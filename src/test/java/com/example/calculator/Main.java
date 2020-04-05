@@ -1,5 +1,6 @@
 package com.example.calculator;
 
+import com.example.calculator.grammar.SyntaxError;
 import com.example.calculator.pprint.ConsoleColor;
 import com.example.calculator.pprint.TokenPPrint;
 import com.example.calculator.token.Tokenizer;
@@ -19,10 +20,12 @@ public class Main {
             try {
                 var result = new Tokenizer(s.replace("\\n", "\n")).tokenizeAll();
                 System.out.print(TokenPPrint.format(result));
-            } catch (Exception e) {
-                System.out.println(ConsoleColor.wrap(ConsoleColor.RED, "Error: " + e.getMessage()));
+            } catch (SyntaxError e) {
                 System.out.print(ConsoleColor.RED);
-
+                System.out.println("Syntax Error: " + e.getMessage());
+                System.out.print(ConsoleColor.END);
+            } catch (Exception e) {
+                System.out.print(ConsoleColor.RED);
                 e.printStackTrace(System.out);
                 System.out.print(ConsoleColor.END);
             }

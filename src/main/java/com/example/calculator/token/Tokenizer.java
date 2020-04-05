@@ -1,5 +1,7 @@
 package com.example.calculator.token;
 
+import com.example.calculator.grammar.SyntaxError;
+
 import java.util.List;
 
 import static com.example.calculator.token.CharTest.*;
@@ -102,7 +104,7 @@ public class Tokenizer {
         // This is the case when in_multi_line_comment is not 0
         // when the while loop has iterated through the entire piece of code
         if (multi_comment_level > 0) {
-            throw new IllegalStateException("Multi-line comment not closed; Unexpected EOF");
+            throw new SyntaxError("Multi-line comment not closed; Unexpected EOF");
         }
 
         if (newline) {
@@ -139,9 +141,9 @@ public class Tokenizer {
         if (isNone(symbol)) {
             sequence.add(NONE, Token.NoneValue);
         } else if (isTrue(symbol)) {
-            sequence.add(BOOL, Boolean.TRUE);
+            sequence.add(BOOLEAN, Boolean.TRUE);
         } else if (isFalse(symbol)) {
-            sequence.add(BOOL, Boolean.FALSE);
+            sequence.add(BOOLEAN, Boolean.FALSE);
         } else if (Keyword.ALL_KEYWORDS.contains(symbol)) {
             sequence.add(KEYWORD, symbol);
         } else {
@@ -239,7 +241,7 @@ public class Tokenizer {
 
             // Fix: Only allow normal strings to span a single line
             if (isNewline(ch) || isCRLF(visitor.code.substring(j, j + 1))) {
-                throw new IllegalStateException("String not closed; Unexpected EOL");
+                throw new SyntaxError("String not closed; Unexpected EOL");
             }
 
             j++;
@@ -261,7 +263,7 @@ public class Tokenizer {
      * @param radix the radix
      */
     private void addInteger(String s, int radix) {
-        sequence.add(INT, Integer.parseInt(s, radix));
+        sequence.add(INTEGER, Integer.parseInt(s, radix));
     }
 
     /**
@@ -287,7 +289,7 @@ public class Tokenizer {
 
         // Fix: EOF after leading literal
         if (j == visitor.i + 2) {
-            throw new IllegalStateException("Error parsing hex: EOF after leading literal");
+            throw new SyntaxError("Error parsing hex: EOF after leading literal");
         }
 
         addInteger(sb.toString(), 16);
@@ -319,7 +321,7 @@ public class Tokenizer {
 
         // Fix: EOF after leading literal
         if (j == visitor.i + 2) {
-            throw new IllegalStateException("Error parsing bin: EOF after leading literal");
+            throw new SyntaxError("Error parsing bin: EOF after leading literal");
         }
 
         addInteger(sb.toString(), 2);
@@ -351,7 +353,7 @@ public class Tokenizer {
 
         // Fix: EOF after leading literal
         if (j == visitor.i + 2) {
-            throw new IllegalStateException("Error parsing oct: EOF after leading literal");
+            throw new SyntaxError("Error parsing oct: EOF after leading literal");
         }
 
         addInteger(sb.toString(), 8);
@@ -432,7 +434,7 @@ public class Tokenizer {
         } else {
             // Fix: the special case of 0 should not throw a syntax error
             if (leading_zero && s.length() > 1) {
-                throw new IllegalStateException("Integer with leading zero");
+                throw new SyntaxError("Integer with leading zero");
             } else {
                 addInteger(s, 10);
             }
@@ -458,7 +460,7 @@ public class Tokenizer {
                     tokenizeDoubleOperator() ||
                     tokenizeSingleOperator()
             )) {
-                throw new IllegalStateException("Tokenizer Failed Due to Unknown Syntax");
+                throw new SyntaxError("Unknown Syntax");
             }
 
             // Make sure that extra spaces around the operator is discarded

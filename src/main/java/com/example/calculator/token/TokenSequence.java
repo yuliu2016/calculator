@@ -42,26 +42,7 @@ public class TokenSequence {
      *          when attempting to pop the space token
      */
     public void popSpace(int n) {
-
-        // Fix: empty token sequence causes n < 1
-        if (tokens.isEmpty()) {
-            return;
-        }
-
-        if (n < 1) {
-            throw new IllegalArgumentException();
-        }
-
-        // Fix: trying to pop the space when there are no sufficient tokens
-        if (tokens.size() < n) {
-            return;
-        }
-
-        int index = tokens.size() - n;
-
-        if (tokens.get(index).type == TokenType.SPACE) {
-            tokens.remove(index);
-        }
+        popDelimiter(TokenType.SPACE, n);
     }
 
 
@@ -72,14 +53,25 @@ public class TokenSequence {
      *          when attempting to pop the newline token
      */
     public void popNewline(int n) {
+        popDelimiter(TokenType.NEWLINE, n);
+    }
 
+    /**
+     * Pop a delimiter newline when the opcode can be simplified
+     *
+     * @param typeToPop the type of token to look for
+     * @param n the number of characters to skip backwards
+     *          when attempting to pop the newline token
+     */
+    public void popDelimiter(TokenType typeToPop, int n) {
         // Fix: empty token sequence causes n < 1
         if (tokens.isEmpty()) {
             return;
         }
 
         if (n < 1) {
-            throw new IllegalArgumentException();
+            throw new TokenException("Cannot pop " + typeToPop
+                    + " past the end of the string!");
         }
 
         // Fix: trying to pop the space when there are no sufficient tokens
@@ -115,7 +107,7 @@ public class TokenSequence {
         // i must be increased from the last call to this function
         // otherwise breaks contract
         if (visitor.i == last_token_index) {
-            throw new IllegalStateException("Cannot add token: Index stayed the same");
+            throw new TokenException("Cannot add token: Index stayed the same");
         }
 
         // iterate through the section of the string that

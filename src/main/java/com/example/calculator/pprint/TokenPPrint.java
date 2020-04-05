@@ -6,7 +6,8 @@ import com.example.calculator.token.Token;
 import java.util.List;
 
 import static com.example.calculator.pprint.ConsoleColor.*;
-import static com.example.calculator.pprint.ConsoleUtil.*;
+import static com.example.calculator.pprint.ConsoleUtil.formatLeftWithSpaces;
+import static com.example.calculator.pprint.ConsoleUtil.formatRightWithZeroes;
 import static com.example.calculator.token.TokenType.*;
 
 public class TokenPPrint {
@@ -18,7 +19,7 @@ public class TokenPPrint {
             return "[Empty Token List]\n";
         }
 
-        for (var token: tokens) {
+        for (var token : tokens) {
             var line = token.line;
             var type = token.type;
             var value = token.value;
@@ -36,7 +37,7 @@ public class TokenPPrint {
             last_line = line;
 
             // Fix: Add column indicators
-            var col = formatRightWithZeroes(String.valueOf(token.column),2);
+            var col = formatRightWithZeroes(String.valueOf(token.column), 2);
             sb.append(WHITE).append(":").append(col).append(END).append("  ");
 
             var type_padded = formatLeftWithSpaces(type.name(), 9);

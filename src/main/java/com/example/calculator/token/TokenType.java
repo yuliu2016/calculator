@@ -8,14 +8,14 @@ public enum TokenType {
     KEYWORD,
     SYMBOL,
     OPERATOR,
-    INT,
-    LONG,
-    COMPLEX,
+    INTEGER,
+    LONG_INT,
     FLOAT,
+    COMPLEX,
     STRING,
     F_STR_NEW,
     F_STR_END,
-    BOOL,
+    BOOLEAN,
     NONE,
     DOC_NEW,
     DOC_STR,
@@ -26,7 +26,7 @@ public enum TokenType {
             List.of(NEWLINE, SPACE, DOC_NEW, DOC_END, F_STR_NEW, F_STR_END);
 
     public static final List<TokenType> NUMBER_LITERALS =
-            List.of(INT, LONG, FLOAT, COMPLEX);
+            List.of(INTEGER, LONG_INT, FLOAT, COMPLEX);
 
     public static final List<TokenType> SYMBOLS =
             List.of(SYMBOL, DOC_REF);
