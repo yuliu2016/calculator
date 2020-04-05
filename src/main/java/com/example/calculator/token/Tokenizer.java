@@ -78,7 +78,7 @@ public class Tokenizer {
 
                 // Fix: increase only one index because there is another one
                 // at the end of this loop.
-                sv.i += 1;
+                sv.i++;
             } else if (isNewline(sv.p1)) {
                 in_comment = false;
                 newline = true;
@@ -89,11 +89,11 @@ public class Tokenizer {
             } else if (isOpenMultiComment(sv.p2)) {
                 multi_comment_level++;
                 // since peek2 is not null, this does not break indexing
-                sv.i += 1;
+                sv.i++;
             } else if (isCloseMultiComment(sv.p2)) {
                 multi_comment_level--;
                 // since peek2 is not null, this does not break indexing
-                sv.i += 1;
+                sv.i++;
             } // else it's a comment character
 
             sv.i++;
@@ -256,7 +256,8 @@ public class Tokenizer {
 
     /**
      * Add a integer to the sequence, to be parsed from a string
-     * @param s the integer
+     *
+     * @param s     the integer
      * @param radix the radix
      */
     private void addInteger(String s, int radix) {
@@ -361,7 +362,7 @@ public class Tokenizer {
 
     /**
      * Tokenize a numerical value that starts with a digit
-     *
+     * <p>
      * Note that this doesn't account for negative values;
      * negatives are represented as an OPERATOR
      */

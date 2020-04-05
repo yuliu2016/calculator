@@ -46,13 +46,8 @@ public class Visitor {
      * characters
      *
      * @param n the number of characters to advance
-     * @throws IndexOutOfBoundsException if the copy cannot advance
-     * by that many characters
      */
     public Visitor copyAndAdvance(int n) {
-        if (i + n >= size) {
-            throw new IndexOutOfBoundsException("Cannot copy and advance");
-        }
         return new Visitor(code, i + n);
     }
 
@@ -63,7 +58,7 @@ public class Visitor {
      * @return true if there is enough characters left to peek
      */
     public boolean canPeek(int n) {
-        return (i + n) < size;
+        return (i + n) <= size;
     }
 
     /**

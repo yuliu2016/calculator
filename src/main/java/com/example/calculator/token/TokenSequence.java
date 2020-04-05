@@ -19,8 +19,9 @@ public class TokenSequence {
     // aware of newline characters
     public int line_number = 1;
 
-    // column of the line; 1-indexed
-    public int column = 1;
+    // column of the line; 1-indexed, but starts at 0 before any characters
+    // are processed when adding tokens to the sequence
+    public int column = 0;
 
     public TokenSequence(String code) {
         visitor = new Visitor(code);
@@ -31,7 +32,7 @@ public class TokenSequence {
         tokens.clear();
         last_token_index = -1;
         line_number = 1;
-        column = 1;
+        column = 0;
     }
 
     /**
@@ -41,6 +42,12 @@ public class TokenSequence {
      *          when attempting to pop the space token
      */
     public void popSpace(int n) {
+
+        // Fix: empty token sequence causes n < 1
+        if (tokens.isEmpty()) {
+            return;
+        }
+
         if (n < 1) {
             throw new IllegalArgumentException();
         }
@@ -65,6 +72,12 @@ public class TokenSequence {
      *          when attempting to pop the newline token
      */
     public void popNewline(int n) {
+
+        // Fix: empty token sequence causes n < 1
+        if (tokens.isEmpty()) {
+            return;
+        }
+
         if (n < 1) {
             throw new IllegalArgumentException();
         }
@@ -91,7 +104,7 @@ public class TokenSequence {
 
         // start of sequence
         popSpace(tokens.size());
-        popSpace(tokens.size());
+        popNewline(tokens.size());
     }
 
     /**
@@ -109,16 +122,30 @@ public class TokenSequence {
         // has been added to the token to search for newlines
 
         // Fix: indexing needs to start at last_token_index + 1
-        for (int i = last_token_index + 1; i < visitor.i; i++) {
+        for (int i = last_token_index + 1; i <= visitor.i; i++) {
             if (CharTest.isNewline(visitor.code.charAt(i))) {
+
+                // Increment line number before the check, in case of the early exit
                 line_number++;
+
+                if (i == visitor.i) {
+                    // Fix: exit early to ensure that newlines are on the right line
+                    var token = new Token(line_number - 1, column + 1, token_type, token_value);
+                    tokens.add(token);
+                    last_token_index = visitor.i;
+                    column = 0;
+
+                    return;
+                }
+
                 column = 0;
+            } else {
+                column++;
             }
-            column++;
         }
 
         last_token_index = visitor.i;
-        var token = new Token(line_number, visitor.i, token_type, token_value);
+        var token = new Token(line_number, column, token_type, token_value);
 
         tokens.add(token);
     }

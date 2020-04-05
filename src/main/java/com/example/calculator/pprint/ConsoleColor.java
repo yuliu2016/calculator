@@ -10,6 +10,7 @@ public class ConsoleColor {
     public static final String BLUE = "\033[34m";
     public static final String BRIGHT_BLUE = "\033[34;1m";
     public static final String MAGENTA = "\033[35m";
+    public static final String RED = "\033[31m";
     public static final String END = "\033[0m";
 
     public static String wrap(String c, String s) {

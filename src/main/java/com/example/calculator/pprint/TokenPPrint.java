@@ -6,14 +6,17 @@ import com.example.calculator.token.Token;
 import java.util.List;
 
 import static com.example.calculator.pprint.ConsoleColor.*;
-import static com.example.calculator.pprint.ConsoleUtil.formatLeftWithSpaces;
-import static com.example.calculator.pprint.ConsoleUtil.formatRightWithZeroes;
+import static com.example.calculator.pprint.ConsoleUtil.*;
 import static com.example.calculator.token.TokenType.*;
 
 public class TokenPPrint {
     public static String format(List<Token> tokens) {
         var sb = new StringBuilder();
         var last_line = -1;
+
+        if (tokens.isEmpty()) {
+            return "[Empty Token List]\n";
+        }
 
         for (var token: tokens) {
             var line = token.line;
@@ -22,15 +25,19 @@ public class TokenPPrint {
 
             if (line != last_line) {
                 // show the line number in bold
-                var wrapped_line = wrap(BOLD, "L" +
-                        formatRightWithZeroes(String.valueOf(line), 3) + "  ");
+                var line_no = formatRightWithZeroes(String.valueOf(line), 3);
+                var wrapped_line = wrap(BOLD, "L" + line_no);
 
                 sb.append(wrapped_line);
             } else {
                 // 5 spaces for the line number
-                sb.append("      ");
+                sb.append("    ");
             }
             last_line = line;
+
+            // Fix: Add column indicators
+            var col = formatRightWithZeroes(String.valueOf(token.column),2);
+            sb.append(WHITE).append(":").append(col).append(END).append("  ");
 
             var type_padded = formatLeftWithSpaces(type.name(), 9);
 
