@@ -43,12 +43,12 @@ public class SimpleEvaluator {
             }
 
             // Current token is an opening brace, push it to 'ops'
-            else if (token.value == OPEN_ROUND)
+            else if (token.value == LPAR)
                 ops.push((Operator) token.value);
 
                 // Closing brace encountered, solve entire brace
-            else if (token.value == CLOSE_ROUND) {
-                while (ops.peek() != OPEN_ROUND) {
+            else if (token.value == RPAR) {
+                while (ops.peek() != LPAR) {
                     values.push(applyOp(ops.pop(), values.pop(), values.pop()));
                 }
                 ops.pop();
@@ -83,7 +83,7 @@ public class SimpleEvaluator {
     // Returns true if 'op2' has higher or same precedence as 'op1', 
     // otherwise returns false. 
     public static boolean hasPrecedence(Operator op1, Operator op2) {
-        if (op2 == OPEN_ROUND || op2 == CLOSE_ROUND)
+        if (op2 == LPAR || op2 == RPAR)
             return false;
         //noinspection RedundantIfStatement
         if ((op1 == TIMES || op1 == DIV) && (op2 == PLUS || op2 == MINUS))

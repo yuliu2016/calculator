@@ -81,7 +81,7 @@ public class TokenSequence {
 
         int index = tokens.size() - n;
 
-        if (tokens.get(index).type == TokenType.NEWLINE) {
+        if (tokens.get(index).type == typeToPop) {
             tokens.remove(index);
         }
     }

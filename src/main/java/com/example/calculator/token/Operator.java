@@ -8,6 +8,7 @@ import java.util.Map;
  * Includes all operators of the language. This includes delimiters
  * such as brackets
  */
+@SuppressWarnings("SpellCheckingInspection")
 public enum Operator {
 
     // ====== Single-char operators ======
@@ -20,17 +21,17 @@ public enum Operator {
 
     // second most common - brackets
 
-    OPEN_ROUND("("),
-    CLOSE_ROUND(")"),
+    LPAR("("),
+    RPAR(")"),
 
-    OPEN_CURLY("{"),
-    CLOSE_CURLY("}"),
+    LBRACE("{"),
+    RBRACE("}"),
 
-    OPEN_SQUARE("["),
-    CLOSE_SQUARE("]"),
+    LSQB("["),
+    RSQB("]"),
 
-    OPEN_ANGLE_LT("<"),
-    CLOSE_ANGLE_MT(">"),
+    LESS("<"),
+    GREATER(">"),
 
     // arithmetic
 
@@ -50,7 +51,7 @@ public enum Operator {
     // ====== Double-Char Operators ======
 
     EQUAL("=="),
-    NOT_EQUAL("!="),
+    NEQUAL("!="),
     LESS_EQUAL("<="),
     MORE_EQUAL(">="),
 
@@ -70,8 +71,8 @@ public enum Operator {
     BIT_AND_ASSIGN("&="),
     BIT_XOR_ASSIGN("^="),
 
-    SHIFT_LEFT("<<"),
-    SHIFT_RIGHT(">>"),
+    LSHIFT("<<"),
+    RSHIFT(">>"),
 
     // ====== Triple-char operators ======
 
@@ -105,14 +106,14 @@ public enum Operator {
             COLON,
             DECORATOR,
 
-            OPEN_ROUND,
-            CLOSE_ROUND,
-            OPEN_CURLY,
-            CLOSE_CURLY,
-            OPEN_SQUARE,
-            CLOSE_SQUARE,
-            OPEN_ANGLE_LT,   // typing and more-than comparison
-            CLOSE_ANGLE_MT,  // typing and more-than comparison
+            LPAR,
+            RPAR,
+            LBRACE,
+            RBRACE,
+            LSQB,
+            RSQB,
+            LESS,   // typing and more-than comparison
+            GREATER,  // typing and more-than comparison
 
             PLUS,
             MINUS,
@@ -131,7 +132,7 @@ public enum Operator {
 
     public static final List<Operator> DOUBLE_OPERATORS = List.of(
             EQUAL,
-            NOT_EQUAL,
+            NEQUAL,
             LESS_EQUAL,
             MORE_EQUAL,
 
@@ -151,8 +152,8 @@ public enum Operator {
             BIT_AND_ASSIGN,
             BIT_XOR_ASSIGN,
 
-            SHIFT_LEFT,
-            SHIFT_RIGHT
+            LSHIFT,
+            RSHIFT
     );
 
     public static final Map<String, Operator> DOUBLE_OPERATOR_MAP =
