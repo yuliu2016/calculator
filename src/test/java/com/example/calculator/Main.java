@@ -1,6 +1,7 @@
 package com.example.calculator;
 
 import com.example.calculator.grammar.SyntaxError;
+import com.example.calculator.parser.Parser;
 import com.example.calculator.pprint.ConsoleColor;
 import com.example.calculator.pprint.TokenPPrint;
 import com.example.calculator.token.Tokenizer;
@@ -20,6 +21,11 @@ public class Main {
             try {
                 var result = new Tokenizer(s.replace("\\n", "\n")).tokenizeAll();
                 System.out.print(TokenPPrint.format(result));
+                var cst = Parser.parse(result);
+                System.out.print(ConsoleColor.BOLD);
+                System.out.print(ConsoleColor.MAGENTA);
+                System.out.print(cst);
+                System.out.println(ConsoleColor.END);
             } catch (SyntaxError e) {
                 System.out.print(ConsoleColor.RED);
                 System.out.println("Syntax Error: " + e.getMessage());

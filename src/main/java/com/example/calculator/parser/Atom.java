@@ -7,6 +7,10 @@ public class Atom {
         this.val = val;
     }
 
+    public Object getVal() {
+        return val;
+    }
+
     @Override
     public String toString() {
         return "(atom " + val + ")";

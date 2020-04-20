@@ -21,6 +21,18 @@ public class ArithmeticExpr {
         assert ops.size() == terms.size();
     }
 
+    public Term getFirstTerm() {
+        return first_term;
+    }
+
+    public List<Operator> getOps() {
+        return ops;
+    }
+
+    public List<Term> getTerms() {
+        return terms;
+    }
+
     @Override
     public String toString() {
         validate();

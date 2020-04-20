@@ -21,6 +21,18 @@ public class Term {
         assert ops.size() == atoms.size();
     }
 
+    public List<Operator> getOps() {
+        return ops;
+    }
+
+    public List<Atom> getAtoms() {
+        return atoms;
+    }
+
+    public Atom getFirstAtom() {
+        return first_atom;
+    }
+
     @Override
     public String toString() {
         validate();
