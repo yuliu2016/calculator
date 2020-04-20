@@ -6,6 +6,14 @@ repositories {
     mavenCentral()
 }
 
+sourceSets {
+    main {
+        java {
+            srcDirs("src/main/java", "src/main/gen")
+        }
+    }
+}
+
 tasks.test {
     useJUnitPlatform()
 }

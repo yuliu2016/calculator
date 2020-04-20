@@ -1,1 +1,1 @@
-rootProject.name = "calculator"
+rootProject.name = "fuga"
