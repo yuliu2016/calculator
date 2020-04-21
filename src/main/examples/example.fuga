@@ -90,3 +90,8 @@ class.impl_for(Timekeeper) # returns [TimekeeperImpl]
 class = def(classdef, metaclass=ClassFactory) {
     return metaclass.create_class(classdef)
 }
+
+mul = def(x,y) { return x * y }
+mul = def(x,y): return x * y
+mul = def x, y => x * y
+call(def x, y => x * y)
