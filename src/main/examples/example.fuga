@@ -1,0 +1,92 @@
+# This is a program written in Fuga
+
+
+repeat = def(times, func) {
+    for i in [0:times] {
+        func()
+    }
+}
+
+repeat(10) {
+    print("Hello World")
+}
+
+Fruit = class {
+    Apple, Orange, Pear, Banana
+} -> enum()
+
+Timekeeper = protocol {
+    time: int
+}
+
+/TimekeeperImpl = class {
+    import time
+    import thread
+
+    init {
+        pass
+    }
+
+    impl(Timekeeper)
+
+    time = property()
+    time.get(() => int(time.time())
+    time.did_set(old, new => print("The new time is ", new))
+
+    /plus = def(other) {
+        if class(other).is_impl(Timekeeper) {
+            return self.time + other.time
+        }
+        return other + self
+    } -> thread.mutex(self)
+}
+
+sum = def(iterable, initial_value=0) {
+    sum_value = initial_value
+    for elem in iterable {
+        sum_value += elem
+    }
+    return sum_value
+}
+
+# Sum of numbers from 1 to 1000
+[1:1001] -> sum()
+range(1001) -> sum()
+
+[1:1001] -> sum()
+
+list = protocol {
+    contract.default_impl_alias()
+
+    T = contract.generic(mixed=True)
+
+    append = def(item) {
+        contract.mutate_self(type="grow")
+        T.update_with(item)
+    }
+
+    __getitem__ = def(index) {
+        contract.check_type(index, int)
+        contract.maybe_out_of_range(index)
+        contract.returns(type=T)
+    }
+
+    __setitem__ = def(index, item) {
+        contract.check_type(index, int)
+        contract.maybe_out_of_range(index)
+        contract.mutate_self(type="set")
+        T.update_with(item)
+    }
+
+    __len__ = def {
+        contract.shallow_property()
+        contract.object_size()
+    }
+}
+
+class.impl_for(Timekeeper) # returns [TimekeeperImpl]
+
+# definition for class
+class = def(classdef, metaclass=ClassFactory) {
+    return metaclass.create_class(classdef)
+}
