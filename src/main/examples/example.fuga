@@ -95,3 +95,17 @@ mul = def(x,y) { return x * y }
 mul = def(x,y): return x * y
 mul = def x, y => x * y
 call(def x, y => x * y)
+
+/*
+Pipe operator - precedence
+*/
+
+square = def x => x * x
+
+3 + 2 -> square() # 7
+(3 + 2) -> square() # 25
+2 ** 4 -> square() # 65534
+
+[1,2,3].a -> [2,3].b
+
+# precedence is higher than power, but lower than subscripts and trailer

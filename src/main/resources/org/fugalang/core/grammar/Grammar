@@ -76,15 +76,15 @@ shift_expr: arith_expr (('<<'|'>>') arith_expr)*
 arith_expr: term (('+'|'-') term)*
 term: factor (('*'|'@'|'/'|'%'|'//') factor)*
 factor: ('+'|'-'|'~') factor | power
-power: atom_expr ['**' factor]
+power: pipe_expr ['**' factor]
+pipe_expr: atom_expr ('->' atom_expr)*
 
 # Atoms
 
 atom_expr: atom trailer*
-atom: ('(' [testlist_comp] ')' |
-       '[' [testlist_comp] ']' |
-       '{' [dictorsetmaker] '}' |
-       NAME | NUMBER | STRING+ | 'None' | 'True' | 'False')
+atom: compound_atom | simple_atom
+compound_atom: '(' [testlist_comp] ')' | '[' [testlist_comp] ']' | '{' [dictorsetmaker] '}'
+simple_atom: NAME | NUMBER | STRING+ | 'None' | 'True' | 'False'
 
 testlist_comp: (namedexpr_test|star_expr) ( comp_for | (',' (namedexpr_test|star_expr))* [','] )
 
@@ -95,10 +95,11 @@ sliceop: ':' [test]
 
 exprlist: (expr|star_expr) (',' (expr|star_expr))* [',']
 testlist: test (',' test)* [',']
-dictorsetmaker: ( ((test ':' test | '**' expr)
-                   (comp_for | (',' (test ':' test | '**' expr))* [','])) |
-                  ((test | star_expr)
-                   (comp_for | (',' (test | star_expr))* [','])) )
+
+dictorsetmaker: dict_maker | set_maker
+
+dict_maker: (test ':' test | '**' expr) (comp_for | (',' (test ':' test | '**' expr))* [','])
+set_maker: (test | star_expr) (comp_for | (',' (test | star_expr))* [','])
 
 argument: (NAME [comp_for) | NAME ':=' test | NAME '=' test | '**' test | '*' test)
 
