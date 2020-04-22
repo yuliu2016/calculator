@@ -2,12 +2,13 @@ package org.fugalang.core.grammar.token;
 
 public enum  MgTokenType {
     NEWLINE,
-    SYMBOL,
-    COLON,
+    SYMB,
+    COLN,
     LPAR,
     RPAR,
     LSQB,
     RSQB,
     PLUS,
-    STAR
+    STAR,
+    OR
 }

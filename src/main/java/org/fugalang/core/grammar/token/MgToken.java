@@ -27,9 +27,12 @@ public class MgToken {
 
     @Override
     public String toString() {
-        return "MgToken{" +
-                "type=" + type +
-                ", value='" + value + '\'' +
-                '}';
+        if (type == MgTokenType.NEWLINE) {
+            return type.name() + "\n";
+        }
+        if (value == null) {
+            return type.name() + " ";
+        }
+        return type.name() + "(" + value + ") ";
     }
 }
