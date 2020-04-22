@@ -6,14 +6,14 @@ eval_input: testlist NEWLINE*
 
 # Statements
 stmt: (simple_stmt | compound_stmt) NEWLINE
-simple_stmt = small_stmt (';' small_stmt)* [';']
+simple_stmt: small_stmt (';' small_stmt)* [';']
 
 # Small Statements
 small_stmt: expr_stmt | del_stmt | pass_stmt | flow_stmt | import_stmt | assert_stmt
 
 testlist_star_expr: (test | star_expr) (',' (test | star_expr))* [',']
 augassign: ('+=' | '-=' | '*=' | '@=' | '/=' | '%=' | '&=' | '|=' | '^=' | '<<=' | '>>=' | '**=' | '//=')
-expr_stmt = testlist_star_expr [('=' testlist_star_expr)* | augassign testlist]
+expr_stmt: testlist_star_expr [augassign testlist | ('=' testlist_star_expr)*]
 
 del_stmt: 'del' exprlist
 pass_stmt: 'pass'
@@ -51,10 +51,10 @@ suite: ':' simple_stmt | '{' simple_stmt '}' | '{' NEWLINE stmt+ '}'
 # Function definitions
 
 varargslist: vfpdef ['=' test] (',' vfpdef ['=' test])*
-vfpdef = NAME
+vfpdef: NAME
 
 lambdef: 'def' [varargslist] '=>' test
-parameters = '(' [varargslist] ')'
+parameters: '(' [varargslist] ')'
 funcdef: 'def' parameters suite
 
 # Test and Expressions
@@ -101,7 +101,8 @@ dictorsetmaker: dict_maker | set_maker
 dict_maker: (test ':' test | '**' expr) (comp_for | (',' (test ':' test | '**' expr))* [','])
 set_maker: (test | star_expr) (comp_for | (',' (test | star_expr))* [','])
 
-argument: (NAME [comp_for) | NAME ':=' test | NAME '=' test | '**' test | '*' test)
+arglist: argument (',' argument)*  [',']
+argument: (NAME [comp_for] | NAME ':=' test | NAME '=' test | '**' test | '*' test)
 
 comp_iter: comp_for | comp_if
 comp_for: 'for' exprlist 'in' or_test [comp_iter]

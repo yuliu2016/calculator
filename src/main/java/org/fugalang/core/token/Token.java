@@ -1,10 +1,10 @@
 package org.fugalang.core.token;
 
 public class Token {
-    public int line;
-    public int column;
-    public TokenType type;
-    public Object value;
+    public final int line;
+    public final int column;
+    public final TokenType type;
+    public final Object value;
 
     public Token(int line, int column, TokenType type, Object value) {
         this.line = line;
