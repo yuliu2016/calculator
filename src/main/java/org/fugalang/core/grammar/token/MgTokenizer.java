@@ -103,7 +103,7 @@ public class MgTokenizer {
             j++;
         }
 
-        addToken(SYMB, visitor.code.substring(visitor.i + 1, j));
+        addToken(TOK, visitor.code.substring(visitor.i + 1, j));
 
         // this line must be after add_token for line no to be correct
         // add an extra one here to account for closing char
@@ -129,7 +129,7 @@ public class MgTokenizer {
         // Since some literals and all keywords have the same rules as symbols
         // just add them here
 
-        addToken(SYMB, symbol);
+        addToken(TOK, symbol);
 
         // this line must be after add_token for line no to be correct
         visitor.i = j;
@@ -155,7 +155,7 @@ public class MgTokenizer {
         } else if (visitor.p1 == '+') {
             addToken(PLUS, null);
         } else if (visitor.p1 == ':') {
-            addToken(COLN, null);
+            addToken(COL, null);
         } else if (visitor.p1 == '|') {
             addToken(OR, null);
         } else {

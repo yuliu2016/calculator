@@ -1,0 +1,75 @@
+TOK('single_input') COL TOK('NEWLINE') OR TOK('simple_stmt') OR TOK('compound_stmt') TOK('NEWLINE') NEWLINE
+TOK('file_input') COL LPAR TOK('NEWLINE') OR TOK('stmt') RPAR STAR NEWLINE
+TOK('eval_input') COL TOK('testlist') TOK('NEWLINE') STAR NEWLINE
+TOK('stmt') COL LPAR TOK('simple_stmt') OR TOK('compound_stmt') RPAR TOK('NEWLINE') NEWLINE
+TOK('simple_stmt') COL TOK('small_stmt') LPAR TOK(';') TOK('small_stmt') RPAR STAR LSQB TOK(';') RSQB NEWLINE
+TOK('small_stmt') COL TOK('expr_stmt') OR TOK('del_stmt') OR TOK('pass_stmt') OR TOK('flow_stmt') OR TOK('import_stmt') OR TOK('assert_stmt') NEWLINE
+TOK('testlist_star_expr') COL LPAR TOK('test') OR TOK('star_expr') RPAR LPAR TOK(',') LPAR TOK('test') OR TOK('star_expr') RPAR RPAR STAR LSQB TOK(',') RSQB NEWLINE
+TOK('augassign') COL LPAR TOK('+=') OR TOK('-=') OR TOK('*=') OR TOK('@=') OR TOK('/=') OR TOK('%=') OR TOK('&=') OR TOK('|=') OR TOK('^=') OR TOK('<<=') OR TOK('>>=') OR TOK('**=') OR TOK('//=') RPAR NEWLINE
+TOK('expr_stmt') COL TOK('testlist_star_expr') LSQB TOK('augassign') TOK('testlist') OR LPAR TOK('=') TOK('testlist_star_expr') RPAR STAR RSQB NEWLINE
+TOK('del_stmt') COL TOK('del') TOK('exprlist') NEWLINE
+TOK('pass_stmt') COL TOK('pass') NEWLINE
+TOK('flow_stmt') COL TOK('break_stmt') OR TOK('continue_stmt') OR TOK('return_stmt') OR TOK('raise_stmt') NEWLINE
+TOK('break_stmt') COL TOK('break') NEWLINE
+TOK('continue_stmt') COL TOK('continue') NEWLINE
+TOK('return_stmt') COL TOK('return') LSQB TOK('testlist_star_expr') RSQB NEWLINE
+TOK('raise_stmt') COL TOK('raise') LSQB TOK('test') LSQB TOK('from') TOK('test') RSQB RSQB NEWLINE
+TOK('import_stmt') COL TOK('import_name') OR TOK('import_from') NEWLINE
+TOK('import_name') COL TOK('import') TOK('dotted_as_names') NEWLINE
+TOK('import_from') COL LPAR TOK('from') LPAR LPAR TOK('.') RPAR STAR TOK('dotted_name') OR LPAR TOK('.') RPAR PLUS RPAR TOK('import') LPAR TOK('*') OR TOK('(') TOK('import_as_names') TOK(')') OR TOK('import_as_names') RPAR RPAR NEWLINE
+TOK('import_as_name') COL TOK('NAME') LSQB TOK('as') TOK('NAME') RSQB NEWLINE
+TOK('dotted_as_name') COL TOK('dotted_name') LSQB TOK('as') TOK('NAME') RSQB NEWLINE
+TOK('import_as_names') COL TOK('import_as_name') LPAR TOK(',') TOK('import_as_name') RPAR STAR LSQB TOK(',') RSQB NEWLINE
+TOK('dotted_as_names') COL TOK('dotted_as_name') LPAR TOK(',') TOK('dotted_as_name') RPAR STAR LSQB TOK(',') RSQB NEWLINE
+TOK('dotted_name') COL TOK('NAME') LPAR TOK('.') TOK('NAME') RPAR STAR NEWLINE
+TOK('assert_stmt') COL TOK('assert') TOK('test') LSQB TOK(',') TOK('test') RSQB NEWLINE
+TOK('compound_stmt') COL TOK('if_stmt') OR TOK('while_stmt') OR TOK('for_stmt') OR TOK('try_stmt') OR TOK('with_stmt') NEWLINE
+TOK('if_stmt') COL TOK('if') TOK('namedexpr_test') TOK('suite') LPAR TOK('elif') TOK('namedexpr_test') TOK('suite') RPAR STAR LSQB TOK('else') TOK('suite') RSQB NEWLINE
+TOK('while_stmt') COL TOK('while') TOK('namedexpr_test') TOK('suite') LSQB TOK('else') TOK('suite') RSQB NEWLINE
+TOK('for_stmt') COL TOK('for') TOK('exprlist') TOK('in') TOK('testlist') TOK('suite') LSQB TOK('else') TOK('suite') RSQB NEWLINE
+TOK('try_stmt') COL LPAR TOK('try') TOK('suite') LPAR LPAR TOK('except_clause') TOK('suite') RPAR PLUS LSQB TOK('else') TOK('suite') RSQB LSQB TOK('finally') TOK('suite') RSQB OR TOK('finally') TOK('suite') RPAR RPAR NEWLINE
+TOK('except_clause') COL TOK('except') LSQB TOK('test') LSQB TOK('as') TOK('NAME') RSQB RSQB NEWLINE
+TOK('with_stmt') COL TOK('with') TOK('with_item') LPAR TOK(',') TOK('with_item') RPAR STAR TOK('suite') NEWLINE
+TOK('with_item') COL TOK('test') LSQB TOK('as') TOK('expr') RSQB NEWLINE
+TOK('suite') COL TOK(':') TOK('simple_stmt') OR TOK('{') TOK('simple_stmt') TOK('}') OR TOK('{') TOK('NEWLINE') TOK('stmt') PLUS TOK('}') NEWLINE
+TOK('varargslist') COL TOK('vfpdef') LSQB TOK('=') TOK('test') RSQB LPAR TOK(',') TOK('vfpdef') LSQB TOK('=') TOK('test') RSQB RPAR STAR NEWLINE
+TOK('vfpdef') COL TOK('NAME') NEWLINE
+TOK('lambdef') COL TOK('def') LSQB TOK('varargslist') RSQB TOK('=>') TOK('test') NEWLINE
+TOK('parameters') COL TOK('(') LSQB TOK('varargslist') RSQB TOK(')') NEWLINE
+TOK('funcdef') COL TOK('def') TOK('parameters') TOK('suite') NEWLINE
+TOK('namedexpr_test') COL TOK('test') LSQB TOK(':=') TOK('test') RSQB NEWLINE
+TOK('test') COL TOK('or_test') LSQB TOK('?') TOK('or_test') TOK(':') TOK('test') RSQB OR TOK('lambdef') OR TOK('funcdef') NEWLINE
+TOK('or_test') COL TOK('and_test') LPAR TOK('or') TOK('and_test') RPAR STAR NEWLINE
+TOK('and_test') COL TOK('not_test') LPAR TOK('and') TOK('not_test') RPAR STAR NEWLINE
+TOK('not_test') COL TOK('not') TOK('not_test') OR TOK('comparison') NEWLINE
+TOK('comparison') COL TOK('expr') LPAR TOK('comp_op') TOK('expr') RPAR STAR NEWLINE
+TOK('comp_op') COL TOK('<') OR TOK('>') OR TOK('==') OR TOK('>=') OR TOK('<=') OR TOK('!=') OR TOK('in') OR TOK('not') TOK('in') OR TOK('is') OR TOK('is') TOK('not') NEWLINE
+TOK('star_expr') COL TOK('*') TOK('expr') NEWLINE
+TOK('expr') COL TOK('xor_expr') LPAR TOK('|') TOK('xor_expr') RPAR STAR NEWLINE
+TOK('xor_expr') COL TOK('and_expr') LPAR TOK('^') TOK('and_expr') RPAR STAR NEWLINE
+TOK('and_expr') COL TOK('shift_expr') LPAR TOK('&') TOK('shift_expr') RPAR STAR NEWLINE
+TOK('shift_expr') COL TOK('arith_expr') LPAR LPAR TOK('<<') OR TOK('>>') RPAR TOK('arith_expr') RPAR STAR NEWLINE
+TOK('arith_expr') COL TOK('term') LPAR LPAR TOK('+') OR TOK('-') RPAR TOK('term') RPAR STAR NEWLINE
+TOK('term') COL TOK('factor') LPAR LPAR TOK('*') OR TOK('@') OR TOK('/') OR TOK('%') OR TOK('//') RPAR TOK('factor') RPAR STAR NEWLINE
+TOK('factor') COL LPAR TOK('+') OR TOK('-') OR TOK('~') RPAR TOK('factor') OR TOK('power') NEWLINE
+TOK('power') COL TOK('pipe_expr') LSQB TOK('**') TOK('factor') RSQB NEWLINE
+TOK('pipe_expr') COL TOK('atom_expr') LPAR TOK('->') TOK('atom_expr') RPAR STAR NEWLINE
+TOK('atom_expr') COL TOK('atom') TOK('trailer') STAR NEWLINE
+TOK('atom') COL TOK('compound_atom') OR TOK('simple_atom') NEWLINE
+TOK('compound_atom') COL TOK('(') LSQB TOK('testlist_comp') RSQB TOK(')') OR TOK('[') LSQB TOK('testlist_comp') RSQB TOK(']') OR TOK('{') LSQB TOK('dictorsetmaker') RSQB TOK('}') NEWLINE
+TOK('simple_atom') COL TOK('NAME') OR TOK('NUMBER') OR TOK('STRING') PLUS OR TOK('None') OR TOK('True') OR TOK('False') NEWLINE
+TOK('testlist_comp') COL LPAR TOK('namedexpr_test') OR TOK('star_expr') RPAR LPAR TOK('comp_for') OR LPAR TOK(',') LPAR TOK('namedexpr_test') OR TOK('star_expr') RPAR RPAR STAR LSQB TOK(',') RSQB RPAR NEWLINE
+TOK('trailer') COL TOK('(') LSQB TOK('arglist') RSQB TOK(')') OR TOK('[') TOK('subscriptlist') TOK(']') OR TOK('.') TOK('NAME') NEWLINE
+TOK('subscriptlist') COL TOK('subscript') LPAR TOK(',') TOK('subscript') RPAR STAR LSQB TOK(',') RSQB NEWLINE
+TOK('subscript') COL TOK('test') OR LSQB TOK('test') RSQB TOK(':') LSQB TOK('test') RSQB LSQB TOK('sliceop') RSQB NEWLINE
+TOK('sliceop') COL TOK(':') LSQB TOK('test') RSQB NEWLINE
+TOK('exprlist') COL LPAR TOK('expr') OR TOK('star_expr') RPAR LPAR TOK(',') LPAR TOK('expr') OR TOK('star_expr') RPAR RPAR STAR LSQB TOK(',') RSQB NEWLINE
+TOK('testlist') COL TOK('test') LPAR TOK(',') TOK('test') RPAR STAR LSQB TOK(',') RSQB NEWLINE
+TOK('dictorsetmaker') COL TOK('dict_maker') OR TOK('set_maker') NEWLINE
+TOK('dict_maker') COL LPAR TOK('test') TOK(':') TOK('test') OR TOK('**') TOK('expr') RPAR LPAR TOK('comp_for') OR LPAR TOK(',') LPAR TOK('test') TOK(':') TOK('test') OR TOK('**') TOK('expr') RPAR RPAR STAR LSQB TOK(',') RSQB RPAR NEWLINE
+TOK('set_maker') COL LPAR TOK('test') OR TOK('star_expr') RPAR LPAR TOK('comp_for') OR LPAR TOK(',') LPAR TOK('test') OR TOK('star_expr') RPAR RPAR STAR LSQB TOK(',') RSQB RPAR NEWLINE
+TOK('arglist') COL TOK('argument') LPAR TOK(',') TOK('argument') RPAR STAR LSQB TOK(',') RSQB NEWLINE
+TOK('argument') COL LPAR TOK('NAME') LSQB TOK('comp_for') RSQB OR TOK('NAME') TOK(':=') TOK('test') OR TOK('NAME') TOK('=') TOK('test') OR TOK('**') TOK('test') OR TOK('*') TOK('test') RPAR NEWLINE
+TOK('comp_iter') COL TOK('comp_for') OR TOK('comp_if') NEWLINE
+TOK('comp_for') COL TOK('for') TOK('exprlist') TOK('in') TOK('or_test') LSQB TOK('comp_iter') RSQB NEWLINE
+TOK('comp_if') COL TOK('if') TOK('test') LSQB TOK('comp_iter') RSQB NEWLINE

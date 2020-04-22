@@ -2,8 +2,8 @@ package org.fugalang.core.grammar.token;
 
 public enum  MgTokenType {
     NEWLINE,
-    SYMB,
-    COLN,
+    TOK,
+    COL,
     LPAR,
     RPAR,
     LSQB,

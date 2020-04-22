@@ -9,7 +9,7 @@ import java.nio.file.Paths;
 
 public class MgGen {
     public static void main(String[] args) {
-        var res = MgGen.class.getResource("/org/fugalang/core/grammar/Grammar");
+        var res = MgGen.class.getResource("/org/fugalang/core/grammar/MetaGrammar");
         try {
             var data = Files.readString(Paths.get(res.toURI()));
             new MgTokenizer(data).tokenize().forEach(System.out::print);
