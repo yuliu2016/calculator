@@ -2,12 +2,12 @@ package org.fugalang.core.grammar.psi;
 
 public class RepeatRule {
     public final SubRule subRule;
-    public final String tokenPlus;
-    public final String tokenMinus;
+    public final boolean tokenStar;
+    public final boolean tokenPlus;
 
-    public RepeatRule(SubRule subRule, String tokenPlus, String tokenMinus) {
+    public RepeatRule(SubRule subRule, boolean tokenStar, boolean tokenPlus) {
         this.subRule = subRule;
+        this.tokenStar = tokenStar;
         this.tokenPlus = tokenPlus;
-        this.tokenMinus = tokenMinus;
     }
 }

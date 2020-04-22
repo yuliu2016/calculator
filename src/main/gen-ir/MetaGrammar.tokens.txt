@@ -1,6 +1,6 @@
 TOK('rules') COL TOK('single_rule') STAR NEWLINE
-TOK('single_rule') COL TOK('NAME') TOK(':') TOK('or_rule') NEWLINE
+TOK('single_rule') COL TOK('TOK') TOK(':') TOK('or_rule') TOK('NEWLINE') NEWLINE
 TOK('or_rule') COL TOK('and_rule') LPAR TOK('|') TOK('and_rule') RPAR STAR NEWLINE
 TOK('and_rule') COL TOK('repeat_rule') LPAR TOK('repeat_rule') RPAR STAR NEWLINE
 TOK('repeat_rule') COL TOK('sub_rule') LSQB TOK('*') OR TOK('+') RSQB NEWLINE
-TOK('sub_rule') COL TOK('(') TOK('or_rule') TOK(')') OR TOK('[') TOK('or_rule') TOK(']') OR TOK('TOKEN') NEWLINE
+TOK('sub_rule') COL TOK('(') TOK('or_rule') TOK(')') OR TOK('[') TOK('or_rule') TOK(']') OR TOK('TOK') NEWLINE
