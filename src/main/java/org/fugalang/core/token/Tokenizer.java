@@ -10,9 +10,6 @@ public class Tokenizer {
     public final TokenSequence sequence;
     public final Visitor visitor;
 
-    public boolean token_is_operator;
-    public boolean last_token_is_operator;
-
     public Tokenizer(String code) {
         sequence = new TokenSequence(code);
         visitor = sequence.visitor;
@@ -106,11 +103,7 @@ public class Tokenizer {
         }
 
         if (newline) {
-            // This is relevant because of the short-hand syntax
-            // (using ':' and '\n' as delimiters instead of curly brackets)
             sequence.add(NEWLINE, Token.NoneValue);
-        } else {
-            sequence.add(SPACE, Token.NoneValue);
         }
 
         // this line must be after add_token for line no to be correct
@@ -159,7 +152,6 @@ public class Tokenizer {
      */
     private boolean tokenizeTripleOperator() {
         if (visitor.p3 != null && Operator.TRIPLE_OPERATOR_MAP.containsKey(visitor.p3)) {
-            token_is_operator = true;
             sequence.add(OPERATOR, Operator.TRIPLE_OPERATOR_MAP.get(visitor.p3));
             visitor.i += 3;
             return true;
@@ -172,7 +164,6 @@ public class Tokenizer {
      */
     private boolean tokenizeDoubleOperator() {
         if (visitor.p2 != null && Operator.DOUBLE_OPERATOR_MAP.containsKey(visitor.p2)) {
-            token_is_operator = true;
             sequence.add(OPERATOR, Operator.DOUBLE_OPERATOR_MAP.get(visitor.p2));
             visitor.i += 2;
             return true;
@@ -187,30 +178,11 @@ public class Tokenizer {
         // Fix: wrap the p1 char into a string in order to look it up on the map
         var ch = String.valueOf(visitor.p1);
         if (Operator.SINGLE_OPERATOR_MAP.containsKey(ch)) {
-            token_is_operator = true;
             sequence.add(OPERATOR, Operator.SINGLE_OPERATOR_MAP.get(ch));
             visitor.i++;
             return true;
         }
         return false;
-    }
-
-    /**
-     * Pop the extra spaces around operators
-     */
-    private void discardOperatorSpaces() {
-        if (last_token_is_operator) {
-            // pop the space after the last operator
-            sequence.popSpace(1);
-        }
-
-        if (token_is_operator) {
-            // pop the space before the current operator
-            sequence.popSpace(2);
-            last_token_is_operator = true;
-        } else {
-            last_token_is_operator = false;
-        }
     }
 
     /**
@@ -447,7 +419,6 @@ public class Tokenizer {
 
         while (visitor.hasRemaining()) {
             visitor.updateAllPeeks();
-            token_is_operator = false;
 
             // Fix: brackets cosing at the wrong call
             if (!(tokenizeSpace() ||
@@ -460,9 +431,6 @@ public class Tokenizer {
             )) {
                 throw new SyntaxError("Unknown Syntax");
             }
-
-            // Make sure that extra spaces around the operator is discarded
-            discardOperatorSpaces();
         }
         sequence.trim();
 

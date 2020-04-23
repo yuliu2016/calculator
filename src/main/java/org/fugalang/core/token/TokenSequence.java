@@ -35,16 +35,6 @@ public class TokenSequence {
         column = 0;
     }
 
-    /**
-     * Pop the space when the opcode can be simplified
-     *
-     * @param n the number of characters to skip backwards
-     *          when attempting to pop the space token
-     */
-    public void popSpace(int n) {
-        popDelimiter(TokenType.SPACE, n);
-    }
-
 
     /**
      * Pop the newline when the opcode can be simplified
@@ -91,11 +81,8 @@ public class TokenSequence {
      */
     public void trim() {
         // end of sequence
-        popSpace(1);
         popNewline(1);
-
         // start of sequence
-        popSpace(tokens.size());
         popNewline(tokens.size());
     }
 

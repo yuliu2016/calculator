@@ -8,7 +8,6 @@ import java.util.Map;
  * Includes all operators of the language. This includes delimiters
  * such as brackets
  */
-@SuppressWarnings("SpellCheckingInspection")
 public enum Operator {
 
     // ====== Single-char operators ======
@@ -17,7 +16,6 @@ public enum Operator {
     COMMA(","),
     ASSIGN("="),
     COLON(":"),
-    DECORATOR("@"),
 
     // second most common - brackets
 
@@ -55,7 +53,8 @@ public enum Operator {
     LESS_EQUAL("<="),
     MORE_EQUAL(">="),
 
-    ARROW("=>"),
+    PIPE("->"),
+    LAMBDA("=>"),
     ELVIS("?:"),
 
     FLOOR_DIV("//"),
@@ -104,7 +103,6 @@ public enum Operator {
             COMMA,
             ASSIGN,
             COLON,
-            DECORATOR,
 
             LPAR,
             RPAR,
@@ -136,7 +134,8 @@ public enum Operator {
             LESS_EQUAL,
             MORE_EQUAL,
 
-            ARROW,
+            PIPE,
+            LAMBDA,
             ELVIS,
 
             FLOOR_DIV,
