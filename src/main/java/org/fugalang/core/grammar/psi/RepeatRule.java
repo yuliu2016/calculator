@@ -17,6 +17,7 @@ public class RepeatRule implements CSTPrintElem {
     @Override
     public void buildString(CSTPrintBuilder builder) {
         builder.setName("repeat_rule");
+        builder.addElem(subRule);
         if (tokenPlus) builder.addString("+");
         else if (tokenStar) builder.addString("*");
     }

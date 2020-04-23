@@ -9,5 +9,6 @@ public interface CSTPrintBuilder {
 
     CSTPrintBuilder addElem(CSTPrintElem elem);
 
+    @SuppressWarnings("UnusedReturnValue")
     CSTPrintBuilder addElems(List<? extends CSTPrintElem> elems);
 }

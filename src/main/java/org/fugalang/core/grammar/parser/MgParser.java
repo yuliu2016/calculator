@@ -39,6 +39,7 @@ public class MgParser {
         if (!parseTokenType(visitor, MgTokenType.COL)) return null;
         var orRule = parseOrRule(visitor);
         if (orRule == null) return null;
+        if (!parseTokenType(visitor, MgTokenType.NEWLINE)) return null;
         return new SingleRule(name, orRule);
     }
 
@@ -91,10 +92,7 @@ public class MgParser {
         var star = parseTokenType(visitor, MgTokenType.STAR);
         var plus = parseTokenType(visitor, MgTokenType.PLUS);
 
-        if (star || plus) {
-            return new RepeatRule(subRule, star, plus);
-        }
-        return null;
+        return new RepeatRule(subRule, star, plus);
     }
 
     public static SubRule parseSubRule(MgTokenVisitor visitor) {
@@ -135,7 +133,7 @@ public class MgParser {
 
     public static boolean parseTokenType(MgTokenVisitor visitor, MgTokenType type) {
         var tok = visitor.getAndAdd();
-        var result =  tok != null && tok.type == type;
+        var result = tok != null && tok.type == type;
         if (!result) {
             visitor.backtrack();
         }
