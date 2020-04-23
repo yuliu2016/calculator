@@ -1,8 +1,11 @@
 package org.fugalang.core.grammar.psi;
 
+import org.fugalang.core.pprint.CSTPrintBuilder;
+import org.fugalang.core.pprint.CSTPrintElem;
+
 import java.util.List;
 
-public class OrRule {
+public class OrRule implements CSTPrintElem {
     public final AndRule andRule;
 
     public final List<AndRule> andRules;
@@ -10,5 +13,12 @@ public class OrRule {
     public OrRule(AndRule andRule, List<AndRule> andRules) {
         this.andRule = andRule;
         this.andRules = andRules;
+    }
+
+    @Override
+    public void buildString(CSTPrintBuilder builder) {
+        builder.setName("or_rule")
+                .addElem(andRule)
+                .addElems(andRules);
     }
 }
