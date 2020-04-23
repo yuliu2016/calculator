@@ -12,13 +12,13 @@ import java.nio.file.Paths;
 
 public class MgGen {
     public static void main(String[] args) {
-        var res = MgGen.class.getResource("/org/fugalang/core/grammar/MetaGrammar");
+        var res = MgGen.class.getResource("/org/fugalang/core/grammar/Grammar");
         try {
             var data = Files.readString(Paths.get(res.toURI()));
             var tokens = new MgTokenizer(data).tokenize();
 
             Rules cst = MgParser.parseRules(tokens);
-            System.out.println(ParseTreePPrint.format(cst, 2));
+            System.out.println(ParseTreePPrint.format(cst, -1));
 
         } catch (IOException | URISyntaxException e) {
             e.printStackTrace();

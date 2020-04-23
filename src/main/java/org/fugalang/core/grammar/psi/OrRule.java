@@ -17,7 +17,7 @@ public class OrRule implements CSTPrintElem {
 
     @Override
     public void buildString(CSTPrintBuilder builder) {
-        builder.setName("or_rule")
+        builder.setName("or")
                 .addElem(andRule)
                 .addElems(andRules);
     }

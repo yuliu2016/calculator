@@ -51,9 +51,10 @@ public class MgParser {
         while (true) {
             visitor.markLookahead();
 
+            var pipe = parseTokenType(visitor, MgTokenType.OR);
             var rule = parseAndRule(visitor);
 
-            if (rule == null) {
+            if (!pipe || rule == null) {
                 visitor.abortLookahead();
                 break;
             } else {

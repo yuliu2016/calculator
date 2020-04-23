@@ -17,10 +17,10 @@ public class SubRule implements CSTPrintElem {
     @Override
     public void buildString(CSTPrintBuilder builder) {
         if (groupedOrRule != null)
-            builder.setName("sub_rule_group").addElem(groupedOrRule);
+            builder.setName("group").addElem(groupedOrRule);
         else if (optionalOrRule != null)
-            builder.setName("sub_rule_opt").addElem(optionalOrRule);
-        else if (token != null) builder.setName("sub_rule").addString(token);
+            builder.setName("opt").addElem(optionalOrRule);
+        else if (token != null) builder.setName("token").addString(token);
         else throw new IllegalStateException();
     }
 }

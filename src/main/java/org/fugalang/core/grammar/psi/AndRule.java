@@ -16,6 +16,6 @@ public class AndRule implements CSTPrintElem {
 
     @Override
     public void buildString(CSTPrintBuilder builder) {
-        builder.setName("and_rule").addElem(repeatRule).addElems(repeatRules);
+        builder.setName("and").addElem(repeatRule).addElems(repeatRules);
     }
 }

@@ -14,7 +14,7 @@ public class SingleRule implements CSTPrintElem {
 
     @Override
     public void buildString(CSTPrintBuilder builder) {
-        builder.setName("single_rule")
+        builder.setName("rule")
                 .addString(name)
                 .addElem(orRule);
     }
