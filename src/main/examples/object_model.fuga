@@ -1,0 +1,74 @@
+/**
+The Fuga Object Model
+
+Fuga is based on objects. An object has a type and a value.
+
+*/
+
+
+class = def(classdef) {
+    if sys.has_feature("fast_class") {
+        return fast_class(classdef)
+    }
+    scope = classdef.__scope__()
+    scope.run()
+    for i in scope.locals() {
+        if
+    }
+
+    cls = def(*constructer_args, **constructer_kwargs) {
+        ob = object()
+        ob.__dict__
+    }
+}
+
+
+sum_odd_digits = def n {
+    return n
+        -> str
+        -> map(int)
+        -> print
+        -> filter(def x: x % 2 == 1)
+        -> sum
+}
+
+hi = async def x {
+}
+
+[0:1000]
+    -> map(def d: x * x)
+    -> print
+    -> filter(def x: x % 2 == 0)
+    -> list
+    -> print
+
+def print(*args, file=stdout, end="\n") {
+    return args
+}
+
+{v: v * v for v in range(1000) }
+
+[0:1000] -> assoc(def v: v * v) -> print
+
+b = class {
+   init {
+       self.a = 1
+       self.b = 1
+   }
+
+   a = def(self) {
+   }
+
+   b = def(cls) {
+   }
+
+   c = 1
+
+   d = def()
+}
+
+Person = dataclass {
+    name: int,
+    age: int,
+
+}

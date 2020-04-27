@@ -1,8 +1,8 @@
 # Grammar for Fuga
 
 single_input: NEWLINE | simple_stmt | compound_stmt NEWLINE
-file_input: (NEWLINE | stmt)*
-eval_input: testlist NEWLINE*
+file_input: (NEWLINE | stmt)* ENDMARKER
+eval_input: testlist NEWLINE* ENDMARKER
 
 # Statements
 stmt: (simple_stmt | compound_stmt) NEWLINE
@@ -46,23 +46,20 @@ except_clause: 'except' [test ['as' NAME]]
 with_stmt: 'with' with_item (',' with_item)* suite
 with_item: test ['as' expr]
 
-suite: ':' simple_stmt | '{' simple_stmt '}' | '{' NEWLINE stmt+ '}'
+block_suite:  '{' simple_stmt '}' | '{' NEWLINE stmt+ '}'
+suite: ':' simple_stmt | block_suite
 
 # Function definitions
 
 varargslist: vfpdef ['=' test] (',' vfpdef ['=' test])*
 vfpdef: NAME
 
-lambdef: 'def' [varargslist] '=>' test
-parameters: '(' [varargslist] ')'
-funcdef: 'def' parameters suite
+funcdef: ['async'] 'def' [varargslist] (':' test | block_suite)
 
 # Test and Expressions
 
 namedexpr_test: test [':=' test]
-
-test: or_test ['?' or_test ':' test] | lambdef | funcdef
-
+test: or_test ['?' or_test ':' test] | funcdef
 or_test: and_test ('or' and_test)*
 and_test: not_test ('and' not_test)*
 not_test: 'not' not_test | comparison
@@ -81,14 +78,15 @@ pipe_expr: atom_expr ('->' atom_expr)*
 
 # Atoms
 
-atom_expr: atom trailer*
+atom_expr: ["await"] atom trailer*
 atom: compound_atom | simple_atom
-compound_atom: '(' [testlist_comp] ')' | '[' [testlist_comp] ']' | '{' [dictorsetmaker] '}'
-simple_atom: NAME | NUMBER | STRING+ | 'None' | 'True' | 'False'
+compound_atom: '(' [testlist_comp] ')' | '[' [testlist_comp_sub] ']' | '{' [dictorsetmaker] '}'
+simple_atom: NAME | NUMBER | STRING | 'None' | 'True' | 'False'
 
 testlist_comp: (namedexpr_test|star_expr) ( comp_for | (',' (namedexpr_test|star_expr))* [','] )
+testlist_comp_sub = testlist_comp | subscript
 
-trailer: '(' [arglist] ')' | '[' subscriptlist ']' | '.' NAME
+trailer: '(' [arglist] ')' | '[' subscriptlist ']' | '.' NAME | block_suite
 subscriptlist: subscript (',' subscript)* [',']
 subscript: test | [test] ':' [test] [sliceop]
 sliceop: ':' [test]
