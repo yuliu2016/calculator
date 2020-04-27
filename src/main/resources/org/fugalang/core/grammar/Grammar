@@ -2,7 +2,7 @@
 
 single_input: NEWLINE | simple_stmt | compound_stmt NEWLINE
 file_input: (NEWLINE | stmt)* ENDMARKER
-eval_input: testlist NEWLINE* ENDMARKER
+eval_input: exprlist NEWLINE* ENDMARKER
 
 # Statements
 stmt: (simple_stmt | compound_stmt) NEWLINE
@@ -11,9 +11,9 @@ simple_stmt: small_stmt (';' small_stmt)* [';']
 # Small Statements
 small_stmt: expr_stmt | del_stmt | pass_stmt | flow_stmt | import_stmt | assert_stmt
 
-testlist_star_expr: (test | star_expr) (',' (test | star_expr))* [',']
+exprlist_star_expr: (expr | star_expr) (',' (expr | star_expr))* [',']
 augassign: ('+=' | '-=' | '*=' | '@=' | '/=' | '%=' | '&=' | '|=' | '^=' | '<<=' | '>>=' | '**=' | '//=')
-expr_stmt: testlist_star_expr [augassign testlist | ('=' testlist_star_expr)*]
+expr_stmt: exprlist_star_expr [augassign exprlist | ('=' exprlist_star_expr)*]
 
 del_stmt: 'del' exprlist
 pass_stmt: 'pass'
@@ -21,8 +21,8 @@ pass_stmt: 'pass'
 flow_stmt: break_stmt | continue_stmt | return_stmt | raise_stmt
 break_stmt: 'break'
 continue_stmt: 'continue'
-return_stmt: 'return' [testlist_star_expr]
-raise_stmt: 'raise' [test ['from' test]]
+return_stmt: 'return' [exprlist_star_expr]
+raise_stmt: 'raise' [expr ['from' expr]]
 
 import_stmt: import_name | import_from
 import_name: 'import' dotted_as_names
@@ -33,44 +33,44 @@ import_as_names: import_as_name (',' import_as_name)* [',']
 dotted_as_names: dotted_as_name (',' dotted_as_name)* [',']
 dotted_name: NAME ('.' NAME)*
 
-assert_stmt: 'assert' test [',' test]
+assert_stmt: 'assert' expr [',' expr]
 
 # Compound statements
 compound_stmt: if_stmt | while_stmt | for_stmt | try_stmt | with_stmt
-if_stmt: 'if' namedexpr_test suite ('elif' namedexpr_test suite)* ['else' suite]
-while_stmt: 'while' namedexpr_test suite ['else' suite]
-for_stmt: 'for' exprlist 'in' testlist suite ['else' suite]
+if_stmt: 'if' namedexpr_expr suite ('elif' namedexpr_expr suite)* ['else' suite]
+while_stmt: 'while' namedexpr_expr suite ['else' suite]
+for_stmt: 'for' exprlist 'in' exprlist suite ['else' suite]
 try_stmt: ('try' suite ((except_clause suite)+ ['else' suite] ['finally' suite] | 'finally' suite))
 # NB compile.c makes sure that the default except clause is last
-except_clause: 'except' [test ['as' NAME]]
+except_clause: 'except' [expr ['as' NAME]]
 with_stmt: 'with' with_item (',' with_item)* suite
-with_item: test ['as' expr]
+with_item: expr ['as' NAME]
 
 block_suite:  '{' simple_stmt '}' | '{' NEWLINE stmt+ '}'
 suite: ':' simple_stmt | block_suite
 
 # Function definitions
 
-varargslist: vfpdef ['=' test] (',' vfpdef ['=' test])*
+varargslist: vfpdef ['=' expr] (',' vfpdef ['=' expr])*
 vfpdef: NAME
 
-funcdef: ['async'] 'def' [varargslist] (':' test | block_suite)
+funcdef: ['async'] 'def' [varargslist] (':' expr | block_suite)
 
 # Test and Expressions
 
-namedexpr_test: test [':=' test]
-test: or_test ['?' or_test ':' test] | funcdef
-or_test: and_test ('or' and_test)*
-and_test: not_test ('and' not_test)*
-not_test: 'not' not_test | comparison
-comparison: expr (comp_op expr)*
+namedexpr_expr: NAME [':=' expr]
+expr: 'if' disjunction '?' disjunction 'else' expr | disjunction | funcdef
+disjunction: conjunction ('or' conjunction)*
+conjunction: inversion ('and' inversion)*
+inversion: 'not' inversion | comparison
+comparison: bitwise_or (comp_op bitwise_or)*
 comp_op: '<'|'>'|'=='|'>='|'<='|'!='|'in'|'not' 'in'|'is'|'is' 'not'
-star_expr: '*' expr
-expr: xor_expr ('|' xor_expr)*
-xor_expr: and_expr ('^' and_expr)*
-and_expr: shift_expr ('&' shift_expr)*
-shift_expr: arith_expr (('<<'|'>>') arith_expr)*
-arith_expr: term (('+'|'-') term)*
+star_expr: '*' bitwise_or
+bitwise_or: bitwise_xor ('|' bitwise_xor)*
+bitwise_xor: bitwise_and ('^' bitwise_and)*
+bitwise_and: shift_expr ('&' shift_expr)*
+shift_expr: sum (('<<'|'>>') sum)*
+sum: term (('+'|'-') term)*
 term: factor (('*'|'@'|'/'|'%'|'//') factor)*
 factor: ('+'|'-'|'~') factor | power
 power: pipe_expr ['**' factor]
@@ -80,28 +80,28 @@ pipe_expr: atom_expr ('->' atom_expr)*
 
 atom_expr: ["await"] atom trailer*
 atom: compound_atom | simple_atom
-compound_atom: '(' [testlist_comp] ')' | '[' [testlist_comp_sub] ']' | '{' [dictorsetmaker] '}'
+compound_atom: '(' [exprlist_comp] ')' | '[' [exprlist_comp_sub] ']' | '{' [dictorsetmaker] '}'
 simple_atom: NAME | NUMBER | STRING | 'None' | 'True' | 'False'
 
-testlist_comp: (namedexpr_test|star_expr) ( comp_for | (',' (namedexpr_test|star_expr))* [','] )
-testlist_comp_sub = testlist_comp | subscript
+exprlist_comp: (namedexpr_expr|star_expr) ( comp_for | (',' (namedexpr_expr|star_expr))* [','] )
+exprlist_comp_sub: exprlist_comp | subscript
 
 trailer: '(' [arglist] ')' | '[' subscriptlist ']' | '.' NAME | block_suite
 subscriptlist: subscript (',' subscript)* [',']
-subscript: test | [test] ':' [test] [sliceop]
-sliceop: ':' [test]
+subscript: expr | [expr] ':' [expr] [sliceop]
+sliceop: ':' [expr]
 
-exprlist: (expr|star_expr) (',' (expr|star_expr))* [',']
-testlist: test (',' test)* [',']
+exprlist: (bitwise_or|star_expr) (',' (bitwise_or|star_expr))* [',']
+exprlist: expr (',' expr)* [',']
 
 dictorsetmaker: dict_maker | set_maker
 
-dict_maker: (test ':' test | '**' expr) (comp_for | (',' (test ':' test | '**' expr))* [','])
-set_maker: (test | star_expr) (comp_for | (',' (test | star_expr))* [','])
+dict_maker: (expr ':' expr | '**' bitwise_or) (comp_for | (',' (expr ':' expr | '**' bitwise_or))* [','])
+set_maker: (expr | star_expr) (comp_for | (',' (expr | star_expr))* [','])
 
 arglist: argument (',' argument)*  [',']
-argument: (NAME [comp_for] | NAME ':=' test | NAME '=' test | '**' test | '*' test)
+argument: (NAME [comp_for] | NAME ':=' expr | NAME '=' expr | '**' expr | '*' expr)
 
 comp_iter: comp_for | comp_if
-comp_for: 'for' exprlist 'in' or_test [comp_iter]
-comp_if: 'if' test [comp_iter]
+comp_for: 'for' exprlist 'in' disjunction [comp_iter]
+comp_if: 'if' expr [comp_iter]

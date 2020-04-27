@@ -46,9 +46,15 @@ def print(*args, file=stdout, end="\n") {
     return args
 }
 
-{v: v * v for v in range(1000) }
+[0:1000] -> assoc(def k: k * k) -> print
+[:1000] -> map(def x: x - 1) -> set -> sorted -> each(print)
 
-[0:1000] -> assoc(def v: v * v) -> print
+[d for d in a for a in g if a == 5]
+
+g -> flatten() -> list
+
+[k for k in range(6)]
+range(6) -> map(def x: if 4 > x ? 2 else 0)
 
 b = class {
    init {

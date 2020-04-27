@@ -16,6 +16,7 @@ public class MgGen {
         try {
             var data = Files.readString(Paths.get(res.toURI()));
             var tokens = new MgTokenizer(data).tokenize();
+            tokens.forEach(System.out::print);
 
             Rules cst = MgParser.parseRules(tokens);
             System.out.println(ParseTreePPrint.format(cst, -1));
