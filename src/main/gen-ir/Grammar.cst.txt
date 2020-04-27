@@ -1,0 +1,2548 @@
+(rules
+  (rule
+    'single_input'
+    (or
+      (and
+        (once
+          (token 'NEWLINE')
+        )
+      )
+      (and
+        (once
+          (token 'simple_stmt')
+        )
+      )
+      (and
+        (once
+          (token 'compound_stmt')
+        )
+        (once
+          (token 'NEWLINE')
+        )
+      )
+    )
+  )
+  (rule
+    'file_input'
+    (or
+      (and
+        (opt_repeat
+          (group
+            (or
+              (and
+                (once
+                  (token 'NEWLINE')
+                )
+              )
+              (and
+                (once
+                  (token 'stmt')
+                )
+              )
+            )
+          )
+        )
+        (once
+          (token 'ENDMARKER')
+        )
+      )
+    )
+  )
+  (rule
+    'eval_input'
+    (or
+      (and
+        (once
+          (token 'exprlist')
+        )
+        (opt_repeat
+          (token 'NEWLINE')
+        )
+        (once
+          (token 'ENDMARKER')
+        )
+      )
+    )
+  )
+  (rule
+    'stmt'
+    (or
+      (and
+        (once
+          (group
+            (or
+              (and
+                (once
+                  (token 'simple_stmt')
+                )
+              )
+              (and
+                (once
+                  (token 'compound_stmt')
+                )
+              )
+            )
+          )
+        )
+        (once
+          (token 'NEWLINE')
+        )
+      )
+    )
+  )
+  (rule
+    'simple_stmt'
+    (or
+      (and
+        (once
+          (token 'small_stmt')
+        )
+        (opt_repeat
+          (group
+            (or
+              (and
+                (once
+                  (token ';')
+                )
+                (once
+                  (token 'small_stmt')
+                )
+              )
+            )
+          )
+        )
+        (once
+          (opt
+            (or
+              (and
+                (once
+                  (token ';')
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (rule
+    'small_stmt'
+    (or
+      (and
+        (once
+          (token 'expr_stmt')
+        )
+      )
+      (and
+        (once
+          (token 'del_stmt')
+        )
+      )
+      (and
+        (once
+          (token 'pass_stmt')
+        )
+      )
+      (and
+        (once
+          (token 'flow_stmt')
+        )
+      )
+      (and
+        (once
+          (token 'import_stmt')
+        )
+      )
+      (and
+        (once
+          (token 'assert_stmt')
+        )
+      )
+    )
+  )
+  (rule
+    'exprlist_star'
+    (or
+      (and
+        (once
+          (group
+            (or
+              (and
+                (once
+                  (token 'expr')
+                )
+              )
+              (and
+                (once
+                  (token 'star_expr')
+                )
+              )
+            )
+          )
+        )
+        (opt_repeat
+          (group
+            (or
+              (and
+                (once
+                  (token ',')
+                )
+                (once
+                  (group
+                    (or
+                      (and
+                        (once
+                          (token 'expr')
+                        )
+                      )
+                      (and
+                        (once
+                          (token 'star_expr')
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+        (once
+          (opt
+            (or
+              (and
+                (once
+                  (token ',')
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (rule
+    'augassign'
+    (or
+      (and
+        (once
+          (group
+            (or
+              (and
+                (once
+                  (token '+=')
+                )
+              )
+              (and
+                (once
+                  (token '-=')
+                )
+              )
+              (and
+                (once
+                  (token '*=')
+                )
+              )
+              (and
+                (once
+                  (token '@=')
+                )
+              )
+              (and
+                (once
+                  (token '/=')
+                )
+              )
+              (and
+                (once
+                  (token '%=')
+                )
+              )
+              (and
+                (once
+                  (token '&=')
+                )
+              )
+              (and
+                (once
+                  (token '|=')
+                )
+              )
+              (and
+                (once
+                  (token '^=')
+                )
+              )
+              (and
+                (once
+                  (token '<<=')
+                )
+              )
+              (and
+                (once
+                  (token '>>=')
+                )
+              )
+              (and
+                (once
+                  (token '**=')
+                )
+              )
+              (and
+                (once
+                  (token '//=')
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (rule
+    'expr_stmt'
+    (or
+      (and
+        (once
+          (token 'exprlist_star')
+        )
+        (once
+          (opt
+            (or
+              (and
+                (once
+                  (token 'augassign')
+                )
+                (once
+                  (token 'exprlist')
+                )
+              )
+              (and
+                (opt_repeat
+                  (group
+                    (or
+                      (and
+                        (once
+                          (token '=')
+                        )
+                        (once
+                          (token 'exprlist_star')
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (rule
+    'del_stmt'
+    (or
+      (and
+        (once
+          (token 'del')
+        )
+        (once
+          (token 'targets')
+        )
+      )
+    )
+  )
+  (rule
+    'pass_stmt'
+    (or
+      (and
+        (once
+          (token 'pass')
+        )
+      )
+    )
+  )
+  (rule
+    'flow_stmt'
+    (or
+      (and
+        (once
+          (token 'break_stmt')
+        )
+      )
+      (and
+        (once
+          (token 'continue_stmt')
+        )
+      )
+      (and
+        (once
+          (token 'return_stmt')
+        )
+      )
+      (and
+        (once
+          (token 'raise_stmt')
+        )
+      )
+    )
+  )
+  (rule
+    'break_stmt'
+    (or
+      (and
+        (once
+          (token 'break')
+        )
+      )
+    )
+  )
+  (rule
+    'continue_stmt'
+    (or
+      (and
+        (once
+          (token 'continue')
+        )
+      )
+    )
+  )
+  (rule
+    'return_stmt'
+    (or
+      (and
+        (once
+          (token 'return')
+        )
+        (once
+          (opt
+            (or
+              (and
+                (once
+                  (token 'exprlist_star')
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (rule
+    'raise_stmt'
+    (or
+      (and
+        (once
+          (token 'raise')
+        )
+        (once
+          (opt
+            (or
+              (and
+                (once
+                  (token 'expr')
+                )
+                (once
+                  (opt
+                    (or
+                      (and
+                        (once
+                          (token 'from')
+                        )
+                        (once
+                          (token 'expr')
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (rule
+    'import_stmt'
+    (or
+      (and
+        (once
+          (token 'import_name')
+        )
+      )
+      (and
+        (once
+          (token 'import_from')
+        )
+      )
+    )
+  )
+  (rule
+    'import_name'
+    (or
+      (and
+        (once
+          (token 'import')
+        )
+        (once
+          (token 'dotted_as_names')
+        )
+      )
+    )
+  )
+  (rule
+    'import_from'
+    (or
+      (and
+        (once
+          (group
+            (or
+              (and
+                (once
+                  (token 'from')
+                )
+                (once
+                  (group
+                    (or
+                      (and
+                        (opt_repeat
+                          (group
+                            (or
+                              (and
+                                (once
+                                  (token '.')
+                                )
+                              )
+                            )
+                          )
+                        )
+                        (once
+                          (token 'dotted_name')
+                        )
+                      )
+                      (and
+                        (repeat
+                          (group
+                            (or
+                              (and
+                                (once
+                                  (token '.')
+                                )
+                              )
+                            )
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+                (once
+                  (token 'import')
+                )
+                (once
+                  (group
+                    (or
+                      (and
+                        (once
+                          (token '*')
+                        )
+                      )
+                      (and
+                        (once
+                          (token '(')
+                        )
+                        (once
+                          (token 'import_as_names')
+                        )
+                        (once
+                          (token ')')
+                        )
+                      )
+                      (and
+                        (once
+                          (token 'import_as_names')
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (rule
+    'import_as_name'
+    (or
+      (and
+        (once
+          (token 'NAME')
+        )
+        (once
+          (opt
+            (or
+              (and
+                (once
+                  (token 'as')
+                )
+                (once
+                  (token 'NAME')
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (rule
+    'dotted_as_name'
+    (or
+      (and
+        (once
+          (token 'dotted_name')
+        )
+        (once
+          (opt
+            (or
+              (and
+                (once
+                  (token 'as')
+                )
+                (once
+                  (token 'NAME')
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (rule
+    'import_as_names'
+    (or
+      (and
+        (once
+          (token 'import_as_name')
+        )
+        (opt_repeat
+          (group
+            (or
+              (and
+                (once
+                  (token ',')
+                )
+                (once
+                  (token 'import_as_name')
+                )
+              )
+            )
+          )
+        )
+        (once
+          (opt
+            (or
+              (and
+                (once
+                  (token ',')
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (rule
+    'dotted_as_names'
+    (or
+      (and
+        (once
+          (token 'dotted_as_name')
+        )
+        (opt_repeat
+          (group
+            (or
+              (and
+                (once
+                  (token ',')
+                )
+                (once
+                  (token 'dotted_as_name')
+                )
+              )
+            )
+          )
+        )
+        (once
+          (opt
+            (or
+              (and
+                (once
+                  (token ',')
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (rule
+    'dotted_name'
+    (or
+      (and
+        (once
+          (token 'NAME')
+        )
+        (opt_repeat
+          (group
+            (or
+              (and
+                (once
+                  (token '.')
+                )
+                (once
+                  (token 'NAME')
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (rule
+    'assert_stmt'
+    (or
+      (and
+        (once
+          (token 'assert')
+        )
+        (once
+          (token 'expr')
+        )
+        (once
+          (opt
+            (or
+              (and
+                (once
+                  (token ',')
+                )
+                (once
+                  (token 'expr')
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (rule
+    'compound_stmt'
+    (or
+      (and
+        (once
+          (token 'if_stmt')
+        )
+      )
+      (and
+        (once
+          (token 'while_stmt')
+        )
+      )
+      (and
+        (once
+          (token 'for_stmt')
+        )
+      )
+      (and
+        (once
+          (token 'try_stmt')
+        )
+      )
+      (and
+        (once
+          (token 'with_stmt')
+        )
+      )
+    )
+  )
+  (rule
+    'if_stmt'
+    (or
+      (and
+        (once
+          (token 'if')
+        )
+        (once
+          (token 'namedexpr_expr')
+        )
+        (once
+          (token 'suite')
+        )
+        (opt_repeat
+          (group
+            (or
+              (and
+                (once
+                  (token 'elif')
+                )
+                (once
+                  (token 'namedexpr_expr')
+                )
+                (once
+                  (token 'suite')
+                )
+              )
+            )
+          )
+        )
+        (once
+          (opt
+            (or
+              (and
+                (once
+                  (token 'else')
+                )
+                (once
+                  (token 'suite')
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (rule
+    'while_stmt'
+    (or
+      (and
+        (once
+          (token 'while')
+        )
+        (once
+          (token 'namedexpr_expr')
+        )
+        (once
+          (token 'suite')
+        )
+        (once
+          (opt
+            (or
+              (and
+                (once
+                  (token 'else')
+                )
+                (once
+                  (token 'suite')
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (rule
+    'for_stmt'
+    (or
+      (and
+        (once
+          (token 'for')
+        )
+        (once
+          (token 'targets')
+        )
+        (once
+          (token 'in')
+        )
+        (once
+          (token 'exprlist')
+        )
+        (once
+          (token 'suite')
+        )
+        (once
+          (opt
+            (or
+              (and
+                (once
+                  (token 'else')
+                )
+                (once
+                  (token 'suite')
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (rule
+    'try_stmt'
+    (or
+      (and
+        (once
+          (group
+            (or
+              (and
+                (once
+                  (token 'try')
+                )
+                (once
+                  (token 'suite')
+                )
+                (once
+                  (group
+                    (or
+                      (and
+                        (repeat
+                          (group
+                            (or
+                              (and
+                                (once
+                                  (token 'except_clause')
+                                )
+                                (once
+                                  (token 'suite')
+                                )
+                              )
+                            )
+                          )
+                        )
+                        (once
+                          (opt
+                            (or
+                              (and
+                                (once
+                                  (token 'else')
+                                )
+                                (once
+                                  (token 'suite')
+                                )
+                              )
+                            )
+                          )
+                        )
+                        (once
+                          (opt
+                            (or
+                              (and
+                                (once
+                                  (token 'finally')
+                                )
+                                (once
+                                  (token 'suite')
+                                )
+                              )
+                            )
+                          )
+                        )
+                      )
+                      (and
+                        (once
+                          (token 'finally')
+                        )
+                        (once
+                          (token 'suite')
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (rule
+    'except_clause'
+    (or
+      (and
+        (once
+          (token 'except')
+        )
+        (once
+          (opt
+            (or
+              (and
+                (once
+                  (token 'expr')
+                )
+                (once
+                  (opt
+                    (or
+                      (and
+                        (once
+                          (token 'as')
+                        )
+                        (once
+                          (token 'NAME')
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (rule
+    'with_stmt'
+    (or
+      (and
+        (once
+          (token 'with')
+        )
+        (once
+          (token 'with_item')
+        )
+        (opt_repeat
+          (group
+            (or
+              (and
+                (once
+                  (token ',')
+                )
+                (once
+                  (token 'with_item')
+                )
+              )
+            )
+          )
+        )
+        (once
+          (token 'suite')
+        )
+      )
+    )
+  )
+  (rule
+    'with_item'
+    (or
+      (and
+        (once
+          (token 'expr')
+        )
+        (once
+          (opt
+            (or
+              (and
+                (once
+                  (token 'as')
+                )
+                (once
+                  (token 'NAME')
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (rule
+    'block_suite'
+    (or
+      (and
+        (once
+          (token '{')
+        )
+        (once
+          (token 'simple_stmt')
+        )
+        (once
+          (token '}')
+        )
+      )
+      (and
+        (once
+          (token '{')
+        )
+        (once
+          (token 'NEWLINE')
+        )
+        (repeat
+          (token 'stmt')
+        )
+        (once
+          (token '}')
+        )
+      )
+    )
+  )
+  (rule
+    'suite'
+    (or
+      (and
+        (once
+          (token ':')
+        )
+        (once
+          (token 'simple_stmt')
+        )
+      )
+      (and
+        (once
+          (token 'block_suite')
+        )
+      )
+    )
+  )
+  (rule
+    'varargslist'
+    (or
+      (and
+        (once
+          (token 'vfpdef')
+        )
+        (once
+          (opt
+            (or
+              (and
+                (once
+                  (token '=')
+                )
+                (once
+                  (token 'expr')
+                )
+              )
+            )
+          )
+        )
+        (opt_repeat
+          (group
+            (or
+              (and
+                (once
+                  (token ',')
+                )
+                (once
+                  (token 'vfpdef')
+                )
+                (once
+                  (opt
+                    (or
+                      (and
+                        (once
+                          (token '=')
+                        )
+                        (once
+                          (token 'expr')
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (rule
+    'vfpdef'
+    (or
+      (and
+        (once
+          (token 'NAME')
+        )
+      )
+    )
+  )
+  (rule
+    'funcdef'
+    (or
+      (and
+        (once
+          (opt
+            (or
+              (and
+                (once
+                  (token 'async')
+                )
+              )
+            )
+          )
+        )
+        (once
+          (token 'def')
+        )
+        (once
+          (opt
+            (or
+              (and
+                (once
+                  (token 'varargslist')
+                )
+              )
+            )
+          )
+        )
+        (once
+          (group
+            (or
+              (and
+                (once
+                  (token ':')
+                )
+                (once
+                  (token 'expr')
+                )
+              )
+              (and
+                (once
+                  (token 'block_suite')
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (rule
+    'namedexpr_expr'
+    (or
+      (and
+        (once
+          (token 'NAME')
+        )
+        (once
+          (opt
+            (or
+              (and
+                (once
+                  (token ':=')
+                )
+                (once
+                  (token 'expr')
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (rule
+    'expr'
+    (or
+      (and
+        (once
+          (token 'if')
+        )
+        (once
+          (token 'disjunction')
+        )
+        (once
+          (token '?')
+        )
+        (once
+          (token 'disjunction')
+        )
+        (once
+          (token 'else')
+        )
+        (once
+          (token 'expr')
+        )
+      )
+      (and
+        (once
+          (token 'disjunction')
+        )
+      )
+      (and
+        (once
+          (token 'funcdef')
+        )
+      )
+    )
+  )
+  (rule
+    'disjunction'
+    (or
+      (and
+        (once
+          (token 'conjunction')
+        )
+        (opt_repeat
+          (group
+            (or
+              (and
+                (once
+                  (token 'or')
+                )
+                (once
+                  (token 'conjunction')
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (rule
+    'conjunction'
+    (or
+      (and
+        (once
+          (token 'inversion')
+        )
+        (opt_repeat
+          (group
+            (or
+              (and
+                (once
+                  (token 'and')
+                )
+                (once
+                  (token 'inversion')
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (rule
+    'inversion'
+    (or
+      (and
+        (once
+          (token 'not')
+        )
+        (once
+          (token 'inversion')
+        )
+      )
+      (and
+        (once
+          (token 'comparison')
+        )
+      )
+    )
+  )
+  (rule
+    'comparison'
+    (or
+      (and
+        (once
+          (token 'bitwise_or')
+        )
+        (opt_repeat
+          (group
+            (or
+              (and
+                (once
+                  (token 'comp_op')
+                )
+                (once
+                  (token 'bitwise_or')
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (rule
+    'comp_op'
+    (or
+      (and
+        (once
+          (token '<')
+        )
+      )
+      (and
+        (once
+          (token '>')
+        )
+      )
+      (and
+        (once
+          (token '==')
+        )
+      )
+      (and
+        (once
+          (token '>=')
+        )
+      )
+      (and
+        (once
+          (token '<=')
+        )
+      )
+      (and
+        (once
+          (token '!=')
+        )
+      )
+      (and
+        (once
+          (token 'in')
+        )
+      )
+      (and
+        (once
+          (token 'not')
+        )
+        (once
+          (token 'in')
+        )
+      )
+      (and
+        (once
+          (token 'is')
+        )
+      )
+      (and
+        (once
+          (token 'is')
+        )
+        (once
+          (token 'not')
+        )
+      )
+    )
+  )
+  (rule
+    'star_expr'
+    (or
+      (and
+        (once
+          (token '*')
+        )
+        (once
+          (token 'bitwise_or')
+        )
+      )
+    )
+  )
+  (rule
+    'bitwise_or'
+    (or
+      (and
+        (once
+          (token 'bitwise_xor')
+        )
+        (opt_repeat
+          (group
+            (or
+              (and
+                (once
+                  (token '|')
+                )
+                (once
+                  (token 'bitwise_xor')
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (rule
+    'bitwise_xor'
+    (or
+      (and
+        (once
+          (token 'bitwise_and')
+        )
+        (opt_repeat
+          (group
+            (or
+              (and
+                (once
+                  (token '^')
+                )
+                (once
+                  (token 'bitwise_and')
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (rule
+    'bitwise_and'
+    (or
+      (and
+        (once
+          (token 'shift_expr')
+        )
+        (opt_repeat
+          (group
+            (or
+              (and
+                (once
+                  (token '&')
+                )
+                (once
+                  (token 'shift_expr')
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (rule
+    'shift_expr'
+    (or
+      (and
+        (once
+          (token 'sum')
+        )
+        (opt_repeat
+          (group
+            (or
+              (and
+                (once
+                  (group
+                    (or
+                      (and
+                        (once
+                          (token '<<')
+                        )
+                      )
+                      (and
+                        (once
+                          (token '>>')
+                        )
+                      )
+                    )
+                  )
+                )
+                (once
+                  (token 'sum')
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (rule
+    'sum'
+    (or
+      (and
+        (once
+          (token 'term')
+        )
+        (opt_repeat
+          (group
+            (or
+              (and
+                (once
+                  (group
+                    (or
+                      (and
+                        (once
+                          (token '+')
+                        )
+                      )
+                      (and
+                        (once
+                          (token '-')
+                        )
+                      )
+                    )
+                  )
+                )
+                (once
+                  (token 'term')
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (rule
+    'term'
+    (or
+      (and
+        (once
+          (token 'factor')
+        )
+        (opt_repeat
+          (group
+            (or
+              (and
+                (once
+                  (group
+                    (or
+                      (and
+                        (once
+                          (token '*')
+                        )
+                      )
+                      (and
+                        (once
+                          (token '@')
+                        )
+                      )
+                      (and
+                        (once
+                          (token '/')
+                        )
+                      )
+                      (and
+                        (once
+                          (token '%')
+                        )
+                      )
+                      (and
+                        (once
+                          (token '//')
+                        )
+                      )
+                    )
+                  )
+                )
+                (once
+                  (token 'factor')
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (rule
+    'factor'
+    (or
+      (and
+        (once
+          (group
+            (or
+              (and
+                (once
+                  (token '+')
+                )
+              )
+              (and
+                (once
+                  (token '-')
+                )
+              )
+              (and
+                (once
+                  (token '~')
+                )
+              )
+            )
+          )
+        )
+        (once
+          (token 'factor')
+        )
+      )
+      (and
+        (once
+          (token 'power')
+        )
+      )
+    )
+  )
+  (rule
+    'power'
+    (or
+      (and
+        (once
+          (token 'pipe_expr')
+        )
+        (once
+          (opt
+            (or
+              (and
+                (once
+                  (token '**')
+                )
+                (once
+                  (token 'factor')
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (rule
+    'pipe_expr'
+    (or
+      (and
+        (once
+          (token 'atom_expr')
+        )
+        (opt_repeat
+          (group
+            (or
+              (and
+                (once
+                  (token '->')
+                )
+                (once
+                  (token 'atom_expr')
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (rule
+    'atom_expr'
+    (or
+      (and
+        (once
+          (opt
+            (or
+              (and
+                (once
+                  (token 'await')
+                )
+              )
+            )
+          )
+        )
+        (once
+          (token 'atom')
+        )
+        (opt_repeat
+          (token 'trailer')
+        )
+      )
+    )
+  )
+  (rule
+    'atom'
+    (or
+      (and
+        (once
+          (token 'compound_atom')
+        )
+      )
+      (and
+        (once
+          (token 'simple_atom')
+        )
+      )
+    )
+  )
+  (rule
+    'compound_atom'
+    (or
+      (and
+        (once
+          (token '(')
+        )
+        (once
+          (opt
+            (or
+              (and
+                (once
+                  (token 'exprlist_comp')
+                )
+              )
+            )
+          )
+        )
+        (once
+          (token ')')
+        )
+      )
+      (and
+        (once
+          (token '[')
+        )
+        (once
+          (opt
+            (or
+              (and
+                (once
+                  (token 'exprlist_comp_sub')
+                )
+              )
+            )
+          )
+        )
+        (once
+          (token ']')
+        )
+      )
+      (and
+        (once
+          (token '{')
+        )
+        (once
+          (opt
+            (or
+              (and
+                (once
+                  (token 'dictorsetmaker')
+                )
+              )
+            )
+          )
+        )
+        (once
+          (token '}')
+        )
+      )
+    )
+  )
+  (rule
+    'simple_atom'
+    (or
+      (and
+        (once
+          (token 'NAME')
+        )
+      )
+      (and
+        (once
+          (token 'NUMBER')
+        )
+      )
+      (and
+        (once
+          (token 'STRING')
+        )
+      )
+      (and
+        (once
+          (token 'None')
+        )
+      )
+      (and
+        (once
+          (token 'True')
+        )
+      )
+      (and
+        (once
+          (token 'False')
+        )
+      )
+    )
+  )
+  (rule
+    'exprlist_comp'
+    (or
+      (and
+        (once
+          (group
+            (or
+              (and
+                (once
+                  (token 'namedexpr_expr')
+                )
+              )
+              (and
+                (once
+                  (token 'star_expr')
+                )
+              )
+            )
+          )
+        )
+        (once
+          (group
+            (or
+              (and
+                (once
+                  (token 'comp_for')
+                )
+              )
+              (and
+                (opt_repeat
+                  (group
+                    (or
+                      (and
+                        (once
+                          (token ',')
+                        )
+                        (once
+                          (group
+                            (or
+                              (and
+                                (once
+                                  (token 'namedexpr_expr')
+                                )
+                              )
+                              (and
+                                (once
+                                  (token 'star_expr')
+                                )
+                              )
+                            )
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+                (once
+                  (opt
+                    (or
+                      (and
+                        (once
+                          (token ',')
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (rule
+    'exprlist_comp_sub'
+    (or
+      (and
+        (once
+          (token 'exprlist_comp')
+        )
+      )
+      (and
+        (once
+          (token 'subscript')
+        )
+      )
+    )
+  )
+  (rule
+    'trailer'
+    (or
+      (and
+        (once
+          (token '(')
+        )
+        (once
+          (opt
+            (or
+              (and
+                (once
+                  (token 'arglist')
+                )
+              )
+            )
+          )
+        )
+        (once
+          (token ')')
+        )
+      )
+      (and
+        (once
+          (token '[')
+        )
+        (once
+          (token 'subscriptlist')
+        )
+        (once
+          (token ']')
+        )
+      )
+      (and
+        (once
+          (token '.')
+        )
+        (once
+          (token 'NAME')
+        )
+      )
+      (and
+        (once
+          (token 'block_suite')
+        )
+      )
+    )
+  )
+  (rule
+    'subscriptlist'
+    (or
+      (and
+        (once
+          (token 'subscript')
+        )
+        (opt_repeat
+          (group
+            (or
+              (and
+                (once
+                  (token ',')
+                )
+                (once
+                  (token 'subscript')
+                )
+              )
+            )
+          )
+        )
+        (once
+          (opt
+            (or
+              (and
+                (once
+                  (token ',')
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (rule
+    'subscript'
+    (or
+      (and
+        (once
+          (token 'expr')
+        )
+      )
+      (and
+        (once
+          (opt
+            (or
+              (and
+                (once
+                  (token 'expr')
+                )
+              )
+            )
+          )
+        )
+        (once
+          (token ':')
+        )
+        (once
+          (opt
+            (or
+              (and
+                (once
+                  (token 'expr')
+                )
+              )
+            )
+          )
+        )
+        (once
+          (opt
+            (or
+              (and
+                (once
+                  (token 'sliceop')
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (rule
+    'sliceop'
+    (or
+      (and
+        (once
+          (token ':')
+        )
+        (once
+          (opt
+            (or
+              (and
+                (once
+                  (token 'expr')
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (rule
+    'targets'
+    (or
+      (and
+        (once
+          (group
+            (or
+              (and
+                (once
+                  (token 'bitwise_or')
+                )
+              )
+              (and
+                (once
+                  (token 'star_expr')
+                )
+              )
+            )
+          )
+        )
+        (opt_repeat
+          (group
+            (or
+              (and
+                (once
+                  (token ',')
+                )
+                (once
+                  (group
+                    (or
+                      (and
+                        (once
+                          (token 'bitwise_or')
+                        )
+                      )
+                      (and
+                        (once
+                          (token 'star_expr')
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+        (once
+          (opt
+            (or
+              (and
+                (once
+                  (token ',')
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (rule
+    'exprlist'
+    (or
+      (and
+        (once
+          (token 'expr')
+        )
+        (opt_repeat
+          (group
+            (or
+              (and
+                (once
+                  (token ',')
+                )
+                (once
+                  (token 'expr')
+                )
+              )
+            )
+          )
+        )
+        (once
+          (opt
+            (or
+              (and
+                (once
+                  (token ',')
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (rule
+    'dictorsetmaker'
+    (or
+      (and
+        (once
+          (token 'dict_maker')
+        )
+      )
+      (and
+        (once
+          (token 'set_maker')
+        )
+      )
+    )
+  )
+  (rule
+    'dict_maker'
+    (or
+      (and
+        (once
+          (group
+            (or
+              (and
+                (once
+                  (token 'expr')
+                )
+                (once
+                  (token ':')
+                )
+                (once
+                  (token 'expr')
+                )
+              )
+              (and
+                (once
+                  (token '**')
+                )
+                (once
+                  (token 'bitwise_or')
+                )
+              )
+            )
+          )
+        )
+        (once
+          (group
+            (or
+              (and
+                (once
+                  (token 'comp_for')
+                )
+              )
+              (and
+                (opt_repeat
+                  (group
+                    (or
+                      (and
+                        (once
+                          (token ',')
+                        )
+                        (once
+                          (group
+                            (or
+                              (and
+                                (once
+                                  (token 'expr')
+                                )
+                                (once
+                                  (token ':')
+                                )
+                                (once
+                                  (token 'expr')
+                                )
+                              )
+                              (and
+                                (once
+                                  (token '**')
+                                )
+                                (once
+                                  (token 'bitwise_or')
+                                )
+                              )
+                            )
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+                (once
+                  (opt
+                    (or
+                      (and
+                        (once
+                          (token ',')
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (rule
+    'set_maker'
+    (or
+      (and
+        (once
+          (group
+            (or
+              (and
+                (once
+                  (token 'expr')
+                )
+              )
+              (and
+                (once
+                  (token 'star_expr')
+                )
+              )
+            )
+          )
+        )
+        (once
+          (group
+            (or
+              (and
+                (once
+                  (token 'comp_for')
+                )
+              )
+              (and
+                (opt_repeat
+                  (group
+                    (or
+                      (and
+                        (once
+                          (token ',')
+                        )
+                        (once
+                          (group
+                            (or
+                              (and
+                                (once
+                                  (token 'expr')
+                                )
+                              )
+                              (and
+                                (once
+                                  (token 'star_expr')
+                                )
+                              )
+                            )
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+                (once
+                  (opt
+                    (or
+                      (and
+                        (once
+                          (token ',')
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (rule
+    'arglist'
+    (or
+      (and
+        (once
+          (token 'argument')
+        )
+        (opt_repeat
+          (group
+            (or
+              (and
+                (once
+                  (token ',')
+                )
+                (once
+                  (token 'argument')
+                )
+              )
+            )
+          )
+        )
+        (once
+          (opt
+            (or
+              (and
+                (once
+                  (token ',')
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (rule
+    'argument'
+    (or
+      (and
+        (once
+          (group
+            (or
+              (and
+                (once
+                  (token 'NAME')
+                )
+                (once
+                  (opt
+                    (or
+                      (and
+                        (once
+                          (token 'comp_for')
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+              (and
+                (once
+                  (token 'NAME')
+                )
+                (once
+                  (token ':=')
+                )
+                (once
+                  (token 'expr')
+                )
+              )
+              (and
+                (once
+                  (token 'NAME')
+                )
+                (once
+                  (token '=')
+                )
+                (once
+                  (token 'expr')
+                )
+              )
+              (and
+                (once
+                  (token '**')
+                )
+                (once
+                  (token 'expr')
+                )
+              )
+              (and
+                (once
+                  (token '*')
+                )
+                (once
+                  (token 'expr')
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (rule
+    'comp_iter'
+    (or
+      (and
+        (once
+          (token 'comp_for')
+        )
+      )
+      (and
+        (once
+          (token 'comp_if')
+        )
+      )
+    )
+  )
+  (rule
+    'comp_for'
+    (or
+      (and
+        (once
+          (token 'for')
+        )
+        (once
+          (token 'targets')
+        )
+        (once
+          (token 'in')
+        )
+        (once
+          (token 'disjunction')
+        )
+        (once
+          (opt
+            (or
+              (and
+                (once
+                  (token 'comp_iter')
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (rule
+    'comp_if'
+    (or
+      (and
+        (once
+          (token 'if')
+        )
+        (once
+          (token 'expr')
+        )
+        (once
+          (opt
+            (or
+              (and
+                (once
+                  (token 'comp_iter')
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)

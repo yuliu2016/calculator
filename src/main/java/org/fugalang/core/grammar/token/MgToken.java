@@ -33,6 +33,6 @@ public class MgToken {
         if (value == null) {
             return type.name() + " ";
         }
-        return type.name() + "('" + value + "') ";
+        return "'" + value + "' ";
     }
 }

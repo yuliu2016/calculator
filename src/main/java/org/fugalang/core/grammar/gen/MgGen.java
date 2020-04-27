@@ -19,7 +19,7 @@ public class MgGen {
             tokens.forEach(System.out::print);
 
             Rules cst = MgParser.parseRules(tokens);
-            System.out.println(ParseTreePPrint.format(cst, -1));
+            System.out.println(ParseTreePPrint.format(cst, 2));
 
         } catch (IOException | URISyntaxException e) {
             e.printStackTrace();
