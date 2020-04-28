@@ -4,6 +4,7 @@ import org.fugalang.core.pprint.CSTPrintBuilder;
 import org.fugalang.core.pprint.CSTPrintElem;
 
 import java.util.List;
+import java.util.Objects;
 
 public class OrRule implements CSTPrintElem {
     public final AndRule andRule;
@@ -11,8 +12,8 @@ public class OrRule implements CSTPrintElem {
     public final List<AndRule> andRules;
 
     public OrRule(AndRule andRule, List<AndRule> andRules) {
-        this.andRule = andRule;
-        this.andRules = andRules;
+        this.andRule = Objects.requireNonNull(andRule);
+        this.andRules = Objects.requireNonNull(andRules);
     }
 
     @Override

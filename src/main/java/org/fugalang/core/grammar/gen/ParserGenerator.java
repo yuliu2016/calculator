@@ -10,16 +10,24 @@ import java.util.Map;
 
 public class ParserGenerator {
     private final Map<String, OrRule> ruleMap;
-    private final TokenConverter validator;
-    private final Map<String, String> classNames = new LinkedHashMap<>();
+    private final TokenConverter converter;
+    private final Map<String, String> classNameMap = new LinkedHashMap<>();
+    private final ClassSet classSet;
 
-    public ParserGenerator(Rules rules, TokenConverter validator) {
+    public ParserGenerator(
+            Rules rules,
+            TokenConverter converter,
+            Path path,
+            String packageName
+    ) {
         ruleMap = new LinkedHashMap<>();
         for (var rule : rules.rules) {
             ruleMap.put(rule.name, rule.orRule);
         }
-        this.validator = validator;
+        this.converter = converter;
         validate();
+
+        classSet = new ClassSet(path, packageName);
     }
 
     public void validate() {
@@ -53,33 +61,100 @@ public class ParserGenerator {
         } else if (rule.optionalOrRule != null) {
             validateOrRule(rule.optionalOrRule);
         } else {
-            if (!ruleMap.containsKey(rule.token) && !validator.didResolveToken(rule.token)) {
+            if (!ruleMap.containsKey(rule.token) && !converter.didResolveToken(rule.token)) {
                 throw new IllegalStateException("'" + rule.token + "' doesn't exist!!!");
             }
         }
     }
 
-    public void generate(Path path, String pkg) {
-        ClassSet classSet = new ClassSet(path, pkg);
-        generateClasses(classSet);
+    public void generate() {
+        classSet.getBuilders().clear();
+        generateClasses();
         for (ClassBuilder builder : classSet.getBuilders()) {
             System.out.println(builder.getClassCode());
         }
     }
 
-    public void generateClasses(ClassSet classSet) {
+    public void generateClasses() {
         // do this first because each rule needs to lookup the types of previous rules
-        for (var entry: ruleMap.entrySet()) {
-            classNames.put(entry.getKey(), CaseUtil.convertCase(entry.getKey()));
+        for (var entry : ruleMap.entrySet()) {
+            classNameMap.put(entry.getKey(), CaseUtil.convertCase(entry.getKey()));
         }
 
         for (var entry : ruleMap.entrySet()) {
-            var className = classNames.get(entry.getKey());
-            appendOrRuleFields(classSet, className, entry.getValue());
+            var className = classNameMap.get(entry.getKey());
+            addOrRule(className, entry.getValue());
         }
     }
 
-    private void appendOrRuleFields(ClassSet classSet, String className, OrRule orRule) {
-        classSet.create(className);
+    //single_input: NEWLINE | simple_stmt | compound_stmt NEWLINE
+    private void addOrRule(String className, OrRule orRule) {
+        ClassBuilder cb = classSet.create(className);
+
+        int cnt = addAndRule(className, cb, orRule.andRule, 1);
+        for (AndRule andRule : orRule.andRules) {
+            cnt = addAndRule(className, cb, andRule, cnt);
+        }
+    }
+
+    private int addAndRule(String className,
+                            ClassBuilder cb, AndRule andRule, int cnt) {
+        if (andRule.repeatRules.isEmpty()) {
+            cnt = addFields(className, cb, andRule.repeatRule, cnt);
+            // only one in the sequence
+        } else {
+            String classWithCount = className + cnt;
+            ClassBuilder cb2 = classSet.create(classWithCount);
+            for (RepeatRule repeatRule : andRule.repeatRules) {
+                cnt = addFields(classWithCount, cb2, repeatRule, cnt);
+            }
+            cnt++;
+        }
+
+        return cnt;
+    }
+
+    private int addFields(String className, ClassBuilder cb, RepeatRule repeatRule, int cnt) {
+
+        if(repeatRule.subRule.token != null) {
+            if (classNameMap.containsKey(repeatRule.subRule.token)) {
+                var nextCls = classNameMap.get(repeatRule.subRule.token);
+                cb.addField(nextCls, CaseUtil.decap(nextCls));
+            } else {
+                var cv = converter.checkToken(repeatRule.subRule.token);
+                if (cv.isPresent()) {
+                    var cv2 = cv.orElseThrow();
+                    var clsName = cv2.getClassName();
+
+                    if (clsName.equals("boolean")) {
+                        cb.addField("boolean", CaseUtil.prefixCap("isToken", cv2.getFieldName()));
+                    } else {
+                        cb.addField(cv2.getClassName(), cv2.getFieldName());
+                    }
+                }
+            }
+
+        }
+
+        return cnt;
+    }
+
+    private boolean isAtomic(OrRule orRule) {
+        return orRule.andRules.isEmpty() && isAtomic(orRule.andRule);
+    }
+
+    private boolean isAtomic(AndRule andRule) {
+        return andRule.repeatRules.isEmpty() && isAtomic(andRule.repeatRule);
+    }
+
+    private boolean isAtomic(RepeatRule repeatRule) {
+        // repeat rules are always atomic
+        return isAtomic(repeatRule.subRule);
+    }
+
+    private boolean isAtomic(SubRule subRule) {
+        return (subRule.groupedOrRule != null && isAtomic(subRule.groupedOrRule)) ||
+                (subRule.optionalOrRule != null && isAtomic(subRule.optionalOrRule)) ||
+                subRule.token != null;
     }
 }

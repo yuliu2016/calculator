@@ -1,7 +1,6 @@
 package org.fugalang.core.grammar.gen;
 
 import org.fugalang.core.grammar.parser.MgParser;
-import org.fugalang.core.grammar.psi.Rules;
 import org.fugalang.core.grammar.token.MgTokenizer;
 import org.fugalang.core.token.Keyword;
 import org.fugalang.core.token.Operator;
@@ -22,14 +21,14 @@ public class MgGen {
 
             var cst = MgParser.parseRules(tokens);
 
-            var gen = new ParserGenerator(cst, MgGen::checkToken);
-
             var path = Paths.get(
                     System.getProperty("user.dir"),
                     "src/main/gen/org/fugalang/core/pgen/"
             );
 
-            gen.generate(path, "org.fugalang.core.pgen");
+            var gen = new ParserGenerator(cst, MgGen::checkToken,
+                    path, "org.fugalang.core.pgen");
+            gen.generate();
 
         } catch (IOException | URISyntaxException e) {
             e.printStackTrace();
@@ -39,16 +38,16 @@ public class MgGen {
     private static Optional<ConvertedValue> checkToken(String s) {
 
         if (Keyword.ALL_KEYWORDS.contains(s)) {
-            return Optional.of(new ConvertedValue("String", s));
+            return Optional.of(new ConvertedValue("boolean", s));
         }
         if (Operator.CODE_TO_NAME.containsKey(s)) {
             var name = CaseUtil.convertCase(Operator.CODE_TO_NAME.get(s));
-            return Optional.of(new ConvertedValue("String", name));
+            return Optional.of(new ConvertedValue("boolean", name));
         }
 
         if (TokenType.NAMES.contains(s)) {
             return Optional.of(new ConvertedValue("Object",
-                    CaseUtil.convertCase(s)));
+                    s.toLowerCase()));
         }
 
         return Optional.empty();

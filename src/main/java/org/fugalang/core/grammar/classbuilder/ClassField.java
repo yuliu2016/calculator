@@ -10,7 +10,7 @@ public class ClassField {
     }
 
     public String asFieldDeclaration() {
-        return String.format("        public %s %s;", type, name);
+        return String.format("public %s %s;", type, name);
     }
 
     public String asConstructorArg() {

@@ -25,7 +25,7 @@ public class ClassBuilder {
     public String getClassCode() {
         StringBuilder sb = new StringBuilder();
         sb
-                .append("// Auto Generated Parser\npackage ")
+                .append("package ")
                 .append(packageName)
                 .append(";\n\npublic class ")
                 .append(className)
@@ -40,17 +40,19 @@ public class ClassBuilder {
         sb.append("\n")
                 .append("    public ")
                 .append(className)
-                .append("(");
+                .append("(\n");
 
         for (int i = 0; i < fields.size(); i++) {
             ClassField field = fields.get(i);
+            sb.append("            ");
             sb.append(field.asConstructorArg());
             if ( i < fields.size() - 1) {
                 sb.append(",");
             }
+            sb.append("\n");
         }
 
-        sb.append(") {\n");
+        sb.append("    ) {\n");
 
         for (ClassField field : getFields()) {
             sb.append("        ");
