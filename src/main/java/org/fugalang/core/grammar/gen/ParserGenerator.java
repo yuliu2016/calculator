@@ -1,17 +1,19 @@
 package org.fugalang.core.grammar.gen;
 
+import org.fugalang.core.grammar.classbuilder.ClassBuilder;
+import org.fugalang.core.grammar.classbuilder.ClassSet;
 import org.fugalang.core.grammar.psi.*;
 
-import java.util.ArrayList;
+import java.nio.file.Path;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 public class ParserGenerator {
     private final Map<String, OrRule> ruleMap;
-    private final TokenValidator validator;
+    private final TokenConverter validator;
+    private final Map<String, String> classNames = new LinkedHashMap<>();
 
-    public ParserGenerator(Rules rules, TokenValidator validator) {
+    public ParserGenerator(Rules rules, TokenConverter validator) {
         ruleMap = new LinkedHashMap<>();
         for (var rule : rules.rules) {
             ruleMap.put(rule.name, rule.orRule);
@@ -51,58 +53,33 @@ public class ParserGenerator {
         } else if (rule.optionalOrRule != null) {
             validateOrRule(rule.optionalOrRule);
         } else {
-            if (!ruleMap.containsKey(rule.token) && !validator.isValidToken(rule.token)) {
+            if (!ruleMap.containsKey(rule.token) && !validator.didResolveToken(rule.token)) {
                 throw new IllegalStateException("'" + rule.token + "' doesn't exist!!!");
             }
         }
     }
 
-    public String generate(String pkg) {
-        return String.format("// Auto Generated Parser\n\npackage %s;\n\npublic class FugaParser {\n%s}",
-                pkg, generateClasses());
+    public void generate(Path path, String pkg) {
+        ClassSet classSet = new ClassSet(path, pkg);
+        generateClasses(classSet);
+        for (ClassBuilder builder : classSet.getBuilders()) {
+            System.out.println(builder.getClassCode());
+        }
     }
 
-    public String generateClasses() {
-        StringBuilder sb = new StringBuilder();
+    public void generateClasses(ClassSet classSet) {
+        // do this first because each rule needs to lookup the types of previous rules
+        for (var entry: ruleMap.entrySet()) {
+            classNames.put(entry.getKey(), CaseUtil.convertCase(entry.getKey()));
+        }
 
         for (var entry : ruleMap.entrySet()) {
-            var clzName = CaseUtil.convertCase(entry.getKey());
-            List<Field> fields = new ArrayList<>();
-            sb.append(String.format("\n    public static class %s {\n\n    ", clzName));
-            appendOrRuleFields(fields, entry.getValue());
-            for (var f : fields) {
-                sb.append(f.asFieldDeclaration());
-                sb.append("\n");
-            }
-            sb.append("}\n");
+            var className = classNames.get(entry.getKey());
+            appendOrRuleFields(classSet, className, entry.getValue());
         }
-
-        return sb.toString();
     }
 
-    private static void appendOrRuleFields(List<Field> fields, OrRule orRule) {
-
-    }
-
-    private static class Field {
-        private final String type;
-        private final String name;
-
-        public Field(String type, String name) {
-            this.type = type;
-            this.name = name;
-        }
-
-        public String asFieldDeclaration() {
-            return String.format("        public %s %s;", type, name);
-        }
-
-        public String asConstructorArg() {
-            return String.format("%s %s", type, name);
-        }
-
-        public String asConstructorStmt() {
-            return String.format("this.%s = %s;", name, name);
-        }
+    private void appendOrRuleFields(ClassSet classSet, String className, OrRule orRule) {
+        classSet.create(className);
     }
 }

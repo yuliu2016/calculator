@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Optional;
 
 public class MgGen {
     public static void main(String[] args) {
@@ -19,21 +20,37 @@ public class MgGen {
             var data = Files.readString(Paths.get(res.toURI()));
             var tokens = new MgTokenizer(data).tokenize();
 
-            Rules cst = MgParser.parseRules(tokens);
+            var cst = MgParser.parseRules(tokens);
 
-            ParserGenerator gen = new ParserGenerator(cst, s -> {
-                return TokenType.NAMES.contains(s)
-                        || Keyword.ALL_KEYWORDS.contains(s)
-                        || Operator.CODES.contains(s);
-            });
+            var gen = new ParserGenerator(cst, MgGen::checkToken);
 
-            String result = gen.generate("org.fugalang.core.pgen");
-            Files.writeString(Paths.get("C:\\Users\\Yu\\XIdeaProjects\\calculator\\src" +
-                    "\\main\\gen\\org\\fugalang\\core\\pgen\\FugaParser.java"), result);
-            System.out.println(result);
+            var path = Paths.get(
+                    System.getProperty("user.dir"),
+                    "src/main/gen/org/fugalang/core/pgen/"
+            );
+
+            gen.generate(path, "org.fugalang.core.pgen");
 
         } catch (IOException | URISyntaxException e) {
             e.printStackTrace();
         }
+    }
+
+    private static Optional<ConvertedValue> checkToken(String s) {
+
+        if (Keyword.ALL_KEYWORDS.contains(s)) {
+            return Optional.of(new ConvertedValue("String", s));
+        }
+        if (Operator.CODE_TO_NAME.containsKey(s)) {
+            var name = CaseUtil.convertCase(Operator.CODE_TO_NAME.get(s));
+            return Optional.of(new ConvertedValue("String", name));
+        }
+
+        if (TokenType.NAMES.contains(s)) {
+            return Optional.of(new ConvertedValue("Object",
+                    CaseUtil.convertCase(s)));
+        }
+
+        return Optional.empty();
     }
 }

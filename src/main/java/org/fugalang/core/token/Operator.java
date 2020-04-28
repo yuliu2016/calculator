@@ -178,6 +178,6 @@ public enum Operator {
     public static final Map<String, Operator> TRIPLE_OPERATOR_MAP =
             invertOperatorList(TRIPLE_OPERATORS);
 
-    public static final List<String> CODES =
-            Arrays.stream(values()).map(Operator::getCode).collect(Collectors.toList());
+    public static final Map<String, String> CODE_TO_NAME =
+            Arrays.stream(values()).collect(Collectors.toMap(Operator::getCode, Enum::name));
 }

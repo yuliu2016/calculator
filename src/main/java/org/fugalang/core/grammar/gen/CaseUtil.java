@@ -6,7 +6,7 @@ public class CaseUtil {
         var sb = new StringBuilder();
         for (var word : words) {
             sb.append(Character.toUpperCase(word.charAt(0)));
-            sb.append(word.substring(1));
+            sb.append(word.substring(1).toLowerCase());
         }
         return sb.toString();
     }
