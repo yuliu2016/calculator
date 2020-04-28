@@ -8,6 +8,7 @@ public class ClassBuilder {
     private final String className;
 
     private final List<ClassField> fields = new ArrayList<>();
+    private String headerComments = null;
 
     public ClassBuilder(String packageName, String className) {
         this.packageName = packageName;
@@ -22,12 +23,21 @@ public class ClassBuilder {
         return className;
     }
 
-    public String getClassCode() {
+    public String generateClassCode() {
         StringBuilder sb = new StringBuilder();
         sb
                 .append("package ")
                 .append(packageName)
-                .append(";\n\npublic class ")
+                .append(";\n\n");
+
+        if (headerComments != null && !headerComments.isBlank()) {
+            sb.append("// ")
+                    .append(headerComments)
+                    .append("\n");
+        }
+
+        sb
+                .append("public class ")
                 .append(className)
                 .append(" {\n");
 
@@ -72,5 +82,13 @@ public class ClassBuilder {
     public void addField(String type, String name) {
         // add imports here
         fields.add(new ClassField(type, name));
+    }
+
+    public String getHeaderComments() {
+        return headerComments;
+    }
+
+    public void setHeaderComments(String headerComments) {
+        this.headerComments = headerComments;
     }
 }

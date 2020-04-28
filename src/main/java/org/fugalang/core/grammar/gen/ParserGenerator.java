@@ -67,11 +67,14 @@ public class ParserGenerator {
         }
     }
 
-    public void generate() {
+    public void generate(boolean toFiles) {
         classSet.getBuilders().clear();
         generateClasses();
         for (ClassBuilder builder : classSet.getBuilders()) {
-            System.out.println(builder.getClassCode());
+            System.out.println(builder.generateClassCode());
+        }
+        if (toFiles) {
+            classSet.writeToFiles();
         }
     }
 
@@ -87,9 +90,9 @@ public class ParserGenerator {
         }
     }
 
-    //single_input: NEWLINE | simple_stmt | compound_stmt NEWLINE
     private void addOrRule(String className, OrRule orRule) {
         ClassBuilder cb = classSet.create(className);
+        cb.setHeaderComments(orRule.toSimpleString());
 
         int cnt = addAndRule(className, cb, orRule.andRule, 1);
         for (AndRule andRule : orRule.andRules) {

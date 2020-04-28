@@ -5,6 +5,7 @@ import org.fugalang.core.pprint.CSTPrintElem;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class AndRule implements CSTPrintElem {
     public final RepeatRule repeatRule;
@@ -18,5 +19,17 @@ public class AndRule implements CSTPrintElem {
     @Override
     public void buildString(CSTPrintBuilder builder) {
         builder.setName("and").addElem(repeatRule).addElems(repeatRules);
+    }
+
+    @Override
+    public String toString() {
+        return toSimpleString();
+    }
+
+    public String toSimpleString() {
+        return repeatRule.toSimpleString() + repeatRules
+                .stream()
+                .map(rule -> " " + rule.toSimpleString())
+                .collect(Collectors.joining());
     }
 }

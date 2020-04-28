@@ -1,6 +1,10 @@
 package org.fugalang.core.grammar.classbuilder;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,5 +36,23 @@ public class ClassSet {
         var builder = new ClassBuilder(packageName, className);
         builders.add(builder);
         return builder;
+    }
+
+    public void writeToFiles() {
+        var fileList = path.toFile().listFiles();
+        if (fileList != null) {
+            for(File file: fileList) {
+                //noinspection ResultOfMethodCallIgnored
+                file.delete();
+            }
+        }
+        try {
+            for (ClassBuilder builder : builders) {
+                Files.writeString(Paths.get(path.toString(),
+                        builder.getClassName() + ".java"), builder.generateClassCode());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

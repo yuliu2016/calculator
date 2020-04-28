@@ -20,6 +20,7 @@ public class MgGen {
             var tokens = new MgTokenizer(data).tokenize();
 
             var cst = MgParser.parseRules(tokens);
+            System.out.println(cst.toSimpleString());
 
             var path = Paths.get(
                     System.getProperty("user.dir"),
@@ -28,7 +29,7 @@ public class MgGen {
 
             var gen = new ParserGenerator(cst, MgGen::checkToken,
                     path, "org.fugalang.core.pgen");
-            gen.generate();
+            gen.generate(false);
 
         } catch (IOException | URISyntaxException e) {
             e.printStackTrace();

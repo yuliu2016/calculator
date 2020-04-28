@@ -1,0 +1,134 @@
+(rules
+  (rule
+    'rules'
+    (or
+      (and
+        (opt_repeat
+          (token 'single_rule')
+        )
+      )
+    )
+  )
+  (rule
+    'single_rule'
+    (or
+      (and
+        (once
+          (token 'TOK')
+        )
+        (once
+          (token ':')
+        )
+        (once
+          (token 'or_rule')
+        )
+        (once
+          (token 'NEWLINE')
+        )
+      )
+    )
+  )
+  (rule
+    'or_rule'
+    (or
+      (and
+        (once
+          (token 'and_rule')
+        )
+        (opt_repeat
+          (group
+            (or
+              (and
+                (once
+                  (token '|')
+                )
+                (once
+                  (token 'and_rule')
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (rule
+    'and_rule'
+    (or
+      (and
+        (once
+          (token 'repeat_rule')
+        )
+        (opt_repeat
+          (group
+            (or
+              (and
+                (once
+                  (token 'repeat_rule')
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (rule
+    'repeat_rule'
+    (or
+      (and
+        (once
+          (token 'sub_rule')
+        )
+        (once
+          (opt
+            (or
+              (and
+                (once
+                  (token '*')
+                )
+              )
+              (and
+                (once
+                  (token '+')
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (rule
+    'sub_rule'
+    (or
+      (and
+        (once
+          (token '(')
+        )
+        (once
+          (token 'or_rule')
+        )
+        (once
+          (token ')')
+        )
+      )
+      (and
+        (once
+          (token '[')
+        )
+        (once
+          (token 'or_rule')
+        )
+        (once
+          (token ']')
+        )
+      )
+      (and
+        (once
+          (token 'TOK')
+        )
+      )
+    )
+  )
+)

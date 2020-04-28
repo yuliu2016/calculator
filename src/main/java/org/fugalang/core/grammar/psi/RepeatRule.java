@@ -21,4 +21,13 @@ public class RepeatRule implements CSTPrintElem {
         else builder.setName("once");
         builder.addElem(subRule);
     }
+
+    @Override
+    public String toString() {
+        return toSimpleString();
+    }
+
+    public String toSimpleString() {
+        return subRule + (tokenStar ? "*" : tokenPlus ? "+" : "");
+    }
 }

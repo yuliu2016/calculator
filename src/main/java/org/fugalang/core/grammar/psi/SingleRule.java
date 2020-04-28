@@ -18,4 +18,13 @@ public class SingleRule implements CSTPrintElem {
                 .addString(name)
                 .addElem(orRule);
     }
+
+    @Override
+    public String toString() {
+        return "SingleRule{}";
+    }
+
+    public String toSimpleString() {
+        return name + ": " + orRule.toSimpleString();
+    }
 }

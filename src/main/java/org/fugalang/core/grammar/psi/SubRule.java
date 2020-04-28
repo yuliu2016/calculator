@@ -23,4 +23,17 @@ public class SubRule implements CSTPrintElem {
         else if (token != null) builder.setName("token").addString(token);
         else throw new IllegalStateException();
     }
+
+    @Override
+    public String toString() {
+        return toSimpleString();
+    }
+
+    public String toSimpleString() {
+        return groupedOrRule != null ?
+                "(" + groupedOrRule.toSimpleString() + ")" :
+                optionalOrRule != null ?
+                        "[" + optionalOrRule.toSimpleString() + "]" :
+                        "'" + token + "'";
+    }
 }
