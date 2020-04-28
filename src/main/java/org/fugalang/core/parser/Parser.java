@@ -90,7 +90,7 @@ public class Parser {
             return null;
         }
 
-        if (token.type == TokenType.INTEGER) {
+        if (token.type == TokenType.NUMBER) {
             return new Atom(token.value);
         }
 

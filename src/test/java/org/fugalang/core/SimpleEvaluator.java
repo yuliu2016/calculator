@@ -36,7 +36,7 @@ public class SimpleEvaluator {
                 continue;
             }
 
-            if (token.type == TokenType.INTEGER) {
+            if (token.type == TokenType.NUMBER) {
                 values.push((Integer) token.value);
             }
 

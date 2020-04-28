@@ -11,7 +11,7 @@ public class NumberParserTest {
     public void testParseInteger() {
         var result = new Tokenizer("123").tokenizeAll();
 
-        assertType(result, 0, TokenType.INTEGER);
+        assertType(result, 0, TokenType.NUMBER);
         assertValue(result, 0, 123);
     }
 
@@ -20,7 +20,7 @@ public class NumberParserTest {
     public void testParseIntegerUnderscore() {
         var result = new Tokenizer("12_3").tokenizeAll();
 
-        assertType(result, 0, TokenType.INTEGER);
+        assertType(result, 0, TokenType.NUMBER);
         assertValue(result, 0, 123);
     }
 

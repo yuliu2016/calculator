@@ -3,7 +3,9 @@ package org.fugalang.core.grammar.gen;
 import org.fugalang.core.grammar.parser.MgParser;
 import org.fugalang.core.grammar.psi.Rules;
 import org.fugalang.core.grammar.token.MgTokenizer;
-import org.fugalang.core.pprint.ParseTreePPrint;
+import org.fugalang.core.token.Keyword;
+import org.fugalang.core.token.Operator;
+import org.fugalang.core.token.TokenType;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -16,10 +18,14 @@ public class MgGen {
         try {
             var data = Files.readString(Paths.get(res.toURI()));
             var tokens = new MgTokenizer(data).tokenize();
-            tokens.forEach(System.out::print);
 
             Rules cst = MgParser.parseRules(tokens);
-            System.out.println(ParseTreePPrint.format(cst, 2));
+
+            ParserGenerator gen = new ParserGenerator(cst, s -> {
+                return TokenType.NAMES.contains(s)
+                        || Keyword.ALL_KEYWORDS.contains(s)
+                        || Operator.CODES.contains(s);
+            });
 
         } catch (IOException | URISyntaxException e) {
             e.printStackTrace();

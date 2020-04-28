@@ -51,7 +51,6 @@ public class TokenPPrint {
             var value_formatted = switch (type) {
                 case STRING -> ConsoleColor.wrap(ConsoleColor.GREEN, "\"" + value.toString() + "\"");
                 case OPERATOR -> " " + ((Operator) value).getCode();
-                case COMPLEX -> " " + value.toString() + "j";
                 default -> " " + value.toString();
             };
 

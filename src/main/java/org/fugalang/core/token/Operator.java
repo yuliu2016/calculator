@@ -1,8 +1,10 @@
 package org.fugalang.core.token;
 
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Includes all operators of the language. This includes delimiters
@@ -16,6 +18,8 @@ public enum Operator {
     COMMA(","),
     ASSIGN("="),
     COLON(":"),
+    TERNERY("?"),
+    SEMICOLON(";"),
 
     // second most common - brackets
 
@@ -38,6 +42,7 @@ public enum Operator {
     TIMES("*"),
     DIV("/"),
     MODULUS("%"),
+    MATRIX_TIMES("@"),
 
     // bitwise operators
 
@@ -54,8 +59,7 @@ public enum Operator {
     MORE_EQUAL(">="),
 
     PIPE("->"),
-    LAMBDA("=>"),
-    ELVIS("?:"),
+    ASGN_EXPR(":="),
 
     FLOOR_DIV("//"),
     POWER("**"),
@@ -65,6 +69,7 @@ public enum Operator {
     TIMES_ASSIGN("*="),
     DIV_ASSIGN("/="),
     MODULUS_ASSIGN("%="),
+    MATRIX_TIMES_ASSIGN("@="),
 
     BIT_OR_ASSIGN("|="),
     BIT_AND_ASSIGN("&="),
@@ -76,7 +81,9 @@ public enum Operator {
     // ====== Triple-char operators ======
 
     FLOOR_DIV_ASSIGN("//="),
-    POWER_ASSIGN("**=");
+    POWER_ASSIGN("**="),
+    LSHIFT_ASSIGN("<<="),
+    RSHIFT_ASSIGN(">>=");
 
     private final String code;
 
@@ -103,6 +110,8 @@ public enum Operator {
             COMMA,
             ASSIGN,
             COLON,
+            TERNERY,
+            SEMICOLON,
 
             LPAR,
             RPAR,
@@ -118,6 +127,7 @@ public enum Operator {
             TIMES,           // times and def(*args)
             DIV,
             MODULUS,
+            MATRIX_TIMES,
 
             BIT_OR,
             BIT_AND,
@@ -135,8 +145,7 @@ public enum Operator {
             MORE_EQUAL,
 
             PIPE,
-            LAMBDA,
-            ELVIS,
+            ASGN_EXPR,
 
             FLOOR_DIV,
             POWER,         // exponents and def(**kw args)/ {**k, **v} etc
@@ -146,6 +155,7 @@ public enum Operator {
             TIMES_ASSIGN,
             DIV_ASSIGN,
             MODULUS_ASSIGN,
+            MATRIX_TIMES_ASSIGN,
 
             BIT_OR_ASSIGN,
             BIT_AND_ASSIGN,
@@ -160,9 +170,14 @@ public enum Operator {
 
     public static final List<Operator> TRIPLE_OPERATORS = List.of(
             FLOOR_DIV_ASSIGN,
-            POWER_ASSIGN
+            POWER_ASSIGN,
+            LSHIFT_ASSIGN,
+            RSHIFT_ASSIGN
     );
 
     public static final Map<String, Operator> TRIPLE_OPERATOR_MAP =
             invertOperatorList(TRIPLE_OPERATORS);
+
+    public static final List<String> CODES =
+            Arrays.stream(values()).map(Operator::getCode).collect(Collectors.toList());
 }

@@ -138,7 +138,7 @@ public class Tokenizer {
         } else if (Keyword.ALL_KEYWORDS.contains(symbol)) {
             sequence.add(KEYWORD, symbol);
         } else {
-            sequence.add(SYMBOL, symbol);
+            sequence.add(NAME, symbol);
         }
 
         // this line must be after add_token for line no to be correct
@@ -233,7 +233,7 @@ public class Tokenizer {
      * @param radix the radix
      */
     private void addInteger(String s, int radix) {
-        sequence.add(INTEGER, Integer.parseInt(s, radix));
+        sequence.add(NUMBER, Integer.parseInt(s, radix));
     }
 
     /**
@@ -398,9 +398,9 @@ public class Tokenizer {
         // a complex literal may also be a float
 
         if (is_complex) {
-            sequence.add(COMPLEX, Double.parseDouble(s));
+            sequence.add(NUMBER, Double.parseDouble(s));
         } else if (is_float) {
-            sequence.add(FLOAT, Double.parseDouble(s));
+            sequence.add(NUMBER, Double.parseDouble(s));
         } else {
             // Fix: the special case of 0 should not throw a syntax error
             if (leading_zero && s.length() > 1) {
