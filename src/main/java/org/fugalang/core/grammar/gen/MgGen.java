@@ -27,6 +27,11 @@ public class MgGen {
                         || Operator.CODES.contains(s);
             });
 
+            String result = gen.generate("org.fugalang.core.pgen");
+            Files.writeString(Paths.get("C:\\Users\\Yu\\XIdeaProjects\\calculator\\src" +
+                    "\\main\\gen\\org\\fugalang\\core\\pgen\\FugaParser.java"), result);
+            System.out.println(result);
+
         } catch (IOException | URISyntaxException e) {
             e.printStackTrace();
         }
