@@ -1,9 +1,11 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
 import java.util.List;
+import org.fugalang.core.parser.DisjunctionRule;
 
 // dict_maker: ('expr' ':' 'expr' | '**' 'bitwise_or') ('comp_for' | (',' ('expr' ':' 'expr' | '**' 'bitwise_or'))* [','])
-public class DictMaker {
+public final class DictMaker extends ConjunctionRule {
     private final DictMaker1Group dictMaker1Group;
     private final DictMaker2Group dictMaker2Group;
 
@@ -24,7 +26,7 @@ public class DictMaker {
     }
 
     // 'expr' ':' 'expr' | '**' 'bitwise_or'
-    public static class DictMaker1Group {
+    public static final class DictMaker1Group extends DisjunctionRule {
         private final DictMaker1Group1 dictMaker1Group1;
         private final DictMaker1Group2 dictMaker1Group2;
 
@@ -46,7 +48,7 @@ public class DictMaker {
     }
 
     // 'expr' ':' 'expr'
-    public static class DictMaker1Group1 {
+    public static final class DictMaker1Group1 extends ConjunctionRule {
         private final Expr expr;
         private final boolean isTokenColon;
         private final Expr expr1;
@@ -75,7 +77,7 @@ public class DictMaker {
     }
 
     // '**' 'bitwise_or'
-    public static class DictMaker1Group2 {
+    public static final class DictMaker1Group2 extends ConjunctionRule {
         private final boolean isTokenPower;
         private final BitwiseOr bitwiseOr;
 
@@ -97,7 +99,7 @@ public class DictMaker {
     }
 
     // 'comp_for' | (',' ('expr' ':' 'expr' | '**' 'bitwise_or'))* [',']
-    public static class DictMaker2Group {
+    public static final class DictMaker2Group extends DisjunctionRule {
         private final CompFor compFor;
         private final DictMaker2Group2 dictMaker2Group2;
 
@@ -119,7 +121,7 @@ public class DictMaker {
     }
 
     // (',' ('expr' ':' 'expr' | '**' 'bitwise_or'))* [',']
-    public static class DictMaker2Group2 {
+    public static final class DictMaker2Group2 extends ConjunctionRule {
         private final List<DictMaker2Group21Group> dictMaker2Group21GroupList;
         private final boolean isTokenComma;
 
@@ -141,7 +143,7 @@ public class DictMaker {
     }
 
     // ',' ('expr' ':' 'expr' | '**' 'bitwise_or')
-    public static class DictMaker2Group21Group {
+    public static final class DictMaker2Group21Group extends ConjunctionRule {
         private final boolean isTokenComma;
         private final DictMaker2Group21Group2Group dictMaker2Group21Group2Group;
 
@@ -163,7 +165,7 @@ public class DictMaker {
     }
 
     // 'expr' ':' 'expr' | '**' 'bitwise_or'
-    public static class DictMaker2Group21Group2Group {
+    public static final class DictMaker2Group21Group2Group extends DisjunctionRule {
         private final DictMaker2Group21Group2Group1 dictMaker2Group21Group2Group1;
         private final DictMaker2Group21Group2Group2 dictMaker2Group21Group2Group2;
 
@@ -185,7 +187,7 @@ public class DictMaker {
     }
 
     // 'expr' ':' 'expr'
-    public static class DictMaker2Group21Group2Group1 {
+    public static final class DictMaker2Group21Group2Group1 extends ConjunctionRule {
         private final Expr expr;
         private final boolean isTokenColon;
         private final Expr expr1;
@@ -214,7 +216,7 @@ public class DictMaker {
     }
 
     // '**' 'bitwise_or'
-    public static class DictMaker2Group21Group2Group2 {
+    public static final class DictMaker2Group21Group2Group2 extends ConjunctionRule {
         private final boolean isTokenPower;
         private final BitwiseOr bitwiseOr;
 

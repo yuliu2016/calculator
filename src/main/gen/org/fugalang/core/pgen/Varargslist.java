@@ -1,10 +1,11 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
 import java.util.List;
 import java.util.Optional;
 
 // varargslist: 'vfpdef' ['=' 'expr'] (',' 'vfpdef' ['=' 'expr'])*
-public class Varargslist {
+public final class Varargslist extends ConjunctionRule {
     private final Vfpdef vfpdef;
     private final Varargslist2Group varargslist2Group;
     private final List<Varargslist3Group> varargslist3GroupList;
@@ -32,7 +33,7 @@ public class Varargslist {
     }
 
     // '=' 'expr'
-    public static class Varargslist2Group {
+    public static final class Varargslist2Group extends ConjunctionRule {
         private final boolean isTokenAssign;
         private final Expr expr;
 
@@ -54,7 +55,7 @@ public class Varargslist {
     }
 
     // ',' 'vfpdef' ['=' 'expr']
-    public static class Varargslist3Group {
+    public static final class Varargslist3Group extends ConjunctionRule {
         private final boolean isTokenComma;
         private final Vfpdef vfpdef;
         private final Varargslist3Group3Group varargslist3Group3Group;
@@ -83,7 +84,7 @@ public class Varargslist {
     }
 
     // '=' 'expr'
-    public static class Varargslist3Group3Group {
+    public static final class Varargslist3Group3Group extends ConjunctionRule {
         private final boolean isTokenAssign;
         private final Expr expr;
 

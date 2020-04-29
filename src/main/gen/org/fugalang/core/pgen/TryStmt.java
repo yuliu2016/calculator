@@ -1,10 +1,12 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
 import java.util.List;
 import java.util.Optional;
+import org.fugalang.core.parser.DisjunctionRule;
 
 // try_stmt: 'try' 'suite' (('except_clause' 'suite')+ ['else' 'suite'] ['finally' 'suite'] | 'finally' 'suite')
-public class TryStmt {
+public final class TryStmt extends ConjunctionRule {
     private final boolean isTokenTry;
     private final Suite suite;
     private final TryStmt3Group tryStmt3Group;
@@ -32,7 +34,7 @@ public class TryStmt {
     }
 
     // ('except_clause' 'suite')+ ['else' 'suite'] ['finally' 'suite'] | 'finally' 'suite'
-    public static class TryStmt3Group {
+    public static final class TryStmt3Group extends DisjunctionRule {
         private final TryStmt3Group1 tryStmt3Group1;
         private final TryStmt3Group2 tryStmt3Group2;
 
@@ -54,7 +56,7 @@ public class TryStmt {
     }
 
     // ('except_clause' 'suite')+ ['else' 'suite'] ['finally' 'suite']
-    public static class TryStmt3Group1 {
+    public static final class TryStmt3Group1 extends ConjunctionRule {
         private final TryStmt3Group11Group tryStmt3Group11Group;
         private final List<TryStmt3Group11Group> tryStmt3Group11GroupList;
         private final TryStmt3Group12Group tryStmt3Group12Group;
@@ -90,7 +92,7 @@ public class TryStmt {
     }
 
     // 'except_clause' 'suite'
-    public static class TryStmt3Group11Group {
+    public static final class TryStmt3Group11Group extends ConjunctionRule {
         private final ExceptClause exceptClause;
         private final Suite suite;
 
@@ -112,7 +114,7 @@ public class TryStmt {
     }
 
     // 'else' 'suite'
-    public static class TryStmt3Group12Group {
+    public static final class TryStmt3Group12Group extends ConjunctionRule {
         private final boolean isTokenElse;
         private final Suite suite;
 
@@ -134,7 +136,7 @@ public class TryStmt {
     }
 
     // 'finally' 'suite'
-    public static class TryStmt3Group13Group {
+    public static final class TryStmt3Group13Group extends ConjunctionRule {
         private final boolean isTokenFinally;
         private final Suite suite;
 
@@ -156,7 +158,7 @@ public class TryStmt {
     }
 
     // 'finally' 'suite'
-    public static class TryStmt3Group2 {
+    public static final class TryStmt3Group2 extends ConjunctionRule {
         private final boolean isTokenFinally;
         private final Suite suite;
 

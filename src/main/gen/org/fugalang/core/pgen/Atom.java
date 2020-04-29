@@ -1,7 +1,9 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.DisjunctionRule;
+
 // atom: 'compound_atom' | 'simple_atom'
-public class Atom {
+public final class Atom extends DisjunctionRule {
     private final CompoundAtom compoundAtom;
     private final SimpleAtom simpleAtom;
 

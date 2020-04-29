@@ -1,7 +1,9 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
+
 // import_name: 'import' 'dotted_as_names'
-public class ImportName {
+public final class ImportName extends ConjunctionRule {
     private final boolean isTokenImport;
     private final DottedAsNames dottedAsNames;
 

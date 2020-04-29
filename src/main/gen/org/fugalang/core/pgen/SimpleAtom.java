@@ -1,7 +1,9 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.DisjunctionRule;
+
 // simple_atom: 'NAME' | 'NUMBER' | 'STRING' | 'None' | 'True' | 'False'
-public class SimpleAtom {
+public final class SimpleAtom extends DisjunctionRule {
     private final Object name;
     private final Object number;
     private final Object string;

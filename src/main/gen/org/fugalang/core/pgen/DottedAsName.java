@@ -1,9 +1,10 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
 import java.util.Optional;
 
 // dotted_as_name: 'dotted_name' ['as' 'NAME']
-public class DottedAsName {
+public final class DottedAsName extends ConjunctionRule {
     private final DottedName dottedName;
     private final DottedAsName2Group dottedAsName2Group;
 
@@ -24,7 +25,7 @@ public class DottedAsName {
     }
 
     // 'as' 'NAME'
-    public static class DottedAsName2Group {
+    public static final class DottedAsName2Group extends ConjunctionRule {
         private final boolean isTokenAs;
         private final Object name;
 

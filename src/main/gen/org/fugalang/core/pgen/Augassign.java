@@ -1,7 +1,9 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.DisjunctionRule;
+
 // augassign: '+=' | '-=' | '*=' | '@=' | '/=' | '%=' | '&=' | '|=' | '^=' | '<<=' | '>>=' | '**=' | '//='
-public class Augassign {
+public final class Augassign extends DisjunctionRule {
     private final boolean isTokenPlusAssign;
     private final boolean isTokenMinusAssign;
     private final boolean isTokenTimesAssign;

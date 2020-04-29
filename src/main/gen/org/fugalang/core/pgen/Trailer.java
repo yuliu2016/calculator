@@ -1,9 +1,11 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
 import java.util.Optional;
+import org.fugalang.core.parser.DisjunctionRule;
 
 // trailer: '(' ['arglist'] ')' | '[' 'subscriptlist' ']' | '.' 'NAME' | 'block_suite'
-public class Trailer {
+public final class Trailer extends DisjunctionRule {
     private final Trailer1 trailer1;
     private final Trailer2 trailer2;
     private final Trailer3 trailer3;
@@ -38,7 +40,7 @@ public class Trailer {
     }
 
     // '(' ['arglist'] ')'
-    public static class Trailer1 {
+    public static final class Trailer1 extends ConjunctionRule {
         private final boolean isTokenLpar;
         private final Arglist arglist;
         private final boolean isTokenRpar;
@@ -67,7 +69,7 @@ public class Trailer {
     }
 
     // '[' 'subscriptlist' ']'
-    public static class Trailer2 {
+    public static final class Trailer2 extends ConjunctionRule {
         private final boolean isTokenLsqb;
         private final Subscriptlist subscriptlist;
         private final boolean isTokenRsqb;
@@ -96,7 +98,7 @@ public class Trailer {
     }
 
     // '.' 'NAME'
-    public static class Trailer3 {
+    public static final class Trailer3 extends ConjunctionRule {
         private final boolean isTokenDot;
         private final Object name;
 

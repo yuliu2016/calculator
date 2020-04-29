@@ -1,9 +1,11 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
 import java.util.List;
+import org.fugalang.core.parser.DisjunctionRule;
 
 // file_input: ('NEWLINE' | 'stmt')* 'ENDMARKER'
-public class FileInput {
+public final class FileInput extends ConjunctionRule {
     private final List<FileInput1Group> fileInput1GroupList;
     private final Object endmarker;
 
@@ -24,7 +26,7 @@ public class FileInput {
     }
 
     // 'NEWLINE' | 'stmt'
-    public static class FileInput1Group {
+    public static final class FileInput1Group extends DisjunctionRule {
         private final Object newline;
         private final Stmt stmt;
 

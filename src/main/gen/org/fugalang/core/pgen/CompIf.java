@@ -1,9 +1,10 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
 import java.util.Optional;
 
 // comp_if: 'if' 'expr' ['comp_iter']
-public class CompIf {
+public final class CompIf extends ConjunctionRule {
     private final boolean isTokenIf;
     private final Expr expr;
     private final CompIter compIter;

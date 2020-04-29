@@ -1,9 +1,10 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
 import java.util.List;
 
 // pipe_expr: 'atom_expr' ('->' 'atom_expr')*
-public class PipeExpr {
+public final class PipeExpr extends ConjunctionRule {
     private final AtomExpr atomExpr;
     private final List<PipeExpr2Group> pipeExpr2GroupList;
 
@@ -24,7 +25,7 @@ public class PipeExpr {
     }
 
     // '->' 'atom_expr'
-    public static class PipeExpr2Group {
+    public static final class PipeExpr2Group extends ConjunctionRule {
         private final boolean isTokenPipe;
         private final AtomExpr atomExpr;
 

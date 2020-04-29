@@ -1,9 +1,11 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
 import java.util.List;
+import org.fugalang.core.parser.DisjunctionRule;
 
 // import_from: 'from' ('.'* 'dotted_name' | '.'+) 'import' ('*' | '(' 'import_as_names' ')' | 'import_as_names')
-public class ImportFrom {
+public final class ImportFrom extends ConjunctionRule {
     private final boolean isTokenFrom;
     private final ImportFrom2Group importFrom2Group;
     private final boolean isTokenImport;
@@ -38,7 +40,7 @@ public class ImportFrom {
     }
 
     // '.'* 'dotted_name' | '.'+
-    public static class ImportFrom2Group {
+    public static final class ImportFrom2Group extends DisjunctionRule {
         private final ImportFrom2Group1 importFrom2Group1;
         private final boolean isTokenDot;
         private final List<Boolean> isTokenDotList;
@@ -67,7 +69,7 @@ public class ImportFrom {
     }
 
     // '.'* 'dotted_name'
-    public static class ImportFrom2Group1 {
+    public static final class ImportFrom2Group1 extends ConjunctionRule {
         private final List<Boolean> isTokenDotList;
         private final DottedName dottedName;
 
@@ -89,7 +91,7 @@ public class ImportFrom {
     }
 
     // '*' | '(' 'import_as_names' ')' | 'import_as_names'
-    public static class ImportFrom4Group {
+    public static final class ImportFrom4Group extends DisjunctionRule {
         private final boolean isTokenTimes;
         private final ImportFrom4Group2 importFrom4Group2;
         private final ImportAsNames importAsNames;
@@ -118,7 +120,7 @@ public class ImportFrom {
     }
 
     // '(' 'import_as_names' ')'
-    public static class ImportFrom4Group2 {
+    public static final class ImportFrom4Group2 extends ConjunctionRule {
         private final boolean isTokenLpar;
         private final ImportAsNames importAsNames;
         private final boolean isTokenRpar;

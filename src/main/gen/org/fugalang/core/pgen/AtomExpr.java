@@ -1,7 +1,9 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
+
 // atom_expr: ['await'] 'atom' 'trailer'*
-public class AtomExpr {
+public final class AtomExpr extends ConjunctionRule {
     private final boolean isTokenAwait;
     private final Atom atom;
     private final Trailer trailer;

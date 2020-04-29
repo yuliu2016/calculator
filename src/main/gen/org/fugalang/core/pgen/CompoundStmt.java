@@ -1,7 +1,9 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.DisjunctionRule;
+
 // compound_stmt: 'if_stmt' | 'while_stmt' | 'for_stmt' | 'try_stmt' | 'with_stmt'
-public class CompoundStmt {
+public final class CompoundStmt extends DisjunctionRule {
     private final IfStmt ifStmt;
     private final WhileStmt whileStmt;
     private final ForStmt forStmt;

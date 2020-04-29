@@ -1,7 +1,9 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
+
 // break_stmt: 'break'
-public class BreakStmt {
+public final class BreakStmt extends ConjunctionRule {
     private final boolean isTokenBreak;
 
     public BreakStmt(

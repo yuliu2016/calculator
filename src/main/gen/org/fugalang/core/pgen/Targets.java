@@ -1,9 +1,11 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
 import java.util.List;
+import org.fugalang.core.parser.DisjunctionRule;
 
 // targets: ('bitwise_or' | 'star_expr') (',' ('bitwise_or' | 'star_expr'))* [',']
-public class Targets {
+public final class Targets extends ConjunctionRule {
     private final Targets1Group targets1Group;
     private final List<Targets2Group> targets2GroupList;
     private final boolean isTokenComma;
@@ -31,7 +33,7 @@ public class Targets {
     }
 
     // 'bitwise_or' | 'star_expr'
-    public static class Targets1Group {
+    public static final class Targets1Group extends DisjunctionRule {
         private final BitwiseOr bitwiseOr;
         private final StarExpr starExpr;
 
@@ -53,7 +55,7 @@ public class Targets {
     }
 
     // ',' ('bitwise_or' | 'star_expr')
-    public static class Targets2Group {
+    public static final class Targets2Group extends ConjunctionRule {
         private final boolean isTokenComma;
         private final Targets2Group2Group targets2Group2Group;
 
@@ -75,7 +77,7 @@ public class Targets {
     }
 
     // 'bitwise_or' | 'star_expr'
-    public static class Targets2Group2Group {
+    public static final class Targets2Group2Group extends DisjunctionRule {
         private final BitwiseOr bitwiseOr;
         private final StarExpr starExpr;
 

@@ -1,7 +1,10 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
+import org.fugalang.core.parser.DisjunctionRule;
+
 // expr: 'if' 'disjunction' '?' 'disjunction' 'else' 'expr' | 'disjunction' | 'funcdef'
-public class Expr {
+public final class Expr extends DisjunctionRule {
     private final Expr1 expr1;
     private final Disjunction disjunction;
     private final Funcdef funcdef;
@@ -29,7 +32,7 @@ public class Expr {
     }
 
     // 'if' 'disjunction' '?' 'disjunction' 'else' 'expr'
-    public static class Expr1 {
+    public static final class Expr1 extends ConjunctionRule {
         private final boolean isTokenIf;
         private final Disjunction disjunction;
         private final boolean isTokenTernery;

@@ -15,6 +15,8 @@ public class ClassBuilder {
 
     private String headerComments = null;
 
+    private RuleType ruleType = null;
+
     public ClassBuilder(String packageName, String className) {
         this.packageName = packageName;
         this.className = className;
@@ -84,12 +86,19 @@ public class ClassBuilder {
         }
 
         if (isStaticInnerClass) {
-            sb.append("public static class ");
+            sb.append("public static final class ");
         } else {
-            sb.append("public class ");
+            sb.append("public final class ");
         }
 
-        sb.append(className).append(" {\n");
+        sb.append(className);
+
+        if (ruleType != null) {
+            // add the parent classes
+            sb.append(" extends ").append(ruleType.getSuperClassShort());
+        }
+
+        sb.append(" {\n");
 
         for (ClassField field : fields) {
             sb.append("    ");
@@ -162,5 +171,16 @@ public class ClassBuilder {
 
     public void setHeaderComments(String headerComments) {
         this.headerComments = headerComments;
+    }
+
+    public void setRuleType(RuleType ruleType) {
+        // remove extra imports if already set
+        if (this.ruleType != null) {
+            for (RuleType value : RuleType.values()) {
+                classImports.remove(value.getSuperClass());
+            }
+        }
+        classImports.add(ruleType.getSuperClass());
+        this.ruleType = ruleType;
     }
 }

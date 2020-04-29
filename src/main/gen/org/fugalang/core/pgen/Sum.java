@@ -1,9 +1,11 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
 import java.util.List;
+import org.fugalang.core.parser.DisjunctionRule;
 
 // sum: 'term' (('+' | '-') 'term')*
-public class Sum {
+public final class Sum extends ConjunctionRule {
     private final Term term;
     private final List<Sum2Group> sum2GroupList;
 
@@ -24,7 +26,7 @@ public class Sum {
     }
 
     // ('+' | '-') 'term'
-    public static class Sum2Group {
+    public static final class Sum2Group extends ConjunctionRule {
         private final Sum2Group1Group sum2Group1Group;
         private final Term term;
 
@@ -46,7 +48,7 @@ public class Sum {
     }
 
     // '+' | '-'
-    public static class Sum2Group1Group {
+    public static final class Sum2Group1Group extends DisjunctionRule {
         private final boolean isTokenPlus;
         private final boolean isTokenMinus;
 

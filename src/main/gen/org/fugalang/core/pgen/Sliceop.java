@@ -1,9 +1,10 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
 import java.util.Optional;
 
 // sliceop: ':' ['expr']
-public class Sliceop {
+public final class Sliceop extends ConjunctionRule {
     private final boolean isTokenColon;
     private final Expr expr;
 

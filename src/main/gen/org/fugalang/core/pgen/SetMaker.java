@@ -1,9 +1,11 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
 import java.util.List;
+import org.fugalang.core.parser.DisjunctionRule;
 
 // set_maker: ('expr' | 'star_expr') ('comp_for' | (',' ('expr' | 'star_expr'))* [','])
-public class SetMaker {
+public final class SetMaker extends ConjunctionRule {
     private final SetMaker1Group setMaker1Group;
     private final SetMaker2Group setMaker2Group;
 
@@ -24,7 +26,7 @@ public class SetMaker {
     }
 
     // 'expr' | 'star_expr'
-    public static class SetMaker1Group {
+    public static final class SetMaker1Group extends DisjunctionRule {
         private final Expr expr;
         private final StarExpr starExpr;
 
@@ -46,7 +48,7 @@ public class SetMaker {
     }
 
     // 'comp_for' | (',' ('expr' | 'star_expr'))* [',']
-    public static class SetMaker2Group {
+    public static final class SetMaker2Group extends DisjunctionRule {
         private final CompFor compFor;
         private final SetMaker2Group2 setMaker2Group2;
 
@@ -68,7 +70,7 @@ public class SetMaker {
     }
 
     // (',' ('expr' | 'star_expr'))* [',']
-    public static class SetMaker2Group2 {
+    public static final class SetMaker2Group2 extends ConjunctionRule {
         private final List<SetMaker2Group21Group> setMaker2Group21GroupList;
         private final boolean isTokenComma;
 
@@ -90,7 +92,7 @@ public class SetMaker {
     }
 
     // ',' ('expr' | 'star_expr')
-    public static class SetMaker2Group21Group {
+    public static final class SetMaker2Group21Group extends ConjunctionRule {
         private final boolean isTokenComma;
         private final SetMaker2Group21Group2Group setMaker2Group21Group2Group;
 
@@ -112,7 +114,7 @@ public class SetMaker {
     }
 
     // 'expr' | 'star_expr'
-    public static class SetMaker2Group21Group2Group {
+    public static final class SetMaker2Group21Group2Group extends DisjunctionRule {
         private final Expr expr;
         private final StarExpr starExpr;
 

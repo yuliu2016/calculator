@@ -1,9 +1,10 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
 import java.util.List;
 
 // dotted_as_names: 'dotted_as_name' (',' 'dotted_as_name')* [',']
-public class DottedAsNames {
+public final class DottedAsNames extends ConjunctionRule {
     private final DottedAsName dottedAsName;
     private final List<DottedAsNames2Group> dottedAsNames2GroupList;
     private final boolean isTokenComma;
@@ -31,7 +32,7 @@ public class DottedAsNames {
     }
 
     // ',' 'dotted_as_name'
-    public static class DottedAsNames2Group {
+    public static final class DottedAsNames2Group extends ConjunctionRule {
         private final boolean isTokenComma;
         private final DottedAsName dottedAsName;
 

@@ -1,7 +1,10 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
+import org.fugalang.core.parser.DisjunctionRule;
+
 // stmt: ('simple_stmt' | 'compound_stmt') 'NEWLINE'
-public class Stmt {
+public final class Stmt extends ConjunctionRule {
     private final Stmt1Group stmt1Group;
     private final Object newline;
 
@@ -22,7 +25,7 @@ public class Stmt {
     }
 
     // 'simple_stmt' | 'compound_stmt'
-    public static class Stmt1Group {
+    public static final class Stmt1Group extends DisjunctionRule {
         private final SimpleStmt simpleStmt;
         private final CompoundStmt compoundStmt;
 

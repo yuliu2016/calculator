@@ -1,7 +1,10 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
+import org.fugalang.core.parser.DisjunctionRule;
+
 // block_suite: '{' 'simple_stmt' '}' | '{' 'NEWLINE' 'stmt'+ '}'
-public class BlockSuite {
+public final class BlockSuite extends DisjunctionRule {
     private final BlockSuite1 blockSuite1;
     private final BlockSuite2 blockSuite2;
 
@@ -22,7 +25,7 @@ public class BlockSuite {
     }
 
     // '{' 'simple_stmt' '}'
-    public static class BlockSuite1 {
+    public static final class BlockSuite1 extends ConjunctionRule {
         private final boolean isTokenLbrace;
         private final SimpleStmt simpleStmt;
         private final boolean isTokenRbrace;
@@ -51,7 +54,7 @@ public class BlockSuite {
     }
 
     // '{' 'NEWLINE' 'stmt'+ '}'
-    public static class BlockSuite2 {
+    public static final class BlockSuite2 extends ConjunctionRule {
         private final boolean isTokenLbrace;
         private final Object newline;
         private final Stmt stmt;

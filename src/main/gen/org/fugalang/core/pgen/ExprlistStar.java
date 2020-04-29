@@ -1,9 +1,11 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
 import java.util.List;
+import org.fugalang.core.parser.DisjunctionRule;
 
 // exprlist_star: ('expr' | 'star_expr') (',' ('expr' | 'star_expr'))* [',']
-public class ExprlistStar {
+public final class ExprlistStar extends ConjunctionRule {
     private final ExprlistStar1Group exprlistStar1Group;
     private final List<ExprlistStar2Group> exprlistStar2GroupList;
     private final boolean isTokenComma;
@@ -31,7 +33,7 @@ public class ExprlistStar {
     }
 
     // 'expr' | 'star_expr'
-    public static class ExprlistStar1Group {
+    public static final class ExprlistStar1Group extends DisjunctionRule {
         private final Expr expr;
         private final StarExpr starExpr;
 
@@ -53,7 +55,7 @@ public class ExprlistStar {
     }
 
     // ',' ('expr' | 'star_expr')
-    public static class ExprlistStar2Group {
+    public static final class ExprlistStar2Group extends ConjunctionRule {
         private final boolean isTokenComma;
         private final ExprlistStar2Group2Group exprlistStar2Group2Group;
 
@@ -75,7 +77,7 @@ public class ExprlistStar {
     }
 
     // 'expr' | 'star_expr'
-    public static class ExprlistStar2Group2Group {
+    public static final class ExprlistStar2Group2Group extends DisjunctionRule {
         private final Expr expr;
         private final StarExpr starExpr;
 

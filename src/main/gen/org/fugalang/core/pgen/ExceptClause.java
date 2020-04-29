@@ -1,9 +1,10 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
 import java.util.Optional;
 
 // except_clause: 'except' ['expr' ['as' 'NAME']]
-public class ExceptClause {
+public final class ExceptClause extends ConjunctionRule {
     private final boolean isTokenExcept;
     private final ExceptClause2Group exceptClause2Group;
 
@@ -24,7 +25,7 @@ public class ExceptClause {
     }
 
     // 'expr' ['as' 'NAME']
-    public static class ExceptClause2Group {
+    public static final class ExceptClause2Group extends ConjunctionRule {
         private final Expr expr;
         private final ExceptClause2Group2Group exceptClause2Group2Group;
 
@@ -46,7 +47,7 @@ public class ExceptClause {
     }
 
     // 'as' 'NAME'
-    public static class ExceptClause2Group2Group {
+    public static final class ExceptClause2Group2Group extends ConjunctionRule {
         private final boolean isTokenAs;
         private final Object name;
 

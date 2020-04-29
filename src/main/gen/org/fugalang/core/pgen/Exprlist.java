@@ -1,9 +1,10 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
 import java.util.List;
 
 // exprlist: 'expr' (',' 'expr')* [',']
-public class Exprlist {
+public final class Exprlist extends ConjunctionRule {
     private final Expr expr;
     private final List<Exprlist2Group> exprlist2GroupList;
     private final boolean isTokenComma;
@@ -31,7 +32,7 @@ public class Exprlist {
     }
 
     // ',' 'expr'
-    public static class Exprlist2Group {
+    public static final class Exprlist2Group extends ConjunctionRule {
         private final boolean isTokenComma;
         private final Expr expr;
 

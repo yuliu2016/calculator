@@ -1,9 +1,11 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
 import java.util.Optional;
+import org.fugalang.core.parser.DisjunctionRule;
 
 // argument: 'NAME' ['comp_for'] | 'NAME' ':=' 'expr' | 'NAME' '=' 'expr' | '**' 'expr' | '*' 'expr'
-public class Argument {
+public final class Argument extends DisjunctionRule {
     private final Argument1 argument1;
     private final Argument2 argument2;
     private final Argument3 argument3;
@@ -45,7 +47,7 @@ public class Argument {
     }
 
     // 'NAME' ['comp_for']
-    public static class Argument1 {
+    public static final class Argument1 extends ConjunctionRule {
         private final Object name;
         private final CompFor compFor;
 
@@ -67,7 +69,7 @@ public class Argument {
     }
 
     // 'NAME' ':=' 'expr'
-    public static class Argument2 {
+    public static final class Argument2 extends ConjunctionRule {
         private final Object name;
         private final boolean isTokenAsgnExpr;
         private final Expr expr;
@@ -96,7 +98,7 @@ public class Argument {
     }
 
     // 'NAME' '=' 'expr'
-    public static class Argument3 {
+    public static final class Argument3 extends ConjunctionRule {
         private final Object name;
         private final boolean isTokenAssign;
         private final Expr expr;
@@ -125,7 +127,7 @@ public class Argument {
     }
 
     // '**' 'expr'
-    public static class Argument4 {
+    public static final class Argument4 extends ConjunctionRule {
         private final boolean isTokenPower;
         private final Expr expr;
 
@@ -147,7 +149,7 @@ public class Argument {
     }
 
     // '*' 'expr'
-    public static class Argument5 {
+    public static final class Argument5 extends ConjunctionRule {
         private final boolean isTokenTimes;
         private final Expr expr;
 

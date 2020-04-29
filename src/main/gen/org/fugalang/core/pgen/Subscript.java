@@ -1,9 +1,11 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
 import java.util.Optional;
+import org.fugalang.core.parser.DisjunctionRule;
 
 // subscript: 'expr' | ['expr'] ':' ['expr'] ['sliceop']
-public class Subscript {
+public final class Subscript extends DisjunctionRule {
     private final Expr expr;
     private final Subscript2 subscript2;
 
@@ -24,7 +26,7 @@ public class Subscript {
     }
 
     // ['expr'] ':' ['expr'] ['sliceop']
-    public static class Subscript2 {
+    public static final class Subscript2 extends ConjunctionRule {
         private final Expr expr;
         private final boolean isTokenColon;
         private final Expr expr1;

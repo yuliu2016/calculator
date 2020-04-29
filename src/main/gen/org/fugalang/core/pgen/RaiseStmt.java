@@ -1,9 +1,10 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
 import java.util.Optional;
 
 // raise_stmt: 'raise' ['expr' ['from' 'expr']]
-public class RaiseStmt {
+public final class RaiseStmt extends ConjunctionRule {
     private final boolean isTokenRaise;
     private final RaiseStmt2Group raiseStmt2Group;
 
@@ -24,7 +25,7 @@ public class RaiseStmt {
     }
 
     // 'expr' ['from' 'expr']
-    public static class RaiseStmt2Group {
+    public static final class RaiseStmt2Group extends ConjunctionRule {
         private final Expr expr;
         private final RaiseStmt2Group2Group raiseStmt2Group2Group;
 
@@ -46,7 +47,7 @@ public class RaiseStmt {
     }
 
     // 'from' 'expr'
-    public static class RaiseStmt2Group2Group {
+    public static final class RaiseStmt2Group2Group extends ConjunctionRule {
         private final boolean isTokenFrom;
         private final Expr expr;
 

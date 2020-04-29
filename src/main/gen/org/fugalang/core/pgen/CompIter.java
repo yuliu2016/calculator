@@ -1,7 +1,9 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.DisjunctionRule;
+
 // comp_iter: 'comp_for' | 'comp_if'
-public class CompIter {
+public final class CompIter extends DisjunctionRule {
     private final CompFor compFor;
     private final CompIf compIf;
 

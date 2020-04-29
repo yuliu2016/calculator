@@ -1,7 +1,9 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.DisjunctionRule;
+
 // import_stmt: 'import_name' | 'import_from'
-public class ImportStmt {
+public final class ImportStmt extends DisjunctionRule {
     private final ImportName importName;
     private final ImportFrom importFrom;
 

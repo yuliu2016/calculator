@@ -1,10 +1,11 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
 import java.util.List;
 import java.util.Optional;
 
 // if_stmt: 'if' 'namedexpr_expr' 'suite' ('elif' 'namedexpr_expr' 'suite')* ['else' 'suite']
-public class IfStmt {
+public final class IfStmt extends ConjunctionRule {
     private final boolean isTokenIf;
     private final NamedexprExpr namedexprExpr;
     private final Suite suite;
@@ -46,7 +47,7 @@ public class IfStmt {
     }
 
     // 'elif' 'namedexpr_expr' 'suite'
-    public static class IfStmt4Group {
+    public static final class IfStmt4Group extends ConjunctionRule {
         private final boolean isTokenElif;
         private final NamedexprExpr namedexprExpr;
         private final Suite suite;
@@ -75,7 +76,7 @@ public class IfStmt {
     }
 
     // 'else' 'suite'
-    public static class IfStmt5Group {
+    public static final class IfStmt5Group extends ConjunctionRule {
         private final boolean isTokenElse;
         private final Suite suite;
 

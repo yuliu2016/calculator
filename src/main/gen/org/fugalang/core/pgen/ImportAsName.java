@@ -1,9 +1,10 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
 import java.util.Optional;
 
 // import_as_name: 'NAME' ['as' 'NAME']
-public class ImportAsName {
+public final class ImportAsName extends ConjunctionRule {
     private final Object name;
     private final ImportAsName2Group importAsName2Group;
 
@@ -24,7 +25,7 @@ public class ImportAsName {
     }
 
     // 'as' 'NAME'
-    public static class ImportAsName2Group {
+    public static final class ImportAsName2Group extends ConjunctionRule {
         private final boolean isTokenAs;
         private final Object name;
 

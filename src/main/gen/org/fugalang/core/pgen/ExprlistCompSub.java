@@ -1,7 +1,9 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.DisjunctionRule;
+
 // exprlist_comp_sub: 'exprlist_comp' | 'subscript'
-public class ExprlistCompSub {
+public final class ExprlistCompSub extends DisjunctionRule {
     private final ExprlistComp exprlistComp;
     private final Subscript subscript;
 

@@ -1,9 +1,10 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
 import java.util.Optional;
 
 // for_stmt: 'for' 'targets' 'in' 'exprlist' 'suite' ['else' 'suite']
-public class ForStmt {
+public final class ForStmt extends ConjunctionRule {
     private final boolean isTokenFor;
     private final Targets targets;
     private final boolean isTokenIn;
@@ -52,7 +53,7 @@ public class ForStmt {
     }
 
     // 'else' 'suite'
-    public static class ForStmt6Group {
+    public static final class ForStmt6Group extends ConjunctionRule {
         private final boolean isTokenElse;
         private final Suite suite;
 

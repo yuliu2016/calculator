@@ -1,9 +1,10 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
 import java.util.List;
 
 // bitwise_or: 'bitwise_xor' ('|' 'bitwise_xor')*
-public class BitwiseOr {
+public final class BitwiseOr extends ConjunctionRule {
     private final BitwiseXor bitwiseXor;
     private final List<BitwiseOr2Group> bitwiseOr2GroupList;
 
@@ -24,7 +25,7 @@ public class BitwiseOr {
     }
 
     // '|' 'bitwise_xor'
-    public static class BitwiseOr2Group {
+    public static final class BitwiseOr2Group extends ConjunctionRule {
         private final boolean isTokenBitOr;
         private final BitwiseXor bitwiseXor;
 

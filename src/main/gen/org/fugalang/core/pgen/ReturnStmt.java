@@ -1,9 +1,10 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
 import java.util.Optional;
 
 // return_stmt: 'return' ['exprlist_star']
-public class ReturnStmt {
+public final class ReturnStmt extends ConjunctionRule {
     private final boolean isTokenReturn;
     private final ExprlistStar exprlistStar;
 

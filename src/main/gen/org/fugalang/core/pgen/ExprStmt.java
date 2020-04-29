@@ -1,10 +1,12 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
 import java.util.List;
 import java.util.Optional;
+import org.fugalang.core.parser.DisjunctionRule;
 
 // expr_stmt: 'exprlist_star' ['augassign' 'exprlist' | ('=' 'exprlist_star')*]
-public class ExprStmt {
+public final class ExprStmt extends ConjunctionRule {
     private final ExprlistStar exprlistStar;
     private final ExprStmt2Group exprStmt2Group;
 
@@ -25,7 +27,7 @@ public class ExprStmt {
     }
 
     // 'augassign' 'exprlist' | ('=' 'exprlist_star')*
-    public static class ExprStmt2Group {
+    public static final class ExprStmt2Group extends DisjunctionRule {
         private final ExprStmt2Group1 exprStmt2Group1;
         private final List<ExprStmt2Group2Group> exprStmt2Group2GroupList;
 
@@ -47,7 +49,7 @@ public class ExprStmt {
     }
 
     // 'augassign' 'exprlist'
-    public static class ExprStmt2Group1 {
+    public static final class ExprStmt2Group1 extends ConjunctionRule {
         private final Augassign augassign;
         private final Exprlist exprlist;
 
@@ -69,7 +71,7 @@ public class ExprStmt {
     }
 
     // '=' 'exprlist_star'
-    public static class ExprStmt2Group2Group {
+    public static final class ExprStmt2Group2Group extends ConjunctionRule {
         private final boolean isTokenAssign;
         private final ExprlistStar exprlistStar;
 

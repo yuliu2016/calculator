@@ -1,9 +1,10 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
 import java.util.List;
 
 // import_as_names: 'import_as_name' (',' 'import_as_name')* [',']
-public class ImportAsNames {
+public final class ImportAsNames extends ConjunctionRule {
     private final ImportAsName importAsName;
     private final List<ImportAsNames2Group> importAsNames2GroupList;
     private final boolean isTokenComma;
@@ -31,7 +32,7 @@ public class ImportAsNames {
     }
 
     // ',' 'import_as_name'
-    public static class ImportAsNames2Group {
+    public static final class ImportAsNames2Group extends ConjunctionRule {
         private final boolean isTokenComma;
         private final ImportAsName importAsName;
 

@@ -1,7 +1,9 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
+
 // del_stmt: 'del' 'targets'
-public class DelStmt {
+public final class DelStmt extends ConjunctionRule {
     private final boolean isTokenDel;
     private final Targets targets;
 

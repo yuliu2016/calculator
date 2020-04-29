@@ -1,9 +1,10 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
 import java.util.List;
 
 // subscriptlist: 'subscript' (',' 'subscript')* [',']
-public class Subscriptlist {
+public final class Subscriptlist extends ConjunctionRule {
     private final Subscript subscript;
     private final List<Subscriptlist2Group> subscriptlist2GroupList;
     private final boolean isTokenComma;
@@ -31,7 +32,7 @@ public class Subscriptlist {
     }
 
     // ',' 'subscript'
-    public static class Subscriptlist2Group {
+    public static final class Subscriptlist2Group extends ConjunctionRule {
         private final boolean isTokenComma;
         private final Subscript subscript;
 

@@ -1,9 +1,10 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
 import java.util.List;
 
 // disjunction: 'conjunction' ('or' 'conjunction')*
-public class Disjunction {
+public final class Disjunction extends ConjunctionRule {
     private final Conjunction conjunction;
     private final List<Disjunction2Group> disjunction2GroupList;
 
@@ -24,7 +25,7 @@ public class Disjunction {
     }
 
     // 'or' 'conjunction'
-    public static class Disjunction2Group {
+    public static final class Disjunction2Group extends ConjunctionRule {
         private final boolean isTokenOr;
         private final Conjunction conjunction;
 

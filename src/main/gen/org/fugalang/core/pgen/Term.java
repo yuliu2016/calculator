@@ -1,9 +1,11 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
 import java.util.List;
+import org.fugalang.core.parser.DisjunctionRule;
 
 // term: 'factor' (('*' | '@' | '/' | '%' | '//') 'factor')*
-public class Term {
+public final class Term extends ConjunctionRule {
     private final Factor factor;
     private final List<Term2Group> term2GroupList;
 
@@ -24,7 +26,7 @@ public class Term {
     }
 
     // ('*' | '@' | '/' | '%' | '//') 'factor'
-    public static class Term2Group {
+    public static final class Term2Group extends ConjunctionRule {
         private final Term2Group1Group term2Group1Group;
         private final Factor factor;
 
@@ -46,7 +48,7 @@ public class Term {
     }
 
     // '*' | '@' | '/' | '%' | '//'
-    public static class Term2Group1Group {
+    public static final class Term2Group1Group extends DisjunctionRule {
         private final boolean isTokenTimes;
         private final boolean isTokenMatrixTimes;
         private final boolean isTokenDiv;

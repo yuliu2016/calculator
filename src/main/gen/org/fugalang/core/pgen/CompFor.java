@@ -1,9 +1,10 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
 import java.util.Optional;
 
 // comp_for: 'for' 'targets' 'in' 'disjunction' ['comp_iter']
-public class CompFor {
+public final class CompFor extends ConjunctionRule {
     private final boolean isTokenFor;
     private final Targets targets;
     private final boolean isTokenIn;

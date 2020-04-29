@@ -1,9 +1,11 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
 import java.util.List;
+import org.fugalang.core.parser.DisjunctionRule;
 
 // exprlist_comp: ('namedexpr_expr' | 'star_expr') ('comp_for' | (',' ('namedexpr_expr' | 'star_expr'))* [','])
-public class ExprlistComp {
+public final class ExprlistComp extends ConjunctionRule {
     private final ExprlistComp1Group exprlistComp1Group;
     private final ExprlistComp2Group exprlistComp2Group;
 
@@ -24,7 +26,7 @@ public class ExprlistComp {
     }
 
     // 'namedexpr_expr' | 'star_expr'
-    public static class ExprlistComp1Group {
+    public static final class ExprlistComp1Group extends DisjunctionRule {
         private final NamedexprExpr namedexprExpr;
         private final StarExpr starExpr;
 
@@ -46,7 +48,7 @@ public class ExprlistComp {
     }
 
     // 'comp_for' | (',' ('namedexpr_expr' | 'star_expr'))* [',']
-    public static class ExprlistComp2Group {
+    public static final class ExprlistComp2Group extends DisjunctionRule {
         private final CompFor compFor;
         private final ExprlistComp2Group2 exprlistComp2Group2;
 
@@ -68,7 +70,7 @@ public class ExprlistComp {
     }
 
     // (',' ('namedexpr_expr' | 'star_expr'))* [',']
-    public static class ExprlistComp2Group2 {
+    public static final class ExprlistComp2Group2 extends ConjunctionRule {
         private final List<ExprlistComp2Group21Group> exprlistComp2Group21GroupList;
         private final boolean isTokenComma;
 
@@ -90,7 +92,7 @@ public class ExprlistComp {
     }
 
     // ',' ('namedexpr_expr' | 'star_expr')
-    public static class ExprlistComp2Group21Group {
+    public static final class ExprlistComp2Group21Group extends ConjunctionRule {
         private final boolean isTokenComma;
         private final ExprlistComp2Group21Group2Group exprlistComp2Group21Group2Group;
 
@@ -112,7 +114,7 @@ public class ExprlistComp {
     }
 
     // 'namedexpr_expr' | 'star_expr'
-    public static class ExprlistComp2Group21Group2Group {
+    public static final class ExprlistComp2Group21Group2Group extends DisjunctionRule {
         private final NamedexprExpr namedexprExpr;
         private final StarExpr starExpr;
 

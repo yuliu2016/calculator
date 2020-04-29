@@ -1,9 +1,10 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
 import java.util.Optional;
 
 // assert_stmt: 'assert' 'expr' [',' 'expr']
-public class AssertStmt {
+public final class AssertStmt extends ConjunctionRule {
     private final boolean isTokenAssert;
     private final Expr expr;
     private final AssertStmt3Group assertStmt3Group;
@@ -31,7 +32,7 @@ public class AssertStmt {
     }
 
     // ',' 'expr'
-    public static class AssertStmt3Group {
+    public static final class AssertStmt3Group extends ConjunctionRule {
         private final boolean isTokenComma;
         private final Expr expr;
 

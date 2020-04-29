@@ -1,7 +1,10 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
+import org.fugalang.core.parser.DisjunctionRule;
+
 // suite: ':' 'simple_stmt' | 'block_suite'
-public class Suite {
+public final class Suite extends DisjunctionRule {
     private final Suite1 suite1;
     private final BlockSuite blockSuite;
 
@@ -22,7 +25,7 @@ public class Suite {
     }
 
     // ':' 'simple_stmt'
-    public static class Suite1 {
+    public static final class Suite1 extends ConjunctionRule {
         private final boolean isTokenColon;
         private final SimpleStmt simpleStmt;
 

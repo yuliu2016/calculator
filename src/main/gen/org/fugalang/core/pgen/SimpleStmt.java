@@ -1,9 +1,10 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
 import java.util.List;
 
 // simple_stmt: 'small_stmt' (';' 'small_stmt')* [';']
-public class SimpleStmt {
+public final class SimpleStmt extends ConjunctionRule {
     private final SmallStmt smallStmt;
     private final List<SimpleStmt2Group> simpleStmt2GroupList;
     private final boolean isTokenSemicolon;
@@ -31,7 +32,7 @@ public class SimpleStmt {
     }
 
     // ';' 'small_stmt'
-    public static class SimpleStmt2Group {
+    public static final class SimpleStmt2Group extends ConjunctionRule {
         private final boolean isTokenSemicolon;
         private final SmallStmt smallStmt;
 

@@ -1,7 +1,9 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.DisjunctionRule;
+
 // small_stmt: 'expr_stmt' | 'del_stmt' | 'pass_stmt' | 'flow_stmt' | 'import_stmt' | 'assert_stmt'
-public class SmallStmt {
+public final class SmallStmt extends DisjunctionRule {
     private final ExprStmt exprStmt;
     private final DelStmt delStmt;
     private final PassStmt passStmt;

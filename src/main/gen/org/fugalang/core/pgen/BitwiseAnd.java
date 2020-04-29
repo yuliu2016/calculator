@@ -1,9 +1,10 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
 import java.util.List;
 
 // bitwise_and: 'shift_expr' ('&' 'shift_expr')*
-public class BitwiseAnd {
+public final class BitwiseAnd extends ConjunctionRule {
     private final ShiftExpr shiftExpr;
     private final List<BitwiseAnd2Group> bitwiseAnd2GroupList;
 
@@ -24,7 +25,7 @@ public class BitwiseAnd {
     }
 
     // '&' 'shift_expr'
-    public static class BitwiseAnd2Group {
+    public static final class BitwiseAnd2Group extends ConjunctionRule {
         private final boolean isTokenBitAnd;
         private final ShiftExpr shiftExpr;
 

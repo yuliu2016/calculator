@@ -1,9 +1,10 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
 import java.util.Optional;
 
 // namedexpr_expr: 'NAME' [':=' 'expr']
-public class NamedexprExpr {
+public final class NamedexprExpr extends ConjunctionRule {
     private final Object name;
     private final NamedexprExpr2Group namedexprExpr2Group;
 
@@ -24,7 +25,7 @@ public class NamedexprExpr {
     }
 
     // ':=' 'expr'
-    public static class NamedexprExpr2Group {
+    public static final class NamedexprExpr2Group extends ConjunctionRule {
         private final boolean isTokenAsgnExpr;
         private final Expr expr;
 

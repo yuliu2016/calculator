@@ -1,9 +1,10 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
 import java.util.Optional;
 
 // while_stmt: 'while' 'namedexpr_expr' 'suite' ['else' 'suite']
-public class WhileStmt {
+public final class WhileStmt extends ConjunctionRule {
     private final boolean isTokenWhile;
     private final NamedexprExpr namedexprExpr;
     private final Suite suite;
@@ -38,7 +39,7 @@ public class WhileStmt {
     }
 
     // 'else' 'suite'
-    public static class WhileStmt4Group {
+    public static final class WhileStmt4Group extends ConjunctionRule {
         private final boolean isTokenElse;
         private final Suite suite;
 

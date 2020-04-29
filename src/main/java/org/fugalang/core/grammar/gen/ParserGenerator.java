@@ -3,6 +3,7 @@ package org.fugalang.core.grammar.gen;
 import org.fugalang.core.grammar.classbuilder.ClassBuilder;
 import org.fugalang.core.grammar.classbuilder.ClassName;
 import org.fugalang.core.grammar.classbuilder.ClassSet;
+import org.fugalang.core.grammar.classbuilder.RuleType;
 import org.fugalang.core.grammar.psi.*;
 
 import java.nio.file.Path;
@@ -116,6 +117,7 @@ public class ParserGenerator {
             // use a root class to reduce files
             ClassBuilder cb = classSet.createRootClass(realClassName);
             cb.setHeaderComments(entry.getKey() + ": " + entry.getValue().toSimpleString());
+            cb.setRuleType(RuleType.Disjunction);
 
             addOrRule(ClassName.of(realClassName), cb, entry.getValue());
 
@@ -127,6 +129,8 @@ public class ParserGenerator {
     private void addOrRule(ClassName className, ClassBuilder cb, OrRule rule) {
         if (rule.andRules.isEmpty()) {
             // only one rule - can propagate fields of this class
+            // but need to change the type here
+            cb.setRuleType(RuleType.Conjunction);
             addAndRule(className, cb, rule.andRule, false);
         } else {
 
@@ -153,6 +157,7 @@ public class ParserGenerator {
                     // a list can't hold multiple-ly typed objects
                     var component_cb = classSet.createComponentClass(classType);
                     component_cb.setHeaderComments(andRule.toSimpleString());
+                    component_cb.setRuleType(RuleType.Conjunction);
 
                     // Add a field to the class set
                     // The reason to do this first is that if adding the rule fails,
@@ -206,9 +211,15 @@ public class ParserGenerator {
         var sub = repeatRule.subRule;
 
         if (sub.groupedOrRule != null) {
-            addOrRuleAsComponent(className, cb, sub.groupedOrRule, repeatRule, false);
+
+            addOrRuleAsComponent(className, cb, sub.groupedOrRule,
+                    repeatRule, false);
+
         } else if (sub.optionalOrRule != null) {
-            addOrRuleAsComponent(className, cb, sub.optionalOrRule, repeatRule, true);
+
+            addOrRuleAsComponent(className, cb,
+                    sub.optionalOrRule, repeatRule, true);
+
         } else if (sub.token != null) {
 
             if (classNameMap.containsKey(sub.token)) {
@@ -228,8 +239,11 @@ public class ParserGenerator {
                 var clsName = convertedValue.getClassName();
 
                 if (clsName.equals("boolean")) {
-                    var fieldName = ParseStringUtil.prefixCap("isToken", convertedValue.getFieldName());
-                    addFieldWithRepeat(ClassName.of("boolean"), cb, fieldName, repeatRule, false);
+                    var fieldName = ParseStringUtil
+                            .prefixCap("isToken", convertedValue.getFieldName());
+
+                    addFieldWithRepeat(ClassName.of("boolean"), cb,
+                            fieldName, repeatRule, false);
                 } else {
                     addFieldWithRepeat(ClassName.of(clsName), cb,
                             convertedValue.getFieldName(), repeatRule, isOptional);
@@ -281,6 +295,7 @@ public class ParserGenerator {
 
             var component_cb = classSet.createComponentClass(classType);
             component_cb.setHeaderComments(rule.toSimpleString());
+            component_cb.setRuleType(RuleType.Disjunction);
 
             // Add a field to the class set
             // The reason to do this first is that if adding the rule fails,

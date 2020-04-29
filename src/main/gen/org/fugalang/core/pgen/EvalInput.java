@@ -1,9 +1,10 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
 import java.util.List;
 
 // eval_input: 'exprlist' 'NEWLINE'* 'ENDMARKER'
-public class EvalInput {
+public final class EvalInput extends ConjunctionRule {
     private final Exprlist exprlist;
     private final List<Object> newlineList;
     private final Object endmarker;

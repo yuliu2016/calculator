@@ -1,7 +1,9 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
+
 // star_expr: '*' 'bitwise_or'
-public class StarExpr {
+public final class StarExpr extends ConjunctionRule {
     private final boolean isTokenTimes;
     private final BitwiseOr bitwiseOr;
 

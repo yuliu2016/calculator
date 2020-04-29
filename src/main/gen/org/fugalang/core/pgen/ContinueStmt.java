@@ -1,7 +1,9 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
+
 // continue_stmt: 'continue'
-public class ContinueStmt {
+public final class ContinueStmt extends ConjunctionRule {
     private final boolean isTokenContinue;
 
     public ContinueStmt(

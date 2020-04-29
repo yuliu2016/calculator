@@ -1,9 +1,10 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
 import java.util.List;
 
 // comparison: 'bitwise_or' ('comp_op' 'bitwise_or')*
-public class Comparison {
+public final class Comparison extends ConjunctionRule {
     private final BitwiseOr bitwiseOr;
     private final List<Comparison2Group> comparison2GroupList;
 
@@ -24,7 +25,7 @@ public class Comparison {
     }
 
     // 'comp_op' 'bitwise_or'
-    public static class Comparison2Group {
+    public static final class Comparison2Group extends ConjunctionRule {
         private final CompOp compOp;
         private final BitwiseOr bitwiseOr;
 

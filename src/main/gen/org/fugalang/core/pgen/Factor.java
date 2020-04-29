@@ -1,7 +1,10 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
+import org.fugalang.core.parser.DisjunctionRule;
+
 // factor: ('+' | '-' | '~') 'factor' | 'power'
-public class Factor {
+public final class Factor extends DisjunctionRule {
     private final Factor1 factor1;
     private final Power power;
 
@@ -22,7 +25,7 @@ public class Factor {
     }
 
     // ('+' | '-' | '~') 'factor'
-    public static class Factor1 {
+    public static final class Factor1 extends ConjunctionRule {
         private final Factor11Group factor11Group;
         private final Factor factor;
 
@@ -44,7 +47,7 @@ public class Factor {
     }
 
     // '+' | '-' | '~'
-    public static class Factor11Group {
+    public static final class Factor11Group extends DisjunctionRule {
         private final boolean isTokenPlus;
         private final boolean isTokenMinus;
         private final boolean isTokenBitNot;

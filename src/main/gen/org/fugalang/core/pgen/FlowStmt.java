@@ -1,7 +1,9 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.DisjunctionRule;
+
 // flow_stmt: 'break_stmt' | 'continue_stmt' | 'return_stmt' | 'raise_stmt'
-public class FlowStmt {
+public final class FlowStmt extends DisjunctionRule {
     private final BreakStmt breakStmt;
     private final ContinueStmt continueStmt;
     private final ReturnStmt returnStmt;

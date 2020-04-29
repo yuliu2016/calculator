@@ -1,9 +1,10 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
 import java.util.List;
 
 // conjunction: 'inversion' ('and' 'inversion')*
-public class Conjunction {
+public final class Conjunction extends ConjunctionRule {
     private final Inversion inversion;
     private final List<Conjunction2Group> conjunction2GroupList;
 
@@ -24,7 +25,7 @@ public class Conjunction {
     }
 
     // 'and' 'inversion'
-    public static class Conjunction2Group {
+    public static final class Conjunction2Group extends ConjunctionRule {
         private final boolean isTokenAnd;
         private final Inversion inversion;
 

@@ -1,7 +1,10 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
+import org.fugalang.core.parser.DisjunctionRule;
+
 // comp_op: '<' | '>' | '==' | '>=' | '<=' | '!=' | 'in' | 'not' 'in' | 'is' | 'is' 'not'
-public class CompOp {
+public final class CompOp extends DisjunctionRule {
     private final boolean isTokenLess;
     private final boolean isTokenGreater;
     private final boolean isTokenEqual;
@@ -78,7 +81,7 @@ public class CompOp {
     }
 
     // 'not' 'in'
-    public static class CompOp8 {
+    public static final class CompOp8 extends ConjunctionRule {
         private final boolean isTokenNot;
         private final boolean isTokenIn;
 
@@ -100,7 +103,7 @@ public class CompOp {
     }
 
     // 'is' 'not'
-    public static class CompOp10 {
+    public static final class CompOp10 extends ConjunctionRule {
         private final boolean isTokenIs;
         private final boolean isTokenNot;
 

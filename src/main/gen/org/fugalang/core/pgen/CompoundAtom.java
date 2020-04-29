@@ -1,9 +1,11 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
 import java.util.Optional;
+import org.fugalang.core.parser.DisjunctionRule;
 
 // compound_atom: '(' ['exprlist_comp'] ')' | '[' ['exprlist_comp_sub'] ']' | '{' ['dictorsetmaker'] '}'
-public class CompoundAtom {
+public final class CompoundAtom extends DisjunctionRule {
     private final CompoundAtom1 compoundAtom1;
     private final CompoundAtom2 compoundAtom2;
     private final CompoundAtom3 compoundAtom3;
@@ -31,7 +33,7 @@ public class CompoundAtom {
     }
 
     // '(' ['exprlist_comp'] ')'
-    public static class CompoundAtom1 {
+    public static final class CompoundAtom1 extends ConjunctionRule {
         private final boolean isTokenLpar;
         private final ExprlistComp exprlistComp;
         private final boolean isTokenRpar;
@@ -60,7 +62,7 @@ public class CompoundAtom {
     }
 
     // '[' ['exprlist_comp_sub'] ']'
-    public static class CompoundAtom2 {
+    public static final class CompoundAtom2 extends ConjunctionRule {
         private final boolean isTokenLsqb;
         private final ExprlistCompSub exprlistCompSub;
         private final boolean isTokenRsqb;
@@ -89,7 +91,7 @@ public class CompoundAtom {
     }
 
     // '{' ['dictorsetmaker'] '}'
-    public static class CompoundAtom3 {
+    public static final class CompoundAtom3 extends ConjunctionRule {
         private final boolean isTokenLbrace;
         private final Dictorsetmaker dictorsetmaker;
         private final boolean isTokenRbrace;

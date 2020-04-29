@@ -1,7 +1,10 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
+import org.fugalang.core.parser.DisjunctionRule;
+
 // inversion: 'not' 'inversion' | 'comparison'
-public class Inversion {
+public final class Inversion extends DisjunctionRule {
     private final Inversion1 inversion1;
     private final Comparison comparison;
 
@@ -22,7 +25,7 @@ public class Inversion {
     }
 
     // 'not' 'inversion'
-    public static class Inversion1 {
+    public static final class Inversion1 extends ConjunctionRule {
         private final boolean isTokenNot;
         private final Inversion inversion;
 

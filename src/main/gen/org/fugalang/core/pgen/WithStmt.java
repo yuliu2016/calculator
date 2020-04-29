@@ -1,9 +1,10 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
 import java.util.List;
 
 // with_stmt: 'with' 'with_item' (',' 'with_item')* 'suite'
-public class WithStmt {
+public final class WithStmt extends ConjunctionRule {
     private final boolean isTokenWith;
     private final WithItem withItem;
     private final List<WithStmt3Group> withStmt3GroupList;
@@ -38,7 +39,7 @@ public class WithStmt {
     }
 
     // ',' 'with_item'
-    public static class WithStmt3Group {
+    public static final class WithStmt3Group extends ConjunctionRule {
         private final boolean isTokenComma;
         private final WithItem withItem;
 

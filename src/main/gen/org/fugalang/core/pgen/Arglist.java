@@ -1,9 +1,10 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
 import java.util.List;
 
 // arglist: 'argument' (',' 'argument')* [',']
-public class Arglist {
+public final class Arglist extends ConjunctionRule {
     private final Argument argument;
     private final List<Arglist2Group> arglist2GroupList;
     private final boolean isTokenComma;
@@ -31,7 +32,7 @@ public class Arglist {
     }
 
     // ',' 'argument'
-    public static class Arglist2Group {
+    public static final class Arglist2Group extends ConjunctionRule {
         private final boolean isTokenComma;
         private final Argument argument;
 

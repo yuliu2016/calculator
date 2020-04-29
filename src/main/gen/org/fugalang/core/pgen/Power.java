@@ -1,9 +1,10 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
 import java.util.Optional;
 
 // power: 'pipe_expr' ['**' 'factor']
-public class Power {
+public final class Power extends ConjunctionRule {
     private final PipeExpr pipeExpr;
     private final Power2Group power2Group;
 
@@ -24,7 +25,7 @@ public class Power {
     }
 
     // '**' 'factor'
-    public static class Power2Group {
+    public static final class Power2Group extends ConjunctionRule {
         private final boolean isTokenPower;
         private final Factor factor;
 

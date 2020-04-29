@@ -1,9 +1,11 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ConjunctionRule;
 import java.util.Optional;
+import org.fugalang.core.parser.DisjunctionRule;
 
 // funcdef: ['async'] 'def' ['varargslist'] (':' 'expr' | 'block_suite')
-public class Funcdef {
+public final class Funcdef extends ConjunctionRule {
     private final boolean isTokenAsync;
     private final boolean isTokenDef;
     private final Varargslist varargslist;
@@ -38,7 +40,7 @@ public class Funcdef {
     }
 
     // ':' 'expr' | 'block_suite'
-    public static class Funcdef4Group {
+    public static final class Funcdef4Group extends DisjunctionRule {
         private final Funcdef4Group1 funcdef4Group1;
         private final BlockSuite blockSuite;
 
@@ -60,7 +62,7 @@ public class Funcdef {
     }
 
     // ':' 'expr'
-    public static class Funcdef4Group1 {
+    public static final class Funcdef4Group1 extends ConjunctionRule {
         private final boolean isTokenColon;
         private final Expr expr;
 
