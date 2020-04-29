@@ -28,7 +28,7 @@ public class MgGen {
 
             var gen = new ParserGenerator(cst, MgGen::checkToken,
                     path, "org.fugalang.core.pgen");
-            gen.generate(false);
+            gen.generate(true);
 
         } catch (IOException | URISyntaxException e) {
             e.printStackTrace();

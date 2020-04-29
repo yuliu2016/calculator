@@ -1,13 +1,16 @@
 package org.fugalang.core.grammar.classbuilder;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class ClassBuilder {
     private final String packageName;
     private final String className;
 
     private final List<ClassField> fields = new ArrayList<>();
+    private final Map<String, Integer> fieldNameCounter = new HashMap<>();
+
+    private final Set<String> classImports = new HashSet<>();
+
     private String headerComments = null;
 
     public ClassBuilder(String packageName, String className) {
@@ -30,6 +33,16 @@ public class ClassBuilder {
                 .append(packageName)
                 .append(";\n\n");
 
+        for (String classImport : classImports) {
+            sb.append("import ")
+                    .append(classImport)
+                    .append(";\n");
+        }
+
+        if (!classImports.isEmpty()) {
+            sb.append("\n");
+        }
+
         if (headerComments != null && !headerComments.isBlank()) {
             sb.append("// ")
                     .append(headerComments)
@@ -41,7 +54,7 @@ public class ClassBuilder {
                 .append(className)
                 .append(" {\n");
 
-        for (ClassField field : getFields()) {
+        for (ClassField field : fields) {
             sb.append("    ");
             sb.append(field.asFieldDeclaration());
             sb.append("\n");
@@ -64,7 +77,7 @@ public class ClassBuilder {
 
         sb.append("    ) {\n");
 
-        for (ClassField field : getFields()) {
+        for (ClassField field : fields) {
             sb.append("        ");
             sb.append(field.asConstructorStmt());
             sb.append("\n");
@@ -75,17 +88,25 @@ public class ClassBuilder {
         return sb.toString();
     }
 
-    public List<ClassField> getFields() {
-        return fields;
-    }
-
     public void addField(String type, String name) {
-        // add imports here
-        fields.add(new ClassField(type, name));
-    }
 
-    public String getHeaderComments() {
-        return headerComments;
+        String actualName;
+
+        if (fieldNameCounter.containsKey(name)) {
+            int cnt = fieldNameCounter.get(name) + 1;
+            actualName = name + cnt;
+            fieldNameCounter.put(name, cnt);
+        } else {
+            actualName = name;
+            fieldNameCounter.put(name, 0);
+        }
+
+        if (type.startsWith("List")) {
+            classImports.add("java.util.List");
+        }
+
+        // add imports here
+        fields.add(new ClassField(type, actualName));
     }
 
     public void setHeaderComments(String headerComments) {

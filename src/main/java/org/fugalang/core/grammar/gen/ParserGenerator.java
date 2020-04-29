@@ -230,7 +230,7 @@ public class ParserGenerator {
         // maybe this can just be added to this class
         // but maybe there needs to be a separate class
 
-        if (rule.andRules.isEmpty()) {
+        if (rule.andRules.isEmpty() && rule.andRule.repeatRules.isEmpty()) {
             // just add all the repeat rules and be done with it
             addAndRule(className, cb, rule.andRule);
         } else {

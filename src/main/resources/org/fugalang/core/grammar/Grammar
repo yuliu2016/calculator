@@ -12,7 +12,7 @@ simple_stmt: small_stmt (';' small_stmt)* [';']
 small_stmt: expr_stmt | del_stmt | pass_stmt | flow_stmt | import_stmt | assert_stmt
 
 exprlist_star: (expr | star_expr) (',' (expr | star_expr))* [',']
-augassign: ('+=' | '-=' | '*=' | '@=' | '/=' | '%=' | '&=' | '|=' | '^=' | '<<=' | '>>=' | '**=' | '//=')
+augassign: '+=' | '-=' | '*=' | '@=' | '/=' | '%=' | '&=' | '|=' | '^=' | '<<=' | '>>=' | '**=' | '//='
 expr_stmt: exprlist_star [augassign exprlist | ('=' exprlist_star)*]
 
 del_stmt: 'del' targets
@@ -26,7 +26,7 @@ raise_stmt: 'raise' [expr ['from' expr]]
 
 import_stmt: import_name | import_from
 import_name: 'import' dotted_as_names
-import_from: ('from' (('.')* dotted_name | ('.')+) 'import' ('*' | '(' import_as_names ')' | import_as_names))
+import_from: 'from' (('.')* dotted_name | ('.')+) 'import' ('*' | '(' import_as_names ')' | import_as_names)
 import_as_name: NAME ['as' NAME]
 dotted_as_name: dotted_name ['as' NAME]
 import_as_names: import_as_name (',' import_as_name)* [',']
@@ -40,7 +40,7 @@ compound_stmt: if_stmt | while_stmt | for_stmt | try_stmt | with_stmt
 if_stmt: 'if' namedexpr_expr suite ('elif' namedexpr_expr suite)* ['else' suite]
 while_stmt: 'while' namedexpr_expr suite ['else' suite]
 for_stmt: 'for' targets 'in' exprlist suite ['else' suite]
-try_stmt: ('try' suite ((except_clause suite)+ ['else' suite] ['finally' suite] | 'finally' suite))
+try_stmt: 'try' suite ((except_clause suite)+ ['else' suite] ['finally' suite] | 'finally' suite)
 # NB compile.c makes sure that the default except clause is last
 except_clause: 'except' [expr ['as' NAME]]
 with_stmt: 'with' with_item (',' with_item)* suite
@@ -83,7 +83,7 @@ atom: compound_atom | simple_atom
 compound_atom: '(' [exprlist_comp] ')' | '[' [exprlist_comp_sub] ']' | '{' [dictorsetmaker] '}'
 simple_atom: NAME | NUMBER | STRING | 'None' | 'True' | 'False'
 
-exprlist_comp: (namedexpr_expr|star_expr) ( comp_for | (',' (namedexpr_expr|star_expr))* [','] )
+exprlist_comp: (namedexpr_expr|star_expr) ( comp_for | (',' (namedexpr_expr|star_expr))* [','])
 exprlist_comp_sub: exprlist_comp | subscript
 
 trailer: '(' [arglist] ')' | '[' subscriptlist ']' | '.' NAME | block_suite
@@ -100,7 +100,7 @@ dict_maker: (expr ':' expr | '**' bitwise_or) (comp_for | (',' (expr ':' expr | 
 set_maker: (expr | star_expr) (comp_for | (',' (expr | star_expr))* [','])
 
 arglist: argument (',' argument)*  [',']
-argument: (NAME [comp_for] | NAME ':=' expr | NAME '=' expr | '**' expr | '*' expr)
+argument: NAME [comp_for] | NAME ':=' expr | NAME '=' expr | '**' expr | '*' expr
 
 comp_iter: comp_for | comp_if
 comp_for: 'for' targets 'in' disjunction [comp_iter]
