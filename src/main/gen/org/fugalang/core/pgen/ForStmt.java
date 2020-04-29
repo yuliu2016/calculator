@@ -24,4 +24,18 @@ public class ForStmt {
         this.suite = suite;
         this.forStmt6Group = forStmt6Group;
     }
+
+    // 'else' 'suite'
+    public static class ForStmt6Group {
+        public final boolean isTokenElse;
+        public final Suite suite;
+
+        public ForStmt6Group(
+                boolean isTokenElse,
+                Suite suite
+        ) {
+            this.isTokenElse = isTokenElse;
+            this.suite = suite;
+        }
+    }
 }

@@ -18,4 +18,52 @@ public class Trailer {
         this.trailer3 = trailer3;
         this.blockSuite = blockSuite;
     }
+
+    // '(' ['arglist'] ')'
+    public static class Trailer1 {
+        public final boolean isTokenLpar;
+        public final Arglist arglist;
+        public final boolean isTokenRpar;
+
+        public Trailer1(
+                boolean isTokenLpar,
+                Arglist arglist,
+                boolean isTokenRpar
+        ) {
+            this.isTokenLpar = isTokenLpar;
+            this.arglist = arglist;
+            this.isTokenRpar = isTokenRpar;
+        }
+    }
+
+    // '[' 'subscriptlist' ']'
+    public static class Trailer2 {
+        public final boolean isTokenLsqb;
+        public final Subscriptlist subscriptlist;
+        public final boolean isTokenRsqb;
+
+        public Trailer2(
+                boolean isTokenLsqb,
+                Subscriptlist subscriptlist,
+                boolean isTokenRsqb
+        ) {
+            this.isTokenLsqb = isTokenLsqb;
+            this.subscriptlist = subscriptlist;
+            this.isTokenRsqb = isTokenRsqb;
+        }
+    }
+
+    // '.' 'NAME'
+    public static class Trailer3 {
+        public final boolean isTokenDot;
+        public final Object name;
+
+        public Trailer3(
+                boolean isTokenDot,
+                Object name
+        ) {
+            this.isTokenDot = isTokenDot;
+            this.name = name;
+        }
+    }
 }

@@ -88,13 +88,17 @@ public class ParserGenerator {
     }
 
     public void generate(boolean toFiles) {
-        classSet.getBuilders().clear();
+        if (!classSet.getClasses().isEmpty()) {
+            throw new IllegalStateException("Cannot repeat generation");
+        }
+
         generateClasses();
+
         if (toFiles) {
             classSet.writeToFiles();
         } else {
-            for (ClassBuilder builder : classSet.getBuilders()) {
-                System.out.println(builder.generateClassCode());
+            for (var classWithComponents : classSet.getClasses()) {
+                System.out.println(classWithComponents.generateClassCode());
             }
         }
     }
@@ -107,10 +111,15 @@ public class ParserGenerator {
 
         for (var entry : ruleMap.entrySet()) {
             var className = classNameMap.get(entry.getKey());
-            ClassBuilder cb = classSet.create(className);
+
+            // use a root class to reduce files
+            ClassBuilder cb = classSet.createRootClass(className);
             cb.setHeaderComments(entry.getKey() + ": " + entry.getValue().toSimpleString());
 
             addOrRule(className, cb, entry.getValue());
+
+            // for checking invariant state
+            classSet.markRootClassDone();
         }
     }
 
@@ -139,7 +148,7 @@ public class ParserGenerator {
                 } else {
                     // need to make a new class for this, because
                     // a list can't hold multiple-ly typed objects
-                    var component_cb = classSet.create(class_with_count);
+                    var component_cb = classSet.createComponentClass(class_with_count);
                     component_cb.setHeaderComments(andRule.toSimpleString());
 
                     // Add a field to the class set
@@ -221,9 +230,11 @@ public class ParserGenerator {
         var objClassName = ParseStringUtil.capitalizeFirstCharOnly(className);
 
         if (repeatRule.tokenStar) {
+            cb.addImport("java.util.List");
             cb.addField("List<" + objClassName + ">", fieldName + "List");
         } else if (repeatRule.tokenPlus) {
             cb.addField(className, fieldName);
+            cb.addImport("java.util.List");
             cb.addField("List<" + objClassName + ">", fieldName + "List");
         } else {
             cb.addField(className, fieldName);
@@ -244,7 +255,7 @@ public class ParserGenerator {
         } else {
             String class_with_postfix = className + "Group";
 
-            var component_cb = classSet.create(class_with_postfix);
+            var component_cb = classSet.createComponentClass(class_with_postfix);
             component_cb.setHeaderComments(rule.toSimpleString());
 
             // Add a field to the class set

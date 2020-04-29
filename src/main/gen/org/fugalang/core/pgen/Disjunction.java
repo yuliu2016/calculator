@@ -14,4 +14,18 @@ public class Disjunction {
         this.conjunction = conjunction;
         this.disjunction2GroupList = disjunction2GroupList;
     }
+
+    // 'or' 'conjunction'
+    public static class Disjunction2Group {
+        public final boolean isTokenOr;
+        public final Conjunction conjunction;
+
+        public Disjunction2Group(
+                boolean isTokenOr,
+                Conjunction conjunction
+        ) {
+            this.isTokenOr = isTokenOr;
+            this.conjunction = conjunction;
+        }
+    }
 }

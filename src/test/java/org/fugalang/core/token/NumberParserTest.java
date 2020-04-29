@@ -29,7 +29,7 @@ public class NumberParserTest {
     public void testParseFloat() {
         var result = new Tokenizer("1.23").tokenizeAll();
 
-        assertType(result, 0, TokenType.FLOAT);
+        assertType(result, 0, TokenType.NUMBER);
         assertValue(result, 0, 1.23);
     }
 
@@ -37,7 +37,7 @@ public class NumberParserTest {
     public void testParseFloatComplex() {
         var result = new Tokenizer("1.23j").tokenizeAll();
 
-        assertType(result, 0, TokenType.COMPLEX);
+        assertType(result, 0, TokenType.NUMBER);
         assertValue(result, 0, 1.23);
     }
 
@@ -45,7 +45,7 @@ public class NumberParserTest {
     public void testParseIntComplex() {
         var result = new Tokenizer("123j").tokenizeAll();
 
-        assertType(result, 0, TokenType.COMPLEX);
+        assertType(result, 0, TokenType.NUMBER);
         assertValue(result, 0, 123.0);
     }
 
@@ -53,7 +53,7 @@ public class NumberParserTest {
     public void testFloatExp() {
         var result = new Tokenizer("1E5").tokenizeAll();
 
-        assertType(result, 0, TokenType.FLOAT);
+        assertType(result, 0, TokenType.NUMBER);
         assertValue(result, 0, 1E5);
     }
 
@@ -62,7 +62,7 @@ public class NumberParserTest {
     public void testFloatExp2() {
         var result = new Tokenizer("1.23E-5").tokenizeAll();
 
-        assertType(result, 0, TokenType.FLOAT);
+        assertType(result, 0, TokenType.NUMBER);
         assertValue(result, 0, 1.23E-5);
     }
 }

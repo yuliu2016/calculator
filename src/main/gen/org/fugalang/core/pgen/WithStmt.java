@@ -20,4 +20,18 @@ public class WithStmt {
         this.withStmt3GroupList = withStmt3GroupList;
         this.suite = suite;
     }
+
+    // ',' 'with_item'
+    public static class WithStmt3Group {
+        public final boolean isTokenComma;
+        public final WithItem withItem;
+
+        public WithStmt3Group(
+                boolean isTokenComma,
+                WithItem withItem
+        ) {
+            this.isTokenComma = isTokenComma;
+            this.withItem = withItem;
+        }
+    }
 }

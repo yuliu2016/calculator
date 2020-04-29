@@ -12,4 +12,18 @@ public class DottedAsName {
         this.dottedName = dottedName;
         this.dottedAsName2Group = dottedAsName2Group;
     }
+
+    // 'as' 'NAME'
+    public static class DottedAsName2Group {
+        public final boolean isTokenAs;
+        public final Object name;
+
+        public DottedAsName2Group(
+                boolean isTokenAs,
+                Object name
+        ) {
+            this.isTokenAs = isTokenAs;
+            this.name = name;
+        }
+    }
 }

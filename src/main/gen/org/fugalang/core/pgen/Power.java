@@ -12,4 +12,18 @@ public class Power {
         this.pipeExpr = pipeExpr;
         this.power2Group = power2Group;
     }
+
+    // '**' 'factor'
+    public static class Power2Group {
+        public final boolean isTokenPower;
+        public final Factor factor;
+
+        public Power2Group(
+                boolean isTokenPower,
+                Factor factor
+        ) {
+            this.isTokenPower = isTokenPower;
+            this.factor = factor;
+        }
+    }
 }

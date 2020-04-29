@@ -17,4 +17,18 @@ public class DottedAsNames {
         this.dottedAsNames2GroupList = dottedAsNames2GroupList;
         this.isTokenComma = isTokenComma;
     }
+
+    // ',' 'dotted_as_name'
+    public static class DottedAsNames2Group {
+        public final boolean isTokenComma;
+        public final DottedAsName dottedAsName;
+
+        public DottedAsNames2Group(
+                boolean isTokenComma,
+                DottedAsName dottedAsName
+        ) {
+            this.isTokenComma = isTokenComma;
+            this.dottedAsName = dottedAsName;
+        }
+    }
 }

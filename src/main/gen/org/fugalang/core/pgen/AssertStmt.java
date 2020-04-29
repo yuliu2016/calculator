@@ -15,4 +15,18 @@ public class AssertStmt {
         this.expr = expr;
         this.assertStmt3Group = assertStmt3Group;
     }
+
+    // ',' 'expr'
+    public static class AssertStmt3Group {
+        public final boolean isTokenComma;
+        public final Expr expr;
+
+        public AssertStmt3Group(
+                boolean isTokenComma,
+                Expr expr
+        ) {
+            this.isTokenComma = isTokenComma;
+            this.expr = expr;
+        }
+    }
 }

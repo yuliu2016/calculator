@@ -17,4 +17,18 @@ public class ImportAsNames {
         this.importAsNames2GroupList = importAsNames2GroupList;
         this.isTokenComma = isTokenComma;
     }
+
+    // ',' 'import_as_name'
+    public static class ImportAsNames2Group {
+        public final boolean isTokenComma;
+        public final ImportAsName importAsName;
+
+        public ImportAsNames2Group(
+                boolean isTokenComma,
+                ImportAsName importAsName
+        ) {
+            this.isTokenComma = isTokenComma;
+            this.importAsName = importAsName;
+        }
+    }
 }

@@ -14,4 +14,18 @@ public class Conjunction {
         this.inversion = inversion;
         this.conjunction2GroupList = conjunction2GroupList;
     }
+
+    // 'and' 'inversion'
+    public static class Conjunction2Group {
+        public final boolean isTokenAnd;
+        public final Inversion inversion;
+
+        public Conjunction2Group(
+                boolean isTokenAnd,
+                Inversion inversion
+        ) {
+            this.isTokenAnd = isTokenAnd;
+            this.inversion = inversion;
+        }
+    }
 }

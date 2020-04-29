@@ -36,4 +36,32 @@ public class CompOp {
         this.isTokenIs = isTokenIs;
         this.compOp10 = compOp10;
     }
+
+    // 'not' 'in'
+    public static class CompOp8 {
+        public final boolean isTokenNot;
+        public final boolean isTokenIn;
+
+        public CompOp8(
+                boolean isTokenNot,
+                boolean isTokenIn
+        ) {
+            this.isTokenNot = isTokenNot;
+            this.isTokenIn = isTokenIn;
+        }
+    }
+
+    // 'is' 'not'
+    public static class CompOp10 {
+        public final boolean isTokenIs;
+        public final boolean isTokenNot;
+
+        public CompOp10(
+                boolean isTokenIs,
+                boolean isTokenNot
+        ) {
+            this.isTokenIs = isTokenIs;
+            this.isTokenNot = isTokenNot;
+        }
+    }
 }

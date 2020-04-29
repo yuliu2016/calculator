@@ -21,4 +21,80 @@ public class Argument {
         this.argument4 = argument4;
         this.argument5 = argument5;
     }
+
+    // 'NAME' ['comp_for']
+    public static class Argument1 {
+        public final Object name;
+        public final CompFor compFor;
+
+        public Argument1(
+                Object name,
+                CompFor compFor
+        ) {
+            this.name = name;
+            this.compFor = compFor;
+        }
+    }
+
+    // 'NAME' ':=' 'expr'
+    public static class Argument2 {
+        public final Object name;
+        public final boolean isTokenAsgnExpr;
+        public final Expr expr;
+
+        public Argument2(
+                Object name,
+                boolean isTokenAsgnExpr,
+                Expr expr
+        ) {
+            this.name = name;
+            this.isTokenAsgnExpr = isTokenAsgnExpr;
+            this.expr = expr;
+        }
+    }
+
+    // 'NAME' '=' 'expr'
+    public static class Argument3 {
+        public final Object name;
+        public final boolean isTokenAssign;
+        public final Expr expr;
+
+        public Argument3(
+                Object name,
+                boolean isTokenAssign,
+                Expr expr
+        ) {
+            this.name = name;
+            this.isTokenAssign = isTokenAssign;
+            this.expr = expr;
+        }
+    }
+
+    // '**' 'expr'
+    public static class Argument4 {
+        public final boolean isTokenPower;
+        public final Expr expr;
+
+        public Argument4(
+                boolean isTokenPower,
+                Expr expr
+        ) {
+            this.isTokenPower = isTokenPower;
+            this.expr = expr;
+        }
+    }
+
+    // '*' 'expr'
+    public static class Argument5 {
+        public final boolean isTokenTimes;
+        public final Expr expr;
+
+        public Argument5(
+                boolean isTokenTimes,
+                Expr expr
+        ) {
+            this.isTokenTimes = isTokenTimes;
+            this.expr = expr;
+        }
+    }
 }

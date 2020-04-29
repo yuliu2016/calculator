@@ -18,4 +18,32 @@ public class Funcdef {
         this.varargslist = varargslist;
         this.funcdef4Group = funcdef4Group;
     }
+
+    // ':' 'expr' | 'block_suite'
+    public static class Funcdef4Group {
+        public final Funcdef4Group1 funcdef4Group1;
+        public final BlockSuite blockSuite;
+
+        public Funcdef4Group(
+                Funcdef4Group1 funcdef4Group1,
+                BlockSuite blockSuite
+        ) {
+            this.funcdef4Group1 = funcdef4Group1;
+            this.blockSuite = blockSuite;
+        }
+    }
+
+    // ':' 'expr'
+    public static class Funcdef4Group1 {
+        public final boolean isTokenColon;
+        public final Expr expr;
+
+        public Funcdef4Group1(
+                boolean isTokenColon,
+                Expr expr
+        ) {
+            this.isTokenColon = isTokenColon;
+            this.expr = expr;
+        }
+    }
 }

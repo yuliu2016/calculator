@@ -12,4 +12,18 @@ public class Inversion {
         this.inversion1 = inversion1;
         this.comparison = comparison;
     }
+
+    // 'not' 'inversion'
+    public static class Inversion1 {
+        public final boolean isTokenNot;
+        public final Inversion inversion;
+
+        public Inversion1(
+                boolean isTokenNot,
+                Inversion inversion
+        ) {
+            this.isTokenNot = isTokenNot;
+            this.inversion = inversion;
+        }
+    }
 }

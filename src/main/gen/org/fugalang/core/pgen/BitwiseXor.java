@@ -14,4 +14,18 @@ public class BitwiseXor {
         this.bitwiseAnd = bitwiseAnd;
         this.bitwiseXor2GroupList = bitwiseXor2GroupList;
     }
+
+    // '^' 'bitwise_and'
+    public static class BitwiseXor2Group {
+        public final boolean isTokenBitXor;
+        public final BitwiseAnd bitwiseAnd;
+
+        public BitwiseXor2Group(
+                boolean isTokenBitXor,
+                BitwiseAnd bitwiseAnd
+        ) {
+            this.isTokenBitXor = isTokenBitXor;
+            this.bitwiseAnd = bitwiseAnd;
+        }
+    }
 }

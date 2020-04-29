@@ -23,4 +23,35 @@ public class IfStmt {
         this.ifStmt4GroupList = ifStmt4GroupList;
         this.ifStmt5Group = ifStmt5Group;
     }
+
+    // 'elif' 'namedexpr_expr' 'suite'
+    public static class IfStmt4Group {
+        public final boolean isTokenElif;
+        public final NamedexprExpr namedexprExpr;
+        public final Suite suite;
+
+        public IfStmt4Group(
+                boolean isTokenElif,
+                NamedexprExpr namedexprExpr,
+                Suite suite
+        ) {
+            this.isTokenElif = isTokenElif;
+            this.namedexprExpr = namedexprExpr;
+            this.suite = suite;
+        }
+    }
+
+    // 'else' 'suite'
+    public static class IfStmt5Group {
+        public final boolean isTokenElse;
+        public final Suite suite;
+
+        public IfStmt5Group(
+                boolean isTokenElse,
+                Suite suite
+        ) {
+            this.isTokenElse = isTokenElse;
+            this.suite = suite;
+        }
+    }
 }

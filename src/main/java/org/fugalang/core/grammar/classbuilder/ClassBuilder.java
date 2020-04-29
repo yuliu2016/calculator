@@ -1,5 +1,7 @@
 package org.fugalang.core.grammar.classbuilder;
 
+import org.fugalang.core.grammar.gen.ParseStringUtil;
+
 import java.util.*;
 
 public class ClassBuilder {
@@ -18,20 +20,32 @@ public class ClassBuilder {
         this.className = className;
     }
 
-    public String getPackageName() {
-        return packageName;
-    }
-
     public String getClassName() {
         return className;
     }
 
     public String generateClassCode() {
+        return generateClassCode(List.of());
+    }
+
+    public Set<String> getClassImports() {
+        return classImports;
+    }
+
+    public String generateClassCode(List<ClassBuilder> componentClasses) {
         StringBuilder sb = new StringBuilder();
+
         sb
                 .append("package ")
                 .append(packageName)
                 .append(";\n\n");
+
+        Set<String> classImports = new HashSet<>(this.classImports);
+
+        // merge the imports
+        for (ClassBuilder componentClass : componentClasses) {
+            classImports.addAll(componentClass.getClassImports());
+        }
 
         for (String classImport : classImports) {
             sb.append("import ")
@@ -39,7 +53,27 @@ public class ClassBuilder {
                     .append(";\n");
         }
 
-        if (!classImports.isEmpty()) {
+        if (!classImports.isEmpty()){
+            sb.append("\n");
+        }
+
+        sb.append(generateClassBody(false));
+
+        for (ClassBuilder componentClass : componentClasses) {
+            var classDef = componentClass.generateClassBody(true);
+            sb.append(ParseStringUtil.indent(classDef, 4));
+        }
+
+        // add final closing bracket
+        sb.append("}\n");
+
+        return sb.toString();
+    }
+
+    public String generateClassBody(boolean isStaticInnerClass) {
+        StringBuilder sb = new StringBuilder();
+
+        if(isStaticInnerClass) {
             sb.append("\n");
         }
 
@@ -49,10 +83,13 @@ public class ClassBuilder {
                     .append("\n");
         }
 
-        sb
-                .append("public class ")
-                .append(className)
-                .append(" {\n");
+        if (isStaticInnerClass) {
+            sb.append("public static class ");
+        } else {
+            sb.append("public class ");
+        }
+
+        sb.append(className).append(" {\n");
 
         for (ClassField field : fields) {
             sb.append("    ");
@@ -69,7 +106,7 @@ public class ClassBuilder {
             ClassField field = fields.get(i);
             sb.append("            ");
             sb.append(field.asConstructorArg());
-            if ( i < fields.size() - 1) {
+            if (i < fields.size() - 1) {
                 sb.append(",");
             }
             sb.append("\n");
@@ -83,9 +120,19 @@ public class ClassBuilder {
             sb.append("\n");
         }
 
-        sb.append("    }\n}\n");
+        sb.append("    }\n");
+
+        if (isStaticInnerClass) {
+            sb.append("}\n");
+        }
+        // else don't append, since external classes need
+        // to add the final quotes
 
         return sb.toString();
+    }
+
+    public void addImport(String classImport) {
+        classImports.add(classImport);
     }
 
     public void addField(String type, String name) {
@@ -99,10 +146,6 @@ public class ClassBuilder {
         } else {
             actualName = name;
             fieldNameCounter.put(name, 0);
-        }
-
-        if (type.startsWith("List")) {
-            classImports.add("java.util.List");
         }
 
         // add imports here

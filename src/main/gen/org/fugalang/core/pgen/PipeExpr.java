@@ -14,4 +14,18 @@ public class PipeExpr {
         this.atomExpr = atomExpr;
         this.pipeExpr2GroupList = pipeExpr2GroupList;
     }
+
+    // '->' 'atom_expr'
+    public static class PipeExpr2Group {
+        public final boolean isTokenPipe;
+        public final AtomExpr atomExpr;
+
+        public PipeExpr2Group(
+                boolean isTokenPipe,
+                AtomExpr atomExpr
+        ) {
+            this.isTokenPipe = isTokenPipe;
+            this.atomExpr = atomExpr;
+        }
+    }
 }

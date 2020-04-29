@@ -12,4 +12,18 @@ public class WithItem {
         this.expr = expr;
         this.withItem2Group = withItem2Group;
     }
+
+    // 'as' 'NAME'
+    public static class WithItem2Group {
+        public final boolean isTokenAs;
+        public final Object name;
+
+        public WithItem2Group(
+                boolean isTokenAs,
+                Object name
+        ) {
+            this.isTokenAs = isTokenAs;
+            this.name = name;
+        }
+    }
 }

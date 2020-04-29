@@ -12,4 +12,18 @@ public class NamedexprExpr {
         this.name = name;
         this.namedexprExpr2Group = namedexprExpr2Group;
     }
+
+    // ':=' 'expr'
+    public static class NamedexprExpr2Group {
+        public final boolean isTokenAsgnExpr;
+        public final Expr expr;
+
+        public NamedexprExpr2Group(
+                boolean isTokenAsgnExpr,
+                Expr expr
+        ) {
+            this.isTokenAsgnExpr = isTokenAsgnExpr;
+            this.expr = expr;
+        }
+    }
 }

@@ -12,4 +12,32 @@ public class RaiseStmt {
         this.isTokenRaise = isTokenRaise;
         this.raiseStmt2Group = raiseStmt2Group;
     }
+
+    // 'expr' ['from' 'expr']
+    public static class RaiseStmt2Group {
+        public final Expr expr;
+        public final RaiseStmt2Group2Group raiseStmt2Group2Group;
+
+        public RaiseStmt2Group(
+                Expr expr,
+                RaiseStmt2Group2Group raiseStmt2Group2Group
+        ) {
+            this.expr = expr;
+            this.raiseStmt2Group2Group = raiseStmt2Group2Group;
+        }
+    }
+
+    // 'from' 'expr'
+    public static class RaiseStmt2Group2Group {
+        public final boolean isTokenFrom;
+        public final Expr expr;
+
+        public RaiseStmt2Group2Group(
+                boolean isTokenFrom,
+                Expr expr
+        ) {
+            this.isTokenFrom = isTokenFrom;
+            this.expr = expr;
+        }
+    }
 }
