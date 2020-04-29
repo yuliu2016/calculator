@@ -1,5 +1,7 @@
 package org.fugalang.core.pgen;
 
+import java.util.Optional;
+
 // compound_atom: '(' ['exprlist_comp'] ')' | '[' ['exprlist_comp_sub'] ']' | '{' ['dictorsetmaker'] '}'
 public class CompoundAtom {
     private final CompoundAtom1 compoundAtom1;
@@ -48,8 +50,8 @@ public class CompoundAtom {
             return isTokenLpar;
         }
 
-        public ExprlistComp getExprlistComp() {
-            return exprlistComp;
+        public Optional<ExprlistComp> getExprlistComp() {
+            return Optional.ofNullable(exprlistComp);
         }
 
         public boolean getIsTokenRpar() {
@@ -77,8 +79,8 @@ public class CompoundAtom {
             return isTokenLsqb;
         }
 
-        public ExprlistCompSub getExprlistCompSub() {
-            return exprlistCompSub;
+        public Optional<ExprlistCompSub> getExprlistCompSub() {
+            return Optional.ofNullable(exprlistCompSub);
         }
 
         public boolean getIsTokenRsqb() {
@@ -106,8 +108,8 @@ public class CompoundAtom {
             return isTokenLbrace;
         }
 
-        public Dictorsetmaker getDictorsetmaker() {
-            return dictorsetmaker;
+        public Optional<Dictorsetmaker> getDictorsetmaker() {
+            return Optional.ofNullable(dictorsetmaker);
         }
 
         public boolean getIsTokenRbrace() {

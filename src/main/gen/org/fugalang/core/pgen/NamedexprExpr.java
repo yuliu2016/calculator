@@ -1,5 +1,7 @@
 package org.fugalang.core.pgen;
 
+import java.util.Optional;
+
 // namedexpr_expr: 'NAME' [':=' 'expr']
 public class NamedexprExpr {
     private final Object name;
@@ -17,8 +19,8 @@ public class NamedexprExpr {
         return name;
     }
 
-    public NamedexprExpr2Group getNamedexprExpr2Group() {
-        return namedexprExpr2Group;
+    public Optional<NamedexprExpr2Group> getNamedexprExpr2Group() {
+        return Optional.ofNullable(namedexprExpr2Group);
     }
 
     // ':=' 'expr'

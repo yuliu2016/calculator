@@ -1,5 +1,7 @@
 package org.fugalang.core.pgen;
 
+import java.util.Optional;
+
 // subscript: 'expr' | ['expr'] ':' ['expr'] ['sliceop']
 public class Subscript {
     private final Expr expr;
@@ -40,20 +42,20 @@ public class Subscript {
             this.sliceop = sliceop;
         }
 
-        public Expr getExpr() {
-            return expr;
+        public Optional<Expr> getExpr() {
+            return Optional.ofNullable(expr);
         }
 
         public boolean getIsTokenColon() {
             return isTokenColon;
         }
 
-        public Expr getExpr1() {
-            return expr1;
+        public Optional<Expr> getExpr1() {
+            return Optional.ofNullable(expr1);
         }
 
-        public Sliceop getSliceop() {
-            return sliceop;
+        public Optional<Sliceop> getSliceop() {
+            return Optional.ofNullable(sliceop);
         }
     }
 }

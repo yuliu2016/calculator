@@ -1,6 +1,7 @@
 package org.fugalang.core.pgen;
 
 import java.util.List;
+import java.util.Optional;
 
 // varargslist: 'vfpdef' ['=' 'expr'] (',' 'vfpdef' ['=' 'expr'])*
 public class Varargslist {
@@ -22,8 +23,8 @@ public class Varargslist {
         return vfpdef;
     }
 
-    public Varargslist2Group getVarargslist2Group() {
-        return varargslist2Group;
+    public Optional<Varargslist2Group> getVarargslist2Group() {
+        return Optional.ofNullable(varargslist2Group);
     }
 
     public List<Varargslist3Group> getVarargslist3GroupList() {
@@ -76,8 +77,8 @@ public class Varargslist {
             return vfpdef;
         }
 
-        public Varargslist3Group3Group getVarargslist3Group3Group() {
-            return varargslist3Group3Group;
+        public Optional<Varargslist3Group3Group> getVarargslist3Group3Group() {
+            return Optional.ofNullable(varargslist3Group3Group);
         }
     }
 

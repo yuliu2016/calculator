@@ -1,5 +1,7 @@
 package org.fugalang.core.pgen;
 
+import java.util.Optional;
+
 // trailer: '(' ['arglist'] ')' | '[' 'subscriptlist' ']' | '.' 'NAME' | 'block_suite'
 public class Trailer {
     private final Trailer1 trailer1;
@@ -55,8 +57,8 @@ public class Trailer {
             return isTokenLpar;
         }
 
-        public Arglist getArglist() {
-            return arglist;
+        public Optional<Arglist> getArglist() {
+            return Optional.ofNullable(arglist);
         }
 
         public boolean getIsTokenRpar() {

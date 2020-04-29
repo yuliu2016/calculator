@@ -1,6 +1,7 @@
 package org.fugalang.core.pgen;
 
 import java.util.List;
+import java.util.Optional;
 
 // if_stmt: 'if' 'namedexpr_expr' 'suite' ('elif' 'namedexpr_expr' 'suite')* ['else' 'suite']
 public class IfStmt {
@@ -40,8 +41,8 @@ public class IfStmt {
         return ifStmt4GroupList;
     }
 
-    public IfStmt5Group getIfStmt5Group() {
-        return ifStmt5Group;
+    public Optional<IfStmt5Group> getIfStmt5Group() {
+        return Optional.ofNullable(ifStmt5Group);
     }
 
     // 'elif' 'namedexpr_expr' 'suite'

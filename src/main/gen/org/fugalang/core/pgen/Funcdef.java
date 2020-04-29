@@ -1,5 +1,7 @@
 package org.fugalang.core.pgen;
 
+import java.util.Optional;
+
 // funcdef: ['async'] 'def' ['varargslist'] (':' 'expr' | 'block_suite')
 public class Funcdef {
     private final boolean isTokenAsync;
@@ -27,8 +29,8 @@ public class Funcdef {
         return isTokenDef;
     }
 
-    public Varargslist getVarargslist() {
-        return varargslist;
+    public Optional<Varargslist> getVarargslist() {
+        return Optional.ofNullable(varargslist);
     }
 
     public Funcdef4Group getFuncdef4Group() {

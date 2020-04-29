@@ -1,5 +1,7 @@
 package org.fugalang.core.pgen;
 
+import java.util.Optional;
+
 // power: 'pipe_expr' ['**' 'factor']
 public class Power {
     private final PipeExpr pipeExpr;
@@ -17,8 +19,8 @@ public class Power {
         return pipeExpr;
     }
 
-    public Power2Group getPower2Group() {
-        return power2Group;
+    public Optional<Power2Group> getPower2Group() {
+        return Optional.ofNullable(power2Group);
     }
 
     // '**' 'factor'

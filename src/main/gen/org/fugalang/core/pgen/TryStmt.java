@@ -1,6 +1,7 @@
 package org.fugalang.core.pgen;
 
 import java.util.List;
+import java.util.Optional;
 
 // try_stmt: 'try' 'suite' (('except_clause' 'suite')+ ['else' 'suite'] ['finally' 'suite'] | 'finally' 'suite')
 public class TryStmt {
@@ -79,12 +80,12 @@ public class TryStmt {
             return tryStmt3Group11GroupList;
         }
 
-        public TryStmt3Group12Group getTryStmt3Group12Group() {
-            return tryStmt3Group12Group;
+        public Optional<TryStmt3Group12Group> getTryStmt3Group12Group() {
+            return Optional.ofNullable(tryStmt3Group12Group);
         }
 
-        public TryStmt3Group13Group getTryStmt3Group13Group() {
-            return tryStmt3Group13Group;
+        public Optional<TryStmt3Group13Group> getTryStmt3Group13Group() {
+            return Optional.ofNullable(tryStmt3Group13Group);
         }
     }
 

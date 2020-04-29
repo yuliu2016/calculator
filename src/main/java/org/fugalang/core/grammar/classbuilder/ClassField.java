@@ -27,13 +27,27 @@ public class ClassField {
 
     public String asGetter() {
         StringBuilder sb = new StringBuilder();
-        sb.append("    public ")
-                .append(className.asType())
-                .append(" get")
+        sb.append("    public ");
+
+        if (isOptional) {
+            sb.append(className.wrapIn("Optional").asType());
+        } else {
+            sb.append(className.asType());
+        }
+
+        sb.append(" get")
                 .append(ParseStringUtil.capitalizeFirstCharOnly(name))
-                .append("() {\n        return ")
-                .append(name)
-                .append(";\n    }\n");
+                .append("() {\n        return ");
+
+        if (isOptional) {
+            sb.append("Optional.ofNullable(")
+                    .append(name)
+                    .append(")");
+        } else {
+            sb.append(name);
+        }
+
+        sb.append(";\n    }\n");
 
         return sb.toString();
     }

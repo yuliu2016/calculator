@@ -1,5 +1,7 @@
 package org.fugalang.core.pgen;
 
+import java.util.Optional;
+
 // with_item: 'expr' ['as' 'NAME']
 public class WithItem {
     private final Expr expr;
@@ -17,8 +19,8 @@ public class WithItem {
         return expr;
     }
 
-    public WithItem2Group getWithItem2Group() {
-        return withItem2Group;
+    public Optional<WithItem2Group> getWithItem2Group() {
+        return Optional.ofNullable(withItem2Group);
     }
 
     // 'as' 'NAME'

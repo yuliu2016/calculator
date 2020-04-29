@@ -1,5 +1,7 @@
 package org.fugalang.core.pgen;
 
+import java.util.Optional;
+
 // dotted_as_name: 'dotted_name' ['as' 'NAME']
 public class DottedAsName {
     private final DottedName dottedName;
@@ -17,8 +19,8 @@ public class DottedAsName {
         return dottedName;
     }
 
-    public DottedAsName2Group getDottedAsName2Group() {
-        return dottedAsName2Group;
+    public Optional<DottedAsName2Group> getDottedAsName2Group() {
+        return Optional.ofNullable(dottedAsName2Group);
     }
 
     // 'as' 'NAME'

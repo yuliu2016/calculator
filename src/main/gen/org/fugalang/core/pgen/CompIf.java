@@ -1,5 +1,7 @@
 package org.fugalang.core.pgen;
 
+import java.util.Optional;
+
 // comp_if: 'if' 'expr' ['comp_iter']
 public class CompIf {
     private final boolean isTokenIf;
@@ -24,7 +26,7 @@ public class CompIf {
         return expr;
     }
 
-    public CompIter getCompIter() {
-        return compIter;
+    public Optional<CompIter> getCompIter() {
+        return Optional.ofNullable(compIter);
     }
 }

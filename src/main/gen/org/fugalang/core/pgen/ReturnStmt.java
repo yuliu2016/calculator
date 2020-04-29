@@ -1,5 +1,7 @@
 package org.fugalang.core.pgen;
 
+import java.util.Optional;
+
 // return_stmt: 'return' ['exprlist_star']
 public class ReturnStmt {
     private final boolean isTokenReturn;
@@ -17,7 +19,7 @@ public class ReturnStmt {
         return isTokenReturn;
     }
 
-    public ExprlistStar getExprlistStar() {
-        return exprlistStar;
+    public Optional<ExprlistStar> getExprlistStar() {
+        return Optional.ofNullable(exprlistStar);
     }
 }

@@ -1,5 +1,7 @@
 package org.fugalang.core.pgen;
 
+import java.util.Optional;
+
 // assert_stmt: 'assert' 'expr' [',' 'expr']
 public class AssertStmt {
     private final boolean isTokenAssert;
@@ -24,8 +26,8 @@ public class AssertStmt {
         return expr;
     }
 
-    public AssertStmt3Group getAssertStmt3Group() {
-        return assertStmt3Group;
+    public Optional<AssertStmt3Group> getAssertStmt3Group() {
+        return Optional.ofNullable(assertStmt3Group);
     }
 
     // ',' 'expr'

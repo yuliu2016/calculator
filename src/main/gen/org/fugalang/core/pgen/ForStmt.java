@@ -1,5 +1,7 @@
 package org.fugalang.core.pgen;
 
+import java.util.Optional;
+
 // for_stmt: 'for' 'targets' 'in' 'exprlist' 'suite' ['else' 'suite']
 public class ForStmt {
     private final boolean isTokenFor;
@@ -45,8 +47,8 @@ public class ForStmt {
         return suite;
     }
 
-    public ForStmt6Group getForStmt6Group() {
-        return forStmt6Group;
+    public Optional<ForStmt6Group> getForStmt6Group() {
+        return Optional.ofNullable(forStmt6Group);
     }
 
     // 'else' 'suite'

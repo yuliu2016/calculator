@@ -1,5 +1,7 @@
 package org.fugalang.core.pgen;
 
+import java.util.Optional;
+
 // import_as_name: 'NAME' ['as' 'NAME']
 public class ImportAsName {
     private final Object name;
@@ -17,8 +19,8 @@ public class ImportAsName {
         return name;
     }
 
-    public ImportAsName2Group getImportAsName2Group() {
-        return importAsName2Group;
+    public Optional<ImportAsName2Group> getImportAsName2Group() {
+        return Optional.ofNullable(importAsName2Group);
     }
 
     // 'as' 'NAME'

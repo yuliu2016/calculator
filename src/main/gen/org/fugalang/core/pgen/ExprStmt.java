@@ -1,6 +1,7 @@
 package org.fugalang.core.pgen;
 
 import java.util.List;
+import java.util.Optional;
 
 // expr_stmt: 'exprlist_star' ['augassign' 'exprlist' | ('=' 'exprlist_star')*]
 public class ExprStmt {
@@ -19,8 +20,8 @@ public class ExprStmt {
         return exprlistStar;
     }
 
-    public ExprStmt2Group getExprStmt2Group() {
-        return exprStmt2Group;
+    public Optional<ExprStmt2Group> getExprStmt2Group() {
+        return Optional.ofNullable(exprStmt2Group);
     }
 
     // 'augassign' 'exprlist' | ('=' 'exprlist_star')*

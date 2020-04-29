@@ -1,5 +1,7 @@
 package org.fugalang.core.pgen;
 
+import java.util.Optional;
+
 // comp_for: 'for' 'targets' 'in' 'disjunction' ['comp_iter']
 public class CompFor {
     private final boolean isTokenFor;
@@ -38,7 +40,7 @@ public class CompFor {
         return disjunction;
     }
 
-    public CompIter getCompIter() {
-        return compIter;
+    public Optional<CompIter> getCompIter() {
+        return Optional.ofNullable(compIter);
     }
 }

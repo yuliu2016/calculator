@@ -1,5 +1,7 @@
 package org.fugalang.core.pgen;
 
+import java.util.Optional;
+
 // raise_stmt: 'raise' ['expr' ['from' 'expr']]
 public class RaiseStmt {
     private final boolean isTokenRaise;
@@ -17,8 +19,8 @@ public class RaiseStmt {
         return isTokenRaise;
     }
 
-    public RaiseStmt2Group getRaiseStmt2Group() {
-        return raiseStmt2Group;
+    public Optional<RaiseStmt2Group> getRaiseStmt2Group() {
+        return Optional.ofNullable(raiseStmt2Group);
     }
 
     // 'expr' ['from' 'expr']
@@ -38,8 +40,8 @@ public class RaiseStmt {
             return expr;
         }
 
-        public RaiseStmt2Group2Group getRaiseStmt2Group2Group() {
-            return raiseStmt2Group2Group;
+        public Optional<RaiseStmt2Group2Group> getRaiseStmt2Group2Group() {
+            return Optional.ofNullable(raiseStmt2Group2Group);
         }
     }
 

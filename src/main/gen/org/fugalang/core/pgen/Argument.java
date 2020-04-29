@@ -1,5 +1,7 @@
 package org.fugalang.core.pgen;
 
+import java.util.Optional;
+
 // argument: 'NAME' ['comp_for'] | 'NAME' ':=' 'expr' | 'NAME' '=' 'expr' | '**' 'expr' | '*' 'expr'
 public class Argument {
     private final Argument1 argument1;
@@ -59,8 +61,8 @@ public class Argument {
             return name;
         }
 
-        public CompFor getCompFor() {
-            return compFor;
+        public Optional<CompFor> getCompFor() {
+            return Optional.ofNullable(compFor);
         }
     }
 

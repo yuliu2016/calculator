@@ -152,6 +152,10 @@ public class ClassBuilder {
             fieldNameCounter.put(name, 0);
         }
 
+        if (isOptional) {
+            addImport("java.util.Optional");
+        }
+
         // add imports here
         fields.add(new ClassField(type, actualName, isOptional));
     }

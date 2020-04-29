@@ -1,5 +1,7 @@
 package org.fugalang.core.pgen;
 
+import java.util.Optional;
+
 // except_clause: 'except' ['expr' ['as' 'NAME']]
 public class ExceptClause {
     private final boolean isTokenExcept;
@@ -17,8 +19,8 @@ public class ExceptClause {
         return isTokenExcept;
     }
 
-    public ExceptClause2Group getExceptClause2Group() {
-        return exceptClause2Group;
+    public Optional<ExceptClause2Group> getExceptClause2Group() {
+        return Optional.ofNullable(exceptClause2Group);
     }
 
     // 'expr' ['as' 'NAME']
@@ -38,8 +40,8 @@ public class ExceptClause {
             return expr;
         }
 
-        public ExceptClause2Group2Group getExceptClause2Group2Group() {
-            return exceptClause2Group2Group;
+        public Optional<ExceptClause2Group2Group> getExceptClause2Group2Group() {
+            return Optional.ofNullable(exceptClause2Group2Group);
         }
     }
 

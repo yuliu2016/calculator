@@ -229,8 +229,7 @@ public class ParserGenerator {
 
                 if (clsName.equals("boolean")) {
                     var fieldName = ParseStringUtil.prefixCap("isToken", convertedValue.getFieldName());
-                    addFieldWithRepeat(ClassName.of("boolean"), cb,
-                            fieldName, repeatRule, isOptional);
+                    addFieldWithRepeat(ClassName.of("boolean"), cb, fieldName, repeatRule, false);
                 } else {
                     addFieldWithRepeat(ClassName.of(clsName), cb,
                             convertedValue.getFieldName(), repeatRule, isOptional);

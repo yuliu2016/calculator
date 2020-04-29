@@ -1,5 +1,7 @@
 package org.fugalang.core.pgen;
 
+import java.util.Optional;
+
 // while_stmt: 'while' 'namedexpr_expr' 'suite' ['else' 'suite']
 public class WhileStmt {
     private final boolean isTokenWhile;
@@ -31,8 +33,8 @@ public class WhileStmt {
         return suite;
     }
 
-    public WhileStmt4Group getWhileStmt4Group() {
-        return whileStmt4Group;
+    public Optional<WhileStmt4Group> getWhileStmt4Group() {
+        return Optional.ofNullable(whileStmt4Group);
     }
 
     // 'else' 'suite'

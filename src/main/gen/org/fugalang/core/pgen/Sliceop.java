@@ -1,5 +1,7 @@
 package org.fugalang.core.pgen;
 
+import java.util.Optional;
+
 // sliceop: ':' ['expr']
 public class Sliceop {
     private final boolean isTokenColon;
@@ -17,7 +19,7 @@ public class Sliceop {
         return isTokenColon;
     }
 
-    public Expr getExpr() {
-        return expr;
+    public Optional<Expr> getExpr() {
+        return Optional.ofNullable(expr);
     }
 }
