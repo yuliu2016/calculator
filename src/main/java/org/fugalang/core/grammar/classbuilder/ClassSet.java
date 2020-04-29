@@ -33,6 +33,22 @@ public class ClassSet {
     }
 
     public ClassBuilder create(String className) {
+
+        var dupError = false;
+        for (ClassBuilder builder : builders) {
+            if (builder.getClassName().equals(className)) {
+                dupError = true;
+                break;
+            }
+        }
+
+        if (dupError) {
+            for (ClassBuilder builder : builders) {
+                System.out.println(builder.generateClassCode());
+            }
+            throw new IllegalArgumentException("Duplicate class: " + className);
+        }
+
         var builder = new ClassBuilder(packageName, className);
         builders.add(builder);
         return builder;

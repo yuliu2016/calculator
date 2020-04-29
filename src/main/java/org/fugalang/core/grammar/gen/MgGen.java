@@ -20,7 +20,6 @@ public class MgGen {
             var tokens = new MgTokenizer(data).tokenize();
 
             var cst = MgParser.parseRules(tokens);
-            System.out.println(cst.toSimpleString());
 
             var path = Paths.get(
                     System.getProperty("user.dir"),

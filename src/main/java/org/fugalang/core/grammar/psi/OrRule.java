@@ -1,5 +1,6 @@
 package org.fugalang.core.grammar.psi;
 
+import org.fugalang.core.grammar.util.FirstAndMore;
 import org.fugalang.core.pprint.CSTPrintBuilder;
 import org.fugalang.core.pprint.CSTPrintElem;
 
@@ -34,5 +35,9 @@ public class OrRule implements CSTPrintElem {
                 .stream()
                 .map(rule -> " | " + rule.toSimpleString())
                 .collect(Collectors.joining());
+    }
+
+    public Iterable<AndRule> allAndRules() {
+        return FirstAndMore.of(andRule, andRules);
     }
 }

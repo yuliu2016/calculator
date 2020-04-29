@@ -8,6 +8,26 @@ import java.nio.file.Path;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * An automatic parser generator
+ *
+ * <h2>General Rules</h2>
+ * <li>A field may contain a single token, or another rule</li>
+ * <li>If the token is a literal, it uses the boolean type</li>
+ * <li>If the token has a value (e.g. Number, String), it is an Object type</li>
+ * <li>A field may also be a repeat rule</li>
+ * <li>If repeat rule is *, only use one field called rule*List</li>
+ * <li>If repeat rule is +, use two fields</li>
+ * <li>Field 1: named rule*</li>
+ * <li>Field 2: named ruleList</li>
+ *
+ * <h2>Atomic Rules</h2>
+ * <li>A rule is <i>atomic</i> when it can be represented in one field</li>
+ * <li>A repeat rule is atomic when its subrule is atomic</li>
+ *
+ * <h2>Class Rules</h2>
+ * <li>A class can represent an And rule or an Or rule</li>
+ */
 public class ParserGenerator {
     private final Map<String, OrRule> ruleMap;
     private final TokenConverter converter;
@@ -86,78 +106,145 @@ public class ParserGenerator {
 
         for (var entry : ruleMap.entrySet()) {
             var className = classNameMap.get(entry.getKey());
-            addOrRule(className, entry.getValue());
+            ClassBuilder cb = classSet.create(className);
+            cb.setHeaderComments(entry.getKey() + ": " + entry.getValue().toSimpleString());
+
+            addOrRule(className, cb, entry.getValue());
         }
     }
 
-    private void addOrRule(String className, OrRule orRule) {
-        ClassBuilder cb = classSet.create(className);
-        cb.setHeaderComments(orRule.toSimpleString());
-
-        int cnt = addAndRule(className, cb, orRule.andRule, 1);
-        for (AndRule andRule : orRule.andRules) {
-            cnt = addAndRule(className, cb, andRule, cnt);
-        }
-    }
-
-    private int addAndRule(String className,
-                            ClassBuilder cb, AndRule andRule, int cnt) {
-        if (andRule.repeatRules.isEmpty()) {
-            cnt = addFields(className, cb, andRule.repeatRule, cnt);
-            // only one in the sequence
+    private void addOrRule(String className, ClassBuilder cb, OrRule rule) {
+        if (rule.andRules.isEmpty()) {
+            // only one rule - can propagate fields of this class
+            addAndRule(className, cb, rule.andRule);
         } else {
-            String classWithCount = className + cnt;
-            ClassBuilder cb2 = classSet.create(classWithCount);
-            for (RepeatRule repeatRule : andRule.repeatRules) {
-                cnt = addFields(classWithCount, cb2, repeatRule, cnt);
-            }
-            cnt++;
-        }
 
-        return cnt;
+            // For counting component classes
+            int class_count = 1;
+
+            // must create new classes for AND rules that have more than one
+            // REPEAT rule
+            for (AndRule andRule : rule.allAndRules()) {
+
+                // add class count to the name, even if not used, because
+                // otherwise could result in the same class names later,
+                // when there are two branches
+                String class_with_count = className + class_count;
+                class_count++;
+
+                if (andRule.repeatRules.isEmpty()) {
+                    // only one repeat rule - can propagate fields of this class
+                    addAndRule(class_with_count, cb, andRule);
+                } else {
+                    // need to make a new class for this, because
+                    // a list can't hold multiple-ly typed objects
+                    var component_cb = classSet.create(class_with_count);
+                    component_cb.setHeaderComments(andRule.toSimpleString());
+
+                    // Add a field to the class set
+                    // The reason to do this first is that if adding the rule fails,
+                    // this class can still show that this point was reached
+                    cb.addField(class_with_count, CaseUtil.decap(class_with_count));
+
+                    addAndRule(class_with_count, component_cb, andRule);
+                }
+            }
+        }
     }
 
-    private int addFields(String className, ClassBuilder cb, RepeatRule repeatRule, int cnt) {
+    private void addAndRule(String className, ClassBuilder cb, AndRule rule) {
 
-        if(repeatRule.subRule.token != null) {
-            if (classNameMap.containsKey(repeatRule.subRule.token)) {
-                var nextCls = classNameMap.get(repeatRule.subRule.token);
-                cb.addField(nextCls, CaseUtil.decap(nextCls));
+        if (rule.repeatRules.isEmpty()) {
+            addRepeatedSubRule(className, cb, rule.repeatRule);
+        } else {
+            // don't need to check for component classes - every RepeatRule
+            // can be on a single field
+
+            // still need to change the names though, since there may be two
+            // parallel groups
+
+            // it's also why there's an if condition: if only one rule, there
+            // shouldn't be numbering
+
+            int class_count = 1;
+
+            for (RepeatRule repeatRule : rule.allRepeatRules()) {
+                String class_with_count = className + class_count;
+                class_count++;
+
+                addRepeatedSubRule(class_with_count, cb, repeatRule);
+            }
+        }
+    }
+
+    private void addRepeatedSubRule(String className, ClassBuilder cb, RepeatRule repeatRule) {
+
+        var sub = repeatRule.subRule;
+
+        if (sub.groupedOrRule != null) {
+            addOrRuleAsComponent(className, cb, sub.groupedOrRule);
+        } else if (sub.optionalOrRule != null) {
+            addOrRuleAsComponent(className, cb, sub.optionalOrRule);
+        } else if (sub.token != null) {
+
+            if (classNameMap.containsKey(sub.token)) {
+
+                // it is referring to another class.
+
+                var classRef = classNameMap.get(sub.token);
+                cb.addField(classRef, CaseUtil.decap(classRef));
             } else {
-                var cv = converter.checkToken(repeatRule.subRule.token);
+
+                // not another class generated by the parser
+                // add a token value instead
+
+                var cv = converter.checkToken(sub.token);
                 if (cv.isPresent()) {
                     var cv2 = cv.orElseThrow();
                     var clsName = cv2.getClassName();
 
                     if (clsName.equals("boolean")) {
+                        if (repeatRule.tokenPlus || repeatRule.tokenStar) {
+                            throw new IllegalStateException();
+                        }
+
                         cb.addField("boolean", CaseUtil.prefixCap("isToken", cv2.getFieldName()));
                     } else {
-                        cb.addField(cv2.getClassName(), cv2.getFieldName());
+
+                        if (repeatRule.tokenStar) {
+                            cb.addField("List<" + clsName + ">", cv2.getFieldName() + "List");
+                        } else if (repeatRule.tokenPlus) {
+                            cb.addField(clsName, cv2.getFieldName());
+                            cb.addField("List<" + clsName + ">", cv2.getFieldName() + "List");
+                        } else {
+                            cb.addField(clsName, cv2.getFieldName());
+                        }
                     }
                 }
             }
-
         }
-
-        return cnt;
     }
 
-    private boolean isAtomic(OrRule orRule) {
-        return orRule.andRules.isEmpty() && isAtomic(orRule.andRule);
-    }
 
-    private boolean isAtomic(AndRule andRule) {
-        return andRule.repeatRules.isEmpty() && isAtomic(andRule.repeatRule);
-    }
+    private void addOrRuleAsComponent(String className, ClassBuilder cb, OrRule rule) {
+        // maybe this can just be added to this class
+        // but maybe there needs to be a separate class
 
-    private boolean isAtomic(RepeatRule repeatRule) {
-        // repeat rules are always atomic
-        return isAtomic(repeatRule.subRule);
-    }
+        if (rule.andRules.isEmpty()) {
+            // just add all the repeat rules and be done with it
+            addAndRule(className, cb, rule.andRule);
+        } else {
+            String class_with_postfix = className + "Group";
 
-    private boolean isAtomic(SubRule subRule) {
-        return (subRule.groupedOrRule != null && isAtomic(subRule.groupedOrRule)) ||
-                (subRule.optionalOrRule != null && isAtomic(subRule.optionalOrRule)) ||
-                subRule.token != null;
+            var component_cb = classSet.create(class_with_postfix);
+            component_cb.setHeaderComments(rule.toSimpleString());
+
+            // Add a field to the class set
+            // The reason to do this first is that if adding the rule fails,
+            // this class can still show that this point was reached
+            cb.addField(class_with_postfix, CaseUtil.decap(class_with_postfix));
+
+            addOrRule(class_with_postfix, component_cb, rule);
+        }
     }
 }
