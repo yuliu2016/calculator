@@ -135,8 +135,11 @@ public class ClassBuilder {
         classImports.add(classImport);
     }
 
-    public void addField(String type, String name) {
+    public void addFieldByClassName(ClassName className, String fieldName) {
+        addField(className.asType(), fieldName);
+    }
 
+    public void addField(String type, String name) {
         String actualName;
 
         if (fieldNameCounter.containsKey(name)) {

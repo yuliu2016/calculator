@@ -1,4 +1,4 @@
-package org.fugalang.core.parser;
+package org.fugalang.core.parser.simple;
 
 public class Atom {
     Object val;

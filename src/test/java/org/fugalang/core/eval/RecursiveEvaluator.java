@@ -1,10 +1,10 @@
 package org.fugalang.core.eval;
 
 import org.fugalang.core.grammar.SyntaxError;
-import org.fugalang.core.parser.ArithmeticExpr;
-import org.fugalang.core.parser.Atom;
-import org.fugalang.core.parser.Parser;
-import org.fugalang.core.parser.Term;
+import org.fugalang.core.parser.simple.ArithmeticExpr;
+import org.fugalang.core.parser.simple.Atom;
+import org.fugalang.core.parser.simple.SimpleParser;
+import org.fugalang.core.parser.simple.Term;
 import org.fugalang.core.pprint.ConsoleColor;
 import org.fugalang.core.token.Operator;
 import org.fugalang.core.token.Token;
@@ -16,7 +16,7 @@ import java.util.Scanner;
 public class RecursiveEvaluator {
 
     private static int evaluate(List<Token> tokens) {
-        var expr = ((ArithmeticExpr) Parser.parse(tokens));
+        var expr = ((ArithmeticExpr) SimpleParser.parse(tokens));
         return evaluate0(expr);
     }
 

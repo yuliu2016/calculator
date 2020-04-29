@@ -1,4 +1,4 @@
-package org.fugalang.core.parser;
+package org.fugalang.core.parser.simple;
 
 import org.fugalang.core.token.Operator;
 

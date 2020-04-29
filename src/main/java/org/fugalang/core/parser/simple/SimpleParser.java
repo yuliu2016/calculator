@@ -1,4 +1,4 @@
-package org.fugalang.core.parser;
+package org.fugalang.core.parser.simple;
 
 import org.fugalang.core.grammar.SyntaxError;
 import org.fugalang.core.token.Operator;
@@ -9,7 +9,7 @@ import org.fugalang.core.token.Tokenizer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Parser {
+public class SimpleParser {
     public static Object parse(List<Token> tokens) {
         // top down - has to be an arithmetic expr
         return parseArithmeticExpr(new TokenVisitor(tokens));
