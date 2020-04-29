@@ -1,4 +1,4 @@
-package org.fugalang.core.eval;
+package org.fugalang.core.eval.recursive;
 
 import org.fugalang.core.grammar.SyntaxError;
 import org.fugalang.core.parser.simple.ArithmeticExpr;

@@ -12,9 +12,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Optional;
 
-public class MgGen {
+public class FugaGenerator {
     public static void main(String[] args) {
-        var res = MgGen.class.getResource("/org/fugalang/core/grammar/Grammar");
+        var res = FugaGenerator.class.getResource("/org/fugalang/core/grammar/Grammar");
         try {
             var data = Files.readString(Paths.get(res.toURI()));
             var tokens = new MgTokenizer(data).tokenize();
@@ -26,7 +26,7 @@ public class MgGen {
                     "src/main/gen/org/fugalang/core/pgen/"
             );
 
-            var gen = new ParserGenerator(cst, MgGen::checkToken,
+            var gen = new ParserGenerator(cst, FugaGenerator::checkToken,
                     path, "org.fugalang.core.pgen");
             gen.generate(true);
 
