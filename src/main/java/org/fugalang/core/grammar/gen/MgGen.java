@@ -41,7 +41,7 @@ public class MgGen {
             return Optional.of(new ConvertedValue("boolean", s));
         }
         if (Operator.CODE_TO_NAME.containsKey(s)) {
-            var name = CaseUtil.convertCase(Operator.CODE_TO_NAME.get(s));
+            var name = ParseStringUtil.convertCase(Operator.CODE_TO_NAME.get(s));
             return Optional.of(new ConvertedValue("boolean", name));
         }
 

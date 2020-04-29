@@ -1,15 +1,17 @@
 package org.fugalang.core.pgen;
 
-// ('.')* 'dotted_name'
+import java.util.List;
+
+// '.'* 'dotted_name'
 public class ImportFrom2Group1 {
-    public final boolean isTokenDot;
+    public final List<Boolean> isTokenDotList;
     public final DottedName dottedName;
 
     public ImportFrom2Group1(
-            boolean isTokenDot,
+            List<Boolean> isTokenDotList,
             DottedName dottedName
     ) {
-        this.isTokenDot = isTokenDot;
+        this.isTokenDotList = isTokenDotList;
         this.dottedName = dottedName;
     }
 }

@@ -1,15 +1,17 @@
 package org.fugalang.core.pgen;
 
+import java.util.List;
+
 // dotted_name: 'NAME' ('.' 'NAME')*
 public class DottedName {
     public final Object name;
-    public final DottedName2Group dottedName2Group;
+    public final List<DottedName2Group> dottedName2GroupList;
 
     public DottedName(
             Object name,
-            DottedName2Group dottedName2Group
+            List<DottedName2Group> dottedName2GroupList
     ) {
         this.name = name;
-        this.dottedName2Group = dottedName2Group;
+        this.dottedName2GroupList = dottedName2GroupList;
     }
 }

@@ -1,15 +1,17 @@
 package org.fugalang.core.pgen;
 
+import java.util.List;
+
 // file_input: ('NEWLINE' | 'stmt')* 'ENDMARKER'
 public class FileInput {
-    public final FileInput1Group fileInput1Group;
+    public final List<FileInput1Group> fileInput1GroupList;
     public final Object endmarker;
 
     public FileInput(
-            FileInput1Group fileInput1Group,
+            List<FileInput1Group> fileInput1GroupList,
             Object endmarker
     ) {
-        this.fileInput1Group = fileInput1Group;
+        this.fileInput1GroupList = fileInput1GroupList;
         this.endmarker = endmarker;
     }
 }

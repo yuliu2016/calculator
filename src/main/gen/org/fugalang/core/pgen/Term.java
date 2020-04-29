@@ -1,15 +1,17 @@
 package org.fugalang.core.pgen;
 
+import java.util.List;
+
 // term: 'factor' (('*' | '@' | '/' | '%' | '//') 'factor')*
 public class Term {
     public final Factor factor;
-    public final Term2Group term2Group;
+    public final List<Term2Group> term2GroupList;
 
     public Term(
             Factor factor,
-            Term2Group term2Group
+            List<Term2Group> term2GroupList
     ) {
         this.factor = factor;
-        this.term2Group = term2Group;
+        this.term2GroupList = term2GroupList;
     }
 }

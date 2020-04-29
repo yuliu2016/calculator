@@ -1,15 +1,17 @@
 package org.fugalang.core.pgen;
 
+import java.util.List;
+
 // comparison: 'bitwise_or' ('comp_op' 'bitwise_or')*
 public class Comparison {
     public final BitwiseOr bitwiseOr;
-    public final Comparison2Group comparison2Group;
+    public final List<Comparison2Group> comparison2GroupList;
 
     public Comparison(
             BitwiseOr bitwiseOr,
-            Comparison2Group comparison2Group
+            List<Comparison2Group> comparison2GroupList
     ) {
         this.bitwiseOr = bitwiseOr;
-        this.comparison2Group = comparison2Group;
+        this.comparison2GroupList = comparison2GroupList;
     }
 }

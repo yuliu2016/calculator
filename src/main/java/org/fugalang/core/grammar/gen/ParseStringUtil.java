@@ -1,6 +1,9 @@
 package org.fugalang.core.grammar.gen;
 
-public class CaseUtil {
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
+public class ParseStringUtil {
     public static String convertCase(String s) {
         var words = s.split("_");
         var sb = new StringBuilder();
@@ -27,5 +30,11 @@ public class CaseUtil {
     public static String decap(String word) {
         return word.isEmpty() ? word : word.substring(0, 1).toLowerCase() +
                 word.substring(1);
+    }
+
+    public static String indent(String block, int indentation) {
+        String idt = " ".repeat(indentation);
+        return Arrays.stream(block.split("\n")).map(ln -> idt + ln)
+                .collect(Collectors.joining());
     }
 }

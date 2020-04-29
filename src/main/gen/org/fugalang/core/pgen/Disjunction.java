@@ -1,15 +1,17 @@
 package org.fugalang.core.pgen;
 
+import java.util.List;
+
 // disjunction: 'conjunction' ('or' 'conjunction')*
 public class Disjunction {
     public final Conjunction conjunction;
-    public final Disjunction2Group disjunction2Group;
+    public final List<Disjunction2Group> disjunction2GroupList;
 
     public Disjunction(
             Conjunction conjunction,
-            Disjunction2Group disjunction2Group
+            List<Disjunction2Group> disjunction2GroupList
     ) {
         this.conjunction = conjunction;
-        this.disjunction2Group = disjunction2Group;
+        this.disjunction2GroupList = disjunction2GroupList;
     }
 }

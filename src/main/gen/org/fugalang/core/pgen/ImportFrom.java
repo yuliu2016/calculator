@@ -1,6 +1,6 @@
 package org.fugalang.core.pgen;
 
-// import_from: 'from' (('.')* 'dotted_name' | ('.')+) 'import' ('*' | '(' 'import_as_names' ')' | 'import_as_names')
+// import_from: 'from' ('.'* 'dotted_name' | '.'+) 'import' ('*' | '(' 'import_as_names' ')' | 'import_as_names')
 public class ImportFrom {
     public final boolean isTokenFrom;
     public final ImportFrom2Group importFrom2Group;

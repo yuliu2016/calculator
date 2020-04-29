@@ -1,15 +1,17 @@
 package org.fugalang.core.pgen;
 
+import java.util.List;
+
 // (',' ('expr' | 'star_expr'))* [',']
 public class SetMaker2Group2 {
-    public final SetMaker2Group21Group setMaker2Group21Group;
+    public final List<SetMaker2Group21Group> setMaker2Group21GroupList;
     public final boolean isTokenComma;
 
     public SetMaker2Group2(
-            SetMaker2Group21Group setMaker2Group21Group,
+            List<SetMaker2Group21Group> setMaker2Group21GroupList,
             boolean isTokenComma
     ) {
-        this.setMaker2Group21Group = setMaker2Group21Group;
+        this.setMaker2Group21GroupList = setMaker2Group21GroupList;
         this.isTokenComma = isTokenComma;
     }
 }
