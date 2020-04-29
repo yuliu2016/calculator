@@ -2,8 +2,8 @@ package org.fugalang.core.pgen;
 
 // suite: ':' 'simple_stmt' | 'block_suite'
 public class Suite {
-    public final Suite1 suite1;
-    public final BlockSuite blockSuite;
+    private final Suite1 suite1;
+    private final BlockSuite blockSuite;
 
     public Suite(
             Suite1 suite1,
@@ -13,10 +13,18 @@ public class Suite {
         this.blockSuite = blockSuite;
     }
 
+    public Suite1 getSuite1() {
+        return suite1;
+    }
+
+    public BlockSuite getBlockSuite() {
+        return blockSuite;
+    }
+
     // ':' 'simple_stmt'
     public static class Suite1 {
-        public final boolean isTokenColon;
-        public final SimpleStmt simpleStmt;
+        private final boolean isTokenColon;
+        private final SimpleStmt simpleStmt;
 
         public Suite1(
                 boolean isTokenColon,
@@ -24,6 +32,14 @@ public class Suite {
         ) {
             this.isTokenColon = isTokenColon;
             this.simpleStmt = simpleStmt;
+        }
+
+        public boolean getIsTokenColon() {
+            return isTokenColon;
+        }
+
+        public SimpleStmt getSimpleStmt() {
+            return simpleStmt;
         }
     }
 }

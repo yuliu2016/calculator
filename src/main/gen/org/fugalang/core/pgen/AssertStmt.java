@@ -2,9 +2,9 @@ package org.fugalang.core.pgen;
 
 // assert_stmt: 'assert' 'expr' [',' 'expr']
 public class AssertStmt {
-    public final boolean isTokenAssert;
-    public final Expr expr;
-    public final AssertStmt3Group assertStmt3Group;
+    private final boolean isTokenAssert;
+    private final Expr expr;
+    private final AssertStmt3Group assertStmt3Group;
 
     public AssertStmt(
             boolean isTokenAssert,
@@ -16,10 +16,22 @@ public class AssertStmt {
         this.assertStmt3Group = assertStmt3Group;
     }
 
+    public boolean getIsTokenAssert() {
+        return isTokenAssert;
+    }
+
+    public Expr getExpr() {
+        return expr;
+    }
+
+    public AssertStmt3Group getAssertStmt3Group() {
+        return assertStmt3Group;
+    }
+
     // ',' 'expr'
     public static class AssertStmt3Group {
-        public final boolean isTokenComma;
-        public final Expr expr;
+        private final boolean isTokenComma;
+        private final Expr expr;
 
         public AssertStmt3Group(
                 boolean isTokenComma,
@@ -27,6 +39,14 @@ public class AssertStmt {
         ) {
             this.isTokenComma = isTokenComma;
             this.expr = expr;
+        }
+
+        public boolean getIsTokenComma() {
+            return isTokenComma;
+        }
+
+        public Expr getExpr() {
+            return expr;
         }
     }
 }

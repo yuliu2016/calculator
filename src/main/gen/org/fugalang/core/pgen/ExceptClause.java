@@ -2,8 +2,8 @@ package org.fugalang.core.pgen;
 
 // except_clause: 'except' ['expr' ['as' 'NAME']]
 public class ExceptClause {
-    public final boolean isTokenExcept;
-    public final ExceptClause2Group exceptClause2Group;
+    private final boolean isTokenExcept;
+    private final ExceptClause2Group exceptClause2Group;
 
     public ExceptClause(
             boolean isTokenExcept,
@@ -13,10 +13,18 @@ public class ExceptClause {
         this.exceptClause2Group = exceptClause2Group;
     }
 
+    public boolean getIsTokenExcept() {
+        return isTokenExcept;
+    }
+
+    public ExceptClause2Group getExceptClause2Group() {
+        return exceptClause2Group;
+    }
+
     // 'expr' ['as' 'NAME']
     public static class ExceptClause2Group {
-        public final Expr expr;
-        public final ExceptClause2Group2Group exceptClause2Group2Group;
+        private final Expr expr;
+        private final ExceptClause2Group2Group exceptClause2Group2Group;
 
         public ExceptClause2Group(
                 Expr expr,
@@ -25,12 +33,20 @@ public class ExceptClause {
             this.expr = expr;
             this.exceptClause2Group2Group = exceptClause2Group2Group;
         }
+
+        public Expr getExpr() {
+            return expr;
+        }
+
+        public ExceptClause2Group2Group getExceptClause2Group2Group() {
+            return exceptClause2Group2Group;
+        }
     }
 
     // 'as' 'NAME'
     public static class ExceptClause2Group2Group {
-        public final boolean isTokenAs;
-        public final Object name;
+        private final boolean isTokenAs;
+        private final Object name;
 
         public ExceptClause2Group2Group(
                 boolean isTokenAs,
@@ -38,6 +54,14 @@ public class ExceptClause {
         ) {
             this.isTokenAs = isTokenAs;
             this.name = name;
+        }
+
+        public boolean getIsTokenAs() {
+            return isTokenAs;
+        }
+
+        public Object getName() {
+            return name;
         }
     }
 }

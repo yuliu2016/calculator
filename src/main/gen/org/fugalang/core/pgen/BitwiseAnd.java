@@ -4,8 +4,8 @@ import java.util.List;
 
 // bitwise_and: 'shift_expr' ('&' 'shift_expr')*
 public class BitwiseAnd {
-    public final ShiftExpr shiftExpr;
-    public final List<BitwiseAnd2Group> bitwiseAnd2GroupList;
+    private final ShiftExpr shiftExpr;
+    private final List<BitwiseAnd2Group> bitwiseAnd2GroupList;
 
     public BitwiseAnd(
             ShiftExpr shiftExpr,
@@ -15,10 +15,18 @@ public class BitwiseAnd {
         this.bitwiseAnd2GroupList = bitwiseAnd2GroupList;
     }
 
+    public ShiftExpr getShiftExpr() {
+        return shiftExpr;
+    }
+
+    public List<BitwiseAnd2Group> getBitwiseAnd2GroupList() {
+        return bitwiseAnd2GroupList;
+    }
+
     // '&' 'shift_expr'
     public static class BitwiseAnd2Group {
-        public final boolean isTokenBitAnd;
-        public final ShiftExpr shiftExpr;
+        private final boolean isTokenBitAnd;
+        private final ShiftExpr shiftExpr;
 
         public BitwiseAnd2Group(
                 boolean isTokenBitAnd,
@@ -26,6 +34,14 @@ public class BitwiseAnd {
         ) {
             this.isTokenBitAnd = isTokenBitAnd;
             this.shiftExpr = shiftExpr;
+        }
+
+        public boolean getIsTokenBitAnd() {
+            return isTokenBitAnd;
+        }
+
+        public ShiftExpr getShiftExpr() {
+            return shiftExpr;
         }
     }
 }

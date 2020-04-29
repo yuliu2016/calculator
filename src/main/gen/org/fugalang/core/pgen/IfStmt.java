@@ -4,11 +4,11 @@ import java.util.List;
 
 // if_stmt: 'if' 'namedexpr_expr' 'suite' ('elif' 'namedexpr_expr' 'suite')* ['else' 'suite']
 public class IfStmt {
-    public final boolean isTokenIf;
-    public final NamedexprExpr namedexprExpr;
-    public final Suite suite;
-    public final List<IfStmt4Group> ifStmt4GroupList;
-    public final IfStmt5Group ifStmt5Group;
+    private final boolean isTokenIf;
+    private final NamedexprExpr namedexprExpr;
+    private final Suite suite;
+    private final List<IfStmt4Group> ifStmt4GroupList;
+    private final IfStmt5Group ifStmt5Group;
 
     public IfStmt(
             boolean isTokenIf,
@@ -24,11 +24,31 @@ public class IfStmt {
         this.ifStmt5Group = ifStmt5Group;
     }
 
+    public boolean getIsTokenIf() {
+        return isTokenIf;
+    }
+
+    public NamedexprExpr getNamedexprExpr() {
+        return namedexprExpr;
+    }
+
+    public Suite getSuite() {
+        return suite;
+    }
+
+    public List<IfStmt4Group> getIfStmt4GroupList() {
+        return ifStmt4GroupList;
+    }
+
+    public IfStmt5Group getIfStmt5Group() {
+        return ifStmt5Group;
+    }
+
     // 'elif' 'namedexpr_expr' 'suite'
     public static class IfStmt4Group {
-        public final boolean isTokenElif;
-        public final NamedexprExpr namedexprExpr;
-        public final Suite suite;
+        private final boolean isTokenElif;
+        private final NamedexprExpr namedexprExpr;
+        private final Suite suite;
 
         public IfStmt4Group(
                 boolean isTokenElif,
@@ -39,12 +59,24 @@ public class IfStmt {
             this.namedexprExpr = namedexprExpr;
             this.suite = suite;
         }
+
+        public boolean getIsTokenElif() {
+            return isTokenElif;
+        }
+
+        public NamedexprExpr getNamedexprExpr() {
+            return namedexprExpr;
+        }
+
+        public Suite getSuite() {
+            return suite;
+        }
     }
 
     // 'else' 'suite'
     public static class IfStmt5Group {
-        public final boolean isTokenElse;
-        public final Suite suite;
+        private final boolean isTokenElse;
+        private final Suite suite;
 
         public IfStmt5Group(
                 boolean isTokenElse,
@@ -52,6 +84,14 @@ public class IfStmt {
         ) {
             this.isTokenElse = isTokenElse;
             this.suite = suite;
+        }
+
+        public boolean getIsTokenElse() {
+            return isTokenElse;
+        }
+
+        public Suite getSuite() {
+            return suite;
         }
     }
 }

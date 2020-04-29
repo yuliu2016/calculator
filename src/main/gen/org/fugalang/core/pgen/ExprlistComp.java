@@ -4,8 +4,8 @@ import java.util.List;
 
 // exprlist_comp: ('namedexpr_expr' | 'star_expr') ('comp_for' | (',' ('namedexpr_expr' | 'star_expr'))* [','])
 public class ExprlistComp {
-    public final ExprlistComp1Group exprlistComp1Group;
-    public final ExprlistComp2Group exprlistComp2Group;
+    private final ExprlistComp1Group exprlistComp1Group;
+    private final ExprlistComp2Group exprlistComp2Group;
 
     public ExprlistComp(
             ExprlistComp1Group exprlistComp1Group,
@@ -15,10 +15,18 @@ public class ExprlistComp {
         this.exprlistComp2Group = exprlistComp2Group;
     }
 
+    public ExprlistComp1Group getExprlistComp1Group() {
+        return exprlistComp1Group;
+    }
+
+    public ExprlistComp2Group getExprlistComp2Group() {
+        return exprlistComp2Group;
+    }
+
     // 'namedexpr_expr' | 'star_expr'
     public static class ExprlistComp1Group {
-        public final NamedexprExpr namedexprExpr;
-        public final StarExpr starExpr;
+        private final NamedexprExpr namedexprExpr;
+        private final StarExpr starExpr;
 
         public ExprlistComp1Group(
                 NamedexprExpr namedexprExpr,
@@ -27,12 +35,20 @@ public class ExprlistComp {
             this.namedexprExpr = namedexprExpr;
             this.starExpr = starExpr;
         }
+
+        public NamedexprExpr getNamedexprExpr() {
+            return namedexprExpr;
+        }
+
+        public StarExpr getStarExpr() {
+            return starExpr;
+        }
     }
 
     // 'comp_for' | (',' ('namedexpr_expr' | 'star_expr'))* [',']
     public static class ExprlistComp2Group {
-        public final CompFor compFor;
-        public final ExprlistComp2Group2 exprlistComp2Group2;
+        private final CompFor compFor;
+        private final ExprlistComp2Group2 exprlistComp2Group2;
 
         public ExprlistComp2Group(
                 CompFor compFor,
@@ -41,12 +57,20 @@ public class ExprlistComp {
             this.compFor = compFor;
             this.exprlistComp2Group2 = exprlistComp2Group2;
         }
+
+        public CompFor getCompFor() {
+            return compFor;
+        }
+
+        public ExprlistComp2Group2 getExprlistComp2Group2() {
+            return exprlistComp2Group2;
+        }
     }
 
     // (',' ('namedexpr_expr' | 'star_expr'))* [',']
     public static class ExprlistComp2Group2 {
-        public final List<ExprlistComp2Group21Group> exprlistComp2Group21GroupList;
-        public final boolean isTokenComma;
+        private final List<ExprlistComp2Group21Group> exprlistComp2Group21GroupList;
+        private final boolean isTokenComma;
 
         public ExprlistComp2Group2(
                 List<ExprlistComp2Group21Group> exprlistComp2Group21GroupList,
@@ -55,12 +79,20 @@ public class ExprlistComp {
             this.exprlistComp2Group21GroupList = exprlistComp2Group21GroupList;
             this.isTokenComma = isTokenComma;
         }
+
+        public List<ExprlistComp2Group21Group> getExprlistComp2Group21GroupList() {
+            return exprlistComp2Group21GroupList;
+        }
+
+        public boolean getIsTokenComma() {
+            return isTokenComma;
+        }
     }
 
     // ',' ('namedexpr_expr' | 'star_expr')
     public static class ExprlistComp2Group21Group {
-        public final boolean isTokenComma;
-        public final ExprlistComp2Group21Group2Group exprlistComp2Group21Group2Group;
+        private final boolean isTokenComma;
+        private final ExprlistComp2Group21Group2Group exprlistComp2Group21Group2Group;
 
         public ExprlistComp2Group21Group(
                 boolean isTokenComma,
@@ -69,12 +101,20 @@ public class ExprlistComp {
             this.isTokenComma = isTokenComma;
             this.exprlistComp2Group21Group2Group = exprlistComp2Group21Group2Group;
         }
+
+        public boolean getIsTokenComma() {
+            return isTokenComma;
+        }
+
+        public ExprlistComp2Group21Group2Group getExprlistComp2Group21Group2Group() {
+            return exprlistComp2Group21Group2Group;
+        }
     }
 
     // 'namedexpr_expr' | 'star_expr'
     public static class ExprlistComp2Group21Group2Group {
-        public final NamedexprExpr namedexprExpr;
-        public final StarExpr starExpr;
+        private final NamedexprExpr namedexprExpr;
+        private final StarExpr starExpr;
 
         public ExprlistComp2Group21Group2Group(
                 NamedexprExpr namedexprExpr,
@@ -82,6 +122,14 @@ public class ExprlistComp {
         ) {
             this.namedexprExpr = namedexprExpr;
             this.starExpr = starExpr;
+        }
+
+        public NamedexprExpr getNamedexprExpr() {
+            return namedexprExpr;
+        }
+
+        public StarExpr getStarExpr() {
+            return starExpr;
         }
     }
 }

@@ -4,10 +4,10 @@ import java.util.List;
 
 // import_from: 'from' ('.'* 'dotted_name' | '.'+) 'import' ('*' | '(' 'import_as_names' ')' | 'import_as_names')
 public class ImportFrom {
-    public final boolean isTokenFrom;
-    public final ImportFrom2Group importFrom2Group;
-    public final boolean isTokenImport;
-    public final ImportFrom4Group importFrom4Group;
+    private final boolean isTokenFrom;
+    private final ImportFrom2Group importFrom2Group;
+    private final boolean isTokenImport;
+    private final ImportFrom4Group importFrom4Group;
 
     public ImportFrom(
             boolean isTokenFrom,
@@ -21,11 +21,27 @@ public class ImportFrom {
         this.importFrom4Group = importFrom4Group;
     }
 
+    public boolean getIsTokenFrom() {
+        return isTokenFrom;
+    }
+
+    public ImportFrom2Group getImportFrom2Group() {
+        return importFrom2Group;
+    }
+
+    public boolean getIsTokenImport() {
+        return isTokenImport;
+    }
+
+    public ImportFrom4Group getImportFrom4Group() {
+        return importFrom4Group;
+    }
+
     // '.'* 'dotted_name' | '.'+
     public static class ImportFrom2Group {
-        public final ImportFrom2Group1 importFrom2Group1;
-        public final boolean isTokenDot;
-        public final List<Boolean> isTokenDotList;
+        private final ImportFrom2Group1 importFrom2Group1;
+        private final boolean isTokenDot;
+        private final List<Boolean> isTokenDotList;
 
         public ImportFrom2Group(
                 ImportFrom2Group1 importFrom2Group1,
@@ -36,12 +52,24 @@ public class ImportFrom {
             this.isTokenDot = isTokenDot;
             this.isTokenDotList = isTokenDotList;
         }
+
+        public ImportFrom2Group1 getImportFrom2Group1() {
+            return importFrom2Group1;
+        }
+
+        public boolean getIsTokenDot() {
+            return isTokenDot;
+        }
+
+        public List<Boolean> getIsTokenDotList() {
+            return isTokenDotList;
+        }
     }
 
     // '.'* 'dotted_name'
     public static class ImportFrom2Group1 {
-        public final List<Boolean> isTokenDotList;
-        public final DottedName dottedName;
+        private final List<Boolean> isTokenDotList;
+        private final DottedName dottedName;
 
         public ImportFrom2Group1(
                 List<Boolean> isTokenDotList,
@@ -50,13 +78,21 @@ public class ImportFrom {
             this.isTokenDotList = isTokenDotList;
             this.dottedName = dottedName;
         }
+
+        public List<Boolean> getIsTokenDotList() {
+            return isTokenDotList;
+        }
+
+        public DottedName getDottedName() {
+            return dottedName;
+        }
     }
 
     // '*' | '(' 'import_as_names' ')' | 'import_as_names'
     public static class ImportFrom4Group {
-        public final boolean isTokenTimes;
-        public final ImportFrom4Group2 importFrom4Group2;
-        public final ImportAsNames importAsNames;
+        private final boolean isTokenTimes;
+        private final ImportFrom4Group2 importFrom4Group2;
+        private final ImportAsNames importAsNames;
 
         public ImportFrom4Group(
                 boolean isTokenTimes,
@@ -67,13 +103,25 @@ public class ImportFrom {
             this.importFrom4Group2 = importFrom4Group2;
             this.importAsNames = importAsNames;
         }
+
+        public boolean getIsTokenTimes() {
+            return isTokenTimes;
+        }
+
+        public ImportFrom4Group2 getImportFrom4Group2() {
+            return importFrom4Group2;
+        }
+
+        public ImportAsNames getImportAsNames() {
+            return importAsNames;
+        }
     }
 
     // '(' 'import_as_names' ')'
     public static class ImportFrom4Group2 {
-        public final boolean isTokenLpar;
-        public final ImportAsNames importAsNames;
-        public final boolean isTokenRpar;
+        private final boolean isTokenLpar;
+        private final ImportAsNames importAsNames;
+        private final boolean isTokenRpar;
 
         public ImportFrom4Group2(
                 boolean isTokenLpar,
@@ -83,6 +131,18 @@ public class ImportFrom {
             this.isTokenLpar = isTokenLpar;
             this.importAsNames = importAsNames;
             this.isTokenRpar = isTokenRpar;
+        }
+
+        public boolean getIsTokenLpar() {
+            return isTokenLpar;
+        }
+
+        public ImportAsNames getImportAsNames() {
+            return importAsNames;
+        }
+
+        public boolean getIsTokenRpar() {
+            return isTokenRpar;
         }
     }
 }

@@ -4,9 +4,9 @@ import java.util.List;
 
 // eval_input: 'exprlist' 'NEWLINE'* 'ENDMARKER'
 public class EvalInput {
-    public final Exprlist exprlist;
-    public final List<Object> newlineList;
-    public final Object endmarker;
+    private final Exprlist exprlist;
+    private final List<Object> newlineList;
+    private final Object endmarker;
 
     public EvalInput(
             Exprlist exprlist,
@@ -16,5 +16,17 @@ public class EvalInput {
         this.exprlist = exprlist;
         this.newlineList = newlineList;
         this.endmarker = endmarker;
+    }
+
+    public Exprlist getExprlist() {
+        return exprlist;
+    }
+
+    public List<Object> getNewlineList() {
+        return newlineList;
+    }
+
+    public Object getEndmarker() {
+        return endmarker;
     }
 }

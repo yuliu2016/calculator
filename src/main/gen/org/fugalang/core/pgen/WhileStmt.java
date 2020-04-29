@@ -2,10 +2,10 @@ package org.fugalang.core.pgen;
 
 // while_stmt: 'while' 'namedexpr_expr' 'suite' ['else' 'suite']
 public class WhileStmt {
-    public final boolean isTokenWhile;
-    public final NamedexprExpr namedexprExpr;
-    public final Suite suite;
-    public final WhileStmt4Group whileStmt4Group;
+    private final boolean isTokenWhile;
+    private final NamedexprExpr namedexprExpr;
+    private final Suite suite;
+    private final WhileStmt4Group whileStmt4Group;
 
     public WhileStmt(
             boolean isTokenWhile,
@@ -19,10 +19,26 @@ public class WhileStmt {
         this.whileStmt4Group = whileStmt4Group;
     }
 
+    public boolean getIsTokenWhile() {
+        return isTokenWhile;
+    }
+
+    public NamedexprExpr getNamedexprExpr() {
+        return namedexprExpr;
+    }
+
+    public Suite getSuite() {
+        return suite;
+    }
+
+    public WhileStmt4Group getWhileStmt4Group() {
+        return whileStmt4Group;
+    }
+
     // 'else' 'suite'
     public static class WhileStmt4Group {
-        public final boolean isTokenElse;
-        public final Suite suite;
+        private final boolean isTokenElse;
+        private final Suite suite;
 
         public WhileStmt4Group(
                 boolean isTokenElse,
@@ -30,6 +46,14 @@ public class WhileStmt {
         ) {
             this.isTokenElse = isTokenElse;
             this.suite = suite;
+        }
+
+        public boolean getIsTokenElse() {
+            return isTokenElse;
+        }
+
+        public Suite getSuite() {
+            return suite;
         }
     }
 }

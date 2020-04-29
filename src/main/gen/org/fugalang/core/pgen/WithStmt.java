@@ -4,10 +4,10 @@ import java.util.List;
 
 // with_stmt: 'with' 'with_item' (',' 'with_item')* 'suite'
 public class WithStmt {
-    public final boolean isTokenWith;
-    public final WithItem withItem;
-    public final List<WithStmt3Group> withStmt3GroupList;
-    public final Suite suite;
+    private final boolean isTokenWith;
+    private final WithItem withItem;
+    private final List<WithStmt3Group> withStmt3GroupList;
+    private final Suite suite;
 
     public WithStmt(
             boolean isTokenWith,
@@ -21,10 +21,26 @@ public class WithStmt {
         this.suite = suite;
     }
 
+    public boolean getIsTokenWith() {
+        return isTokenWith;
+    }
+
+    public WithItem getWithItem() {
+        return withItem;
+    }
+
+    public List<WithStmt3Group> getWithStmt3GroupList() {
+        return withStmt3GroupList;
+    }
+
+    public Suite getSuite() {
+        return suite;
+    }
+
     // ',' 'with_item'
     public static class WithStmt3Group {
-        public final boolean isTokenComma;
-        public final WithItem withItem;
+        private final boolean isTokenComma;
+        private final WithItem withItem;
 
         public WithStmt3Group(
                 boolean isTokenComma,
@@ -32,6 +48,14 @@ public class WithStmt {
         ) {
             this.isTokenComma = isTokenComma;
             this.withItem = withItem;
+        }
+
+        public boolean getIsTokenComma() {
+            return isTokenComma;
+        }
+
+        public WithItem getWithItem() {
+            return withItem;
         }
     }
 }

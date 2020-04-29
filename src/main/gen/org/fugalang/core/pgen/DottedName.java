@@ -4,8 +4,8 @@ import java.util.List;
 
 // dotted_name: 'NAME' ('.' 'NAME')*
 public class DottedName {
-    public final Object name;
-    public final List<DottedName2Group> dottedName2GroupList;
+    private final Object name;
+    private final List<DottedName2Group> dottedName2GroupList;
 
     public DottedName(
             Object name,
@@ -15,10 +15,18 @@ public class DottedName {
         this.dottedName2GroupList = dottedName2GroupList;
     }
 
+    public Object getName() {
+        return name;
+    }
+
+    public List<DottedName2Group> getDottedName2GroupList() {
+        return dottedName2GroupList;
+    }
+
     // '.' 'NAME'
     public static class DottedName2Group {
-        public final boolean isTokenDot;
-        public final Object name;
+        private final boolean isTokenDot;
+        private final Object name;
 
         public DottedName2Group(
                 boolean isTokenDot,
@@ -26,6 +34,14 @@ public class DottedName {
         ) {
             this.isTokenDot = isTokenDot;
             this.name = name;
+        }
+
+        public boolean getIsTokenDot() {
+            return isTokenDot;
+        }
+
+        public Object getName() {
+            return name;
         }
     }
 }

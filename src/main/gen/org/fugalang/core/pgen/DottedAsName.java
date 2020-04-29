@@ -2,8 +2,8 @@ package org.fugalang.core.pgen;
 
 // dotted_as_name: 'dotted_name' ['as' 'NAME']
 public class DottedAsName {
-    public final DottedName dottedName;
-    public final DottedAsName2Group dottedAsName2Group;
+    private final DottedName dottedName;
+    private final DottedAsName2Group dottedAsName2Group;
 
     public DottedAsName(
             DottedName dottedName,
@@ -13,10 +13,18 @@ public class DottedAsName {
         this.dottedAsName2Group = dottedAsName2Group;
     }
 
+    public DottedName getDottedName() {
+        return dottedName;
+    }
+
+    public DottedAsName2Group getDottedAsName2Group() {
+        return dottedAsName2Group;
+    }
+
     // 'as' 'NAME'
     public static class DottedAsName2Group {
-        public final boolean isTokenAs;
-        public final Object name;
+        private final boolean isTokenAs;
+        private final Object name;
 
         public DottedAsName2Group(
                 boolean isTokenAs,
@@ -24,6 +32,14 @@ public class DottedAsName {
         ) {
             this.isTokenAs = isTokenAs;
             this.name = name;
+        }
+
+        public boolean getIsTokenAs() {
+            return isTokenAs;
+        }
+
+        public Object getName() {
+            return name;
         }
     }
 }

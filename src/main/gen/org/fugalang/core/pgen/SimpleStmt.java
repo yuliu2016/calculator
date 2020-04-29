@@ -4,9 +4,9 @@ import java.util.List;
 
 // simple_stmt: 'small_stmt' (';' 'small_stmt')* [';']
 public class SimpleStmt {
-    public final SmallStmt smallStmt;
-    public final List<SimpleStmt2Group> simpleStmt2GroupList;
-    public final boolean isTokenSemicolon;
+    private final SmallStmt smallStmt;
+    private final List<SimpleStmt2Group> simpleStmt2GroupList;
+    private final boolean isTokenSemicolon;
 
     public SimpleStmt(
             SmallStmt smallStmt,
@@ -18,10 +18,22 @@ public class SimpleStmt {
         this.isTokenSemicolon = isTokenSemicolon;
     }
 
+    public SmallStmt getSmallStmt() {
+        return smallStmt;
+    }
+
+    public List<SimpleStmt2Group> getSimpleStmt2GroupList() {
+        return simpleStmt2GroupList;
+    }
+
+    public boolean getIsTokenSemicolon() {
+        return isTokenSemicolon;
+    }
+
     // ';' 'small_stmt'
     public static class SimpleStmt2Group {
-        public final boolean isTokenSemicolon;
-        public final SmallStmt smallStmt;
+        private final boolean isTokenSemicolon;
+        private final SmallStmt smallStmt;
 
         public SimpleStmt2Group(
                 boolean isTokenSemicolon,
@@ -29,6 +41,14 @@ public class SimpleStmt {
         ) {
             this.isTokenSemicolon = isTokenSemicolon;
             this.smallStmt = smallStmt;
+        }
+
+        public boolean getIsTokenSemicolon() {
+            return isTokenSemicolon;
+        }
+
+        public SmallStmt getSmallStmt() {
+            return smallStmt;
         }
     }
 }

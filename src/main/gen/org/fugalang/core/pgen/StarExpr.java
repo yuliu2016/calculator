@@ -2,8 +2,8 @@ package org.fugalang.core.pgen;
 
 // star_expr: '*' 'bitwise_or'
 public class StarExpr {
-    public final boolean isTokenTimes;
-    public final BitwiseOr bitwiseOr;
+    private final boolean isTokenTimes;
+    private final BitwiseOr bitwiseOr;
 
     public StarExpr(
             boolean isTokenTimes,
@@ -11,5 +11,13 @@ public class StarExpr {
     ) {
         this.isTokenTimes = isTokenTimes;
         this.bitwiseOr = bitwiseOr;
+    }
+
+    public boolean getIsTokenTimes() {
+        return isTokenTimes;
+    }
+
+    public BitwiseOr getBitwiseOr() {
+        return bitwiseOr;
     }
 }

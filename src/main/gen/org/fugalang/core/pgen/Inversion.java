@@ -2,8 +2,8 @@ package org.fugalang.core.pgen;
 
 // inversion: 'not' 'inversion' | 'comparison'
 public class Inversion {
-    public final Inversion1 inversion1;
-    public final Comparison comparison;
+    private final Inversion1 inversion1;
+    private final Comparison comparison;
 
     public Inversion(
             Inversion1 inversion1,
@@ -13,10 +13,18 @@ public class Inversion {
         this.comparison = comparison;
     }
 
+    public Inversion1 getInversion1() {
+        return inversion1;
+    }
+
+    public Comparison getComparison() {
+        return comparison;
+    }
+
     // 'not' 'inversion'
     public static class Inversion1 {
-        public final boolean isTokenNot;
-        public final Inversion inversion;
+        private final boolean isTokenNot;
+        private final Inversion inversion;
 
         public Inversion1(
                 boolean isTokenNot,
@@ -24,6 +32,14 @@ public class Inversion {
         ) {
             this.isTokenNot = isTokenNot;
             this.inversion = inversion;
+        }
+
+        public boolean getIsTokenNot() {
+            return isTokenNot;
+        }
+
+        public Inversion getInversion() {
+            return inversion;
         }
     }
 }

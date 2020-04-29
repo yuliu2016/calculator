@@ -4,8 +4,8 @@ import java.util.List;
 
 // conjunction: 'inversion' ('and' 'inversion')*
 public class Conjunction {
-    public final Inversion inversion;
-    public final List<Conjunction2Group> conjunction2GroupList;
+    private final Inversion inversion;
+    private final List<Conjunction2Group> conjunction2GroupList;
 
     public Conjunction(
             Inversion inversion,
@@ -15,10 +15,18 @@ public class Conjunction {
         this.conjunction2GroupList = conjunction2GroupList;
     }
 
+    public Inversion getInversion() {
+        return inversion;
+    }
+
+    public List<Conjunction2Group> getConjunction2GroupList() {
+        return conjunction2GroupList;
+    }
+
     // 'and' 'inversion'
     public static class Conjunction2Group {
-        public final boolean isTokenAnd;
-        public final Inversion inversion;
+        private final boolean isTokenAnd;
+        private final Inversion inversion;
 
         public Conjunction2Group(
                 boolean isTokenAnd,
@@ -26,6 +34,14 @@ public class Conjunction {
         ) {
             this.isTokenAnd = isTokenAnd;
             this.inversion = inversion;
+        }
+
+        public boolean getIsTokenAnd() {
+            return isTokenAnd;
+        }
+
+        public Inversion getInversion() {
+            return inversion;
         }
     }
 }

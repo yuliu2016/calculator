@@ -2,8 +2,8 @@ package org.fugalang.core.pgen;
 
 // stmt: ('simple_stmt' | 'compound_stmt') 'NEWLINE'
 public class Stmt {
-    public final Stmt1Group stmt1Group;
-    public final Object newline;
+    private final Stmt1Group stmt1Group;
+    private final Object newline;
 
     public Stmt(
             Stmt1Group stmt1Group,
@@ -13,10 +13,18 @@ public class Stmt {
         this.newline = newline;
     }
 
+    public Stmt1Group getStmt1Group() {
+        return stmt1Group;
+    }
+
+    public Object getNewline() {
+        return newline;
+    }
+
     // 'simple_stmt' | 'compound_stmt'
     public static class Stmt1Group {
-        public final SimpleStmt simpleStmt;
-        public final CompoundStmt compoundStmt;
+        private final SimpleStmt simpleStmt;
+        private final CompoundStmt compoundStmt;
 
         public Stmt1Group(
                 SimpleStmt simpleStmt,
@@ -24,6 +32,14 @@ public class Stmt {
         ) {
             this.simpleStmt = simpleStmt;
             this.compoundStmt = compoundStmt;
+        }
+
+        public SimpleStmt getSimpleStmt() {
+            return simpleStmt;
+        }
+
+        public CompoundStmt getCompoundStmt() {
+            return compoundStmt;
         }
     }
 }

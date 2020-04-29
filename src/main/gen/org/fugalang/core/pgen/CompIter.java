@@ -2,8 +2,8 @@ package org.fugalang.core.pgen;
 
 // comp_iter: 'comp_for' | 'comp_if'
 public class CompIter {
-    public final CompFor compFor;
-    public final CompIf compIf;
+    private final CompFor compFor;
+    private final CompIf compIf;
 
     public CompIter(
             CompFor compFor,
@@ -11,5 +11,13 @@ public class CompIter {
     ) {
         this.compFor = compFor;
         this.compIf = compIf;
+    }
+
+    public CompFor getCompFor() {
+        return compFor;
+    }
+
+    public CompIf getCompIf() {
+        return compIf;
     }
 }

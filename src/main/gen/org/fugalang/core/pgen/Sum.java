@@ -4,8 +4,8 @@ import java.util.List;
 
 // sum: 'term' (('+' | '-') 'term')*
 public class Sum {
-    public final Term term;
-    public final List<Sum2Group> sum2GroupList;
+    private final Term term;
+    private final List<Sum2Group> sum2GroupList;
 
     public Sum(
             Term term,
@@ -15,10 +15,18 @@ public class Sum {
         this.sum2GroupList = sum2GroupList;
     }
 
+    public Term getTerm() {
+        return term;
+    }
+
+    public List<Sum2Group> getSum2GroupList() {
+        return sum2GroupList;
+    }
+
     // ('+' | '-') 'term'
     public static class Sum2Group {
-        public final Sum2Group1Group sum2Group1Group;
-        public final Term term;
+        private final Sum2Group1Group sum2Group1Group;
+        private final Term term;
 
         public Sum2Group(
                 Sum2Group1Group sum2Group1Group,
@@ -27,12 +35,20 @@ public class Sum {
             this.sum2Group1Group = sum2Group1Group;
             this.term = term;
         }
+
+        public Sum2Group1Group getSum2Group1Group() {
+            return sum2Group1Group;
+        }
+
+        public Term getTerm() {
+            return term;
+        }
     }
 
     // '+' | '-'
     public static class Sum2Group1Group {
-        public final boolean isTokenPlus;
-        public final boolean isTokenMinus;
+        private final boolean isTokenPlus;
+        private final boolean isTokenMinus;
 
         public Sum2Group1Group(
                 boolean isTokenPlus,
@@ -40,6 +56,14 @@ public class Sum {
         ) {
             this.isTokenPlus = isTokenPlus;
             this.isTokenMinus = isTokenMinus;
+        }
+
+        public boolean getIsTokenPlus() {
+            return isTokenPlus;
+        }
+
+        public boolean getIsTokenMinus() {
+            return isTokenMinus;
         }
     }
 }

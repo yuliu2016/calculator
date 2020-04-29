@@ -4,8 +4,8 @@ import java.util.List;
 
 // pipe_expr: 'atom_expr' ('->' 'atom_expr')*
 public class PipeExpr {
-    public final AtomExpr atomExpr;
-    public final List<PipeExpr2Group> pipeExpr2GroupList;
+    private final AtomExpr atomExpr;
+    private final List<PipeExpr2Group> pipeExpr2GroupList;
 
     public PipeExpr(
             AtomExpr atomExpr,
@@ -15,10 +15,18 @@ public class PipeExpr {
         this.pipeExpr2GroupList = pipeExpr2GroupList;
     }
 
+    public AtomExpr getAtomExpr() {
+        return atomExpr;
+    }
+
+    public List<PipeExpr2Group> getPipeExpr2GroupList() {
+        return pipeExpr2GroupList;
+    }
+
     // '->' 'atom_expr'
     public static class PipeExpr2Group {
-        public final boolean isTokenPipe;
-        public final AtomExpr atomExpr;
+        private final boolean isTokenPipe;
+        private final AtomExpr atomExpr;
 
         public PipeExpr2Group(
                 boolean isTokenPipe,
@@ -26,6 +34,14 @@ public class PipeExpr {
         ) {
             this.isTokenPipe = isTokenPipe;
             this.atomExpr = atomExpr;
+        }
+
+        public boolean getIsTokenPipe() {
+            return isTokenPipe;
+        }
+
+        public AtomExpr getAtomExpr() {
+            return atomExpr;
         }
     }
 }

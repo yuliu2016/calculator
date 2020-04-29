@@ -2,11 +2,11 @@ package org.fugalang.core.pgen;
 
 // comp_for: 'for' 'targets' 'in' 'disjunction' ['comp_iter']
 public class CompFor {
-    public final boolean isTokenFor;
-    public final Targets targets;
-    public final boolean isTokenIn;
-    public final Disjunction disjunction;
-    public final CompIter compIter;
+    private final boolean isTokenFor;
+    private final Targets targets;
+    private final boolean isTokenIn;
+    private final Disjunction disjunction;
+    private final CompIter compIter;
 
     public CompFor(
             boolean isTokenFor,
@@ -20,5 +20,25 @@ public class CompFor {
         this.isTokenIn = isTokenIn;
         this.disjunction = disjunction;
         this.compIter = compIter;
+    }
+
+    public boolean getIsTokenFor() {
+        return isTokenFor;
+    }
+
+    public Targets getTargets() {
+        return targets;
+    }
+
+    public boolean getIsTokenIn() {
+        return isTokenIn;
+    }
+
+    public Disjunction getDisjunction() {
+        return disjunction;
+    }
+
+    public CompIter getCompIter() {
+        return compIter;
     }
 }

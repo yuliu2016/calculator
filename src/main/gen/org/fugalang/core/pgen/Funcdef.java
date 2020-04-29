@@ -2,10 +2,10 @@ package org.fugalang.core.pgen;
 
 // funcdef: ['async'] 'def' ['varargslist'] (':' 'expr' | 'block_suite')
 public class Funcdef {
-    public final boolean isTokenAsync;
-    public final boolean isTokenDef;
-    public final Varargslist varargslist;
-    public final Funcdef4Group funcdef4Group;
+    private final boolean isTokenAsync;
+    private final boolean isTokenDef;
+    private final Varargslist varargslist;
+    private final Funcdef4Group funcdef4Group;
 
     public Funcdef(
             boolean isTokenAsync,
@@ -19,10 +19,26 @@ public class Funcdef {
         this.funcdef4Group = funcdef4Group;
     }
 
+    public boolean getIsTokenAsync() {
+        return isTokenAsync;
+    }
+
+    public boolean getIsTokenDef() {
+        return isTokenDef;
+    }
+
+    public Varargslist getVarargslist() {
+        return varargslist;
+    }
+
+    public Funcdef4Group getFuncdef4Group() {
+        return funcdef4Group;
+    }
+
     // ':' 'expr' | 'block_suite'
     public static class Funcdef4Group {
-        public final Funcdef4Group1 funcdef4Group1;
-        public final BlockSuite blockSuite;
+        private final Funcdef4Group1 funcdef4Group1;
+        private final BlockSuite blockSuite;
 
         public Funcdef4Group(
                 Funcdef4Group1 funcdef4Group1,
@@ -31,12 +47,20 @@ public class Funcdef {
             this.funcdef4Group1 = funcdef4Group1;
             this.blockSuite = blockSuite;
         }
+
+        public Funcdef4Group1 getFuncdef4Group1() {
+            return funcdef4Group1;
+        }
+
+        public BlockSuite getBlockSuite() {
+            return blockSuite;
+        }
     }
 
     // ':' 'expr'
     public static class Funcdef4Group1 {
-        public final boolean isTokenColon;
-        public final Expr expr;
+        private final boolean isTokenColon;
+        private final Expr expr;
 
         public Funcdef4Group1(
                 boolean isTokenColon,
@@ -44,6 +68,14 @@ public class Funcdef {
         ) {
             this.isTokenColon = isTokenColon;
             this.expr = expr;
+        }
+
+        public boolean getIsTokenColon() {
+            return isTokenColon;
+        }
+
+        public Expr getExpr() {
+            return expr;
         }
     }
 }

@@ -2,8 +2,8 @@ package org.fugalang.core.pgen;
 
 // import_as_name: 'NAME' ['as' 'NAME']
 public class ImportAsName {
-    public final Object name;
-    public final ImportAsName2Group importAsName2Group;
+    private final Object name;
+    private final ImportAsName2Group importAsName2Group;
 
     public ImportAsName(
             Object name,
@@ -13,10 +13,18 @@ public class ImportAsName {
         this.importAsName2Group = importAsName2Group;
     }
 
+    public Object getName() {
+        return name;
+    }
+
+    public ImportAsName2Group getImportAsName2Group() {
+        return importAsName2Group;
+    }
+
     // 'as' 'NAME'
     public static class ImportAsName2Group {
-        public final boolean isTokenAs;
-        public final Object name;
+        private final boolean isTokenAs;
+        private final Object name;
 
         public ImportAsName2Group(
                 boolean isTokenAs,
@@ -24,6 +32,14 @@ public class ImportAsName {
         ) {
             this.isTokenAs = isTokenAs;
             this.name = name;
+        }
+
+        public boolean getIsTokenAs() {
+            return isTokenAs;
+        }
+
+        public Object getName() {
+            return name;
         }
     }
 }

@@ -2,8 +2,8 @@ package org.fugalang.core.pgen;
 
 // block_suite: '{' 'simple_stmt' '}' | '{' 'NEWLINE' 'stmt'+ '}'
 public class BlockSuite {
-    public final BlockSuite1 blockSuite1;
-    public final BlockSuite2 blockSuite2;
+    private final BlockSuite1 blockSuite1;
+    private final BlockSuite2 blockSuite2;
 
     public BlockSuite(
             BlockSuite1 blockSuite1,
@@ -13,11 +13,19 @@ public class BlockSuite {
         this.blockSuite2 = blockSuite2;
     }
 
+    public BlockSuite1 getBlockSuite1() {
+        return blockSuite1;
+    }
+
+    public BlockSuite2 getBlockSuite2() {
+        return blockSuite2;
+    }
+
     // '{' 'simple_stmt' '}'
     public static class BlockSuite1 {
-        public final boolean isTokenLbrace;
-        public final SimpleStmt simpleStmt;
-        public final boolean isTokenRbrace;
+        private final boolean isTokenLbrace;
+        private final SimpleStmt simpleStmt;
+        private final boolean isTokenRbrace;
 
         public BlockSuite1(
                 boolean isTokenLbrace,
@@ -28,14 +36,26 @@ public class BlockSuite {
             this.simpleStmt = simpleStmt;
             this.isTokenRbrace = isTokenRbrace;
         }
+
+        public boolean getIsTokenLbrace() {
+            return isTokenLbrace;
+        }
+
+        public SimpleStmt getSimpleStmt() {
+            return simpleStmt;
+        }
+
+        public boolean getIsTokenRbrace() {
+            return isTokenRbrace;
+        }
     }
 
     // '{' 'NEWLINE' 'stmt'+ '}'
     public static class BlockSuite2 {
-        public final boolean isTokenLbrace;
-        public final Object newline;
-        public final Stmt stmt;
-        public final boolean isTokenRbrace;
+        private final boolean isTokenLbrace;
+        private final Object newline;
+        private final Stmt stmt;
+        private final boolean isTokenRbrace;
 
         public BlockSuite2(
                 boolean isTokenLbrace,
@@ -47,6 +67,22 @@ public class BlockSuite {
             this.newline = newline;
             this.stmt = stmt;
             this.isTokenRbrace = isTokenRbrace;
+        }
+
+        public boolean getIsTokenLbrace() {
+            return isTokenLbrace;
+        }
+
+        public Object getNewline() {
+            return newline;
+        }
+
+        public Stmt getStmt() {
+            return stmt;
+        }
+
+        public boolean getIsTokenRbrace() {
+            return isTokenRbrace;
         }
     }
 }

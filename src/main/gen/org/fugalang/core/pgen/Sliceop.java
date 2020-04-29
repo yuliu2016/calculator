@@ -2,8 +2,8 @@ package org.fugalang.core.pgen;
 
 // sliceop: ':' ['expr']
 public class Sliceop {
-    public final boolean isTokenColon;
-    public final Expr expr;
+    private final boolean isTokenColon;
+    private final Expr expr;
 
     public Sliceop(
             boolean isTokenColon,
@@ -11,5 +11,13 @@ public class Sliceop {
     ) {
         this.isTokenColon = isTokenColon;
         this.expr = expr;
+    }
+
+    public boolean getIsTokenColon() {
+        return isTokenColon;
+    }
+
+    public Expr getExpr() {
+        return expr;
     }
 }

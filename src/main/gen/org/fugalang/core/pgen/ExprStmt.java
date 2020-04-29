@@ -4,8 +4,8 @@ import java.util.List;
 
 // expr_stmt: 'exprlist_star' ['augassign' 'exprlist' | ('=' 'exprlist_star')*]
 public class ExprStmt {
-    public final ExprlistStar exprlistStar;
-    public final ExprStmt2Group exprStmt2Group;
+    private final ExprlistStar exprlistStar;
+    private final ExprStmt2Group exprStmt2Group;
 
     public ExprStmt(
             ExprlistStar exprlistStar,
@@ -15,10 +15,18 @@ public class ExprStmt {
         this.exprStmt2Group = exprStmt2Group;
     }
 
+    public ExprlistStar getExprlistStar() {
+        return exprlistStar;
+    }
+
+    public ExprStmt2Group getExprStmt2Group() {
+        return exprStmt2Group;
+    }
+
     // 'augassign' 'exprlist' | ('=' 'exprlist_star')*
     public static class ExprStmt2Group {
-        public final ExprStmt2Group1 exprStmt2Group1;
-        public final List<ExprStmt2Group2Group> exprStmt2Group2GroupList;
+        private final ExprStmt2Group1 exprStmt2Group1;
+        private final List<ExprStmt2Group2Group> exprStmt2Group2GroupList;
 
         public ExprStmt2Group(
                 ExprStmt2Group1 exprStmt2Group1,
@@ -27,12 +35,20 @@ public class ExprStmt {
             this.exprStmt2Group1 = exprStmt2Group1;
             this.exprStmt2Group2GroupList = exprStmt2Group2GroupList;
         }
+
+        public ExprStmt2Group1 getExprStmt2Group1() {
+            return exprStmt2Group1;
+        }
+
+        public List<ExprStmt2Group2Group> getExprStmt2Group2GroupList() {
+            return exprStmt2Group2GroupList;
+        }
     }
 
     // 'augassign' 'exprlist'
     public static class ExprStmt2Group1 {
-        public final Augassign augassign;
-        public final Exprlist exprlist;
+        private final Augassign augassign;
+        private final Exprlist exprlist;
 
         public ExprStmt2Group1(
                 Augassign augassign,
@@ -41,12 +57,20 @@ public class ExprStmt {
             this.augassign = augassign;
             this.exprlist = exprlist;
         }
+
+        public Augassign getAugassign() {
+            return augassign;
+        }
+
+        public Exprlist getExprlist() {
+            return exprlist;
+        }
     }
 
     // '=' 'exprlist_star'
     public static class ExprStmt2Group2Group {
-        public final boolean isTokenAssign;
-        public final ExprlistStar exprlistStar;
+        private final boolean isTokenAssign;
+        private final ExprlistStar exprlistStar;
 
         public ExprStmt2Group2Group(
                 boolean isTokenAssign,
@@ -54,6 +78,14 @@ public class ExprStmt {
         ) {
             this.isTokenAssign = isTokenAssign;
             this.exprlistStar = exprlistStar;
+        }
+
+        public boolean getIsTokenAssign() {
+            return isTokenAssign;
+        }
+
+        public ExprlistStar getExprlistStar() {
+            return exprlistStar;
         }
     }
 }

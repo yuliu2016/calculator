@@ -4,8 +4,8 @@ import java.util.List;
 
 // bitwise_or: 'bitwise_xor' ('|' 'bitwise_xor')*
 public class BitwiseOr {
-    public final BitwiseXor bitwiseXor;
-    public final List<BitwiseOr2Group> bitwiseOr2GroupList;
+    private final BitwiseXor bitwiseXor;
+    private final List<BitwiseOr2Group> bitwiseOr2GroupList;
 
     public BitwiseOr(
             BitwiseXor bitwiseXor,
@@ -15,10 +15,18 @@ public class BitwiseOr {
         this.bitwiseOr2GroupList = bitwiseOr2GroupList;
     }
 
+    public BitwiseXor getBitwiseXor() {
+        return bitwiseXor;
+    }
+
+    public List<BitwiseOr2Group> getBitwiseOr2GroupList() {
+        return bitwiseOr2GroupList;
+    }
+
     // '|' 'bitwise_xor'
     public static class BitwiseOr2Group {
-        public final boolean isTokenBitOr;
-        public final BitwiseXor bitwiseXor;
+        private final boolean isTokenBitOr;
+        private final BitwiseXor bitwiseXor;
 
         public BitwiseOr2Group(
                 boolean isTokenBitOr,
@@ -26,6 +34,14 @@ public class BitwiseOr {
         ) {
             this.isTokenBitOr = isTokenBitOr;
             this.bitwiseXor = bitwiseXor;
+        }
+
+        public boolean getIsTokenBitOr() {
+            return isTokenBitOr;
+        }
+
+        public BitwiseXor getBitwiseXor() {
+            return bitwiseXor;
         }
     }
 }

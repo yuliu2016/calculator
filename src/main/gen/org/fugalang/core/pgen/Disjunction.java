@@ -4,8 +4,8 @@ import java.util.List;
 
 // disjunction: 'conjunction' ('or' 'conjunction')*
 public class Disjunction {
-    public final Conjunction conjunction;
-    public final List<Disjunction2Group> disjunction2GroupList;
+    private final Conjunction conjunction;
+    private final List<Disjunction2Group> disjunction2GroupList;
 
     public Disjunction(
             Conjunction conjunction,
@@ -15,10 +15,18 @@ public class Disjunction {
         this.disjunction2GroupList = disjunction2GroupList;
     }
 
+    public Conjunction getConjunction() {
+        return conjunction;
+    }
+
+    public List<Disjunction2Group> getDisjunction2GroupList() {
+        return disjunction2GroupList;
+    }
+
     // 'or' 'conjunction'
     public static class Disjunction2Group {
-        public final boolean isTokenOr;
-        public final Conjunction conjunction;
+        private final boolean isTokenOr;
+        private final Conjunction conjunction;
 
         public Disjunction2Group(
                 boolean isTokenOr,
@@ -26,6 +34,14 @@ public class Disjunction {
         ) {
             this.isTokenOr = isTokenOr;
             this.conjunction = conjunction;
+        }
+
+        public boolean getIsTokenOr() {
+            return isTokenOr;
+        }
+
+        public Conjunction getConjunction() {
+            return conjunction;
         }
     }
 }

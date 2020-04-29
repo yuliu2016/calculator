@@ -2,12 +2,12 @@ package org.fugalang.core.pgen;
 
 // small_stmt: 'expr_stmt' | 'del_stmt' | 'pass_stmt' | 'flow_stmt' | 'import_stmt' | 'assert_stmt'
 public class SmallStmt {
-    public final ExprStmt exprStmt;
-    public final DelStmt delStmt;
-    public final PassStmt passStmt;
-    public final FlowStmt flowStmt;
-    public final ImportStmt importStmt;
-    public final AssertStmt assertStmt;
+    private final ExprStmt exprStmt;
+    private final DelStmt delStmt;
+    private final PassStmt passStmt;
+    private final FlowStmt flowStmt;
+    private final ImportStmt importStmt;
+    private final AssertStmt assertStmt;
 
     public SmallStmt(
             ExprStmt exprStmt,
@@ -23,5 +23,29 @@ public class SmallStmt {
         this.flowStmt = flowStmt;
         this.importStmt = importStmt;
         this.assertStmt = assertStmt;
+    }
+
+    public ExprStmt getExprStmt() {
+        return exprStmt;
+    }
+
+    public DelStmt getDelStmt() {
+        return delStmt;
+    }
+
+    public PassStmt getPassStmt() {
+        return passStmt;
+    }
+
+    public FlowStmt getFlowStmt() {
+        return flowStmt;
+    }
+
+    public ImportStmt getImportStmt() {
+        return importStmt;
+    }
+
+    public AssertStmt getAssertStmt() {
+        return assertStmt;
     }
 }

@@ -4,9 +4,9 @@ import java.util.List;
 
 // subscriptlist: 'subscript' (',' 'subscript')* [',']
 public class Subscriptlist {
-    public final Subscript subscript;
-    public final List<Subscriptlist2Group> subscriptlist2GroupList;
-    public final boolean isTokenComma;
+    private final Subscript subscript;
+    private final List<Subscriptlist2Group> subscriptlist2GroupList;
+    private final boolean isTokenComma;
 
     public Subscriptlist(
             Subscript subscript,
@@ -18,10 +18,22 @@ public class Subscriptlist {
         this.isTokenComma = isTokenComma;
     }
 
+    public Subscript getSubscript() {
+        return subscript;
+    }
+
+    public List<Subscriptlist2Group> getSubscriptlist2GroupList() {
+        return subscriptlist2GroupList;
+    }
+
+    public boolean getIsTokenComma() {
+        return isTokenComma;
+    }
+
     // ',' 'subscript'
     public static class Subscriptlist2Group {
-        public final boolean isTokenComma;
-        public final Subscript subscript;
+        private final boolean isTokenComma;
+        private final Subscript subscript;
 
         public Subscriptlist2Group(
                 boolean isTokenComma,
@@ -29,6 +41,14 @@ public class Subscriptlist {
         ) {
             this.isTokenComma = isTokenComma;
             this.subscript = subscript;
+        }
+
+        public boolean getIsTokenComma() {
+            return isTokenComma;
+        }
+
+        public Subscript getSubscript() {
+            return subscript;
         }
     }
 }

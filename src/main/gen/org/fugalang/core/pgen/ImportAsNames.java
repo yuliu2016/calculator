@@ -4,9 +4,9 @@ import java.util.List;
 
 // import_as_names: 'import_as_name' (',' 'import_as_name')* [',']
 public class ImportAsNames {
-    public final ImportAsName importAsName;
-    public final List<ImportAsNames2Group> importAsNames2GroupList;
-    public final boolean isTokenComma;
+    private final ImportAsName importAsName;
+    private final List<ImportAsNames2Group> importAsNames2GroupList;
+    private final boolean isTokenComma;
 
     public ImportAsNames(
             ImportAsName importAsName,
@@ -18,10 +18,22 @@ public class ImportAsNames {
         this.isTokenComma = isTokenComma;
     }
 
+    public ImportAsName getImportAsName() {
+        return importAsName;
+    }
+
+    public List<ImportAsNames2Group> getImportAsNames2GroupList() {
+        return importAsNames2GroupList;
+    }
+
+    public boolean getIsTokenComma() {
+        return isTokenComma;
+    }
+
     // ',' 'import_as_name'
     public static class ImportAsNames2Group {
-        public final boolean isTokenComma;
-        public final ImportAsName importAsName;
+        private final boolean isTokenComma;
+        private final ImportAsName importAsName;
 
         public ImportAsNames2Group(
                 boolean isTokenComma,
@@ -29,6 +41,14 @@ public class ImportAsNames {
         ) {
             this.isTokenComma = isTokenComma;
             this.importAsName = importAsName;
+        }
+
+        public boolean getIsTokenComma() {
+            return isTokenComma;
+        }
+
+        public ImportAsName getImportAsName() {
+            return importAsName;
         }
     }
 }

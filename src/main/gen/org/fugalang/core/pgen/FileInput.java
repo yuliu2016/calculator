@@ -4,8 +4,8 @@ import java.util.List;
 
 // file_input: ('NEWLINE' | 'stmt')* 'ENDMARKER'
 public class FileInput {
-    public final List<FileInput1Group> fileInput1GroupList;
-    public final Object endmarker;
+    private final List<FileInput1Group> fileInput1GroupList;
+    private final Object endmarker;
 
     public FileInput(
             List<FileInput1Group> fileInput1GroupList,
@@ -15,10 +15,18 @@ public class FileInput {
         this.endmarker = endmarker;
     }
 
+    public List<FileInput1Group> getFileInput1GroupList() {
+        return fileInput1GroupList;
+    }
+
+    public Object getEndmarker() {
+        return endmarker;
+    }
+
     // 'NEWLINE' | 'stmt'
     public static class FileInput1Group {
-        public final Object newline;
-        public final Stmt stmt;
+        private final Object newline;
+        private final Stmt stmt;
 
         public FileInput1Group(
                 Object newline,
@@ -26,6 +34,14 @@ public class FileInput {
         ) {
             this.newline = newline;
             this.stmt = stmt;
+        }
+
+        public Object getNewline() {
+            return newline;
+        }
+
+        public Stmt getStmt() {
+            return stmt;
         }
     }
 }

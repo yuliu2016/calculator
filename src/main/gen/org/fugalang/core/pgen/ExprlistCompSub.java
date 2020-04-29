@@ -2,8 +2,8 @@ package org.fugalang.core.pgen;
 
 // exprlist_comp_sub: 'exprlist_comp' | 'subscript'
 public class ExprlistCompSub {
-    public final ExprlistComp exprlistComp;
-    public final Subscript subscript;
+    private final ExprlistComp exprlistComp;
+    private final Subscript subscript;
 
     public ExprlistCompSub(
             ExprlistComp exprlistComp,
@@ -11,5 +11,13 @@ public class ExprlistCompSub {
     ) {
         this.exprlistComp = exprlistComp;
         this.subscript = subscript;
+    }
+
+    public ExprlistComp getExprlistComp() {
+        return exprlistComp;
+    }
+
+    public Subscript getSubscript() {
+        return subscript;
     }
 }

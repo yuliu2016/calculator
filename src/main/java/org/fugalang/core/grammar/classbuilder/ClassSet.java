@@ -115,15 +115,22 @@ public class ClassSet {
         return builder;
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public void writeToFiles() {
-        var fileList = path.toFile().listFiles();
-        if (fileList != null) {
-            for (File file : fileList) {
-                //noinspection ResultOfMethodCallIgnored
-                file.delete();
-            }
-        }
         try {
+            var rootFile = path.toFile();
+
+            if (!rootFile.isDirectory()) {
+                rootFile.mkdirs();
+            }
+
+            var fileList = path.toFile().listFiles();
+            if (fileList != null) {
+                for (File file : fileList) {
+                    file.delete();
+                }
+            }
+
             for (var aClass : classes) {
                 Files.writeString(Paths.get(path.toString(),
                         aClass.getClassName() + ".java"), aClass.generateClassCode());

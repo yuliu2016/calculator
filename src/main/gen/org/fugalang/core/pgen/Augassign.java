@@ -2,19 +2,19 @@ package org.fugalang.core.pgen;
 
 // augassign: '+=' | '-=' | '*=' | '@=' | '/=' | '%=' | '&=' | '|=' | '^=' | '<<=' | '>>=' | '**=' | '//='
 public class Augassign {
-    public final boolean isTokenPlusAssign;
-    public final boolean isTokenMinusAssign;
-    public final boolean isTokenTimesAssign;
-    public final boolean isTokenMatrixTimesAssign;
-    public final boolean isTokenDivAssign;
-    public final boolean isTokenModulusAssign;
-    public final boolean isTokenBitAndAssign;
-    public final boolean isTokenBitOrAssign;
-    public final boolean isTokenBitXorAssign;
-    public final boolean isTokenLshiftAssign;
-    public final boolean isTokenRshiftAssign;
-    public final boolean isTokenPowerAssign;
-    public final boolean isTokenFloorDivAssign;
+    private final boolean isTokenPlusAssign;
+    private final boolean isTokenMinusAssign;
+    private final boolean isTokenTimesAssign;
+    private final boolean isTokenMatrixTimesAssign;
+    private final boolean isTokenDivAssign;
+    private final boolean isTokenModulusAssign;
+    private final boolean isTokenBitAndAssign;
+    private final boolean isTokenBitOrAssign;
+    private final boolean isTokenBitXorAssign;
+    private final boolean isTokenLshiftAssign;
+    private final boolean isTokenRshiftAssign;
+    private final boolean isTokenPowerAssign;
+    private final boolean isTokenFloorDivAssign;
 
     public Augassign(
             boolean isTokenPlusAssign,
@@ -44,5 +44,57 @@ public class Augassign {
         this.isTokenRshiftAssign = isTokenRshiftAssign;
         this.isTokenPowerAssign = isTokenPowerAssign;
         this.isTokenFloorDivAssign = isTokenFloorDivAssign;
+    }
+
+    public boolean getIsTokenPlusAssign() {
+        return isTokenPlusAssign;
+    }
+
+    public boolean getIsTokenMinusAssign() {
+        return isTokenMinusAssign;
+    }
+
+    public boolean getIsTokenTimesAssign() {
+        return isTokenTimesAssign;
+    }
+
+    public boolean getIsTokenMatrixTimesAssign() {
+        return isTokenMatrixTimesAssign;
+    }
+
+    public boolean getIsTokenDivAssign() {
+        return isTokenDivAssign;
+    }
+
+    public boolean getIsTokenModulusAssign() {
+        return isTokenModulusAssign;
+    }
+
+    public boolean getIsTokenBitAndAssign() {
+        return isTokenBitAndAssign;
+    }
+
+    public boolean getIsTokenBitOrAssign() {
+        return isTokenBitOrAssign;
+    }
+
+    public boolean getIsTokenBitXorAssign() {
+        return isTokenBitXorAssign;
+    }
+
+    public boolean getIsTokenLshiftAssign() {
+        return isTokenLshiftAssign;
+    }
+
+    public boolean getIsTokenRshiftAssign() {
+        return isTokenRshiftAssign;
+    }
+
+    public boolean getIsTokenPowerAssign() {
+        return isTokenPowerAssign;
+    }
+
+    public boolean getIsTokenFloorDivAssign() {
+        return isTokenFloorDivAssign;
     }
 }

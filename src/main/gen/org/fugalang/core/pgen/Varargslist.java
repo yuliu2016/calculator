@@ -4,9 +4,9 @@ import java.util.List;
 
 // varargslist: 'vfpdef' ['=' 'expr'] (',' 'vfpdef' ['=' 'expr'])*
 public class Varargslist {
-    public final Vfpdef vfpdef;
-    public final Varargslist2Group varargslist2Group;
-    public final List<Varargslist3Group> varargslist3GroupList;
+    private final Vfpdef vfpdef;
+    private final Varargslist2Group varargslist2Group;
+    private final List<Varargslist3Group> varargslist3GroupList;
 
     public Varargslist(
             Vfpdef vfpdef,
@@ -18,10 +18,22 @@ public class Varargslist {
         this.varargslist3GroupList = varargslist3GroupList;
     }
 
+    public Vfpdef getVfpdef() {
+        return vfpdef;
+    }
+
+    public Varargslist2Group getVarargslist2Group() {
+        return varargslist2Group;
+    }
+
+    public List<Varargslist3Group> getVarargslist3GroupList() {
+        return varargslist3GroupList;
+    }
+
     // '=' 'expr'
     public static class Varargslist2Group {
-        public final boolean isTokenAssign;
-        public final Expr expr;
+        private final boolean isTokenAssign;
+        private final Expr expr;
 
         public Varargslist2Group(
                 boolean isTokenAssign,
@@ -30,13 +42,21 @@ public class Varargslist {
             this.isTokenAssign = isTokenAssign;
             this.expr = expr;
         }
+
+        public boolean getIsTokenAssign() {
+            return isTokenAssign;
+        }
+
+        public Expr getExpr() {
+            return expr;
+        }
     }
 
     // ',' 'vfpdef' ['=' 'expr']
     public static class Varargslist3Group {
-        public final boolean isTokenComma;
-        public final Vfpdef vfpdef;
-        public final Varargslist3Group3Group varargslist3Group3Group;
+        private final boolean isTokenComma;
+        private final Vfpdef vfpdef;
+        private final Varargslist3Group3Group varargslist3Group3Group;
 
         public Varargslist3Group(
                 boolean isTokenComma,
@@ -47,12 +67,24 @@ public class Varargslist {
             this.vfpdef = vfpdef;
             this.varargslist3Group3Group = varargslist3Group3Group;
         }
+
+        public boolean getIsTokenComma() {
+            return isTokenComma;
+        }
+
+        public Vfpdef getVfpdef() {
+            return vfpdef;
+        }
+
+        public Varargslist3Group3Group getVarargslist3Group3Group() {
+            return varargslist3Group3Group;
+        }
     }
 
     // '=' 'expr'
     public static class Varargslist3Group3Group {
-        public final boolean isTokenAssign;
-        public final Expr expr;
+        private final boolean isTokenAssign;
+        private final Expr expr;
 
         public Varargslist3Group3Group(
                 boolean isTokenAssign,
@@ -60,6 +92,14 @@ public class Varargslist {
         ) {
             this.isTokenAssign = isTokenAssign;
             this.expr = expr;
+        }
+
+        public boolean getIsTokenAssign() {
+            return isTokenAssign;
+        }
+
+        public Expr getExpr() {
+            return expr;
         }
     }
 }

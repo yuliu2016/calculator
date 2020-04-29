@@ -4,9 +4,9 @@ import java.util.List;
 
 // exprlist_star: ('expr' | 'star_expr') (',' ('expr' | 'star_expr'))* [',']
 public class ExprlistStar {
-    public final ExprlistStar1Group exprlistStar1Group;
-    public final List<ExprlistStar2Group> exprlistStar2GroupList;
-    public final boolean isTokenComma;
+    private final ExprlistStar1Group exprlistStar1Group;
+    private final List<ExprlistStar2Group> exprlistStar2GroupList;
+    private final boolean isTokenComma;
 
     public ExprlistStar(
             ExprlistStar1Group exprlistStar1Group,
@@ -18,10 +18,22 @@ public class ExprlistStar {
         this.isTokenComma = isTokenComma;
     }
 
+    public ExprlistStar1Group getExprlistStar1Group() {
+        return exprlistStar1Group;
+    }
+
+    public List<ExprlistStar2Group> getExprlistStar2GroupList() {
+        return exprlistStar2GroupList;
+    }
+
+    public boolean getIsTokenComma() {
+        return isTokenComma;
+    }
+
     // 'expr' | 'star_expr'
     public static class ExprlistStar1Group {
-        public final Expr expr;
-        public final StarExpr starExpr;
+        private final Expr expr;
+        private final StarExpr starExpr;
 
         public ExprlistStar1Group(
                 Expr expr,
@@ -30,12 +42,20 @@ public class ExprlistStar {
             this.expr = expr;
             this.starExpr = starExpr;
         }
+
+        public Expr getExpr() {
+            return expr;
+        }
+
+        public StarExpr getStarExpr() {
+            return starExpr;
+        }
     }
 
     // ',' ('expr' | 'star_expr')
     public static class ExprlistStar2Group {
-        public final boolean isTokenComma;
-        public final ExprlistStar2Group2Group exprlistStar2Group2Group;
+        private final boolean isTokenComma;
+        private final ExprlistStar2Group2Group exprlistStar2Group2Group;
 
         public ExprlistStar2Group(
                 boolean isTokenComma,
@@ -44,12 +64,20 @@ public class ExprlistStar {
             this.isTokenComma = isTokenComma;
             this.exprlistStar2Group2Group = exprlistStar2Group2Group;
         }
+
+        public boolean getIsTokenComma() {
+            return isTokenComma;
+        }
+
+        public ExprlistStar2Group2Group getExprlistStar2Group2Group() {
+            return exprlistStar2Group2Group;
+        }
     }
 
     // 'expr' | 'star_expr'
     public static class ExprlistStar2Group2Group {
-        public final Expr expr;
-        public final StarExpr starExpr;
+        private final Expr expr;
+        private final StarExpr starExpr;
 
         public ExprlistStar2Group2Group(
                 Expr expr,
@@ -57,6 +85,14 @@ public class ExprlistStar {
         ) {
             this.expr = expr;
             this.starExpr = starExpr;
+        }
+
+        public Expr getExpr() {
+            return expr;
+        }
+
+        public StarExpr getStarExpr() {
+            return starExpr;
         }
     }
 }

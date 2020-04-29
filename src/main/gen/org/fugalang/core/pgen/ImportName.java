@@ -2,8 +2,8 @@ package org.fugalang.core.pgen;
 
 // import_name: 'import' 'dotted_as_names'
 public class ImportName {
-    public final boolean isTokenImport;
-    public final DottedAsNames dottedAsNames;
+    private final boolean isTokenImport;
+    private final DottedAsNames dottedAsNames;
 
     public ImportName(
             boolean isTokenImport,
@@ -11,5 +11,13 @@ public class ImportName {
     ) {
         this.isTokenImport = isTokenImport;
         this.dottedAsNames = dottedAsNames;
+    }
+
+    public boolean getIsTokenImport() {
+        return isTokenImport;
+    }
+
+    public DottedAsNames getDottedAsNames() {
+        return dottedAsNames;
     }
 }

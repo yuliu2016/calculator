@@ -4,9 +4,9 @@ import java.util.List;
 
 // try_stmt: 'try' 'suite' (('except_clause' 'suite')+ ['else' 'suite'] ['finally' 'suite'] | 'finally' 'suite')
 public class TryStmt {
-    public final boolean isTokenTry;
-    public final Suite suite;
-    public final TryStmt3Group tryStmt3Group;
+    private final boolean isTokenTry;
+    private final Suite suite;
+    private final TryStmt3Group tryStmt3Group;
 
     public TryStmt(
             boolean isTokenTry,
@@ -18,10 +18,22 @@ public class TryStmt {
         this.tryStmt3Group = tryStmt3Group;
     }
 
+    public boolean getIsTokenTry() {
+        return isTokenTry;
+    }
+
+    public Suite getSuite() {
+        return suite;
+    }
+
+    public TryStmt3Group getTryStmt3Group() {
+        return tryStmt3Group;
+    }
+
     // ('except_clause' 'suite')+ ['else' 'suite'] ['finally' 'suite'] | 'finally' 'suite'
     public static class TryStmt3Group {
-        public final TryStmt3Group1 tryStmt3Group1;
-        public final TryStmt3Group2 tryStmt3Group2;
+        private final TryStmt3Group1 tryStmt3Group1;
+        private final TryStmt3Group2 tryStmt3Group2;
 
         public TryStmt3Group(
                 TryStmt3Group1 tryStmt3Group1,
@@ -30,14 +42,22 @@ public class TryStmt {
             this.tryStmt3Group1 = tryStmt3Group1;
             this.tryStmt3Group2 = tryStmt3Group2;
         }
+
+        public TryStmt3Group1 getTryStmt3Group1() {
+            return tryStmt3Group1;
+        }
+
+        public TryStmt3Group2 getTryStmt3Group2() {
+            return tryStmt3Group2;
+        }
     }
 
     // ('except_clause' 'suite')+ ['else' 'suite'] ['finally' 'suite']
     public static class TryStmt3Group1 {
-        public final TryStmt3Group11Group tryStmt3Group11Group;
-        public final List<TryStmt3Group11Group> tryStmt3Group11GroupList;
-        public final TryStmt3Group12Group tryStmt3Group12Group;
-        public final TryStmt3Group13Group tryStmt3Group13Group;
+        private final TryStmt3Group11Group tryStmt3Group11Group;
+        private final List<TryStmt3Group11Group> tryStmt3Group11GroupList;
+        private final TryStmt3Group12Group tryStmt3Group12Group;
+        private final TryStmt3Group13Group tryStmt3Group13Group;
 
         public TryStmt3Group1(
                 TryStmt3Group11Group tryStmt3Group11Group,
@@ -50,12 +70,28 @@ public class TryStmt {
             this.tryStmt3Group12Group = tryStmt3Group12Group;
             this.tryStmt3Group13Group = tryStmt3Group13Group;
         }
+
+        public TryStmt3Group11Group getTryStmt3Group11Group() {
+            return tryStmt3Group11Group;
+        }
+
+        public List<TryStmt3Group11Group> getTryStmt3Group11GroupList() {
+            return tryStmt3Group11GroupList;
+        }
+
+        public TryStmt3Group12Group getTryStmt3Group12Group() {
+            return tryStmt3Group12Group;
+        }
+
+        public TryStmt3Group13Group getTryStmt3Group13Group() {
+            return tryStmt3Group13Group;
+        }
     }
 
     // 'except_clause' 'suite'
     public static class TryStmt3Group11Group {
-        public final ExceptClause exceptClause;
-        public final Suite suite;
+        private final ExceptClause exceptClause;
+        private final Suite suite;
 
         public TryStmt3Group11Group(
                 ExceptClause exceptClause,
@@ -64,12 +100,20 @@ public class TryStmt {
             this.exceptClause = exceptClause;
             this.suite = suite;
         }
+
+        public ExceptClause getExceptClause() {
+            return exceptClause;
+        }
+
+        public Suite getSuite() {
+            return suite;
+        }
     }
 
     // 'else' 'suite'
     public static class TryStmt3Group12Group {
-        public final boolean isTokenElse;
-        public final Suite suite;
+        private final boolean isTokenElse;
+        private final Suite suite;
 
         public TryStmt3Group12Group(
                 boolean isTokenElse,
@@ -78,12 +122,20 @@ public class TryStmt {
             this.isTokenElse = isTokenElse;
             this.suite = suite;
         }
+
+        public boolean getIsTokenElse() {
+            return isTokenElse;
+        }
+
+        public Suite getSuite() {
+            return suite;
+        }
     }
 
     // 'finally' 'suite'
     public static class TryStmt3Group13Group {
-        public final boolean isTokenFinally;
-        public final Suite suite;
+        private final boolean isTokenFinally;
+        private final Suite suite;
 
         public TryStmt3Group13Group(
                 boolean isTokenFinally,
@@ -92,12 +144,20 @@ public class TryStmt {
             this.isTokenFinally = isTokenFinally;
             this.suite = suite;
         }
+
+        public boolean getIsTokenFinally() {
+            return isTokenFinally;
+        }
+
+        public Suite getSuite() {
+            return suite;
+        }
     }
 
     // 'finally' 'suite'
     public static class TryStmt3Group2 {
-        public final boolean isTokenFinally;
-        public final Suite suite;
+        private final boolean isTokenFinally;
+        private final Suite suite;
 
         public TryStmt3Group2(
                 boolean isTokenFinally,
@@ -105,6 +165,14 @@ public class TryStmt {
         ) {
             this.isTokenFinally = isTokenFinally;
             this.suite = suite;
+        }
+
+        public boolean getIsTokenFinally() {
+            return isTokenFinally;
+        }
+
+        public Suite getSuite() {
+            return suite;
         }
     }
 }

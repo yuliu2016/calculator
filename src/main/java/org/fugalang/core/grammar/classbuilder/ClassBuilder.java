@@ -122,6 +122,11 @@ public class ClassBuilder {
 
         sb.append("    }\n");
 
+        for (ClassField field: fields) {
+            sb.append("\n");
+            sb.append(field.asGetter());
+        }
+
         if (isStaticInnerClass) {
             sb.append("}\n");
         }
@@ -135,11 +140,7 @@ public class ClassBuilder {
         classImports.add(classImport);
     }
 
-    public void addFieldByClassName(ClassName className, String fieldName) {
-        addField(className.asType(), fieldName);
-    }
-
-    public void addField(String type, String name) {
+    public void addFieldByClassName(ClassName type, String name, boolean isOptional) {
         String actualName;
 
         if (fieldNameCounter.containsKey(name)) {
@@ -152,7 +153,7 @@ public class ClassBuilder {
         }
 
         // add imports here
-        fields.add(new ClassField(type, actualName));
+        fields.add(new ClassField(type, actualName, isOptional));
     }
 
     public void setHeaderComments(String headerComments) {

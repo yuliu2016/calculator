@@ -2,8 +2,8 @@ package org.fugalang.core.pgen;
 
 // namedexpr_expr: 'NAME' [':=' 'expr']
 public class NamedexprExpr {
-    public final Object name;
-    public final NamedexprExpr2Group namedexprExpr2Group;
+    private final Object name;
+    private final NamedexprExpr2Group namedexprExpr2Group;
 
     public NamedexprExpr(
             Object name,
@@ -13,10 +13,18 @@ public class NamedexprExpr {
         this.namedexprExpr2Group = namedexprExpr2Group;
     }
 
+    public Object getName() {
+        return name;
+    }
+
+    public NamedexprExpr2Group getNamedexprExpr2Group() {
+        return namedexprExpr2Group;
+    }
+
     // ':=' 'expr'
     public static class NamedexprExpr2Group {
-        public final boolean isTokenAsgnExpr;
-        public final Expr expr;
+        private final boolean isTokenAsgnExpr;
+        private final Expr expr;
 
         public NamedexprExpr2Group(
                 boolean isTokenAsgnExpr,
@@ -24,6 +32,14 @@ public class NamedexprExpr {
         ) {
             this.isTokenAsgnExpr = isTokenAsgnExpr;
             this.expr = expr;
+        }
+
+        public boolean getIsTokenAsgnExpr() {
+            return isTokenAsgnExpr;
+        }
+
+        public Expr getExpr() {
+            return expr;
         }
     }
 }

@@ -4,9 +4,9 @@ import java.util.List;
 
 // exprlist: 'expr' (',' 'expr')* [',']
 public class Exprlist {
-    public final Expr expr;
-    public final List<Exprlist2Group> exprlist2GroupList;
-    public final boolean isTokenComma;
+    private final Expr expr;
+    private final List<Exprlist2Group> exprlist2GroupList;
+    private final boolean isTokenComma;
 
     public Exprlist(
             Expr expr,
@@ -18,10 +18,22 @@ public class Exprlist {
         this.isTokenComma = isTokenComma;
     }
 
+    public Expr getExpr() {
+        return expr;
+    }
+
+    public List<Exprlist2Group> getExprlist2GroupList() {
+        return exprlist2GroupList;
+    }
+
+    public boolean getIsTokenComma() {
+        return isTokenComma;
+    }
+
     // ',' 'expr'
     public static class Exprlist2Group {
-        public final boolean isTokenComma;
-        public final Expr expr;
+        private final boolean isTokenComma;
+        private final Expr expr;
 
         public Exprlist2Group(
                 boolean isTokenComma,
@@ -29,6 +41,14 @@ public class Exprlist {
         ) {
             this.isTokenComma = isTokenComma;
             this.expr = expr;
+        }
+
+        public boolean getIsTokenComma() {
+            return isTokenComma;
+        }
+
+        public Expr getExpr() {
+            return expr;
         }
     }
 }

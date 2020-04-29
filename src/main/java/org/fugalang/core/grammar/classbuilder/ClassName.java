@@ -8,13 +8,15 @@ import java.util.List;
 public class ClassName {
     private final String realClassName;
     private final List<String> genericWrappers;
+    private final String typeStr;
 
     private ClassName(String realClassName, List<String> genericWrappers) {
         this.realClassName = realClassName;
         this.genericWrappers = genericWrappers;
+        typeStr = computeType();
     }
 
-    public String asType() {
+    private String computeType() {
         StringBuilder sb = new StringBuilder();
 
         for (String genericWrapper : genericWrappers) {
@@ -32,11 +34,14 @@ public class ClassName {
         }
 
         sb.append(">".repeat(genericWrappers.size()));
-
         return sb.toString();
     }
 
-    public ClassName wrap(String genericWrapper) {
+    public String asType() {
+        return typeStr;
+    }
+
+    public ClassName wrapIn(String genericWrapper) {
         List<String> wrappers = new ArrayList<>();
         wrappers.add(genericWrapper);
         wrappers.addAll(genericWrappers);
@@ -49,5 +54,10 @@ public class ClassName {
 
     public static ClassName of(String realClassName) {
         return new ClassName(realClassName, List.of());
+    }
+
+    @Override
+    public String toString() {
+        return typeStr;
     }
 }

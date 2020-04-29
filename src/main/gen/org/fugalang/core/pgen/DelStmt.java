@@ -2,8 +2,8 @@ package org.fugalang.core.pgen;
 
 // del_stmt: 'del' 'targets'
 public class DelStmt {
-    public final boolean isTokenDel;
-    public final Targets targets;
+    private final boolean isTokenDel;
+    private final Targets targets;
 
     public DelStmt(
             boolean isTokenDel,
@@ -11,5 +11,13 @@ public class DelStmt {
     ) {
         this.isTokenDel = isTokenDel;
         this.targets = targets;
+    }
+
+    public boolean getIsTokenDel() {
+        return isTokenDel;
+    }
+
+    public Targets getTargets() {
+        return targets;
     }
 }

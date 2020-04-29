@@ -4,9 +4,9 @@ import java.util.List;
 
 // dotted_as_names: 'dotted_as_name' (',' 'dotted_as_name')* [',']
 public class DottedAsNames {
-    public final DottedAsName dottedAsName;
-    public final List<DottedAsNames2Group> dottedAsNames2GroupList;
-    public final boolean isTokenComma;
+    private final DottedAsName dottedAsName;
+    private final List<DottedAsNames2Group> dottedAsNames2GroupList;
+    private final boolean isTokenComma;
 
     public DottedAsNames(
             DottedAsName dottedAsName,
@@ -18,10 +18,22 @@ public class DottedAsNames {
         this.isTokenComma = isTokenComma;
     }
 
+    public DottedAsName getDottedAsName() {
+        return dottedAsName;
+    }
+
+    public List<DottedAsNames2Group> getDottedAsNames2GroupList() {
+        return dottedAsNames2GroupList;
+    }
+
+    public boolean getIsTokenComma() {
+        return isTokenComma;
+    }
+
     // ',' 'dotted_as_name'
     public static class DottedAsNames2Group {
-        public final boolean isTokenComma;
-        public final DottedAsName dottedAsName;
+        private final boolean isTokenComma;
+        private final DottedAsName dottedAsName;
 
         public DottedAsNames2Group(
                 boolean isTokenComma,
@@ -29,6 +41,14 @@ public class DottedAsNames {
         ) {
             this.isTokenComma = isTokenComma;
             this.dottedAsName = dottedAsName;
+        }
+
+        public boolean getIsTokenComma() {
+            return isTokenComma;
+        }
+
+        public DottedAsName getDottedAsName() {
+            return dottedAsName;
         }
     }
 }

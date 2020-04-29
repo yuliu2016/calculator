@@ -2,8 +2,8 @@ package org.fugalang.core.pgen;
 
 // dictorsetmaker: 'dict_maker' | 'set_maker'
 public class Dictorsetmaker {
-    public final DictMaker dictMaker;
-    public final SetMaker setMaker;
+    private final DictMaker dictMaker;
+    private final SetMaker setMaker;
 
     public Dictorsetmaker(
             DictMaker dictMaker,
@@ -11,5 +11,13 @@ public class Dictorsetmaker {
     ) {
         this.dictMaker = dictMaker;
         this.setMaker = setMaker;
+    }
+
+    public DictMaker getDictMaker() {
+        return dictMaker;
+    }
+
+    public SetMaker getSetMaker() {
+        return setMaker;
     }
 }

@@ -4,8 +4,8 @@ import java.util.List;
 
 // set_maker: ('expr' | 'star_expr') ('comp_for' | (',' ('expr' | 'star_expr'))* [','])
 public class SetMaker {
-    public final SetMaker1Group setMaker1Group;
-    public final SetMaker2Group setMaker2Group;
+    private final SetMaker1Group setMaker1Group;
+    private final SetMaker2Group setMaker2Group;
 
     public SetMaker(
             SetMaker1Group setMaker1Group,
@@ -15,10 +15,18 @@ public class SetMaker {
         this.setMaker2Group = setMaker2Group;
     }
 
+    public SetMaker1Group getSetMaker1Group() {
+        return setMaker1Group;
+    }
+
+    public SetMaker2Group getSetMaker2Group() {
+        return setMaker2Group;
+    }
+
     // 'expr' | 'star_expr'
     public static class SetMaker1Group {
-        public final Expr expr;
-        public final StarExpr starExpr;
+        private final Expr expr;
+        private final StarExpr starExpr;
 
         public SetMaker1Group(
                 Expr expr,
@@ -27,12 +35,20 @@ public class SetMaker {
             this.expr = expr;
             this.starExpr = starExpr;
         }
+
+        public Expr getExpr() {
+            return expr;
+        }
+
+        public StarExpr getStarExpr() {
+            return starExpr;
+        }
     }
 
     // 'comp_for' | (',' ('expr' | 'star_expr'))* [',']
     public static class SetMaker2Group {
-        public final CompFor compFor;
-        public final SetMaker2Group2 setMaker2Group2;
+        private final CompFor compFor;
+        private final SetMaker2Group2 setMaker2Group2;
 
         public SetMaker2Group(
                 CompFor compFor,
@@ -41,12 +57,20 @@ public class SetMaker {
             this.compFor = compFor;
             this.setMaker2Group2 = setMaker2Group2;
         }
+
+        public CompFor getCompFor() {
+            return compFor;
+        }
+
+        public SetMaker2Group2 getSetMaker2Group2() {
+            return setMaker2Group2;
+        }
     }
 
     // (',' ('expr' | 'star_expr'))* [',']
     public static class SetMaker2Group2 {
-        public final List<SetMaker2Group21Group> setMaker2Group21GroupList;
-        public final boolean isTokenComma;
+        private final List<SetMaker2Group21Group> setMaker2Group21GroupList;
+        private final boolean isTokenComma;
 
         public SetMaker2Group2(
                 List<SetMaker2Group21Group> setMaker2Group21GroupList,
@@ -55,12 +79,20 @@ public class SetMaker {
             this.setMaker2Group21GroupList = setMaker2Group21GroupList;
             this.isTokenComma = isTokenComma;
         }
+
+        public List<SetMaker2Group21Group> getSetMaker2Group21GroupList() {
+            return setMaker2Group21GroupList;
+        }
+
+        public boolean getIsTokenComma() {
+            return isTokenComma;
+        }
     }
 
     // ',' ('expr' | 'star_expr')
     public static class SetMaker2Group21Group {
-        public final boolean isTokenComma;
-        public final SetMaker2Group21Group2Group setMaker2Group21Group2Group;
+        private final boolean isTokenComma;
+        private final SetMaker2Group21Group2Group setMaker2Group21Group2Group;
 
         public SetMaker2Group21Group(
                 boolean isTokenComma,
@@ -69,12 +101,20 @@ public class SetMaker {
             this.isTokenComma = isTokenComma;
             this.setMaker2Group21Group2Group = setMaker2Group21Group2Group;
         }
+
+        public boolean getIsTokenComma() {
+            return isTokenComma;
+        }
+
+        public SetMaker2Group21Group2Group getSetMaker2Group21Group2Group() {
+            return setMaker2Group21Group2Group;
+        }
     }
 
     // 'expr' | 'star_expr'
     public static class SetMaker2Group21Group2Group {
-        public final Expr expr;
-        public final StarExpr starExpr;
+        private final Expr expr;
+        private final StarExpr starExpr;
 
         public SetMaker2Group21Group2Group(
                 Expr expr,
@@ -82,6 +122,14 @@ public class SetMaker {
         ) {
             this.expr = expr;
             this.starExpr = starExpr;
+        }
+
+        public Expr getExpr() {
+            return expr;
+        }
+
+        public StarExpr getStarExpr() {
+            return starExpr;
         }
     }
 }

@@ -4,9 +4,9 @@ import java.util.List;
 
 // arglist: 'argument' (',' 'argument')* [',']
 public class Arglist {
-    public final Argument argument;
-    public final List<Arglist2Group> arglist2GroupList;
-    public final boolean isTokenComma;
+    private final Argument argument;
+    private final List<Arglist2Group> arglist2GroupList;
+    private final boolean isTokenComma;
 
     public Arglist(
             Argument argument,
@@ -18,10 +18,22 @@ public class Arglist {
         this.isTokenComma = isTokenComma;
     }
 
+    public Argument getArgument() {
+        return argument;
+    }
+
+    public List<Arglist2Group> getArglist2GroupList() {
+        return arglist2GroupList;
+    }
+
+    public boolean getIsTokenComma() {
+        return isTokenComma;
+    }
+
     // ',' 'argument'
     public static class Arglist2Group {
-        public final boolean isTokenComma;
-        public final Argument argument;
+        private final boolean isTokenComma;
+        private final Argument argument;
 
         public Arglist2Group(
                 boolean isTokenComma,
@@ -29,6 +41,14 @@ public class Arglist {
         ) {
             this.isTokenComma = isTokenComma;
             this.argument = argument;
+        }
+
+        public boolean getIsTokenComma() {
+            return isTokenComma;
+        }
+
+        public Argument getArgument() {
+            return argument;
         }
     }
 }

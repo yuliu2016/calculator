@@ -2,11 +2,11 @@ package org.fugalang.core.pgen;
 
 // argument: 'NAME' ['comp_for'] | 'NAME' ':=' 'expr' | 'NAME' '=' 'expr' | '**' 'expr' | '*' 'expr'
 public class Argument {
-    public final Argument1 argument1;
-    public final Argument2 argument2;
-    public final Argument3 argument3;
-    public final Argument4 argument4;
-    public final Argument5 argument5;
+    private final Argument1 argument1;
+    private final Argument2 argument2;
+    private final Argument3 argument3;
+    private final Argument4 argument4;
+    private final Argument5 argument5;
 
     public Argument(
             Argument1 argument1,
@@ -22,10 +22,30 @@ public class Argument {
         this.argument5 = argument5;
     }
 
+    public Argument1 getArgument1() {
+        return argument1;
+    }
+
+    public Argument2 getArgument2() {
+        return argument2;
+    }
+
+    public Argument3 getArgument3() {
+        return argument3;
+    }
+
+    public Argument4 getArgument4() {
+        return argument4;
+    }
+
+    public Argument5 getArgument5() {
+        return argument5;
+    }
+
     // 'NAME' ['comp_for']
     public static class Argument1 {
-        public final Object name;
-        public final CompFor compFor;
+        private final Object name;
+        private final CompFor compFor;
 
         public Argument1(
                 Object name,
@@ -34,13 +54,21 @@ public class Argument {
             this.name = name;
             this.compFor = compFor;
         }
+
+        public Object getName() {
+            return name;
+        }
+
+        public CompFor getCompFor() {
+            return compFor;
+        }
     }
 
     // 'NAME' ':=' 'expr'
     public static class Argument2 {
-        public final Object name;
-        public final boolean isTokenAsgnExpr;
-        public final Expr expr;
+        private final Object name;
+        private final boolean isTokenAsgnExpr;
+        private final Expr expr;
 
         public Argument2(
                 Object name,
@@ -51,13 +79,25 @@ public class Argument {
             this.isTokenAsgnExpr = isTokenAsgnExpr;
             this.expr = expr;
         }
+
+        public Object getName() {
+            return name;
+        }
+
+        public boolean getIsTokenAsgnExpr() {
+            return isTokenAsgnExpr;
+        }
+
+        public Expr getExpr() {
+            return expr;
+        }
     }
 
     // 'NAME' '=' 'expr'
     public static class Argument3 {
-        public final Object name;
-        public final boolean isTokenAssign;
-        public final Expr expr;
+        private final Object name;
+        private final boolean isTokenAssign;
+        private final Expr expr;
 
         public Argument3(
                 Object name,
@@ -68,12 +108,24 @@ public class Argument {
             this.isTokenAssign = isTokenAssign;
             this.expr = expr;
         }
+
+        public Object getName() {
+            return name;
+        }
+
+        public boolean getIsTokenAssign() {
+            return isTokenAssign;
+        }
+
+        public Expr getExpr() {
+            return expr;
+        }
     }
 
     // '**' 'expr'
     public static class Argument4 {
-        public final boolean isTokenPower;
-        public final Expr expr;
+        private final boolean isTokenPower;
+        private final Expr expr;
 
         public Argument4(
                 boolean isTokenPower,
@@ -82,12 +134,20 @@ public class Argument {
             this.isTokenPower = isTokenPower;
             this.expr = expr;
         }
+
+        public boolean getIsTokenPower() {
+            return isTokenPower;
+        }
+
+        public Expr getExpr() {
+            return expr;
+        }
     }
 
     // '*' 'expr'
     public static class Argument5 {
-        public final boolean isTokenTimes;
-        public final Expr expr;
+        private final boolean isTokenTimes;
+        private final Expr expr;
 
         public Argument5(
                 boolean isTokenTimes,
@@ -95,6 +155,14 @@ public class Argument {
         ) {
             this.isTokenTimes = isTokenTimes;
             this.expr = expr;
+        }
+
+        public boolean getIsTokenTimes() {
+            return isTokenTimes;
+        }
+
+        public Expr getExpr() {
+            return expr;
         }
     }
 }

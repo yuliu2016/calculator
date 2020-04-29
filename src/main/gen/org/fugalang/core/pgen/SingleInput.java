@@ -2,9 +2,9 @@ package org.fugalang.core.pgen;
 
 // single_input: 'NEWLINE' | 'simple_stmt' | 'compound_stmt' 'NEWLINE'
 public class SingleInput {
-    public final Object newline;
-    public final SimpleStmt simpleStmt;
-    public final SingleInput3 singleInput3;
+    private final Object newline;
+    private final SimpleStmt simpleStmt;
+    private final SingleInput3 singleInput3;
 
     public SingleInput(
             Object newline,
@@ -16,10 +16,22 @@ public class SingleInput {
         this.singleInput3 = singleInput3;
     }
 
+    public Object getNewline() {
+        return newline;
+    }
+
+    public SimpleStmt getSimpleStmt() {
+        return simpleStmt;
+    }
+
+    public SingleInput3 getSingleInput3() {
+        return singleInput3;
+    }
+
     // 'compound_stmt' 'NEWLINE'
     public static class SingleInput3 {
-        public final CompoundStmt compoundStmt;
-        public final Object newline;
+        private final CompoundStmt compoundStmt;
+        private final Object newline;
 
         public SingleInput3(
                 CompoundStmt compoundStmt,
@@ -27,6 +39,14 @@ public class SingleInput {
         ) {
             this.compoundStmt = compoundStmt;
             this.newline = newline;
+        }
+
+        public CompoundStmt getCompoundStmt() {
+            return compoundStmt;
+        }
+
+        public Object getNewline() {
+            return newline;
         }
     }
 }
