@@ -1,5 +1,6 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
 import org.fugalang.core.parser.DisjunctionRule;
 
@@ -33,6 +34,16 @@ public final class Inversion extends DisjunctionRule {
         return comparison;
     }
 
+    public static boolean parse(ParseTree parseTree, int level) {
+        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            return false;
+        }
+        var marker = parseTree.enter(level, RULE_NAME);
+        var result = false;
+        parseTree.exit(level, marker, result);
+        return result;
+    }
+
     // 'not' 'inversion'
     public static final class Inversion1 extends ConjunctionRule {
         public static final String RULE_NAME = "inversion:1";
@@ -61,6 +72,16 @@ public final class Inversion extends DisjunctionRule {
 
         public Inversion inversion() {
             return inversion;
+        }
+
+        public static boolean parse(ParseTree parseTree, int level) {
+            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+                return false;
+            }
+            var marker = parseTree.enter(level, RULE_NAME);
+            var result = false;
+            parseTree.exit(level, marker, result);
+            return result;
         }
     }
 }

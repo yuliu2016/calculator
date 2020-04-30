@@ -1,5 +1,6 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
 import java.util.Optional;
 
@@ -33,6 +34,16 @@ public final class WithItem extends ConjunctionRule {
         return Optional.ofNullable(withItem2);
     }
 
+    public static boolean parse(ParseTree parseTree, int level) {
+        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            return false;
+        }
+        var marker = parseTree.enter(level, RULE_NAME);
+        var result = false;
+        parseTree.exit(level, marker, result);
+        return result;
+    }
+
     // 'as' 'NAME'
     public static final class WithItem2 extends ConjunctionRule {
         public static final String RULE_NAME = "with_item:2";
@@ -61,6 +72,16 @@ public final class WithItem extends ConjunctionRule {
 
         public String name() {
             return name;
+        }
+
+        public static boolean parse(ParseTree parseTree, int level) {
+            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+                return false;
+            }
+            var marker = parseTree.enter(level, RULE_NAME);
+            var result = false;
+            parseTree.exit(level, marker, result);
+            return result;
         }
     }
 }

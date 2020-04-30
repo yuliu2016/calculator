@@ -1,5 +1,6 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
 import java.util.List;
 import java.util.Optional;
@@ -43,6 +44,16 @@ public final class TryStmt extends ConjunctionRule {
         return tryStmt3;
     }
 
+    public static boolean parse(ParseTree parseTree, int level) {
+        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            return false;
+        }
+        var marker = parseTree.enter(level, RULE_NAME);
+        var result = false;
+        parseTree.exit(level, marker, result);
+        return result;
+    }
+
     // ('except_clause' 'suite')+ ['else' 'suite'] ['finally' 'suite'] | 'finally' 'suite'
     public static final class TryStmt3 extends DisjunctionRule {
         public static final String RULE_NAME = "try_stmt:3";
@@ -71,6 +82,16 @@ public final class TryStmt extends ConjunctionRule {
 
         public TryStmt32 tryStmt32() {
             return tryStmt32;
+        }
+
+        public static boolean parse(ParseTree parseTree, int level) {
+            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+                return false;
+            }
+            var marker = parseTree.enter(level, RULE_NAME);
+            var result = false;
+            parseTree.exit(level, marker, result);
+            return result;
         }
     }
 
@@ -119,6 +140,16 @@ public final class TryStmt extends ConjunctionRule {
         public Optional<TryStmt313> tryStmt313() {
             return Optional.ofNullable(tryStmt313);
         }
+
+        public static boolean parse(ParseTree parseTree, int level) {
+            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+                return false;
+            }
+            var marker = parseTree.enter(level, RULE_NAME);
+            var result = false;
+            parseTree.exit(level, marker, result);
+            return result;
+        }
     }
 
     // 'except_clause' 'suite'
@@ -149,6 +180,16 @@ public final class TryStmt extends ConjunctionRule {
 
         public Suite suite() {
             return suite;
+        }
+
+        public static boolean parse(ParseTree parseTree, int level) {
+            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+                return false;
+            }
+            var marker = parseTree.enter(level, RULE_NAME);
+            var result = false;
+            parseTree.exit(level, marker, result);
+            return result;
         }
     }
 
@@ -181,6 +222,16 @@ public final class TryStmt extends ConjunctionRule {
         public Suite suite() {
             return suite;
         }
+
+        public static boolean parse(ParseTree parseTree, int level) {
+            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+                return false;
+            }
+            var marker = parseTree.enter(level, RULE_NAME);
+            var result = false;
+            parseTree.exit(level, marker, result);
+            return result;
+        }
     }
 
     // 'finally' 'suite'
@@ -212,6 +263,16 @@ public final class TryStmt extends ConjunctionRule {
         public Suite suite() {
             return suite;
         }
+
+        public static boolean parse(ParseTree parseTree, int level) {
+            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+                return false;
+            }
+            var marker = parseTree.enter(level, RULE_NAME);
+            var result = false;
+            parseTree.exit(level, marker, result);
+            return result;
+        }
     }
 
     // 'finally' 'suite'
@@ -242,6 +303,16 @@ public final class TryStmt extends ConjunctionRule {
 
         public Suite suite() {
             return suite;
+        }
+
+        public static boolean parse(ParseTree parseTree, int level) {
+            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+                return false;
+            }
+            var marker = parseTree.enter(level, RULE_NAME);
+            var result = false;
+            parseTree.exit(level, marker, result);
+            return result;
         }
     }
 }

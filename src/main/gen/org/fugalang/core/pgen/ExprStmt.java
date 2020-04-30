@@ -1,5 +1,6 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
 import java.util.List;
 import java.util.Optional;
@@ -35,6 +36,16 @@ public final class ExprStmt extends ConjunctionRule {
         return Optional.ofNullable(exprStmt2);
     }
 
+    public static boolean parse(ParseTree parseTree, int level) {
+        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            return false;
+        }
+        var marker = parseTree.enter(level, RULE_NAME);
+        var result = false;
+        parseTree.exit(level, marker, result);
+        return result;
+    }
+
     // 'augassign' 'exprlist' | ('=' 'exprlist_star')*
     public static final class ExprStmt2 extends DisjunctionRule {
         public static final String RULE_NAME = "expr_stmt:2";
@@ -63,6 +74,16 @@ public final class ExprStmt extends ConjunctionRule {
 
         public List<ExprStmt22> exprStmt22List() {
             return exprStmt22List;
+        }
+
+        public static boolean parse(ParseTree parseTree, int level) {
+            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+                return false;
+            }
+            var marker = parseTree.enter(level, RULE_NAME);
+            var result = false;
+            parseTree.exit(level, marker, result);
+            return result;
         }
     }
 
@@ -95,6 +116,16 @@ public final class ExprStmt extends ConjunctionRule {
         public Exprlist exprlist() {
             return exprlist;
         }
+
+        public static boolean parse(ParseTree parseTree, int level) {
+            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+                return false;
+            }
+            var marker = parseTree.enter(level, RULE_NAME);
+            var result = false;
+            parseTree.exit(level, marker, result);
+            return result;
+        }
     }
 
     // '=' 'exprlist_star'
@@ -125,6 +156,16 @@ public final class ExprStmt extends ConjunctionRule {
 
         public ExprlistStar exprlistStar() {
             return exprlistStar;
+        }
+
+        public static boolean parse(ParseTree parseTree, int level) {
+            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+                return false;
+            }
+            var marker = parseTree.enter(level, RULE_NAME);
+            var result = false;
+            parseTree.exit(level, marker, result);
+            return result;
         }
     }
 }

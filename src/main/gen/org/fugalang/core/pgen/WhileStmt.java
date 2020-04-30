@@ -1,5 +1,6 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
 import java.util.Optional;
 
@@ -49,6 +50,16 @@ public final class WhileStmt extends ConjunctionRule {
         return Optional.ofNullable(whileStmt4);
     }
 
+    public static boolean parse(ParseTree parseTree, int level) {
+        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            return false;
+        }
+        var marker = parseTree.enter(level, RULE_NAME);
+        var result = false;
+        parseTree.exit(level, marker, result);
+        return result;
+    }
+
     // 'else' 'suite'
     public static final class WhileStmt4 extends ConjunctionRule {
         public static final String RULE_NAME = "while_stmt:4";
@@ -77,6 +88,16 @@ public final class WhileStmt extends ConjunctionRule {
 
         public Suite suite() {
             return suite;
+        }
+
+        public static boolean parse(ParseTree parseTree, int level) {
+            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+                return false;
+            }
+            var marker = parseTree.enter(level, RULE_NAME);
+            var result = false;
+            parseTree.exit(level, marker, result);
+            return result;
         }
     }
 }

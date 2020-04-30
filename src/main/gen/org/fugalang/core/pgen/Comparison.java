@@ -1,5 +1,6 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
 import java.util.List;
 
@@ -33,6 +34,16 @@ public final class Comparison extends ConjunctionRule {
         return comparison2List;
     }
 
+    public static boolean parse(ParseTree parseTree, int level) {
+        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            return false;
+        }
+        var marker = parseTree.enter(level, RULE_NAME);
+        var result = false;
+        parseTree.exit(level, marker, result);
+        return result;
+    }
+
     // 'comp_op' 'bitwise_or'
     public static final class Comparison2 extends ConjunctionRule {
         public static final String RULE_NAME = "comparison:2";
@@ -61,6 +72,16 @@ public final class Comparison extends ConjunctionRule {
 
         public BitwiseOr bitwiseOr() {
             return bitwiseOr;
+        }
+
+        public static boolean parse(ParseTree parseTree, int level) {
+            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+                return false;
+            }
+            var marker = parseTree.enter(level, RULE_NAME);
+            var result = false;
+            parseTree.exit(level, marker, result);
+            return result;
         }
     }
 }

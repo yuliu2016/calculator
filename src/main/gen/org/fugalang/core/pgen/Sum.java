@@ -1,5 +1,6 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
 import java.util.List;
 import org.fugalang.core.parser.DisjunctionRule;
@@ -34,6 +35,16 @@ public final class Sum extends ConjunctionRule {
         return sum2List;
     }
 
+    public static boolean parse(ParseTree parseTree, int level) {
+        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            return false;
+        }
+        var marker = parseTree.enter(level, RULE_NAME);
+        var result = false;
+        parseTree.exit(level, marker, result);
+        return result;
+    }
+
     // ('+' | '-') 'term'
     public static final class Sum2 extends ConjunctionRule {
         public static final String RULE_NAME = "sum:2";
@@ -62,6 +73,16 @@ public final class Sum extends ConjunctionRule {
 
         public Term term() {
             return term;
+        }
+
+        public static boolean parse(ParseTree parseTree, int level) {
+            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+                return false;
+            }
+            var marker = parseTree.enter(level, RULE_NAME);
+            var result = false;
+            parseTree.exit(level, marker, result);
+            return result;
         }
     }
 
@@ -93,6 +114,16 @@ public final class Sum extends ConjunctionRule {
 
         public boolean isTokenMinus() {
             return isTokenMinus;
+        }
+
+        public static boolean parse(ParseTree parseTree, int level) {
+            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+                return false;
+            }
+            var marker = parseTree.enter(level, RULE_NAME);
+            var result = false;
+            parseTree.exit(level, marker, result);
+            return result;
         }
     }
 }

@@ -1,5 +1,6 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
 import java.util.Optional;
 import org.fugalang.core.parser.DisjunctionRule;
@@ -50,6 +51,16 @@ public final class Trailer extends DisjunctionRule {
         return blockSuite;
     }
 
+    public static boolean parse(ParseTree parseTree, int level) {
+        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            return false;
+        }
+        var marker = parseTree.enter(level, RULE_NAME);
+        var result = false;
+        parseTree.exit(level, marker, result);
+        return result;
+    }
+
     // '(' ['arglist'] ')'
     public static final class Trailer1 extends ConjunctionRule {
         public static final String RULE_NAME = "trailer:1";
@@ -86,6 +97,16 @@ public final class Trailer extends DisjunctionRule {
 
         public boolean isTokenRpar() {
             return isTokenRpar;
+        }
+
+        public static boolean parse(ParseTree parseTree, int level) {
+            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+                return false;
+            }
+            var marker = parseTree.enter(level, RULE_NAME);
+            var result = false;
+            parseTree.exit(level, marker, result);
+            return result;
         }
     }
 
@@ -126,6 +147,16 @@ public final class Trailer extends DisjunctionRule {
         public boolean isTokenRsqb() {
             return isTokenRsqb;
         }
+
+        public static boolean parse(ParseTree parseTree, int level) {
+            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+                return false;
+            }
+            var marker = parseTree.enter(level, RULE_NAME);
+            var result = false;
+            parseTree.exit(level, marker, result);
+            return result;
+        }
     }
 
     // '.' 'NAME'
@@ -156,6 +187,16 @@ public final class Trailer extends DisjunctionRule {
 
         public String name() {
             return name;
+        }
+
+        public static boolean parse(ParseTree parseTree, int level) {
+            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+                return false;
+            }
+            var marker = parseTree.enter(level, RULE_NAME);
+            var result = false;
+            parseTree.exit(level, marker, result);
+            return result;
         }
     }
 }

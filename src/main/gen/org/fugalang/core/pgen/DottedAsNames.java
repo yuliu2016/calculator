@@ -1,5 +1,6 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
 import java.util.List;
 
@@ -41,6 +42,16 @@ public final class DottedAsNames extends ConjunctionRule {
         return isTokenComma;
     }
 
+    public static boolean parse(ParseTree parseTree, int level) {
+        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            return false;
+        }
+        var marker = parseTree.enter(level, RULE_NAME);
+        var result = false;
+        parseTree.exit(level, marker, result);
+        return result;
+    }
+
     // ',' 'dotted_as_name'
     public static final class DottedAsNames2 extends ConjunctionRule {
         public static final String RULE_NAME = "dotted_as_names:2";
@@ -69,6 +80,16 @@ public final class DottedAsNames extends ConjunctionRule {
 
         public DottedAsName dottedAsName() {
             return dottedAsName;
+        }
+
+        public static boolean parse(ParseTree parseTree, int level) {
+            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+                return false;
+            }
+            var marker = parseTree.enter(level, RULE_NAME);
+            var result = false;
+            parseTree.exit(level, marker, result);
+            return result;
         }
     }
 }

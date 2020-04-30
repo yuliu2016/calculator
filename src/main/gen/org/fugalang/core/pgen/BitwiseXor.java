@@ -1,5 +1,6 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
 import java.util.List;
 
@@ -33,6 +34,16 @@ public final class BitwiseXor extends ConjunctionRule {
         return bitwiseXor2List;
     }
 
+    public static boolean parse(ParseTree parseTree, int level) {
+        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            return false;
+        }
+        var marker = parseTree.enter(level, RULE_NAME);
+        var result = false;
+        parseTree.exit(level, marker, result);
+        return result;
+    }
+
     // '^' 'bitwise_and'
     public static final class BitwiseXor2 extends ConjunctionRule {
         public static final String RULE_NAME = "bitwise_xor:2";
@@ -61,6 +72,16 @@ public final class BitwiseXor extends ConjunctionRule {
 
         public BitwiseAnd bitwiseAnd() {
             return bitwiseAnd;
+        }
+
+        public static boolean parse(ParseTree parseTree, int level) {
+            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+                return false;
+            }
+            var marker = parseTree.enter(level, RULE_NAME);
+            var result = false;
+            parseTree.exit(level, marker, result);
+            return result;
         }
     }
 }

@@ -1,5 +1,6 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
 import java.util.List;
 import org.fugalang.core.parser.DisjunctionRule;
@@ -34,6 +35,16 @@ public final class DictMaker extends ConjunctionRule {
         return dictMaker2;
     }
 
+    public static boolean parse(ParseTree parseTree, int level) {
+        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            return false;
+        }
+        var marker = parseTree.enter(level, RULE_NAME);
+        var result = false;
+        parseTree.exit(level, marker, result);
+        return result;
+    }
+
     // 'comp_for' | (',' 'dict_item')* [',']
     public static final class DictMaker2 extends DisjunctionRule {
         public static final String RULE_NAME = "dict_maker:2";
@@ -62,6 +73,16 @@ public final class DictMaker extends ConjunctionRule {
 
         public DictMaker22 dictMaker22() {
             return dictMaker22;
+        }
+
+        public static boolean parse(ParseTree parseTree, int level) {
+            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+                return false;
+            }
+            var marker = parseTree.enter(level, RULE_NAME);
+            var result = false;
+            parseTree.exit(level, marker, result);
+            return result;
         }
     }
 
@@ -94,6 +115,16 @@ public final class DictMaker extends ConjunctionRule {
         public boolean isTokenComma() {
             return isTokenComma;
         }
+
+        public static boolean parse(ParseTree parseTree, int level) {
+            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+                return false;
+            }
+            var marker = parseTree.enter(level, RULE_NAME);
+            var result = false;
+            parseTree.exit(level, marker, result);
+            return result;
+        }
     }
 
     // ',' 'dict_item'
@@ -124,6 +155,16 @@ public final class DictMaker extends ConjunctionRule {
 
         public DictItem dictItem() {
             return dictItem;
+        }
+
+        public static boolean parse(ParseTree parseTree, int level) {
+            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+                return false;
+            }
+            var marker = parseTree.enter(level, RULE_NAME);
+            var result = false;
+            parseTree.exit(level, marker, result);
+            return result;
         }
     }
 }

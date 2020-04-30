@@ -1,5 +1,6 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
 import org.fugalang.core.parser.DisjunctionRule;
 
@@ -33,6 +34,16 @@ public final class Stmt extends ConjunctionRule {
         return newline;
     }
 
+    public static boolean parse(ParseTree parseTree, int level) {
+        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            return false;
+        }
+        var marker = parseTree.enter(level, RULE_NAME);
+        var result = false;
+        parseTree.exit(level, marker, result);
+        return result;
+    }
+
     // 'simple_stmt' | 'compound_stmt'
     public static final class Stmt1 extends DisjunctionRule {
         public static final String RULE_NAME = "stmt:1";
@@ -61,6 +72,16 @@ public final class Stmt extends ConjunctionRule {
 
         public CompoundStmt compoundStmt() {
             return compoundStmt;
+        }
+
+        public static boolean parse(ParseTree parseTree, int level) {
+            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+                return false;
+            }
+            var marker = parseTree.enter(level, RULE_NAME);
+            var result = false;
+            parseTree.exit(level, marker, result);
+            return result;
         }
     }
 }

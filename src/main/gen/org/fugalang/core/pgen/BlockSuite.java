@@ -1,5 +1,6 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
 import java.util.List;
 import org.fugalang.core.parser.DisjunctionRule;
@@ -32,6 +33,16 @@ public final class BlockSuite extends DisjunctionRule {
 
     public BlockSuite2 blockSuite2() {
         return blockSuite2;
+    }
+
+    public static boolean parse(ParseTree parseTree, int level) {
+        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            return false;
+        }
+        var marker = parseTree.enter(level, RULE_NAME);
+        var result = false;
+        parseTree.exit(level, marker, result);
+        return result;
     }
 
     // '{' 'simple_stmt' '}'
@@ -70,6 +81,16 @@ public final class BlockSuite extends DisjunctionRule {
 
         public boolean isTokenRbrace() {
             return isTokenRbrace;
+        }
+
+        public static boolean parse(ParseTree parseTree, int level) {
+            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+                return false;
+            }
+            var marker = parseTree.enter(level, RULE_NAME);
+            var result = false;
+            parseTree.exit(level, marker, result);
+            return result;
         }
     }
 
@@ -125,6 +146,16 @@ public final class BlockSuite extends DisjunctionRule {
 
         public boolean isTokenRbrace() {
             return isTokenRbrace;
+        }
+
+        public static boolean parse(ParseTree parseTree, int level) {
+            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+                return false;
+            }
+            var marker = parseTree.enter(level, RULE_NAME);
+            var result = false;
+            parseTree.exit(level, marker, result);
+            return result;
         }
     }
 }

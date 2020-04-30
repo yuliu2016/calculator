@@ -1,5 +1,6 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
 import java.util.List;
 
@@ -41,6 +42,16 @@ public final class ExprlistStar extends ConjunctionRule {
         return isTokenComma;
     }
 
+    public static boolean parse(ParseTree parseTree, int level) {
+        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            return false;
+        }
+        var marker = parseTree.enter(level, RULE_NAME);
+        var result = false;
+        parseTree.exit(level, marker, result);
+        return result;
+    }
+
     // ',' 'expr_or_star'
     public static final class ExprlistStar2 extends ConjunctionRule {
         public static final String RULE_NAME = "exprlist_star:2";
@@ -69,6 +80,16 @@ public final class ExprlistStar extends ConjunctionRule {
 
         public ExprOrStar exprOrStar() {
             return exprOrStar;
+        }
+
+        public static boolean parse(ParseTree parseTree, int level) {
+            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+                return false;
+            }
+            var marker = parseTree.enter(level, RULE_NAME);
+            var result = false;
+            parseTree.exit(level, marker, result);
+            return result;
         }
     }
 }

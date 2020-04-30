@@ -1,5 +1,6 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
 import java.util.List;
 import org.fugalang.core.parser.DisjunctionRule;
@@ -50,6 +51,16 @@ public final class ImportFrom extends ConjunctionRule {
         return importFrom4;
     }
 
+    public static boolean parse(ParseTree parseTree, int level) {
+        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            return false;
+        }
+        var marker = parseTree.enter(level, RULE_NAME);
+        var result = false;
+        parseTree.exit(level, marker, result);
+        return result;
+    }
+
     // '.'* 'dotted_name' | '.'+
     public static final class ImportFrom2 extends DisjunctionRule {
         public static final String RULE_NAME = "import_from:2";
@@ -87,6 +98,16 @@ public final class ImportFrom extends ConjunctionRule {
         public List<Boolean> isTokenDotList() {
             return isTokenDotList;
         }
+
+        public static boolean parse(ParseTree parseTree, int level) {
+            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+                return false;
+            }
+            var marker = parseTree.enter(level, RULE_NAME);
+            var result = false;
+            parseTree.exit(level, marker, result);
+            return result;
+        }
     }
 
     // '.'* 'dotted_name'
@@ -117,6 +138,16 @@ public final class ImportFrom extends ConjunctionRule {
 
         public DottedName dottedName() {
             return dottedName;
+        }
+
+        public static boolean parse(ParseTree parseTree, int level) {
+            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+                return false;
+            }
+            var marker = parseTree.enter(level, RULE_NAME);
+            var result = false;
+            parseTree.exit(level, marker, result);
+            return result;
         }
     }
 
@@ -157,6 +188,16 @@ public final class ImportFrom extends ConjunctionRule {
         public ImportAsNames importAsNames() {
             return importAsNames;
         }
+
+        public static boolean parse(ParseTree parseTree, int level) {
+            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+                return false;
+            }
+            var marker = parseTree.enter(level, RULE_NAME);
+            var result = false;
+            parseTree.exit(level, marker, result);
+            return result;
+        }
     }
 
     // '(' 'import_as_names' ')'
@@ -195,6 +236,16 @@ public final class ImportFrom extends ConjunctionRule {
 
         public boolean isTokenRpar() {
             return isTokenRpar;
+        }
+
+        public static boolean parse(ParseTree parseTree, int level) {
+            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+                return false;
+            }
+            var marker = parseTree.enter(level, RULE_NAME);
+            var result = false;
+            parseTree.exit(level, marker, result);
+            return result;
         }
     }
 }

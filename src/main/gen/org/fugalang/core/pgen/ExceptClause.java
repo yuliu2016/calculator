@@ -1,5 +1,6 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
 import java.util.Optional;
 
@@ -33,6 +34,16 @@ public final class ExceptClause extends ConjunctionRule {
         return Optional.ofNullable(exceptClause2);
     }
 
+    public static boolean parse(ParseTree parseTree, int level) {
+        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            return false;
+        }
+        var marker = parseTree.enter(level, RULE_NAME);
+        var result = false;
+        parseTree.exit(level, marker, result);
+        return result;
+    }
+
     // 'expr' ['as' 'NAME']
     public static final class ExceptClause2 extends ConjunctionRule {
         public static final String RULE_NAME = "except_clause:2";
@@ -61,6 +72,16 @@ public final class ExceptClause extends ConjunctionRule {
 
         public Optional<ExceptClause22> exceptClause22() {
             return Optional.ofNullable(exceptClause22);
+        }
+
+        public static boolean parse(ParseTree parseTree, int level) {
+            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+                return false;
+            }
+            var marker = parseTree.enter(level, RULE_NAME);
+            var result = false;
+            parseTree.exit(level, marker, result);
+            return result;
         }
     }
 
@@ -92,6 +113,16 @@ public final class ExceptClause extends ConjunctionRule {
 
         public String name() {
             return name;
+        }
+
+        public static boolean parse(ParseTree parseTree, int level) {
+            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+                return false;
+            }
+            var marker = parseTree.enter(level, RULE_NAME);
+            var result = false;
+            parseTree.exit(level, marker, result);
+            return result;
         }
     }
 }

@@ -1,5 +1,6 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
 import java.util.Optional;
 import org.fugalang.core.parser.DisjunctionRule;
@@ -58,6 +59,16 @@ public final class Argument extends DisjunctionRule {
         return argument5;
     }
 
+    public static boolean parse(ParseTree parseTree, int level) {
+        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            return false;
+        }
+        var marker = parseTree.enter(level, RULE_NAME);
+        var result = false;
+        parseTree.exit(level, marker, result);
+        return result;
+    }
+
     // 'NAME' ['comp_for']
     public static final class Argument1 extends ConjunctionRule {
         public static final String RULE_NAME = "argument:1";
@@ -86,6 +97,16 @@ public final class Argument extends DisjunctionRule {
 
         public Optional<CompFor> compFor() {
             return Optional.ofNullable(compFor);
+        }
+
+        public static boolean parse(ParseTree parseTree, int level) {
+            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+                return false;
+            }
+            var marker = parseTree.enter(level, RULE_NAME);
+            var result = false;
+            parseTree.exit(level, marker, result);
+            return result;
         }
     }
 
@@ -126,6 +147,16 @@ public final class Argument extends DisjunctionRule {
         public Expr expr() {
             return expr;
         }
+
+        public static boolean parse(ParseTree parseTree, int level) {
+            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+                return false;
+            }
+            var marker = parseTree.enter(level, RULE_NAME);
+            var result = false;
+            parseTree.exit(level, marker, result);
+            return result;
+        }
     }
 
     // 'NAME' '=' 'expr'
@@ -165,6 +196,16 @@ public final class Argument extends DisjunctionRule {
         public Expr expr() {
             return expr;
         }
+
+        public static boolean parse(ParseTree parseTree, int level) {
+            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+                return false;
+            }
+            var marker = parseTree.enter(level, RULE_NAME);
+            var result = false;
+            parseTree.exit(level, marker, result);
+            return result;
+        }
     }
 
     // '**' 'expr'
@@ -196,6 +237,16 @@ public final class Argument extends DisjunctionRule {
         public Expr expr() {
             return expr;
         }
+
+        public static boolean parse(ParseTree parseTree, int level) {
+            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+                return false;
+            }
+            var marker = parseTree.enter(level, RULE_NAME);
+            var result = false;
+            parseTree.exit(level, marker, result);
+            return result;
+        }
     }
 
     // '*' 'expr'
@@ -226,6 +277,16 @@ public final class Argument extends DisjunctionRule {
 
         public Expr expr() {
             return expr;
+        }
+
+        public static boolean parse(ParseTree parseTree, int level) {
+            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+                return false;
+            }
+            var marker = parseTree.enter(level, RULE_NAME);
+            var result = false;
+            parseTree.exit(level, marker, result);
+            return result;
         }
     }
 }

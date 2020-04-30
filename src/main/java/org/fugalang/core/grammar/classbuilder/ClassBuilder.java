@@ -22,6 +22,8 @@ public class ClassBuilder {
         this.packageName = packageName;
         this.className = className;
         this.printName = printName;
+
+        classImports.add("org.fugalang.core.parser.ParseTree");
     }
 
     public String getClassName() {
@@ -124,6 +126,8 @@ public class ClassBuilder {
             sb.append(field.asGetter());
         }
 
+        generateParsingFunc(sb);
+
         if (isStaticInnerClass) {
             sb.append("}\n");
         }
@@ -170,6 +174,23 @@ public class ClassBuilder {
             sb.append(field.asRuleStmt(ruleType));
             sb.append("\n");
         }
+        sb.append("    }\n");
+    }
+
+    private void generateParsingFunc(StringBuilder sb) {
+        sb.append("\n");
+        sb.append("    public static boolean parse(ParseTree parseTree, int level) {\n");
+
+        var mb = new StringBuilder();
+        mb.append("if (!ParseTree.recursionGuard(level, RULE_NAME)) {\n    return false;\n}\n");
+        mb.append("var marker = parseTree.enter(level, RULE_NAME);\n");
+        mb.append("var result = false;\n");
+
+        mb.append("parseTree.exit(level, marker, result);\n");
+        mb.append("return result;\n");
+
+        sb.append(ParseStringUtil.indent(mb.toString(), 8));
+
         sb.append("    }\n");
     }
 

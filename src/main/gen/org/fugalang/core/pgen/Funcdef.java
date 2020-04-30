@@ -1,5 +1,6 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
 import java.util.Optional;
 import org.fugalang.core.parser.DisjunctionRule;
@@ -50,6 +51,16 @@ public final class Funcdef extends ConjunctionRule {
         return funcdef4;
     }
 
+    public static boolean parse(ParseTree parseTree, int level) {
+        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            return false;
+        }
+        var marker = parseTree.enter(level, RULE_NAME);
+        var result = false;
+        parseTree.exit(level, marker, result);
+        return result;
+    }
+
     // ':' 'expr' | 'block_suite'
     public static final class Funcdef4 extends DisjunctionRule {
         public static final String RULE_NAME = "funcdef:4";
@@ -78,6 +89,16 @@ public final class Funcdef extends ConjunctionRule {
 
         public BlockSuite blockSuite() {
             return blockSuite;
+        }
+
+        public static boolean parse(ParseTree parseTree, int level) {
+            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+                return false;
+            }
+            var marker = parseTree.enter(level, RULE_NAME);
+            var result = false;
+            parseTree.exit(level, marker, result);
+            return result;
         }
     }
 
@@ -109,6 +130,16 @@ public final class Funcdef extends ConjunctionRule {
 
         public Expr expr() {
             return expr;
+        }
+
+        public static boolean parse(ParseTree parseTree, int level) {
+            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+                return false;
+            }
+            var marker = parseTree.enter(level, RULE_NAME);
+            var result = false;
+            parseTree.exit(level, marker, result);
+            return result;
         }
     }
 }

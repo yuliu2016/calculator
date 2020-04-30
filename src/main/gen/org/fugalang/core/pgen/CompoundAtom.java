@@ -1,5 +1,6 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
 import java.util.Optional;
 import org.fugalang.core.parser.DisjunctionRule;
@@ -42,6 +43,16 @@ public final class CompoundAtom extends DisjunctionRule {
         return compoundAtom3;
     }
 
+    public static boolean parse(ParseTree parseTree, int level) {
+        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            return false;
+        }
+        var marker = parseTree.enter(level, RULE_NAME);
+        var result = false;
+        parseTree.exit(level, marker, result);
+        return result;
+    }
+
     // '(' ['exprlist_comp'] ')'
     public static final class CompoundAtom1 extends ConjunctionRule {
         public static final String RULE_NAME = "compound_atom:1";
@@ -78,6 +89,16 @@ public final class CompoundAtom extends DisjunctionRule {
 
         public boolean isTokenRpar() {
             return isTokenRpar;
+        }
+
+        public static boolean parse(ParseTree parseTree, int level) {
+            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+                return false;
+            }
+            var marker = parseTree.enter(level, RULE_NAME);
+            var result = false;
+            parseTree.exit(level, marker, result);
+            return result;
         }
     }
 
@@ -118,6 +139,16 @@ public final class CompoundAtom extends DisjunctionRule {
         public boolean isTokenRsqb() {
             return isTokenRsqb;
         }
+
+        public static boolean parse(ParseTree parseTree, int level) {
+            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+                return false;
+            }
+            var marker = parseTree.enter(level, RULE_NAME);
+            var result = false;
+            parseTree.exit(level, marker, result);
+            return result;
+        }
     }
 
     // '{' ['dictorsetmaker'] '}'
@@ -156,6 +187,16 @@ public final class CompoundAtom extends DisjunctionRule {
 
         public boolean isTokenRbrace() {
             return isTokenRbrace;
+        }
+
+        public static boolean parse(ParseTree parseTree, int level) {
+            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+                return false;
+            }
+            var marker = parseTree.enter(level, RULE_NAME);
+            var result = false;
+            parseTree.exit(level, marker, result);
+            return result;
         }
     }
 }

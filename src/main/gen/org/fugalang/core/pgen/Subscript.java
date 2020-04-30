@@ -1,5 +1,6 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
 import java.util.Optional;
 import org.fugalang.core.parser.DisjunctionRule;
@@ -32,6 +33,16 @@ public final class Subscript extends DisjunctionRule {
 
     public Subscript2 subscript2() {
         return subscript2;
+    }
+
+    public static boolean parse(ParseTree parseTree, int level) {
+        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            return false;
+        }
+        var marker = parseTree.enter(level, RULE_NAME);
+        var result = false;
+        parseTree.exit(level, marker, result);
+        return result;
     }
 
     // ['expr'] ':' ['expr'] ['sliceop']
@@ -78,6 +89,16 @@ public final class Subscript extends DisjunctionRule {
 
         public Optional<Sliceop> sliceop() {
             return Optional.ofNullable(sliceop);
+        }
+
+        public static boolean parse(ParseTree parseTree, int level) {
+            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+                return false;
+            }
+            var marker = parseTree.enter(level, RULE_NAME);
+            var result = false;
+            parseTree.exit(level, marker, result);
+            return result;
         }
     }
 }

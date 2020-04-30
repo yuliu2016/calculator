@@ -1,5 +1,6 @@
 package org.fugalang.core.pgen;
 
+import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
 import java.util.List;
 
@@ -41,6 +42,16 @@ public final class SimpleStmt extends ConjunctionRule {
         return isTokenSemicolon;
     }
 
+    public static boolean parse(ParseTree parseTree, int level) {
+        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            return false;
+        }
+        var marker = parseTree.enter(level, RULE_NAME);
+        var result = false;
+        parseTree.exit(level, marker, result);
+        return result;
+    }
+
     // ';' 'small_stmt'
     public static final class SimpleStmt2 extends ConjunctionRule {
         public static final String RULE_NAME = "simple_stmt:2";
@@ -69,6 +80,16 @@ public final class SimpleStmt extends ConjunctionRule {
 
         public SmallStmt smallStmt() {
             return smallStmt;
+        }
+
+        public static boolean parse(ParseTree parseTree, int level) {
+            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+                return false;
+            }
+            var marker = parseTree.enter(level, RULE_NAME);
+            var result = false;
+            parseTree.exit(level, marker, result);
+            return result;
         }
     }
 }
