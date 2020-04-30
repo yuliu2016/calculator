@@ -7,70 +7,70 @@ import org.fugalang.core.parser.DisjunctionRule;
 // set_maker: 'expr_or_star' ('comp_for' | (',' 'expr_or_star')* [','])
 public final class SetMaker extends ConjunctionRule {
     private final ExprOrStar exprOrStar;
-    private final SetMaker2Group setMaker2Group;
+    private final SetMaker2 setMaker2;
 
     public SetMaker(
             ExprOrStar exprOrStar,
-            SetMaker2Group setMaker2Group
+            SetMaker2 setMaker2
     ) {
         this.exprOrStar = exprOrStar;
-        this.setMaker2Group = setMaker2Group;
+        this.setMaker2 = setMaker2;
 
         addRequired("exprOrStar", exprOrStar);
-        addRequired("setMaker2Group", setMaker2Group);
+        addRequired("setMaker2", setMaker2);
     }
 
     public ExprOrStar exprOrStar() {
         return exprOrStar;
     }
 
-    public SetMaker2Group setMaker2Group() {
-        return setMaker2Group;
+    public SetMaker2 setMaker2() {
+        return setMaker2;
     }
 
     // 'comp_for' | (',' 'expr_or_star')* [',']
-    public static final class SetMaker2Group extends DisjunctionRule {
+    public static final class SetMaker2 extends DisjunctionRule {
         private final CompFor compFor;
-        private final SetMaker2Group2 setMaker2Group2;
+        private final SetMaker22 setMaker22;
 
-        public SetMaker2Group(
+        public SetMaker2(
                 CompFor compFor,
-                SetMaker2Group2 setMaker2Group2
+                SetMaker22 setMaker22
         ) {
             this.compFor = compFor;
-            this.setMaker2Group2 = setMaker2Group2;
+            this.setMaker22 = setMaker22;
 
             addChoice("compFor", compFor);
-            addChoice("setMaker2Group2", setMaker2Group2);
+            addChoice("setMaker22", setMaker22);
         }
 
         public CompFor compFor() {
             return compFor;
         }
 
-        public SetMaker2Group2 setMaker2Group2() {
-            return setMaker2Group2;
+        public SetMaker22 setMaker22() {
+            return setMaker22;
         }
     }
 
     // (',' 'expr_or_star')* [',']
-    public static final class SetMaker2Group2 extends ConjunctionRule {
-        private final List<SetMaker2Group21Group> setMaker2Group21GroupList;
+    public static final class SetMaker22 extends ConjunctionRule {
+        private final List<SetMaker221> setMaker221List;
         private final boolean isTokenComma;
 
-        public SetMaker2Group2(
-                List<SetMaker2Group21Group> setMaker2Group21GroupList,
+        public SetMaker22(
+                List<SetMaker221> setMaker221List,
                 boolean isTokenComma
         ) {
-            this.setMaker2Group21GroupList = setMaker2Group21GroupList;
+            this.setMaker221List = setMaker221List;
             this.isTokenComma = isTokenComma;
 
-            addRequired("setMaker2Group21GroupList", setMaker2Group21GroupList);
+            addRequired("setMaker221List", setMaker221List);
             addRequired("isTokenComma", isTokenComma);
         }
 
-        public List<SetMaker2Group21Group> setMaker2Group21GroupList() {
-            return setMaker2Group21GroupList;
+        public List<SetMaker221> setMaker221List() {
+            return setMaker221List;
         }
 
         public boolean isTokenComma() {
@@ -79,11 +79,11 @@ public final class SetMaker extends ConjunctionRule {
     }
 
     // ',' 'expr_or_star'
-    public static final class SetMaker2Group21Group extends ConjunctionRule {
+    public static final class SetMaker221 extends ConjunctionRule {
         private final boolean isTokenComma;
         private final ExprOrStar exprOrStar;
 
-        public SetMaker2Group21Group(
+        public SetMaker221(
                 boolean isTokenComma,
                 ExprOrStar exprOrStar
         ) {

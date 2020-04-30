@@ -6,33 +6,33 @@ import java.util.Optional;
 // dotted_as_name: 'dotted_name' ['as' 'NAME']
 public final class DottedAsName extends ConjunctionRule {
     private final DottedName dottedName;
-    private final DottedAsName2Group dottedAsName2Group;
+    private final DottedAsName2 dottedAsName2;
 
     public DottedAsName(
             DottedName dottedName,
-            DottedAsName2Group dottedAsName2Group
+            DottedAsName2 dottedAsName2
     ) {
         this.dottedName = dottedName;
-        this.dottedAsName2Group = dottedAsName2Group;
+        this.dottedAsName2 = dottedAsName2;
 
         addRequired("dottedName", dottedName);
-        addOptional("dottedAsName2Group", dottedAsName2Group);
+        addOptional("dottedAsName2", dottedAsName2);
     }
 
     public DottedName dottedName() {
         return dottedName;
     }
 
-    public Optional<DottedAsName2Group> dottedAsName2Group() {
-        return Optional.ofNullable(dottedAsName2Group);
+    public Optional<DottedAsName2> dottedAsName2() {
+        return Optional.ofNullable(dottedAsName2);
     }
 
     // 'as' 'NAME'
-    public static final class DottedAsName2Group extends ConjunctionRule {
+    public static final class DottedAsName2 extends ConjunctionRule {
         private final boolean isTokenAs;
         private final String name;
 
-        public DottedAsName2Group(
+        public DottedAsName2(
                 boolean isTokenAs,
                 String name
         ) {

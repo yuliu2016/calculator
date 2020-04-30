@@ -9,20 +9,20 @@ import org.fugalang.core.parser.DisjunctionRule;
 public final class TryStmt extends ConjunctionRule {
     private final boolean isTokenTry;
     private final Suite suite;
-    private final TryStmt3Group tryStmt3Group;
+    private final TryStmt3 tryStmt3;
 
     public TryStmt(
             boolean isTokenTry,
             Suite suite,
-            TryStmt3Group tryStmt3Group
+            TryStmt3 tryStmt3
     ) {
         this.isTokenTry = isTokenTry;
         this.suite = suite;
-        this.tryStmt3Group = tryStmt3Group;
+        this.tryStmt3 = tryStmt3;
 
         addRequired("isTokenTry", isTokenTry);
         addRequired("suite", suite);
-        addRequired("tryStmt3Group", tryStmt3Group);
+        addRequired("tryStmt3", tryStmt3);
     }
 
     public boolean isTokenTry() {
@@ -33,82 +33,82 @@ public final class TryStmt extends ConjunctionRule {
         return suite;
     }
 
-    public TryStmt3Group tryStmt3Group() {
-        return tryStmt3Group;
+    public TryStmt3 tryStmt3() {
+        return tryStmt3;
     }
 
     // ('except_clause' 'suite')+ ['else' 'suite'] ['finally' 'suite'] | 'finally' 'suite'
-    public static final class TryStmt3Group extends DisjunctionRule {
-        private final TryStmt3Group1 tryStmt3Group1;
-        private final TryStmt3Group2 tryStmt3Group2;
+    public static final class TryStmt3 extends DisjunctionRule {
+        private final TryStmt31 tryStmt31;
+        private final TryStmt32 tryStmt32;
 
-        public TryStmt3Group(
-                TryStmt3Group1 tryStmt3Group1,
-                TryStmt3Group2 tryStmt3Group2
+        public TryStmt3(
+                TryStmt31 tryStmt31,
+                TryStmt32 tryStmt32
         ) {
-            this.tryStmt3Group1 = tryStmt3Group1;
-            this.tryStmt3Group2 = tryStmt3Group2;
+            this.tryStmt31 = tryStmt31;
+            this.tryStmt32 = tryStmt32;
 
-            addChoice("tryStmt3Group1", tryStmt3Group1);
-            addChoice("tryStmt3Group2", tryStmt3Group2);
+            addChoice("tryStmt31", tryStmt31);
+            addChoice("tryStmt32", tryStmt32);
         }
 
-        public TryStmt3Group1 tryStmt3Group1() {
-            return tryStmt3Group1;
+        public TryStmt31 tryStmt31() {
+            return tryStmt31;
         }
 
-        public TryStmt3Group2 tryStmt3Group2() {
-            return tryStmt3Group2;
+        public TryStmt32 tryStmt32() {
+            return tryStmt32;
         }
     }
 
     // ('except_clause' 'suite')+ ['else' 'suite'] ['finally' 'suite']
-    public static final class TryStmt3Group1 extends ConjunctionRule {
-        private final TryStmt3Group11Group tryStmt3Group11Group;
-        private final List<TryStmt3Group11Group> tryStmt3Group11GroupList;
-        private final TryStmt3Group12Group tryStmt3Group12Group;
-        private final TryStmt3Group13Group tryStmt3Group13Group;
+    public static final class TryStmt31 extends ConjunctionRule {
+        private final TryStmt311 tryStmt311;
+        private final List<TryStmt311> tryStmt311List;
+        private final TryStmt312 tryStmt312;
+        private final TryStmt313 tryStmt313;
 
-        public TryStmt3Group1(
-                TryStmt3Group11Group tryStmt3Group11Group,
-                List<TryStmt3Group11Group> tryStmt3Group11GroupList,
-                TryStmt3Group12Group tryStmt3Group12Group,
-                TryStmt3Group13Group tryStmt3Group13Group
+        public TryStmt31(
+                TryStmt311 tryStmt311,
+                List<TryStmt311> tryStmt311List,
+                TryStmt312 tryStmt312,
+                TryStmt313 tryStmt313
         ) {
-            this.tryStmt3Group11Group = tryStmt3Group11Group;
-            this.tryStmt3Group11GroupList = tryStmt3Group11GroupList;
-            this.tryStmt3Group12Group = tryStmt3Group12Group;
-            this.tryStmt3Group13Group = tryStmt3Group13Group;
+            this.tryStmt311 = tryStmt311;
+            this.tryStmt311List = tryStmt311List;
+            this.tryStmt312 = tryStmt312;
+            this.tryStmt313 = tryStmt313;
 
-            addRequired("tryStmt3Group11Group", tryStmt3Group11Group);
-            addRequired("tryStmt3Group11GroupList", tryStmt3Group11GroupList);
-            addOptional("tryStmt3Group12Group", tryStmt3Group12Group);
-            addOptional("tryStmt3Group13Group", tryStmt3Group13Group);
+            addRequired("tryStmt311", tryStmt311);
+            addRequired("tryStmt311List", tryStmt311List);
+            addOptional("tryStmt312", tryStmt312);
+            addOptional("tryStmt313", tryStmt313);
         }
 
-        public TryStmt3Group11Group tryStmt3Group11Group() {
-            return tryStmt3Group11Group;
+        public TryStmt311 tryStmt311() {
+            return tryStmt311;
         }
 
-        public List<TryStmt3Group11Group> tryStmt3Group11GroupList() {
-            return tryStmt3Group11GroupList;
+        public List<TryStmt311> tryStmt311List() {
+            return tryStmt311List;
         }
 
-        public Optional<TryStmt3Group12Group> tryStmt3Group12Group() {
-            return Optional.ofNullable(tryStmt3Group12Group);
+        public Optional<TryStmt312> tryStmt312() {
+            return Optional.ofNullable(tryStmt312);
         }
 
-        public Optional<TryStmt3Group13Group> tryStmt3Group13Group() {
-            return Optional.ofNullable(tryStmt3Group13Group);
+        public Optional<TryStmt313> tryStmt313() {
+            return Optional.ofNullable(tryStmt313);
         }
     }
 
     // 'except_clause' 'suite'
-    public static final class TryStmt3Group11Group extends ConjunctionRule {
+    public static final class TryStmt311 extends ConjunctionRule {
         private final ExceptClause exceptClause;
         private final Suite suite;
 
-        public TryStmt3Group11Group(
+        public TryStmt311(
                 ExceptClause exceptClause,
                 Suite suite
         ) {
@@ -129,11 +129,11 @@ public final class TryStmt extends ConjunctionRule {
     }
 
     // 'else' 'suite'
-    public static final class TryStmt3Group12Group extends ConjunctionRule {
+    public static final class TryStmt312 extends ConjunctionRule {
         private final boolean isTokenElse;
         private final Suite suite;
 
-        public TryStmt3Group12Group(
+        public TryStmt312(
                 boolean isTokenElse,
                 Suite suite
         ) {
@@ -154,11 +154,11 @@ public final class TryStmt extends ConjunctionRule {
     }
 
     // 'finally' 'suite'
-    public static final class TryStmt3Group13Group extends ConjunctionRule {
+    public static final class TryStmt313 extends ConjunctionRule {
         private final boolean isTokenFinally;
         private final Suite suite;
 
-        public TryStmt3Group13Group(
+        public TryStmt313(
                 boolean isTokenFinally,
                 Suite suite
         ) {
@@ -179,11 +179,11 @@ public final class TryStmt extends ConjunctionRule {
     }
 
     // 'finally' 'suite'
-    public static final class TryStmt3Group2 extends ConjunctionRule {
+    public static final class TryStmt32 extends ConjunctionRule {
         private final boolean isTokenFinally;
         private final Suite suite;
 
-        public TryStmt3Group2(
+        public TryStmt32(
                 boolean isTokenFinally,
                 Suite suite
         ) {

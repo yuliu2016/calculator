@@ -6,20 +6,20 @@ import java.util.List;
 // exprlist_star: 'expr_or_star' (',' 'expr_or_star')* [',']
 public final class ExprlistStar extends ConjunctionRule {
     private final ExprOrStar exprOrStar;
-    private final List<ExprlistStar2Group> exprlistStar2GroupList;
+    private final List<ExprlistStar2> exprlistStar2List;
     private final boolean isTokenComma;
 
     public ExprlistStar(
             ExprOrStar exprOrStar,
-            List<ExprlistStar2Group> exprlistStar2GroupList,
+            List<ExprlistStar2> exprlistStar2List,
             boolean isTokenComma
     ) {
         this.exprOrStar = exprOrStar;
-        this.exprlistStar2GroupList = exprlistStar2GroupList;
+        this.exprlistStar2List = exprlistStar2List;
         this.isTokenComma = isTokenComma;
 
         addRequired("exprOrStar", exprOrStar);
-        addRequired("exprlistStar2GroupList", exprlistStar2GroupList);
+        addRequired("exprlistStar2List", exprlistStar2List);
         addRequired("isTokenComma", isTokenComma);
     }
 
@@ -27,8 +27,8 @@ public final class ExprlistStar extends ConjunctionRule {
         return exprOrStar;
     }
 
-    public List<ExprlistStar2Group> exprlistStar2GroupList() {
-        return exprlistStar2GroupList;
+    public List<ExprlistStar2> exprlistStar2List() {
+        return exprlistStar2List;
     }
 
     public boolean isTokenComma() {
@@ -36,11 +36,11 @@ public final class ExprlistStar extends ConjunctionRule {
     }
 
     // ',' 'expr_or_star'
-    public static final class ExprlistStar2Group extends ConjunctionRule {
+    public static final class ExprlistStar2 extends ConjunctionRule {
         private final boolean isTokenComma;
         private final ExprOrStar exprOrStar;
 
-        public ExprlistStar2Group(
+        public ExprlistStar2(
                 boolean isTokenComma,
                 ExprOrStar exprOrStar
         ) {

@@ -8,23 +8,23 @@ public final class WhileStmt extends ConjunctionRule {
     private final boolean isTokenWhile;
     private final NamedexprExpr namedexprExpr;
     private final Suite suite;
-    private final WhileStmt4Group whileStmt4Group;
+    private final WhileStmt4 whileStmt4;
 
     public WhileStmt(
             boolean isTokenWhile,
             NamedexprExpr namedexprExpr,
             Suite suite,
-            WhileStmt4Group whileStmt4Group
+            WhileStmt4 whileStmt4
     ) {
         this.isTokenWhile = isTokenWhile;
         this.namedexprExpr = namedexprExpr;
         this.suite = suite;
-        this.whileStmt4Group = whileStmt4Group;
+        this.whileStmt4 = whileStmt4;
 
         addRequired("isTokenWhile", isTokenWhile);
         addRequired("namedexprExpr", namedexprExpr);
         addRequired("suite", suite);
-        addOptional("whileStmt4Group", whileStmt4Group);
+        addOptional("whileStmt4", whileStmt4);
     }
 
     public boolean isTokenWhile() {
@@ -39,16 +39,16 @@ public final class WhileStmt extends ConjunctionRule {
         return suite;
     }
 
-    public Optional<WhileStmt4Group> whileStmt4Group() {
-        return Optional.ofNullable(whileStmt4Group);
+    public Optional<WhileStmt4> whileStmt4() {
+        return Optional.ofNullable(whileStmt4);
     }
 
     // 'else' 'suite'
-    public static final class WhileStmt4Group extends ConjunctionRule {
+    public static final class WhileStmt4 extends ConjunctionRule {
         private final boolean isTokenElse;
         private final Suite suite;
 
-        public WhileStmt4Group(
+        public WhileStmt4(
                 boolean isTokenElse,
                 Suite suite
         ) {

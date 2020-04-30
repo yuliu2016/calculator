@@ -6,20 +6,20 @@ import java.util.List;
 // simple_stmt: 'small_stmt' (';' 'small_stmt')* [';']
 public final class SimpleStmt extends ConjunctionRule {
     private final SmallStmt smallStmt;
-    private final List<SimpleStmt2Group> simpleStmt2GroupList;
+    private final List<SimpleStmt2> simpleStmt2List;
     private final boolean isTokenSemicolon;
 
     public SimpleStmt(
             SmallStmt smallStmt,
-            List<SimpleStmt2Group> simpleStmt2GroupList,
+            List<SimpleStmt2> simpleStmt2List,
             boolean isTokenSemicolon
     ) {
         this.smallStmt = smallStmt;
-        this.simpleStmt2GroupList = simpleStmt2GroupList;
+        this.simpleStmt2List = simpleStmt2List;
         this.isTokenSemicolon = isTokenSemicolon;
 
         addRequired("smallStmt", smallStmt);
-        addRequired("simpleStmt2GroupList", simpleStmt2GroupList);
+        addRequired("simpleStmt2List", simpleStmt2List);
         addRequired("isTokenSemicolon", isTokenSemicolon);
     }
 
@@ -27,8 +27,8 @@ public final class SimpleStmt extends ConjunctionRule {
         return smallStmt;
     }
 
-    public List<SimpleStmt2Group> simpleStmt2GroupList() {
-        return simpleStmt2GroupList;
+    public List<SimpleStmt2> simpleStmt2List() {
+        return simpleStmt2List;
     }
 
     public boolean isTokenSemicolon() {
@@ -36,11 +36,11 @@ public final class SimpleStmt extends ConjunctionRule {
     }
 
     // ';' 'small_stmt'
-    public static final class SimpleStmt2Group extends ConjunctionRule {
+    public static final class SimpleStmt2 extends ConjunctionRule {
         private final boolean isTokenSemicolon;
         private final SmallStmt smallStmt;
 
-        public SimpleStmt2Group(
+        public SimpleStmt2(
                 boolean isTokenSemicolon,
                 SmallStmt smallStmt
         ) {

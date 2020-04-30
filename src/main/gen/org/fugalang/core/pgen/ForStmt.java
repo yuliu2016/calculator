@@ -10,7 +10,7 @@ public final class ForStmt extends ConjunctionRule {
     private final boolean isTokenIn;
     private final Exprlist exprlist;
     private final Suite suite;
-    private final ForStmt6Group forStmt6Group;
+    private final ForStmt6 forStmt6;
 
     public ForStmt(
             boolean isTokenFor,
@@ -18,21 +18,21 @@ public final class ForStmt extends ConjunctionRule {
             boolean isTokenIn,
             Exprlist exprlist,
             Suite suite,
-            ForStmt6Group forStmt6Group
+            ForStmt6 forStmt6
     ) {
         this.isTokenFor = isTokenFor;
         this.targets = targets;
         this.isTokenIn = isTokenIn;
         this.exprlist = exprlist;
         this.suite = suite;
-        this.forStmt6Group = forStmt6Group;
+        this.forStmt6 = forStmt6;
 
         addRequired("isTokenFor", isTokenFor);
         addRequired("targets", targets);
         addRequired("isTokenIn", isTokenIn);
         addRequired("exprlist", exprlist);
         addRequired("suite", suite);
-        addOptional("forStmt6Group", forStmt6Group);
+        addOptional("forStmt6", forStmt6);
     }
 
     public boolean isTokenFor() {
@@ -55,16 +55,16 @@ public final class ForStmt extends ConjunctionRule {
         return suite;
     }
 
-    public Optional<ForStmt6Group> forStmt6Group() {
-        return Optional.ofNullable(forStmt6Group);
+    public Optional<ForStmt6> forStmt6() {
+        return Optional.ofNullable(forStmt6);
     }
 
     // 'else' 'suite'
-    public static final class ForStmt6Group extends ConjunctionRule {
+    public static final class ForStmt6 extends ConjunctionRule {
         private final boolean isTokenElse;
         private final Suite suite;
 
-        public ForStmt6Group(
+        public ForStmt6(
                 boolean isTokenElse,
                 Suite suite
         ) {

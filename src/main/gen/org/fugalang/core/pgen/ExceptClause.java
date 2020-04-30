@@ -6,58 +6,58 @@ import java.util.Optional;
 // except_clause: 'except' ['expr' ['as' 'NAME']]
 public final class ExceptClause extends ConjunctionRule {
     private final boolean isTokenExcept;
-    private final ExceptClause2Group exceptClause2Group;
+    private final ExceptClause2 exceptClause2;
 
     public ExceptClause(
             boolean isTokenExcept,
-            ExceptClause2Group exceptClause2Group
+            ExceptClause2 exceptClause2
     ) {
         this.isTokenExcept = isTokenExcept;
-        this.exceptClause2Group = exceptClause2Group;
+        this.exceptClause2 = exceptClause2;
 
         addRequired("isTokenExcept", isTokenExcept);
-        addOptional("exceptClause2Group", exceptClause2Group);
+        addOptional("exceptClause2", exceptClause2);
     }
 
     public boolean isTokenExcept() {
         return isTokenExcept;
     }
 
-    public Optional<ExceptClause2Group> exceptClause2Group() {
-        return Optional.ofNullable(exceptClause2Group);
+    public Optional<ExceptClause2> exceptClause2() {
+        return Optional.ofNullable(exceptClause2);
     }
 
     // 'expr' ['as' 'NAME']
-    public static final class ExceptClause2Group extends ConjunctionRule {
+    public static final class ExceptClause2 extends ConjunctionRule {
         private final Expr expr;
-        private final ExceptClause2Group2Group exceptClause2Group2Group;
+        private final ExceptClause22 exceptClause22;
 
-        public ExceptClause2Group(
+        public ExceptClause2(
                 Expr expr,
-                ExceptClause2Group2Group exceptClause2Group2Group
+                ExceptClause22 exceptClause22
         ) {
             this.expr = expr;
-            this.exceptClause2Group2Group = exceptClause2Group2Group;
+            this.exceptClause22 = exceptClause22;
 
             addRequired("expr", expr);
-            addOptional("exceptClause2Group2Group", exceptClause2Group2Group);
+            addOptional("exceptClause22", exceptClause22);
         }
 
         public Expr expr() {
             return expr;
         }
 
-        public Optional<ExceptClause2Group2Group> exceptClause2Group2Group() {
-            return Optional.ofNullable(exceptClause2Group2Group);
+        public Optional<ExceptClause22> exceptClause22() {
+            return Optional.ofNullable(exceptClause22);
         }
     }
 
     // 'as' 'NAME'
-    public static final class ExceptClause2Group2Group extends ConjunctionRule {
+    public static final class ExceptClause22 extends ConjunctionRule {
         private final boolean isTokenAs;
         private final String name;
 
-        public ExceptClause2Group2Group(
+        public ExceptClause22(
                 boolean isTokenAs,
                 String name
         ) {

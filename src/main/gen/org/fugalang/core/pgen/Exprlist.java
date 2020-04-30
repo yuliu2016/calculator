@@ -6,20 +6,20 @@ import java.util.List;
 // exprlist: 'expr' (',' 'expr')* [',']
 public final class Exprlist extends ConjunctionRule {
     private final Expr expr;
-    private final List<Exprlist2Group> exprlist2GroupList;
+    private final List<Exprlist2> exprlist2List;
     private final boolean isTokenComma;
 
     public Exprlist(
             Expr expr,
-            List<Exprlist2Group> exprlist2GroupList,
+            List<Exprlist2> exprlist2List,
             boolean isTokenComma
     ) {
         this.expr = expr;
-        this.exprlist2GroupList = exprlist2GroupList;
+        this.exprlist2List = exprlist2List;
         this.isTokenComma = isTokenComma;
 
         addRequired("expr", expr);
-        addRequired("exprlist2GroupList", exprlist2GroupList);
+        addRequired("exprlist2List", exprlist2List);
         addRequired("isTokenComma", isTokenComma);
     }
 
@@ -27,8 +27,8 @@ public final class Exprlist extends ConjunctionRule {
         return expr;
     }
 
-    public List<Exprlist2Group> exprlist2GroupList() {
-        return exprlist2GroupList;
+    public List<Exprlist2> exprlist2List() {
+        return exprlist2List;
     }
 
     public boolean isTokenComma() {
@@ -36,11 +36,11 @@ public final class Exprlist extends ConjunctionRule {
     }
 
     // ',' 'expr'
-    public static final class Exprlist2Group extends ConjunctionRule {
+    public static final class Exprlist2 extends ConjunctionRule {
         private final boolean isTokenComma;
         private final Expr expr;
 
-        public Exprlist2Group(
+        public Exprlist2(
                 boolean isTokenComma,
                 Expr expr
         ) {

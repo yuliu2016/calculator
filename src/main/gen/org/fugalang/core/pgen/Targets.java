@@ -6,30 +6,30 @@ import org.fugalang.core.parser.DisjunctionRule;
 
 // targets: ('bitwise_or' | 'star_expr') (',' ('bitwise_or' | 'star_expr'))* [',']
 public final class Targets extends ConjunctionRule {
-    private final Targets1Group targets1Group;
-    private final List<Targets2Group> targets2GroupList;
+    private final Targets1 targets1;
+    private final List<Targets2> targets2List;
     private final boolean isTokenComma;
 
     public Targets(
-            Targets1Group targets1Group,
-            List<Targets2Group> targets2GroupList,
+            Targets1 targets1,
+            List<Targets2> targets2List,
             boolean isTokenComma
     ) {
-        this.targets1Group = targets1Group;
-        this.targets2GroupList = targets2GroupList;
+        this.targets1 = targets1;
+        this.targets2List = targets2List;
         this.isTokenComma = isTokenComma;
 
-        addRequired("targets1Group", targets1Group);
-        addRequired("targets2GroupList", targets2GroupList);
+        addRequired("targets1", targets1);
+        addRequired("targets2List", targets2List);
         addRequired("isTokenComma", isTokenComma);
     }
 
-    public Targets1Group targets1Group() {
-        return targets1Group;
+    public Targets1 targets1() {
+        return targets1;
     }
 
-    public List<Targets2Group> targets2GroupList() {
-        return targets2GroupList;
+    public List<Targets2> targets2List() {
+        return targets2List;
     }
 
     public boolean isTokenComma() {
@@ -37,11 +37,11 @@ public final class Targets extends ConjunctionRule {
     }
 
     // 'bitwise_or' | 'star_expr'
-    public static final class Targets1Group extends DisjunctionRule {
+    public static final class Targets1 extends DisjunctionRule {
         private final BitwiseOr bitwiseOr;
         private final StarExpr starExpr;
 
-        public Targets1Group(
+        public Targets1(
                 BitwiseOr bitwiseOr,
                 StarExpr starExpr
         ) {
@@ -62,36 +62,36 @@ public final class Targets extends ConjunctionRule {
     }
 
     // ',' ('bitwise_or' | 'star_expr')
-    public static final class Targets2Group extends ConjunctionRule {
+    public static final class Targets2 extends ConjunctionRule {
         private final boolean isTokenComma;
-        private final Targets2Group2Group targets2Group2Group;
+        private final Targets22 targets22;
 
-        public Targets2Group(
+        public Targets2(
                 boolean isTokenComma,
-                Targets2Group2Group targets2Group2Group
+                Targets22 targets22
         ) {
             this.isTokenComma = isTokenComma;
-            this.targets2Group2Group = targets2Group2Group;
+            this.targets22 = targets22;
 
             addRequired("isTokenComma", isTokenComma);
-            addRequired("targets2Group2Group", targets2Group2Group);
+            addRequired("targets22", targets22);
         }
 
         public boolean isTokenComma() {
             return isTokenComma;
         }
 
-        public Targets2Group2Group targets2Group2Group() {
-            return targets2Group2Group;
+        public Targets22 targets22() {
+            return targets22;
         }
     }
 
     // 'bitwise_or' | 'star_expr'
-    public static final class Targets2Group2Group extends DisjunctionRule {
+    public static final class Targets22 extends DisjunctionRule {
         private final BitwiseOr bitwiseOr;
         private final StarExpr starExpr;
 
-        public Targets2Group2Group(
+        public Targets22(
                 BitwiseOr bitwiseOr,
                 StarExpr starExpr
         ) {

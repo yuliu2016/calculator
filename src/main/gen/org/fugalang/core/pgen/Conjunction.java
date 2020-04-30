@@ -6,33 +6,33 @@ import java.util.List;
 // conjunction: 'inversion' ('and' 'inversion')*
 public final class Conjunction extends ConjunctionRule {
     private final Inversion inversion;
-    private final List<Conjunction2Group> conjunction2GroupList;
+    private final List<Conjunction2> conjunction2List;
 
     public Conjunction(
             Inversion inversion,
-            List<Conjunction2Group> conjunction2GroupList
+            List<Conjunction2> conjunction2List
     ) {
         this.inversion = inversion;
-        this.conjunction2GroupList = conjunction2GroupList;
+        this.conjunction2List = conjunction2List;
 
         addRequired("inversion", inversion);
-        addRequired("conjunction2GroupList", conjunction2GroupList);
+        addRequired("conjunction2List", conjunction2List);
     }
 
     public Inversion inversion() {
         return inversion;
     }
 
-    public List<Conjunction2Group> conjunction2GroupList() {
-        return conjunction2GroupList;
+    public List<Conjunction2> conjunction2List() {
+        return conjunction2List;
     }
 
     // 'and' 'inversion'
-    public static final class Conjunction2Group extends ConjunctionRule {
+    public static final class Conjunction2 extends ConjunctionRule {
         private final boolean isTokenAnd;
         private final Inversion inversion;
 
-        public Conjunction2Group(
+        public Conjunction2(
                 boolean isTokenAnd,
                 Inversion inversion
         ) {

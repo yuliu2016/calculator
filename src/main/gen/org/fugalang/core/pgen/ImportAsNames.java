@@ -6,20 +6,20 @@ import java.util.List;
 // import_as_names: 'import_as_name' (',' 'import_as_name')* [',']
 public final class ImportAsNames extends ConjunctionRule {
     private final ImportAsName importAsName;
-    private final List<ImportAsNames2Group> importAsNames2GroupList;
+    private final List<ImportAsNames2> importAsNames2List;
     private final boolean isTokenComma;
 
     public ImportAsNames(
             ImportAsName importAsName,
-            List<ImportAsNames2Group> importAsNames2GroupList,
+            List<ImportAsNames2> importAsNames2List,
             boolean isTokenComma
     ) {
         this.importAsName = importAsName;
-        this.importAsNames2GroupList = importAsNames2GroupList;
+        this.importAsNames2List = importAsNames2List;
         this.isTokenComma = isTokenComma;
 
         addRequired("importAsName", importAsName);
-        addRequired("importAsNames2GroupList", importAsNames2GroupList);
+        addRequired("importAsNames2List", importAsNames2List);
         addRequired("isTokenComma", isTokenComma);
     }
 
@@ -27,8 +27,8 @@ public final class ImportAsNames extends ConjunctionRule {
         return importAsName;
     }
 
-    public List<ImportAsNames2Group> importAsNames2GroupList() {
-        return importAsNames2GroupList;
+    public List<ImportAsNames2> importAsNames2List() {
+        return importAsNames2List;
     }
 
     public boolean isTokenComma() {
@@ -36,11 +36,11 @@ public final class ImportAsNames extends ConjunctionRule {
     }
 
     // ',' 'import_as_name'
-    public static final class ImportAsNames2Group extends ConjunctionRule {
+    public static final class ImportAsNames2 extends ConjunctionRule {
         private final boolean isTokenComma;
         private final ImportAsName importAsName;
 
-        public ImportAsNames2Group(
+        public ImportAsNames2(
                 boolean isTokenComma,
                 ImportAsName importAsName
         ) {

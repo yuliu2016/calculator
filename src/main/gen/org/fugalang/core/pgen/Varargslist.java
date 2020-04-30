@@ -7,41 +7,41 @@ import java.util.Optional;
 // varargslist: 'vfpdef' ['=' 'expr'] (',' 'vfpdef' ['=' 'expr'])*
 public final class Varargslist extends ConjunctionRule {
     private final Vfpdef vfpdef;
-    private final Varargslist2Group varargslist2Group;
-    private final List<Varargslist3Group> varargslist3GroupList;
+    private final Varargslist2 varargslist2;
+    private final List<Varargslist3> varargslist3List;
 
     public Varargslist(
             Vfpdef vfpdef,
-            Varargslist2Group varargslist2Group,
-            List<Varargslist3Group> varargslist3GroupList
+            Varargslist2 varargslist2,
+            List<Varargslist3> varargslist3List
     ) {
         this.vfpdef = vfpdef;
-        this.varargslist2Group = varargslist2Group;
-        this.varargslist3GroupList = varargslist3GroupList;
+        this.varargslist2 = varargslist2;
+        this.varargslist3List = varargslist3List;
 
         addRequired("vfpdef", vfpdef);
-        addOptional("varargslist2Group", varargslist2Group);
-        addRequired("varargslist3GroupList", varargslist3GroupList);
+        addOptional("varargslist2", varargslist2);
+        addRequired("varargslist3List", varargslist3List);
     }
 
     public Vfpdef vfpdef() {
         return vfpdef;
     }
 
-    public Optional<Varargslist2Group> varargslist2Group() {
-        return Optional.ofNullable(varargslist2Group);
+    public Optional<Varargslist2> varargslist2() {
+        return Optional.ofNullable(varargslist2);
     }
 
-    public List<Varargslist3Group> varargslist3GroupList() {
-        return varargslist3GroupList;
+    public List<Varargslist3> varargslist3List() {
+        return varargslist3List;
     }
 
     // '=' 'expr'
-    public static final class Varargslist2Group extends ConjunctionRule {
+    public static final class Varargslist2 extends ConjunctionRule {
         private final boolean isTokenAssign;
         private final Expr expr;
 
-        public Varargslist2Group(
+        public Varargslist2(
                 boolean isTokenAssign,
                 Expr expr
         ) {
@@ -62,23 +62,23 @@ public final class Varargslist extends ConjunctionRule {
     }
 
     // ',' 'vfpdef' ['=' 'expr']
-    public static final class Varargslist3Group extends ConjunctionRule {
+    public static final class Varargslist3 extends ConjunctionRule {
         private final boolean isTokenComma;
         private final Vfpdef vfpdef;
-        private final Varargslist3Group3Group varargslist3Group3Group;
+        private final Varargslist33 varargslist33;
 
-        public Varargslist3Group(
+        public Varargslist3(
                 boolean isTokenComma,
                 Vfpdef vfpdef,
-                Varargslist3Group3Group varargslist3Group3Group
+                Varargslist33 varargslist33
         ) {
             this.isTokenComma = isTokenComma;
             this.vfpdef = vfpdef;
-            this.varargslist3Group3Group = varargslist3Group3Group;
+            this.varargslist33 = varargslist33;
 
             addRequired("isTokenComma", isTokenComma);
             addRequired("vfpdef", vfpdef);
-            addOptional("varargslist3Group3Group", varargslist3Group3Group);
+            addOptional("varargslist33", varargslist33);
         }
 
         public boolean isTokenComma() {
@@ -89,17 +89,17 @@ public final class Varargslist extends ConjunctionRule {
             return vfpdef;
         }
 
-        public Optional<Varargslist3Group3Group> varargslist3Group3Group() {
-            return Optional.ofNullable(varargslist3Group3Group);
+        public Optional<Varargslist33> varargslist33() {
+            return Optional.ofNullable(varargslist33);
         }
     }
 
     // '=' 'expr'
-    public static final class Varargslist3Group3Group extends ConjunctionRule {
+    public static final class Varargslist33 extends ConjunctionRule {
         private final boolean isTokenAssign;
         private final Expr expr;
 
-        public Varargslist3Group3Group(
+        public Varargslist33(
                 boolean isTokenAssign,
                 Expr expr
         ) {

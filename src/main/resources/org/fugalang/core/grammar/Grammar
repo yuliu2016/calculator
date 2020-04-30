@@ -97,7 +97,7 @@ exprlist: expr (',' expr)* [',']
 
 dictorsetmaker: dict_maker | set_maker
 
-dict_item: (expr ':' expr | '**' bitwise_or)
+dict_item: expr ':' expr | '**' bitwise_or
 dict_maker: dict_item (comp_for | (',' dict_item)* [','])
 set_maker: expr_or_star (comp_for | (',' expr_or_star)* [','])
 

@@ -6,20 +6,20 @@ import java.util.List;
 // dotted_as_names: 'dotted_as_name' (',' 'dotted_as_name')* [',']
 public final class DottedAsNames extends ConjunctionRule {
     private final DottedAsName dottedAsName;
-    private final List<DottedAsNames2Group> dottedAsNames2GroupList;
+    private final List<DottedAsNames2> dottedAsNames2List;
     private final boolean isTokenComma;
 
     public DottedAsNames(
             DottedAsName dottedAsName,
-            List<DottedAsNames2Group> dottedAsNames2GroupList,
+            List<DottedAsNames2> dottedAsNames2List,
             boolean isTokenComma
     ) {
         this.dottedAsName = dottedAsName;
-        this.dottedAsNames2GroupList = dottedAsNames2GroupList;
+        this.dottedAsNames2List = dottedAsNames2List;
         this.isTokenComma = isTokenComma;
 
         addRequired("dottedAsName", dottedAsName);
-        addRequired("dottedAsNames2GroupList", dottedAsNames2GroupList);
+        addRequired("dottedAsNames2List", dottedAsNames2List);
         addRequired("isTokenComma", isTokenComma);
     }
 
@@ -27,8 +27,8 @@ public final class DottedAsNames extends ConjunctionRule {
         return dottedAsName;
     }
 
-    public List<DottedAsNames2Group> dottedAsNames2GroupList() {
-        return dottedAsNames2GroupList;
+    public List<DottedAsNames2> dottedAsNames2List() {
+        return dottedAsNames2List;
     }
 
     public boolean isTokenComma() {
@@ -36,11 +36,11 @@ public final class DottedAsNames extends ConjunctionRule {
     }
 
     // ',' 'dotted_as_name'
-    public static final class DottedAsNames2Group extends ConjunctionRule {
+    public static final class DottedAsNames2 extends ConjunctionRule {
         private final boolean isTokenComma;
         private final DottedAsName dottedAsName;
 
-        public DottedAsNames2Group(
+        public DottedAsNames2(
                 boolean isTokenComma,
                 DottedAsName dottedAsName
         ) {

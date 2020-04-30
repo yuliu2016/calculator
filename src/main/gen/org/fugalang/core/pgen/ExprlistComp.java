@@ -7,70 +7,70 @@ import org.fugalang.core.parser.DisjunctionRule;
 // exprlist_comp: 'expr_or_star' ('comp_for' | (',' 'expr_or_star')* [','])
 public final class ExprlistComp extends ConjunctionRule {
     private final ExprOrStar exprOrStar;
-    private final ExprlistComp2Group exprlistComp2Group;
+    private final ExprlistComp2 exprlistComp2;
 
     public ExprlistComp(
             ExprOrStar exprOrStar,
-            ExprlistComp2Group exprlistComp2Group
+            ExprlistComp2 exprlistComp2
     ) {
         this.exprOrStar = exprOrStar;
-        this.exprlistComp2Group = exprlistComp2Group;
+        this.exprlistComp2 = exprlistComp2;
 
         addRequired("exprOrStar", exprOrStar);
-        addRequired("exprlistComp2Group", exprlistComp2Group);
+        addRequired("exprlistComp2", exprlistComp2);
     }
 
     public ExprOrStar exprOrStar() {
         return exprOrStar;
     }
 
-    public ExprlistComp2Group exprlistComp2Group() {
-        return exprlistComp2Group;
+    public ExprlistComp2 exprlistComp2() {
+        return exprlistComp2;
     }
 
     // 'comp_for' | (',' 'expr_or_star')* [',']
-    public static final class ExprlistComp2Group extends DisjunctionRule {
+    public static final class ExprlistComp2 extends DisjunctionRule {
         private final CompFor compFor;
-        private final ExprlistComp2Group2 exprlistComp2Group2;
+        private final ExprlistComp22 exprlistComp22;
 
-        public ExprlistComp2Group(
+        public ExprlistComp2(
                 CompFor compFor,
-                ExprlistComp2Group2 exprlistComp2Group2
+                ExprlistComp22 exprlistComp22
         ) {
             this.compFor = compFor;
-            this.exprlistComp2Group2 = exprlistComp2Group2;
+            this.exprlistComp22 = exprlistComp22;
 
             addChoice("compFor", compFor);
-            addChoice("exprlistComp2Group2", exprlistComp2Group2);
+            addChoice("exprlistComp22", exprlistComp22);
         }
 
         public CompFor compFor() {
             return compFor;
         }
 
-        public ExprlistComp2Group2 exprlistComp2Group2() {
-            return exprlistComp2Group2;
+        public ExprlistComp22 exprlistComp22() {
+            return exprlistComp22;
         }
     }
 
     // (',' 'expr_or_star')* [',']
-    public static final class ExprlistComp2Group2 extends ConjunctionRule {
-        private final List<ExprlistComp2Group21Group> exprlistComp2Group21GroupList;
+    public static final class ExprlistComp22 extends ConjunctionRule {
+        private final List<ExprlistComp221> exprlistComp221List;
         private final boolean isTokenComma;
 
-        public ExprlistComp2Group2(
-                List<ExprlistComp2Group21Group> exprlistComp2Group21GroupList,
+        public ExprlistComp22(
+                List<ExprlistComp221> exprlistComp221List,
                 boolean isTokenComma
         ) {
-            this.exprlistComp2Group21GroupList = exprlistComp2Group21GroupList;
+            this.exprlistComp221List = exprlistComp221List;
             this.isTokenComma = isTokenComma;
 
-            addRequired("exprlistComp2Group21GroupList", exprlistComp2Group21GroupList);
+            addRequired("exprlistComp221List", exprlistComp221List);
             addRequired("isTokenComma", isTokenComma);
         }
 
-        public List<ExprlistComp2Group21Group> exprlistComp2Group21GroupList() {
-            return exprlistComp2Group21GroupList;
+        public List<ExprlistComp221> exprlistComp221List() {
+            return exprlistComp221List;
         }
 
         public boolean isTokenComma() {
@@ -79,11 +79,11 @@ public final class ExprlistComp extends ConjunctionRule {
     }
 
     // ',' 'expr_or_star'
-    public static final class ExprlistComp2Group21Group extends ConjunctionRule {
+    public static final class ExprlistComp221 extends ConjunctionRule {
         private final boolean isTokenComma;
         private final ExprOrStar exprOrStar;
 
-        public ExprlistComp2Group21Group(
+        public ExprlistComp221(
                 boolean isTokenComma,
                 ExprOrStar exprOrStar
         ) {

@@ -6,33 +6,33 @@ import java.util.List;
 // comparison: 'bitwise_or' ('comp_op' 'bitwise_or')*
 public final class Comparison extends ConjunctionRule {
     private final BitwiseOr bitwiseOr;
-    private final List<Comparison2Group> comparison2GroupList;
+    private final List<Comparison2> comparison2List;
 
     public Comparison(
             BitwiseOr bitwiseOr,
-            List<Comparison2Group> comparison2GroupList
+            List<Comparison2> comparison2List
     ) {
         this.bitwiseOr = bitwiseOr;
-        this.comparison2GroupList = comparison2GroupList;
+        this.comparison2List = comparison2List;
 
         addRequired("bitwiseOr", bitwiseOr);
-        addRequired("comparison2GroupList", comparison2GroupList);
+        addRequired("comparison2List", comparison2List);
     }
 
     public BitwiseOr bitwiseOr() {
         return bitwiseOr;
     }
 
-    public List<Comparison2Group> comparison2GroupList() {
-        return comparison2GroupList;
+    public List<Comparison2> comparison2List() {
+        return comparison2List;
     }
 
     // 'comp_op' 'bitwise_or'
-    public static final class Comparison2Group extends ConjunctionRule {
+    public static final class Comparison2 extends ConjunctionRule {
         private final CompOp compOp;
         private final BitwiseOr bitwiseOr;
 
-        public Comparison2Group(
+        public Comparison2(
                 CompOp compOp,
                 BitwiseOr bitwiseOr
         ) {

@@ -9,27 +9,27 @@ public final class IfStmt extends ConjunctionRule {
     private final boolean isTokenIf;
     private final NamedexprExpr namedexprExpr;
     private final Suite suite;
-    private final List<IfStmt4Group> ifStmt4GroupList;
-    private final IfStmt5Group ifStmt5Group;
+    private final List<IfStmt4> ifStmt4List;
+    private final IfStmt5 ifStmt5;
 
     public IfStmt(
             boolean isTokenIf,
             NamedexprExpr namedexprExpr,
             Suite suite,
-            List<IfStmt4Group> ifStmt4GroupList,
-            IfStmt5Group ifStmt5Group
+            List<IfStmt4> ifStmt4List,
+            IfStmt5 ifStmt5
     ) {
         this.isTokenIf = isTokenIf;
         this.namedexprExpr = namedexprExpr;
         this.suite = suite;
-        this.ifStmt4GroupList = ifStmt4GroupList;
-        this.ifStmt5Group = ifStmt5Group;
+        this.ifStmt4List = ifStmt4List;
+        this.ifStmt5 = ifStmt5;
 
         addRequired("isTokenIf", isTokenIf);
         addRequired("namedexprExpr", namedexprExpr);
         addRequired("suite", suite);
-        addRequired("ifStmt4GroupList", ifStmt4GroupList);
-        addOptional("ifStmt5Group", ifStmt5Group);
+        addRequired("ifStmt4List", ifStmt4List);
+        addOptional("ifStmt5", ifStmt5);
     }
 
     public boolean isTokenIf() {
@@ -44,21 +44,21 @@ public final class IfStmt extends ConjunctionRule {
         return suite;
     }
 
-    public List<IfStmt4Group> ifStmt4GroupList() {
-        return ifStmt4GroupList;
+    public List<IfStmt4> ifStmt4List() {
+        return ifStmt4List;
     }
 
-    public Optional<IfStmt5Group> ifStmt5Group() {
-        return Optional.ofNullable(ifStmt5Group);
+    public Optional<IfStmt5> ifStmt5() {
+        return Optional.ofNullable(ifStmt5);
     }
 
     // 'elif' 'namedexpr_expr' 'suite'
-    public static final class IfStmt4Group extends ConjunctionRule {
+    public static final class IfStmt4 extends ConjunctionRule {
         private final boolean isTokenElif;
         private final NamedexprExpr namedexprExpr;
         private final Suite suite;
 
-        public IfStmt4Group(
+        public IfStmt4(
                 boolean isTokenElif,
                 NamedexprExpr namedexprExpr,
                 Suite suite
@@ -86,11 +86,11 @@ public final class IfStmt extends ConjunctionRule {
     }
 
     // 'else' 'suite'
-    public static final class IfStmt5Group extends ConjunctionRule {
+    public static final class IfStmt5 extends ConjunctionRule {
         private final boolean isTokenElse;
         private final Suite suite;
 
-        public IfStmt5Group(
+        public IfStmt5(
                 boolean isTokenElse,
                 Suite suite
         ) {

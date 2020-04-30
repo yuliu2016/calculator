@@ -7,45 +7,45 @@ import org.fugalang.core.parser.DisjunctionRule;
 // shift_expr: 'sum' (('<<' | '>>') 'sum')*
 public final class ShiftExpr extends ConjunctionRule {
     private final Sum sum;
-    private final List<ShiftExpr2Group> shiftExpr2GroupList;
+    private final List<ShiftExpr2> shiftExpr2List;
 
     public ShiftExpr(
             Sum sum,
-            List<ShiftExpr2Group> shiftExpr2GroupList
+            List<ShiftExpr2> shiftExpr2List
     ) {
         this.sum = sum;
-        this.shiftExpr2GroupList = shiftExpr2GroupList;
+        this.shiftExpr2List = shiftExpr2List;
 
         addRequired("sum", sum);
-        addRequired("shiftExpr2GroupList", shiftExpr2GroupList);
+        addRequired("shiftExpr2List", shiftExpr2List);
     }
 
     public Sum sum() {
         return sum;
     }
 
-    public List<ShiftExpr2Group> shiftExpr2GroupList() {
-        return shiftExpr2GroupList;
+    public List<ShiftExpr2> shiftExpr2List() {
+        return shiftExpr2List;
     }
 
     // ('<<' | '>>') 'sum'
-    public static final class ShiftExpr2Group extends ConjunctionRule {
-        private final ShiftExpr2Group1Group shiftExpr2Group1Group;
+    public static final class ShiftExpr2 extends ConjunctionRule {
+        private final ShiftExpr21 shiftExpr21;
         private final Sum sum;
 
-        public ShiftExpr2Group(
-                ShiftExpr2Group1Group shiftExpr2Group1Group,
+        public ShiftExpr2(
+                ShiftExpr21 shiftExpr21,
                 Sum sum
         ) {
-            this.shiftExpr2Group1Group = shiftExpr2Group1Group;
+            this.shiftExpr21 = shiftExpr21;
             this.sum = sum;
 
-            addRequired("shiftExpr2Group1Group", shiftExpr2Group1Group);
+            addRequired("shiftExpr21", shiftExpr21);
             addRequired("sum", sum);
         }
 
-        public ShiftExpr2Group1Group shiftExpr2Group1Group() {
-            return shiftExpr2Group1Group;
+        public ShiftExpr21 shiftExpr21() {
+            return shiftExpr21;
         }
 
         public Sum sum() {
@@ -54,11 +54,11 @@ public final class ShiftExpr extends ConjunctionRule {
     }
 
     // '<<' | '>>'
-    public static final class ShiftExpr2Group1Group extends DisjunctionRule {
+    public static final class ShiftExpr21 extends DisjunctionRule {
         private final boolean isTokenLshift;
         private final boolean isTokenRshift;
 
-        public ShiftExpr2Group1Group(
+        public ShiftExpr21(
                 boolean isTokenLshift,
                 boolean isTokenRshift
         ) {

@@ -7,45 +7,45 @@ import org.fugalang.core.parser.DisjunctionRule;
 // term: 'factor' (('*' | '@' | '/' | '%' | '//') 'factor')*
 public final class Term extends ConjunctionRule {
     private final Factor factor;
-    private final List<Term2Group> term2GroupList;
+    private final List<Term2> term2List;
 
     public Term(
             Factor factor,
-            List<Term2Group> term2GroupList
+            List<Term2> term2List
     ) {
         this.factor = factor;
-        this.term2GroupList = term2GroupList;
+        this.term2List = term2List;
 
         addRequired("factor", factor);
-        addRequired("term2GroupList", term2GroupList);
+        addRequired("term2List", term2List);
     }
 
     public Factor factor() {
         return factor;
     }
 
-    public List<Term2Group> term2GroupList() {
-        return term2GroupList;
+    public List<Term2> term2List() {
+        return term2List;
     }
 
     // ('*' | '@' | '/' | '%' | '//') 'factor'
-    public static final class Term2Group extends ConjunctionRule {
-        private final Term2Group1Group term2Group1Group;
+    public static final class Term2 extends ConjunctionRule {
+        private final Term21 term21;
         private final Factor factor;
 
-        public Term2Group(
-                Term2Group1Group term2Group1Group,
+        public Term2(
+                Term21 term21,
                 Factor factor
         ) {
-            this.term2Group1Group = term2Group1Group;
+            this.term21 = term21;
             this.factor = factor;
 
-            addRequired("term2Group1Group", term2Group1Group);
+            addRequired("term21", term21);
             addRequired("factor", factor);
         }
 
-        public Term2Group1Group term2Group1Group() {
-            return term2Group1Group;
+        public Term21 term21() {
+            return term21;
         }
 
         public Factor factor() {
@@ -54,14 +54,14 @@ public final class Term extends ConjunctionRule {
     }
 
     // '*' | '@' | '/' | '%' | '//'
-    public static final class Term2Group1Group extends DisjunctionRule {
+    public static final class Term21 extends DisjunctionRule {
         private final boolean isTokenTimes;
         private final boolean isTokenMatrixTimes;
         private final boolean isTokenDiv;
         private final boolean isTokenModulus;
         private final boolean isTokenFloorDiv;
 
-        public Term2Group1Group(
+        public Term21(
                 boolean isTokenTimes,
                 boolean isTokenMatrixTimes,
                 boolean isTokenDiv,

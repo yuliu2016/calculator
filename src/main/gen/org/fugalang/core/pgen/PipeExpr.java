@@ -6,33 +6,33 @@ import java.util.List;
 // pipe_expr: 'atom_expr' ('->' 'atom_expr')*
 public final class PipeExpr extends ConjunctionRule {
     private final AtomExpr atomExpr;
-    private final List<PipeExpr2Group> pipeExpr2GroupList;
+    private final List<PipeExpr2> pipeExpr2List;
 
     public PipeExpr(
             AtomExpr atomExpr,
-            List<PipeExpr2Group> pipeExpr2GroupList
+            List<PipeExpr2> pipeExpr2List
     ) {
         this.atomExpr = atomExpr;
-        this.pipeExpr2GroupList = pipeExpr2GroupList;
+        this.pipeExpr2List = pipeExpr2List;
 
         addRequired("atomExpr", atomExpr);
-        addRequired("pipeExpr2GroupList", pipeExpr2GroupList);
+        addRequired("pipeExpr2List", pipeExpr2List);
     }
 
     public AtomExpr atomExpr() {
         return atomExpr;
     }
 
-    public List<PipeExpr2Group> pipeExpr2GroupList() {
-        return pipeExpr2GroupList;
+    public List<PipeExpr2> pipeExpr2List() {
+        return pipeExpr2List;
     }
 
     // '->' 'atom_expr'
-    public static final class PipeExpr2Group extends ConjunctionRule {
+    public static final class PipeExpr2 extends ConjunctionRule {
         private final boolean isTokenPipe;
         private final AtomExpr atomExpr;
 
-        public PipeExpr2Group(
+        public PipeExpr2(
                 boolean isTokenPipe,
                 AtomExpr atomExpr
         ) {

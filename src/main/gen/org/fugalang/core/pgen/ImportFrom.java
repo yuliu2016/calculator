@@ -7,65 +7,65 @@ import org.fugalang.core.parser.DisjunctionRule;
 // import_from: 'from' ('.'* 'dotted_name' | '.'+) 'import' ('*' | '(' 'import_as_names' ')' | 'import_as_names')
 public final class ImportFrom extends ConjunctionRule {
     private final boolean isTokenFrom;
-    private final ImportFrom2Group importFrom2Group;
+    private final ImportFrom2 importFrom2;
     private final boolean isTokenImport;
-    private final ImportFrom4Group importFrom4Group;
+    private final ImportFrom4 importFrom4;
 
     public ImportFrom(
             boolean isTokenFrom,
-            ImportFrom2Group importFrom2Group,
+            ImportFrom2 importFrom2,
             boolean isTokenImport,
-            ImportFrom4Group importFrom4Group
+            ImportFrom4 importFrom4
     ) {
         this.isTokenFrom = isTokenFrom;
-        this.importFrom2Group = importFrom2Group;
+        this.importFrom2 = importFrom2;
         this.isTokenImport = isTokenImport;
-        this.importFrom4Group = importFrom4Group;
+        this.importFrom4 = importFrom4;
 
         addRequired("isTokenFrom", isTokenFrom);
-        addRequired("importFrom2Group", importFrom2Group);
+        addRequired("importFrom2", importFrom2);
         addRequired("isTokenImport", isTokenImport);
-        addRequired("importFrom4Group", importFrom4Group);
+        addRequired("importFrom4", importFrom4);
     }
 
     public boolean isTokenFrom() {
         return isTokenFrom;
     }
 
-    public ImportFrom2Group importFrom2Group() {
-        return importFrom2Group;
+    public ImportFrom2 importFrom2() {
+        return importFrom2;
     }
 
     public boolean isTokenImport() {
         return isTokenImport;
     }
 
-    public ImportFrom4Group importFrom4Group() {
-        return importFrom4Group;
+    public ImportFrom4 importFrom4() {
+        return importFrom4;
     }
 
     // '.'* 'dotted_name' | '.'+
-    public static final class ImportFrom2Group extends DisjunctionRule {
-        private final ImportFrom2Group1 importFrom2Group1;
+    public static final class ImportFrom2 extends DisjunctionRule {
+        private final ImportFrom21 importFrom21;
         private final boolean isTokenDot;
         private final List<Boolean> isTokenDotList;
 
-        public ImportFrom2Group(
-                ImportFrom2Group1 importFrom2Group1,
+        public ImportFrom2(
+                ImportFrom21 importFrom21,
                 boolean isTokenDot,
                 List<Boolean> isTokenDotList
         ) {
-            this.importFrom2Group1 = importFrom2Group1;
+            this.importFrom21 = importFrom21;
             this.isTokenDot = isTokenDot;
             this.isTokenDotList = isTokenDotList;
 
-            addChoice("importFrom2Group1", importFrom2Group1);
+            addChoice("importFrom21", importFrom21);
             addChoice("isTokenDot", isTokenDot);
             addChoice("isTokenDotList", isTokenDotList);
         }
 
-        public ImportFrom2Group1 importFrom2Group1() {
-            return importFrom2Group1;
+        public ImportFrom21 importFrom21() {
+            return importFrom21;
         }
 
         public boolean isTokenDot() {
@@ -78,11 +78,11 @@ public final class ImportFrom extends ConjunctionRule {
     }
 
     // '.'* 'dotted_name'
-    public static final class ImportFrom2Group1 extends ConjunctionRule {
+    public static final class ImportFrom21 extends ConjunctionRule {
         private final List<Boolean> isTokenDotList;
         private final DottedName dottedName;
 
-        public ImportFrom2Group1(
+        public ImportFrom21(
                 List<Boolean> isTokenDotList,
                 DottedName dottedName
         ) {
@@ -103,22 +103,22 @@ public final class ImportFrom extends ConjunctionRule {
     }
 
     // '*' | '(' 'import_as_names' ')' | 'import_as_names'
-    public static final class ImportFrom4Group extends DisjunctionRule {
+    public static final class ImportFrom4 extends DisjunctionRule {
         private final boolean isTokenTimes;
-        private final ImportFrom4Group2 importFrom4Group2;
+        private final ImportFrom42 importFrom42;
         private final ImportAsNames importAsNames;
 
-        public ImportFrom4Group(
+        public ImportFrom4(
                 boolean isTokenTimes,
-                ImportFrom4Group2 importFrom4Group2,
+                ImportFrom42 importFrom42,
                 ImportAsNames importAsNames
         ) {
             this.isTokenTimes = isTokenTimes;
-            this.importFrom4Group2 = importFrom4Group2;
+            this.importFrom42 = importFrom42;
             this.importAsNames = importAsNames;
 
             addChoice("isTokenTimes", isTokenTimes);
-            addChoice("importFrom4Group2", importFrom4Group2);
+            addChoice("importFrom42", importFrom42);
             addChoice("importAsNames", importAsNames);
         }
 
@@ -126,8 +126,8 @@ public final class ImportFrom extends ConjunctionRule {
             return isTokenTimes;
         }
 
-        public ImportFrom4Group2 importFrom4Group2() {
-            return importFrom4Group2;
+        public ImportFrom42 importFrom42() {
+            return importFrom42;
         }
 
         public ImportAsNames importAsNames() {
@@ -136,12 +136,12 @@ public final class ImportFrom extends ConjunctionRule {
     }
 
     // '(' 'import_as_names' ')'
-    public static final class ImportFrom4Group2 extends ConjunctionRule {
+    public static final class ImportFrom42 extends ConjunctionRule {
         private final boolean isTokenLpar;
         private final ImportAsNames importAsNames;
         private final boolean isTokenRpar;
 
-        public ImportFrom4Group2(
+        public ImportFrom42(
                 boolean isTokenLpar,
                 ImportAsNames importAsNames,
                 boolean isTokenRpar

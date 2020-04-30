@@ -5,22 +5,22 @@ import org.fugalang.core.parser.DisjunctionRule;
 
 // stmt: ('simple_stmt' | 'compound_stmt') 'NEWLINE'
 public final class Stmt extends ConjunctionRule {
-    private final Stmt1Group stmt1Group;
+    private final Stmt1 stmt1;
     private final Object newline;
 
     public Stmt(
-            Stmt1Group stmt1Group,
+            Stmt1 stmt1,
             Object newline
     ) {
-        this.stmt1Group = stmt1Group;
+        this.stmt1 = stmt1;
         this.newline = newline;
 
-        addRequired("stmt1Group", stmt1Group);
+        addRequired("stmt1", stmt1);
         addRequired("newline", newline);
     }
 
-    public Stmt1Group stmt1Group() {
-        return stmt1Group;
+    public Stmt1 stmt1() {
+        return stmt1;
     }
 
     public Object newline() {
@@ -28,11 +28,11 @@ public final class Stmt extends ConjunctionRule {
     }
 
     // 'simple_stmt' | 'compound_stmt'
-    public static final class Stmt1Group extends DisjunctionRule {
+    public static final class Stmt1 extends DisjunctionRule {
         private final SimpleStmt simpleStmt;
         private final CompoundStmt compoundStmt;
 
-        public Stmt1Group(
+        public Stmt1(
                 SimpleStmt simpleStmt,
                 CompoundStmt compoundStmt
         ) {

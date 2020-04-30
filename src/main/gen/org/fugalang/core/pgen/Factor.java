@@ -29,22 +29,22 @@ public final class Factor extends DisjunctionRule {
 
     // ('+' | '-' | '~') 'factor'
     public static final class Factor1 extends ConjunctionRule {
-        private final Factor11Group factor11Group;
+        private final Factor11 factor11;
         private final Factor factor;
 
         public Factor1(
-                Factor11Group factor11Group,
+                Factor11 factor11,
                 Factor factor
         ) {
-            this.factor11Group = factor11Group;
+            this.factor11 = factor11;
             this.factor = factor;
 
-            addRequired("factor11Group", factor11Group);
+            addRequired("factor11", factor11);
             addRequired("factor", factor);
         }
 
-        public Factor11Group factor11Group() {
-            return factor11Group;
+        public Factor11 factor11() {
+            return factor11;
         }
 
         public Factor factor() {
@@ -53,12 +53,12 @@ public final class Factor extends DisjunctionRule {
     }
 
     // '+' | '-' | '~'
-    public static final class Factor11Group extends DisjunctionRule {
+    public static final class Factor11 extends DisjunctionRule {
         private final boolean isTokenPlus;
         private final boolean isTokenMinus;
         private final boolean isTokenBitNot;
 
-        public Factor11Group(
+        public Factor11(
                 boolean isTokenPlus,
                 boolean isTokenMinus,
                 boolean isTokenBitNot

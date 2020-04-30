@@ -9,23 +9,23 @@ public final class Funcdef extends ConjunctionRule {
     private final boolean isTokenAsync;
     private final boolean isTokenDef;
     private final Varargslist varargslist;
-    private final Funcdef4Group funcdef4Group;
+    private final Funcdef4 funcdef4;
 
     public Funcdef(
             boolean isTokenAsync,
             boolean isTokenDef,
             Varargslist varargslist,
-            Funcdef4Group funcdef4Group
+            Funcdef4 funcdef4
     ) {
         this.isTokenAsync = isTokenAsync;
         this.isTokenDef = isTokenDef;
         this.varargslist = varargslist;
-        this.funcdef4Group = funcdef4Group;
+        this.funcdef4 = funcdef4;
 
         addRequired("isTokenAsync", isTokenAsync);
         addRequired("isTokenDef", isTokenDef);
         addOptional("varargslist", varargslist);
-        addRequired("funcdef4Group", funcdef4Group);
+        addRequired("funcdef4", funcdef4);
     }
 
     public boolean isTokenAsync() {
@@ -40,28 +40,28 @@ public final class Funcdef extends ConjunctionRule {
         return Optional.ofNullable(varargslist);
     }
 
-    public Funcdef4Group funcdef4Group() {
-        return funcdef4Group;
+    public Funcdef4 funcdef4() {
+        return funcdef4;
     }
 
     // ':' 'expr' | 'block_suite'
-    public static final class Funcdef4Group extends DisjunctionRule {
-        private final Funcdef4Group1 funcdef4Group1;
+    public static final class Funcdef4 extends DisjunctionRule {
+        private final Funcdef41 funcdef41;
         private final BlockSuite blockSuite;
 
-        public Funcdef4Group(
-                Funcdef4Group1 funcdef4Group1,
+        public Funcdef4(
+                Funcdef41 funcdef41,
                 BlockSuite blockSuite
         ) {
-            this.funcdef4Group1 = funcdef4Group1;
+            this.funcdef41 = funcdef41;
             this.blockSuite = blockSuite;
 
-            addChoice("funcdef4Group1", funcdef4Group1);
+            addChoice("funcdef41", funcdef41);
             addChoice("blockSuite", blockSuite);
         }
 
-        public Funcdef4Group1 funcdef4Group1() {
-            return funcdef4Group1;
+        public Funcdef41 funcdef41() {
+            return funcdef41;
         }
 
         public BlockSuite blockSuite() {
@@ -70,11 +70,11 @@ public final class Funcdef extends ConjunctionRule {
     }
 
     // ':' 'expr'
-    public static final class Funcdef4Group1 extends ConjunctionRule {
+    public static final class Funcdef41 extends ConjunctionRule {
         private final boolean isTokenColon;
         private final Expr expr;
 
-        public Funcdef4Group1(
+        public Funcdef41(
                 boolean isTokenColon,
                 Expr expr
         ) {

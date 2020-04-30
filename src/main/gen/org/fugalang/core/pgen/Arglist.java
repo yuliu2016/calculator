@@ -6,20 +6,20 @@ import java.util.List;
 // arglist: 'argument' (',' 'argument')* [',']
 public final class Arglist extends ConjunctionRule {
     private final Argument argument;
-    private final List<Arglist2Group> arglist2GroupList;
+    private final List<Arglist2> arglist2List;
     private final boolean isTokenComma;
 
     public Arglist(
             Argument argument,
-            List<Arglist2Group> arglist2GroupList,
+            List<Arglist2> arglist2List,
             boolean isTokenComma
     ) {
         this.argument = argument;
-        this.arglist2GroupList = arglist2GroupList;
+        this.arglist2List = arglist2List;
         this.isTokenComma = isTokenComma;
 
         addRequired("argument", argument);
-        addRequired("arglist2GroupList", arglist2GroupList);
+        addRequired("arglist2List", arglist2List);
         addRequired("isTokenComma", isTokenComma);
     }
 
@@ -27,8 +27,8 @@ public final class Arglist extends ConjunctionRule {
         return argument;
     }
 
-    public List<Arglist2Group> arglist2GroupList() {
-        return arglist2GroupList;
+    public List<Arglist2> arglist2List() {
+        return arglist2List;
     }
 
     public boolean isTokenComma() {
@@ -36,11 +36,11 @@ public final class Arglist extends ConjunctionRule {
     }
 
     // ',' 'argument'
-    public static final class Arglist2Group extends ConjunctionRule {
+    public static final class Arglist2 extends ConjunctionRule {
         private final boolean isTokenComma;
         private final Argument argument;
 
-        public Arglist2Group(
+        public Arglist2(
                 boolean isTokenComma,
                 Argument argument
         ) {

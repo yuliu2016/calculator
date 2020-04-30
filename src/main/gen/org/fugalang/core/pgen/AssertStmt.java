@@ -7,20 +7,20 @@ import java.util.Optional;
 public final class AssertStmt extends ConjunctionRule {
     private final boolean isTokenAssert;
     private final Expr expr;
-    private final AssertStmt3Group assertStmt3Group;
+    private final AssertStmt3 assertStmt3;
 
     public AssertStmt(
             boolean isTokenAssert,
             Expr expr,
-            AssertStmt3Group assertStmt3Group
+            AssertStmt3 assertStmt3
     ) {
         this.isTokenAssert = isTokenAssert;
         this.expr = expr;
-        this.assertStmt3Group = assertStmt3Group;
+        this.assertStmt3 = assertStmt3;
 
         addRequired("isTokenAssert", isTokenAssert);
         addRequired("expr", expr);
-        addOptional("assertStmt3Group", assertStmt3Group);
+        addOptional("assertStmt3", assertStmt3);
     }
 
     public boolean isTokenAssert() {
@@ -31,16 +31,16 @@ public final class AssertStmt extends ConjunctionRule {
         return expr;
     }
 
-    public Optional<AssertStmt3Group> assertStmt3Group() {
-        return Optional.ofNullable(assertStmt3Group);
+    public Optional<AssertStmt3> assertStmt3() {
+        return Optional.ofNullable(assertStmt3);
     }
 
     // ',' 'expr'
-    public static final class AssertStmt3Group extends ConjunctionRule {
+    public static final class AssertStmt3 extends ConjunctionRule {
         private final boolean isTokenComma;
         private final Expr expr;
 
-        public AssertStmt3Group(
+        public AssertStmt3(
                 boolean isTokenComma,
                 Expr expr
         ) {

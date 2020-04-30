@@ -6,33 +6,33 @@ import java.util.List;
 // bitwise_xor: 'bitwise_and' ('^' 'bitwise_and')*
 public final class BitwiseXor extends ConjunctionRule {
     private final BitwiseAnd bitwiseAnd;
-    private final List<BitwiseXor2Group> bitwiseXor2GroupList;
+    private final List<BitwiseXor2> bitwiseXor2List;
 
     public BitwiseXor(
             BitwiseAnd bitwiseAnd,
-            List<BitwiseXor2Group> bitwiseXor2GroupList
+            List<BitwiseXor2> bitwiseXor2List
     ) {
         this.bitwiseAnd = bitwiseAnd;
-        this.bitwiseXor2GroupList = bitwiseXor2GroupList;
+        this.bitwiseXor2List = bitwiseXor2List;
 
         addRequired("bitwiseAnd", bitwiseAnd);
-        addRequired("bitwiseXor2GroupList", bitwiseXor2GroupList);
+        addRequired("bitwiseXor2List", bitwiseXor2List);
     }
 
     public BitwiseAnd bitwiseAnd() {
         return bitwiseAnd;
     }
 
-    public List<BitwiseXor2Group> bitwiseXor2GroupList() {
-        return bitwiseXor2GroupList;
+    public List<BitwiseXor2> bitwiseXor2List() {
+        return bitwiseXor2List;
     }
 
     // '^' 'bitwise_and'
-    public static final class BitwiseXor2Group extends ConjunctionRule {
+    public static final class BitwiseXor2 extends ConjunctionRule {
         private final boolean isTokenBitXor;
         private final BitwiseAnd bitwiseAnd;
 
-        public BitwiseXor2Group(
+        public BitwiseXor2(
                 boolean isTokenBitXor,
                 BitwiseAnd bitwiseAnd
         ) {

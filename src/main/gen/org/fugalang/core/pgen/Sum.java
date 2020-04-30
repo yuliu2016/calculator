@@ -7,45 +7,45 @@ import org.fugalang.core.parser.DisjunctionRule;
 // sum: 'term' (('+' | '-') 'term')*
 public final class Sum extends ConjunctionRule {
     private final Term term;
-    private final List<Sum2Group> sum2GroupList;
+    private final List<Sum2> sum2List;
 
     public Sum(
             Term term,
-            List<Sum2Group> sum2GroupList
+            List<Sum2> sum2List
     ) {
         this.term = term;
-        this.sum2GroupList = sum2GroupList;
+        this.sum2List = sum2List;
 
         addRequired("term", term);
-        addRequired("sum2GroupList", sum2GroupList);
+        addRequired("sum2List", sum2List);
     }
 
     public Term term() {
         return term;
     }
 
-    public List<Sum2Group> sum2GroupList() {
-        return sum2GroupList;
+    public List<Sum2> sum2List() {
+        return sum2List;
     }
 
     // ('+' | '-') 'term'
-    public static final class Sum2Group extends ConjunctionRule {
-        private final Sum2Group1Group sum2Group1Group;
+    public static final class Sum2 extends ConjunctionRule {
+        private final Sum21 sum21;
         private final Term term;
 
-        public Sum2Group(
-                Sum2Group1Group sum2Group1Group,
+        public Sum2(
+                Sum21 sum21,
                 Term term
         ) {
-            this.sum2Group1Group = sum2Group1Group;
+            this.sum21 = sum21;
             this.term = term;
 
-            addRequired("sum2Group1Group", sum2Group1Group);
+            addRequired("sum21", sum21);
             addRequired("term", term);
         }
 
-        public Sum2Group1Group sum2Group1Group() {
-            return sum2Group1Group;
+        public Sum21 sum21() {
+            return sum21;
         }
 
         public Term term() {
@@ -54,11 +54,11 @@ public final class Sum extends ConjunctionRule {
     }
 
     // '+' | '-'
-    public static final class Sum2Group1Group extends DisjunctionRule {
+    public static final class Sum21 extends DisjunctionRule {
         private final boolean isTokenPlus;
         private final boolean isTokenMinus;
 
-        public Sum2Group1Group(
+        public Sum21(
                 boolean isTokenPlus,
                 boolean isTokenMinus
         ) {

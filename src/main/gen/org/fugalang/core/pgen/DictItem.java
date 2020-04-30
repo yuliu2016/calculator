@@ -3,54 +3,37 @@ package org.fugalang.core.pgen;
 import org.fugalang.core.parser.ConjunctionRule;
 import org.fugalang.core.parser.DisjunctionRule;
 
-// dict_item: ('expr' ':' 'expr' | '**' 'bitwise_or')
-public final class DictItem extends ConjunctionRule {
-    private final DictItemGroup dictItemGroup;
+// dict_item: 'expr' ':' 'expr' | '**' 'bitwise_or'
+public final class DictItem extends DisjunctionRule {
+    private final DictItem1 dictItem1;
+    private final DictItem2 dictItem2;
 
     public DictItem(
-            DictItemGroup dictItemGroup
+            DictItem1 dictItem1,
+            DictItem2 dictItem2
     ) {
-        this.dictItemGroup = dictItemGroup;
+        this.dictItem1 = dictItem1;
+        this.dictItem2 = dictItem2;
 
-        addRequired("dictItemGroup", dictItemGroup);
+        addChoice("dictItem1", dictItem1);
+        addChoice("dictItem2", dictItem2);
     }
 
-    public DictItemGroup dictItemGroup() {
-        return dictItemGroup;
+    public DictItem1 dictItem1() {
+        return dictItem1;
     }
 
-    // 'expr' ':' 'expr' | '**' 'bitwise_or'
-    public static final class DictItemGroup extends DisjunctionRule {
-        private final DictItemGroup1 dictItemGroup1;
-        private final DictItemGroup2 dictItemGroup2;
-
-        public DictItemGroup(
-                DictItemGroup1 dictItemGroup1,
-                DictItemGroup2 dictItemGroup2
-        ) {
-            this.dictItemGroup1 = dictItemGroup1;
-            this.dictItemGroup2 = dictItemGroup2;
-
-            addChoice("dictItemGroup1", dictItemGroup1);
-            addChoice("dictItemGroup2", dictItemGroup2);
-        }
-
-        public DictItemGroup1 dictItemGroup1() {
-            return dictItemGroup1;
-        }
-
-        public DictItemGroup2 dictItemGroup2() {
-            return dictItemGroup2;
-        }
+    public DictItem2 dictItem2() {
+        return dictItem2;
     }
 
     // 'expr' ':' 'expr'
-    public static final class DictItemGroup1 extends ConjunctionRule {
+    public static final class DictItem1 extends ConjunctionRule {
         private final Expr expr;
         private final boolean isTokenColon;
         private final Expr expr1;
 
-        public DictItemGroup1(
+        public DictItem1(
                 Expr expr,
                 boolean isTokenColon,
                 Expr expr1
@@ -78,11 +61,11 @@ public final class DictItem extends ConjunctionRule {
     }
 
     // '**' 'bitwise_or'
-    public static final class DictItemGroup2 extends ConjunctionRule {
+    public static final class DictItem2 extends ConjunctionRule {
         private final boolean isTokenPower;
         private final BitwiseOr bitwiseOr;
 
-        public DictItemGroup2(
+        public DictItem2(
                 boolean isTokenPower,
                 BitwiseOr bitwiseOr
         ) {

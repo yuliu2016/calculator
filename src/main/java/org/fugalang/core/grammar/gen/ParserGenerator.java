@@ -302,8 +302,7 @@ public class ParserGenerator {
             // just add all the repeat rules and be done with it
             addAndRule(className, cb, rule.andRule, isOptional);
         } else {
-            var classWithSuffix = className.suffix("Group");
-            var classType = classWithSuffix.asType();
+            var classType = className.asType();
 
             var component_cb = classSet.createComponentClass(classType);
             component_cb.setHeaderComments(rule.toSimpleString());
@@ -312,10 +311,10 @@ public class ParserGenerator {
             // Add a field to the class set
             // The reason to do this first is that if adding the rule fails,
             // this class can still show that this point was reached
-            addFieldWithRepeat(classWithSuffix, cb,
+            addFieldWithRepeat(className, cb,
                     ParseStringUtil.decap(classType), repeatRule, isOptional);
 
-            addOrRule(classWithSuffix, component_cb, rule);
+            addOrRule(className, component_cb, rule);
         }
     }
 }

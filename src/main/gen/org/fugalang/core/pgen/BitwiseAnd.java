@@ -6,33 +6,33 @@ import java.util.List;
 // bitwise_and: 'shift_expr' ('&' 'shift_expr')*
 public final class BitwiseAnd extends ConjunctionRule {
     private final ShiftExpr shiftExpr;
-    private final List<BitwiseAnd2Group> bitwiseAnd2GroupList;
+    private final List<BitwiseAnd2> bitwiseAnd2List;
 
     public BitwiseAnd(
             ShiftExpr shiftExpr,
-            List<BitwiseAnd2Group> bitwiseAnd2GroupList
+            List<BitwiseAnd2> bitwiseAnd2List
     ) {
         this.shiftExpr = shiftExpr;
-        this.bitwiseAnd2GroupList = bitwiseAnd2GroupList;
+        this.bitwiseAnd2List = bitwiseAnd2List;
 
         addRequired("shiftExpr", shiftExpr);
-        addRequired("bitwiseAnd2GroupList", bitwiseAnd2GroupList);
+        addRequired("bitwiseAnd2List", bitwiseAnd2List);
     }
 
     public ShiftExpr shiftExpr() {
         return shiftExpr;
     }
 
-    public List<BitwiseAnd2Group> bitwiseAnd2GroupList() {
-        return bitwiseAnd2GroupList;
+    public List<BitwiseAnd2> bitwiseAnd2List() {
+        return bitwiseAnd2List;
     }
 
     // '&' 'shift_expr'
-    public static final class BitwiseAnd2Group extends ConjunctionRule {
+    public static final class BitwiseAnd2 extends ConjunctionRule {
         private final boolean isTokenBitAnd;
         private final ShiftExpr shiftExpr;
 
-        public BitwiseAnd2Group(
+        public BitwiseAnd2(
                 boolean isTokenBitAnd,
                 ShiftExpr shiftExpr
         ) {

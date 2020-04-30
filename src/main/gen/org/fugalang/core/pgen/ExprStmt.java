@@ -8,58 +8,58 @@ import org.fugalang.core.parser.DisjunctionRule;
 // expr_stmt: 'exprlist_star' ['augassign' 'exprlist' | ('=' 'exprlist_star')*]
 public final class ExprStmt extends ConjunctionRule {
     private final ExprlistStar exprlistStar;
-    private final ExprStmt2Group exprStmt2Group;
+    private final ExprStmt2 exprStmt2;
 
     public ExprStmt(
             ExprlistStar exprlistStar,
-            ExprStmt2Group exprStmt2Group
+            ExprStmt2 exprStmt2
     ) {
         this.exprlistStar = exprlistStar;
-        this.exprStmt2Group = exprStmt2Group;
+        this.exprStmt2 = exprStmt2;
 
         addRequired("exprlistStar", exprlistStar);
-        addOptional("exprStmt2Group", exprStmt2Group);
+        addOptional("exprStmt2", exprStmt2);
     }
 
     public ExprlistStar exprlistStar() {
         return exprlistStar;
     }
 
-    public Optional<ExprStmt2Group> exprStmt2Group() {
-        return Optional.ofNullable(exprStmt2Group);
+    public Optional<ExprStmt2> exprStmt2() {
+        return Optional.ofNullable(exprStmt2);
     }
 
     // 'augassign' 'exprlist' | ('=' 'exprlist_star')*
-    public static final class ExprStmt2Group extends DisjunctionRule {
-        private final ExprStmt2Group1 exprStmt2Group1;
-        private final List<ExprStmt2Group2Group> exprStmt2Group2GroupList;
+    public static final class ExprStmt2 extends DisjunctionRule {
+        private final ExprStmt21 exprStmt21;
+        private final List<ExprStmt22> exprStmt22List;
 
-        public ExprStmt2Group(
-                ExprStmt2Group1 exprStmt2Group1,
-                List<ExprStmt2Group2Group> exprStmt2Group2GroupList
+        public ExprStmt2(
+                ExprStmt21 exprStmt21,
+                List<ExprStmt22> exprStmt22List
         ) {
-            this.exprStmt2Group1 = exprStmt2Group1;
-            this.exprStmt2Group2GroupList = exprStmt2Group2GroupList;
+            this.exprStmt21 = exprStmt21;
+            this.exprStmt22List = exprStmt22List;
 
-            addChoice("exprStmt2Group1", exprStmt2Group1);
-            addChoice("exprStmt2Group2GroupList", exprStmt2Group2GroupList);
+            addChoice("exprStmt21", exprStmt21);
+            addChoice("exprStmt22List", exprStmt22List);
         }
 
-        public ExprStmt2Group1 exprStmt2Group1() {
-            return exprStmt2Group1;
+        public ExprStmt21 exprStmt21() {
+            return exprStmt21;
         }
 
-        public List<ExprStmt2Group2Group> exprStmt2Group2GroupList() {
-            return exprStmt2Group2GroupList;
+        public List<ExprStmt22> exprStmt22List() {
+            return exprStmt22List;
         }
     }
 
     // 'augassign' 'exprlist'
-    public static final class ExprStmt2Group1 extends ConjunctionRule {
+    public static final class ExprStmt21 extends ConjunctionRule {
         private final Augassign augassign;
         private final Exprlist exprlist;
 
-        public ExprStmt2Group1(
+        public ExprStmt21(
                 Augassign augassign,
                 Exprlist exprlist
         ) {
@@ -80,11 +80,11 @@ public final class ExprStmt extends ConjunctionRule {
     }
 
     // '=' 'exprlist_star'
-    public static final class ExprStmt2Group2Group extends ConjunctionRule {
+    public static final class ExprStmt22 extends ConjunctionRule {
         private final boolean isTokenAssign;
         private final ExprlistStar exprlistStar;
 
-        public ExprStmt2Group2Group(
+        public ExprStmt22(
                 boolean isTokenAssign,
                 ExprlistStar exprlistStar
         ) {

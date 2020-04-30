@@ -6,33 +6,33 @@ import java.util.Optional;
 // with_item: 'expr' ['as' 'NAME']
 public final class WithItem extends ConjunctionRule {
     private final Expr expr;
-    private final WithItem2Group withItem2Group;
+    private final WithItem2 withItem2;
 
     public WithItem(
             Expr expr,
-            WithItem2Group withItem2Group
+            WithItem2 withItem2
     ) {
         this.expr = expr;
-        this.withItem2Group = withItem2Group;
+        this.withItem2 = withItem2;
 
         addRequired("expr", expr);
-        addOptional("withItem2Group", withItem2Group);
+        addOptional("withItem2", withItem2);
     }
 
     public Expr expr() {
         return expr;
     }
 
-    public Optional<WithItem2Group> withItem2Group() {
-        return Optional.ofNullable(withItem2Group);
+    public Optional<WithItem2> withItem2() {
+        return Optional.ofNullable(withItem2);
     }
 
     // 'as' 'NAME'
-    public static final class WithItem2Group extends ConjunctionRule {
+    public static final class WithItem2 extends ConjunctionRule {
         private final boolean isTokenAs;
         private final String name;
 
-        public WithItem2Group(
+        public WithItem2(
                 boolean isTokenAs,
                 String name
         ) {

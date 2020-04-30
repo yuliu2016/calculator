@@ -6,33 +6,33 @@ import java.util.Optional;
 // power: 'pipe_expr' ['**' 'factor']
 public final class Power extends ConjunctionRule {
     private final PipeExpr pipeExpr;
-    private final Power2Group power2Group;
+    private final Power2 power2;
 
     public Power(
             PipeExpr pipeExpr,
-            Power2Group power2Group
+            Power2 power2
     ) {
         this.pipeExpr = pipeExpr;
-        this.power2Group = power2Group;
+        this.power2 = power2;
 
         addRequired("pipeExpr", pipeExpr);
-        addOptional("power2Group", power2Group);
+        addOptional("power2", power2);
     }
 
     public PipeExpr pipeExpr() {
         return pipeExpr;
     }
 
-    public Optional<Power2Group> power2Group() {
-        return Optional.ofNullable(power2Group);
+    public Optional<Power2> power2() {
+        return Optional.ofNullable(power2);
     }
 
     // '**' 'factor'
-    public static final class Power2Group extends ConjunctionRule {
+    public static final class Power2 extends ConjunctionRule {
         private final boolean isTokenPower;
         private final Factor factor;
 
-        public Power2Group(
+        public Power2(
                 boolean isTokenPower,
                 Factor factor
         ) {

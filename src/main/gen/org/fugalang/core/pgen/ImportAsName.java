@@ -6,33 +6,33 @@ import java.util.Optional;
 // import_as_name: 'NAME' ['as' 'NAME']
 public final class ImportAsName extends ConjunctionRule {
     private final String name;
-    private final ImportAsName2Group importAsName2Group;
+    private final ImportAsName2 importAsName2;
 
     public ImportAsName(
             String name,
-            ImportAsName2Group importAsName2Group
+            ImportAsName2 importAsName2
     ) {
         this.name = name;
-        this.importAsName2Group = importAsName2Group;
+        this.importAsName2 = importAsName2;
 
         addRequired("name", name);
-        addOptional("importAsName2Group", importAsName2Group);
+        addOptional("importAsName2", importAsName2);
     }
 
     public String name() {
         return name;
     }
 
-    public Optional<ImportAsName2Group> importAsName2Group() {
-        return Optional.ofNullable(importAsName2Group);
+    public Optional<ImportAsName2> importAsName2() {
+        return Optional.ofNullable(importAsName2);
     }
 
     // 'as' 'NAME'
-    public static final class ImportAsName2Group extends ConjunctionRule {
+    public static final class ImportAsName2 extends ConjunctionRule {
         private final boolean isTokenAs;
         private final String name;
 
-        public ImportAsName2Group(
+        public ImportAsName2(
                 boolean isTokenAs,
                 String name
         ) {

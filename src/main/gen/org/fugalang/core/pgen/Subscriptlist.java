@@ -6,20 +6,20 @@ import java.util.List;
 // subscriptlist: 'subscript' (',' 'subscript')* [',']
 public final class Subscriptlist extends ConjunctionRule {
     private final Subscript subscript;
-    private final List<Subscriptlist2Group> subscriptlist2GroupList;
+    private final List<Subscriptlist2> subscriptlist2List;
     private final boolean isTokenComma;
 
     public Subscriptlist(
             Subscript subscript,
-            List<Subscriptlist2Group> subscriptlist2GroupList,
+            List<Subscriptlist2> subscriptlist2List,
             boolean isTokenComma
     ) {
         this.subscript = subscript;
-        this.subscriptlist2GroupList = subscriptlist2GroupList;
+        this.subscriptlist2List = subscriptlist2List;
         this.isTokenComma = isTokenComma;
 
         addRequired("subscript", subscript);
-        addRequired("subscriptlist2GroupList", subscriptlist2GroupList);
+        addRequired("subscriptlist2List", subscriptlist2List);
         addRequired("isTokenComma", isTokenComma);
     }
 
@@ -27,8 +27,8 @@ public final class Subscriptlist extends ConjunctionRule {
         return subscript;
     }
 
-    public List<Subscriptlist2Group> subscriptlist2GroupList() {
-        return subscriptlist2GroupList;
+    public List<Subscriptlist2> subscriptlist2List() {
+        return subscriptlist2List;
     }
 
     public boolean isTokenComma() {
@@ -36,11 +36,11 @@ public final class Subscriptlist extends ConjunctionRule {
     }
 
     // ',' 'subscript'
-    public static final class Subscriptlist2Group extends ConjunctionRule {
+    public static final class Subscriptlist2 extends ConjunctionRule {
         private final boolean isTokenComma;
         private final Subscript subscript;
 
-        public Subscriptlist2Group(
+        public Subscriptlist2(
                 boolean isTokenComma,
                 Subscript subscript
         ) {

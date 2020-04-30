@@ -6,58 +6,58 @@ import java.util.Optional;
 // raise_stmt: 'raise' ['expr' ['from' 'expr']]
 public final class RaiseStmt extends ConjunctionRule {
     private final boolean isTokenRaise;
-    private final RaiseStmt2Group raiseStmt2Group;
+    private final RaiseStmt2 raiseStmt2;
 
     public RaiseStmt(
             boolean isTokenRaise,
-            RaiseStmt2Group raiseStmt2Group
+            RaiseStmt2 raiseStmt2
     ) {
         this.isTokenRaise = isTokenRaise;
-        this.raiseStmt2Group = raiseStmt2Group;
+        this.raiseStmt2 = raiseStmt2;
 
         addRequired("isTokenRaise", isTokenRaise);
-        addOptional("raiseStmt2Group", raiseStmt2Group);
+        addOptional("raiseStmt2", raiseStmt2);
     }
 
     public boolean isTokenRaise() {
         return isTokenRaise;
     }
 
-    public Optional<RaiseStmt2Group> raiseStmt2Group() {
-        return Optional.ofNullable(raiseStmt2Group);
+    public Optional<RaiseStmt2> raiseStmt2() {
+        return Optional.ofNullable(raiseStmt2);
     }
 
     // 'expr' ['from' 'expr']
-    public static final class RaiseStmt2Group extends ConjunctionRule {
+    public static final class RaiseStmt2 extends ConjunctionRule {
         private final Expr expr;
-        private final RaiseStmt2Group2Group raiseStmt2Group2Group;
+        private final RaiseStmt22 raiseStmt22;
 
-        public RaiseStmt2Group(
+        public RaiseStmt2(
                 Expr expr,
-                RaiseStmt2Group2Group raiseStmt2Group2Group
+                RaiseStmt22 raiseStmt22
         ) {
             this.expr = expr;
-            this.raiseStmt2Group2Group = raiseStmt2Group2Group;
+            this.raiseStmt22 = raiseStmt22;
 
             addRequired("expr", expr);
-            addOptional("raiseStmt2Group2Group", raiseStmt2Group2Group);
+            addOptional("raiseStmt22", raiseStmt22);
         }
 
         public Expr expr() {
             return expr;
         }
 
-        public Optional<RaiseStmt2Group2Group> raiseStmt2Group2Group() {
-            return Optional.ofNullable(raiseStmt2Group2Group);
+        public Optional<RaiseStmt22> raiseStmt22() {
+            return Optional.ofNullable(raiseStmt22);
         }
     }
 
     // 'from' 'expr'
-    public static final class RaiseStmt2Group2Group extends ConjunctionRule {
+    public static final class RaiseStmt22 extends ConjunctionRule {
         private final boolean isTokenFrom;
         private final Expr expr;
 
-        public RaiseStmt2Group2Group(
+        public RaiseStmt22(
                 boolean isTokenFrom,
                 Expr expr
         ) {

@@ -6,22 +6,22 @@ import org.fugalang.core.parser.DisjunctionRule;
 
 // file_input: ('NEWLINE' | 'stmt')* 'ENDMARKER'
 public final class FileInput extends ConjunctionRule {
-    private final List<FileInput1Group> fileInput1GroupList;
+    private final List<FileInput1> fileInput1List;
     private final Object endmarker;
 
     public FileInput(
-            List<FileInput1Group> fileInput1GroupList,
+            List<FileInput1> fileInput1List,
             Object endmarker
     ) {
-        this.fileInput1GroupList = fileInput1GroupList;
+        this.fileInput1List = fileInput1List;
         this.endmarker = endmarker;
 
-        addRequired("fileInput1GroupList", fileInput1GroupList);
+        addRequired("fileInput1List", fileInput1List);
         addRequired("endmarker", endmarker);
     }
 
-    public List<FileInput1Group> fileInput1GroupList() {
-        return fileInput1GroupList;
+    public List<FileInput1> fileInput1List() {
+        return fileInput1List;
     }
 
     public Object endmarker() {
@@ -29,11 +29,11 @@ public final class FileInput extends ConjunctionRule {
     }
 
     // 'NEWLINE' | 'stmt'
-    public static final class FileInput1Group extends DisjunctionRule {
+    public static final class FileInput1 extends DisjunctionRule {
         private final Object newline;
         private final Stmt stmt;
 
-        public FileInput1Group(
+        public FileInput1(
                 Object newline,
                 Stmt stmt
         ) {
