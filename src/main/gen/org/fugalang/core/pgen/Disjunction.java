@@ -14,7 +14,10 @@ public final class Disjunction extends ConjunctionRule {
     ) {
         this.conjunction = conjunction;
         this.disjunction2List = disjunction2List;
+    }
 
+    @Override
+    protected void buildRule() {
         addRequired("conjunction", conjunction);
         addRequired("disjunction2List", disjunction2List);
     }
@@ -38,7 +41,10 @@ public final class Disjunction extends ConjunctionRule {
         ) {
             this.isTokenOr = isTokenOr;
             this.conjunction = conjunction;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("isTokenOr", isTokenOr);
             addRequired("conjunction", conjunction);
         }

@@ -14,7 +14,10 @@ public final class Conjunction extends ConjunctionRule {
     ) {
         this.inversion = inversion;
         this.conjunction2List = conjunction2List;
+    }
 
+    @Override
+    protected void buildRule() {
         addRequired("inversion", inversion);
         addRequired("conjunction2List", conjunction2List);
     }
@@ -38,7 +41,10 @@ public final class Conjunction extends ConjunctionRule {
         ) {
             this.isTokenAnd = isTokenAnd;
             this.inversion = inversion;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("isTokenAnd", isTokenAnd);
             addRequired("inversion", inversion);
         }

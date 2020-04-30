@@ -14,7 +14,10 @@ public final class ReturnStmt extends ConjunctionRule {
     ) {
         this.isTokenReturn = isTokenReturn;
         this.exprlistStar = exprlistStar;
+    }
 
+    @Override
+    protected void buildRule() {
         addRequired("isTokenReturn", isTokenReturn);
         addOptional("exprlistStar", exprlistStar);
     }

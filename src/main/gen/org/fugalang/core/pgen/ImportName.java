@@ -13,7 +13,10 @@ public final class ImportName extends ConjunctionRule {
     ) {
         this.isTokenImport = isTokenImport;
         this.dottedAsNames = dottedAsNames;
+    }
 
+    @Override
+    protected void buildRule() {
         addRequired("isTokenImport", isTokenImport);
         addRequired("dottedAsNames", dottedAsNames);
     }

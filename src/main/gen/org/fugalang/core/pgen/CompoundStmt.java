@@ -22,7 +22,10 @@ public final class CompoundStmt extends DisjunctionRule {
         this.forStmt = forStmt;
         this.tryStmt = tryStmt;
         this.withStmt = withStmt;
+    }
 
+    @Override
+    protected void buildRule() {
         addChoice("ifStmt", ifStmt);
         addChoice("whileStmt", whileStmt);
         addChoice("forStmt", forStmt);

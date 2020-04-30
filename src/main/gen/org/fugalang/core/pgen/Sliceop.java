@@ -14,7 +14,10 @@ public final class Sliceop extends ConjunctionRule {
     ) {
         this.isTokenColon = isTokenColon;
         this.expr = expr;
+    }
 
+    @Override
+    protected void buildRule() {
         addRequired("isTokenColon", isTokenColon);
         addOptional("expr", expr);
     }

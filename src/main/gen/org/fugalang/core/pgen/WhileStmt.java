@@ -20,7 +20,10 @@ public final class WhileStmt extends ConjunctionRule {
         this.namedexprExpr = namedexprExpr;
         this.suite = suite;
         this.whileStmt4 = whileStmt4;
+    }
 
+    @Override
+    protected void buildRule() {
         addRequired("isTokenWhile", isTokenWhile);
         addRequired("namedexprExpr", namedexprExpr);
         addRequired("suite", suite);
@@ -54,7 +57,10 @@ public final class WhileStmt extends ConjunctionRule {
         ) {
             this.isTokenElse = isTokenElse;
             this.suite = suite;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("isTokenElse", isTokenElse);
             addRequired("suite", suite);
         }

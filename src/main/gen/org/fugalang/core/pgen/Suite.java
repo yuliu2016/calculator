@@ -14,7 +14,10 @@ public final class Suite extends DisjunctionRule {
     ) {
         this.suite1 = suite1;
         this.blockSuite = blockSuite;
+    }
 
+    @Override
+    protected void buildRule() {
         addChoice("suite1", suite1);
         addChoice("blockSuite", blockSuite);
     }
@@ -38,7 +41,10 @@ public final class Suite extends DisjunctionRule {
         ) {
             this.isTokenColon = isTokenColon;
             this.simpleStmt = simpleStmt;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("isTokenColon", isTokenColon);
             addRequired("simpleStmt", simpleStmt);
         }

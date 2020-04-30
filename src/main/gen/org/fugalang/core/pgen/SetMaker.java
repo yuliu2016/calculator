@@ -15,7 +15,10 @@ public final class SetMaker extends ConjunctionRule {
     ) {
         this.exprOrStar = exprOrStar;
         this.setMaker2 = setMaker2;
+    }
 
+    @Override
+    protected void buildRule() {
         addRequired("exprOrStar", exprOrStar);
         addRequired("setMaker2", setMaker2);
     }
@@ -39,7 +42,10 @@ public final class SetMaker extends ConjunctionRule {
         ) {
             this.compFor = compFor;
             this.setMaker22 = setMaker22;
+        }
 
+        @Override
+        protected void buildRule() {
             addChoice("compFor", compFor);
             addChoice("setMaker22", setMaker22);
         }
@@ -64,7 +70,10 @@ public final class SetMaker extends ConjunctionRule {
         ) {
             this.setMaker221List = setMaker221List;
             this.isTokenComma = isTokenComma;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("setMaker221List", setMaker221List);
             addRequired("isTokenComma", isTokenComma);
         }
@@ -89,7 +98,10 @@ public final class SetMaker extends ConjunctionRule {
         ) {
             this.isTokenComma = isTokenComma;
             this.exprOrStar = exprOrStar;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("isTokenComma", isTokenComma);
             addRequired("exprOrStar", exprOrStar);
         }

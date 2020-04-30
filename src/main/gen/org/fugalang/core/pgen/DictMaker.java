@@ -15,7 +15,10 @@ public final class DictMaker extends ConjunctionRule {
     ) {
         this.dictItem = dictItem;
         this.dictMaker2 = dictMaker2;
+    }
 
+    @Override
+    protected void buildRule() {
         addRequired("dictItem", dictItem);
         addRequired("dictMaker2", dictMaker2);
     }
@@ -39,7 +42,10 @@ public final class DictMaker extends ConjunctionRule {
         ) {
             this.compFor = compFor;
             this.dictMaker22 = dictMaker22;
+        }
 
+        @Override
+        protected void buildRule() {
             addChoice("compFor", compFor);
             addChoice("dictMaker22", dictMaker22);
         }
@@ -64,7 +70,10 @@ public final class DictMaker extends ConjunctionRule {
         ) {
             this.dictMaker221List = dictMaker221List;
             this.isTokenComma = isTokenComma;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("dictMaker221List", dictMaker221List);
             addRequired("isTokenComma", isTokenComma);
         }
@@ -89,7 +98,10 @@ public final class DictMaker extends ConjunctionRule {
         ) {
             this.isTokenComma = isTokenComma;
             this.dictItem = dictItem;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("isTokenComma", isTokenComma);
             addRequired("dictItem", dictItem);
         }

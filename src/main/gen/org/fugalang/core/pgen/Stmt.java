@@ -14,7 +14,10 @@ public final class Stmt extends ConjunctionRule {
     ) {
         this.stmt1 = stmt1;
         this.newline = newline;
+    }
 
+    @Override
+    protected void buildRule() {
         addRequired("stmt1", stmt1);
         addRequired("newline", newline);
     }
@@ -38,7 +41,10 @@ public final class Stmt extends ConjunctionRule {
         ) {
             this.simpleStmt = simpleStmt;
             this.compoundStmt = compoundStmt;
+        }
 
+        @Override
+        protected void buildRule() {
             addChoice("simpleStmt", simpleStmt);
             addChoice("compoundStmt", compoundStmt);
         }

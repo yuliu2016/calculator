@@ -14,7 +14,10 @@ public final class Power extends ConjunctionRule {
     ) {
         this.pipeExpr = pipeExpr;
         this.power2 = power2;
+    }
 
+    @Override
+    protected void buildRule() {
         addRequired("pipeExpr", pipeExpr);
         addOptional("power2", power2);
     }
@@ -38,7 +41,10 @@ public final class Power extends ConjunctionRule {
         ) {
             this.isTokenPower = isTokenPower;
             this.factor = factor;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("isTokenPower", isTokenPower);
             addRequired("factor", factor);
         }

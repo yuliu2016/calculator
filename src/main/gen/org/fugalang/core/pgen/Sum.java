@@ -15,7 +15,10 @@ public final class Sum extends ConjunctionRule {
     ) {
         this.term = term;
         this.sum2List = sum2List;
+    }
 
+    @Override
+    protected void buildRule() {
         addRequired("term", term);
         addRequired("sum2List", sum2List);
     }
@@ -39,7 +42,10 @@ public final class Sum extends ConjunctionRule {
         ) {
             this.sum21 = sum21;
             this.term = term;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("sum21", sum21);
             addRequired("term", term);
         }
@@ -64,7 +70,10 @@ public final class Sum extends ConjunctionRule {
         ) {
             this.isTokenPlus = isTokenPlus;
             this.isTokenMinus = isTokenMinus;
+        }
 
+        @Override
+        protected void buildRule() {
             addChoice("isTokenPlus", isTokenPlus);
             addChoice("isTokenMinus", isTokenMinus);
         }

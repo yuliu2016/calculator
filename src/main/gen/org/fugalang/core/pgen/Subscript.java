@@ -15,7 +15,10 @@ public final class Subscript extends DisjunctionRule {
     ) {
         this.expr = expr;
         this.subscript2 = subscript2;
+    }
 
+    @Override
+    protected void buildRule() {
         addChoice("expr", expr);
         addChoice("subscript2", subscript2);
     }
@@ -45,7 +48,10 @@ public final class Subscript extends DisjunctionRule {
             this.isTokenColon = isTokenColon;
             this.expr1 = expr1;
             this.sliceop = sliceop;
+        }
 
+        @Override
+        protected void buildRule() {
             addOptional("expr", expr);
             addRequired("isTokenColon", isTokenColon);
             addOptional("expr1", expr1);

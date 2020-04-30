@@ -14,7 +14,10 @@ public final class PipeExpr extends ConjunctionRule {
     ) {
         this.atomExpr = atomExpr;
         this.pipeExpr2List = pipeExpr2List;
+    }
 
+    @Override
+    protected void buildRule() {
         addRequired("atomExpr", atomExpr);
         addRequired("pipeExpr2List", pipeExpr2List);
     }
@@ -38,7 +41,10 @@ public final class PipeExpr extends ConjunctionRule {
         ) {
             this.isTokenPipe = isTokenPipe;
             this.atomExpr = atomExpr;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("isTokenPipe", isTokenPipe);
             addRequired("atomExpr", atomExpr);
         }

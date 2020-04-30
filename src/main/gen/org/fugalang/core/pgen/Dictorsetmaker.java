@@ -13,7 +13,10 @@ public final class Dictorsetmaker extends DisjunctionRule {
     ) {
         this.dictMaker = dictMaker;
         this.setMaker = setMaker;
+    }
 
+    @Override
+    protected void buildRule() {
         addChoice("dictMaker", dictMaker);
         addChoice("setMaker", setMaker);
     }

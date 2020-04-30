@@ -17,7 +17,10 @@ public final class AssertStmt extends ConjunctionRule {
         this.isTokenAssert = isTokenAssert;
         this.expr = expr;
         this.assertStmt3 = assertStmt3;
+    }
 
+    @Override
+    protected void buildRule() {
         addRequired("isTokenAssert", isTokenAssert);
         addRequired("expr", expr);
         addOptional("assertStmt3", assertStmt3);
@@ -46,7 +49,10 @@ public final class AssertStmt extends ConjunctionRule {
         ) {
             this.isTokenComma = isTokenComma;
             this.expr = expr;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("isTokenComma", isTokenComma);
             addRequired("expr", expr);
         }

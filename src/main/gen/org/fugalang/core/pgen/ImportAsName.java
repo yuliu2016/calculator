@@ -14,7 +14,10 @@ public final class ImportAsName extends ConjunctionRule {
     ) {
         this.name = name;
         this.importAsName2 = importAsName2;
+    }
 
+    @Override
+    protected void buildRule() {
         addRequired("name", name);
         addOptional("importAsName2", importAsName2);
     }
@@ -38,7 +41,10 @@ public final class ImportAsName extends ConjunctionRule {
         ) {
             this.isTokenAs = isTokenAs;
             this.name = name;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("isTokenAs", isTokenAs);
             addRequired("name", name);
         }

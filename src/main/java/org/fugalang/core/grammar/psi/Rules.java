@@ -1,12 +1,12 @@
 package org.fugalang.core.grammar.psi;
 
-import org.fugalang.core.pprint.CSTPrintBuilder;
-import org.fugalang.core.pprint.CSTPrintElem;
+import org.fugalang.core.pprint.TreeStringBuilder;
+import org.fugalang.core.pprint.TreeStringElem;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Rules implements CSTPrintElem {
+public class Rules implements TreeStringElem {
     public final List<SingleRule> rules;
 
     public Rules(List<SingleRule> rules) {
@@ -14,7 +14,7 @@ public class Rules implements CSTPrintElem {
     }
 
     @Override
-    public void buildString(CSTPrintBuilder builder) {
+    public void buildString(TreeStringBuilder builder) {
         builder.setName("rules").addElems(rules);
     }
 

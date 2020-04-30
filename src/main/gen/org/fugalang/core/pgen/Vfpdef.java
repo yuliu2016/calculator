@@ -10,7 +10,10 @@ public final class Vfpdef extends ConjunctionRule {
             String name
     ) {
         this.name = name;
+    }
 
+    @Override
+    protected void buildRule() {
         addRequired("name", name);
     }
 

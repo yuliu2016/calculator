@@ -17,7 +17,10 @@ public final class SingleInput extends DisjunctionRule {
         this.newline = newline;
         this.simpleStmt = simpleStmt;
         this.singleInput3 = singleInput3;
+    }
 
+    @Override
+    protected void buildRule() {
         addChoice("newline", newline);
         addChoice("simpleStmt", simpleStmt);
         addChoice("singleInput3", singleInput3);
@@ -46,7 +49,10 @@ public final class SingleInput extends DisjunctionRule {
         ) {
             this.compoundStmt = compoundStmt;
             this.newline = newline;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("compoundStmt", compoundStmt);
             addRequired("newline", newline);
         }

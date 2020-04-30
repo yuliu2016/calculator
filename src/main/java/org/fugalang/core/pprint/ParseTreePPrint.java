@@ -3,14 +3,14 @@ package org.fugalang.core.pprint;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ParseTreePPrint implements CSTPrintBuilder {
+public class ParseTreePPrint implements TreeStringBuilder {
     String name;
     List<String> elems = new ArrayList<>();
     int indent;
     int curr_indent;
     boolean recur = false;
 
-    public ParseTreePPrint(CSTPrintElem elem, int indent, int curr_indent) {
+    public ParseTreePPrint(TreeStringElem elem, int indent, int curr_indent) {
         this.name = elem.getClass().getSimpleName();
         this.indent = indent;
         this.curr_indent = indent < 0 ? 0 : curr_indent + indent;
@@ -32,26 +32,26 @@ public class ParseTreePPrint implements CSTPrintBuilder {
     }
 
     @Override
-    public CSTPrintBuilder setName(String name) {
+    public TreeStringBuilder setName(String name) {
         this.name = name;
         return this;
     }
 
     @Override
-    public CSTPrintBuilder addString(String token) {
+    public TreeStringBuilder addString(String token) {
         elems.add("'" + token + "'");
         return this;
     }
 
     @Override
-    public CSTPrintBuilder addElem(CSTPrintElem elem) {
+    public TreeStringBuilder addElem(TreeStringElem elem) {
         recur = true;
         elems.add(new ParseTreePPrint(elem, indent, curr_indent).asString());
         return this;
     }
 
     @Override
-    public CSTPrintBuilder addElems(List<? extends CSTPrintElem> elems) {
+    public TreeStringBuilder addElems(List<? extends TreeStringElem> elems) {
         for (var elem : elems) {
             addElem(elem);
         }
@@ -63,7 +63,7 @@ public class ParseTreePPrint implements CSTPrintBuilder {
         return asString();
     }
 
-    public static String format(CSTPrintElem elem, int indent) {
+    public static String format(TreeStringElem elem, int indent) {
         return new ParseTreePPrint(elem, indent, 0).asString();
     }
 }

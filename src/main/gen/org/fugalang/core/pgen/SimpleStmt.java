@@ -17,7 +17,10 @@ public final class SimpleStmt extends ConjunctionRule {
         this.smallStmt = smallStmt;
         this.simpleStmt2List = simpleStmt2List;
         this.isTokenSemicolon = isTokenSemicolon;
+    }
 
+    @Override
+    protected void buildRule() {
         addRequired("smallStmt", smallStmt);
         addRequired("simpleStmt2List", simpleStmt2List);
         addRequired("isTokenSemicolon", isTokenSemicolon);
@@ -46,7 +49,10 @@ public final class SimpleStmt extends ConjunctionRule {
         ) {
             this.isTokenSemicolon = isTokenSemicolon;
             this.smallStmt = smallStmt;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("isTokenSemicolon", isTokenSemicolon);
             addRequired("smallStmt", smallStmt);
         }

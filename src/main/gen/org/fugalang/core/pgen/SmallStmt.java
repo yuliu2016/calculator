@@ -25,7 +25,10 @@ public final class SmallStmt extends DisjunctionRule {
         this.flowStmt = flowStmt;
         this.importStmt = importStmt;
         this.assertStmt = assertStmt;
+    }
 
+    @Override
+    protected void buildRule() {
         addChoice("exprStmt", exprStmt);
         addChoice("delStmt", delStmt);
         addChoice("passStmt", passStmt);

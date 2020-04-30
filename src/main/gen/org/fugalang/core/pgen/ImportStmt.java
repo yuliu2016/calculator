@@ -13,7 +13,10 @@ public final class ImportStmt extends DisjunctionRule {
     ) {
         this.importName = importName;
         this.importFrom = importFrom;
+    }
 
+    @Override
+    protected void buildRule() {
         addChoice("importName", importName);
         addChoice("importFrom", importFrom);
     }

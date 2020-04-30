@@ -14,7 +14,10 @@ public final class RaiseStmt extends ConjunctionRule {
     ) {
         this.isTokenRaise = isTokenRaise;
         this.raiseStmt2 = raiseStmt2;
+    }
 
+    @Override
+    protected void buildRule() {
         addRequired("isTokenRaise", isTokenRaise);
         addOptional("raiseStmt2", raiseStmt2);
     }
@@ -38,7 +41,10 @@ public final class RaiseStmt extends ConjunctionRule {
         ) {
             this.expr = expr;
             this.raiseStmt22 = raiseStmt22;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("expr", expr);
             addOptional("raiseStmt22", raiseStmt22);
         }
@@ -63,7 +69,10 @@ public final class RaiseStmt extends ConjunctionRule {
         ) {
             this.isTokenFrom = isTokenFrom;
             this.expr = expr;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("isTokenFrom", isTokenFrom);
             addRequired("expr", expr);
         }

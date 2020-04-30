@@ -21,7 +21,10 @@ public final class Funcdef extends ConjunctionRule {
         this.isTokenDef = isTokenDef;
         this.varargslist = varargslist;
         this.funcdef4 = funcdef4;
+    }
 
+    @Override
+    protected void buildRule() {
         addRequired("isTokenAsync", isTokenAsync);
         addRequired("isTokenDef", isTokenDef);
         addOptional("varargslist", varargslist);
@@ -55,7 +58,10 @@ public final class Funcdef extends ConjunctionRule {
         ) {
             this.funcdef41 = funcdef41;
             this.blockSuite = blockSuite;
+        }
 
+        @Override
+        protected void buildRule() {
             addChoice("funcdef41", funcdef41);
             addChoice("blockSuite", blockSuite);
         }
@@ -80,7 +86,10 @@ public final class Funcdef extends ConjunctionRule {
         ) {
             this.isTokenColon = isTokenColon;
             this.expr = expr;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("isTokenColon", isTokenColon);
             addRequired("expr", expr);
         }

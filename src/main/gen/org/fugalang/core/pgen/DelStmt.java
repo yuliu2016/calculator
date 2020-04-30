@@ -13,7 +13,10 @@ public final class DelStmt extends ConjunctionRule {
     ) {
         this.isTokenDel = isTokenDel;
         this.targets = targets;
+    }
 
+    @Override
+    protected void buildRule() {
         addRequired("isTokenDel", isTokenDel);
         addRequired("targets", targets);
     }

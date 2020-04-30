@@ -14,7 +14,10 @@ public final class DictItem extends DisjunctionRule {
     ) {
         this.dictItem1 = dictItem1;
         this.dictItem2 = dictItem2;
+    }
 
+    @Override
+    protected void buildRule() {
         addChoice("dictItem1", dictItem1);
         addChoice("dictItem2", dictItem2);
     }
@@ -41,7 +44,10 @@ public final class DictItem extends DisjunctionRule {
             this.expr = expr;
             this.isTokenColon = isTokenColon;
             this.expr1 = expr1;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("expr", expr);
             addRequired("isTokenColon", isTokenColon);
             addRequired("expr1", expr1);
@@ -71,7 +77,10 @@ public final class DictItem extends DisjunctionRule {
         ) {
             this.isTokenPower = isTokenPower;
             this.bitwiseOr = bitwiseOr;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("isTokenPower", isTokenPower);
             addRequired("bitwiseOr", bitwiseOr);
         }

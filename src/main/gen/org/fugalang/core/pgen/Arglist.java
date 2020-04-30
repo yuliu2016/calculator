@@ -17,7 +17,10 @@ public final class Arglist extends ConjunctionRule {
         this.argument = argument;
         this.arglist2List = arglist2List;
         this.isTokenComma = isTokenComma;
+    }
 
+    @Override
+    protected void buildRule() {
         addRequired("argument", argument);
         addRequired("arglist2List", arglist2List);
         addRequired("isTokenComma", isTokenComma);
@@ -46,7 +49,10 @@ public final class Arglist extends ConjunctionRule {
         ) {
             this.isTokenComma = isTokenComma;
             this.argument = argument;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("isTokenComma", isTokenComma);
             addRequired("argument", argument);
         }

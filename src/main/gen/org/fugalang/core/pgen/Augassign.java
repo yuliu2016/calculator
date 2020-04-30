@@ -46,7 +46,10 @@ public final class Augassign extends DisjunctionRule {
         this.isTokenRshiftAssign = isTokenRshiftAssign;
         this.isTokenPowerAssign = isTokenPowerAssign;
         this.isTokenFloorDivAssign = isTokenFloorDivAssign;
+    }
 
+    @Override
+    protected void buildRule() {
         addChoice("isTokenPlusAssign", isTokenPlusAssign);
         addChoice("isTokenMinusAssign", isTokenMinusAssign);
         addChoice("isTokenTimesAssign", isTokenTimesAssign);

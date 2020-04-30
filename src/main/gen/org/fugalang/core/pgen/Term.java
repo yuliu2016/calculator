@@ -15,7 +15,10 @@ public final class Term extends ConjunctionRule {
     ) {
         this.factor = factor;
         this.term2List = term2List;
+    }
 
+    @Override
+    protected void buildRule() {
         addRequired("factor", factor);
         addRequired("term2List", term2List);
     }
@@ -39,7 +42,10 @@ public final class Term extends ConjunctionRule {
         ) {
             this.term21 = term21;
             this.factor = factor;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("term21", term21);
             addRequired("factor", factor);
         }
@@ -73,7 +79,10 @@ public final class Term extends ConjunctionRule {
             this.isTokenDiv = isTokenDiv;
             this.isTokenModulus = isTokenModulus;
             this.isTokenFloorDiv = isTokenFloorDiv;
+        }
 
+        @Override
+        protected void buildRule() {
             addChoice("isTokenTimes", isTokenTimes);
             addChoice("isTokenMatrixTimes", isTokenMatrixTimes);
             addChoice("isTokenDiv", isTokenDiv);

@@ -15,7 +15,10 @@ public final class ExprlistComp extends ConjunctionRule {
     ) {
         this.exprOrStar = exprOrStar;
         this.exprlistComp2 = exprlistComp2;
+    }
 
+    @Override
+    protected void buildRule() {
         addRequired("exprOrStar", exprOrStar);
         addRequired("exprlistComp2", exprlistComp2);
     }
@@ -39,7 +42,10 @@ public final class ExprlistComp extends ConjunctionRule {
         ) {
             this.compFor = compFor;
             this.exprlistComp22 = exprlistComp22;
+        }
 
+        @Override
+        protected void buildRule() {
             addChoice("compFor", compFor);
             addChoice("exprlistComp22", exprlistComp22);
         }
@@ -64,7 +70,10 @@ public final class ExprlistComp extends ConjunctionRule {
         ) {
             this.exprlistComp221List = exprlistComp221List;
             this.isTokenComma = isTokenComma;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("exprlistComp221List", exprlistComp221List);
             addRequired("isTokenComma", isTokenComma);
         }
@@ -89,7 +98,10 @@ public final class ExprlistComp extends ConjunctionRule {
         ) {
             this.isTokenComma = isTokenComma;
             this.exprOrStar = exprOrStar;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("isTokenComma", isTokenComma);
             addRequired("exprOrStar", exprOrStar);
         }

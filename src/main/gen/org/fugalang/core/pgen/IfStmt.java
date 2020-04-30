@@ -24,7 +24,10 @@ public final class IfStmt extends ConjunctionRule {
         this.suite = suite;
         this.ifStmt4List = ifStmt4List;
         this.ifStmt5 = ifStmt5;
+    }
 
+    @Override
+    protected void buildRule() {
         addRequired("isTokenIf", isTokenIf);
         addRequired("namedexprExpr", namedexprExpr);
         addRequired("suite", suite);
@@ -66,7 +69,10 @@ public final class IfStmt extends ConjunctionRule {
             this.isTokenElif = isTokenElif;
             this.namedexprExpr = namedexprExpr;
             this.suite = suite;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("isTokenElif", isTokenElif);
             addRequired("namedexprExpr", namedexprExpr);
             addRequired("suite", suite);
@@ -96,7 +102,10 @@ public final class IfStmt extends ConjunctionRule {
         ) {
             this.isTokenElse = isTokenElse;
             this.suite = suite;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("isTokenElse", isTokenElse);
             addRequired("suite", suite);
         }

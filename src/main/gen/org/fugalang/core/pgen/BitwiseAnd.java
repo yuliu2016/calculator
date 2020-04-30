@@ -14,7 +14,10 @@ public final class BitwiseAnd extends ConjunctionRule {
     ) {
         this.shiftExpr = shiftExpr;
         this.bitwiseAnd2List = bitwiseAnd2List;
+    }
 
+    @Override
+    protected void buildRule() {
         addRequired("shiftExpr", shiftExpr);
         addRequired("bitwiseAnd2List", bitwiseAnd2List);
     }
@@ -38,7 +41,10 @@ public final class BitwiseAnd extends ConjunctionRule {
         ) {
             this.isTokenBitAnd = isTokenBitAnd;
             this.shiftExpr = shiftExpr;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("isTokenBitAnd", isTokenBitAnd);
             addRequired("shiftExpr", shiftExpr);
         }

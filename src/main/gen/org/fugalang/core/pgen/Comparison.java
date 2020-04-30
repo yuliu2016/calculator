@@ -14,7 +14,10 @@ public final class Comparison extends ConjunctionRule {
     ) {
         this.bitwiseOr = bitwiseOr;
         this.comparison2List = comparison2List;
+    }
 
+    @Override
+    protected void buildRule() {
         addRequired("bitwiseOr", bitwiseOr);
         addRequired("comparison2List", comparison2List);
     }
@@ -38,7 +41,10 @@ public final class Comparison extends ConjunctionRule {
         ) {
             this.compOp = compOp;
             this.bitwiseOr = bitwiseOr;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("compOp", compOp);
             addRequired("bitwiseOr", bitwiseOr);
         }

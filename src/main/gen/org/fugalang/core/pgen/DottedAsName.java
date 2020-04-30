@@ -14,7 +14,10 @@ public final class DottedAsName extends ConjunctionRule {
     ) {
         this.dottedName = dottedName;
         this.dottedAsName2 = dottedAsName2;
+    }
 
+    @Override
+    protected void buildRule() {
         addRequired("dottedName", dottedName);
         addOptional("dottedAsName2", dottedAsName2);
     }
@@ -38,7 +41,10 @@ public final class DottedAsName extends ConjunctionRule {
         ) {
             this.isTokenAs = isTokenAs;
             this.name = name;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("isTokenAs", isTokenAs);
             addRequired("name", name);
         }

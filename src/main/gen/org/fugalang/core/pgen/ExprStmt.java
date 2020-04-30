@@ -16,7 +16,10 @@ public final class ExprStmt extends ConjunctionRule {
     ) {
         this.exprlistStar = exprlistStar;
         this.exprStmt2 = exprStmt2;
+    }
 
+    @Override
+    protected void buildRule() {
         addRequired("exprlistStar", exprlistStar);
         addOptional("exprStmt2", exprStmt2);
     }
@@ -40,7 +43,10 @@ public final class ExprStmt extends ConjunctionRule {
         ) {
             this.exprStmt21 = exprStmt21;
             this.exprStmt22List = exprStmt22List;
+        }
 
+        @Override
+        protected void buildRule() {
             addChoice("exprStmt21", exprStmt21);
             addChoice("exprStmt22List", exprStmt22List);
         }
@@ -65,7 +71,10 @@ public final class ExprStmt extends ConjunctionRule {
         ) {
             this.augassign = augassign;
             this.exprlist = exprlist;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("augassign", augassign);
             addRequired("exprlist", exprlist);
         }
@@ -90,7 +99,10 @@ public final class ExprStmt extends ConjunctionRule {
         ) {
             this.isTokenAssign = isTokenAssign;
             this.exprlistStar = exprlistStar;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("isTokenAssign", isTokenAssign);
             addRequired("exprlistStar", exprlistStar);
         }

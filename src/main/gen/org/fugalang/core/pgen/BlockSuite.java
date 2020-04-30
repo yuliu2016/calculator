@@ -15,7 +15,10 @@ public final class BlockSuite extends DisjunctionRule {
     ) {
         this.blockSuite1 = blockSuite1;
         this.blockSuite2 = blockSuite2;
+    }
 
+    @Override
+    protected void buildRule() {
         addChoice("blockSuite1", blockSuite1);
         addChoice("blockSuite2", blockSuite2);
     }
@@ -42,7 +45,10 @@ public final class BlockSuite extends DisjunctionRule {
             this.isTokenLbrace = isTokenLbrace;
             this.simpleStmt = simpleStmt;
             this.isTokenRbrace = isTokenRbrace;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("isTokenLbrace", isTokenLbrace);
             addRequired("simpleStmt", simpleStmt);
             addRequired("isTokenRbrace", isTokenRbrace);
@@ -81,7 +87,10 @@ public final class BlockSuite extends DisjunctionRule {
             this.stmt = stmt;
             this.stmtList = stmtList;
             this.isTokenRbrace = isTokenRbrace;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("isTokenLbrace", isTokenLbrace);
             addRequired("newline", newline);
             addRequired("stmt", stmt);

@@ -38,7 +38,10 @@ public final class CompOp extends DisjunctionRule {
         this.compOp8 = compOp8;
         this.isTokenIs = isTokenIs;
         this.compOp10 = compOp10;
+    }
 
+    @Override
+    protected void buildRule() {
         addChoice("isTokenLess", isTokenLess);
         addChoice("isTokenGreater", isTokenGreater);
         addChoice("isTokenEqual", isTokenEqual);
@@ -102,7 +105,10 @@ public final class CompOp extends DisjunctionRule {
         ) {
             this.isTokenNot = isTokenNot;
             this.isTokenIn = isTokenIn;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("isTokenNot", isTokenNot);
             addRequired("isTokenIn", isTokenIn);
         }
@@ -127,7 +133,10 @@ public final class CompOp extends DisjunctionRule {
         ) {
             this.isTokenIs = isTokenIs;
             this.isTokenNot = isTokenNot;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("isTokenIs", isTokenIs);
             addRequired("isTokenNot", isTokenNot);
         }

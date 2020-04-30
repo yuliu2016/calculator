@@ -17,7 +17,10 @@ public final class ExprlistStar extends ConjunctionRule {
         this.exprOrStar = exprOrStar;
         this.exprlistStar2List = exprlistStar2List;
         this.isTokenComma = isTokenComma;
+    }
 
+    @Override
+    protected void buildRule() {
         addRequired("exprOrStar", exprOrStar);
         addRequired("exprlistStar2List", exprlistStar2List);
         addRequired("isTokenComma", isTokenComma);
@@ -46,7 +49,10 @@ public final class ExprlistStar extends ConjunctionRule {
         ) {
             this.isTokenComma = isTokenComma;
             this.exprOrStar = exprOrStar;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("isTokenComma", isTokenComma);
             addRequired("exprOrStar", exprOrStar);
         }

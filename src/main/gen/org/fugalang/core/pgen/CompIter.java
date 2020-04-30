@@ -13,7 +13,10 @@ public final class CompIter extends DisjunctionRule {
     ) {
         this.compFor = compFor;
         this.compIf = compIf;
+    }
 
+    @Override
+    protected void buildRule() {
         addChoice("compFor", compFor);
         addChoice("compIf", compIf);
     }

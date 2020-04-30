@@ -13,7 +13,10 @@ public final class Atom extends DisjunctionRule {
     ) {
         this.compoundAtom = compoundAtom;
         this.simpleAtom = simpleAtom;
+    }
 
+    @Override
+    protected void buildRule() {
         addChoice("compoundAtom", compoundAtom);
         addChoice("simpleAtom", simpleAtom);
     }

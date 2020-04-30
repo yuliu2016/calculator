@@ -108,7 +108,7 @@ public class ClassBuilder {
             sb.append("\n");
         }
 
-        generateConstructorWithBuilder(sb);
+        generateConstructorAndOverride(sb);
 
         for (ClassField field: fields) {
             sb.append("\n");
@@ -124,7 +124,7 @@ public class ClassBuilder {
         return sb.toString();
     }
 
-    private void generateConstructorWithBuilder(StringBuilder sb) {
+    private void generateConstructorAndOverride(StringBuilder sb) {
         sb.append("\n")
                 .append("    public ")
                 .append(className)
@@ -147,15 +147,15 @@ public class ClassBuilder {
             sb.append(field.asConstructorStmt());
             sb.append("\n");
         }
+        sb.append("    }\n\n");
 
-        sb.append("\n");
+        sb.append("    @Override\n    protected void buildRule() {\n");
 
         for (ClassField field : fields) {
             sb.append("        ");
             sb.append(field.asRuleStmt(ruleType));
             sb.append("\n");
         }
-
         sb.append("    }\n");
     }
 

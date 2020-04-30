@@ -13,7 +13,10 @@ public final class ExprlistCompSub extends DisjunctionRule {
     ) {
         this.exprlistComp = exprlistComp;
         this.subscript = subscript;
+    }
 
+    @Override
+    protected void buildRule() {
         addChoice("exprlistComp", exprlistComp);
         addChoice("subscript", subscript);
     }

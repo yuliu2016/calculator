@@ -18,7 +18,10 @@ public final class Targets extends ConjunctionRule {
         this.targets1 = targets1;
         this.targets2List = targets2List;
         this.isTokenComma = isTokenComma;
+    }
 
+    @Override
+    protected void buildRule() {
         addRequired("targets1", targets1);
         addRequired("targets2List", targets2List);
         addRequired("isTokenComma", isTokenComma);
@@ -47,7 +50,10 @@ public final class Targets extends ConjunctionRule {
         ) {
             this.bitwiseOr = bitwiseOr;
             this.starExpr = starExpr;
+        }
 
+        @Override
+        protected void buildRule() {
             addChoice("bitwiseOr", bitwiseOr);
             addChoice("starExpr", starExpr);
         }
@@ -72,7 +78,10 @@ public final class Targets extends ConjunctionRule {
         ) {
             this.isTokenComma = isTokenComma;
             this.targets22 = targets22;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("isTokenComma", isTokenComma);
             addRequired("targets22", targets22);
         }
@@ -97,7 +106,10 @@ public final class Targets extends ConjunctionRule {
         ) {
             this.bitwiseOr = bitwiseOr;
             this.starExpr = starExpr;
+        }
 
+        @Override
+        protected void buildRule() {
             addChoice("bitwiseOr", bitwiseOr);
             addChoice("starExpr", starExpr);
         }

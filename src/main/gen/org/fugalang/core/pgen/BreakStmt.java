@@ -10,7 +10,10 @@ public final class BreakStmt extends ConjunctionRule {
             boolean isTokenBreak
     ) {
         this.isTokenBreak = isTokenBreak;
+    }
 
+    @Override
+    protected void buildRule() {
         addRequired("isTokenBreak", isTokenBreak);
     }
 

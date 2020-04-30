@@ -14,7 +14,10 @@ public final class ExceptClause extends ConjunctionRule {
     ) {
         this.isTokenExcept = isTokenExcept;
         this.exceptClause2 = exceptClause2;
+    }
 
+    @Override
+    protected void buildRule() {
         addRequired("isTokenExcept", isTokenExcept);
         addOptional("exceptClause2", exceptClause2);
     }
@@ -38,7 +41,10 @@ public final class ExceptClause extends ConjunctionRule {
         ) {
             this.expr = expr;
             this.exceptClause22 = exceptClause22;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("expr", expr);
             addOptional("exceptClause22", exceptClause22);
         }
@@ -63,7 +69,10 @@ public final class ExceptClause extends ConjunctionRule {
         ) {
             this.isTokenAs = isTokenAs;
             this.name = name;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("isTokenAs", isTokenAs);
             addRequired("name", name);
         }

@@ -14,7 +14,10 @@ public final class WithItem extends ConjunctionRule {
     ) {
         this.expr = expr;
         this.withItem2 = withItem2;
+    }
 
+    @Override
+    protected void buildRule() {
         addRequired("expr", expr);
         addOptional("withItem2", withItem2);
     }
@@ -38,7 +41,10 @@ public final class WithItem extends ConjunctionRule {
         ) {
             this.isTokenAs = isTokenAs;
             this.name = name;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("isTokenAs", isTokenAs);
             addRequired("name", name);
         }

@@ -15,7 +15,10 @@ public final class ShiftExpr extends ConjunctionRule {
     ) {
         this.sum = sum;
         this.shiftExpr2List = shiftExpr2List;
+    }
 
+    @Override
+    protected void buildRule() {
         addRequired("sum", sum);
         addRequired("shiftExpr2List", shiftExpr2List);
     }
@@ -39,7 +42,10 @@ public final class ShiftExpr extends ConjunctionRule {
         ) {
             this.shiftExpr21 = shiftExpr21;
             this.sum = sum;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("shiftExpr21", shiftExpr21);
             addRequired("sum", sum);
         }
@@ -64,7 +70,10 @@ public final class ShiftExpr extends ConjunctionRule {
         ) {
             this.isTokenLshift = isTokenLshift;
             this.isTokenRshift = isTokenRshift;
+        }
 
+        @Override
+        protected void buildRule() {
             addChoice("isTokenLshift", isTokenLshift);
             addChoice("isTokenRshift", isTokenRshift);
         }

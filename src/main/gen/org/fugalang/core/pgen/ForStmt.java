@@ -26,7 +26,10 @@ public final class ForStmt extends ConjunctionRule {
         this.exprlist = exprlist;
         this.suite = suite;
         this.forStmt6 = forStmt6;
+    }
 
+    @Override
+    protected void buildRule() {
         addRequired("isTokenFor", isTokenFor);
         addRequired("targets", targets);
         addRequired("isTokenIn", isTokenIn);
@@ -70,7 +73,10 @@ public final class ForStmt extends ConjunctionRule {
         ) {
             this.isTokenElse = isTokenElse;
             this.suite = suite;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("isTokenElse", isTokenElse);
             addRequired("suite", suite);
         }

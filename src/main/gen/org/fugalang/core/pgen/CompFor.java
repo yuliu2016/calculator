@@ -23,7 +23,10 @@ public final class CompFor extends ConjunctionRule {
         this.isTokenIn = isTokenIn;
         this.disjunction = disjunction;
         this.compIter = compIter;
+    }
 
+    @Override
+    protected void buildRule() {
         addRequired("isTokenFor", isTokenFor);
         addRequired("targets", targets);
         addRequired("isTokenIn", isTokenIn);

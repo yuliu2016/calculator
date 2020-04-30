@@ -17,7 +17,10 @@ public final class Subscriptlist extends ConjunctionRule {
         this.subscript = subscript;
         this.subscriptlist2List = subscriptlist2List;
         this.isTokenComma = isTokenComma;
+    }
 
+    @Override
+    protected void buildRule() {
         addRequired("subscript", subscript);
         addRequired("subscriptlist2List", subscriptlist2List);
         addRequired("isTokenComma", isTokenComma);
@@ -46,7 +49,10 @@ public final class Subscriptlist extends ConjunctionRule {
         ) {
             this.isTokenComma = isTokenComma;
             this.subscript = subscript;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("isTokenComma", isTokenComma);
             addRequired("subscript", subscript);
         }

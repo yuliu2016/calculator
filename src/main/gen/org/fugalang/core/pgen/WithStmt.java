@@ -20,7 +20,10 @@ public final class WithStmt extends ConjunctionRule {
         this.withItem = withItem;
         this.withStmt3List = withStmt3List;
         this.suite = suite;
+    }
 
+    @Override
+    protected void buildRule() {
         addRequired("isTokenWith", isTokenWith);
         addRequired("withItem", withItem);
         addRequired("withStmt3List", withStmt3List);
@@ -54,7 +57,10 @@ public final class WithStmt extends ConjunctionRule {
         ) {
             this.isTokenComma = isTokenComma;
             this.withItem = withItem;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("isTokenComma", isTokenComma);
             addRequired("withItem", withItem);
         }

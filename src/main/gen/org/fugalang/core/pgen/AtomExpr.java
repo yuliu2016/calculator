@@ -17,7 +17,10 @@ public final class AtomExpr extends ConjunctionRule {
         this.isTokenAwait = isTokenAwait;
         this.atom = atom;
         this.trailerList = trailerList;
+    }
 
+    @Override
+    protected void buildRule() {
         addRequired("isTokenAwait", isTokenAwait);
         addRequired("atom", atom);
         addRequired("trailerList", trailerList);

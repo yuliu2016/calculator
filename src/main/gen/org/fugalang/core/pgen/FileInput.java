@@ -15,7 +15,10 @@ public final class FileInput extends ConjunctionRule {
     ) {
         this.fileInput1List = fileInput1List;
         this.endmarker = endmarker;
+    }
 
+    @Override
+    protected void buildRule() {
         addRequired("fileInput1List", fileInput1List);
         addRequired("endmarker", endmarker);
     }
@@ -39,7 +42,10 @@ public final class FileInput extends ConjunctionRule {
         ) {
             this.newline = newline;
             this.stmt = stmt;
+        }
 
+        @Override
+        protected void buildRule() {
             addChoice("newline", newline);
             addChoice("stmt", stmt);
         }

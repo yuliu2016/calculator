@@ -19,7 +19,10 @@ public final class TryStmt extends ConjunctionRule {
         this.isTokenTry = isTokenTry;
         this.suite = suite;
         this.tryStmt3 = tryStmt3;
+    }
 
+    @Override
+    protected void buildRule() {
         addRequired("isTokenTry", isTokenTry);
         addRequired("suite", suite);
         addRequired("tryStmt3", tryStmt3);
@@ -48,7 +51,10 @@ public final class TryStmt extends ConjunctionRule {
         ) {
             this.tryStmt31 = tryStmt31;
             this.tryStmt32 = tryStmt32;
+        }
 
+        @Override
+        protected void buildRule() {
             addChoice("tryStmt31", tryStmt31);
             addChoice("tryStmt32", tryStmt32);
         }
@@ -79,7 +85,10 @@ public final class TryStmt extends ConjunctionRule {
             this.tryStmt311List = tryStmt311List;
             this.tryStmt312 = tryStmt312;
             this.tryStmt313 = tryStmt313;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("tryStmt311", tryStmt311);
             addRequired("tryStmt311List", tryStmt311List);
             addOptional("tryStmt312", tryStmt312);
@@ -114,7 +123,10 @@ public final class TryStmt extends ConjunctionRule {
         ) {
             this.exceptClause = exceptClause;
             this.suite = suite;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("exceptClause", exceptClause);
             addRequired("suite", suite);
         }
@@ -139,7 +151,10 @@ public final class TryStmt extends ConjunctionRule {
         ) {
             this.isTokenElse = isTokenElse;
             this.suite = suite;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("isTokenElse", isTokenElse);
             addRequired("suite", suite);
         }
@@ -164,7 +179,10 @@ public final class TryStmt extends ConjunctionRule {
         ) {
             this.isTokenFinally = isTokenFinally;
             this.suite = suite;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("isTokenFinally", isTokenFinally);
             addRequired("suite", suite);
         }
@@ -189,7 +207,10 @@ public final class TryStmt extends ConjunctionRule {
         ) {
             this.isTokenFinally = isTokenFinally;
             this.suite = suite;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("isTokenFinally", isTokenFinally);
             addRequired("suite", suite);
         }

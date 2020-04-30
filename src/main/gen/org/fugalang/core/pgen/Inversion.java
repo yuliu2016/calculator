@@ -14,7 +14,10 @@ public final class Inversion extends DisjunctionRule {
     ) {
         this.inversion1 = inversion1;
         this.comparison = comparison;
+    }
 
+    @Override
+    protected void buildRule() {
         addChoice("inversion1", inversion1);
         addChoice("comparison", comparison);
     }
@@ -38,7 +41,10 @@ public final class Inversion extends DisjunctionRule {
         ) {
             this.isTokenNot = isTokenNot;
             this.inversion = inversion;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("isTokenNot", isTokenNot);
             addRequired("inversion", inversion);
         }

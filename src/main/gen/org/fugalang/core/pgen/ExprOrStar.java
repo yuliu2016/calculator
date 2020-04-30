@@ -13,7 +13,10 @@ public final class ExprOrStar extends DisjunctionRule {
     ) {
         this.expr = expr;
         this.starExpr = starExpr;
+    }
 
+    @Override
+    protected void buildRule() {
         addChoice("expr", expr);
         addChoice("starExpr", starExpr);
     }

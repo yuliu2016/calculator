@@ -18,7 +18,10 @@ public final class Varargslist extends ConjunctionRule {
         this.vfpdef = vfpdef;
         this.varargslist2 = varargslist2;
         this.varargslist3List = varargslist3List;
+    }
 
+    @Override
+    protected void buildRule() {
         addRequired("vfpdef", vfpdef);
         addOptional("varargslist2", varargslist2);
         addRequired("varargslist3List", varargslist3List);
@@ -47,7 +50,10 @@ public final class Varargslist extends ConjunctionRule {
         ) {
             this.isTokenAssign = isTokenAssign;
             this.expr = expr;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("isTokenAssign", isTokenAssign);
             addRequired("expr", expr);
         }
@@ -75,7 +81,10 @@ public final class Varargslist extends ConjunctionRule {
             this.isTokenComma = isTokenComma;
             this.vfpdef = vfpdef;
             this.varargslist33 = varargslist33;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("isTokenComma", isTokenComma);
             addRequired("vfpdef", vfpdef);
             addOptional("varargslist33", varargslist33);
@@ -105,7 +114,10 @@ public final class Varargslist extends ConjunctionRule {
         ) {
             this.isTokenAssign = isTokenAssign;
             this.expr = expr;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("isTokenAssign", isTokenAssign);
             addRequired("expr", expr);
         }

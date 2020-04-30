@@ -1,9 +1,9 @@
 package org.fugalang.core.grammar.psi;
 
-import org.fugalang.core.pprint.CSTPrintBuilder;
-import org.fugalang.core.pprint.CSTPrintElem;
+import org.fugalang.core.pprint.TreeStringBuilder;
+import org.fugalang.core.pprint.TreeStringElem;
 
-public class RepeatRule implements CSTPrintElem {
+public class RepeatRule implements TreeStringElem {
     public final SubRule subRule;
     private final boolean tokenStar;
     private final boolean tokenPlus;
@@ -23,7 +23,7 @@ public class RepeatRule implements CSTPrintElem {
     }
 
     @Override
-    public void buildString(CSTPrintBuilder builder) {
+    public void buildString(TreeStringBuilder builder) {
         if (tokenPlus) builder.setName("repeat");
         else if (tokenStar) builder.setName("opt_repeat");
         else builder.setName("once");

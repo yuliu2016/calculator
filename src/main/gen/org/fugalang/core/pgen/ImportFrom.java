@@ -21,7 +21,10 @@ public final class ImportFrom extends ConjunctionRule {
         this.importFrom2 = importFrom2;
         this.isTokenImport = isTokenImport;
         this.importFrom4 = importFrom4;
+    }
 
+    @Override
+    protected void buildRule() {
         addRequired("isTokenFrom", isTokenFrom);
         addRequired("importFrom2", importFrom2);
         addRequired("isTokenImport", isTokenImport);
@@ -58,7 +61,10 @@ public final class ImportFrom extends ConjunctionRule {
             this.importFrom21 = importFrom21;
             this.isTokenDot = isTokenDot;
             this.isTokenDotList = isTokenDotList;
+        }
 
+        @Override
+        protected void buildRule() {
             addChoice("importFrom21", importFrom21);
             addChoice("isTokenDot", isTokenDot);
             addChoice("isTokenDotList", isTokenDotList);
@@ -88,7 +94,10 @@ public final class ImportFrom extends ConjunctionRule {
         ) {
             this.isTokenDotList = isTokenDotList;
             this.dottedName = dottedName;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("isTokenDotList", isTokenDotList);
             addRequired("dottedName", dottedName);
         }
@@ -116,7 +125,10 @@ public final class ImportFrom extends ConjunctionRule {
             this.isTokenTimes = isTokenTimes;
             this.importFrom42 = importFrom42;
             this.importAsNames = importAsNames;
+        }
 
+        @Override
+        protected void buildRule() {
             addChoice("isTokenTimes", isTokenTimes);
             addChoice("importFrom42", importFrom42);
             addChoice("importAsNames", importAsNames);
@@ -149,7 +161,10 @@ public final class ImportFrom extends ConjunctionRule {
             this.isTokenLpar = isTokenLpar;
             this.importAsNames = importAsNames;
             this.isTokenRpar = isTokenRpar;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("isTokenLpar", isTokenLpar);
             addRequired("importAsNames", importAsNames);
             addRequired("isTokenRpar", isTokenRpar);

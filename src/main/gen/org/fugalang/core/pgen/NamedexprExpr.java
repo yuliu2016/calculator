@@ -14,7 +14,10 @@ public final class NamedexprExpr extends ConjunctionRule {
     ) {
         this.name = name;
         this.namedexprExpr2 = namedexprExpr2;
+    }
 
+    @Override
+    protected void buildRule() {
         addRequired("name", name);
         addOptional("namedexprExpr2", namedexprExpr2);
     }
@@ -38,7 +41,10 @@ public final class NamedexprExpr extends ConjunctionRule {
         ) {
             this.isTokenAsgnExpr = isTokenAsgnExpr;
             this.expr = expr;
+        }
 
+        @Override
+        protected void buildRule() {
             addRequired("isTokenAsgnExpr", isTokenAsgnExpr);
             addRequired("expr", expr);
         }

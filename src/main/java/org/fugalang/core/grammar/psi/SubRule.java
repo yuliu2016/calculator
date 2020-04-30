@@ -1,9 +1,9 @@
 package org.fugalang.core.grammar.psi;
 
-import org.fugalang.core.pprint.CSTPrintBuilder;
-import org.fugalang.core.pprint.CSTPrintElem;
+import org.fugalang.core.pprint.TreeStringBuilder;
+import org.fugalang.core.pprint.TreeStringElem;
 
-public class SubRule implements CSTPrintElem {
+public class SubRule implements TreeStringElem {
     public final OrRule groupedOrRule;
     public final OrRule optionalOrRule;
     public final String token;
@@ -33,7 +33,7 @@ public class SubRule implements CSTPrintElem {
     }
 
     @Override
-    public void buildString(CSTPrintBuilder builder) {
+    public void buildString(TreeStringBuilder builder) {
         if (groupedOrRule != null)
             builder.setName("group").addElem(groupedOrRule);
         else if (optionalOrRule != null)
