@@ -18,11 +18,11 @@ public final class ImportName extends ConjunctionRule {
         addRequired("dottedAsNames", dottedAsNames);
     }
 
-    public boolean getIsTokenImport() {
+    public boolean isTokenImport() {
         return isTokenImport;
     }
 
-    public DottedAsNames getDottedAsNames() {
+    public DottedAsNames dottedAsNames() {
         return dottedAsNames;
     }
 }

@@ -24,15 +24,15 @@ public final class Varargslist extends ConjunctionRule {
         addRequired("varargslist3GroupList", varargslist3GroupList);
     }
 
-    public Vfpdef getVfpdef() {
+    public Vfpdef vfpdef() {
         return vfpdef;
     }
 
-    public Optional<Varargslist2Group> getVarargslist2Group() {
+    public Optional<Varargslist2Group> varargslist2Group() {
         return Optional.ofNullable(varargslist2Group);
     }
 
-    public List<Varargslist3Group> getVarargslist3GroupList() {
+    public List<Varargslist3Group> varargslist3GroupList() {
         return varargslist3GroupList;
     }
 
@@ -52,11 +52,11 @@ public final class Varargslist extends ConjunctionRule {
             addRequired("expr", expr);
         }
 
-        public boolean getIsTokenAssign() {
+        public boolean isTokenAssign() {
             return isTokenAssign;
         }
 
-        public Expr getExpr() {
+        public Expr expr() {
             return expr;
         }
     }
@@ -81,15 +81,15 @@ public final class Varargslist extends ConjunctionRule {
             addOptional("varargslist3Group3Group", varargslist3Group3Group);
         }
 
-        public boolean getIsTokenComma() {
+        public boolean isTokenComma() {
             return isTokenComma;
         }
 
-        public Vfpdef getVfpdef() {
+        public Vfpdef vfpdef() {
             return vfpdef;
         }
 
-        public Optional<Varargslist3Group3Group> getVarargslist3Group3Group() {
+        public Optional<Varargslist3Group3Group> varargslist3Group3Group() {
             return Optional.ofNullable(varargslist3Group3Group);
         }
     }
@@ -110,11 +110,11 @@ public final class Varargslist extends ConjunctionRule {
             addRequired("expr", expr);
         }
 
-        public boolean getIsTokenAssign() {
+        public boolean isTokenAssign() {
             return isTokenAssign;
         }
 
-        public Expr getExpr() {
+        public Expr expr() {
             return expr;
         }
     }

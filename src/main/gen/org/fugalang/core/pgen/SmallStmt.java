@@ -34,27 +34,27 @@ public final class SmallStmt extends DisjunctionRule {
         addChoice("assertStmt", assertStmt);
     }
 
-    public ExprStmt getExprStmt() {
+    public ExprStmt exprStmt() {
         return exprStmt;
     }
 
-    public DelStmt getDelStmt() {
+    public DelStmt delStmt() {
         return delStmt;
     }
 
-    public PassStmt getPassStmt() {
+    public PassStmt passStmt() {
         return passStmt;
     }
 
-    public FlowStmt getFlowStmt() {
+    public FlowStmt flowStmt() {
         return flowStmt;
     }
 
-    public ImportStmt getImportStmt() {
+    public ImportStmt importStmt() {
         return importStmt;
     }
 
-    public AssertStmt getAssertStmt() {
+    public AssertStmt assertStmt() {
         return assertStmt;
     }
 }

@@ -5,11 +5,11 @@ import java.util.Optional;
 
 // namedexpr_expr: 'NAME' [':=' 'expr']
 public final class NamedexprExpr extends ConjunctionRule {
-    private final Object name;
+    private final String name;
     private final NamedexprExpr2Group namedexprExpr2Group;
 
     public NamedexprExpr(
-            Object name,
+            String name,
             NamedexprExpr2Group namedexprExpr2Group
     ) {
         this.name = name;
@@ -19,11 +19,11 @@ public final class NamedexprExpr extends ConjunctionRule {
         addOptional("namedexprExpr2Group", namedexprExpr2Group);
     }
 
-    public Object getName() {
+    public String name() {
         return name;
     }
 
-    public Optional<NamedexprExpr2Group> getNamedexprExpr2Group() {
+    public Optional<NamedexprExpr2Group> namedexprExpr2Group() {
         return Optional.ofNullable(namedexprExpr2Group);
     }
 
@@ -43,11 +43,11 @@ public final class NamedexprExpr extends ConjunctionRule {
             addRequired("expr", expr);
         }
 
-        public boolean getIsTokenAsgnExpr() {
+        public boolean isTokenAsgnExpr() {
             return isTokenAsgnExpr;
         }
 
-        public Expr getExpr() {
+        public Expr expr() {
             return expr;
         }
     }

@@ -32,23 +32,23 @@ public final class IfStmt extends ConjunctionRule {
         addOptional("ifStmt5Group", ifStmt5Group);
     }
 
-    public boolean getIsTokenIf() {
+    public boolean isTokenIf() {
         return isTokenIf;
     }
 
-    public NamedexprExpr getNamedexprExpr() {
+    public NamedexprExpr namedexprExpr() {
         return namedexprExpr;
     }
 
-    public Suite getSuite() {
+    public Suite suite() {
         return suite;
     }
 
-    public List<IfStmt4Group> getIfStmt4GroupList() {
+    public List<IfStmt4Group> ifStmt4GroupList() {
         return ifStmt4GroupList;
     }
 
-    public Optional<IfStmt5Group> getIfStmt5Group() {
+    public Optional<IfStmt5Group> ifStmt5Group() {
         return Optional.ofNullable(ifStmt5Group);
     }
 
@@ -72,15 +72,15 @@ public final class IfStmt extends ConjunctionRule {
             addRequired("suite", suite);
         }
 
-        public boolean getIsTokenElif() {
+        public boolean isTokenElif() {
             return isTokenElif;
         }
 
-        public NamedexprExpr getNamedexprExpr() {
+        public NamedexprExpr namedexprExpr() {
             return namedexprExpr;
         }
 
-        public Suite getSuite() {
+        public Suite suite() {
             return suite;
         }
     }
@@ -101,11 +101,11 @@ public final class IfStmt extends ConjunctionRule {
             addRequired("suite", suite);
         }
 
-        public boolean getIsTokenElse() {
+        public boolean isTokenElse() {
             return isTokenElse;
         }
 
-        public Suite getSuite() {
+        public Suite suite() {
             return suite;
         }
     }

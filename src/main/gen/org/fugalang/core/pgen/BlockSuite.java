@@ -20,11 +20,11 @@ public final class BlockSuite extends DisjunctionRule {
         addChoice("blockSuite2", blockSuite2);
     }
 
-    public BlockSuite1 getBlockSuite1() {
+    public BlockSuite1 blockSuite1() {
         return blockSuite1;
     }
 
-    public BlockSuite2 getBlockSuite2() {
+    public BlockSuite2 blockSuite2() {
         return blockSuite2;
     }
 
@@ -48,15 +48,15 @@ public final class BlockSuite extends DisjunctionRule {
             addRequired("isTokenRbrace", isTokenRbrace);
         }
 
-        public boolean getIsTokenLbrace() {
+        public boolean isTokenLbrace() {
             return isTokenLbrace;
         }
 
-        public SimpleStmt getSimpleStmt() {
+        public SimpleStmt simpleStmt() {
             return simpleStmt;
         }
 
-        public boolean getIsTokenRbrace() {
+        public boolean isTokenRbrace() {
             return isTokenRbrace;
         }
     }
@@ -89,23 +89,23 @@ public final class BlockSuite extends DisjunctionRule {
             addRequired("isTokenRbrace", isTokenRbrace);
         }
 
-        public boolean getIsTokenLbrace() {
+        public boolean isTokenLbrace() {
             return isTokenLbrace;
         }
 
-        public Object getNewline() {
+        public Object newline() {
             return newline;
         }
 
-        public Stmt getStmt() {
+        public Stmt stmt() {
             return stmt;
         }
 
-        public List<Stmt> getStmtList() {
+        public List<Stmt> stmtList() {
             return stmtList;
         }
 
-        public boolean getIsTokenRbrace() {
+        public boolean isTokenRbrace() {
             return isTokenRbrace;
         }
     }

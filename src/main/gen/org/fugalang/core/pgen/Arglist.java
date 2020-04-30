@@ -23,15 +23,15 @@ public final class Arglist extends ConjunctionRule {
         addRequired("isTokenComma", isTokenComma);
     }
 
-    public Argument getArgument() {
+    public Argument argument() {
         return argument;
     }
 
-    public List<Arglist2Group> getArglist2GroupList() {
+    public List<Arglist2Group> arglist2GroupList() {
         return arglist2GroupList;
     }
 
-    public boolean getIsTokenComma() {
+    public boolean isTokenComma() {
         return isTokenComma;
     }
 
@@ -51,11 +51,11 @@ public final class Arglist extends ConjunctionRule {
             addRequired("argument", argument);
         }
 
-        public boolean getIsTokenComma() {
+        public boolean isTokenComma() {
             return isTokenComma;
         }
 
-        public Argument getArgument() {
+        public Argument argument() {
             return argument;
         }
     }

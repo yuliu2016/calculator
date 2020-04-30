@@ -19,11 +19,11 @@ public final class Conjunction extends ConjunctionRule {
         addRequired("conjunction2GroupList", conjunction2GroupList);
     }
 
-    public Inversion getInversion() {
+    public Inversion inversion() {
         return inversion;
     }
 
-    public List<Conjunction2Group> getConjunction2GroupList() {
+    public List<Conjunction2Group> conjunction2GroupList() {
         return conjunction2GroupList;
     }
 
@@ -43,11 +43,11 @@ public final class Conjunction extends ConjunctionRule {
             addRequired("inversion", inversion);
         }
 
-        public boolean getIsTokenAnd() {
+        public boolean isTokenAnd() {
             return isTokenAnd;
         }
 
-        public Inversion getInversion() {
+        public Inversion inversion() {
             return inversion;
         }
     }

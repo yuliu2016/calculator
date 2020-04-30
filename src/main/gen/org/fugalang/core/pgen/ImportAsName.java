@@ -5,11 +5,11 @@ import java.util.Optional;
 
 // import_as_name: 'NAME' ['as' 'NAME']
 public final class ImportAsName extends ConjunctionRule {
-    private final Object name;
+    private final String name;
     private final ImportAsName2Group importAsName2Group;
 
     public ImportAsName(
-            Object name,
+            String name,
             ImportAsName2Group importAsName2Group
     ) {
         this.name = name;
@@ -19,22 +19,22 @@ public final class ImportAsName extends ConjunctionRule {
         addOptional("importAsName2Group", importAsName2Group);
     }
 
-    public Object getName() {
+    public String name() {
         return name;
     }
 
-    public Optional<ImportAsName2Group> getImportAsName2Group() {
+    public Optional<ImportAsName2Group> importAsName2Group() {
         return Optional.ofNullable(importAsName2Group);
     }
 
     // 'as' 'NAME'
     public static final class ImportAsName2Group extends ConjunctionRule {
         private final boolean isTokenAs;
-        private final Object name;
+        private final String name;
 
         public ImportAsName2Group(
                 boolean isTokenAs,
-                Object name
+                String name
         ) {
             this.isTokenAs = isTokenAs;
             this.name = name;
@@ -43,11 +43,11 @@ public final class ImportAsName extends ConjunctionRule {
             addRequired("name", name);
         }
 
-        public boolean getIsTokenAs() {
+        public boolean isTokenAs() {
             return isTokenAs;
         }
 
-        public Object getName() {
+        public String name() {
             return name;
         }
     }

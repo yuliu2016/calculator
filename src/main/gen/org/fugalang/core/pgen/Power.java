@@ -19,11 +19,11 @@ public final class Power extends ConjunctionRule {
         addOptional("power2Group", power2Group);
     }
 
-    public PipeExpr getPipeExpr() {
+    public PipeExpr pipeExpr() {
         return pipeExpr;
     }
 
-    public Optional<Power2Group> getPower2Group() {
+    public Optional<Power2Group> power2Group() {
         return Optional.ofNullable(power2Group);
     }
 
@@ -43,11 +43,11 @@ public final class Power extends ConjunctionRule {
             addRequired("factor", factor);
         }
 
-        public boolean getIsTokenPower() {
+        public boolean isTokenPower() {
             return isTokenPower;
         }
 
-        public Factor getFactor() {
+        public Factor factor() {
             return factor;
         }
     }

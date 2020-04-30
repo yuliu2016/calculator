@@ -23,15 +23,15 @@ public final class DottedAsNames extends ConjunctionRule {
         addRequired("isTokenComma", isTokenComma);
     }
 
-    public DottedAsName getDottedAsName() {
+    public DottedAsName dottedAsName() {
         return dottedAsName;
     }
 
-    public List<DottedAsNames2Group> getDottedAsNames2GroupList() {
+    public List<DottedAsNames2Group> dottedAsNames2GroupList() {
         return dottedAsNames2GroupList;
     }
 
-    public boolean getIsTokenComma() {
+    public boolean isTokenComma() {
         return isTokenComma;
     }
 
@@ -51,11 +51,11 @@ public final class DottedAsNames extends ConjunctionRule {
             addRequired("dottedAsName", dottedAsName);
         }
 
-        public boolean getIsTokenComma() {
+        public boolean isTokenComma() {
             return isTokenComma;
         }
 
-        public DottedAsName getDottedAsName() {
+        public DottedAsName dottedAsName() {
             return dottedAsName;
         }
     }

@@ -18,11 +18,11 @@ public final class DelStmt extends ConjunctionRule {
         addRequired("targets", targets);
     }
 
-    public boolean getIsTokenDel() {
+    public boolean isTokenDel() {
         return isTokenDel;
     }
 
-    public Targets getTargets() {
+    public Targets targets() {
         return targets;
     }
 }

@@ -25,15 +25,15 @@ public final class TryStmt extends ConjunctionRule {
         addRequired("tryStmt3Group", tryStmt3Group);
     }
 
-    public boolean getIsTokenTry() {
+    public boolean isTokenTry() {
         return isTokenTry;
     }
 
-    public Suite getSuite() {
+    public Suite suite() {
         return suite;
     }
 
-    public TryStmt3Group getTryStmt3Group() {
+    public TryStmt3Group tryStmt3Group() {
         return tryStmt3Group;
     }
 
@@ -53,11 +53,11 @@ public final class TryStmt extends ConjunctionRule {
             addChoice("tryStmt3Group2", tryStmt3Group2);
         }
 
-        public TryStmt3Group1 getTryStmt3Group1() {
+        public TryStmt3Group1 tryStmt3Group1() {
             return tryStmt3Group1;
         }
 
-        public TryStmt3Group2 getTryStmt3Group2() {
+        public TryStmt3Group2 tryStmt3Group2() {
             return tryStmt3Group2;
         }
     }
@@ -86,19 +86,19 @@ public final class TryStmt extends ConjunctionRule {
             addOptional("tryStmt3Group13Group", tryStmt3Group13Group);
         }
 
-        public TryStmt3Group11Group getTryStmt3Group11Group() {
+        public TryStmt3Group11Group tryStmt3Group11Group() {
             return tryStmt3Group11Group;
         }
 
-        public List<TryStmt3Group11Group> getTryStmt3Group11GroupList() {
+        public List<TryStmt3Group11Group> tryStmt3Group11GroupList() {
             return tryStmt3Group11GroupList;
         }
 
-        public Optional<TryStmt3Group12Group> getTryStmt3Group12Group() {
+        public Optional<TryStmt3Group12Group> tryStmt3Group12Group() {
             return Optional.ofNullable(tryStmt3Group12Group);
         }
 
-        public Optional<TryStmt3Group13Group> getTryStmt3Group13Group() {
+        public Optional<TryStmt3Group13Group> tryStmt3Group13Group() {
             return Optional.ofNullable(tryStmt3Group13Group);
         }
     }
@@ -119,11 +119,11 @@ public final class TryStmt extends ConjunctionRule {
             addRequired("suite", suite);
         }
 
-        public ExceptClause getExceptClause() {
+        public ExceptClause exceptClause() {
             return exceptClause;
         }
 
-        public Suite getSuite() {
+        public Suite suite() {
             return suite;
         }
     }
@@ -144,11 +144,11 @@ public final class TryStmt extends ConjunctionRule {
             addRequired("suite", suite);
         }
 
-        public boolean getIsTokenElse() {
+        public boolean isTokenElse() {
             return isTokenElse;
         }
 
-        public Suite getSuite() {
+        public Suite suite() {
             return suite;
         }
     }
@@ -169,11 +169,11 @@ public final class TryStmt extends ConjunctionRule {
             addRequired("suite", suite);
         }
 
-        public boolean getIsTokenFinally() {
+        public boolean isTokenFinally() {
             return isTokenFinally;
         }
 
-        public Suite getSuite() {
+        public Suite suite() {
             return suite;
         }
     }
@@ -194,11 +194,11 @@ public final class TryStmt extends ConjunctionRule {
             addRequired("suite", suite);
         }
 
-        public boolean getIsTokenFinally() {
+        public boolean isTokenFinally() {
             return isTokenFinally;
         }
 
-        public Suite getSuite() {
+        public Suite suite() {
             return suite;
         }
     }

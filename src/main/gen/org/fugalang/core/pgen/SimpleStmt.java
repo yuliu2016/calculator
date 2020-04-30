@@ -23,15 +23,15 @@ public final class SimpleStmt extends ConjunctionRule {
         addRequired("isTokenSemicolon", isTokenSemicolon);
     }
 
-    public SmallStmt getSmallStmt() {
+    public SmallStmt smallStmt() {
         return smallStmt;
     }
 
-    public List<SimpleStmt2Group> getSimpleStmt2GroupList() {
+    public List<SimpleStmt2Group> simpleStmt2GroupList() {
         return simpleStmt2GroupList;
     }
 
-    public boolean getIsTokenSemicolon() {
+    public boolean isTokenSemicolon() {
         return isTokenSemicolon;
     }
 
@@ -51,11 +51,11 @@ public final class SimpleStmt extends ConjunctionRule {
             addRequired("smallStmt", smallStmt);
         }
 
-        public boolean getIsTokenSemicolon() {
+        public boolean isTokenSemicolon() {
             return isTokenSemicolon;
         }
 
-        public SmallStmt getSmallStmt() {
+        public SmallStmt smallStmt() {
             return smallStmt;
         }
     }

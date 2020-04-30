@@ -62,55 +62,55 @@ public final class Augassign extends DisjunctionRule {
         addChoice("isTokenFloorDivAssign", isTokenFloorDivAssign);
     }
 
-    public boolean getIsTokenPlusAssign() {
+    public boolean isTokenPlusAssign() {
         return isTokenPlusAssign;
     }
 
-    public boolean getIsTokenMinusAssign() {
+    public boolean isTokenMinusAssign() {
         return isTokenMinusAssign;
     }
 
-    public boolean getIsTokenTimesAssign() {
+    public boolean isTokenTimesAssign() {
         return isTokenTimesAssign;
     }
 
-    public boolean getIsTokenMatrixTimesAssign() {
+    public boolean isTokenMatrixTimesAssign() {
         return isTokenMatrixTimesAssign;
     }
 
-    public boolean getIsTokenDivAssign() {
+    public boolean isTokenDivAssign() {
         return isTokenDivAssign;
     }
 
-    public boolean getIsTokenModulusAssign() {
+    public boolean isTokenModulusAssign() {
         return isTokenModulusAssign;
     }
 
-    public boolean getIsTokenBitAndAssign() {
+    public boolean isTokenBitAndAssign() {
         return isTokenBitAndAssign;
     }
 
-    public boolean getIsTokenBitOrAssign() {
+    public boolean isTokenBitOrAssign() {
         return isTokenBitOrAssign;
     }
 
-    public boolean getIsTokenBitXorAssign() {
+    public boolean isTokenBitXorAssign() {
         return isTokenBitXorAssign;
     }
 
-    public boolean getIsTokenLshiftAssign() {
+    public boolean isTokenLshiftAssign() {
         return isTokenLshiftAssign;
     }
 
-    public boolean getIsTokenRshiftAssign() {
+    public boolean isTokenRshiftAssign() {
         return isTokenRshiftAssign;
     }
 
-    public boolean getIsTokenPowerAssign() {
+    public boolean isTokenPowerAssign() {
         return isTokenPowerAssign;
     }
 
-    public boolean getIsTokenFloorDivAssign() {
+    public boolean isTokenFloorDivAssign() {
         return isTokenFloorDivAssign;
     }
 }

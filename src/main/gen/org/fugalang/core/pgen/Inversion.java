@@ -19,11 +19,11 @@ public final class Inversion extends DisjunctionRule {
         addChoice("comparison", comparison);
     }
 
-    public Inversion1 getInversion1() {
+    public Inversion1 inversion1() {
         return inversion1;
     }
 
-    public Comparison getComparison() {
+    public Comparison comparison() {
         return comparison;
     }
 
@@ -43,11 +43,11 @@ public final class Inversion extends DisjunctionRule {
             addRequired("inversion", inversion);
         }
 
-        public boolean getIsTokenNot() {
+        public boolean isTokenNot() {
             return isTokenNot;
         }
 
-        public Inversion getInversion() {
+        public Inversion inversion() {
             return inversion;
         }
     }

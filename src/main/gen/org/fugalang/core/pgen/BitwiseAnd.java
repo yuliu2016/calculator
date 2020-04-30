@@ -19,11 +19,11 @@ public final class BitwiseAnd extends ConjunctionRule {
         addRequired("bitwiseAnd2GroupList", bitwiseAnd2GroupList);
     }
 
-    public ShiftExpr getShiftExpr() {
+    public ShiftExpr shiftExpr() {
         return shiftExpr;
     }
 
-    public List<BitwiseAnd2Group> getBitwiseAnd2GroupList() {
+    public List<BitwiseAnd2Group> bitwiseAnd2GroupList() {
         return bitwiseAnd2GroupList;
     }
 
@@ -43,11 +43,11 @@ public final class BitwiseAnd extends ConjunctionRule {
             addRequired("shiftExpr", shiftExpr);
         }
 
-        public boolean getIsTokenBitAnd() {
+        public boolean isTokenBitAnd() {
             return isTokenBitAnd;
         }
 
-        public ShiftExpr getShiftExpr() {
+        public ShiftExpr shiftExpr() {
             return shiftExpr;
         }
     }

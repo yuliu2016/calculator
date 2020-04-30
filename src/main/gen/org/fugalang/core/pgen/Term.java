@@ -20,11 +20,11 @@ public final class Term extends ConjunctionRule {
         addRequired("term2GroupList", term2GroupList);
     }
 
-    public Factor getFactor() {
+    public Factor factor() {
         return factor;
     }
 
-    public List<Term2Group> getTerm2GroupList() {
+    public List<Term2Group> term2GroupList() {
         return term2GroupList;
     }
 
@@ -44,11 +44,11 @@ public final class Term extends ConjunctionRule {
             addRequired("factor", factor);
         }
 
-        public Term2Group1Group getTerm2Group1Group() {
+        public Term2Group1Group term2Group1Group() {
             return term2Group1Group;
         }
 
-        public Factor getFactor() {
+        public Factor factor() {
             return factor;
         }
     }
@@ -81,23 +81,23 @@ public final class Term extends ConjunctionRule {
             addChoice("isTokenFloorDiv", isTokenFloorDiv);
         }
 
-        public boolean getIsTokenTimes() {
+        public boolean isTokenTimes() {
             return isTokenTimes;
         }
 
-        public boolean getIsTokenMatrixTimes() {
+        public boolean isTokenMatrixTimes() {
             return isTokenMatrixTimes;
         }
 
-        public boolean getIsTokenDiv() {
+        public boolean isTokenDiv() {
             return isTokenDiv;
         }
 
-        public boolean getIsTokenModulus() {
+        public boolean isTokenModulus() {
             return isTokenModulus;
         }
 
-        public boolean getIsTokenFloorDiv() {
+        public boolean isTokenFloorDiv() {
             return isTokenFloorDiv;
         }
     }

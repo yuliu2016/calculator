@@ -19,11 +19,11 @@ public final class Stmt extends ConjunctionRule {
         addRequired("newline", newline);
     }
 
-    public Stmt1Group getStmt1Group() {
+    public Stmt1Group stmt1Group() {
         return stmt1Group;
     }
 
-    public Object getNewline() {
+    public Object newline() {
         return newline;
     }
 
@@ -43,11 +43,11 @@ public final class Stmt extends ConjunctionRule {
             addChoice("compoundStmt", compoundStmt);
         }
 
-        public SimpleStmt getSimpleStmt() {
+        public SimpleStmt simpleStmt() {
             return simpleStmt;
         }
 
-        public CompoundStmt getCompoundStmt() {
+        public CompoundStmt compoundStmt() {
             return compoundStmt;
         }
     }

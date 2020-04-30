@@ -23,15 +23,15 @@ public final class AssertStmt extends ConjunctionRule {
         addOptional("assertStmt3Group", assertStmt3Group);
     }
 
-    public boolean getIsTokenAssert() {
+    public boolean isTokenAssert() {
         return isTokenAssert;
     }
 
-    public Expr getExpr() {
+    public Expr expr() {
         return expr;
     }
 
-    public Optional<AssertStmt3Group> getAssertStmt3Group() {
+    public Optional<AssertStmt3Group> assertStmt3Group() {
         return Optional.ofNullable(assertStmt3Group);
     }
 
@@ -51,11 +51,11 @@ public final class AssertStmt extends ConjunctionRule {
             addRequired("expr", expr);
         }
 
-        public boolean getIsTokenComma() {
+        public boolean isTokenComma() {
             return isTokenComma;
         }
 
-        public Expr getExpr() {
+        public Expr expr() {
             return expr;
         }
     }

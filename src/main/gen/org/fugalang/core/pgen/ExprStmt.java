@@ -21,11 +21,11 @@ public final class ExprStmt extends ConjunctionRule {
         addOptional("exprStmt2Group", exprStmt2Group);
     }
 
-    public ExprlistStar getExprlistStar() {
+    public ExprlistStar exprlistStar() {
         return exprlistStar;
     }
 
-    public Optional<ExprStmt2Group> getExprStmt2Group() {
+    public Optional<ExprStmt2Group> exprStmt2Group() {
         return Optional.ofNullable(exprStmt2Group);
     }
 
@@ -45,11 +45,11 @@ public final class ExprStmt extends ConjunctionRule {
             addChoice("exprStmt2Group2GroupList", exprStmt2Group2GroupList);
         }
 
-        public ExprStmt2Group1 getExprStmt2Group1() {
+        public ExprStmt2Group1 exprStmt2Group1() {
             return exprStmt2Group1;
         }
 
-        public List<ExprStmt2Group2Group> getExprStmt2Group2GroupList() {
+        public List<ExprStmt2Group2Group> exprStmt2Group2GroupList() {
             return exprStmt2Group2GroupList;
         }
     }
@@ -70,11 +70,11 @@ public final class ExprStmt extends ConjunctionRule {
             addRequired("exprlist", exprlist);
         }
 
-        public Augassign getAugassign() {
+        public Augassign augassign() {
             return augassign;
         }
 
-        public Exprlist getExprlist() {
+        public Exprlist exprlist() {
             return exprlist;
         }
     }
@@ -95,11 +95,11 @@ public final class ExprStmt extends ConjunctionRule {
             addRequired("exprlistStar", exprlistStar);
         }
 
-        public boolean getIsTokenAssign() {
+        public boolean isTokenAssign() {
             return isTokenAssign;
         }
 
-        public ExprlistStar getExprlistStar() {
+        public ExprlistStar exprlistStar() {
             return exprlistStar;
         }
     }

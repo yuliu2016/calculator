@@ -46,6 +46,9 @@ public class FugaGenerator {
         }
 
         if (TokenType.NAMES.contains(s)) {
+            if (s.equals("STRING") || s.equals("NAME")) {
+                return Optional.of(new ConvertedValue("String", s.toLowerCase()));
+            }
             return Optional.of(new ConvertedValue("Object",
                     s.toLowerCase()));
         }

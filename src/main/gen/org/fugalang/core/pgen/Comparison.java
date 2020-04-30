@@ -19,11 +19,11 @@ public final class Comparison extends ConjunctionRule {
         addRequired("comparison2GroupList", comparison2GroupList);
     }
 
-    public BitwiseOr getBitwiseOr() {
+    public BitwiseOr bitwiseOr() {
         return bitwiseOr;
     }
 
-    public List<Comparison2Group> getComparison2GroupList() {
+    public List<Comparison2Group> comparison2GroupList() {
         return comparison2GroupList;
     }
 
@@ -43,11 +43,11 @@ public final class Comparison extends ConjunctionRule {
             addRequired("bitwiseOr", bitwiseOr);
         }
 
-        public CompOp getCompOp() {
+        public CompOp compOp() {
             return compOp;
         }
 
-        public BitwiseOr getBitwiseOr() {
+        public BitwiseOr bitwiseOr() {
             return bitwiseOr;
         }
     }

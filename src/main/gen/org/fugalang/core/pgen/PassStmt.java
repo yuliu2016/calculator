@@ -14,7 +14,7 @@ public final class PassStmt extends ConjunctionRule {
         addRequired("isTokenPass", isTokenPass);
     }
 
-    public boolean getIsTokenPass() {
+    public boolean isTokenPass() {
         return isTokenPass;
     }
 }

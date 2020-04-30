@@ -1,6 +1,5 @@
 package org.fugalang.core.grammar.classbuilder;
 
-import org.fugalang.core.grammar.gen.ParseStringUtil;
 
 public class ClassField {
     private final ClassName className;
@@ -35,9 +34,7 @@ public class ClassField {
             sb.append(className.asType());
         }
 
-        sb.append(" get")
-                .append(ParseStringUtil.capitalizeFirstCharOnly(fieldName))
-                .append("() {\n        return ");
+        sb.append(" ").append(fieldName).append("() {\n        return ");
 
         if (isOptional) {
             sb.append("Optional.ofNullable(")

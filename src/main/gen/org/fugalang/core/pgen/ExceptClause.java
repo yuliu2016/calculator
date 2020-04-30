@@ -19,11 +19,11 @@ public final class ExceptClause extends ConjunctionRule {
         addOptional("exceptClause2Group", exceptClause2Group);
     }
 
-    public boolean getIsTokenExcept() {
+    public boolean isTokenExcept() {
         return isTokenExcept;
     }
 
-    public Optional<ExceptClause2Group> getExceptClause2Group() {
+    public Optional<ExceptClause2Group> exceptClause2Group() {
         return Optional.ofNullable(exceptClause2Group);
     }
 
@@ -43,11 +43,11 @@ public final class ExceptClause extends ConjunctionRule {
             addOptional("exceptClause2Group2Group", exceptClause2Group2Group);
         }
 
-        public Expr getExpr() {
+        public Expr expr() {
             return expr;
         }
 
-        public Optional<ExceptClause2Group2Group> getExceptClause2Group2Group() {
+        public Optional<ExceptClause2Group2Group> exceptClause2Group2Group() {
             return Optional.ofNullable(exceptClause2Group2Group);
         }
     }
@@ -55,11 +55,11 @@ public final class ExceptClause extends ConjunctionRule {
     // 'as' 'NAME'
     public static final class ExceptClause2Group2Group extends ConjunctionRule {
         private final boolean isTokenAs;
-        private final Object name;
+        private final String name;
 
         public ExceptClause2Group2Group(
                 boolean isTokenAs,
-                Object name
+                String name
         ) {
             this.isTokenAs = isTokenAs;
             this.name = name;
@@ -68,11 +68,11 @@ public final class ExceptClause extends ConjunctionRule {
             addRequired("name", name);
         }
 
-        public boolean getIsTokenAs() {
+        public boolean isTokenAs() {
             return isTokenAs;
         }
 
-        public Object getName() {
+        public String name() {
             return name;
         }
     }

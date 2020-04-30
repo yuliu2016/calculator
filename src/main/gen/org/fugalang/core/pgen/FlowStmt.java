@@ -26,19 +26,19 @@ public final class FlowStmt extends DisjunctionRule {
         addChoice("raiseStmt", raiseStmt);
     }
 
-    public BreakStmt getBreakStmt() {
+    public BreakStmt breakStmt() {
         return breakStmt;
     }
 
-    public ContinueStmt getContinueStmt() {
+    public ContinueStmt continueStmt() {
         return continueStmt;
     }
 
-    public ReturnStmt getReturnStmt() {
+    public ReturnStmt returnStmt() {
         return returnStmt;
     }
 
-    public RaiseStmt getRaiseStmt() {
+    public RaiseStmt raiseStmt() {
         return raiseStmt;
     }
 }

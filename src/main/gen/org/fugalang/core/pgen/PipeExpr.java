@@ -19,11 +19,11 @@ public final class PipeExpr extends ConjunctionRule {
         addRequired("pipeExpr2GroupList", pipeExpr2GroupList);
     }
 
-    public AtomExpr getAtomExpr() {
+    public AtomExpr atomExpr() {
         return atomExpr;
     }
 
-    public List<PipeExpr2Group> getPipeExpr2GroupList() {
+    public List<PipeExpr2Group> pipeExpr2GroupList() {
         return pipeExpr2GroupList;
     }
 
@@ -43,11 +43,11 @@ public final class PipeExpr extends ConjunctionRule {
             addRequired("atomExpr", atomExpr);
         }
 
-        public boolean getIsTokenPipe() {
+        public boolean isTokenPipe() {
             return isTokenPipe;
         }
 
-        public AtomExpr getAtomExpr() {
+        public AtomExpr atomExpr() {
             return atomExpr;
         }
     }

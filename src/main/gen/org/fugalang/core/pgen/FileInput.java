@@ -20,11 +20,11 @@ public final class FileInput extends ConjunctionRule {
         addRequired("endmarker", endmarker);
     }
 
-    public List<FileInput1Group> getFileInput1GroupList() {
+    public List<FileInput1Group> fileInput1GroupList() {
         return fileInput1GroupList;
     }
 
-    public Object getEndmarker() {
+    public Object endmarker() {
         return endmarker;
     }
 
@@ -44,11 +44,11 @@ public final class FileInput extends ConjunctionRule {
             addChoice("stmt", stmt);
         }
 
-        public Object getNewline() {
+        public Object newline() {
             return newline;
         }
 
-        public Stmt getStmt() {
+        public Stmt stmt() {
             return stmt;
         }
     }

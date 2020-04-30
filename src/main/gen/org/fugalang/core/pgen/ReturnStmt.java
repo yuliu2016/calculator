@@ -19,11 +19,11 @@ public final class ReturnStmt extends ConjunctionRule {
         addOptional("exprlistStar", exprlistStar);
     }
 
-    public boolean getIsTokenReturn() {
+    public boolean isTokenReturn() {
         return isTokenReturn;
     }
 
-    public Optional<ExprlistStar> getExprlistStar() {
+    public Optional<ExprlistStar> exprlistStar() {
         return Optional.ofNullable(exprlistStar);
     }
 }

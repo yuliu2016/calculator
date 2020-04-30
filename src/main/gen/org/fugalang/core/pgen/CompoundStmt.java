@@ -30,23 +30,23 @@ public final class CompoundStmt extends DisjunctionRule {
         addChoice("withStmt", withStmt);
     }
 
-    public IfStmt getIfStmt() {
+    public IfStmt ifStmt() {
         return ifStmt;
     }
 
-    public WhileStmt getWhileStmt() {
+    public WhileStmt whileStmt() {
         return whileStmt;
     }
 
-    public ForStmt getForStmt() {
+    public ForStmt forStmt() {
         return forStmt;
     }
 
-    public TryStmt getTryStmt() {
+    public TryStmt tryStmt() {
         return tryStmt;
     }
 
-    public WithStmt getWithStmt() {
+    public WithStmt withStmt() {
         return withStmt;
     }
 }

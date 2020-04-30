@@ -5,11 +5,11 @@ import java.util.List;
 
 // dotted_name: 'NAME' ('.' 'NAME')*
 public final class DottedName extends ConjunctionRule {
-    private final Object name;
+    private final String name;
     private final List<DottedName2Group> dottedName2GroupList;
 
     public DottedName(
-            Object name,
+            String name,
             List<DottedName2Group> dottedName2GroupList
     ) {
         this.name = name;
@@ -19,22 +19,22 @@ public final class DottedName extends ConjunctionRule {
         addRequired("dottedName2GroupList", dottedName2GroupList);
     }
 
-    public Object getName() {
+    public String name() {
         return name;
     }
 
-    public List<DottedName2Group> getDottedName2GroupList() {
+    public List<DottedName2Group> dottedName2GroupList() {
         return dottedName2GroupList;
     }
 
     // '.' 'NAME'
     public static final class DottedName2Group extends ConjunctionRule {
         private final boolean isTokenDot;
-        private final Object name;
+        private final String name;
 
         public DottedName2Group(
                 boolean isTokenDot,
-                Object name
+                String name
         ) {
             this.isTokenDot = isTokenDot;
             this.name = name;
@@ -43,11 +43,11 @@ public final class DottedName extends ConjunctionRule {
             addRequired("name", name);
         }
 
-        public boolean getIsTokenDot() {
+        public boolean isTokenDot() {
             return isTokenDot;
         }
 
-        public Object getName() {
+        public String name() {
             return name;
         }
     }

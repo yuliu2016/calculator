@@ -23,15 +23,15 @@ public final class Subscriptlist extends ConjunctionRule {
         addRequired("isTokenComma", isTokenComma);
     }
 
-    public Subscript getSubscript() {
+    public Subscript subscript() {
         return subscript;
     }
 
-    public List<Subscriptlist2Group> getSubscriptlist2GroupList() {
+    public List<Subscriptlist2Group> subscriptlist2GroupList() {
         return subscriptlist2GroupList;
     }
 
-    public boolean getIsTokenComma() {
+    public boolean isTokenComma() {
         return isTokenComma;
     }
 
@@ -51,11 +51,11 @@ public final class Subscriptlist extends ConjunctionRule {
             addRequired("subscript", subscript);
         }
 
-        public boolean getIsTokenComma() {
+        public boolean isTokenComma() {
             return isTokenComma;
         }
 
-        public Subscript getSubscript() {
+        public Subscript subscript() {
             return subscript;
         }
     }

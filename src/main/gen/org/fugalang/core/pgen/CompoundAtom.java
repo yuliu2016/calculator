@@ -24,15 +24,15 @@ public final class CompoundAtom extends DisjunctionRule {
         addChoice("compoundAtom3", compoundAtom3);
     }
 
-    public CompoundAtom1 getCompoundAtom1() {
+    public CompoundAtom1 compoundAtom1() {
         return compoundAtom1;
     }
 
-    public CompoundAtom2 getCompoundAtom2() {
+    public CompoundAtom2 compoundAtom2() {
         return compoundAtom2;
     }
 
-    public CompoundAtom3 getCompoundAtom3() {
+    public CompoundAtom3 compoundAtom3() {
         return compoundAtom3;
     }
 
@@ -56,15 +56,15 @@ public final class CompoundAtom extends DisjunctionRule {
             addRequired("isTokenRpar", isTokenRpar);
         }
 
-        public boolean getIsTokenLpar() {
+        public boolean isTokenLpar() {
             return isTokenLpar;
         }
 
-        public Optional<ExprlistComp> getExprlistComp() {
+        public Optional<ExprlistComp> exprlistComp() {
             return Optional.ofNullable(exprlistComp);
         }
 
-        public boolean getIsTokenRpar() {
+        public boolean isTokenRpar() {
             return isTokenRpar;
         }
     }
@@ -89,15 +89,15 @@ public final class CompoundAtom extends DisjunctionRule {
             addRequired("isTokenRsqb", isTokenRsqb);
         }
 
-        public boolean getIsTokenLsqb() {
+        public boolean isTokenLsqb() {
             return isTokenLsqb;
         }
 
-        public Optional<ExprlistCompSub> getExprlistCompSub() {
+        public Optional<ExprlistCompSub> exprlistCompSub() {
             return Optional.ofNullable(exprlistCompSub);
         }
 
-        public boolean getIsTokenRsqb() {
+        public boolean isTokenRsqb() {
             return isTokenRsqb;
         }
     }
@@ -122,15 +122,15 @@ public final class CompoundAtom extends DisjunctionRule {
             addRequired("isTokenRbrace", isTokenRbrace);
         }
 
-        public boolean getIsTokenLbrace() {
+        public boolean isTokenLbrace() {
             return isTokenLbrace;
         }
 
-        public Optional<Dictorsetmaker> getDictorsetmaker() {
+        public Optional<Dictorsetmaker> dictorsetmaker() {
             return Optional.ofNullable(dictorsetmaker);
         }
 
-        public boolean getIsTokenRbrace() {
+        public boolean isTokenRbrace() {
             return isTokenRbrace;
         }
     }

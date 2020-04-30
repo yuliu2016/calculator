@@ -20,11 +20,11 @@ public final class Subscript extends DisjunctionRule {
         addChoice("subscript2", subscript2);
     }
 
-    public Expr getExpr() {
+    public Expr expr() {
         return expr;
     }
 
-    public Subscript2 getSubscript2() {
+    public Subscript2 subscript2() {
         return subscript2;
     }
 
@@ -52,19 +52,19 @@ public final class Subscript extends DisjunctionRule {
             addOptional("sliceop", sliceop);
         }
 
-        public Optional<Expr> getExpr() {
+        public Optional<Expr> expr() {
             return Optional.ofNullable(expr);
         }
 
-        public boolean getIsTokenColon() {
+        public boolean isTokenColon() {
             return isTokenColon;
         }
 
-        public Optional<Expr> getExpr1() {
+        public Optional<Expr> expr1() {
             return Optional.ofNullable(expr1);
         }
 
-        public Optional<Sliceop> getSliceop() {
+        public Optional<Sliceop> sliceop() {
             return Optional.ofNullable(sliceop);
         }
     }

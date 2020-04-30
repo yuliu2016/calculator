@@ -28,19 +28,19 @@ public final class Trailer extends DisjunctionRule {
         addChoice("blockSuite", blockSuite);
     }
 
-    public Trailer1 getTrailer1() {
+    public Trailer1 trailer1() {
         return trailer1;
     }
 
-    public Trailer2 getTrailer2() {
+    public Trailer2 trailer2() {
         return trailer2;
     }
 
-    public Trailer3 getTrailer3() {
+    public Trailer3 trailer3() {
         return trailer3;
     }
 
-    public BlockSuite getBlockSuite() {
+    public BlockSuite blockSuite() {
         return blockSuite;
     }
 
@@ -64,15 +64,15 @@ public final class Trailer extends DisjunctionRule {
             addRequired("isTokenRpar", isTokenRpar);
         }
 
-        public boolean getIsTokenLpar() {
+        public boolean isTokenLpar() {
             return isTokenLpar;
         }
 
-        public Optional<Arglist> getArglist() {
+        public Optional<Arglist> arglist() {
             return Optional.ofNullable(arglist);
         }
 
-        public boolean getIsTokenRpar() {
+        public boolean isTokenRpar() {
             return isTokenRpar;
         }
     }
@@ -97,15 +97,15 @@ public final class Trailer extends DisjunctionRule {
             addRequired("isTokenRsqb", isTokenRsqb);
         }
 
-        public boolean getIsTokenLsqb() {
+        public boolean isTokenLsqb() {
             return isTokenLsqb;
         }
 
-        public Subscriptlist getSubscriptlist() {
+        public Subscriptlist subscriptlist() {
             return subscriptlist;
         }
 
-        public boolean getIsTokenRsqb() {
+        public boolean isTokenRsqb() {
             return isTokenRsqb;
         }
     }
@@ -113,11 +113,11 @@ public final class Trailer extends DisjunctionRule {
     // '.' 'NAME'
     public static final class Trailer3 extends ConjunctionRule {
         private final boolean isTokenDot;
-        private final Object name;
+        private final String name;
 
         public Trailer3(
                 boolean isTokenDot,
-                Object name
+                String name
         ) {
             this.isTokenDot = isTokenDot;
             this.name = name;
@@ -126,11 +126,11 @@ public final class Trailer extends DisjunctionRule {
             addRequired("name", name);
         }
 
-        public boolean getIsTokenDot() {
+        public boolean isTokenDot() {
             return isTokenDot;
         }
 
-        public Object getName() {
+        public String name() {
             return name;
         }
     }

@@ -18,11 +18,11 @@ public final class CompIter extends DisjunctionRule {
         addChoice("compIf", compIf);
     }
 
-    public CompFor getCompFor() {
+    public CompFor compFor() {
         return compFor;
     }
 
-    public CompIf getCompIf() {
+    public CompIf compIf() {
         return compIf;
     }
 }

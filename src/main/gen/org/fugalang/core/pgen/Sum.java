@@ -20,11 +20,11 @@ public final class Sum extends ConjunctionRule {
         addRequired("sum2GroupList", sum2GroupList);
     }
 
-    public Term getTerm() {
+    public Term term() {
         return term;
     }
 
-    public List<Sum2Group> getSum2GroupList() {
+    public List<Sum2Group> sum2GroupList() {
         return sum2GroupList;
     }
 
@@ -44,11 +44,11 @@ public final class Sum extends ConjunctionRule {
             addRequired("term", term);
         }
 
-        public Sum2Group1Group getSum2Group1Group() {
+        public Sum2Group1Group sum2Group1Group() {
             return sum2Group1Group;
         }
 
-        public Term getTerm() {
+        public Term term() {
             return term;
         }
     }
@@ -69,11 +69,11 @@ public final class Sum extends ConjunctionRule {
             addChoice("isTokenMinus", isTokenMinus);
         }
 
-        public boolean getIsTokenPlus() {
+        public boolean isTokenPlus() {
             return isTokenPlus;
         }
 
-        public boolean getIsTokenMinus() {
+        public boolean isTokenMinus() {
             return isTokenMinus;
         }
     }

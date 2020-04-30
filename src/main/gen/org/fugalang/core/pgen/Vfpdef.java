@@ -4,17 +4,17 @@ import org.fugalang.core.parser.ConjunctionRule;
 
 // vfpdef: 'NAME'
 public final class Vfpdef extends ConjunctionRule {
-    private final Object name;
+    private final String name;
 
     public Vfpdef(
-            Object name
+            String name
     ) {
         this.name = name;
 
         addRequired("name", name);
     }
 
-    public Object getName() {
+    public String name() {
         return name;
     }
 }

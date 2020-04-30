@@ -19,22 +19,22 @@ public final class WithItem extends ConjunctionRule {
         addOptional("withItem2Group", withItem2Group);
     }
 
-    public Expr getExpr() {
+    public Expr expr() {
         return expr;
     }
 
-    public Optional<WithItem2Group> getWithItem2Group() {
+    public Optional<WithItem2Group> withItem2Group() {
         return Optional.ofNullable(withItem2Group);
     }
 
     // 'as' 'NAME'
     public static final class WithItem2Group extends ConjunctionRule {
         private final boolean isTokenAs;
-        private final Object name;
+        private final String name;
 
         public WithItem2Group(
                 boolean isTokenAs,
-                Object name
+                String name
         ) {
             this.isTokenAs = isTokenAs;
             this.name = name;
@@ -43,11 +43,11 @@ public final class WithItem extends ConjunctionRule {
             addRequired("name", name);
         }
 
-        public boolean getIsTokenAs() {
+        public boolean isTokenAs() {
             return isTokenAs;
         }
 
-        public Object getName() {
+        public String name() {
             return name;
         }
     }

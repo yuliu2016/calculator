@@ -28,19 +28,19 @@ public final class ImportFrom extends ConjunctionRule {
         addRequired("importFrom4Group", importFrom4Group);
     }
 
-    public boolean getIsTokenFrom() {
+    public boolean isTokenFrom() {
         return isTokenFrom;
     }
 
-    public ImportFrom2Group getImportFrom2Group() {
+    public ImportFrom2Group importFrom2Group() {
         return importFrom2Group;
     }
 
-    public boolean getIsTokenImport() {
+    public boolean isTokenImport() {
         return isTokenImport;
     }
 
-    public ImportFrom4Group getImportFrom4Group() {
+    public ImportFrom4Group importFrom4Group() {
         return importFrom4Group;
     }
 
@@ -64,15 +64,15 @@ public final class ImportFrom extends ConjunctionRule {
             addChoice("isTokenDotList", isTokenDotList);
         }
 
-        public ImportFrom2Group1 getImportFrom2Group1() {
+        public ImportFrom2Group1 importFrom2Group1() {
             return importFrom2Group1;
         }
 
-        public boolean getIsTokenDot() {
+        public boolean isTokenDot() {
             return isTokenDot;
         }
 
-        public List<Boolean> getIsTokenDotList() {
+        public List<Boolean> isTokenDotList() {
             return isTokenDotList;
         }
     }
@@ -93,11 +93,11 @@ public final class ImportFrom extends ConjunctionRule {
             addRequired("dottedName", dottedName);
         }
 
-        public List<Boolean> getIsTokenDotList() {
+        public List<Boolean> isTokenDotList() {
             return isTokenDotList;
         }
 
-        public DottedName getDottedName() {
+        public DottedName dottedName() {
             return dottedName;
         }
     }
@@ -122,15 +122,15 @@ public final class ImportFrom extends ConjunctionRule {
             addChoice("importAsNames", importAsNames);
         }
 
-        public boolean getIsTokenTimes() {
+        public boolean isTokenTimes() {
             return isTokenTimes;
         }
 
-        public ImportFrom4Group2 getImportFrom4Group2() {
+        public ImportFrom4Group2 importFrom4Group2() {
             return importFrom4Group2;
         }
 
-        public ImportAsNames getImportAsNames() {
+        public ImportAsNames importAsNames() {
             return importAsNames;
         }
     }
@@ -155,15 +155,15 @@ public final class ImportFrom extends ConjunctionRule {
             addRequired("isTokenRpar", isTokenRpar);
         }
 
-        public boolean getIsTokenLpar() {
+        public boolean isTokenLpar() {
             return isTokenLpar;
         }
 
-        public ImportAsNames getImportAsNames() {
+        public ImportAsNames importAsNames() {
             return importAsNames;
         }
 
-        public boolean getIsTokenRpar() {
+        public boolean isTokenRpar() {
             return isTokenRpar;
         }
     }

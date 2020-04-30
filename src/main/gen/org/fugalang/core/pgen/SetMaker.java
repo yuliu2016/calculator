@@ -4,56 +4,31 @@ import org.fugalang.core.parser.ConjunctionRule;
 import java.util.List;
 import org.fugalang.core.parser.DisjunctionRule;
 
-// set_maker: ('expr' | 'star_expr') ('comp_for' | (',' ('expr' | 'star_expr'))* [','])
+// set_maker: 'expr_or_star' ('comp_for' | (',' 'expr_or_star')* [','])
 public final class SetMaker extends ConjunctionRule {
-    private final SetMaker1Group setMaker1Group;
+    private final ExprOrStar exprOrStar;
     private final SetMaker2Group setMaker2Group;
 
     public SetMaker(
-            SetMaker1Group setMaker1Group,
+            ExprOrStar exprOrStar,
             SetMaker2Group setMaker2Group
     ) {
-        this.setMaker1Group = setMaker1Group;
+        this.exprOrStar = exprOrStar;
         this.setMaker2Group = setMaker2Group;
 
-        addRequired("setMaker1Group", setMaker1Group);
+        addRequired("exprOrStar", exprOrStar);
         addRequired("setMaker2Group", setMaker2Group);
     }
 
-    public SetMaker1Group getSetMaker1Group() {
-        return setMaker1Group;
+    public ExprOrStar exprOrStar() {
+        return exprOrStar;
     }
 
-    public SetMaker2Group getSetMaker2Group() {
+    public SetMaker2Group setMaker2Group() {
         return setMaker2Group;
     }
 
-    // 'expr' | 'star_expr'
-    public static final class SetMaker1Group extends DisjunctionRule {
-        private final Expr expr;
-        private final StarExpr starExpr;
-
-        public SetMaker1Group(
-                Expr expr,
-                StarExpr starExpr
-        ) {
-            this.expr = expr;
-            this.starExpr = starExpr;
-
-            addChoice("expr", expr);
-            addChoice("starExpr", starExpr);
-        }
-
-        public Expr getExpr() {
-            return expr;
-        }
-
-        public StarExpr getStarExpr() {
-            return starExpr;
-        }
-    }
-
-    // 'comp_for' | (',' ('expr' | 'star_expr'))* [',']
+    // 'comp_for' | (',' 'expr_or_star')* [',']
     public static final class SetMaker2Group extends DisjunctionRule {
         private final CompFor compFor;
         private final SetMaker2Group2 setMaker2Group2;
@@ -69,16 +44,16 @@ public final class SetMaker extends ConjunctionRule {
             addChoice("setMaker2Group2", setMaker2Group2);
         }
 
-        public CompFor getCompFor() {
+        public CompFor compFor() {
             return compFor;
         }
 
-        public SetMaker2Group2 getSetMaker2Group2() {
+        public SetMaker2Group2 setMaker2Group2() {
             return setMaker2Group2;
         }
     }
 
-    // (',' ('expr' | 'star_expr'))* [',']
+    // (',' 'expr_or_star')* [',']
     public static final class SetMaker2Group2 extends ConjunctionRule {
         private final List<SetMaker2Group21Group> setMaker2Group21GroupList;
         private final boolean isTokenComma;
@@ -94,62 +69,37 @@ public final class SetMaker extends ConjunctionRule {
             addRequired("isTokenComma", isTokenComma);
         }
 
-        public List<SetMaker2Group21Group> getSetMaker2Group21GroupList() {
+        public List<SetMaker2Group21Group> setMaker2Group21GroupList() {
             return setMaker2Group21GroupList;
         }
 
-        public boolean getIsTokenComma() {
+        public boolean isTokenComma() {
             return isTokenComma;
         }
     }
 
-    // ',' ('expr' | 'star_expr')
+    // ',' 'expr_or_star'
     public static final class SetMaker2Group21Group extends ConjunctionRule {
         private final boolean isTokenComma;
-        private final SetMaker2Group21Group2Group setMaker2Group21Group2Group;
+        private final ExprOrStar exprOrStar;
 
         public SetMaker2Group21Group(
                 boolean isTokenComma,
-                SetMaker2Group21Group2Group setMaker2Group21Group2Group
+                ExprOrStar exprOrStar
         ) {
             this.isTokenComma = isTokenComma;
-            this.setMaker2Group21Group2Group = setMaker2Group21Group2Group;
+            this.exprOrStar = exprOrStar;
 
             addRequired("isTokenComma", isTokenComma);
-            addRequired("setMaker2Group21Group2Group", setMaker2Group21Group2Group);
+            addRequired("exprOrStar", exprOrStar);
         }
 
-        public boolean getIsTokenComma() {
+        public boolean isTokenComma() {
             return isTokenComma;
         }
 
-        public SetMaker2Group21Group2Group getSetMaker2Group21Group2Group() {
-            return setMaker2Group21Group2Group;
-        }
-    }
-
-    // 'expr' | 'star_expr'
-    public static final class SetMaker2Group21Group2Group extends DisjunctionRule {
-        private final Expr expr;
-        private final StarExpr starExpr;
-
-        public SetMaker2Group21Group2Group(
-                Expr expr,
-                StarExpr starExpr
-        ) {
-            this.expr = expr;
-            this.starExpr = starExpr;
-
-            addChoice("expr", expr);
-            addChoice("starExpr", starExpr);
-        }
-
-        public Expr getExpr() {
-            return expr;
-        }
-
-        public StarExpr getStarExpr() {
-            return starExpr;
+        public ExprOrStar exprOrStar() {
+            return exprOrStar;
         }
     }
 }

@@ -51,43 +51,43 @@ public final class CompOp extends DisjunctionRule {
         addChoice("compOp10", compOp10);
     }
 
-    public boolean getIsTokenLess() {
+    public boolean isTokenLess() {
         return isTokenLess;
     }
 
-    public boolean getIsTokenGreater() {
+    public boolean isTokenGreater() {
         return isTokenGreater;
     }
 
-    public boolean getIsTokenEqual() {
+    public boolean isTokenEqual() {
         return isTokenEqual;
     }
 
-    public boolean getIsTokenMoreEqual() {
+    public boolean isTokenMoreEqual() {
         return isTokenMoreEqual;
     }
 
-    public boolean getIsTokenLessEqual() {
+    public boolean isTokenLessEqual() {
         return isTokenLessEqual;
     }
 
-    public boolean getIsTokenNequal() {
+    public boolean isTokenNequal() {
         return isTokenNequal;
     }
 
-    public boolean getIsTokenIn() {
+    public boolean isTokenIn() {
         return isTokenIn;
     }
 
-    public CompOp8 getCompOp8() {
+    public CompOp8 compOp8() {
         return compOp8;
     }
 
-    public boolean getIsTokenIs() {
+    public boolean isTokenIs() {
         return isTokenIs;
     }
 
-    public CompOp10 getCompOp10() {
+    public CompOp10 compOp10() {
         return compOp10;
     }
 
@@ -107,11 +107,11 @@ public final class CompOp extends DisjunctionRule {
             addRequired("isTokenIn", isTokenIn);
         }
 
-        public boolean getIsTokenNot() {
+        public boolean isTokenNot() {
             return isTokenNot;
         }
 
-        public boolean getIsTokenIn() {
+        public boolean isTokenIn() {
             return isTokenIn;
         }
     }
@@ -132,11 +132,11 @@ public final class CompOp extends DisjunctionRule {
             addRequired("isTokenNot", isTokenNot);
         }
 
-        public boolean getIsTokenIs() {
+        public boolean isTokenIs() {
             return isTokenIs;
         }
 
-        public boolean getIsTokenNot() {
+        public boolean isTokenNot() {
             return isTokenNot;
         }
     }

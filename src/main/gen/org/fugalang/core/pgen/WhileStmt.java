@@ -27,19 +27,19 @@ public final class WhileStmt extends ConjunctionRule {
         addOptional("whileStmt4Group", whileStmt4Group);
     }
 
-    public boolean getIsTokenWhile() {
+    public boolean isTokenWhile() {
         return isTokenWhile;
     }
 
-    public NamedexprExpr getNamedexprExpr() {
+    public NamedexprExpr namedexprExpr() {
         return namedexprExpr;
     }
 
-    public Suite getSuite() {
+    public Suite suite() {
         return suite;
     }
 
-    public Optional<WhileStmt4Group> getWhileStmt4Group() {
+    public Optional<WhileStmt4Group> whileStmt4Group() {
         return Optional.ofNullable(whileStmt4Group);
     }
 
@@ -59,11 +59,11 @@ public final class WhileStmt extends ConjunctionRule {
             addRequired("suite", suite);
         }
 
-        public boolean getIsTokenElse() {
+        public boolean isTokenElse() {
             return isTokenElse;
         }
 
-        public Suite getSuite() {
+        public Suite suite() {
             return suite;
         }
     }

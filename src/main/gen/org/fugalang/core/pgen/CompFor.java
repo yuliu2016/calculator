@@ -31,23 +31,23 @@ public final class CompFor extends ConjunctionRule {
         addOptional("compIter", compIter);
     }
 
-    public boolean getIsTokenFor() {
+    public boolean isTokenFor() {
         return isTokenFor;
     }
 
-    public Targets getTargets() {
+    public Targets targets() {
         return targets;
     }
 
-    public boolean getIsTokenIn() {
+    public boolean isTokenIn() {
         return isTokenIn;
     }
 
-    public Disjunction getDisjunction() {
+    public Disjunction disjunction() {
         return disjunction;
     }
 
-    public Optional<CompIter> getCompIter() {
+    public Optional<CompIter> compIter() {
         return Optional.ofNullable(compIter);
     }
 }

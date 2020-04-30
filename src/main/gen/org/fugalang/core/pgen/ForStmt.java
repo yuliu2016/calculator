@@ -35,27 +35,27 @@ public final class ForStmt extends ConjunctionRule {
         addOptional("forStmt6Group", forStmt6Group);
     }
 
-    public boolean getIsTokenFor() {
+    public boolean isTokenFor() {
         return isTokenFor;
     }
 
-    public Targets getTargets() {
+    public Targets targets() {
         return targets;
     }
 
-    public boolean getIsTokenIn() {
+    public boolean isTokenIn() {
         return isTokenIn;
     }
 
-    public Exprlist getExprlist() {
+    public Exprlist exprlist() {
         return exprlist;
     }
 
-    public Suite getSuite() {
+    public Suite suite() {
         return suite;
     }
 
-    public Optional<ForStmt6Group> getForStmt6Group() {
+    public Optional<ForStmt6Group> forStmt6Group() {
         return Optional.ofNullable(forStmt6Group);
     }
 
@@ -75,11 +75,11 @@ public final class ForStmt extends ConjunctionRule {
             addRequired("suite", suite);
         }
 
-        public boolean getIsTokenElse() {
+        public boolean isTokenElse() {
             return isTokenElse;
         }
 
-        public Suite getSuite() {
+        public Suite suite() {
             return suite;
         }
     }

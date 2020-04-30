@@ -18,11 +18,11 @@ public final class ExprlistCompSub extends DisjunctionRule {
         addChoice("subscript", subscript);
     }
 
-    public ExprlistComp getExprlistComp() {
+    public ExprlistComp exprlistComp() {
         return exprlistComp;
     }
 
-    public Subscript getSubscript() {
+    public Subscript subscript() {
         return subscript;
     }
 }

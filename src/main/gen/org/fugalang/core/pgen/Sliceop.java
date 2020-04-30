@@ -19,11 +19,11 @@ public final class Sliceop extends ConjunctionRule {
         addOptional("expr", expr);
     }
 
-    public boolean getIsTokenColon() {
+    public boolean isTokenColon() {
         return isTokenColon;
     }
 
-    public Optional<Expr> getExpr() {
+    public Optional<Expr> expr() {
         return Optional.ofNullable(expr);
     }
 }

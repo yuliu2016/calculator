@@ -23,15 +23,15 @@ public final class EvalInput extends ConjunctionRule {
         addRequired("endmarker", endmarker);
     }
 
-    public Exprlist getExprlist() {
+    public Exprlist exprlist() {
         return exprlist;
     }
 
-    public List<Object> getNewlineList() {
+    public List<Object> newlineList() {
         return newlineList;
     }
 
-    public Object getEndmarker() {
+    public Object endmarker() {
         return endmarker;
     }
 }

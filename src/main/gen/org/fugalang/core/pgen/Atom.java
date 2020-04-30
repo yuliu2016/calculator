@@ -18,11 +18,11 @@ public final class Atom extends DisjunctionRule {
         addChoice("simpleAtom", simpleAtom);
     }
 
-    public CompoundAtom getCompoundAtom() {
+    public CompoundAtom compoundAtom() {
         return compoundAtom;
     }
 
-    public SimpleAtom getSimpleAtom() {
+    public SimpleAtom simpleAtom() {
         return simpleAtom;
     }
 }

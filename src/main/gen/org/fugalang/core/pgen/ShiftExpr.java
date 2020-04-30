@@ -20,11 +20,11 @@ public final class ShiftExpr extends ConjunctionRule {
         addRequired("shiftExpr2GroupList", shiftExpr2GroupList);
     }
 
-    public Sum getSum() {
+    public Sum sum() {
         return sum;
     }
 
-    public List<ShiftExpr2Group> getShiftExpr2GroupList() {
+    public List<ShiftExpr2Group> shiftExpr2GroupList() {
         return shiftExpr2GroupList;
     }
 
@@ -44,11 +44,11 @@ public final class ShiftExpr extends ConjunctionRule {
             addRequired("sum", sum);
         }
 
-        public ShiftExpr2Group1Group getShiftExpr2Group1Group() {
+        public ShiftExpr2Group1Group shiftExpr2Group1Group() {
             return shiftExpr2Group1Group;
         }
 
-        public Sum getSum() {
+        public Sum sum() {
             return sum;
         }
     }
@@ -69,11 +69,11 @@ public final class ShiftExpr extends ConjunctionRule {
             addChoice("isTokenRshift", isTokenRshift);
         }
 
-        public boolean getIsTokenLshift() {
+        public boolean isTokenLshift() {
             return isTokenLshift;
         }
 
-        public boolean getIsTokenRshift() {
+        public boolean isTokenRshift() {
             return isTokenRshift;
         }
     }

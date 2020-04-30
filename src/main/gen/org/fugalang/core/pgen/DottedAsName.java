@@ -19,22 +19,22 @@ public final class DottedAsName extends ConjunctionRule {
         addOptional("dottedAsName2Group", dottedAsName2Group);
     }
 
-    public DottedName getDottedName() {
+    public DottedName dottedName() {
         return dottedName;
     }
 
-    public Optional<DottedAsName2Group> getDottedAsName2Group() {
+    public Optional<DottedAsName2Group> dottedAsName2Group() {
         return Optional.ofNullable(dottedAsName2Group);
     }
 
     // 'as' 'NAME'
     public static final class DottedAsName2Group extends ConjunctionRule {
         private final boolean isTokenAs;
-        private final Object name;
+        private final String name;
 
         public DottedAsName2Group(
                 boolean isTokenAs,
-                Object name
+                String name
         ) {
             this.isTokenAs = isTokenAs;
             this.name = name;
@@ -43,11 +43,11 @@ public final class DottedAsName extends ConjunctionRule {
             addRequired("name", name);
         }
 
-        public boolean getIsTokenAs() {
+        public boolean isTokenAs() {
             return isTokenAs;
         }
 
-        public Object getName() {
+        public String name() {
             return name;
         }
     }

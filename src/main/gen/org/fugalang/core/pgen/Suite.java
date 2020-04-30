@@ -19,11 +19,11 @@ public final class Suite extends DisjunctionRule {
         addChoice("blockSuite", blockSuite);
     }
 
-    public Suite1 getSuite1() {
+    public Suite1 suite1() {
         return suite1;
     }
 
-    public BlockSuite getBlockSuite() {
+    public BlockSuite blockSuite() {
         return blockSuite;
     }
 
@@ -43,11 +43,11 @@ public final class Suite extends DisjunctionRule {
             addRequired("simpleStmt", simpleStmt);
         }
 
-        public boolean getIsTokenColon() {
+        public boolean isTokenColon() {
             return isTokenColon;
         }
 
-        public SimpleStmt getSimpleStmt() {
+        public SimpleStmt simpleStmt() {
             return simpleStmt;
         }
     }

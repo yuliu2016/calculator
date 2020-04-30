@@ -23,15 +23,15 @@ public final class ImportAsNames extends ConjunctionRule {
         addRequired("isTokenComma", isTokenComma);
     }
 
-    public ImportAsName getImportAsName() {
+    public ImportAsName importAsName() {
         return importAsName;
     }
 
-    public List<ImportAsNames2Group> getImportAsNames2GroupList() {
+    public List<ImportAsNames2Group> importAsNames2GroupList() {
         return importAsNames2GroupList;
     }
 
-    public boolean getIsTokenComma() {
+    public boolean isTokenComma() {
         return isTokenComma;
     }
 
@@ -51,11 +51,11 @@ public final class ImportAsNames extends ConjunctionRule {
             addRequired("importAsName", importAsName);
         }
 
-        public boolean getIsTokenComma() {
+        public boolean isTokenComma() {
             return isTokenComma;
         }
 
-        public ImportAsName getImportAsName() {
+        public ImportAsName importAsName() {
             return importAsName;
         }
     }

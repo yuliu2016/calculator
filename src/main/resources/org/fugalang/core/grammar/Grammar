@@ -11,7 +11,8 @@ simple_stmt: small_stmt (';' small_stmt)* [';']
 # Small Statements
 small_stmt: expr_stmt | del_stmt | pass_stmt | flow_stmt | import_stmt | assert_stmt
 
-exprlist_star: (expr | star_expr) (',' (expr | star_expr))* [',']
+expr_or_star: expr | star_expr
+exprlist_star: expr_or_star (',' expr_or_star)* [',']
 augassign: '+=' | '-=' | '*=' | '@=' | '/=' | '%=' | '&=' | '|=' | '^=' | '<<=' | '>>=' | '**=' | '//='
 expr_stmt: exprlist_star [augassign exprlist | ('=' exprlist_star)*]
 
@@ -83,7 +84,7 @@ atom: compound_atom | simple_atom
 compound_atom: '(' [exprlist_comp] ')' | '[' [exprlist_comp_sub] ']' | '{' [dictorsetmaker] '}'
 simple_atom: NAME | NUMBER | STRING | 'None' | 'True' | 'False'
 
-exprlist_comp: (namedexpr_expr|star_expr) ( comp_for | (',' (namedexpr_expr|star_expr))* [','])
+exprlist_comp: expr_or_star ( comp_for | (',' expr_or_star)* [','])
 exprlist_comp_sub: exprlist_comp | subscript
 
 trailer: '(' [arglist] ')' | '[' subscriptlist ']' | '.' NAME | block_suite
@@ -96,8 +97,9 @@ exprlist: expr (',' expr)* [',']
 
 dictorsetmaker: dict_maker | set_maker
 
-dict_maker: (expr ':' expr | '**' bitwise_or) (comp_for | (',' (expr ':' expr | '**' bitwise_or))* [','])
-set_maker: (expr | star_expr) (comp_for | (',' (expr | star_expr))* [','])
+dict_item: (expr ':' expr | '**' bitwise_or)
+dict_maker: dict_item (comp_for | (',' dict_item)* [','])
+set_maker: expr_or_star (comp_for | (',' expr_or_star)* [','])
 
 arglist: argument (',' argument)*  [',']
 argument: NAME [comp_for] | NAME ':=' expr | NAME '=' expr | '**' expr | '*' expr

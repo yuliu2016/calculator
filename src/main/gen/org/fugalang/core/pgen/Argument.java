@@ -32,33 +32,33 @@ public final class Argument extends DisjunctionRule {
         addChoice("argument5", argument5);
     }
 
-    public Argument1 getArgument1() {
+    public Argument1 argument1() {
         return argument1;
     }
 
-    public Argument2 getArgument2() {
+    public Argument2 argument2() {
         return argument2;
     }
 
-    public Argument3 getArgument3() {
+    public Argument3 argument3() {
         return argument3;
     }
 
-    public Argument4 getArgument4() {
+    public Argument4 argument4() {
         return argument4;
     }
 
-    public Argument5 getArgument5() {
+    public Argument5 argument5() {
         return argument5;
     }
 
     // 'NAME' ['comp_for']
     public static final class Argument1 extends ConjunctionRule {
-        private final Object name;
+        private final String name;
         private final CompFor compFor;
 
         public Argument1(
-                Object name,
+                String name,
                 CompFor compFor
         ) {
             this.name = name;
@@ -68,23 +68,23 @@ public final class Argument extends DisjunctionRule {
             addOptional("compFor", compFor);
         }
 
-        public Object getName() {
+        public String name() {
             return name;
         }
 
-        public Optional<CompFor> getCompFor() {
+        public Optional<CompFor> compFor() {
             return Optional.ofNullable(compFor);
         }
     }
 
     // 'NAME' ':=' 'expr'
     public static final class Argument2 extends ConjunctionRule {
-        private final Object name;
+        private final String name;
         private final boolean isTokenAsgnExpr;
         private final Expr expr;
 
         public Argument2(
-                Object name,
+                String name,
                 boolean isTokenAsgnExpr,
                 Expr expr
         ) {
@@ -97,27 +97,27 @@ public final class Argument extends DisjunctionRule {
             addRequired("expr", expr);
         }
 
-        public Object getName() {
+        public String name() {
             return name;
         }
 
-        public boolean getIsTokenAsgnExpr() {
+        public boolean isTokenAsgnExpr() {
             return isTokenAsgnExpr;
         }
 
-        public Expr getExpr() {
+        public Expr expr() {
             return expr;
         }
     }
 
     // 'NAME' '=' 'expr'
     public static final class Argument3 extends ConjunctionRule {
-        private final Object name;
+        private final String name;
         private final boolean isTokenAssign;
         private final Expr expr;
 
         public Argument3(
-                Object name,
+                String name,
                 boolean isTokenAssign,
                 Expr expr
         ) {
@@ -130,15 +130,15 @@ public final class Argument extends DisjunctionRule {
             addRequired("expr", expr);
         }
 
-        public Object getName() {
+        public String name() {
             return name;
         }
 
-        public boolean getIsTokenAssign() {
+        public boolean isTokenAssign() {
             return isTokenAssign;
         }
 
-        public Expr getExpr() {
+        public Expr expr() {
             return expr;
         }
     }
@@ -159,11 +159,11 @@ public final class Argument extends DisjunctionRule {
             addRequired("expr", expr);
         }
 
-        public boolean getIsTokenPower() {
+        public boolean isTokenPower() {
             return isTokenPower;
         }
 
-        public Expr getExpr() {
+        public Expr expr() {
             return expr;
         }
     }
@@ -184,11 +184,11 @@ public final class Argument extends DisjunctionRule {
             addRequired("expr", expr);
         }
 
-        public boolean getIsTokenTimes() {
+        public boolean isTokenTimes() {
             return isTokenTimes;
         }
 
-        public Expr getExpr() {
+        public Expr expr() {
             return expr;
         }
     }

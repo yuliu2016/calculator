@@ -19,11 +19,11 @@ public final class Disjunction extends ConjunctionRule {
         addRequired("disjunction2GroupList", disjunction2GroupList);
     }
 
-    public Conjunction getConjunction() {
+    public Conjunction conjunction() {
         return conjunction;
     }
 
-    public List<Disjunction2Group> getDisjunction2GroupList() {
+    public List<Disjunction2Group> disjunction2GroupList() {
         return disjunction2GroupList;
     }
 
@@ -43,11 +43,11 @@ public final class Disjunction extends ConjunctionRule {
             addRequired("conjunction", conjunction);
         }
 
-        public boolean getIsTokenOr() {
+        public boolean isTokenOr() {
             return isTokenOr;
         }
 
-        public Conjunction getConjunction() {
+        public Conjunction conjunction() {
             return conjunction;
         }
     }

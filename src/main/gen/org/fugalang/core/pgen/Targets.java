@@ -24,15 +24,15 @@ public final class Targets extends ConjunctionRule {
         addRequired("isTokenComma", isTokenComma);
     }
 
-    public Targets1Group getTargets1Group() {
+    public Targets1Group targets1Group() {
         return targets1Group;
     }
 
-    public List<Targets2Group> getTargets2GroupList() {
+    public List<Targets2Group> targets2GroupList() {
         return targets2GroupList;
     }
 
-    public boolean getIsTokenComma() {
+    public boolean isTokenComma() {
         return isTokenComma;
     }
 
@@ -52,11 +52,11 @@ public final class Targets extends ConjunctionRule {
             addChoice("starExpr", starExpr);
         }
 
-        public BitwiseOr getBitwiseOr() {
+        public BitwiseOr bitwiseOr() {
             return bitwiseOr;
         }
 
-        public StarExpr getStarExpr() {
+        public StarExpr starExpr() {
             return starExpr;
         }
     }
@@ -77,11 +77,11 @@ public final class Targets extends ConjunctionRule {
             addRequired("targets2Group2Group", targets2Group2Group);
         }
 
-        public boolean getIsTokenComma() {
+        public boolean isTokenComma() {
             return isTokenComma;
         }
 
-        public Targets2Group2Group getTargets2Group2Group() {
+        public Targets2Group2Group targets2Group2Group() {
             return targets2Group2Group;
         }
     }
@@ -102,11 +102,11 @@ public final class Targets extends ConjunctionRule {
             addChoice("starExpr", starExpr);
         }
 
-        public BitwiseOr getBitwiseOr() {
+        public BitwiseOr bitwiseOr() {
             return bitwiseOr;
         }
 
-        public StarExpr getStarExpr() {
+        public StarExpr starExpr() {
             return starExpr;
         }
     }

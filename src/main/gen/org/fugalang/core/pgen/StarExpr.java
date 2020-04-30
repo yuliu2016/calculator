@@ -18,11 +18,11 @@ public final class StarExpr extends ConjunctionRule {
         addRequired("bitwiseOr", bitwiseOr);
     }
 
-    public boolean getIsTokenTimes() {
+    public boolean isTokenTimes() {
         return isTokenTimes;
     }
 
-    public BitwiseOr getBitwiseOr() {
+    public BitwiseOr bitwiseOr() {
         return bitwiseOr;
     }
 }

@@ -19,11 +19,11 @@ public final class BitwiseOr extends ConjunctionRule {
         addRequired("bitwiseOr2GroupList", bitwiseOr2GroupList);
     }
 
-    public BitwiseXor getBitwiseXor() {
+    public BitwiseXor bitwiseXor() {
         return bitwiseXor;
     }
 
-    public List<BitwiseOr2Group> getBitwiseOr2GroupList() {
+    public List<BitwiseOr2Group> bitwiseOr2GroupList() {
         return bitwiseOr2GroupList;
     }
 
@@ -43,11 +43,11 @@ public final class BitwiseOr extends ConjunctionRule {
             addRequired("bitwiseXor", bitwiseXor);
         }
 
-        public boolean getIsTokenBitOr() {
+        public boolean isTokenBitOr() {
             return isTokenBitOr;
         }
 
-        public BitwiseXor getBitwiseXor() {
+        public BitwiseXor bitwiseXor() {
             return bitwiseXor;
         }
     }

@@ -19,11 +19,11 @@ public final class Factor extends DisjunctionRule {
         addChoice("power", power);
     }
 
-    public Factor1 getFactor1() {
+    public Factor1 factor1() {
         return factor1;
     }
 
-    public Power getPower() {
+    public Power power() {
         return power;
     }
 
@@ -43,11 +43,11 @@ public final class Factor extends DisjunctionRule {
             addRequired("factor", factor);
         }
 
-        public Factor11Group getFactor11Group() {
+        public Factor11Group factor11Group() {
             return factor11Group;
         }
 
-        public Factor getFactor() {
+        public Factor factor() {
             return factor;
         }
     }
@@ -72,15 +72,15 @@ public final class Factor extends DisjunctionRule {
             addChoice("isTokenBitNot", isTokenBitNot);
         }
 
-        public boolean getIsTokenPlus() {
+        public boolean isTokenPlus() {
             return isTokenPlus;
         }
 
-        public boolean getIsTokenMinus() {
+        public boolean isTokenMinus() {
             return isTokenMinus;
         }
 
-        public boolean getIsTokenBitNot() {
+        public boolean isTokenBitNot() {
             return isTokenBitNot;
         }
     }

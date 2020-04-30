@@ -27,19 +27,19 @@ public final class WithStmt extends ConjunctionRule {
         addRequired("suite", suite);
     }
 
-    public boolean getIsTokenWith() {
+    public boolean isTokenWith() {
         return isTokenWith;
     }
 
-    public WithItem getWithItem() {
+    public WithItem withItem() {
         return withItem;
     }
 
-    public List<WithStmt3Group> getWithStmt3GroupList() {
+    public List<WithStmt3Group> withStmt3GroupList() {
         return withStmt3GroupList;
     }
 
-    public Suite getSuite() {
+    public Suite suite() {
         return suite;
     }
 
@@ -59,11 +59,11 @@ public final class WithStmt extends ConjunctionRule {
             addRequired("withItem", withItem);
         }
 
-        public boolean getIsTokenComma() {
+        public boolean isTokenComma() {
             return isTokenComma;
         }
 
-        public WithItem getWithItem() {
+        public WithItem withItem() {
             return withItem;
         }
     }

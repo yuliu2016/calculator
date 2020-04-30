@@ -28,19 +28,19 @@ public final class Funcdef extends ConjunctionRule {
         addRequired("funcdef4Group", funcdef4Group);
     }
 
-    public boolean getIsTokenAsync() {
+    public boolean isTokenAsync() {
         return isTokenAsync;
     }
 
-    public boolean getIsTokenDef() {
+    public boolean isTokenDef() {
         return isTokenDef;
     }
 
-    public Optional<Varargslist> getVarargslist() {
+    public Optional<Varargslist> varargslist() {
         return Optional.ofNullable(varargslist);
     }
 
-    public Funcdef4Group getFuncdef4Group() {
+    public Funcdef4Group funcdef4Group() {
         return funcdef4Group;
     }
 
@@ -60,11 +60,11 @@ public final class Funcdef extends ConjunctionRule {
             addChoice("blockSuite", blockSuite);
         }
 
-        public Funcdef4Group1 getFuncdef4Group1() {
+        public Funcdef4Group1 funcdef4Group1() {
             return funcdef4Group1;
         }
 
-        public BlockSuite getBlockSuite() {
+        public BlockSuite blockSuite() {
             return blockSuite;
         }
     }
@@ -85,11 +85,11 @@ public final class Funcdef extends ConjunctionRule {
             addRequired("expr", expr);
         }
 
-        public boolean getIsTokenColon() {
+        public boolean isTokenColon() {
             return isTokenColon;
         }
 
-        public Expr getExpr() {
+        public Expr expr() {
             return expr;
         }
     }

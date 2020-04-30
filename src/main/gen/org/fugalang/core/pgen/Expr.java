@@ -23,15 +23,15 @@ public final class Expr extends DisjunctionRule {
         addChoice("funcdef", funcdef);
     }
 
-    public Expr1 getExpr1() {
+    public Expr1 expr1() {
         return expr1;
     }
 
-    public Disjunction getDisjunction() {
+    public Disjunction disjunction() {
         return disjunction;
     }
 
-    public Funcdef getFuncdef() {
+    public Funcdef funcdef() {
         return funcdef;
     }
 
@@ -67,27 +67,27 @@ public final class Expr extends DisjunctionRule {
             addRequired("expr", expr);
         }
 
-        public boolean getIsTokenIf() {
+        public boolean isTokenIf() {
             return isTokenIf;
         }
 
-        public Disjunction getDisjunction() {
+        public Disjunction disjunction() {
             return disjunction;
         }
 
-        public boolean getIsTokenTernery() {
+        public boolean isTokenTernery() {
             return isTokenTernery;
         }
 
-        public Disjunction getDisjunction1() {
+        public Disjunction disjunction1() {
             return disjunction1;
         }
 
-        public boolean getIsTokenElse() {
+        public boolean isTokenElse() {
             return isTokenElse;
         }
 
-        public Expr getExpr() {
+        public Expr expr() {
             return expr;
         }
     }

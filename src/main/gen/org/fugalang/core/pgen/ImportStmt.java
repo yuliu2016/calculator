@@ -18,11 +18,11 @@ public final class ImportStmt extends DisjunctionRule {
         addChoice("importFrom", importFrom);
     }
 
-    public ImportName getImportName() {
+    public ImportName importName() {
         return importName;
     }
 
-    public ImportFrom getImportFrom() {
+    public ImportFrom importFrom() {
         return importFrom;
     }
 }

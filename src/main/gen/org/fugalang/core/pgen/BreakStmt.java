@@ -14,7 +14,7 @@ public final class BreakStmt extends ConjunctionRule {
         addRequired("isTokenBreak", isTokenBreak);
     }
 
-    public boolean getIsTokenBreak() {
+    public boolean isTokenBreak() {
         return isTokenBreak;
     }
 }

@@ -2,112 +2,61 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.ConjunctionRule;
 import java.util.List;
-import org.fugalang.core.parser.DisjunctionRule;
 
-// exprlist_star: ('expr' | 'star_expr') (',' ('expr' | 'star_expr'))* [',']
+// exprlist_star: 'expr_or_star' (',' 'expr_or_star')* [',']
 public final class ExprlistStar extends ConjunctionRule {
-    private final ExprlistStar1Group exprlistStar1Group;
+    private final ExprOrStar exprOrStar;
     private final List<ExprlistStar2Group> exprlistStar2GroupList;
     private final boolean isTokenComma;
 
     public ExprlistStar(
-            ExprlistStar1Group exprlistStar1Group,
+            ExprOrStar exprOrStar,
             List<ExprlistStar2Group> exprlistStar2GroupList,
             boolean isTokenComma
     ) {
-        this.exprlistStar1Group = exprlistStar1Group;
+        this.exprOrStar = exprOrStar;
         this.exprlistStar2GroupList = exprlistStar2GroupList;
         this.isTokenComma = isTokenComma;
 
-        addRequired("exprlistStar1Group", exprlistStar1Group);
+        addRequired("exprOrStar", exprOrStar);
         addRequired("exprlistStar2GroupList", exprlistStar2GroupList);
         addRequired("isTokenComma", isTokenComma);
     }
 
-    public ExprlistStar1Group getExprlistStar1Group() {
-        return exprlistStar1Group;
+    public ExprOrStar exprOrStar() {
+        return exprOrStar;
     }
 
-    public List<ExprlistStar2Group> getExprlistStar2GroupList() {
+    public List<ExprlistStar2Group> exprlistStar2GroupList() {
         return exprlistStar2GroupList;
     }
 
-    public boolean getIsTokenComma() {
+    public boolean isTokenComma() {
         return isTokenComma;
     }
 
-    // 'expr' | 'star_expr'
-    public static final class ExprlistStar1Group extends DisjunctionRule {
-        private final Expr expr;
-        private final StarExpr starExpr;
-
-        public ExprlistStar1Group(
-                Expr expr,
-                StarExpr starExpr
-        ) {
-            this.expr = expr;
-            this.starExpr = starExpr;
-
-            addChoice("expr", expr);
-            addChoice("starExpr", starExpr);
-        }
-
-        public Expr getExpr() {
-            return expr;
-        }
-
-        public StarExpr getStarExpr() {
-            return starExpr;
-        }
-    }
-
-    // ',' ('expr' | 'star_expr')
+    // ',' 'expr_or_star'
     public static final class ExprlistStar2Group extends ConjunctionRule {
         private final boolean isTokenComma;
-        private final ExprlistStar2Group2Group exprlistStar2Group2Group;
+        private final ExprOrStar exprOrStar;
 
         public ExprlistStar2Group(
                 boolean isTokenComma,
-                ExprlistStar2Group2Group exprlistStar2Group2Group
+                ExprOrStar exprOrStar
         ) {
             this.isTokenComma = isTokenComma;
-            this.exprlistStar2Group2Group = exprlistStar2Group2Group;
+            this.exprOrStar = exprOrStar;
 
             addRequired("isTokenComma", isTokenComma);
-            addRequired("exprlistStar2Group2Group", exprlistStar2Group2Group);
+            addRequired("exprOrStar", exprOrStar);
         }
 
-        public boolean getIsTokenComma() {
+        public boolean isTokenComma() {
             return isTokenComma;
         }
 
-        public ExprlistStar2Group2Group getExprlistStar2Group2Group() {
-            return exprlistStar2Group2Group;
-        }
-    }
-
-    // 'expr' | 'star_expr'
-    public static final class ExprlistStar2Group2Group extends DisjunctionRule {
-        private final Expr expr;
-        private final StarExpr starExpr;
-
-        public ExprlistStar2Group2Group(
-                Expr expr,
-                StarExpr starExpr
-        ) {
-            this.expr = expr;
-            this.starExpr = starExpr;
-
-            addChoice("expr", expr);
-            addChoice("starExpr", starExpr);
-        }
-
-        public Expr getExpr() {
-            return expr;
-        }
-
-        public StarExpr getStarExpr() {
-            return starExpr;
+        public ExprOrStar exprOrStar() {
+            return exprOrStar;
         }
     }
 }

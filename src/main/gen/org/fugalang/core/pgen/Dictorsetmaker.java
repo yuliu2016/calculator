@@ -18,11 +18,11 @@ public final class Dictorsetmaker extends DisjunctionRule {
         addChoice("setMaker", setMaker);
     }
 
-    public DictMaker getDictMaker() {
+    public DictMaker dictMaker() {
         return dictMaker;
     }
 
-    public SetMaker getSetMaker() {
+    public SetMaker setMaker() {
         return setMaker;
     }
 }

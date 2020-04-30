@@ -23,15 +23,15 @@ public final class AtomExpr extends ConjunctionRule {
         addRequired("trailerList", trailerList);
     }
 
-    public boolean getIsTokenAwait() {
+    public boolean isTokenAwait() {
         return isTokenAwait;
     }
 
-    public Atom getAtom() {
+    public Atom atom() {
         return atom;
     }
 
-    public List<Trailer> getTrailerList() {
+    public List<Trailer> trailerList() {
         return trailerList;
     }
 }

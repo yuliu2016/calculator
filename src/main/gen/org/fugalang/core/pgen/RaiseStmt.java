@@ -19,11 +19,11 @@ public final class RaiseStmt extends ConjunctionRule {
         addOptional("raiseStmt2Group", raiseStmt2Group);
     }
 
-    public boolean getIsTokenRaise() {
+    public boolean isTokenRaise() {
         return isTokenRaise;
     }
 
-    public Optional<RaiseStmt2Group> getRaiseStmt2Group() {
+    public Optional<RaiseStmt2Group> raiseStmt2Group() {
         return Optional.ofNullable(raiseStmt2Group);
     }
 
@@ -43,11 +43,11 @@ public final class RaiseStmt extends ConjunctionRule {
             addOptional("raiseStmt2Group2Group", raiseStmt2Group2Group);
         }
 
-        public Expr getExpr() {
+        public Expr expr() {
             return expr;
         }
 
-        public Optional<RaiseStmt2Group2Group> getRaiseStmt2Group2Group() {
+        public Optional<RaiseStmt2Group2Group> raiseStmt2Group2Group() {
             return Optional.ofNullable(raiseStmt2Group2Group);
         }
     }
@@ -68,11 +68,11 @@ public final class RaiseStmt extends ConjunctionRule {
             addRequired("expr", expr);
         }
 
-        public boolean getIsTokenFrom() {
+        public boolean isTokenFrom() {
             return isTokenFrom;
         }
 
-        public Expr getExpr() {
+        public Expr expr() {
             return expr;
         }
     }

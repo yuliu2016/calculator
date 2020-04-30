@@ -14,7 +14,7 @@ public final class ContinueStmt extends ConjunctionRule {
         addRequired("isTokenContinue", isTokenContinue);
     }
 
-    public boolean getIsTokenContinue() {
+    public boolean isTokenContinue() {
         return isTokenContinue;
     }
 }

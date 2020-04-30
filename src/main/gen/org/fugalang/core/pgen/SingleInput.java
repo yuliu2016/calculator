@@ -23,15 +23,15 @@ public final class SingleInput extends DisjunctionRule {
         addChoice("singleInput3", singleInput3);
     }
 
-    public Object getNewline() {
+    public Object newline() {
         return newline;
     }
 
-    public SimpleStmt getSimpleStmt() {
+    public SimpleStmt simpleStmt() {
         return simpleStmt;
     }
 
-    public SingleInput3 getSingleInput3() {
+    public SingleInput3 singleInput3() {
         return singleInput3;
     }
 
@@ -51,11 +51,11 @@ public final class SingleInput extends DisjunctionRule {
             addRequired("newline", newline);
         }
 
-        public CompoundStmt getCompoundStmt() {
+        public CompoundStmt compoundStmt() {
             return compoundStmt;
         }
 
-        public Object getNewline() {
+        public Object newline() {
             return newline;
         }
     }

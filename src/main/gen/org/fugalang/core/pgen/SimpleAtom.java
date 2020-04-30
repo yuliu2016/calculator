@@ -4,17 +4,17 @@ import org.fugalang.core.parser.DisjunctionRule;
 
 // simple_atom: 'NAME' | 'NUMBER' | 'STRING' | 'None' | 'True' | 'False'
 public final class SimpleAtom extends DisjunctionRule {
-    private final Object name;
+    private final String name;
     private final Object number;
-    private final Object string;
+    private final String string;
     private final boolean isTokenNone;
     private final boolean isTokenTrue;
     private final boolean isTokenFalse;
 
     public SimpleAtom(
-            Object name,
+            String name,
             Object number,
-            Object string,
+            String string,
             boolean isTokenNone,
             boolean isTokenTrue,
             boolean isTokenFalse
@@ -34,27 +34,27 @@ public final class SimpleAtom extends DisjunctionRule {
         addChoice("isTokenFalse", isTokenFalse);
     }
 
-    public Object getName() {
+    public String name() {
         return name;
     }
 
-    public Object getNumber() {
+    public Object number() {
         return number;
     }
 
-    public Object getString() {
+    public String string() {
         return string;
     }
 
-    public boolean getIsTokenNone() {
+    public boolean isTokenNone() {
         return isTokenNone;
     }
 
-    public boolean getIsTokenTrue() {
+    public boolean isTokenTrue() {
         return isTokenTrue;
     }
 
-    public boolean getIsTokenFalse() {
+    public boolean isTokenFalse() {
         return isTokenFalse;
     }
 }

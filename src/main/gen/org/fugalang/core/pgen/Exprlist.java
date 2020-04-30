@@ -23,15 +23,15 @@ public final class Exprlist extends ConjunctionRule {
         addRequired("isTokenComma", isTokenComma);
     }
 
-    public Expr getExpr() {
+    public Expr expr() {
         return expr;
     }
 
-    public List<Exprlist2Group> getExprlist2GroupList() {
+    public List<Exprlist2Group> exprlist2GroupList() {
         return exprlist2GroupList;
     }
 
-    public boolean getIsTokenComma() {
+    public boolean isTokenComma() {
         return isTokenComma;
     }
 
@@ -51,11 +51,11 @@ public final class Exprlist extends ConjunctionRule {
             addRequired("expr", expr);
         }
 
-        public boolean getIsTokenComma() {
+        public boolean isTokenComma() {
             return isTokenComma;
         }
 
-        public Expr getExpr() {
+        public Expr expr() {
             return expr;
         }
     }

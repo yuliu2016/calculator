@@ -23,15 +23,15 @@ public final class CompIf extends ConjunctionRule {
         addOptional("compIter", compIter);
     }
 
-    public boolean getIsTokenIf() {
+    public boolean isTokenIf() {
         return isTokenIf;
     }
 
-    public Expr getExpr() {
+    public Expr expr() {
         return expr;
     }
 
-    public Optional<CompIter> getCompIter() {
+    public Optional<CompIter> compIter() {
         return Optional.ofNullable(compIter);
     }
 }
