@@ -96,6 +96,8 @@ public class ClassBuilder {
         if (ruleType != null) {
             // add the parent classes
             sb.append(" extends ").append(ruleType.getSuperClassShort());
+        } else {
+            throw new IllegalStateException("No Rule Type");
         }
 
         sb.append(" {\n");

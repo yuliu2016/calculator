@@ -1,6 +1,7 @@
 package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.ConjunctionRule;
+import java.util.List;
 import org.fugalang.core.parser.DisjunctionRule;
 
 // block_suite: '{' 'simple_stmt' '}' | '{' 'NEWLINE' 'stmt'+ '}'
@@ -58,17 +59,20 @@ public final class BlockSuite extends DisjunctionRule {
         private final boolean isTokenLbrace;
         private final Object newline;
         private final Stmt stmt;
+        private final List<Stmt> stmtList;
         private final boolean isTokenRbrace;
 
         public BlockSuite2(
                 boolean isTokenLbrace,
                 Object newline,
                 Stmt stmt,
+                List<Stmt> stmtList,
                 boolean isTokenRbrace
         ) {
             this.isTokenLbrace = isTokenLbrace;
             this.newline = newline;
             this.stmt = stmt;
+            this.stmtList = stmtList;
             this.isTokenRbrace = isTokenRbrace;
         }
 
@@ -82,6 +86,10 @@ public final class BlockSuite extends DisjunctionRule {
 
         public Stmt getStmt() {
             return stmt;
+        }
+
+        public List<Stmt> getStmtList() {
+            return stmtList;
         }
 
         public boolean getIsTokenRbrace() {

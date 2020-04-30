@@ -1,21 +1,22 @@
 package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.ConjunctionRule;
+import java.util.List;
 
 // atom_expr: ['await'] 'atom' 'trailer'*
 public final class AtomExpr extends ConjunctionRule {
     private final boolean isTokenAwait;
     private final Atom atom;
-    private final Trailer trailer;
+    private final List<Trailer> trailerList;
 
     public AtomExpr(
             boolean isTokenAwait,
             Atom atom,
-            Trailer trailer
+            List<Trailer> trailerList
     ) {
         this.isTokenAwait = isTokenAwait;
         this.atom = atom;
-        this.trailer = trailer;
+        this.trailerList = trailerList;
     }
 
     public boolean getIsTokenAwait() {
@@ -26,7 +27,7 @@ public final class AtomExpr extends ConjunctionRule {
         return atom;
     }
 
-    public Trailer getTrailer() {
-        return trailer;
+    public List<Trailer> getTrailerList() {
+        return trailerList;
     }
 }

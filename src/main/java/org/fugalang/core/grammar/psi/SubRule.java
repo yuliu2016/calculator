@@ -8,10 +8,28 @@ public class SubRule implements CSTPrintElem {
     public final OrRule optionalOrRule;
     public final String token;
 
+    public final Type type;
+
     public SubRule(OrRule groupedOrRule, OrRule optionalOrRule, String token) {
         this.groupedOrRule = groupedOrRule;
         this.optionalOrRule = optionalOrRule;
         this.token = token;
+
+        if (groupedOrRule != null) {
+            if (optionalOrRule == null && token == null) {
+                type = Type.Group;
+            } else {
+                throw new IllegalArgumentException("More than one non-null value");
+            }
+        } else if (optionalOrRule != null) {
+            if (token == null) {
+                type = Type.Optional;
+            } else {
+                throw new IllegalArgumentException("More than one non-null value");
+            }
+        } else {
+            type = Type.Token;
+        }
     }
 
     @Override
@@ -35,5 +53,11 @@ public class SubRule implements CSTPrintElem {
                 optionalOrRule != null ?
                         "[" + optionalOrRule.toSimpleString() + "]" :
                         "'" + token + "'";
+    }
+
+    public enum Type {
+        Group,
+        Optional,
+        Token
     }
 }

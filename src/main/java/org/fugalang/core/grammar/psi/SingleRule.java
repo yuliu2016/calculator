@@ -21,7 +21,7 @@ public class SingleRule implements CSTPrintElem {
 
     @Override
     public String toString() {
-        return "SingleRule{}";
+        return toSimpleString();
     }
 
     public String toSimpleString() {

@@ -33,7 +33,7 @@ public class RecursiveEvaluator {
             } else if (op == Operator.MINUS) {
                 sum -= value;
             } else {
-                throw new IllegalStateException();
+                throw new IllegalStateException("Illegal op: " + op);
             }
         }
 
@@ -53,7 +53,7 @@ public class RecursiveEvaluator {
             } else if (op == Operator.DIV) {
                 product /= value;
             } else {
-                throw new IllegalStateException();
+                throw new IllegalStateException("Illegal Op: " + op);
             }
         }
 
@@ -67,7 +67,7 @@ public class RecursiveEvaluator {
         } else if (val instanceof ArithmeticExpr) {
             return evaluate0((ArithmeticExpr) val);
         }
-        throw new IllegalStateException();
+        throw new IllegalStateException("Illegal value: " + val);
     }
 
     public static void main(String[] args) {
