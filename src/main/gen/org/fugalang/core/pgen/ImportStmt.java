@@ -13,6 +13,9 @@ public final class ImportStmt extends DisjunctionRule {
     ) {
         this.importName = importName;
         this.importFrom = importFrom;
+
+        addChoice("importName", importName);
+        addChoice("importFrom", importFrom);
     }
 
     public ImportName getImportName() {

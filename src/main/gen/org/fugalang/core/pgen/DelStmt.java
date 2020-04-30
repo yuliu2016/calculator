@@ -13,6 +13,9 @@ public final class DelStmt extends ConjunctionRule {
     ) {
         this.isTokenDel = isTokenDel;
         this.targets = targets;
+
+        addRequired("isTokenDel", isTokenDel);
+        addRequired("targets", targets);
     }
 
     public boolean getIsTokenDel() {

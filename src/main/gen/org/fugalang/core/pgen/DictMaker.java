@@ -15,6 +15,9 @@ public final class DictMaker extends ConjunctionRule {
     ) {
         this.dictMaker1Group = dictMaker1Group;
         this.dictMaker2Group = dictMaker2Group;
+
+        addRequired("dictMaker1Group", dictMaker1Group);
+        addRequired("dictMaker2Group", dictMaker2Group);
     }
 
     public DictMaker1Group getDictMaker1Group() {
@@ -36,6 +39,9 @@ public final class DictMaker extends ConjunctionRule {
         ) {
             this.dictMaker1Group1 = dictMaker1Group1;
             this.dictMaker1Group2 = dictMaker1Group2;
+
+            addChoice("dictMaker1Group1", dictMaker1Group1);
+            addChoice("dictMaker1Group2", dictMaker1Group2);
         }
 
         public DictMaker1Group1 getDictMaker1Group1() {
@@ -61,6 +67,10 @@ public final class DictMaker extends ConjunctionRule {
             this.expr = expr;
             this.isTokenColon = isTokenColon;
             this.expr1 = expr1;
+
+            addRequired("expr", expr);
+            addRequired("isTokenColon", isTokenColon);
+            addRequired("expr1", expr1);
         }
 
         public Expr getExpr() {
@@ -87,6 +97,9 @@ public final class DictMaker extends ConjunctionRule {
         ) {
             this.isTokenPower = isTokenPower;
             this.bitwiseOr = bitwiseOr;
+
+            addRequired("isTokenPower", isTokenPower);
+            addRequired("bitwiseOr", bitwiseOr);
         }
 
         public boolean getIsTokenPower() {
@@ -109,6 +122,9 @@ public final class DictMaker extends ConjunctionRule {
         ) {
             this.compFor = compFor;
             this.dictMaker2Group2 = dictMaker2Group2;
+
+            addChoice("compFor", compFor);
+            addChoice("dictMaker2Group2", dictMaker2Group2);
         }
 
         public CompFor getCompFor() {
@@ -131,6 +147,9 @@ public final class DictMaker extends ConjunctionRule {
         ) {
             this.dictMaker2Group21GroupList = dictMaker2Group21GroupList;
             this.isTokenComma = isTokenComma;
+
+            addRequired("dictMaker2Group21GroupList", dictMaker2Group21GroupList);
+            addRequired("isTokenComma", isTokenComma);
         }
 
         public List<DictMaker2Group21Group> getDictMaker2Group21GroupList() {
@@ -153,6 +172,9 @@ public final class DictMaker extends ConjunctionRule {
         ) {
             this.isTokenComma = isTokenComma;
             this.dictMaker2Group21Group2Group = dictMaker2Group21Group2Group;
+
+            addRequired("isTokenComma", isTokenComma);
+            addRequired("dictMaker2Group21Group2Group", dictMaker2Group21Group2Group);
         }
 
         public boolean getIsTokenComma() {
@@ -175,6 +197,9 @@ public final class DictMaker extends ConjunctionRule {
         ) {
             this.dictMaker2Group21Group2Group1 = dictMaker2Group21Group2Group1;
             this.dictMaker2Group21Group2Group2 = dictMaker2Group21Group2Group2;
+
+            addChoice("dictMaker2Group21Group2Group1", dictMaker2Group21Group2Group1);
+            addChoice("dictMaker2Group21Group2Group2", dictMaker2Group21Group2Group2);
         }
 
         public DictMaker2Group21Group2Group1 getDictMaker2Group21Group2Group1() {
@@ -200,6 +225,10 @@ public final class DictMaker extends ConjunctionRule {
             this.expr = expr;
             this.isTokenColon = isTokenColon;
             this.expr1 = expr1;
+
+            addRequired("expr", expr);
+            addRequired("isTokenColon", isTokenColon);
+            addRequired("expr1", expr1);
         }
 
         public Expr getExpr() {
@@ -226,6 +255,9 @@ public final class DictMaker extends ConjunctionRule {
         ) {
             this.isTokenPower = isTokenPower;
             this.bitwiseOr = bitwiseOr;
+
+            addRequired("isTokenPower", isTokenPower);
+            addRequired("bitwiseOr", bitwiseOr);
         }
 
         public boolean getIsTokenPower() {

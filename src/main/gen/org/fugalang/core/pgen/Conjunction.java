@@ -14,6 +14,9 @@ public final class Conjunction extends ConjunctionRule {
     ) {
         this.inversion = inversion;
         this.conjunction2GroupList = conjunction2GroupList;
+
+        addRequired("inversion", inversion);
+        addRequired("conjunction2GroupList", conjunction2GroupList);
     }
 
     public Inversion getInversion() {
@@ -35,6 +38,9 @@ public final class Conjunction extends ConjunctionRule {
         ) {
             this.isTokenAnd = isTokenAnd;
             this.inversion = inversion;
+
+            addRequired("isTokenAnd", isTokenAnd);
+            addRequired("inversion", inversion);
         }
 
         public boolean getIsTokenAnd() {

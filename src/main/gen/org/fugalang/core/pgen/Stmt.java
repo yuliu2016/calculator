@@ -14,6 +14,9 @@ public final class Stmt extends ConjunctionRule {
     ) {
         this.stmt1Group = stmt1Group;
         this.newline = newline;
+
+        addRequired("stmt1Group", stmt1Group);
+        addRequired("newline", newline);
     }
 
     public Stmt1Group getStmt1Group() {
@@ -35,6 +38,9 @@ public final class Stmt extends ConjunctionRule {
         ) {
             this.simpleStmt = simpleStmt;
             this.compoundStmt = compoundStmt;
+
+            addChoice("simpleStmt", simpleStmt);
+            addChoice("compoundStmt", compoundStmt);
         }
 
         public SimpleStmt getSimpleStmt() {

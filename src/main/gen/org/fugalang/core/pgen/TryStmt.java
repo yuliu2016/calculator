@@ -19,6 +19,10 @@ public final class TryStmt extends ConjunctionRule {
         this.isTokenTry = isTokenTry;
         this.suite = suite;
         this.tryStmt3Group = tryStmt3Group;
+
+        addRequired("isTokenTry", isTokenTry);
+        addRequired("suite", suite);
+        addRequired("tryStmt3Group", tryStmt3Group);
     }
 
     public boolean getIsTokenTry() {
@@ -44,6 +48,9 @@ public final class TryStmt extends ConjunctionRule {
         ) {
             this.tryStmt3Group1 = tryStmt3Group1;
             this.tryStmt3Group2 = tryStmt3Group2;
+
+            addChoice("tryStmt3Group1", tryStmt3Group1);
+            addChoice("tryStmt3Group2", tryStmt3Group2);
         }
 
         public TryStmt3Group1 getTryStmt3Group1() {
@@ -72,6 +79,11 @@ public final class TryStmt extends ConjunctionRule {
             this.tryStmt3Group11GroupList = tryStmt3Group11GroupList;
             this.tryStmt3Group12Group = tryStmt3Group12Group;
             this.tryStmt3Group13Group = tryStmt3Group13Group;
+
+            addRequired("tryStmt3Group11Group", tryStmt3Group11Group);
+            addRequired("tryStmt3Group11GroupList", tryStmt3Group11GroupList);
+            addOptional("tryStmt3Group12Group", tryStmt3Group12Group);
+            addOptional("tryStmt3Group13Group", tryStmt3Group13Group);
         }
 
         public TryStmt3Group11Group getTryStmt3Group11Group() {
@@ -102,6 +114,9 @@ public final class TryStmt extends ConjunctionRule {
         ) {
             this.exceptClause = exceptClause;
             this.suite = suite;
+
+            addRequired("exceptClause", exceptClause);
+            addRequired("suite", suite);
         }
 
         public ExceptClause getExceptClause() {
@@ -124,6 +139,9 @@ public final class TryStmt extends ConjunctionRule {
         ) {
             this.isTokenElse = isTokenElse;
             this.suite = suite;
+
+            addRequired("isTokenElse", isTokenElse);
+            addRequired("suite", suite);
         }
 
         public boolean getIsTokenElse() {
@@ -146,6 +164,9 @@ public final class TryStmt extends ConjunctionRule {
         ) {
             this.isTokenFinally = isTokenFinally;
             this.suite = suite;
+
+            addRequired("isTokenFinally", isTokenFinally);
+            addRequired("suite", suite);
         }
 
         public boolean getIsTokenFinally() {
@@ -168,6 +189,9 @@ public final class TryStmt extends ConjunctionRule {
         ) {
             this.isTokenFinally = isTokenFinally;
             this.suite = suite;
+
+            addRequired("isTokenFinally", isTokenFinally);
+            addRequired("suite", suite);
         }
 
         public boolean getIsTokenFinally() {

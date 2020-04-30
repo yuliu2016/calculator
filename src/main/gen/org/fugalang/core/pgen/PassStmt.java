@@ -10,6 +10,8 @@ public final class PassStmt extends ConjunctionRule {
             boolean isTokenPass
     ) {
         this.isTokenPass = isTokenPass;
+
+        addRequired("isTokenPass", isTokenPass);
     }
 
     public boolean getIsTokenPass() {

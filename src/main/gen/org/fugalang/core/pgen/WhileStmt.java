@@ -20,6 +20,11 @@ public final class WhileStmt extends ConjunctionRule {
         this.namedexprExpr = namedexprExpr;
         this.suite = suite;
         this.whileStmt4Group = whileStmt4Group;
+
+        addRequired("isTokenWhile", isTokenWhile);
+        addRequired("namedexprExpr", namedexprExpr);
+        addRequired("suite", suite);
+        addOptional("whileStmt4Group", whileStmt4Group);
     }
 
     public boolean getIsTokenWhile() {
@@ -49,6 +54,9 @@ public final class WhileStmt extends ConjunctionRule {
         ) {
             this.isTokenElse = isTokenElse;
             this.suite = suite;
+
+            addRequired("isTokenElse", isTokenElse);
+            addRequired("suite", suite);
         }
 
         public boolean getIsTokenElse() {

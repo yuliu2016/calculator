@@ -21,6 +21,11 @@ public final class ImportFrom extends ConjunctionRule {
         this.importFrom2Group = importFrom2Group;
         this.isTokenImport = isTokenImport;
         this.importFrom4Group = importFrom4Group;
+
+        addRequired("isTokenFrom", isTokenFrom);
+        addRequired("importFrom2Group", importFrom2Group);
+        addRequired("isTokenImport", isTokenImport);
+        addRequired("importFrom4Group", importFrom4Group);
     }
 
     public boolean getIsTokenFrom() {
@@ -53,6 +58,10 @@ public final class ImportFrom extends ConjunctionRule {
             this.importFrom2Group1 = importFrom2Group1;
             this.isTokenDot = isTokenDot;
             this.isTokenDotList = isTokenDotList;
+
+            addChoice("importFrom2Group1", importFrom2Group1);
+            addChoice("isTokenDot", isTokenDot);
+            addChoice("isTokenDotList", isTokenDotList);
         }
 
         public ImportFrom2Group1 getImportFrom2Group1() {
@@ -79,6 +88,9 @@ public final class ImportFrom extends ConjunctionRule {
         ) {
             this.isTokenDotList = isTokenDotList;
             this.dottedName = dottedName;
+
+            addRequired("isTokenDotList", isTokenDotList);
+            addRequired("dottedName", dottedName);
         }
 
         public List<Boolean> getIsTokenDotList() {
@@ -104,6 +116,10 @@ public final class ImportFrom extends ConjunctionRule {
             this.isTokenTimes = isTokenTimes;
             this.importFrom4Group2 = importFrom4Group2;
             this.importAsNames = importAsNames;
+
+            addChoice("isTokenTimes", isTokenTimes);
+            addChoice("importFrom4Group2", importFrom4Group2);
+            addChoice("importAsNames", importAsNames);
         }
 
         public boolean getIsTokenTimes() {
@@ -133,6 +149,10 @@ public final class ImportFrom extends ConjunctionRule {
             this.isTokenLpar = isTokenLpar;
             this.importAsNames = importAsNames;
             this.isTokenRpar = isTokenRpar;
+
+            addRequired("isTokenLpar", isTokenLpar);
+            addRequired("importAsNames", importAsNames);
+            addRequired("isTokenRpar", isTokenRpar);
         }
 
         public boolean getIsTokenLpar() {

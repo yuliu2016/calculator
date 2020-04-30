@@ -24,6 +24,12 @@ public final class Argument extends DisjunctionRule {
         this.argument3 = argument3;
         this.argument4 = argument4;
         this.argument5 = argument5;
+
+        addChoice("argument1", argument1);
+        addChoice("argument2", argument2);
+        addChoice("argument3", argument3);
+        addChoice("argument4", argument4);
+        addChoice("argument5", argument5);
     }
 
     public Argument1 getArgument1() {
@@ -57,6 +63,9 @@ public final class Argument extends DisjunctionRule {
         ) {
             this.name = name;
             this.compFor = compFor;
+
+            addRequired("name", name);
+            addOptional("compFor", compFor);
         }
 
         public Object getName() {
@@ -82,6 +91,10 @@ public final class Argument extends DisjunctionRule {
             this.name = name;
             this.isTokenAsgnExpr = isTokenAsgnExpr;
             this.expr = expr;
+
+            addRequired("name", name);
+            addRequired("isTokenAsgnExpr", isTokenAsgnExpr);
+            addRequired("expr", expr);
         }
 
         public Object getName() {
@@ -111,6 +124,10 @@ public final class Argument extends DisjunctionRule {
             this.name = name;
             this.isTokenAssign = isTokenAssign;
             this.expr = expr;
+
+            addRequired("name", name);
+            addRequired("isTokenAssign", isTokenAssign);
+            addRequired("expr", expr);
         }
 
         public Object getName() {
@@ -137,6 +154,9 @@ public final class Argument extends DisjunctionRule {
         ) {
             this.isTokenPower = isTokenPower;
             this.expr = expr;
+
+            addRequired("isTokenPower", isTokenPower);
+            addRequired("expr", expr);
         }
 
         public boolean getIsTokenPower() {
@@ -159,6 +179,9 @@ public final class Argument extends DisjunctionRule {
         ) {
             this.isTokenTimes = isTokenTimes;
             this.expr = expr;
+
+            addRequired("isTokenTimes", isTokenTimes);
+            addRequired("expr", expr);
         }
 
         public boolean getIsTokenTimes() {

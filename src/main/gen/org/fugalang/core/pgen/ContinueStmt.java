@@ -10,6 +10,8 @@ public final class ContinueStmt extends ConjunctionRule {
             boolean isTokenContinue
     ) {
         this.isTokenContinue = isTokenContinue;
+
+        addRequired("isTokenContinue", isTokenContinue);
     }
 
     public boolean getIsTokenContinue() {

@@ -46,6 +46,20 @@ public final class Augassign extends DisjunctionRule {
         this.isTokenRshiftAssign = isTokenRshiftAssign;
         this.isTokenPowerAssign = isTokenPowerAssign;
         this.isTokenFloorDivAssign = isTokenFloorDivAssign;
+
+        addChoice("isTokenPlusAssign", isTokenPlusAssign);
+        addChoice("isTokenMinusAssign", isTokenMinusAssign);
+        addChoice("isTokenTimesAssign", isTokenTimesAssign);
+        addChoice("isTokenMatrixTimesAssign", isTokenMatrixTimesAssign);
+        addChoice("isTokenDivAssign", isTokenDivAssign);
+        addChoice("isTokenModulusAssign", isTokenModulusAssign);
+        addChoice("isTokenBitAndAssign", isTokenBitAndAssign);
+        addChoice("isTokenBitOrAssign", isTokenBitOrAssign);
+        addChoice("isTokenBitXorAssign", isTokenBitXorAssign);
+        addChoice("isTokenLshiftAssign", isTokenLshiftAssign);
+        addChoice("isTokenRshiftAssign", isTokenRshiftAssign);
+        addChoice("isTokenPowerAssign", isTokenPowerAssign);
+        addChoice("isTokenFloorDivAssign", isTokenFloorDivAssign);
     }
 
     public boolean getIsTokenPlusAssign() {

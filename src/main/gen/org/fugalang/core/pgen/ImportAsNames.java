@@ -17,6 +17,10 @@ public final class ImportAsNames extends ConjunctionRule {
         this.importAsName = importAsName;
         this.importAsNames2GroupList = importAsNames2GroupList;
         this.isTokenComma = isTokenComma;
+
+        addRequired("importAsName", importAsName);
+        addRequired("importAsNames2GroupList", importAsNames2GroupList);
+        addRequired("isTokenComma", isTokenComma);
     }
 
     public ImportAsName getImportAsName() {
@@ -42,6 +46,9 @@ public final class ImportAsNames extends ConjunctionRule {
         ) {
             this.isTokenComma = isTokenComma;
             this.importAsName = importAsName;
+
+            addRequired("isTokenComma", isTokenComma);
+            addRequired("importAsName", importAsName);
         }
 
         public boolean getIsTokenComma() {

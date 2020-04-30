@@ -17,6 +17,10 @@ public final class SingleInput extends DisjunctionRule {
         this.newline = newline;
         this.simpleStmt = simpleStmt;
         this.singleInput3 = singleInput3;
+
+        addChoice("newline", newline);
+        addChoice("simpleStmt", simpleStmt);
+        addChoice("singleInput3", singleInput3);
     }
 
     public Object getNewline() {
@@ -42,6 +46,9 @@ public final class SingleInput extends DisjunctionRule {
         ) {
             this.compoundStmt = compoundStmt;
             this.newline = newline;
+
+            addRequired("compoundStmt", compoundStmt);
+            addRequired("newline", newline);
         }
 
         public CompoundStmt getCompoundStmt() {

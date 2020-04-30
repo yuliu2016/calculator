@@ -15,6 +15,9 @@ public final class Sum extends ConjunctionRule {
     ) {
         this.term = term;
         this.sum2GroupList = sum2GroupList;
+
+        addRequired("term", term);
+        addRequired("sum2GroupList", sum2GroupList);
     }
 
     public Term getTerm() {
@@ -36,6 +39,9 @@ public final class Sum extends ConjunctionRule {
         ) {
             this.sum2Group1Group = sum2Group1Group;
             this.term = term;
+
+            addRequired("sum2Group1Group", sum2Group1Group);
+            addRequired("term", term);
         }
 
         public Sum2Group1Group getSum2Group1Group() {
@@ -58,6 +64,9 @@ public final class Sum extends ConjunctionRule {
         ) {
             this.isTokenPlus = isTokenPlus;
             this.isTokenMinus = isTokenMinus;
+
+            addChoice("isTokenPlus", isTokenPlus);
+            addChoice("isTokenMinus", isTokenMinus);
         }
 
         public boolean getIsTokenPlus() {

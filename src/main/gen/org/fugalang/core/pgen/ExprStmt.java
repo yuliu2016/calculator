@@ -16,6 +16,9 @@ public final class ExprStmt extends ConjunctionRule {
     ) {
         this.exprlistStar = exprlistStar;
         this.exprStmt2Group = exprStmt2Group;
+
+        addRequired("exprlistStar", exprlistStar);
+        addOptional("exprStmt2Group", exprStmt2Group);
     }
 
     public ExprlistStar getExprlistStar() {
@@ -37,6 +40,9 @@ public final class ExprStmt extends ConjunctionRule {
         ) {
             this.exprStmt2Group1 = exprStmt2Group1;
             this.exprStmt2Group2GroupList = exprStmt2Group2GroupList;
+
+            addChoice("exprStmt2Group1", exprStmt2Group1);
+            addChoice("exprStmt2Group2GroupList", exprStmt2Group2GroupList);
         }
 
         public ExprStmt2Group1 getExprStmt2Group1() {
@@ -59,6 +65,9 @@ public final class ExprStmt extends ConjunctionRule {
         ) {
             this.augassign = augassign;
             this.exprlist = exprlist;
+
+            addRequired("augassign", augassign);
+            addRequired("exprlist", exprlist);
         }
 
         public Augassign getAugassign() {
@@ -81,6 +90,9 @@ public final class ExprStmt extends ConjunctionRule {
         ) {
             this.isTokenAssign = isTokenAssign;
             this.exprlistStar = exprlistStar;
+
+            addRequired("isTokenAssign", isTokenAssign);
+            addRequired("exprlistStar", exprlistStar);
         }
 
         public boolean getIsTokenAssign() {

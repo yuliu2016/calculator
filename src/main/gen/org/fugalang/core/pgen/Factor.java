@@ -14,6 +14,9 @@ public final class Factor extends DisjunctionRule {
     ) {
         this.factor1 = factor1;
         this.power = power;
+
+        addChoice("factor1", factor1);
+        addChoice("power", power);
     }
 
     public Factor1 getFactor1() {
@@ -35,6 +38,9 @@ public final class Factor extends DisjunctionRule {
         ) {
             this.factor11Group = factor11Group;
             this.factor = factor;
+
+            addRequired("factor11Group", factor11Group);
+            addRequired("factor", factor);
         }
 
         public Factor11Group getFactor11Group() {
@@ -60,6 +66,10 @@ public final class Factor extends DisjunctionRule {
             this.isTokenPlus = isTokenPlus;
             this.isTokenMinus = isTokenMinus;
             this.isTokenBitNot = isTokenBitNot;
+
+            addChoice("isTokenPlus", isTokenPlus);
+            addChoice("isTokenMinus", isTokenMinus);
+            addChoice("isTokenBitNot", isTokenBitNot);
         }
 
         public boolean getIsTokenPlus() {

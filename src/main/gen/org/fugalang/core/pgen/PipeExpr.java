@@ -14,6 +14,9 @@ public final class PipeExpr extends ConjunctionRule {
     ) {
         this.atomExpr = atomExpr;
         this.pipeExpr2GroupList = pipeExpr2GroupList;
+
+        addRequired("atomExpr", atomExpr);
+        addRequired("pipeExpr2GroupList", pipeExpr2GroupList);
     }
 
     public AtomExpr getAtomExpr() {
@@ -35,6 +38,9 @@ public final class PipeExpr extends ConjunctionRule {
         ) {
             this.isTokenPipe = isTokenPipe;
             this.atomExpr = atomExpr;
+
+            addRequired("isTokenPipe", isTokenPipe);
+            addRequired("atomExpr", atomExpr);
         }
 
         public boolean getIsTokenPipe() {

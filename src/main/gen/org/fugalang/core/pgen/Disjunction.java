@@ -14,6 +14,9 @@ public final class Disjunction extends ConjunctionRule {
     ) {
         this.conjunction = conjunction;
         this.disjunction2GroupList = disjunction2GroupList;
+
+        addRequired("conjunction", conjunction);
+        addRequired("disjunction2GroupList", disjunction2GroupList);
     }
 
     public Conjunction getConjunction() {
@@ -35,6 +38,9 @@ public final class Disjunction extends ConjunctionRule {
         ) {
             this.isTokenOr = isTokenOr;
             this.conjunction = conjunction;
+
+            addRequired("isTokenOr", isTokenOr);
+            addRequired("conjunction", conjunction);
         }
 
         public boolean getIsTokenOr() {

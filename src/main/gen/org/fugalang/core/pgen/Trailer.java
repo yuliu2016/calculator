@@ -21,6 +21,11 @@ public final class Trailer extends DisjunctionRule {
         this.trailer2 = trailer2;
         this.trailer3 = trailer3;
         this.blockSuite = blockSuite;
+
+        addChoice("trailer1", trailer1);
+        addChoice("trailer2", trailer2);
+        addChoice("trailer3", trailer3);
+        addChoice("blockSuite", blockSuite);
     }
 
     public Trailer1 getTrailer1() {
@@ -53,6 +58,10 @@ public final class Trailer extends DisjunctionRule {
             this.isTokenLpar = isTokenLpar;
             this.arglist = arglist;
             this.isTokenRpar = isTokenRpar;
+
+            addRequired("isTokenLpar", isTokenLpar);
+            addOptional("arglist", arglist);
+            addRequired("isTokenRpar", isTokenRpar);
         }
 
         public boolean getIsTokenLpar() {
@@ -82,6 +91,10 @@ public final class Trailer extends DisjunctionRule {
             this.isTokenLsqb = isTokenLsqb;
             this.subscriptlist = subscriptlist;
             this.isTokenRsqb = isTokenRsqb;
+
+            addRequired("isTokenLsqb", isTokenLsqb);
+            addRequired("subscriptlist", subscriptlist);
+            addRequired("isTokenRsqb", isTokenRsqb);
         }
 
         public boolean getIsTokenLsqb() {
@@ -108,6 +121,9 @@ public final class Trailer extends DisjunctionRule {
         ) {
             this.isTokenDot = isTokenDot;
             this.name = name;
+
+            addRequired("isTokenDot", isTokenDot);
+            addRequired("name", name);
         }
 
         public boolean getIsTokenDot() {

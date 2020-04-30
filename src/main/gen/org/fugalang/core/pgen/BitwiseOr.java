@@ -14,6 +14,9 @@ public final class BitwiseOr extends ConjunctionRule {
     ) {
         this.bitwiseXor = bitwiseXor;
         this.bitwiseOr2GroupList = bitwiseOr2GroupList;
+
+        addRequired("bitwiseXor", bitwiseXor);
+        addRequired("bitwiseOr2GroupList", bitwiseOr2GroupList);
     }
 
     public BitwiseXor getBitwiseXor() {
@@ -35,6 +38,9 @@ public final class BitwiseOr extends ConjunctionRule {
         ) {
             this.isTokenBitOr = isTokenBitOr;
             this.bitwiseXor = bitwiseXor;
+
+            addRequired("isTokenBitOr", isTokenBitOr);
+            addRequired("bitwiseXor", bitwiseXor);
         }
 
         public boolean getIsTokenBitOr() {

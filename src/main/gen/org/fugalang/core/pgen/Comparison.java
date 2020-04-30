@@ -14,6 +14,9 @@ public final class Comparison extends ConjunctionRule {
     ) {
         this.bitwiseOr = bitwiseOr;
         this.comparison2GroupList = comparison2GroupList;
+
+        addRequired("bitwiseOr", bitwiseOr);
+        addRequired("comparison2GroupList", comparison2GroupList);
     }
 
     public BitwiseOr getBitwiseOr() {
@@ -35,6 +38,9 @@ public final class Comparison extends ConjunctionRule {
         ) {
             this.compOp = compOp;
             this.bitwiseOr = bitwiseOr;
+
+            addRequired("compOp", compOp);
+            addRequired("bitwiseOr", bitwiseOr);
         }
 
         public CompOp getCompOp() {

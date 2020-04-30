@@ -15,6 +15,9 @@ public final class FileInput extends ConjunctionRule {
     ) {
         this.fileInput1GroupList = fileInput1GroupList;
         this.endmarker = endmarker;
+
+        addRequired("fileInput1GroupList", fileInput1GroupList);
+        addRequired("endmarker", endmarker);
     }
 
     public List<FileInput1Group> getFileInput1GroupList() {
@@ -36,6 +39,9 @@ public final class FileInput extends ConjunctionRule {
         ) {
             this.newline = newline;
             this.stmt = stmt;
+
+            addChoice("newline", newline);
+            addChoice("stmt", stmt);
         }
 
         public Object getNewline() {

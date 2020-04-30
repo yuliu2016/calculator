@@ -13,6 +13,9 @@ public final class Atom extends DisjunctionRule {
     ) {
         this.compoundAtom = compoundAtom;
         this.simpleAtom = simpleAtom;
+
+        addChoice("compoundAtom", compoundAtom);
+        addChoice("simpleAtom", simpleAtom);
     }
 
     public CompoundAtom getCompoundAtom() {

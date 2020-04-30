@@ -15,6 +15,9 @@ public final class ExprlistComp extends ConjunctionRule {
     ) {
         this.exprlistComp1Group = exprlistComp1Group;
         this.exprlistComp2Group = exprlistComp2Group;
+
+        addRequired("exprlistComp1Group", exprlistComp1Group);
+        addRequired("exprlistComp2Group", exprlistComp2Group);
     }
 
     public ExprlistComp1Group getExprlistComp1Group() {
@@ -36,6 +39,9 @@ public final class ExprlistComp extends ConjunctionRule {
         ) {
             this.namedexprExpr = namedexprExpr;
             this.starExpr = starExpr;
+
+            addChoice("namedexprExpr", namedexprExpr);
+            addChoice("starExpr", starExpr);
         }
 
         public NamedexprExpr getNamedexprExpr() {
@@ -58,6 +64,9 @@ public final class ExprlistComp extends ConjunctionRule {
         ) {
             this.compFor = compFor;
             this.exprlistComp2Group2 = exprlistComp2Group2;
+
+            addChoice("compFor", compFor);
+            addChoice("exprlistComp2Group2", exprlistComp2Group2);
         }
 
         public CompFor getCompFor() {
@@ -80,6 +89,9 @@ public final class ExprlistComp extends ConjunctionRule {
         ) {
             this.exprlistComp2Group21GroupList = exprlistComp2Group21GroupList;
             this.isTokenComma = isTokenComma;
+
+            addRequired("exprlistComp2Group21GroupList", exprlistComp2Group21GroupList);
+            addRequired("isTokenComma", isTokenComma);
         }
 
         public List<ExprlistComp2Group21Group> getExprlistComp2Group21GroupList() {
@@ -102,6 +114,9 @@ public final class ExprlistComp extends ConjunctionRule {
         ) {
             this.isTokenComma = isTokenComma;
             this.exprlistComp2Group21Group2Group = exprlistComp2Group21Group2Group;
+
+            addRequired("isTokenComma", isTokenComma);
+            addRequired("exprlistComp2Group21Group2Group", exprlistComp2Group21Group2Group);
         }
 
         public boolean getIsTokenComma() {
@@ -124,6 +139,9 @@ public final class ExprlistComp extends ConjunctionRule {
         ) {
             this.namedexprExpr = namedexprExpr;
             this.starExpr = starExpr;
+
+            addChoice("namedexprExpr", namedexprExpr);
+            addChoice("starExpr", starExpr);
         }
 
         public NamedexprExpr getNamedexprExpr() {

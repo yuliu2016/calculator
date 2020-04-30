@@ -17,6 +17,10 @@ public final class CompIf extends ConjunctionRule {
         this.isTokenIf = isTokenIf;
         this.expr = expr;
         this.compIter = compIter;
+
+        addRequired("isTokenIf", isTokenIf);
+        addRequired("expr", expr);
+        addOptional("compIter", compIter);
     }
 
     public boolean getIsTokenIf() {

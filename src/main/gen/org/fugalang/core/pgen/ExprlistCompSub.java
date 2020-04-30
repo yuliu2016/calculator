@@ -13,6 +13,9 @@ public final class ExprlistCompSub extends DisjunctionRule {
     ) {
         this.exprlistComp = exprlistComp;
         this.subscript = subscript;
+
+        addChoice("exprlistComp", exprlistComp);
+        addChoice("subscript", subscript);
     }
 
     public ExprlistComp getExprlistComp() {

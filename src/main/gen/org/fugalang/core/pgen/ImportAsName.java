@@ -14,6 +14,9 @@ public final class ImportAsName extends ConjunctionRule {
     ) {
         this.name = name;
         this.importAsName2Group = importAsName2Group;
+
+        addRequired("name", name);
+        addOptional("importAsName2Group", importAsName2Group);
     }
 
     public Object getName() {
@@ -35,6 +38,9 @@ public final class ImportAsName extends ConjunctionRule {
         ) {
             this.isTokenAs = isTokenAs;
             this.name = name;
+
+            addRequired("isTokenAs", isTokenAs);
+            addRequired("name", name);
         }
 
         public boolean getIsTokenAs() {

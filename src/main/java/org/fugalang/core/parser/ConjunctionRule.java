@@ -1,19 +1,13 @@
 package org.fugalang.core.parser;
 
 public class ConjunctionRule implements ParserNode {
-    public <T> T addRequired(String name, T value) {
-        return value;
+
+    public void addRequired(String name, boolean value) {
     }
 
-    public boolean addRequired(String name, boolean value) {
-        return value;
+    public void addRequired(String name, Object value) {
     }
 
-    public <T> T addOptional(String name, T value) {
-        return value;
-    }
-
-    public boolean addOptional(String name, boolean value) {
-        return value;
+    public void addOptional(String name, Object value) {
     }
 }

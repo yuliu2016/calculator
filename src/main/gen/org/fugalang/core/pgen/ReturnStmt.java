@@ -14,6 +14,9 @@ public final class ReturnStmt extends ConjunctionRule {
     ) {
         this.isTokenReturn = isTokenReturn;
         this.exprlistStar = exprlistStar;
+
+        addRequired("isTokenReturn", isTokenReturn);
+        addOptional("exprlistStar", exprlistStar);
     }
 
     public boolean getIsTokenReturn() {

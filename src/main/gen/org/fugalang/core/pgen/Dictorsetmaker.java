@@ -13,6 +13,9 @@ public final class Dictorsetmaker extends DisjunctionRule {
     ) {
         this.dictMaker = dictMaker;
         this.setMaker = setMaker;
+
+        addChoice("dictMaker", dictMaker);
+        addChoice("setMaker", setMaker);
     }
 
     public DictMaker getDictMaker() {

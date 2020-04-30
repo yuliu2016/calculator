@@ -18,6 +18,10 @@ public final class ExprlistStar extends ConjunctionRule {
         this.exprlistStar1Group = exprlistStar1Group;
         this.exprlistStar2GroupList = exprlistStar2GroupList;
         this.isTokenComma = isTokenComma;
+
+        addRequired("exprlistStar1Group", exprlistStar1Group);
+        addRequired("exprlistStar2GroupList", exprlistStar2GroupList);
+        addRequired("isTokenComma", isTokenComma);
     }
 
     public ExprlistStar1Group getExprlistStar1Group() {
@@ -43,6 +47,9 @@ public final class ExprlistStar extends ConjunctionRule {
         ) {
             this.expr = expr;
             this.starExpr = starExpr;
+
+            addChoice("expr", expr);
+            addChoice("starExpr", starExpr);
         }
 
         public Expr getExpr() {
@@ -65,6 +72,9 @@ public final class ExprlistStar extends ConjunctionRule {
         ) {
             this.isTokenComma = isTokenComma;
             this.exprlistStar2Group2Group = exprlistStar2Group2Group;
+
+            addRequired("isTokenComma", isTokenComma);
+            addRequired("exprlistStar2Group2Group", exprlistStar2Group2Group);
         }
 
         public boolean getIsTokenComma() {
@@ -87,6 +97,9 @@ public final class ExprlistStar extends ConjunctionRule {
         ) {
             this.expr = expr;
             this.starExpr = starExpr;
+
+            addChoice("expr", expr);
+            addChoice("starExpr", starExpr);
         }
 
         public Expr getExpr() {

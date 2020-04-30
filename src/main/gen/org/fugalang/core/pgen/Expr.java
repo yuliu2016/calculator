@@ -17,6 +17,10 @@ public final class Expr extends DisjunctionRule {
         this.expr1 = expr1;
         this.disjunction = disjunction;
         this.funcdef = funcdef;
+
+        addChoice("expr1", expr1);
+        addChoice("disjunction", disjunction);
+        addChoice("funcdef", funcdef);
     }
 
     public Expr1 getExpr1() {
@@ -54,6 +58,13 @@ public final class Expr extends DisjunctionRule {
             this.disjunction1 = disjunction1;
             this.isTokenElse = isTokenElse;
             this.expr = expr;
+
+            addRequired("isTokenIf", isTokenIf);
+            addRequired("disjunction", disjunction);
+            addRequired("isTokenTernery", isTokenTernery);
+            addRequired("disjunction1", disjunction1);
+            addRequired("isTokenElse", isTokenElse);
+            addRequired("expr", expr);
         }
 
         public boolean getIsTokenIf() {

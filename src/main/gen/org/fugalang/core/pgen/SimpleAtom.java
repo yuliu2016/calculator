@@ -25,6 +25,13 @@ public final class SimpleAtom extends DisjunctionRule {
         this.isTokenNone = isTokenNone;
         this.isTokenTrue = isTokenTrue;
         this.isTokenFalse = isTokenFalse;
+
+        addChoice("name", name);
+        addChoice("number", number);
+        addChoice("string", string);
+        addChoice("isTokenNone", isTokenNone);
+        addChoice("isTokenTrue", isTokenTrue);
+        addChoice("isTokenFalse", isTokenFalse);
     }
 
     public Object getName() {

@@ -14,6 +14,9 @@ public final class BitwiseAnd extends ConjunctionRule {
     ) {
         this.shiftExpr = shiftExpr;
         this.bitwiseAnd2GroupList = bitwiseAnd2GroupList;
+
+        addRequired("shiftExpr", shiftExpr);
+        addRequired("bitwiseAnd2GroupList", bitwiseAnd2GroupList);
     }
 
     public ShiftExpr getShiftExpr() {
@@ -35,6 +38,9 @@ public final class BitwiseAnd extends ConjunctionRule {
         ) {
             this.isTokenBitAnd = isTokenBitAnd;
             this.shiftExpr = shiftExpr;
+
+            addRequired("isTokenBitAnd", isTokenBitAnd);
+            addRequired("shiftExpr", shiftExpr);
         }
 
         public boolean getIsTokenBitAnd() {

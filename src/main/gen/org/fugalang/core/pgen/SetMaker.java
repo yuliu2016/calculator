@@ -15,6 +15,9 @@ public final class SetMaker extends ConjunctionRule {
     ) {
         this.setMaker1Group = setMaker1Group;
         this.setMaker2Group = setMaker2Group;
+
+        addRequired("setMaker1Group", setMaker1Group);
+        addRequired("setMaker2Group", setMaker2Group);
     }
 
     public SetMaker1Group getSetMaker1Group() {
@@ -36,6 +39,9 @@ public final class SetMaker extends ConjunctionRule {
         ) {
             this.expr = expr;
             this.starExpr = starExpr;
+
+            addChoice("expr", expr);
+            addChoice("starExpr", starExpr);
         }
 
         public Expr getExpr() {
@@ -58,6 +64,9 @@ public final class SetMaker extends ConjunctionRule {
         ) {
             this.compFor = compFor;
             this.setMaker2Group2 = setMaker2Group2;
+
+            addChoice("compFor", compFor);
+            addChoice("setMaker2Group2", setMaker2Group2);
         }
 
         public CompFor getCompFor() {
@@ -80,6 +89,9 @@ public final class SetMaker extends ConjunctionRule {
         ) {
             this.setMaker2Group21GroupList = setMaker2Group21GroupList;
             this.isTokenComma = isTokenComma;
+
+            addRequired("setMaker2Group21GroupList", setMaker2Group21GroupList);
+            addRequired("isTokenComma", isTokenComma);
         }
 
         public List<SetMaker2Group21Group> getSetMaker2Group21GroupList() {
@@ -102,6 +114,9 @@ public final class SetMaker extends ConjunctionRule {
         ) {
             this.isTokenComma = isTokenComma;
             this.setMaker2Group21Group2Group = setMaker2Group21Group2Group;
+
+            addRequired("isTokenComma", isTokenComma);
+            addRequired("setMaker2Group21Group2Group", setMaker2Group21Group2Group);
         }
 
         public boolean getIsTokenComma() {
@@ -124,6 +139,9 @@ public final class SetMaker extends ConjunctionRule {
         ) {
             this.expr = expr;
             this.starExpr = starExpr;
+
+            addChoice("expr", expr);
+            addChoice("starExpr", starExpr);
         }
 
         public Expr getExpr() {

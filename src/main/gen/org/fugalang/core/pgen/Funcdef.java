@@ -21,6 +21,11 @@ public final class Funcdef extends ConjunctionRule {
         this.isTokenDef = isTokenDef;
         this.varargslist = varargslist;
         this.funcdef4Group = funcdef4Group;
+
+        addRequired("isTokenAsync", isTokenAsync);
+        addRequired("isTokenDef", isTokenDef);
+        addOptional("varargslist", varargslist);
+        addRequired("funcdef4Group", funcdef4Group);
     }
 
     public boolean getIsTokenAsync() {
@@ -50,6 +55,9 @@ public final class Funcdef extends ConjunctionRule {
         ) {
             this.funcdef4Group1 = funcdef4Group1;
             this.blockSuite = blockSuite;
+
+            addChoice("funcdef4Group1", funcdef4Group1);
+            addChoice("blockSuite", blockSuite);
         }
 
         public Funcdef4Group1 getFuncdef4Group1() {
@@ -72,6 +80,9 @@ public final class Funcdef extends ConjunctionRule {
         ) {
             this.isTokenColon = isTokenColon;
             this.expr = expr;
+
+            addRequired("isTokenColon", isTokenColon);
+            addRequired("expr", expr);
         }
 
         public boolean getIsTokenColon() {

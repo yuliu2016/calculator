@@ -14,6 +14,9 @@ public final class NamedexprExpr extends ConjunctionRule {
     ) {
         this.name = name;
         this.namedexprExpr2Group = namedexprExpr2Group;
+
+        addRequired("name", name);
+        addOptional("namedexprExpr2Group", namedexprExpr2Group);
     }
 
     public Object getName() {
@@ -35,6 +38,9 @@ public final class NamedexprExpr extends ConjunctionRule {
         ) {
             this.isTokenAsgnExpr = isTokenAsgnExpr;
             this.expr = expr;
+
+            addRequired("isTokenAsgnExpr", isTokenAsgnExpr);
+            addRequired("expr", expr);
         }
 
         public boolean getIsTokenAsgnExpr() {

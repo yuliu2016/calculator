@@ -18,6 +18,10 @@ public final class Targets extends ConjunctionRule {
         this.targets1Group = targets1Group;
         this.targets2GroupList = targets2GroupList;
         this.isTokenComma = isTokenComma;
+
+        addRequired("targets1Group", targets1Group);
+        addRequired("targets2GroupList", targets2GroupList);
+        addRequired("isTokenComma", isTokenComma);
     }
 
     public Targets1Group getTargets1Group() {
@@ -43,6 +47,9 @@ public final class Targets extends ConjunctionRule {
         ) {
             this.bitwiseOr = bitwiseOr;
             this.starExpr = starExpr;
+
+            addChoice("bitwiseOr", bitwiseOr);
+            addChoice("starExpr", starExpr);
         }
 
         public BitwiseOr getBitwiseOr() {
@@ -65,6 +72,9 @@ public final class Targets extends ConjunctionRule {
         ) {
             this.isTokenComma = isTokenComma;
             this.targets2Group2Group = targets2Group2Group;
+
+            addRequired("isTokenComma", isTokenComma);
+            addRequired("targets2Group2Group", targets2Group2Group);
         }
 
         public boolean getIsTokenComma() {
@@ -87,6 +97,9 @@ public final class Targets extends ConjunctionRule {
         ) {
             this.bitwiseOr = bitwiseOr;
             this.starExpr = starExpr;
+
+            addChoice("bitwiseOr", bitwiseOr);
+            addChoice("starExpr", starExpr);
         }
 
         public BitwiseOr getBitwiseOr() {

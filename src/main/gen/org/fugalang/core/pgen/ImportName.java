@@ -13,6 +13,9 @@ public final class ImportName extends ConjunctionRule {
     ) {
         this.isTokenImport = isTokenImport;
         this.dottedAsNames = dottedAsNames;
+
+        addRequired("isTokenImport", isTokenImport);
+        addRequired("dottedAsNames", dottedAsNames);
     }
 
     public boolean getIsTokenImport() {

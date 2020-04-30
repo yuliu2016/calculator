@@ -14,6 +14,9 @@ public final class RaiseStmt extends ConjunctionRule {
     ) {
         this.isTokenRaise = isTokenRaise;
         this.raiseStmt2Group = raiseStmt2Group;
+
+        addRequired("isTokenRaise", isTokenRaise);
+        addOptional("raiseStmt2Group", raiseStmt2Group);
     }
 
     public boolean getIsTokenRaise() {
@@ -35,6 +38,9 @@ public final class RaiseStmt extends ConjunctionRule {
         ) {
             this.expr = expr;
             this.raiseStmt2Group2Group = raiseStmt2Group2Group;
+
+            addRequired("expr", expr);
+            addOptional("raiseStmt2Group2Group", raiseStmt2Group2Group);
         }
 
         public Expr getExpr() {
@@ -57,6 +63,9 @@ public final class RaiseStmt extends ConjunctionRule {
         ) {
             this.isTokenFrom = isTokenFrom;
             this.expr = expr;
+
+            addRequired("isTokenFrom", isTokenFrom);
+            addRequired("expr", expr);
         }
 
         public boolean getIsTokenFrom() {

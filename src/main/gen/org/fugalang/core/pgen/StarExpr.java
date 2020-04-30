@@ -13,6 +13,9 @@ public final class StarExpr extends ConjunctionRule {
     ) {
         this.isTokenTimes = isTokenTimes;
         this.bitwiseOr = bitwiseOr;
+
+        addRequired("isTokenTimes", isTokenTimes);
+        addRequired("bitwiseOr", bitwiseOr);
     }
 
     public boolean getIsTokenTimes() {

@@ -14,6 +14,9 @@ public final class WithItem extends ConjunctionRule {
     ) {
         this.expr = expr;
         this.withItem2Group = withItem2Group;
+
+        addRequired("expr", expr);
+        addOptional("withItem2Group", withItem2Group);
     }
 
     public Expr getExpr() {
@@ -35,6 +38,9 @@ public final class WithItem extends ConjunctionRule {
         ) {
             this.isTokenAs = isTokenAs;
             this.name = name;
+
+            addRequired("isTokenAs", isTokenAs);
+            addRequired("name", name);
         }
 
         public boolean getIsTokenAs() {

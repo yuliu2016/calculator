@@ -14,6 +14,9 @@ public final class DottedName extends ConjunctionRule {
     ) {
         this.name = name;
         this.dottedName2GroupList = dottedName2GroupList;
+
+        addRequired("name", name);
+        addRequired("dottedName2GroupList", dottedName2GroupList);
     }
 
     public Object getName() {
@@ -35,6 +38,9 @@ public final class DottedName extends ConjunctionRule {
         ) {
             this.isTokenDot = isTokenDot;
             this.name = name;
+
+            addRequired("isTokenDot", isTokenDot);
+            addRequired("name", name);
         }
 
         public boolean getIsTokenDot() {

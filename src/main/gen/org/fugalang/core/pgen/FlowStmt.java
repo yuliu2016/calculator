@@ -19,6 +19,11 @@ public final class FlowStmt extends DisjunctionRule {
         this.continueStmt = continueStmt;
         this.returnStmt = returnStmt;
         this.raiseStmt = raiseStmt;
+
+        addChoice("breakStmt", breakStmt);
+        addChoice("continueStmt", continueStmt);
+        addChoice("returnStmt", returnStmt);
+        addChoice("raiseStmt", raiseStmt);
     }
 
     public BreakStmt getBreakStmt() {

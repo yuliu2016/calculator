@@ -18,6 +18,10 @@ public final class CompoundAtom extends DisjunctionRule {
         this.compoundAtom1 = compoundAtom1;
         this.compoundAtom2 = compoundAtom2;
         this.compoundAtom3 = compoundAtom3;
+
+        addChoice("compoundAtom1", compoundAtom1);
+        addChoice("compoundAtom2", compoundAtom2);
+        addChoice("compoundAtom3", compoundAtom3);
     }
 
     public CompoundAtom1 getCompoundAtom1() {
@@ -46,6 +50,10 @@ public final class CompoundAtom extends DisjunctionRule {
             this.isTokenLpar = isTokenLpar;
             this.exprlistComp = exprlistComp;
             this.isTokenRpar = isTokenRpar;
+
+            addRequired("isTokenLpar", isTokenLpar);
+            addOptional("exprlistComp", exprlistComp);
+            addRequired("isTokenRpar", isTokenRpar);
         }
 
         public boolean getIsTokenLpar() {
@@ -75,6 +83,10 @@ public final class CompoundAtom extends DisjunctionRule {
             this.isTokenLsqb = isTokenLsqb;
             this.exprlistCompSub = exprlistCompSub;
             this.isTokenRsqb = isTokenRsqb;
+
+            addRequired("isTokenLsqb", isTokenLsqb);
+            addOptional("exprlistCompSub", exprlistCompSub);
+            addRequired("isTokenRsqb", isTokenRsqb);
         }
 
         public boolean getIsTokenLsqb() {
@@ -104,6 +116,10 @@ public final class CompoundAtom extends DisjunctionRule {
             this.isTokenLbrace = isTokenLbrace;
             this.dictorsetmaker = dictorsetmaker;
             this.isTokenRbrace = isTokenRbrace;
+
+            addRequired("isTokenLbrace", isTokenLbrace);
+            addOptional("dictorsetmaker", dictorsetmaker);
+            addRequired("isTokenRbrace", isTokenRbrace);
         }
 
         public boolean getIsTokenLbrace() {

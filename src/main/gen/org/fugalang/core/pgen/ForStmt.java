@@ -26,6 +26,13 @@ public final class ForStmt extends ConjunctionRule {
         this.exprlist = exprlist;
         this.suite = suite;
         this.forStmt6Group = forStmt6Group;
+
+        addRequired("isTokenFor", isTokenFor);
+        addRequired("targets", targets);
+        addRequired("isTokenIn", isTokenIn);
+        addRequired("exprlist", exprlist);
+        addRequired("suite", suite);
+        addOptional("forStmt6Group", forStmt6Group);
     }
 
     public boolean getIsTokenFor() {
@@ -63,6 +70,9 @@ public final class ForStmt extends ConjunctionRule {
         ) {
             this.isTokenElse = isTokenElse;
             this.suite = suite;
+
+            addRequired("isTokenElse", isTokenElse);
+            addRequired("suite", suite);
         }
 
         public boolean getIsTokenElse() {

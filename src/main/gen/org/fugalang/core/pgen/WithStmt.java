@@ -20,6 +20,11 @@ public final class WithStmt extends ConjunctionRule {
         this.withItem = withItem;
         this.withStmt3GroupList = withStmt3GroupList;
         this.suite = suite;
+
+        addRequired("isTokenWith", isTokenWith);
+        addRequired("withItem", withItem);
+        addRequired("withStmt3GroupList", withStmt3GroupList);
+        addRequired("suite", suite);
     }
 
     public boolean getIsTokenWith() {
@@ -49,6 +54,9 @@ public final class WithStmt extends ConjunctionRule {
         ) {
             this.isTokenComma = isTokenComma;
             this.withItem = withItem;
+
+            addRequired("isTokenComma", isTokenComma);
+            addRequired("withItem", withItem);
         }
 
         public boolean getIsTokenComma() {

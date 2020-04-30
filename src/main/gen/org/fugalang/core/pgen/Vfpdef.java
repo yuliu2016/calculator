@@ -10,6 +10,8 @@ public final class Vfpdef extends ConjunctionRule {
             Object name
     ) {
         this.name = name;
+
+        addRequired("name", name);
     }
 
     public Object getName() {

@@ -17,6 +17,10 @@ public final class Arglist extends ConjunctionRule {
         this.argument = argument;
         this.arglist2GroupList = arglist2GroupList;
         this.isTokenComma = isTokenComma;
+
+        addRequired("argument", argument);
+        addRequired("arglist2GroupList", arglist2GroupList);
+        addRequired("isTokenComma", isTokenComma);
     }
 
     public Argument getArgument() {
@@ -42,6 +46,9 @@ public final class Arglist extends ConjunctionRule {
         ) {
             this.isTokenComma = isTokenComma;
             this.argument = argument;
+
+            addRequired("isTokenComma", isTokenComma);
+            addRequired("argument", argument);
         }
 
         public boolean getIsTokenComma() {

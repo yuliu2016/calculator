@@ -15,6 +15,9 @@ public final class Term extends ConjunctionRule {
     ) {
         this.factor = factor;
         this.term2GroupList = term2GroupList;
+
+        addRequired("factor", factor);
+        addRequired("term2GroupList", term2GroupList);
     }
 
     public Factor getFactor() {
@@ -36,6 +39,9 @@ public final class Term extends ConjunctionRule {
         ) {
             this.term2Group1Group = term2Group1Group;
             this.factor = factor;
+
+            addRequired("term2Group1Group", term2Group1Group);
+            addRequired("factor", factor);
         }
 
         public Term2Group1Group getTerm2Group1Group() {
@@ -67,6 +73,12 @@ public final class Term extends ConjunctionRule {
             this.isTokenDiv = isTokenDiv;
             this.isTokenModulus = isTokenModulus;
             this.isTokenFloorDiv = isTokenFloorDiv;
+
+            addChoice("isTokenTimes", isTokenTimes);
+            addChoice("isTokenMatrixTimes", isTokenMatrixTimes);
+            addChoice("isTokenDiv", isTokenDiv);
+            addChoice("isTokenModulus", isTokenModulus);
+            addChoice("isTokenFloorDiv", isTokenFloorDiv);
         }
 
         public boolean getIsTokenTimes() {

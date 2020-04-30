@@ -17,6 +17,10 @@ public final class AssertStmt extends ConjunctionRule {
         this.isTokenAssert = isTokenAssert;
         this.expr = expr;
         this.assertStmt3Group = assertStmt3Group;
+
+        addRequired("isTokenAssert", isTokenAssert);
+        addRequired("expr", expr);
+        addOptional("assertStmt3Group", assertStmt3Group);
     }
 
     public boolean getIsTokenAssert() {
@@ -42,6 +46,9 @@ public final class AssertStmt extends ConjunctionRule {
         ) {
             this.isTokenComma = isTokenComma;
             this.expr = expr;
+
+            addRequired("isTokenComma", isTokenComma);
+            addRequired("expr", expr);
         }
 
         public boolean getIsTokenComma() {

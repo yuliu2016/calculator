@@ -17,6 +17,10 @@ public final class EvalInput extends ConjunctionRule {
         this.exprlist = exprlist;
         this.newlineList = newlineList;
         this.endmarker = endmarker;
+
+        addRequired("exprlist", exprlist);
+        addRequired("newlineList", newlineList);
+        addRequired("endmarker", endmarker);
     }
 
     public Exprlist getExprlist() {

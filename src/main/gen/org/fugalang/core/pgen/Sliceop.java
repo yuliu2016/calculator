@@ -14,6 +14,9 @@ public final class Sliceop extends ConjunctionRule {
     ) {
         this.isTokenColon = isTokenColon;
         this.expr = expr;
+
+        addRequired("isTokenColon", isTokenColon);
+        addOptional("expr", expr);
     }
 
     public boolean getIsTokenColon() {

@@ -108,6 +108,23 @@ public class ClassBuilder {
             sb.append("\n");
         }
 
+        generateConstructorWithBuilder(sb);
+
+        for (ClassField field: fields) {
+            sb.append("\n");
+            sb.append(field.asGetter());
+        }
+
+        if (isStaticInnerClass) {
+            sb.append("}\n");
+        }
+        // else don't append, since external classes need
+        // to add the final quotes
+
+        return sb.toString();
+    }
+
+    private void generateConstructorWithBuilder(StringBuilder sb) {
         sb.append("\n")
                 .append("    public ")
                 .append(className)
@@ -131,20 +148,15 @@ public class ClassBuilder {
             sb.append("\n");
         }
 
-        sb.append("    }\n");
+        sb.append("\n");
 
-        for (ClassField field: fields) {
+        for (ClassField field : fields) {
+            sb.append("        ");
+            sb.append(field.asRuleStmt(ruleType));
             sb.append("\n");
-            sb.append(field.asGetter());
         }
 
-        if (isStaticInnerClass) {
-            sb.append("}\n");
-        }
-        // else don't append, since external classes need
-        // to add the final quotes
-
-        return sb.toString();
+        sb.append("    }\n");
     }
 
     public void addImport(String classImport) {

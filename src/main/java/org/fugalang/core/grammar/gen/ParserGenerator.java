@@ -36,6 +36,9 @@ public class ParserGenerator {
     private final Map<String, String> classNameMap = new LinkedHashMap<>();
     private final ClassSet classSet;
 
+    private static final boolean REQUIRED = false;
+    private static final boolean OPTIONAL = true;
+
     public ParserGenerator(
             Rules rules,
             TokenConverter converter,
@@ -130,7 +133,7 @@ public class ParserGenerator {
             // only one rule - can propagate fields of this class
             // but need to change the type here
             cb.setRuleType(RuleType.Conjunction);
-            addAndRule(className, cb, rule.andRule, false);
+            addAndRule(className, cb, rule.andRule, REQUIRED);
         } else {
 
             // For counting component classes
@@ -148,7 +151,7 @@ public class ParserGenerator {
 
                 if (andRule.repeatRules.isEmpty()) {
                     // only one repeat rule - can propagate fields of this class
-                    addAndRule(classWithCount, cb, andRule, false);
+                    addAndRule(classWithCount, cb, andRule, REQUIRED);
                 } else {
                     var classType = classWithCount.asType();
 
@@ -162,9 +165,9 @@ public class ParserGenerator {
                     // The reason to do this first is that if adding the rule fails,
                     // this class can still show that this point was reached
                     cb.addFieldByClassName(classWithCount,
-                            ParseStringUtil.decap(classType), false);
+                            ParseStringUtil.decap(classType), REQUIRED);
 
-                    addAndRule(classWithCount, component_cb, andRule, false);
+                    addAndRule(classWithCount, component_cb, andRule, REQUIRED);
                 }
             }
         }
@@ -210,9 +213,11 @@ public class ParserGenerator {
 
         switch (subRule.type) {
             case Group -> addOrRuleAsComponent(className, cb, subRule.groupedOrRule,
-                    repeatRule, false);
+                    repeatRule, REQUIRED);
+
             case Optional -> addOrRuleAsComponent(className, cb,
-                    subRule.optionalOrRule, repeatRule, true);
+                    subRule.optionalOrRule, repeatRule, OPTIONAL);
+
             case Token -> addToken(cb, repeatRule, subRule, isOptional);
         }
     }
@@ -246,7 +251,7 @@ public class ParserGenerator {
                         .prefixCap("isToken", convertedValue.getFieldName());
 
                 addFieldWithRepeat(ClassName.of("boolean"), cb,
-                        fieldName, repeatRule, false);
+                        fieldName, repeatRule, REQUIRED);
             } else {
                 addFieldWithRepeat(ClassName.of(clsName), cb,
                         convertedValue.getFieldName(), repeatRule, isOptional);
@@ -263,12 +268,14 @@ public class ParserGenerator {
     ) {
         switch (repeatRule.type) {
             case Once -> cb.addFieldByClassName(className, fieldName, isOptional);
+
             case OnceOrMore -> {
                 cb.addFieldByClassName(className, fieldName, isOptional);
                 cb.addImport("java.util.List");
                 cb.addFieldByClassName(className.wrapIn("List"),
                         fieldName + "List", isOptional);
             }
+
             case NoneOrMore -> {
                 cb.addImport("java.util.List");
                 cb.addFieldByClassName(className.wrapIn("List"),

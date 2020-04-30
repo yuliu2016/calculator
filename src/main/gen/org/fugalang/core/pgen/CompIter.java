@@ -13,6 +13,9 @@ public final class CompIter extends DisjunctionRule {
     ) {
         this.compFor = compFor;
         this.compIf = compIf;
+
+        addChoice("compFor", compFor);
+        addChoice("compIf", compIf);
     }
 
     public CompFor getCompFor() {

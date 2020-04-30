@@ -14,6 +14,9 @@ public final class Power extends ConjunctionRule {
     ) {
         this.pipeExpr = pipeExpr;
         this.power2Group = power2Group;
+
+        addRequired("pipeExpr", pipeExpr);
+        addOptional("power2Group", power2Group);
     }
 
     public PipeExpr getPipeExpr() {
@@ -35,6 +38,9 @@ public final class Power extends ConjunctionRule {
         ) {
             this.isTokenPower = isTokenPower;
             this.factor = factor;
+
+            addRequired("isTokenPower", isTokenPower);
+            addRequired("factor", factor);
         }
 
         public boolean getIsTokenPower() {
