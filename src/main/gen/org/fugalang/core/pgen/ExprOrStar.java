@@ -4,6 +4,8 @@ import org.fugalang.core.parser.DisjunctionRule;
 
 // expr_or_star: 'expr' | 'star_expr'
 public final class ExprOrStar extends DisjunctionRule {
+    public static final String RULE_NAME = "expr_or_star";
+
     private final Expr expr;
     private final StarExpr starExpr;
 
@@ -17,6 +19,7 @@ public final class ExprOrStar extends DisjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addChoice("expr", expr);
         addChoice("starExpr", starExpr);
     }

@@ -5,6 +5,8 @@ import java.util.Optional;
 
 // comp_if: 'if' 'expr' ['comp_iter']
 public final class CompIf extends ConjunctionRule {
+    public static final String RULE_NAME = "comp_if";
+
     private final boolean isTokenIf;
     private final Expr expr;
     private final CompIter compIter;
@@ -21,6 +23,7 @@ public final class CompIf extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addRequired("isTokenIf", isTokenIf);
         addRequired("expr", expr);
         addOptional("compIter", compIter);

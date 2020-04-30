@@ -5,6 +5,8 @@ import org.fugalang.core.parser.DisjunctionRule;
 
 // factor: ('+' | '-' | '~') 'factor' | 'power'
 public final class Factor extends DisjunctionRule {
+    public static final String RULE_NAME = "factor";
+
     private final Factor1 factor1;
     private final Power power;
 
@@ -18,6 +20,7 @@ public final class Factor extends DisjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addChoice("factor1", factor1);
         addChoice("power", power);
     }
@@ -32,6 +35,8 @@ public final class Factor extends DisjunctionRule {
 
     // ('+' | '-' | '~') 'factor'
     public static final class Factor1 extends ConjunctionRule {
+        public static final String RULE_NAME = "factor:1";
+
         private final Factor11 factor11;
         private final Factor factor;
 
@@ -45,6 +50,7 @@ public final class Factor extends DisjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("factor11", factor11);
             addRequired("factor", factor);
         }
@@ -60,6 +66,8 @@ public final class Factor extends DisjunctionRule {
 
     // '+' | '-' | '~'
     public static final class Factor11 extends DisjunctionRule {
+        public static final String RULE_NAME = "factor:1:1";
+
         private final boolean isTokenPlus;
         private final boolean isTokenMinus;
         private final boolean isTokenBitNot;
@@ -76,6 +84,7 @@ public final class Factor extends DisjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addChoice("isTokenPlus", isTokenPlus);
             addChoice("isTokenMinus", isTokenMinus);
             addChoice("isTokenBitNot", isTokenBitNot);

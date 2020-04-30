@@ -6,6 +6,8 @@ import org.fugalang.core.parser.DisjunctionRule;
 
 // compound_atom: '(' ['exprlist_comp'] ')' | '[' ['exprlist_comp_sub'] ']' | '{' ['dictorsetmaker'] '}'
 public final class CompoundAtom extends DisjunctionRule {
+    public static final String RULE_NAME = "compound_atom";
+
     private final CompoundAtom1 compoundAtom1;
     private final CompoundAtom2 compoundAtom2;
     private final CompoundAtom3 compoundAtom3;
@@ -22,6 +24,7 @@ public final class CompoundAtom extends DisjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addChoice("compoundAtom1", compoundAtom1);
         addChoice("compoundAtom2", compoundAtom2);
         addChoice("compoundAtom3", compoundAtom3);
@@ -41,6 +44,8 @@ public final class CompoundAtom extends DisjunctionRule {
 
     // '(' ['exprlist_comp'] ')'
     public static final class CompoundAtom1 extends ConjunctionRule {
+        public static final String RULE_NAME = "compound_atom:1";
+
         private final boolean isTokenLpar;
         private final ExprlistComp exprlistComp;
         private final boolean isTokenRpar;
@@ -57,6 +62,7 @@ public final class CompoundAtom extends DisjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("isTokenLpar", isTokenLpar);
             addOptional("exprlistComp", exprlistComp);
             addRequired("isTokenRpar", isTokenRpar);
@@ -77,6 +83,8 @@ public final class CompoundAtom extends DisjunctionRule {
 
     // '[' ['exprlist_comp_sub'] ']'
     public static final class CompoundAtom2 extends ConjunctionRule {
+        public static final String RULE_NAME = "compound_atom:2";
+
         private final boolean isTokenLsqb;
         private final ExprlistCompSub exprlistCompSub;
         private final boolean isTokenRsqb;
@@ -93,6 +101,7 @@ public final class CompoundAtom extends DisjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("isTokenLsqb", isTokenLsqb);
             addOptional("exprlistCompSub", exprlistCompSub);
             addRequired("isTokenRsqb", isTokenRsqb);
@@ -113,6 +122,8 @@ public final class CompoundAtom extends DisjunctionRule {
 
     // '{' ['dictorsetmaker'] '}'
     public static final class CompoundAtom3 extends ConjunctionRule {
+        public static final String RULE_NAME = "compound_atom:3";
+
         private final boolean isTokenLbrace;
         private final Dictorsetmaker dictorsetmaker;
         private final boolean isTokenRbrace;
@@ -129,6 +140,7 @@ public final class CompoundAtom extends DisjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("isTokenLbrace", isTokenLbrace);
             addOptional("dictorsetmaker", dictorsetmaker);
             addRequired("isTokenRbrace", isTokenRbrace);

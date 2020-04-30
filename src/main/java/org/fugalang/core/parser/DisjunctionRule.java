@@ -1,5 +1,6 @@
 package org.fugalang.core.parser;
 
+import org.fugalang.core.pprint.ParseTreePPrint;
 import org.fugalang.core.pprint.TreeStringBuilder;
 import org.fugalang.core.pprint.TreeStringElem;
 
@@ -8,6 +9,14 @@ public abstract class DisjunctionRule implements TreeStringElem {
     private ComputedRule computedRule = null;
 
     protected abstract void buildRule();
+
+    protected void setExplicitName(String ruleName){
+        computedRule.setRuleName(ruleName, true);
+    }
+
+    protected void setImpliedName(String ruleName){
+        computedRule.setRuleName(ruleName, false);
+    }
 
     protected void addChoice(String name, Object choice) {
         computedRule.addChoice(name, choice);
@@ -49,6 +58,10 @@ public abstract class DisjunctionRule implements TreeStringElem {
         computedRule.buildString(builder);
     }
 
+    public String prettyFormat() {
+        return ParseTreePPrint.format(this, 2);
+    }
+
     @Override
     public final int hashCode() {
         validate();
@@ -64,10 +77,6 @@ public abstract class DisjunctionRule implements TreeStringElem {
         return false;
     }
 
-    private String getName() {
-        return getClass().getSimpleName();
-    }
-
     private static void computeRuleFail(String msg) {
         throw new IllegalArgumentException(msg);
     }
@@ -80,19 +89,26 @@ public abstract class DisjunctionRule implements TreeStringElem {
         private int chosenIndex = -1;
         private Object chosenComponent;
         private String chosenName;
+        private String ruleName;
+        private boolean isExplicitName;
 
         public ComputedRule() {
             DisjunctionRule.this.buildRule();
 
             if (chosenIndex < 0) {
-                computeRuleFail(getName() + " must have at least one valid choice");
+                computeRuleFail("Rule" + ruleName + " must have at least one valid choice");
             }
+        }
+
+        private void setRuleName(String ruleName, boolean isExplicitName) {
+            this.ruleName = ruleName;
+            this.isExplicitName = isExplicitName;
         }
 
         private void addChoice(String name, boolean value) {
             if (value) {
                 if (chosenIndex > 0) {
-                    computeRuleFail(name + "must be mutually exclusive for " + getName() +
+                    computeRuleFail(name + "must be mutually exclusive for rule " + ruleName +
                             "; currently " + chosenName + " at index " + chosenIndex +
                             " has already been chosen");
                 }
@@ -106,7 +122,7 @@ public abstract class DisjunctionRule implements TreeStringElem {
         private void addChoice(String name, Object value) {
             if (value != null) {
                 if (chosenIndex > 0) {
-                    computeRuleFail(name + "must be mutually exclusive for " + getName() +
+                    computeRuleFail(name + "must be mutually exclusive for rule " + ruleName +
                             "; currently " + chosenName + " at index " + chosenIndex +
                             " has already been chosen");
                 }
@@ -123,7 +139,8 @@ public abstract class DisjunctionRule implements TreeStringElem {
 
         private String simpleString() {
             if (str == null) {
-                str = "(" + getName() + " " + chosenComponent + ")";
+                var maybeName = (isExplicitName ? ruleName : "") + "#" + chosenIndex;
+                str = "(" + maybeName + " " + chosenComponent + ")";
             }
             return str;
         }
@@ -145,7 +162,10 @@ public abstract class DisjunctionRule implements TreeStringElem {
         }
 
         public void buildString(TreeStringBuilder builder) {
-            builder.setName(getName() + "#" + chosenIndex);
+
+            if (isExplicitName) {
+                builder.setName(ruleName + "#" + chosenIndex);
+            }
 
             if (chosenComponent instanceof TreeStringElem) {
                 builder.addElem((TreeStringElem) chosenComponent);

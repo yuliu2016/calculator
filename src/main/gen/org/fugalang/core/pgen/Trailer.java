@@ -6,6 +6,8 @@ import org.fugalang.core.parser.DisjunctionRule;
 
 // trailer: '(' ['arglist'] ')' | '[' 'subscriptlist' ']' | '.' 'NAME' | 'block_suite'
 public final class Trailer extends DisjunctionRule {
+    public static final String RULE_NAME = "trailer";
+
     private final Trailer1 trailer1;
     private final Trailer2 trailer2;
     private final Trailer3 trailer3;
@@ -25,6 +27,7 @@ public final class Trailer extends DisjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addChoice("trailer1", trailer1);
         addChoice("trailer2", trailer2);
         addChoice("trailer3", trailer3);
@@ -49,6 +52,8 @@ public final class Trailer extends DisjunctionRule {
 
     // '(' ['arglist'] ')'
     public static final class Trailer1 extends ConjunctionRule {
+        public static final String RULE_NAME = "trailer:1";
+
         private final boolean isTokenLpar;
         private final Arglist arglist;
         private final boolean isTokenRpar;
@@ -65,6 +70,7 @@ public final class Trailer extends DisjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("isTokenLpar", isTokenLpar);
             addOptional("arglist", arglist);
             addRequired("isTokenRpar", isTokenRpar);
@@ -85,6 +91,8 @@ public final class Trailer extends DisjunctionRule {
 
     // '[' 'subscriptlist' ']'
     public static final class Trailer2 extends ConjunctionRule {
+        public static final String RULE_NAME = "trailer:2";
+
         private final boolean isTokenLsqb;
         private final Subscriptlist subscriptlist;
         private final boolean isTokenRsqb;
@@ -101,6 +109,7 @@ public final class Trailer extends DisjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("isTokenLsqb", isTokenLsqb);
             addRequired("subscriptlist", subscriptlist);
             addRequired("isTokenRsqb", isTokenRsqb);
@@ -121,6 +130,8 @@ public final class Trailer extends DisjunctionRule {
 
     // '.' 'NAME'
     public static final class Trailer3 extends ConjunctionRule {
+        public static final String RULE_NAME = "trailer:3";
+
         private final boolean isTokenDot;
         private final String name;
 
@@ -134,6 +145,7 @@ public final class Trailer extends DisjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("isTokenDot", isTokenDot);
             addRequired("name", name);
         }

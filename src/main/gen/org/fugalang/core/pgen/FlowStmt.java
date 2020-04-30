@@ -4,6 +4,8 @@ import org.fugalang.core.parser.DisjunctionRule;
 
 // flow_stmt: 'break_stmt' | 'continue_stmt' | 'return_stmt' | 'raise_stmt'
 public final class FlowStmt extends DisjunctionRule {
+    public static final String RULE_NAME = "flow_stmt";
+
     private final BreakStmt breakStmt;
     private final ContinueStmt continueStmt;
     private final ReturnStmt returnStmt;
@@ -23,6 +25,7 @@ public final class FlowStmt extends DisjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addChoice("breakStmt", breakStmt);
         addChoice("continueStmt", continueStmt);
         addChoice("returnStmt", returnStmt);

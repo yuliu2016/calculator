@@ -5,6 +5,8 @@ import java.util.List;
 
 // comparison: 'bitwise_or' ('comp_op' 'bitwise_or')*
 public final class Comparison extends ConjunctionRule {
+    public static final String RULE_NAME = "comparison";
+
     private final BitwiseOr bitwiseOr;
     private final List<Comparison2> comparison2List;
 
@@ -18,6 +20,7 @@ public final class Comparison extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addRequired("bitwiseOr", bitwiseOr);
         addRequired("comparison2List", comparison2List);
     }
@@ -32,6 +35,8 @@ public final class Comparison extends ConjunctionRule {
 
     // 'comp_op' 'bitwise_or'
     public static final class Comparison2 extends ConjunctionRule {
+        public static final String RULE_NAME = "comparison:2";
+
         private final CompOp compOp;
         private final BitwiseOr bitwiseOr;
 
@@ -45,6 +50,7 @@ public final class Comparison extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("compOp", compOp);
             addRequired("bitwiseOr", bitwiseOr);
         }

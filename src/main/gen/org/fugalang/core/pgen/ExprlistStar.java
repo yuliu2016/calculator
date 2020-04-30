@@ -5,6 +5,8 @@ import java.util.List;
 
 // exprlist_star: 'expr_or_star' (',' 'expr_or_star')* [',']
 public final class ExprlistStar extends ConjunctionRule {
+    public static final String RULE_NAME = "exprlist_star";
+
     private final ExprOrStar exprOrStar;
     private final List<ExprlistStar2> exprlistStar2List;
     private final boolean isTokenComma;
@@ -21,6 +23,7 @@ public final class ExprlistStar extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addRequired("exprOrStar", exprOrStar);
         addRequired("exprlistStar2List", exprlistStar2List);
         addRequired("isTokenComma", isTokenComma);
@@ -40,6 +43,8 @@ public final class ExprlistStar extends ConjunctionRule {
 
     // ',' 'expr_or_star'
     public static final class ExprlistStar2 extends ConjunctionRule {
+        public static final String RULE_NAME = "exprlist_star:2";
+
         private final boolean isTokenComma;
         private final ExprOrStar exprOrStar;
 
@@ -53,6 +58,7 @@ public final class ExprlistStar extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("isTokenComma", isTokenComma);
             addRequired("exprOrStar", exprOrStar);
         }

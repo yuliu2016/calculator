@@ -19,11 +19,13 @@ public class ParseTreePPrint implements TreeStringBuilder {
 
     public String asString() {
         if (indent < 0 || !recur) {
-            return "(" + name + " " + String.join(" ", elems) + ")";
+            var maybeName = name == null ? "" : name + " ";
+            return "(" + maybeName + String.join(" ", elems) + ")";
         }
+        var maybeName = name == null ? "" : name ;
         var sb = new StringBuilder();
         var idt = " ".repeat(curr_indent);
-        sb.append("(").append(name).append('\n');
+        sb.append("(").append(maybeName).append('\n');
         for (var elem : elems) {
             sb.append(idt).append(elem).append("\n");
         }

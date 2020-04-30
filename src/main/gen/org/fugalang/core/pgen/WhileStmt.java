@@ -5,6 +5,8 @@ import java.util.Optional;
 
 // while_stmt: 'while' 'namedexpr_expr' 'suite' ['else' 'suite']
 public final class WhileStmt extends ConjunctionRule {
+    public static final String RULE_NAME = "while_stmt";
+
     private final boolean isTokenWhile;
     private final NamedexprExpr namedexprExpr;
     private final Suite suite;
@@ -24,6 +26,7 @@ public final class WhileStmt extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addRequired("isTokenWhile", isTokenWhile);
         addRequired("namedexprExpr", namedexprExpr);
         addRequired("suite", suite);
@@ -48,6 +51,8 @@ public final class WhileStmt extends ConjunctionRule {
 
     // 'else' 'suite'
     public static final class WhileStmt4 extends ConjunctionRule {
+        public static final String RULE_NAME = "while_stmt:4";
+
         private final boolean isTokenElse;
         private final Suite suite;
 
@@ -61,6 +66,7 @@ public final class WhileStmt extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("isTokenElse", isTokenElse);
             addRequired("suite", suite);
         }

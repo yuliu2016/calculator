@@ -4,6 +4,8 @@ import org.fugalang.core.parser.DisjunctionRule;
 
 // small_stmt: 'expr_stmt' | 'del_stmt' | 'pass_stmt' | 'flow_stmt' | 'import_stmt' | 'assert_stmt'
 public final class SmallStmt extends DisjunctionRule {
+    public static final String RULE_NAME = "small_stmt";
+
     private final ExprStmt exprStmt;
     private final DelStmt delStmt;
     private final PassStmt passStmt;
@@ -29,6 +31,7 @@ public final class SmallStmt extends DisjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addChoice("exprStmt", exprStmt);
         addChoice("delStmt", delStmt);
         addChoice("passStmt", passStmt);

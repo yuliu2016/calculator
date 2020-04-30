@@ -5,6 +5,8 @@ import org.fugalang.core.parser.DisjunctionRule;
 
 // expr: 'if' 'disjunction' '?' 'disjunction' 'else' 'expr' | 'disjunction' | 'funcdef'
 public final class Expr extends DisjunctionRule {
+    public static final String RULE_NAME = "expr";
+
     private final Expr1 expr1;
     private final Disjunction disjunction;
     private final Funcdef funcdef;
@@ -21,6 +23,7 @@ public final class Expr extends DisjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addChoice("expr1", expr1);
         addChoice("disjunction", disjunction);
         addChoice("funcdef", funcdef);
@@ -40,6 +43,8 @@ public final class Expr extends DisjunctionRule {
 
     // 'if' 'disjunction' '?' 'disjunction' 'else' 'expr'
     public static final class Expr1 extends ConjunctionRule {
+        public static final String RULE_NAME = "expr:1";
+
         private final boolean isTokenIf;
         private final Disjunction disjunction;
         private final boolean isTokenTernery;
@@ -65,6 +70,7 @@ public final class Expr extends DisjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("isTokenIf", isTokenIf);
             addRequired("disjunction", disjunction);
             addRequired("isTokenTernery", isTokenTernery);

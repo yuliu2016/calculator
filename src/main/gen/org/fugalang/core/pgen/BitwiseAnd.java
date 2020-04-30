@@ -5,6 +5,8 @@ import java.util.List;
 
 // bitwise_and: 'shift_expr' ('&' 'shift_expr')*
 public final class BitwiseAnd extends ConjunctionRule {
+    public static final String RULE_NAME = "bitwise_and";
+
     private final ShiftExpr shiftExpr;
     private final List<BitwiseAnd2> bitwiseAnd2List;
 
@@ -18,6 +20,7 @@ public final class BitwiseAnd extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addRequired("shiftExpr", shiftExpr);
         addRequired("bitwiseAnd2List", bitwiseAnd2List);
     }
@@ -32,6 +35,8 @@ public final class BitwiseAnd extends ConjunctionRule {
 
     // '&' 'shift_expr'
     public static final class BitwiseAnd2 extends ConjunctionRule {
+        public static final String RULE_NAME = "bitwise_and:2";
+
         private final boolean isTokenBitAnd;
         private final ShiftExpr shiftExpr;
 
@@ -45,6 +50,7 @@ public final class BitwiseAnd extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("isTokenBitAnd", isTokenBitAnd);
             addRequired("shiftExpr", shiftExpr);
         }

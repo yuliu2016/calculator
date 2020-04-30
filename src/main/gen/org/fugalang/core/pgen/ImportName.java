@@ -4,6 +4,8 @@ import org.fugalang.core.parser.ConjunctionRule;
 
 // import_name: 'import' 'dotted_as_names'
 public final class ImportName extends ConjunctionRule {
+    public static final String RULE_NAME = "import_name";
+
     private final boolean isTokenImport;
     private final DottedAsNames dottedAsNames;
 
@@ -17,6 +19,7 @@ public final class ImportName extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addRequired("isTokenImport", isTokenImport);
         addRequired("dottedAsNames", dottedAsNames);
     }

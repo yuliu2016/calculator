@@ -5,6 +5,8 @@ import java.util.List;
 
 // pipe_expr: 'atom_expr' ('->' 'atom_expr')*
 public final class PipeExpr extends ConjunctionRule {
+    public static final String RULE_NAME = "pipe_expr";
+
     private final AtomExpr atomExpr;
     private final List<PipeExpr2> pipeExpr2List;
 
@@ -18,6 +20,7 @@ public final class PipeExpr extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addRequired("atomExpr", atomExpr);
         addRequired("pipeExpr2List", pipeExpr2List);
     }
@@ -32,6 +35,8 @@ public final class PipeExpr extends ConjunctionRule {
 
     // '->' 'atom_expr'
     public static final class PipeExpr2 extends ConjunctionRule {
+        public static final String RULE_NAME = "pipe_expr:2";
+
         private final boolean isTokenPipe;
         private final AtomExpr atomExpr;
 
@@ -45,6 +50,7 @@ public final class PipeExpr extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("isTokenPipe", isTokenPipe);
             addRequired("atomExpr", atomExpr);
         }

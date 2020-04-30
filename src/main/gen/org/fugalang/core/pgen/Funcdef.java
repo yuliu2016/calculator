@@ -6,6 +6,8 @@ import org.fugalang.core.parser.DisjunctionRule;
 
 // funcdef: ['async'] 'def' ['varargslist'] (':' 'expr' | 'block_suite')
 public final class Funcdef extends ConjunctionRule {
+    public static final String RULE_NAME = "funcdef";
+
     private final boolean isTokenAsync;
     private final boolean isTokenDef;
     private final Varargslist varargslist;
@@ -25,6 +27,7 @@ public final class Funcdef extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addRequired("isTokenAsync", isTokenAsync);
         addRequired("isTokenDef", isTokenDef);
         addOptional("varargslist", varargslist);
@@ -49,6 +52,8 @@ public final class Funcdef extends ConjunctionRule {
 
     // ':' 'expr' | 'block_suite'
     public static final class Funcdef4 extends DisjunctionRule {
+        public static final String RULE_NAME = "funcdef:4";
+
         private final Funcdef41 funcdef41;
         private final BlockSuite blockSuite;
 
@@ -62,6 +67,7 @@ public final class Funcdef extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addChoice("funcdef41", funcdef41);
             addChoice("blockSuite", blockSuite);
         }
@@ -77,6 +83,8 @@ public final class Funcdef extends ConjunctionRule {
 
     // ':' 'expr'
     public static final class Funcdef41 extends ConjunctionRule {
+        public static final String RULE_NAME = "funcdef:4:1";
+
         private final boolean isTokenColon;
         private final Expr expr;
 
@@ -90,6 +98,7 @@ public final class Funcdef extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("isTokenColon", isTokenColon);
             addRequired("expr", expr);
         }

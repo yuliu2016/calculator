@@ -5,6 +5,8 @@ import java.util.List;
 
 // conjunction: 'inversion' ('and' 'inversion')*
 public final class Conjunction extends ConjunctionRule {
+    public static final String RULE_NAME = "conjunction";
+
     private final Inversion inversion;
     private final List<Conjunction2> conjunction2List;
 
@@ -18,6 +20,7 @@ public final class Conjunction extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addRequired("inversion", inversion);
         addRequired("conjunction2List", conjunction2List);
     }
@@ -32,6 +35,8 @@ public final class Conjunction extends ConjunctionRule {
 
     // 'and' 'inversion'
     public static final class Conjunction2 extends ConjunctionRule {
+        public static final String RULE_NAME = "conjunction:2";
+
         private final boolean isTokenAnd;
         private final Inversion inversion;
 
@@ -45,6 +50,7 @@ public final class Conjunction extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("isTokenAnd", isTokenAnd);
             addRequired("inversion", inversion);
         }

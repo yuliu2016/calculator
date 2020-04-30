@@ -5,6 +5,8 @@ import java.util.List;
 
 // import_as_names: 'import_as_name' (',' 'import_as_name')* [',']
 public final class ImportAsNames extends ConjunctionRule {
+    public static final String RULE_NAME = "import_as_names";
+
     private final ImportAsName importAsName;
     private final List<ImportAsNames2> importAsNames2List;
     private final boolean isTokenComma;
@@ -21,6 +23,7 @@ public final class ImportAsNames extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addRequired("importAsName", importAsName);
         addRequired("importAsNames2List", importAsNames2List);
         addRequired("isTokenComma", isTokenComma);
@@ -40,6 +43,8 @@ public final class ImportAsNames extends ConjunctionRule {
 
     // ',' 'import_as_name'
     public static final class ImportAsNames2 extends ConjunctionRule {
+        public static final String RULE_NAME = "import_as_names:2";
+
         private final boolean isTokenComma;
         private final ImportAsName importAsName;
 
@@ -53,6 +58,7 @@ public final class ImportAsNames extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("isTokenComma", isTokenComma);
             addRequired("importAsName", importAsName);
         }

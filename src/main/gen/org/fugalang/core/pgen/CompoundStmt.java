@@ -4,6 +4,8 @@ import org.fugalang.core.parser.DisjunctionRule;
 
 // compound_stmt: 'if_stmt' | 'while_stmt' | 'for_stmt' | 'try_stmt' | 'with_stmt'
 public final class CompoundStmt extends DisjunctionRule {
+    public static final String RULE_NAME = "compound_stmt";
+
     private final IfStmt ifStmt;
     private final WhileStmt whileStmt;
     private final ForStmt forStmt;
@@ -26,6 +28,7 @@ public final class CompoundStmt extends DisjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addChoice("ifStmt", ifStmt);
         addChoice("whileStmt", whileStmt);
         addChoice("forStmt", forStmt);

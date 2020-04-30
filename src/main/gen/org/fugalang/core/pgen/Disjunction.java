@@ -5,6 +5,8 @@ import java.util.List;
 
 // disjunction: 'conjunction' ('or' 'conjunction')*
 public final class Disjunction extends ConjunctionRule {
+    public static final String RULE_NAME = "disjunction";
+
     private final Conjunction conjunction;
     private final List<Disjunction2> disjunction2List;
 
@@ -18,6 +20,7 @@ public final class Disjunction extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addRequired("conjunction", conjunction);
         addRequired("disjunction2List", disjunction2List);
     }
@@ -32,6 +35,8 @@ public final class Disjunction extends ConjunctionRule {
 
     // 'or' 'conjunction'
     public static final class Disjunction2 extends ConjunctionRule {
+        public static final String RULE_NAME = "disjunction:2";
+
         private final boolean isTokenOr;
         private final Conjunction conjunction;
 
@@ -45,6 +50,7 @@ public final class Disjunction extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("isTokenOr", isTokenOr);
             addRequired("conjunction", conjunction);
         }

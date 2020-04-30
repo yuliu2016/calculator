@@ -5,6 +5,8 @@ import java.util.List;
 
 // eval_input: 'exprlist' 'NEWLINE'* 'ENDMARKER'
 public final class EvalInput extends ConjunctionRule {
+    public static final String RULE_NAME = "eval_input";
+
     private final Exprlist exprlist;
     private final List<Object> newlineList;
     private final Object endmarker;
@@ -21,6 +23,7 @@ public final class EvalInput extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addRequired("exprlist", exprlist);
         addRequired("newlineList", newlineList);
         addRequired("endmarker", endmarker);

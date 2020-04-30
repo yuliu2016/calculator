@@ -5,6 +5,8 @@ import java.util.Optional;
 
 // dotted_as_name: 'dotted_name' ['as' 'NAME']
 public final class DottedAsName extends ConjunctionRule {
+    public static final String RULE_NAME = "dotted_as_name";
+
     private final DottedName dottedName;
     private final DottedAsName2 dottedAsName2;
 
@@ -18,6 +20,7 @@ public final class DottedAsName extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addRequired("dottedName", dottedName);
         addOptional("dottedAsName2", dottedAsName2);
     }
@@ -32,6 +35,8 @@ public final class DottedAsName extends ConjunctionRule {
 
     // 'as' 'NAME'
     public static final class DottedAsName2 extends ConjunctionRule {
+        public static final String RULE_NAME = "dotted_as_name:2";
+
         private final boolean isTokenAs;
         private final String name;
 
@@ -45,6 +50,7 @@ public final class DottedAsName extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("isTokenAs", isTokenAs);
             addRequired("name", name);
         }

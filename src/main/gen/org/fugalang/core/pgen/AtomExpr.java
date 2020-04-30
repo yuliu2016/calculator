@@ -5,6 +5,8 @@ import java.util.List;
 
 // atom_expr: ['await'] 'atom' 'trailer'*
 public final class AtomExpr extends ConjunctionRule {
+    public static final String RULE_NAME = "atom_expr";
+
     private final boolean isTokenAwait;
     private final Atom atom;
     private final List<Trailer> trailerList;
@@ -21,6 +23,7 @@ public final class AtomExpr extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addRequired("isTokenAwait", isTokenAwait);
         addRequired("atom", atom);
         addRequired("trailerList", trailerList);

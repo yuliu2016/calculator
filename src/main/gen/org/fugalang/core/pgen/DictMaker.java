@@ -6,6 +6,8 @@ import org.fugalang.core.parser.DisjunctionRule;
 
 // dict_maker: 'dict_item' ('comp_for' | (',' 'dict_item')* [','])
 public final class DictMaker extends ConjunctionRule {
+    public static final String RULE_NAME = "dict_maker";
+
     private final DictItem dictItem;
     private final DictMaker2 dictMaker2;
 
@@ -19,6 +21,7 @@ public final class DictMaker extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addRequired("dictItem", dictItem);
         addRequired("dictMaker2", dictMaker2);
     }
@@ -33,6 +36,8 @@ public final class DictMaker extends ConjunctionRule {
 
     // 'comp_for' | (',' 'dict_item')* [',']
     public static final class DictMaker2 extends DisjunctionRule {
+        public static final String RULE_NAME = "dict_maker:2";
+
         private final CompFor compFor;
         private final DictMaker22 dictMaker22;
 
@@ -46,6 +51,7 @@ public final class DictMaker extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addChoice("compFor", compFor);
             addChoice("dictMaker22", dictMaker22);
         }
@@ -61,6 +67,8 @@ public final class DictMaker extends ConjunctionRule {
 
     // (',' 'dict_item')* [',']
     public static final class DictMaker22 extends ConjunctionRule {
+        public static final String RULE_NAME = "dict_maker:2:2";
+
         private final List<DictMaker221> dictMaker221List;
         private final boolean isTokenComma;
 
@@ -74,6 +82,7 @@ public final class DictMaker extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("dictMaker221List", dictMaker221List);
             addRequired("isTokenComma", isTokenComma);
         }
@@ -89,6 +98,8 @@ public final class DictMaker extends ConjunctionRule {
 
     // ',' 'dict_item'
     public static final class DictMaker221 extends ConjunctionRule {
+        public static final String RULE_NAME = "dict_maker:2:2:1";
+
         private final boolean isTokenComma;
         private final DictItem dictItem;
 
@@ -102,6 +113,7 @@ public final class DictMaker extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("isTokenComma", isTokenComma);
             addRequired("dictItem", dictItem);
         }

@@ -54,10 +54,10 @@ public class ClassSet {
         return classes;
     }
 
-    public ClassBuilder createRootClass(String className) {
+    public ClassBuilder createRootClass(ClassName className) {
         var dupError = false;
         for (var cls : classes) {
-            if (cls.getClassName().equals(className)) {
+            if (cls.getClassName().equals(className.asType())) {
                 dupError = true;
                 break;
             }
@@ -70,7 +70,8 @@ public class ClassSet {
             throw new IllegalArgumentException("Duplicate class: " + className);
         }
 
-        var rootClassBuilder = new ClassBuilder(packageName, className);
+        var rootClassBuilder = new ClassBuilder(packageName,
+                className.asType(), className.asPrintName());
 
         currentClassWithComp = new ClassWithComponents(rootClassBuilder);
         classes.add(currentClassWithComp);
@@ -85,7 +86,7 @@ public class ClassSet {
         currentClassWithComp = null;
     }
 
-    public ClassBuilder createComponentClass(String className) {
+    public ClassBuilder createComponentClass(ClassName className) {
 
         if (currentClassWithComp == null) {
             throw new IllegalStateException("No root class to add component to");
@@ -95,7 +96,7 @@ public class ClassSet {
 
         var dupError = false;
         for (ClassBuilder builder : currentClass.componentClasses) {
-            if (builder.getClassName().equals(className)) {
+            if (builder.getClassName().equals(className.asType())) {
                 dupError = true;
                 break;
             }
@@ -108,7 +109,7 @@ public class ClassSet {
             throw new IllegalArgumentException("Duplicate inner class: " + className);
         }
 
-        var builder = new ClassBuilder(packageName, className);
+        var builder = new ClassBuilder(packageName, className.asType(), className.asPrintName());
 
         currentClass.componentClasses.add(builder);
 

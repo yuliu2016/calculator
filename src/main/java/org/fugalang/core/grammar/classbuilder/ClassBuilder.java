@@ -7,6 +7,7 @@ import java.util.*;
 public class ClassBuilder {
     private final String packageName;
     private final String className;
+    private final String printName;
 
     private final List<ClassField> fields = new ArrayList<>();
     private final Map<String, Integer> fieldNameCounter = new HashMap<>();
@@ -17,9 +18,10 @@ public class ClassBuilder {
 
     private RuleType ruleType = null;
 
-    public ClassBuilder(String packageName, String className) {
+    public ClassBuilder(String packageName, String className, String printName) {
         this.packageName = packageName;
         this.className = className;
+        this.printName = printName;
     }
 
     public String getClassName() {
@@ -93,6 +95,8 @@ public class ClassBuilder {
 
         sb.append(className);
 
+        // extends
+
         if (ruleType != null) {
             // add the parent classes
             sb.append(" extends ").append(ruleType.getSuperClassShort());
@@ -102,13 +106,18 @@ public class ClassBuilder {
 
         sb.append(" {\n");
 
+        // rule name constant
+        sb.append("    public static final String RULE_NAME = \"")
+                .append(printName)
+                .append("\";\n\n");
+
         for (ClassField field : fields) {
             sb.append("    ");
             sb.append(field.asFieldDeclaration());
             sb.append("\n");
         }
 
-        generateConstructorAndOverride(sb);
+        generateConstructorAndOverride(sb, isStaticInnerClass);
 
         for (ClassField field: fields) {
             sb.append("\n");
@@ -124,7 +133,7 @@ public class ClassBuilder {
         return sb.toString();
     }
 
-    private void generateConstructorAndOverride(StringBuilder sb) {
+    private void generateConstructorAndOverride(StringBuilder sb, boolean isStaticInnerClass) {
         sb.append("\n")
                 .append("    public ")
                 .append(className)
@@ -148,8 +157,13 @@ public class ClassBuilder {
             sb.append("\n");
         }
         sb.append("    }\n\n");
-
         sb.append("    @Override\n    protected void buildRule() {\n");
+
+        if (isStaticInnerClass) {
+            sb.append("        setImpliedName(RULE_NAME);\n");
+        } else {
+            sb.append("        setExplicitName(RULE_NAME);\n");
+        }
 
         for (ClassField field : fields) {
             sb.append("        ");
@@ -163,16 +177,16 @@ public class ClassBuilder {
         classImports.add(classImport);
     }
 
-    public void addFieldByClassName(ClassName type, String name, boolean isOptional) {
+    public void addFieldByClassName(ClassName type, String fieldName, boolean isOptional) {
         String actualName;
 
-        if (fieldNameCounter.containsKey(name)) {
-            int cnt = fieldNameCounter.get(name) + 1;
-            actualName = name + cnt;
-            fieldNameCounter.put(name, cnt);
+        if (fieldNameCounter.containsKey(fieldName)) {
+            int cnt = fieldNameCounter.get(fieldName) + 1;
+            actualName = fieldName + cnt;
+            fieldNameCounter.put(fieldName, cnt);
         } else {
-            actualName = name;
-            fieldNameCounter.put(name, 0);
+            actualName = fieldName;
+            fieldNameCounter.put(fieldName, 0);
         }
 
         if (isOptional) {

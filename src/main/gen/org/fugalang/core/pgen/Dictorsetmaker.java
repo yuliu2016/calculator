@@ -4,6 +4,8 @@ import org.fugalang.core.parser.DisjunctionRule;
 
 // dictorsetmaker: 'dict_maker' | 'set_maker'
 public final class Dictorsetmaker extends DisjunctionRule {
+    public static final String RULE_NAME = "dictorsetmaker";
+
     private final DictMaker dictMaker;
     private final SetMaker setMaker;
 
@@ -17,6 +19,7 @@ public final class Dictorsetmaker extends DisjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addChoice("dictMaker", dictMaker);
         addChoice("setMaker", setMaker);
     }

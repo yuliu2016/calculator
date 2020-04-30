@@ -6,6 +6,8 @@ import java.util.Optional;
 
 // varargslist: 'vfpdef' ['=' 'expr'] (',' 'vfpdef' ['=' 'expr'])*
 public final class Varargslist extends ConjunctionRule {
+    public static final String RULE_NAME = "varargslist";
+
     private final Vfpdef vfpdef;
     private final Varargslist2 varargslist2;
     private final List<Varargslist3> varargslist3List;
@@ -22,6 +24,7 @@ public final class Varargslist extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addRequired("vfpdef", vfpdef);
         addOptional("varargslist2", varargslist2);
         addRequired("varargslist3List", varargslist3List);
@@ -41,6 +44,8 @@ public final class Varargslist extends ConjunctionRule {
 
     // '=' 'expr'
     public static final class Varargslist2 extends ConjunctionRule {
+        public static final String RULE_NAME = "varargslist:2";
+
         private final boolean isTokenAssign;
         private final Expr expr;
 
@@ -54,6 +59,7 @@ public final class Varargslist extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("isTokenAssign", isTokenAssign);
             addRequired("expr", expr);
         }
@@ -69,6 +75,8 @@ public final class Varargslist extends ConjunctionRule {
 
     // ',' 'vfpdef' ['=' 'expr']
     public static final class Varargslist3 extends ConjunctionRule {
+        public static final String RULE_NAME = "varargslist:3";
+
         private final boolean isTokenComma;
         private final Vfpdef vfpdef;
         private final Varargslist33 varargslist33;
@@ -85,6 +93,7 @@ public final class Varargslist extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("isTokenComma", isTokenComma);
             addRequired("vfpdef", vfpdef);
             addOptional("varargslist33", varargslist33);
@@ -105,6 +114,8 @@ public final class Varargslist extends ConjunctionRule {
 
     // '=' 'expr'
     public static final class Varargslist33 extends ConjunctionRule {
+        public static final String RULE_NAME = "varargslist:3:3";
+
         private final boolean isTokenAssign;
         private final Expr expr;
 
@@ -118,6 +129,7 @@ public final class Varargslist extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("isTokenAssign", isTokenAssign);
             addRequired("expr", expr);
         }

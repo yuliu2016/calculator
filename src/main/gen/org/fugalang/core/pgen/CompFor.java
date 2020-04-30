@@ -5,6 +5,8 @@ import java.util.Optional;
 
 // comp_for: 'for' 'targets' 'in' 'disjunction' ['comp_iter']
 public final class CompFor extends ConjunctionRule {
+    public static final String RULE_NAME = "comp_for";
+
     private final boolean isTokenFor;
     private final Targets targets;
     private final boolean isTokenIn;
@@ -27,6 +29,7 @@ public final class CompFor extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addRequired("isTokenFor", isTokenFor);
         addRequired("targets", targets);
         addRequired("isTokenIn", isTokenIn);

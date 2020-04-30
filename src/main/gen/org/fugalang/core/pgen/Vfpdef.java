@@ -4,6 +4,8 @@ import org.fugalang.core.parser.ConjunctionRule;
 
 // vfpdef: 'NAME'
 public final class Vfpdef extends ConjunctionRule {
+    public static final String RULE_NAME = "vfpdef";
+
     private final String name;
 
     public Vfpdef(
@@ -14,6 +16,7 @@ public final class Vfpdef extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addRequired("name", name);
     }
 

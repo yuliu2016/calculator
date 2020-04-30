@@ -4,6 +4,8 @@ import org.fugalang.core.parser.DisjunctionRule;
 
 // exprlist_comp_sub: 'exprlist_comp' | 'subscript'
 public final class ExprlistCompSub extends DisjunctionRule {
+    public static final String RULE_NAME = "exprlist_comp_sub";
+
     private final ExprlistComp exprlistComp;
     private final Subscript subscript;
 
@@ -17,6 +19,7 @@ public final class ExprlistCompSub extends DisjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addChoice("exprlistComp", exprlistComp);
         addChoice("subscript", subscript);
     }

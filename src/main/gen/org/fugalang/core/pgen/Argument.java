@@ -6,6 +6,8 @@ import org.fugalang.core.parser.DisjunctionRule;
 
 // argument: 'NAME' ['comp_for'] | 'NAME' ':=' 'expr' | 'NAME' '=' 'expr' | '**' 'expr' | '*' 'expr'
 public final class Argument extends DisjunctionRule {
+    public static final String RULE_NAME = "argument";
+
     private final Argument1 argument1;
     private final Argument2 argument2;
     private final Argument3 argument3;
@@ -28,6 +30,7 @@ public final class Argument extends DisjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addChoice("argument1", argument1);
         addChoice("argument2", argument2);
         addChoice("argument3", argument3);
@@ -57,6 +60,8 @@ public final class Argument extends DisjunctionRule {
 
     // 'NAME' ['comp_for']
     public static final class Argument1 extends ConjunctionRule {
+        public static final String RULE_NAME = "argument:1";
+
         private final String name;
         private final CompFor compFor;
 
@@ -70,6 +75,7 @@ public final class Argument extends DisjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("name", name);
             addOptional("compFor", compFor);
         }
@@ -85,6 +91,8 @@ public final class Argument extends DisjunctionRule {
 
     // 'NAME' ':=' 'expr'
     public static final class Argument2 extends ConjunctionRule {
+        public static final String RULE_NAME = "argument:2";
+
         private final String name;
         private final boolean isTokenAsgnExpr;
         private final Expr expr;
@@ -101,6 +109,7 @@ public final class Argument extends DisjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("name", name);
             addRequired("isTokenAsgnExpr", isTokenAsgnExpr);
             addRequired("expr", expr);
@@ -121,6 +130,8 @@ public final class Argument extends DisjunctionRule {
 
     // 'NAME' '=' 'expr'
     public static final class Argument3 extends ConjunctionRule {
+        public static final String RULE_NAME = "argument:3";
+
         private final String name;
         private final boolean isTokenAssign;
         private final Expr expr;
@@ -137,6 +148,7 @@ public final class Argument extends DisjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("name", name);
             addRequired("isTokenAssign", isTokenAssign);
             addRequired("expr", expr);
@@ -157,6 +169,8 @@ public final class Argument extends DisjunctionRule {
 
     // '**' 'expr'
     public static final class Argument4 extends ConjunctionRule {
+        public static final String RULE_NAME = "argument:4";
+
         private final boolean isTokenPower;
         private final Expr expr;
 
@@ -170,6 +184,7 @@ public final class Argument extends DisjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("isTokenPower", isTokenPower);
             addRequired("expr", expr);
         }
@@ -185,6 +200,8 @@ public final class Argument extends DisjunctionRule {
 
     // '*' 'expr'
     public static final class Argument5 extends ConjunctionRule {
+        public static final String RULE_NAME = "argument:5";
+
         private final boolean isTokenTimes;
         private final Expr expr;
 
@@ -198,6 +215,7 @@ public final class Argument extends DisjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("isTokenTimes", isTokenTimes);
             addRequired("expr", expr);
         }

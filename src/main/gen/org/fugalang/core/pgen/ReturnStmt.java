@@ -5,6 +5,8 @@ import java.util.Optional;
 
 // return_stmt: 'return' ['exprlist_star']
 public final class ReturnStmt extends ConjunctionRule {
+    public static final String RULE_NAME = "return_stmt";
+
     private final boolean isTokenReturn;
     private final ExprlistStar exprlistStar;
 
@@ -18,6 +20,7 @@ public final class ReturnStmt extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addRequired("isTokenReturn", isTokenReturn);
         addOptional("exprlistStar", exprlistStar);
     }

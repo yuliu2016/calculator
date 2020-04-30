@@ -6,6 +6,8 @@ import org.fugalang.core.parser.DisjunctionRule;
 
 // block_suite: '{' 'simple_stmt' '}' | '{' 'NEWLINE' 'stmt'+ '}'
 public final class BlockSuite extends DisjunctionRule {
+    public static final String RULE_NAME = "block_suite";
+
     private final BlockSuite1 blockSuite1;
     private final BlockSuite2 blockSuite2;
 
@@ -19,6 +21,7 @@ public final class BlockSuite extends DisjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addChoice("blockSuite1", blockSuite1);
         addChoice("blockSuite2", blockSuite2);
     }
@@ -33,6 +36,8 @@ public final class BlockSuite extends DisjunctionRule {
 
     // '{' 'simple_stmt' '}'
     public static final class BlockSuite1 extends ConjunctionRule {
+        public static final String RULE_NAME = "block_suite:1";
+
         private final boolean isTokenLbrace;
         private final SimpleStmt simpleStmt;
         private final boolean isTokenRbrace;
@@ -49,6 +54,7 @@ public final class BlockSuite extends DisjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("isTokenLbrace", isTokenLbrace);
             addRequired("simpleStmt", simpleStmt);
             addRequired("isTokenRbrace", isTokenRbrace);
@@ -69,6 +75,8 @@ public final class BlockSuite extends DisjunctionRule {
 
     // '{' 'NEWLINE' 'stmt'+ '}'
     public static final class BlockSuite2 extends ConjunctionRule {
+        public static final String RULE_NAME = "block_suite:2";
+
         private final boolean isTokenLbrace;
         private final Object newline;
         private final Stmt stmt;
@@ -91,6 +99,7 @@ public final class BlockSuite extends DisjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("isTokenLbrace", isTokenLbrace);
             addRequired("newline", newline);
             addRequired("stmt", stmt);

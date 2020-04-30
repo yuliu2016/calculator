@@ -5,6 +5,8 @@ import java.util.List;
 
 // bitwise_xor: 'bitwise_and' ('^' 'bitwise_and')*
 public final class BitwiseXor extends ConjunctionRule {
+    public static final String RULE_NAME = "bitwise_xor";
+
     private final BitwiseAnd bitwiseAnd;
     private final List<BitwiseXor2> bitwiseXor2List;
 
@@ -18,6 +20,7 @@ public final class BitwiseXor extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addRequired("bitwiseAnd", bitwiseAnd);
         addRequired("bitwiseXor2List", bitwiseXor2List);
     }
@@ -32,6 +35,8 @@ public final class BitwiseXor extends ConjunctionRule {
 
     // '^' 'bitwise_and'
     public static final class BitwiseXor2 extends ConjunctionRule {
+        public static final String RULE_NAME = "bitwise_xor:2";
+
         private final boolean isTokenBitXor;
         private final BitwiseAnd bitwiseAnd;
 
@@ -45,6 +50,7 @@ public final class BitwiseXor extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("isTokenBitXor", isTokenBitXor);
             addRequired("bitwiseAnd", bitwiseAnd);
         }

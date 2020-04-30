@@ -4,6 +4,8 @@ import org.fugalang.core.parser.DisjunctionRule;
 
 // simple_atom: 'NAME' | 'NUMBER' | 'STRING' | 'None' | 'True' | 'False'
 public final class SimpleAtom extends DisjunctionRule {
+    public static final String RULE_NAME = "simple_atom";
+
     private final String name;
     private final Object number;
     private final String string;
@@ -29,6 +31,7 @@ public final class SimpleAtom extends DisjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addChoice("name", name);
         addChoice("number", number);
         addChoice("string", string);

@@ -6,6 +6,8 @@ import org.fugalang.core.parser.DisjunctionRule;
 
 // targets: ('bitwise_or' | 'star_expr') (',' ('bitwise_or' | 'star_expr'))* [',']
 public final class Targets extends ConjunctionRule {
+    public static final String RULE_NAME = "targets";
+
     private final Targets1 targets1;
     private final List<Targets2> targets2List;
     private final boolean isTokenComma;
@@ -22,6 +24,7 @@ public final class Targets extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addRequired("targets1", targets1);
         addRequired("targets2List", targets2List);
         addRequired("isTokenComma", isTokenComma);
@@ -41,6 +44,8 @@ public final class Targets extends ConjunctionRule {
 
     // 'bitwise_or' | 'star_expr'
     public static final class Targets1 extends DisjunctionRule {
+        public static final String RULE_NAME = "targets:1";
+
         private final BitwiseOr bitwiseOr;
         private final StarExpr starExpr;
 
@@ -54,6 +59,7 @@ public final class Targets extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addChoice("bitwiseOr", bitwiseOr);
             addChoice("starExpr", starExpr);
         }
@@ -69,6 +75,8 @@ public final class Targets extends ConjunctionRule {
 
     // ',' ('bitwise_or' | 'star_expr')
     public static final class Targets2 extends ConjunctionRule {
+        public static final String RULE_NAME = "targets:2";
+
         private final boolean isTokenComma;
         private final Targets22 targets22;
 
@@ -82,6 +90,7 @@ public final class Targets extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("isTokenComma", isTokenComma);
             addRequired("targets22", targets22);
         }
@@ -97,6 +106,8 @@ public final class Targets extends ConjunctionRule {
 
     // 'bitwise_or' | 'star_expr'
     public static final class Targets22 extends DisjunctionRule {
+        public static final String RULE_NAME = "targets:2:2";
+
         private final BitwiseOr bitwiseOr;
         private final StarExpr starExpr;
 
@@ -110,6 +121,7 @@ public final class Targets extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addChoice("bitwiseOr", bitwiseOr);
             addChoice("starExpr", starExpr);
         }

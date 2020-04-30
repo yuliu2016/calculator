@@ -6,6 +6,8 @@ import org.fugalang.core.parser.DisjunctionRule;
 
 // import_from: 'from' ('.'* 'dotted_name' | '.'+) 'import' ('*' | '(' 'import_as_names' ')' | 'import_as_names')
 public final class ImportFrom extends ConjunctionRule {
+    public static final String RULE_NAME = "import_from";
+
     private final boolean isTokenFrom;
     private final ImportFrom2 importFrom2;
     private final boolean isTokenImport;
@@ -25,6 +27,7 @@ public final class ImportFrom extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addRequired("isTokenFrom", isTokenFrom);
         addRequired("importFrom2", importFrom2);
         addRequired("isTokenImport", isTokenImport);
@@ -49,6 +52,8 @@ public final class ImportFrom extends ConjunctionRule {
 
     // '.'* 'dotted_name' | '.'+
     public static final class ImportFrom2 extends DisjunctionRule {
+        public static final String RULE_NAME = "import_from:2";
+
         private final ImportFrom21 importFrom21;
         private final boolean isTokenDot;
         private final List<Boolean> isTokenDotList;
@@ -65,6 +70,7 @@ public final class ImportFrom extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addChoice("importFrom21", importFrom21);
             addChoice("isTokenDot", isTokenDot);
             addChoice("isTokenDotList", isTokenDotList);
@@ -85,6 +91,8 @@ public final class ImportFrom extends ConjunctionRule {
 
     // '.'* 'dotted_name'
     public static final class ImportFrom21 extends ConjunctionRule {
+        public static final String RULE_NAME = "import_from:2:1";
+
         private final List<Boolean> isTokenDotList;
         private final DottedName dottedName;
 
@@ -98,6 +106,7 @@ public final class ImportFrom extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("isTokenDotList", isTokenDotList);
             addRequired("dottedName", dottedName);
         }
@@ -113,6 +122,8 @@ public final class ImportFrom extends ConjunctionRule {
 
     // '*' | '(' 'import_as_names' ')' | 'import_as_names'
     public static final class ImportFrom4 extends DisjunctionRule {
+        public static final String RULE_NAME = "import_from:4";
+
         private final boolean isTokenTimes;
         private final ImportFrom42 importFrom42;
         private final ImportAsNames importAsNames;
@@ -129,6 +140,7 @@ public final class ImportFrom extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addChoice("isTokenTimes", isTokenTimes);
             addChoice("importFrom42", importFrom42);
             addChoice("importAsNames", importAsNames);
@@ -149,6 +161,8 @@ public final class ImportFrom extends ConjunctionRule {
 
     // '(' 'import_as_names' ')'
     public static final class ImportFrom42 extends ConjunctionRule {
+        public static final String RULE_NAME = "import_from:4:2";
+
         private final boolean isTokenLpar;
         private final ImportAsNames importAsNames;
         private final boolean isTokenRpar;
@@ -165,6 +179,7 @@ public final class ImportFrom extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("isTokenLpar", isTokenLpar);
             addRequired("importAsNames", importAsNames);
             addRequired("isTokenRpar", isTokenRpar);

@@ -1,5 +1,6 @@
 package org.fugalang.core.parser;
 
+import org.fugalang.core.pprint.ParseTreePPrint;
 import org.fugalang.core.pprint.TreeStringBuilder;
 import org.fugalang.core.pprint.TreeStringElem;
 
@@ -12,6 +13,14 @@ public abstract class ConjunctionRule implements TreeStringElem {
     private ComputedRule computedRule = null;
 
     protected abstract void buildRule();
+
+    protected void setExplicitName(String ruleName) {
+        computedRule.setRuleName(ruleName, true);
+    }
+
+    protected void setImpliedName(String ruleName) {
+        computedRule.setRuleName(ruleName, false);
+    }
 
     protected void addRequired(String name, boolean value) {
         computedRule.addRequired(name, value);
@@ -61,6 +70,10 @@ public abstract class ConjunctionRule implements TreeStringElem {
         computedRule.buildString(builder);
     }
 
+    public String prettyFormat() {
+        return ParseTreePPrint.format(this, 2);
+    }
+
     @Override
     public final int hashCode() {
         validate();
@@ -76,10 +89,6 @@ public abstract class ConjunctionRule implements TreeStringElem {
         return false;
     }
 
-    private String getName() {
-        return getClass().getSimpleName();
-    }
-
     private static void computeRuleFail(String msg) {
         throw new IllegalArgumentException(msg);
     }
@@ -90,15 +99,22 @@ public abstract class ConjunctionRule implements TreeStringElem {
         private boolean hashed;
         private String str = null;
         private int length;
+        private String ruleName;
+        private boolean isExplicitName;
 
         public ComputedRule() {
             ConjunctionRule.this.buildRule();
         }
 
+        private void setRuleName(String ruleName, boolean isExplicitName) {
+            this.ruleName = ruleName;
+            this.isExplicitName = isExplicitName;
+        }
+
         private void addRequired(String name, boolean value) {
             if (!value) {
                 computeRuleFail(name + " is a required boolean field for " +
-                        getName() + ", but it is false");
+                        ruleName + ", but it is false");
             }
             components.add(name);
             length++;
@@ -106,14 +122,13 @@ public abstract class ConjunctionRule implements TreeStringElem {
 
         private void addRequired(String name, Object value) {
             if (value == null) {
-                computeRuleFail(name + " is a required field for " +
-                        getName() + ", but it is null");
+                computeRuleFail(name + " is a required field for rule " +
+                        ruleName + ", but it is null");
             }
             components.add(value);
             length++;
         }
 
-        @SuppressWarnings("unused")
         private void addOptional(String name, Object value) {
             components.add(value);
             if (value != null) {
@@ -127,8 +142,10 @@ public abstract class ConjunctionRule implements TreeStringElem {
 
         private String simpleString() {
             if (str == null) {
+                var maybeName = isExplicitName ? ruleName + " " : "";
+
                 str = components.stream().map(Object::toString)
-                        .collect(Collectors.joining(" ", "(" + getName(), ")"));
+                        .collect(Collectors.joining(" ", "(" + maybeName, ")"));
             }
             return str;
         }
@@ -150,7 +167,10 @@ public abstract class ConjunctionRule implements TreeStringElem {
         }
 
         private void buildString(TreeStringBuilder builder) {
-            builder.setName(getName());
+
+            if (isExplicitName) {
+                builder.setName(ruleName);
+            }
 
             for (Object component : components) {
                 if (component instanceof TreeStringElem) {

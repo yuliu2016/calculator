@@ -5,6 +5,8 @@ import org.fugalang.core.parser.DisjunctionRule;
 
 // dict_item: 'expr' ':' 'expr' | '**' 'bitwise_or'
 public final class DictItem extends DisjunctionRule {
+    public static final String RULE_NAME = "dict_item";
+
     private final DictItem1 dictItem1;
     private final DictItem2 dictItem2;
 
@@ -18,6 +20,7 @@ public final class DictItem extends DisjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addChoice("dictItem1", dictItem1);
         addChoice("dictItem2", dictItem2);
     }
@@ -32,6 +35,8 @@ public final class DictItem extends DisjunctionRule {
 
     // 'expr' ':' 'expr'
     public static final class DictItem1 extends ConjunctionRule {
+        public static final String RULE_NAME = "dict_item:1";
+
         private final Expr expr;
         private final boolean isTokenColon;
         private final Expr expr1;
@@ -48,6 +53,7 @@ public final class DictItem extends DisjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("expr", expr);
             addRequired("isTokenColon", isTokenColon);
             addRequired("expr1", expr1);
@@ -68,6 +74,8 @@ public final class DictItem extends DisjunctionRule {
 
     // '**' 'bitwise_or'
     public static final class DictItem2 extends ConjunctionRule {
+        public static final String RULE_NAME = "dict_item:2";
+
         private final boolean isTokenPower;
         private final BitwiseOr bitwiseOr;
 
@@ -81,6 +89,7 @@ public final class DictItem extends DisjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("isTokenPower", isTokenPower);
             addRequired("bitwiseOr", bitwiseOr);
         }

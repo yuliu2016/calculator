@@ -115,13 +115,15 @@ public class ParserGenerator {
 
         for (var entry : ruleMap.entrySet()) {
             var realClassName = classNameMap.get(entry.getKey());
+            var className = ClassName.of(realClassName, entry.getKey());
 
             // use a root class to reduce files
-            ClassBuilder cb = classSet.createRootClass(realClassName);
+            ClassBuilder cb = classSet.createRootClass(className);
+
             cb.setHeaderComments(entry.getKey() + ": " + entry.getValue().toSimpleString());
             cb.setRuleType(RuleType.Disjunction);
 
-            addOrRule(ClassName.of(realClassName), cb, entry.getValue());
+            addOrRule(className, cb, entry.getValue());
 
             // for checking invariant state
             classSet.markRootClassDone();
@@ -146,28 +148,26 @@ public class ParserGenerator {
                 // add class count to the name, even if not used, because
                 // otherwise could result in the same class names later,
                 // when there are two branches
-                var classWithCount = className.suffix(class_count);
+                var newClassName = className.suffix(class_count);
                 class_count++;
 
                 if (andRule.repeatRules.isEmpty()) {
                     // only one repeat rule - can propagate fields of this class
-                    addAndRule(classWithCount, cb, andRule, REQUIRED);
+                    addAndRule(newClassName, cb, andRule, REQUIRED);
                 } else {
-                    var classType = classWithCount.asType();
-
                     // need to make a new class for this, because
                     // a list can't hold multiple-ly typed objects
-                    var component_cb = classSet.createComponentClass(classType);
+                    var component_cb = classSet.createComponentClass(newClassName);
+
                     component_cb.setHeaderComments(andRule.toSimpleString());
                     component_cb.setRuleType(RuleType.Conjunction);
 
                     // Add a field to the class set
                     // The reason to do this first is that if adding the rule fails,
                     // this class can still show that this point was reached
-                    cb.addFieldByClassName(classWithCount,
-                            ParseStringUtil.decap(classType), REQUIRED);
+                    cb.addFieldByClassName(newClassName, newClassName.decapName(), REQUIRED);
 
-                    addAndRule(classWithCount, component_cb, andRule, REQUIRED);
+                    addAndRule(newClassName, component_cb, andRule, REQUIRED);
                 }
             }
         }
@@ -302,17 +302,15 @@ public class ParserGenerator {
             // just add all the repeat rules and be done with it
             addAndRule(className, cb, rule.andRule, isOptional);
         } else {
-            var classType = className.asType();
 
-            var component_cb = classSet.createComponentClass(classType);
+            var component_cb = classSet.createComponentClass(className);
             component_cb.setHeaderComments(rule.toSimpleString());
             component_cb.setRuleType(RuleType.Disjunction);
 
             // Add a field to the class set
             // The reason to do this first is that if adding the rule fails,
             // this class can still show that this point was reached
-            addFieldWithRepeat(className, cb,
-                    ParseStringUtil.decap(classType), repeatRule, isOptional);
+            addFieldWithRepeat(className, cb, className.decapName(), repeatRule, isOptional);
 
             addOrRule(className, component_cb, rule);
         }

@@ -5,6 +5,8 @@ import java.util.Optional;
 
 // namedexpr_expr: 'NAME' [':=' 'expr']
 public final class NamedexprExpr extends ConjunctionRule {
+    public static final String RULE_NAME = "namedexpr_expr";
+
     private final String name;
     private final NamedexprExpr2 namedexprExpr2;
 
@@ -18,6 +20,7 @@ public final class NamedexprExpr extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addRequired("name", name);
         addOptional("namedexprExpr2", namedexprExpr2);
     }
@@ -32,6 +35,8 @@ public final class NamedexprExpr extends ConjunctionRule {
 
     // ':=' 'expr'
     public static final class NamedexprExpr2 extends ConjunctionRule {
+        public static final String RULE_NAME = "namedexpr_expr:2";
+
         private final boolean isTokenAsgnExpr;
         private final Expr expr;
 
@@ -45,6 +50,7 @@ public final class NamedexprExpr extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("isTokenAsgnExpr", isTokenAsgnExpr);
             addRequired("expr", expr);
         }

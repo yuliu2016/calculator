@@ -5,6 +5,8 @@ import java.util.Optional;
 
 // assert_stmt: 'assert' 'expr' [',' 'expr']
 public final class AssertStmt extends ConjunctionRule {
+    public static final String RULE_NAME = "assert_stmt";
+
     private final boolean isTokenAssert;
     private final Expr expr;
     private final AssertStmt3 assertStmt3;
@@ -21,6 +23,7 @@ public final class AssertStmt extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addRequired("isTokenAssert", isTokenAssert);
         addRequired("expr", expr);
         addOptional("assertStmt3", assertStmt3);
@@ -40,6 +43,8 @@ public final class AssertStmt extends ConjunctionRule {
 
     // ',' 'expr'
     public static final class AssertStmt3 extends ConjunctionRule {
+        public static final String RULE_NAME = "assert_stmt:3";
+
         private final boolean isTokenComma;
         private final Expr expr;
 
@@ -53,6 +58,7 @@ public final class AssertStmt extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("isTokenComma", isTokenComma);
             addRequired("expr", expr);
         }

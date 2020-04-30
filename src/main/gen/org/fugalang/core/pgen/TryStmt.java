@@ -7,6 +7,8 @@ import org.fugalang.core.parser.DisjunctionRule;
 
 // try_stmt: 'try' 'suite' (('except_clause' 'suite')+ ['else' 'suite'] ['finally' 'suite'] | 'finally' 'suite')
 public final class TryStmt extends ConjunctionRule {
+    public static final String RULE_NAME = "try_stmt";
+
     private final boolean isTokenTry;
     private final Suite suite;
     private final TryStmt3 tryStmt3;
@@ -23,6 +25,7 @@ public final class TryStmt extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addRequired("isTokenTry", isTokenTry);
         addRequired("suite", suite);
         addRequired("tryStmt3", tryStmt3);
@@ -42,6 +45,8 @@ public final class TryStmt extends ConjunctionRule {
 
     // ('except_clause' 'suite')+ ['else' 'suite'] ['finally' 'suite'] | 'finally' 'suite'
     public static final class TryStmt3 extends DisjunctionRule {
+        public static final String RULE_NAME = "try_stmt:3";
+
         private final TryStmt31 tryStmt31;
         private final TryStmt32 tryStmt32;
 
@@ -55,6 +60,7 @@ public final class TryStmt extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addChoice("tryStmt31", tryStmt31);
             addChoice("tryStmt32", tryStmt32);
         }
@@ -70,6 +76,8 @@ public final class TryStmt extends ConjunctionRule {
 
     // ('except_clause' 'suite')+ ['else' 'suite'] ['finally' 'suite']
     public static final class TryStmt31 extends ConjunctionRule {
+        public static final String RULE_NAME = "try_stmt:3:1";
+
         private final TryStmt311 tryStmt311;
         private final List<TryStmt311> tryStmt311List;
         private final TryStmt312 tryStmt312;
@@ -89,6 +97,7 @@ public final class TryStmt extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("tryStmt311", tryStmt311);
             addRequired("tryStmt311List", tryStmt311List);
             addOptional("tryStmt312", tryStmt312);
@@ -114,6 +123,8 @@ public final class TryStmt extends ConjunctionRule {
 
     // 'except_clause' 'suite'
     public static final class TryStmt311 extends ConjunctionRule {
+        public static final String RULE_NAME = "try_stmt:3:1:1";
+
         private final ExceptClause exceptClause;
         private final Suite suite;
 
@@ -127,6 +138,7 @@ public final class TryStmt extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("exceptClause", exceptClause);
             addRequired("suite", suite);
         }
@@ -142,6 +154,8 @@ public final class TryStmt extends ConjunctionRule {
 
     // 'else' 'suite'
     public static final class TryStmt312 extends ConjunctionRule {
+        public static final String RULE_NAME = "try_stmt:3:1:2";
+
         private final boolean isTokenElse;
         private final Suite suite;
 
@@ -155,6 +169,7 @@ public final class TryStmt extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("isTokenElse", isTokenElse);
             addRequired("suite", suite);
         }
@@ -170,6 +185,8 @@ public final class TryStmt extends ConjunctionRule {
 
     // 'finally' 'suite'
     public static final class TryStmt313 extends ConjunctionRule {
+        public static final String RULE_NAME = "try_stmt:3:1:3";
+
         private final boolean isTokenFinally;
         private final Suite suite;
 
@@ -183,6 +200,7 @@ public final class TryStmt extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("isTokenFinally", isTokenFinally);
             addRequired("suite", suite);
         }
@@ -198,6 +216,8 @@ public final class TryStmt extends ConjunctionRule {
 
     // 'finally' 'suite'
     public static final class TryStmt32 extends ConjunctionRule {
+        public static final String RULE_NAME = "try_stmt:3:2";
+
         private final boolean isTokenFinally;
         private final Suite suite;
 
@@ -211,6 +231,7 @@ public final class TryStmt extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("isTokenFinally", isTokenFinally);
             addRequired("suite", suite);
         }

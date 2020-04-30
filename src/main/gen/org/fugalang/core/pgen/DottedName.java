@@ -5,6 +5,8 @@ import java.util.List;
 
 // dotted_name: 'NAME' ('.' 'NAME')*
 public final class DottedName extends ConjunctionRule {
+    public static final String RULE_NAME = "dotted_name";
+
     private final String name;
     private final List<DottedName2> dottedName2List;
 
@@ -18,6 +20,7 @@ public final class DottedName extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addRequired("name", name);
         addRequired("dottedName2List", dottedName2List);
     }
@@ -32,6 +35,8 @@ public final class DottedName extends ConjunctionRule {
 
     // '.' 'NAME'
     public static final class DottedName2 extends ConjunctionRule {
+        public static final String RULE_NAME = "dotted_name:2";
+
         private final boolean isTokenDot;
         private final String name;
 
@@ -45,6 +50,7 @@ public final class DottedName extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("isTokenDot", isTokenDot);
             addRequired("name", name);
         }

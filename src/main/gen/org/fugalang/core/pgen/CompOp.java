@@ -5,6 +5,8 @@ import org.fugalang.core.parser.DisjunctionRule;
 
 // comp_op: '<' | '>' | '==' | '>=' | '<=' | '!=' | 'in' | 'not' 'in' | 'is' | 'is' 'not'
 public final class CompOp extends DisjunctionRule {
+    public static final String RULE_NAME = "comp_op";
+
     private final boolean isTokenLess;
     private final boolean isTokenGreater;
     private final boolean isTokenEqual;
@@ -42,6 +44,7 @@ public final class CompOp extends DisjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addChoice("isTokenLess", isTokenLess);
         addChoice("isTokenGreater", isTokenGreater);
         addChoice("isTokenEqual", isTokenEqual);
@@ -96,6 +99,8 @@ public final class CompOp extends DisjunctionRule {
 
     // 'not' 'in'
     public static final class CompOp8 extends ConjunctionRule {
+        public static final String RULE_NAME = "comp_op:8";
+
         private final boolean isTokenNot;
         private final boolean isTokenIn;
 
@@ -109,6 +114,7 @@ public final class CompOp extends DisjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("isTokenNot", isTokenNot);
             addRequired("isTokenIn", isTokenIn);
         }
@@ -124,6 +130,8 @@ public final class CompOp extends DisjunctionRule {
 
     // 'is' 'not'
     public static final class CompOp10 extends ConjunctionRule {
+        public static final String RULE_NAME = "comp_op:10";
+
         private final boolean isTokenIs;
         private final boolean isTokenNot;
 
@@ -137,6 +145,7 @@ public final class CompOp extends DisjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("isTokenIs", isTokenIs);
             addRequired("isTokenNot", isTokenNot);
         }

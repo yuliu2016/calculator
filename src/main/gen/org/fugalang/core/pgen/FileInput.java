@@ -6,6 +6,8 @@ import org.fugalang.core.parser.DisjunctionRule;
 
 // file_input: ('NEWLINE' | 'stmt')* 'ENDMARKER'
 public final class FileInput extends ConjunctionRule {
+    public static final String RULE_NAME = "file_input";
+
     private final List<FileInput1> fileInput1List;
     private final Object endmarker;
 
@@ -19,6 +21,7 @@ public final class FileInput extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addRequired("fileInput1List", fileInput1List);
         addRequired("endmarker", endmarker);
     }
@@ -33,6 +36,8 @@ public final class FileInput extends ConjunctionRule {
 
     // 'NEWLINE' | 'stmt'
     public static final class FileInput1 extends DisjunctionRule {
+        public static final String RULE_NAME = "file_input:1";
+
         private final Object newline;
         private final Stmt stmt;
 
@@ -46,6 +51,7 @@ public final class FileInput extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addChoice("newline", newline);
             addChoice("stmt", stmt);
         }

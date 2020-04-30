@@ -5,6 +5,8 @@ import java.util.Optional;
 
 // with_item: 'expr' ['as' 'NAME']
 public final class WithItem extends ConjunctionRule {
+    public static final String RULE_NAME = "with_item";
+
     private final Expr expr;
     private final WithItem2 withItem2;
 
@@ -18,6 +20,7 @@ public final class WithItem extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addRequired("expr", expr);
         addOptional("withItem2", withItem2);
     }
@@ -32,6 +35,8 @@ public final class WithItem extends ConjunctionRule {
 
     // 'as' 'NAME'
     public static final class WithItem2 extends ConjunctionRule {
+        public static final String RULE_NAME = "with_item:2";
+
         private final boolean isTokenAs;
         private final String name;
 
@@ -45,6 +50,7 @@ public final class WithItem extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("isTokenAs", isTokenAs);
             addRequired("name", name);
         }

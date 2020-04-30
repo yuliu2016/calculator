@@ -4,6 +4,8 @@ import org.fugalang.core.parser.DisjunctionRule;
 
 // augassign: '+=' | '-=' | '*=' | '@=' | '/=' | '%=' | '&=' | '|=' | '^=' | '<<=' | '>>=' | '**=' | '//='
 public final class Augassign extends DisjunctionRule {
+    public static final String RULE_NAME = "augassign";
+
     private final boolean isTokenPlusAssign;
     private final boolean isTokenMinusAssign;
     private final boolean isTokenTimesAssign;
@@ -50,6 +52,7 @@ public final class Augassign extends DisjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addChoice("isTokenPlusAssign", isTokenPlusAssign);
         addChoice("isTokenMinusAssign", isTokenMinusAssign);
         addChoice("isTokenTimesAssign", isTokenTimesAssign);

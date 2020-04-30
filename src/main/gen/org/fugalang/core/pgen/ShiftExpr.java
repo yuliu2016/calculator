@@ -6,6 +6,8 @@ import org.fugalang.core.parser.DisjunctionRule;
 
 // shift_expr: 'sum' (('<<' | '>>') 'sum')*
 public final class ShiftExpr extends ConjunctionRule {
+    public static final String RULE_NAME = "shift_expr";
+
     private final Sum sum;
     private final List<ShiftExpr2> shiftExpr2List;
 
@@ -19,6 +21,7 @@ public final class ShiftExpr extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addRequired("sum", sum);
         addRequired("shiftExpr2List", shiftExpr2List);
     }
@@ -33,6 +36,8 @@ public final class ShiftExpr extends ConjunctionRule {
 
     // ('<<' | '>>') 'sum'
     public static final class ShiftExpr2 extends ConjunctionRule {
+        public static final String RULE_NAME = "shift_expr:2";
+
         private final ShiftExpr21 shiftExpr21;
         private final Sum sum;
 
@@ -46,6 +51,7 @@ public final class ShiftExpr extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("shiftExpr21", shiftExpr21);
             addRequired("sum", sum);
         }
@@ -61,6 +67,8 @@ public final class ShiftExpr extends ConjunctionRule {
 
     // '<<' | '>>'
     public static final class ShiftExpr21 extends DisjunctionRule {
+        public static final String RULE_NAME = "shift_expr:2:1";
+
         private final boolean isTokenLshift;
         private final boolean isTokenRshift;
 
@@ -74,6 +82,7 @@ public final class ShiftExpr extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addChoice("isTokenLshift", isTokenLshift);
             addChoice("isTokenRshift", isTokenRshift);
         }

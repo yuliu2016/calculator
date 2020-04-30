@@ -5,6 +5,8 @@ import java.util.Optional;
 
 // except_clause: 'except' ['expr' ['as' 'NAME']]
 public final class ExceptClause extends ConjunctionRule {
+    public static final String RULE_NAME = "except_clause";
+
     private final boolean isTokenExcept;
     private final ExceptClause2 exceptClause2;
 
@@ -18,6 +20,7 @@ public final class ExceptClause extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addRequired("isTokenExcept", isTokenExcept);
         addOptional("exceptClause2", exceptClause2);
     }
@@ -32,6 +35,8 @@ public final class ExceptClause extends ConjunctionRule {
 
     // 'expr' ['as' 'NAME']
     public static final class ExceptClause2 extends ConjunctionRule {
+        public static final String RULE_NAME = "except_clause:2";
+
         private final Expr expr;
         private final ExceptClause22 exceptClause22;
 
@@ -45,6 +50,7 @@ public final class ExceptClause extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("expr", expr);
             addOptional("exceptClause22", exceptClause22);
         }
@@ -60,6 +66,8 @@ public final class ExceptClause extends ConjunctionRule {
 
     // 'as' 'NAME'
     public static final class ExceptClause22 extends ConjunctionRule {
+        public static final String RULE_NAME = "except_clause:2:2";
+
         private final boolean isTokenAs;
         private final String name;
 
@@ -73,6 +81,7 @@ public final class ExceptClause extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("isTokenAs", isTokenAs);
             addRequired("name", name);
         }

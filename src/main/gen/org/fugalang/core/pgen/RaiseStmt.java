@@ -5,6 +5,8 @@ import java.util.Optional;
 
 // raise_stmt: 'raise' ['expr' ['from' 'expr']]
 public final class RaiseStmt extends ConjunctionRule {
+    public static final String RULE_NAME = "raise_stmt";
+
     private final boolean isTokenRaise;
     private final RaiseStmt2 raiseStmt2;
 
@@ -18,6 +20,7 @@ public final class RaiseStmt extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addRequired("isTokenRaise", isTokenRaise);
         addOptional("raiseStmt2", raiseStmt2);
     }
@@ -32,6 +35,8 @@ public final class RaiseStmt extends ConjunctionRule {
 
     // 'expr' ['from' 'expr']
     public static final class RaiseStmt2 extends ConjunctionRule {
+        public static final String RULE_NAME = "raise_stmt:2";
+
         private final Expr expr;
         private final RaiseStmt22 raiseStmt22;
 
@@ -45,6 +50,7 @@ public final class RaiseStmt extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("expr", expr);
             addOptional("raiseStmt22", raiseStmt22);
         }
@@ -60,6 +66,8 @@ public final class RaiseStmt extends ConjunctionRule {
 
     // 'from' 'expr'
     public static final class RaiseStmt22 extends ConjunctionRule {
+        public static final String RULE_NAME = "raise_stmt:2:2";
+
         private final boolean isTokenFrom;
         private final Expr expr;
 
@@ -73,6 +81,7 @@ public final class RaiseStmt extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("isTokenFrom", isTokenFrom);
             addRequired("expr", expr);
         }

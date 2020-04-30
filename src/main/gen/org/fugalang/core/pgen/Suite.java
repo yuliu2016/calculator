@@ -5,6 +5,8 @@ import org.fugalang.core.parser.DisjunctionRule;
 
 // suite: ':' 'simple_stmt' | 'block_suite'
 public final class Suite extends DisjunctionRule {
+    public static final String RULE_NAME = "suite";
+
     private final Suite1 suite1;
     private final BlockSuite blockSuite;
 
@@ -18,6 +20,7 @@ public final class Suite extends DisjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addChoice("suite1", suite1);
         addChoice("blockSuite", blockSuite);
     }
@@ -32,6 +35,8 @@ public final class Suite extends DisjunctionRule {
 
     // ':' 'simple_stmt'
     public static final class Suite1 extends ConjunctionRule {
+        public static final String RULE_NAME = "suite:1";
+
         private final boolean isTokenColon;
         private final SimpleStmt simpleStmt;
 
@@ -45,6 +50,7 @@ public final class Suite extends DisjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("isTokenColon", isTokenColon);
             addRequired("simpleStmt", simpleStmt);
         }

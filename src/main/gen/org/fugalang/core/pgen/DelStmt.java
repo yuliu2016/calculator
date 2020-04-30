@@ -4,6 +4,8 @@ import org.fugalang.core.parser.ConjunctionRule;
 
 // del_stmt: 'del' 'targets'
 public final class DelStmt extends ConjunctionRule {
+    public static final String RULE_NAME = "del_stmt";
+
     private final boolean isTokenDel;
     private final Targets targets;
 
@@ -17,6 +19,7 @@ public final class DelStmt extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addRequired("isTokenDel", isTokenDel);
         addRequired("targets", targets);
     }

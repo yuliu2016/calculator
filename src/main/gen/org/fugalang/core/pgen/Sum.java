@@ -6,6 +6,8 @@ import org.fugalang.core.parser.DisjunctionRule;
 
 // sum: 'term' (('+' | '-') 'term')*
 public final class Sum extends ConjunctionRule {
+    public static final String RULE_NAME = "sum";
+
     private final Term term;
     private final List<Sum2> sum2List;
 
@@ -19,6 +21,7 @@ public final class Sum extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addRequired("term", term);
         addRequired("sum2List", sum2List);
     }
@@ -33,6 +36,8 @@ public final class Sum extends ConjunctionRule {
 
     // ('+' | '-') 'term'
     public static final class Sum2 extends ConjunctionRule {
+        public static final String RULE_NAME = "sum:2";
+
         private final Sum21 sum21;
         private final Term term;
 
@@ -46,6 +51,7 @@ public final class Sum extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("sum21", sum21);
             addRequired("term", term);
         }
@@ -61,6 +67,8 @@ public final class Sum extends ConjunctionRule {
 
     // '+' | '-'
     public static final class Sum21 extends DisjunctionRule {
+        public static final String RULE_NAME = "sum:2:1";
+
         private final boolean isTokenPlus;
         private final boolean isTokenMinus;
 
@@ -74,6 +82,7 @@ public final class Sum extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addChoice("isTokenPlus", isTokenPlus);
             addChoice("isTokenMinus", isTokenMinus);
         }

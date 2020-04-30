@@ -6,6 +6,8 @@ import org.fugalang.core.parser.DisjunctionRule;
 
 // exprlist_comp: 'expr_or_star' ('comp_for' | (',' 'expr_or_star')* [','])
 public final class ExprlistComp extends ConjunctionRule {
+    public static final String RULE_NAME = "exprlist_comp";
+
     private final ExprOrStar exprOrStar;
     private final ExprlistComp2 exprlistComp2;
 
@@ -19,6 +21,7 @@ public final class ExprlistComp extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addRequired("exprOrStar", exprOrStar);
         addRequired("exprlistComp2", exprlistComp2);
     }
@@ -33,6 +36,8 @@ public final class ExprlistComp extends ConjunctionRule {
 
     // 'comp_for' | (',' 'expr_or_star')* [',']
     public static final class ExprlistComp2 extends DisjunctionRule {
+        public static final String RULE_NAME = "exprlist_comp:2";
+
         private final CompFor compFor;
         private final ExprlistComp22 exprlistComp22;
 
@@ -46,6 +51,7 @@ public final class ExprlistComp extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addChoice("compFor", compFor);
             addChoice("exprlistComp22", exprlistComp22);
         }
@@ -61,6 +67,8 @@ public final class ExprlistComp extends ConjunctionRule {
 
     // (',' 'expr_or_star')* [',']
     public static final class ExprlistComp22 extends ConjunctionRule {
+        public static final String RULE_NAME = "exprlist_comp:2:2";
+
         private final List<ExprlistComp221> exprlistComp221List;
         private final boolean isTokenComma;
 
@@ -74,6 +82,7 @@ public final class ExprlistComp extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("exprlistComp221List", exprlistComp221List);
             addRequired("isTokenComma", isTokenComma);
         }
@@ -89,6 +98,8 @@ public final class ExprlistComp extends ConjunctionRule {
 
     // ',' 'expr_or_star'
     public static final class ExprlistComp221 extends ConjunctionRule {
+        public static final String RULE_NAME = "exprlist_comp:2:2:1";
+
         private final boolean isTokenComma;
         private final ExprOrStar exprOrStar;
 
@@ -102,6 +113,7 @@ public final class ExprlistComp extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("isTokenComma", isTokenComma);
             addRequired("exprOrStar", exprOrStar);
         }

@@ -6,6 +6,8 @@ import java.util.Optional;
 
 // if_stmt: 'if' 'namedexpr_expr' 'suite' ('elif' 'namedexpr_expr' 'suite')* ['else' 'suite']
 public final class IfStmt extends ConjunctionRule {
+    public static final String RULE_NAME = "if_stmt";
+
     private final boolean isTokenIf;
     private final NamedexprExpr namedexprExpr;
     private final Suite suite;
@@ -28,6 +30,7 @@ public final class IfStmt extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addRequired("isTokenIf", isTokenIf);
         addRequired("namedexprExpr", namedexprExpr);
         addRequired("suite", suite);
@@ -57,6 +60,8 @@ public final class IfStmt extends ConjunctionRule {
 
     // 'elif' 'namedexpr_expr' 'suite'
     public static final class IfStmt4 extends ConjunctionRule {
+        public static final String RULE_NAME = "if_stmt:4";
+
         private final boolean isTokenElif;
         private final NamedexprExpr namedexprExpr;
         private final Suite suite;
@@ -73,6 +78,7 @@ public final class IfStmt extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("isTokenElif", isTokenElif);
             addRequired("namedexprExpr", namedexprExpr);
             addRequired("suite", suite);
@@ -93,6 +99,8 @@ public final class IfStmt extends ConjunctionRule {
 
     // 'else' 'suite'
     public static final class IfStmt5 extends ConjunctionRule {
+        public static final String RULE_NAME = "if_stmt:5";
+
         private final boolean isTokenElse;
         private final Suite suite;
 
@@ -106,6 +114,7 @@ public final class IfStmt extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("isTokenElse", isTokenElse);
             addRequired("suite", suite);
         }

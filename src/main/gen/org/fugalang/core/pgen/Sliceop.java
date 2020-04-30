@@ -5,6 +5,8 @@ import java.util.Optional;
 
 // sliceop: ':' ['expr']
 public final class Sliceop extends ConjunctionRule {
+    public static final String RULE_NAME = "sliceop";
+
     private final boolean isTokenColon;
     private final Expr expr;
 
@@ -18,6 +20,7 @@ public final class Sliceop extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addRequired("isTokenColon", isTokenColon);
         addOptional("expr", expr);
     }

@@ -5,6 +5,8 @@ import java.util.Optional;
 
 // for_stmt: 'for' 'targets' 'in' 'exprlist' 'suite' ['else' 'suite']
 public final class ForStmt extends ConjunctionRule {
+    public static final String RULE_NAME = "for_stmt";
+
     private final boolean isTokenFor;
     private final Targets targets;
     private final boolean isTokenIn;
@@ -30,6 +32,7 @@ public final class ForStmt extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addRequired("isTokenFor", isTokenFor);
         addRequired("targets", targets);
         addRequired("isTokenIn", isTokenIn);
@@ -64,6 +67,8 @@ public final class ForStmt extends ConjunctionRule {
 
     // 'else' 'suite'
     public static final class ForStmt6 extends ConjunctionRule {
+        public static final String RULE_NAME = "for_stmt:6";
+
         private final boolean isTokenElse;
         private final Suite suite;
 
@@ -77,6 +82,7 @@ public final class ForStmt extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("isTokenElse", isTokenElse);
             addRequired("suite", suite);
         }

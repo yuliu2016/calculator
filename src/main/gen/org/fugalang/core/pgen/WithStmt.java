@@ -5,6 +5,8 @@ import java.util.List;
 
 // with_stmt: 'with' 'with_item' (',' 'with_item')* 'suite'
 public final class WithStmt extends ConjunctionRule {
+    public static final String RULE_NAME = "with_stmt";
+
     private final boolean isTokenWith;
     private final WithItem withItem;
     private final List<WithStmt3> withStmt3List;
@@ -24,6 +26,7 @@ public final class WithStmt extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addRequired("isTokenWith", isTokenWith);
         addRequired("withItem", withItem);
         addRequired("withStmt3List", withStmt3List);
@@ -48,6 +51,8 @@ public final class WithStmt extends ConjunctionRule {
 
     // ',' 'with_item'
     public static final class WithStmt3 extends ConjunctionRule {
+        public static final String RULE_NAME = "with_stmt:3";
+
         private final boolean isTokenComma;
         private final WithItem withItem;
 
@@ -61,6 +66,7 @@ public final class WithStmt extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("isTokenComma", isTokenComma);
             addRequired("withItem", withItem);
         }

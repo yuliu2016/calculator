@@ -5,6 +5,8 @@ import org.fugalang.core.parser.DisjunctionRule;
 
 // single_input: 'NEWLINE' | 'simple_stmt' | 'compound_stmt' 'NEWLINE'
 public final class SingleInput extends DisjunctionRule {
+    public static final String RULE_NAME = "single_input";
+
     private final Object newline;
     private final SimpleStmt simpleStmt;
     private final SingleInput3 singleInput3;
@@ -21,6 +23,7 @@ public final class SingleInput extends DisjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addChoice("newline", newline);
         addChoice("simpleStmt", simpleStmt);
         addChoice("singleInput3", singleInput3);
@@ -40,6 +43,8 @@ public final class SingleInput extends DisjunctionRule {
 
     // 'compound_stmt' 'NEWLINE'
     public static final class SingleInput3 extends ConjunctionRule {
+        public static final String RULE_NAME = "single_input:3";
+
         private final CompoundStmt compoundStmt;
         private final Object newline;
 
@@ -53,6 +58,7 @@ public final class SingleInput extends DisjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("compoundStmt", compoundStmt);
             addRequired("newline", newline);
         }

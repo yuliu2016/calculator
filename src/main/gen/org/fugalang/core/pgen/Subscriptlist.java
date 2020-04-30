@@ -5,6 +5,8 @@ import java.util.List;
 
 // subscriptlist: 'subscript' (',' 'subscript')* [',']
 public final class Subscriptlist extends ConjunctionRule {
+    public static final String RULE_NAME = "subscriptlist";
+
     private final Subscript subscript;
     private final List<Subscriptlist2> subscriptlist2List;
     private final boolean isTokenComma;
@@ -21,6 +23,7 @@ public final class Subscriptlist extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addRequired("subscript", subscript);
         addRequired("subscriptlist2List", subscriptlist2List);
         addRequired("isTokenComma", isTokenComma);
@@ -40,6 +43,8 @@ public final class Subscriptlist extends ConjunctionRule {
 
     // ',' 'subscript'
     public static final class Subscriptlist2 extends ConjunctionRule {
+        public static final String RULE_NAME = "subscriptlist:2";
+
         private final boolean isTokenComma;
         private final Subscript subscript;
 
@@ -53,6 +58,7 @@ public final class Subscriptlist extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("isTokenComma", isTokenComma);
             addRequired("subscript", subscript);
         }

@@ -7,6 +7,8 @@ import org.fugalang.core.parser.DisjunctionRule;
 
 // expr_stmt: 'exprlist_star' ['augassign' 'exprlist' | ('=' 'exprlist_star')*]
 public final class ExprStmt extends ConjunctionRule {
+    public static final String RULE_NAME = "expr_stmt";
+
     private final ExprlistStar exprlistStar;
     private final ExprStmt2 exprStmt2;
 
@@ -20,6 +22,7 @@ public final class ExprStmt extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addRequired("exprlistStar", exprlistStar);
         addOptional("exprStmt2", exprStmt2);
     }
@@ -34,6 +37,8 @@ public final class ExprStmt extends ConjunctionRule {
 
     // 'augassign' 'exprlist' | ('=' 'exprlist_star')*
     public static final class ExprStmt2 extends DisjunctionRule {
+        public static final String RULE_NAME = "expr_stmt:2";
+
         private final ExprStmt21 exprStmt21;
         private final List<ExprStmt22> exprStmt22List;
 
@@ -47,6 +52,7 @@ public final class ExprStmt extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addChoice("exprStmt21", exprStmt21);
             addChoice("exprStmt22List", exprStmt22List);
         }
@@ -62,6 +68,8 @@ public final class ExprStmt extends ConjunctionRule {
 
     // 'augassign' 'exprlist'
     public static final class ExprStmt21 extends ConjunctionRule {
+        public static final String RULE_NAME = "expr_stmt:2:1";
+
         private final Augassign augassign;
         private final Exprlist exprlist;
 
@@ -75,6 +83,7 @@ public final class ExprStmt extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("augassign", augassign);
             addRequired("exprlist", exprlist);
         }
@@ -90,6 +99,8 @@ public final class ExprStmt extends ConjunctionRule {
 
     // '=' 'exprlist_star'
     public static final class ExprStmt22 extends ConjunctionRule {
+        public static final String RULE_NAME = "expr_stmt:2:2";
+
         private final boolean isTokenAssign;
         private final ExprlistStar exprlistStar;
 
@@ -103,6 +114,7 @@ public final class ExprStmt extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("isTokenAssign", isTokenAssign);
             addRequired("exprlistStar", exprlistStar);
         }

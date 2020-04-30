@@ -5,6 +5,8 @@ import java.util.Optional;
 
 // power: 'pipe_expr' ['**' 'factor']
 public final class Power extends ConjunctionRule {
+    public static final String RULE_NAME = "power";
+
     private final PipeExpr pipeExpr;
     private final Power2 power2;
 
@@ -18,6 +20,7 @@ public final class Power extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addRequired("pipeExpr", pipeExpr);
         addOptional("power2", power2);
     }
@@ -32,6 +35,8 @@ public final class Power extends ConjunctionRule {
 
     // '**' 'factor'
     public static final class Power2 extends ConjunctionRule {
+        public static final String RULE_NAME = "power:2";
+
         private final boolean isTokenPower;
         private final Factor factor;
 
@@ -45,6 +50,7 @@ public final class Power extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addRequired("isTokenPower", isTokenPower);
             addRequired("factor", factor);
         }

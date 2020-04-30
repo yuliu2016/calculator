@@ -6,6 +6,8 @@ import org.fugalang.core.parser.DisjunctionRule;
 
 // subscript: 'expr' | ['expr'] ':' ['expr'] ['sliceop']
 public final class Subscript extends DisjunctionRule {
+    public static final String RULE_NAME = "subscript";
+
     private final Expr expr;
     private final Subscript2 subscript2;
 
@@ -19,6 +21,7 @@ public final class Subscript extends DisjunctionRule {
 
     @Override
     protected void buildRule() {
+        setExplicitName(RULE_NAME);
         addChoice("expr", expr);
         addChoice("subscript2", subscript2);
     }
@@ -33,6 +36,8 @@ public final class Subscript extends DisjunctionRule {
 
     // ['expr'] ':' ['expr'] ['sliceop']
     public static final class Subscript2 extends ConjunctionRule {
+        public static final String RULE_NAME = "subscript:2";
+
         private final Expr expr;
         private final boolean isTokenColon;
         private final Expr expr1;
@@ -52,6 +57,7 @@ public final class Subscript extends DisjunctionRule {
 
         @Override
         protected void buildRule() {
+            setImpliedName(RULE_NAME);
             addOptional("expr", expr);
             addRequired("isTokenColon", isTokenColon);
             addOptional("expr1", expr1);
