@@ -50,11 +50,13 @@ public final class Arglist extends ConjunctionRule {
         boolean result;
 
         result = Argument.parse(parseTree, level + 1);
+        parseTree.enterCollection();
         while (true) {
             if (!Arglist2.parse(parseTree, level + 1)) {
                 break;
             }
         }
+        parseTree.exitCollection();
         result = result && parseTree.consumeTokenLiteral(",");
 
         parseTree.exit(level, marker, result);

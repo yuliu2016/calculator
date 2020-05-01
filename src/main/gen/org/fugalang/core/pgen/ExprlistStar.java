@@ -50,11 +50,13 @@ public final class ExprlistStar extends ConjunctionRule {
         boolean result;
 
         result = ExprOrStar.parse(parseTree, level + 1);
+        parseTree.enterCollection();
         while (true) {
             if (!ExprlistStar2.parse(parseTree, level + 1)) {
                 break;
             }
         }
+        parseTree.exitCollection();
         result = result && parseTree.consumeTokenLiteral(",");
 
         parseTree.exit(level, marker, result);

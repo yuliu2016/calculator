@@ -50,11 +50,13 @@ public final class SimpleStmt extends ConjunctionRule {
         boolean result;
 
         result = SmallStmt.parse(parseTree, level + 1);
+        parseTree.enterCollection();
         while (true) {
             if (!SimpleStmt2.parse(parseTree, level + 1)) {
                 break;
             }
         }
+        parseTree.exitCollection();
         result = result && parseTree.consumeTokenLiteral(";");
 
         parseTree.exit(level, marker, result);

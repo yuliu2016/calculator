@@ -114,9 +114,13 @@ public final class ImportFrom extends ConjunctionRule {
 
             result = ImportFrom21.parse(parseTree, level + 1);
             if (!result) result = parseTree.consumeTokenLiteral(".");
+            parseTree.enterCollection();
             while (true) {
-                if(!parseTree.consumeTokenLiteral(".")) break;
+                if (!parseTree.consumeTokenLiteral(".")) {
+                    break;
+                }
             }
+            parseTree.exitCollection();
 
             parseTree.exit(level, marker, result);
             return result;
@@ -160,11 +164,13 @@ public final class ImportFrom extends ConjunctionRule {
             var marker = parseTree.enter(level, RULE_NAME);
             boolean result;
 
+            parseTree.enterCollection();
             while (true) {
                 if (!parseTree.consumeTokenLiteral(".")) {
                     break;
                 }
             }
+            parseTree.exitCollection();
             result = DottedName.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);

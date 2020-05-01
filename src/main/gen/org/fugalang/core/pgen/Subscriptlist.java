@@ -50,11 +50,13 @@ public final class Subscriptlist extends ConjunctionRule {
         boolean result;
 
         result = Subscript.parse(parseTree, level + 1);
+        parseTree.enterCollection();
         while (true) {
             if (!Subscriptlist2.parse(parseTree, level + 1)) {
                 break;
             }
         }
+        parseTree.exitCollection();
         result = result && parseTree.consumeTokenLiteral(",");
 
         parseTree.exit(level, marker, result);

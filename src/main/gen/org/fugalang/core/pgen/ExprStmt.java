@@ -88,9 +88,13 @@ public final class ExprStmt extends ConjunctionRule {
             boolean result;
 
             result = ExprStmt21.parse(parseTree, level + 1);
+            parseTree.enterCollection();
             while (true) {
-                if(!ExprStmt22.parse(parseTree, level + 1)) break;
+                if (!ExprStmt22.parse(parseTree, level + 1)) {
+                    break;
+                }
             }
+            parseTree.exitCollection();
 
             parseTree.exit(level, marker, result);
             return result;

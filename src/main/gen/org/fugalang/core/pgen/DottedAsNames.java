@@ -50,11 +50,13 @@ public final class DottedAsNames extends ConjunctionRule {
         boolean result;
 
         result = DottedAsName.parse(parseTree, level + 1);
+        parseTree.enterCollection();
         while (true) {
             if (!DottedAsNames2.parse(parseTree, level + 1)) {
                 break;
             }
         }
+        parseTree.exitCollection();
         result = result && parseTree.consumeTokenLiteral(",");
 
         parseTree.exit(level, marker, result);

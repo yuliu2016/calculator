@@ -50,11 +50,13 @@ public final class EvalInput extends ConjunctionRule {
         boolean result;
 
         result = Exprlist.parse(parseTree, level + 1);
+        parseTree.enterCollection();
         while (true) {
             if (!parseTree.consumeTokenType("NEWLINE")) {
                 break;
             }
         }
+        parseTree.exitCollection();
         result = result && parseTree.consumeTokenType("ENDMARKER");
 
         parseTree.exit(level, marker, result);

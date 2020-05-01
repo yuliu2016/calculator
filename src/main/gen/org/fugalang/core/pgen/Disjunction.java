@@ -42,11 +42,13 @@ public final class Disjunction extends ConjunctionRule {
         boolean result;
 
         result = Conjunction.parse(parseTree, level + 1);
+        parseTree.enterCollection();
         while (true) {
             if (!Disjunction2.parse(parseTree, level + 1)) {
                 break;
             }
         }
+        parseTree.exitCollection();
 
         parseTree.exit(level, marker, result);
         return result;

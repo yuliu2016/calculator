@@ -51,11 +51,13 @@ public final class AtomExpr extends ConjunctionRule {
 
         result = parseTree.consumeTokenLiteral("await");
         result = result && Atom.parse(parseTree, level + 1);
+        parseTree.enterCollection();
         while (true) {
             if (!Trailer.parse(parseTree, level + 1)) {
                 break;
             }
         }
+        parseTree.exitCollection();
 
         parseTree.exit(level, marker, result);
         return result;

@@ -42,11 +42,13 @@ public final class BitwiseOr extends ConjunctionRule {
         boolean result;
 
         result = BitwiseXor.parse(parseTree, level + 1);
+        parseTree.enterCollection();
         while (true) {
             if (!BitwiseOr2.parse(parseTree, level + 1)) {
                 break;
             }
         }
+        parseTree.exitCollection();
 
         parseTree.exit(level, marker, result);
         return result;

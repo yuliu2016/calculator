@@ -130,7 +130,8 @@ public class ClassField {
             }
             case Optional -> resultExpr + ";\n";
             case Repeated -> {
-                yield "while (true) {\n    if (!" + resultExpr + ") {\n        break;\n    }\n}\n";
+                yield "parseTree.enterCollection();\nwhile (true) {\n    if (!" + resultExpr +
+                        ") {\n        break;\n    }\n}\nparseTree.exitCollection();\n";
             }
         };
     }
@@ -149,7 +150,8 @@ public class ClassField {
             }
             case Optional -> resultExpr + ";\n";
             case Repeated -> {
-                yield  "while (true) {\n    if(!" + resultExpr + ") break;\n}\n";
+                yield  "parseTree.enterCollection();\nwhile (true) {\n    if (!" + resultExpr +
+                        ") {\n        break;\n    }\n}\nparseTree.exitCollection();\n";
             }
         };
     }

@@ -43,11 +43,13 @@ public final class Sum extends ConjunctionRule {
         boolean result;
 
         result = Term.parse(parseTree, level + 1);
+        parseTree.enterCollection();
         while (true) {
             if (!Sum2.parse(parseTree, level + 1)) {
                 break;
             }
         }
+        parseTree.exitCollection();
 
         parseTree.exit(level, marker, result);
         return result;

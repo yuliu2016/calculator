@@ -51,11 +51,13 @@ public final class Targets extends ConjunctionRule {
         boolean result;
 
         result = Targets1.parse(parseTree, level + 1);
+        parseTree.enterCollection();
         while (true) {
             if (!Targets2.parse(parseTree, level + 1)) {
                 break;
             }
         }
+        parseTree.exitCollection();
         result = result && parseTree.consumeTokenLiteral(",");
 
         parseTree.exit(level, marker, result);

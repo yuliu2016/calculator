@@ -42,11 +42,13 @@ public final class Conjunction extends ConjunctionRule {
         boolean result;
 
         result = Inversion.parse(parseTree, level + 1);
+        parseTree.enterCollection();
         while (true) {
             if (!Conjunction2.parse(parseTree, level + 1)) {
                 break;
             }
         }
+        parseTree.exitCollection();
 
         parseTree.exit(level, marker, result);
         return result;

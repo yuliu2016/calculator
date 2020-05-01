@@ -167,11 +167,13 @@ public final class BlockSuite extends DisjunctionRule {
             result = parseTree.consumeTokenLiteral("{");
             result = result && parseTree.consumeTokenType("NEWLINE");
             result = result && Stmt.parse(parseTree, level + 1);
+            parseTree.enterCollection();
             while (true) {
                 if (!Stmt.parse(parseTree, level + 1)) {
                     break;
                 }
             }
+            parseTree.exitCollection();
             result = result && parseTree.consumeTokenLiteral("}");
 
             parseTree.exit(level, marker, result);

@@ -59,11 +59,13 @@ public final class WithStmt extends ConjunctionRule {
 
         result = parseTree.consumeTokenLiteral("with");
         result = result && WithItem.parse(parseTree, level + 1);
+        parseTree.enterCollection();
         while (true) {
             if (!WithStmt3.parse(parseTree, level + 1)) {
                 break;
             }
         }
+        parseTree.exitCollection();
         result = result && Suite.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);

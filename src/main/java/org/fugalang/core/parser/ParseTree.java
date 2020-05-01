@@ -14,6 +14,14 @@ public interface ParseTree {
 
     void exit(int level, Marker marker, boolean success);
 
+    void enterSection();
+
+    void exitSection();
+
+    void enterCollection();
+
+    void exitCollection();
+
     boolean consumeTokenType(String type);
 
     boolean consumeTokenLiteral(String type);

@@ -52,11 +52,13 @@ public final class Varargslist extends ConjunctionRule {
 
         result = Vfpdef.parse(parseTree, level + 1);
         Varargslist2.parse(parseTree, level + 1);
+        parseTree.enterCollection();
         while (true) {
             if (!Varargslist3.parse(parseTree, level + 1)) {
                 break;
             }
         }
+        parseTree.exitCollection();
 
         parseTree.exit(level, marker, result);
         return result;

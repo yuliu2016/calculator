@@ -43,11 +43,13 @@ public final class ShiftExpr extends ConjunctionRule {
         boolean result;
 
         result = Sum.parse(parseTree, level + 1);
+        parseTree.enterCollection();
         while (true) {
             if (!ShiftExpr2.parse(parseTree, level + 1)) {
                 break;
             }
         }
+        parseTree.exitCollection();
 
         parseTree.exit(level, marker, result);
         return result;

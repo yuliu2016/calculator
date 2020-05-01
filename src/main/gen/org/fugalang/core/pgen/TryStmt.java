@@ -158,11 +158,13 @@ public final class TryStmt extends ConjunctionRule {
             boolean result;
 
             result = TryStmt311.parse(parseTree, level + 1);
+            parseTree.enterCollection();
             while (true) {
                 if (!TryStmt311.parse(parseTree, level + 1)) {
                     break;
                 }
             }
+            parseTree.exitCollection();
             TryStmt312.parse(parseTree, level + 1);
             TryStmt313.parse(parseTree, level + 1);
 

@@ -69,11 +69,13 @@ public final class IfStmt extends ConjunctionRule {
         result = parseTree.consumeTokenLiteral("if");
         result = result && NamedexprExpr.parse(parseTree, level + 1);
         result = result && Suite.parse(parseTree, level + 1);
+        parseTree.enterCollection();
         while (true) {
             if (!IfStmt4.parse(parseTree, level + 1)) {
                 break;
             }
         }
+        parseTree.exitCollection();
         IfStmt5.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);

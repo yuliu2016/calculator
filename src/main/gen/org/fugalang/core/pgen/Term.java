@@ -43,11 +43,13 @@ public final class Term extends ConjunctionRule {
         boolean result;
 
         result = Factor.parse(parseTree, level + 1);
+        parseTree.enterCollection();
         while (true) {
             if (!Term2.parse(parseTree, level + 1)) {
                 break;
             }
         }
+        parseTree.exitCollection();
 
         parseTree.exit(level, marker, result);
         return result;

@@ -42,11 +42,13 @@ public final class FileInput extends ConjunctionRule {
         var marker = parseTree.enter(level, RULE_NAME);
         boolean result;
 
+        parseTree.enterCollection();
         while (true) {
             if (!FileInput1.parse(parseTree, level + 1)) {
                 break;
             }
         }
+        parseTree.exitCollection();
         result = parseTree.consumeTokenType("ENDMARKER");
 
         parseTree.exit(level, marker, result);

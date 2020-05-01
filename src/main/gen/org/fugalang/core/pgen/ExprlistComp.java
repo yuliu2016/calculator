@@ -131,11 +131,13 @@ public final class ExprlistComp extends ConjunctionRule {
             var marker = parseTree.enter(level, RULE_NAME);
             boolean result;
 
+            parseTree.enterCollection();
             while (true) {
                 if (!ExprlistComp221.parse(parseTree, level + 1)) {
                     break;
                 }
             }
+            parseTree.exitCollection();
             result = parseTree.consumeTokenLiteral(",");
 
             parseTree.exit(level, marker, result);
