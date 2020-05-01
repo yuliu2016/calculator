@@ -8,7 +8,7 @@ public class SubRule implements TreeStringElem {
     public final OrRule optionalOrRule;
     public final String token;
 
-    public final Type type;
+    public final SubRuleType type;
 
     public SubRule(OrRule groupedOrRule, OrRule optionalOrRule, String token) {
         this.groupedOrRule = groupedOrRule;
@@ -17,18 +17,18 @@ public class SubRule implements TreeStringElem {
 
         if (groupedOrRule != null) {
             if (optionalOrRule == null && token == null) {
-                type = Type.Group;
+                type = SubRuleType.Group;
             } else {
                 throw new IllegalArgumentException("More than one non-null value");
             }
         } else if (optionalOrRule != null) {
             if (token == null) {
-                type = Type.Optional;
+                type = SubRuleType.Optional;
             } else {
                 throw new IllegalArgumentException("More than one non-null value");
             }
         } else {
-            type = Type.Token;
+            type = SubRuleType.Token;
         }
     }
 
@@ -55,9 +55,4 @@ public class SubRule implements TreeStringElem {
                         "'" + token + "'";
     }
 
-    public enum Type {
-        Group,
-        Optional,
-        Token
-    }
 }

@@ -5,11 +5,37 @@ public class ClassField {
     private final ClassName className;
     private final String fieldName;
     private final boolean isOptional;
+    private final boolean isRepeated;
 
-    public ClassField(ClassName className, String fieldName, boolean isOptional) {
+    public ClassField(ClassName className, String fieldName, boolean isOptional, boolean isRepeated) {
         this.className = className;
         this.fieldName = fieldName;
         this.isOptional = isOptional;
+        this.isRepeated = isRepeated;
+
+        if (isOptional && isRepeated) {
+            throw new IllegalArgumentException("ClassField: Cannot be optional and repeated at the same time");
+        }
+    }
+
+    public String getFieldName() {
+        return fieldName;
+    }
+
+    public boolean isOptional() {
+        return isOptional;
+    }
+
+    /**
+     * Used for field name conflict resolution
+     */
+    public ClassField withFieldName(String newFieldName) {
+        return new ClassField(className, newFieldName, isOptional, isRepeated);
+    }
+
+    @Override
+    public String toString() {
+        return "ClassField{" + asFieldDeclaration() + "}";
     }
 
     public String asFieldDeclaration() {
@@ -49,8 +75,8 @@ public class ClassField {
         return sb.toString();
     }
 
-    public String asRuleStmt(RuleType parentRule) {
-        switch (parentRule) {
+    public String asRuleStmt(RuleType ruleType) {
+        switch (ruleType) {
             case Disjunction -> {
                 return "addChoice(\"" + fieldName + "\", " + fieldName + ");";
             }
@@ -61,7 +87,11 @@ public class ClassField {
                     return "addRequired(\"" + fieldName + "\", " + fieldName + ");";
                 }
             }
-            default -> throw new IllegalArgumentException("ClassField does not support RuleType" + parentRule);
+            default -> throw new IllegalArgumentException("ClassField does not support RuleType" + ruleType);
         }
+    }
+
+    public String asParserStmt(RuleType ruleType) {
+        return "";
     }
 }

@@ -8,7 +8,7 @@ public class RepeatRule implements TreeStringElem {
     private final boolean tokenStar;
     private final boolean tokenPlus;
 
-    public final Type type;
+    public final RepeatType type;
 
     public RepeatRule(SubRule subRule, boolean tokenStar, boolean tokenPlus) {
         this.subRule = subRule;
@@ -19,7 +19,7 @@ public class RepeatRule implements TreeStringElem {
             throw new IllegalArgumentException("Cannot be Star and Plus at the same time");
         }
 
-        type = tokenStar ? Type.NoneOrMore : tokenPlus ? Type.OnceOrMore : Type.Once;
+        type = tokenStar ? RepeatType.NoneOrMore : tokenPlus ? RepeatType.OnceOrMore : RepeatType.Once;
     }
 
     @Override
@@ -39,9 +39,4 @@ public class RepeatRule implements TreeStringElem {
         return subRule + (tokenStar ? "*" : tokenPlus ? "+" : "");
     }
 
-    public enum Type {
-        Once,
-        OnceOrMore,
-        NoneOrMore
-    }
 }

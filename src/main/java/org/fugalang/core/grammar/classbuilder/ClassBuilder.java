@@ -23,7 +23,11 @@ public class ClassBuilder {
         this.className = className;
         this.printName = printName;
 
-        classImports.add("org.fugalang.core.parser.ParseTree");
+        resolvePrelude();
+    }
+
+    private void resolvePrelude() {
+        addImport("org.fugalang.core.parser.ParseTree");
     }
 
     public String getClassName() {
@@ -59,7 +63,7 @@ public class ClassBuilder {
                     .append(";\n");
         }
 
-        if (!classImports.isEmpty()){
+        if (!classImports.isEmpty()) {
             sb.append("\n");
         }
 
@@ -79,7 +83,7 @@ public class ClassBuilder {
     public String generateClassBody(boolean isStaticInnerClass) {
         StringBuilder sb = new StringBuilder();
 
-        if(isStaticInnerClass) {
+        if (isStaticInnerClass) {
             sb.append("\n");
         }
 
@@ -121,7 +125,7 @@ public class ClassBuilder {
 
         generateConstructorAndOverride(sb, isStaticInnerClass);
 
-        for (ClassField field: fields) {
+        for (ClassField field : fields) {
             sb.append("\n");
             sb.append(field.asGetter());
         }
@@ -186,6 +190,10 @@ public class ClassBuilder {
         mb.append("var marker = parseTree.enter(level, RULE_NAME);\n");
         mb.append("var result = false;\n");
 
+        for (ClassField field : fields) {
+            mb.append(field.asParserStmt(ruleType));
+        }
+
         mb.append("parseTree.exit(level, marker, result);\n");
         mb.append("return result;\n");
 
@@ -198,24 +206,23 @@ public class ClassBuilder {
         classImports.add(classImport);
     }
 
-    public void addFieldByClassName(ClassName type, String fieldName, boolean isOptional) {
-        String actualName;
+    public void addField(ClassField classField) {
+        var fieldName = classField.getFieldName();
 
         if (fieldNameCounter.containsKey(fieldName)) {
             int cnt = fieldNameCounter.get(fieldName) + 1;
-            actualName = fieldName + cnt;
             fieldNameCounter.put(fieldName, cnt);
+
+            // modify the field name with the field count
+            fields.add(classField.withFieldName(fieldName + cnt));
         } else {
-            actualName = fieldName;
             fieldNameCounter.put(fieldName, 0);
+            fields.add(classField);
         }
 
-        if (isOptional) {
+        if (classField.isOptional()) {
             addImport("java.util.Optional");
         }
-
-        // add imports here
-        fields.add(new ClassField(type, actualName, isOptional));
     }
 
     public void setHeaderComments(String headerComments) {
