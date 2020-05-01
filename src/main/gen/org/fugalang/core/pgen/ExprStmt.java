@@ -90,7 +90,9 @@ public final class ExprStmt extends ConjunctionRule {
             result = ExprStmt21.parse(parseTree, level + 1);
             parseTree.enterCollection();
             while (true) {
-                if (!ExprStmt22.parse(parseTree, level + 1)) {
+                var pos = parseTree.position();
+                if (!ExprStmt22.parse(parseTree, level + 1) ||
+                        parseTree.guardLoopExit(pos)) {
                     break;
                 }
             }

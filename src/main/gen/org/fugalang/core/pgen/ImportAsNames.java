@@ -52,7 +52,9 @@ public final class ImportAsNames extends ConjunctionRule {
         result = ImportAsName.parse(parseTree, level + 1);
         parseTree.enterCollection();
         while (true) {
-            if (!ImportAsNames2.parse(parseTree, level + 1)) {
+            var pos = parseTree.position();
+            if (!ImportAsNames2.parse(parseTree, level + 1) ||
+                    parseTree.guardLoopExit(pos)) {
                 break;
             }
         }

@@ -122,6 +122,9 @@ public class ParserGenerator {
 
             addOrRule(className, cb, entry.getValue());
 
+            // protect against not initializing result
+            cb.guardMatchEmptyString();
+
             // for checking invariant state
             classSet.markRootClassDone();
         }
@@ -166,6 +169,9 @@ public class ParserGenerator {
                             RepeatType.Once, REQUIRED, ResultSource.ofClass(newClassName));
 
                     addAndRule(newClassName, component_cb, andRule, REQUIRED);
+
+                    // protect against not initializing result
+                    component_cb.guardMatchEmptyString();
                 }
             }
         }
@@ -269,27 +275,18 @@ public class ParserGenerator {
             boolean isOptional,
             ResultSource resultSource
     ) {
-        // just one item
-        if (repeatType == RepeatType.Once || repeatType == RepeatType.OnceOrMore) {
-            var field = new ClassField(className, fieldName,
-                    isOptional, false, resultSource);
-
+        if (repeatType == RepeatType.Once) {
+            var fieldType = isOptional ? FieldType.Optional : FieldType.Required;
+            var field = new ClassField(className, fieldName, fieldType, resultSource);
             cb.addField(field);
-        }
-
-        // a list of items
-        if (repeatType == RepeatType.OnceOrMore || repeatType == RepeatType.NoneOrMore) {
+        } else {
             cb.addImport("java.util.List");
             var newClassName = className.wrapIn("List");
             var newFieldName = fieldName + "List";
 
-            if (isOptional) {
-                throw new IllegalStateException("Cannot be optional when repeatType != Once");
-            }
-
-            var field = new ClassField(newClassName, newFieldName,
-                    FieldType.Repeated, resultSource);
-
+            var fieldType = repeatType == RepeatType.OnceOrMore ?
+                    FieldType.RequiredList : FieldType.OptionalList;
+            var field = new ClassField(newClassName, newFieldName, fieldType, resultSource);
             cb.addField(field);
         }
     }
@@ -324,6 +321,9 @@ public class ParserGenerator {
                     repeatType, isOptional, ResultSource.ofClass(className));
 
             addOrRule(className, component_cb, rule);
+
+            // protect against not initializing result
+            component_cb.guardMatchEmptyString();
         }
     }
 }

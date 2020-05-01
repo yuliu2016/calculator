@@ -52,7 +52,9 @@ public final class ExprlistStar extends ConjunctionRule {
         result = ExprOrStar.parse(parseTree, level + 1);
         parseTree.enterCollection();
         while (true) {
-            if (!ExprlistStar2.parse(parseTree, level + 1)) {
+            var pos = parseTree.position();
+            if (!ExprlistStar2.parse(parseTree, level + 1) ||
+                    parseTree.guardLoopExit(pos)) {
                 break;
             }
         }

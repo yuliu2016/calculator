@@ -87,7 +87,7 @@ public final class ExprlistComp extends ConjunctionRule {
             boolean result;
 
             result = CompFor.parse(parseTree, level + 1);
-            if (!result) result = ExprlistComp22.parse(parseTree, level + 1);
+            result = result || ExprlistComp22.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);
             return result;
@@ -133,7 +133,9 @@ public final class ExprlistComp extends ConjunctionRule {
 
             parseTree.enterCollection();
             while (true) {
-                if (!ExprlistComp221.parse(parseTree, level + 1)) {
+                var pos = parseTree.position();
+                if (!ExprlistComp221.parse(parseTree, level + 1) ||
+                        parseTree.guardLoopExit(pos)) {
                     break;
                 }
             }

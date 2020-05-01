@@ -42,7 +42,7 @@ public final class Inversion extends DisjunctionRule {
         boolean result;
 
         result = Inversion1.parse(parseTree, level + 1);
-        if (!result) result = Comparison.parse(parseTree, level + 1);
+        result = result || Comparison.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);
         return result;

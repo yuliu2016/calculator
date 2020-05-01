@@ -53,7 +53,9 @@ public final class Targets extends ConjunctionRule {
         result = Targets1.parse(parseTree, level + 1);
         parseTree.enterCollection();
         while (true) {
-            if (!Targets2.parse(parseTree, level + 1)) {
+            var pos = parseTree.position();
+            if (!Targets2.parse(parseTree, level + 1) ||
+                    parseTree.guardLoopExit(pos)) {
                 break;
             }
         }
@@ -102,7 +104,7 @@ public final class Targets extends ConjunctionRule {
             boolean result;
 
             result = BitwiseOr.parse(parseTree, level + 1);
-            if (!result) result = StarExpr.parse(parseTree, level + 1);
+            result = result || StarExpr.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);
             return result;
@@ -192,7 +194,7 @@ public final class Targets extends ConjunctionRule {
             boolean result;
 
             result = BitwiseOr.parse(parseTree, level + 1);
-            if (!result) result = StarExpr.parse(parseTree, level + 1);
+            result = result || StarExpr.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);
             return result;

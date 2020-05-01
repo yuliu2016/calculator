@@ -44,7 +44,9 @@ public final class BitwiseOr extends ConjunctionRule {
         result = BitwiseXor.parse(parseTree, level + 1);
         parseTree.enterCollection();
         while (true) {
-            if (!BitwiseOr2.parse(parseTree, level + 1)) {
+            var pos = parseTree.position();
+            if (!BitwiseOr2.parse(parseTree, level + 1) ||
+                    parseTree.guardLoopExit(pos)) {
                 break;
             }
         }

@@ -193,10 +193,15 @@ public class ClassBuilder {
         var first = true;
         for (ClassField field : fields) {
             var result = field.asParserStmt(ruleType, first);
-            if (field.isSimple()) {
+            if (field.isRequired()) {
                 first = false;
             }
             mb.append(result);
+        }
+
+        if (first) {
+            throw new IllegalStateException("The rule for class " + className +
+                    " may match an empty string");
         }
 
         mb.append("\nparseTree.exit(level, marker, result);\n");
@@ -225,8 +230,18 @@ public class ClassBuilder {
             fields.add(classField);
         }
 
-        if (classField.isOptional()) {
+        if (classField.isOptionalSingle()) {
             addImport("java.util.Optional");
+        }
+    }
+
+    /**
+     * A rule cannot be matched against an empty string
+     */
+    public void guardMatchEmptyString() {
+        if (fields.stream().noneMatch(ClassField::isRequired)) {
+            throw new IllegalStateException("The rule for class " + className +
+                    " may match an empty string");
         }
     }
 

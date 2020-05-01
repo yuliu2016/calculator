@@ -44,7 +44,9 @@ public final class FileInput extends ConjunctionRule {
 
         parseTree.enterCollection();
         while (true) {
-            if (!FileInput1.parse(parseTree, level + 1)) {
+            var pos = parseTree.position();
+            if (!FileInput1.parse(parseTree, level + 1) ||
+                    parseTree.guardLoopExit(pos)) {
                 break;
             }
         }
@@ -93,7 +95,7 @@ public final class FileInput extends ConjunctionRule {
             boolean result;
 
             result = parseTree.consumeTokenType("NEWLINE");
-            if (!result) result = Stmt.parse(parseTree, level + 1);
+            result = result || Stmt.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);
             return result;

@@ -54,7 +54,9 @@ public final class Varargslist extends ConjunctionRule {
         Varargslist2.parse(parseTree, level + 1);
         parseTree.enterCollection();
         while (true) {
-            if (!Varargslist3.parse(parseTree, level + 1)) {
+            var pos = parseTree.position();
+            if (!Varargslist3.parse(parseTree, level + 1) ||
+                    parseTree.guardLoopExit(pos)) {
                 break;
             }
         }

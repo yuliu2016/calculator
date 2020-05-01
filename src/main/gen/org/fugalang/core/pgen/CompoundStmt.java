@@ -65,10 +65,10 @@ public final class CompoundStmt extends DisjunctionRule {
         boolean result;
 
         result = IfStmt.parse(parseTree, level + 1);
-        if (!result) result = WhileStmt.parse(parseTree, level + 1);
-        if (!result) result = ForStmt.parse(parseTree, level + 1);
-        if (!result) result = TryStmt.parse(parseTree, level + 1);
-        if (!result) result = WithStmt.parse(parseTree, level + 1);
+        result = result || WhileStmt.parse(parseTree, level + 1);
+        result = result || ForStmt.parse(parseTree, level + 1);
+        result = result || TryStmt.parse(parseTree, level + 1);
+        result = result || WithStmt.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);
         return result;

@@ -52,7 +52,9 @@ public final class Subscriptlist extends ConjunctionRule {
         result = Subscript.parse(parseTree, level + 1);
         parseTree.enterCollection();
         while (true) {
-            if (!Subscriptlist2.parse(parseTree, level + 1)) {
+            var pos = parseTree.position();
+            if (!Subscriptlist2.parse(parseTree, level + 1) ||
+                    parseTree.guardLoopExit(pos)) {
                 break;
             }
         }

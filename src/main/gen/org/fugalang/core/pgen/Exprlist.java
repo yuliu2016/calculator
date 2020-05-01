@@ -52,7 +52,9 @@ public final class Exprlist extends ConjunctionRule {
         result = Expr.parse(parseTree, level + 1);
         parseTree.enterCollection();
         while (true) {
-            if (!Exprlist2.parse(parseTree, level + 1)) {
+            var pos = parseTree.position();
+            if (!Exprlist2.parse(parseTree, level + 1) ||
+                    parseTree.guardLoopExit(pos)) {
                 break;
             }
         }

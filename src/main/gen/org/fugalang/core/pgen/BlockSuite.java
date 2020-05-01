@@ -43,7 +43,7 @@ public final class BlockSuite extends DisjunctionRule {
         boolean result;
 
         result = BlockSuite1.parse(parseTree, level + 1);
-        if (!result) result = BlockSuite2.parse(parseTree, level + 1);
+        result = result || BlockSuite2.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);
         return result;
@@ -109,20 +109,17 @@ public final class BlockSuite extends DisjunctionRule {
 
         private final boolean isTokenLbrace;
         private final Object newline;
-        private final Stmt stmt;
         private final List<Stmt> stmtList;
         private final boolean isTokenRbrace;
 
         public BlockSuite2(
                 boolean isTokenLbrace,
                 Object newline,
-                Stmt stmt,
                 List<Stmt> stmtList,
                 boolean isTokenRbrace
         ) {
             this.isTokenLbrace = isTokenLbrace;
             this.newline = newline;
-            this.stmt = stmt;
             this.stmtList = stmtList;
             this.isTokenRbrace = isTokenRbrace;
         }
@@ -132,7 +129,6 @@ public final class BlockSuite extends DisjunctionRule {
             setImpliedName(RULE_NAME);
             addRequired("isTokenLbrace", isTokenLbrace);
             addRequired("newline", newline);
-            addRequired("stmt", stmt);
             addRequired("stmtList", stmtList);
             addRequired("isTokenRbrace", isTokenRbrace);
         }
@@ -143,10 +139,6 @@ public final class BlockSuite extends DisjunctionRule {
 
         public Object newline() {
             return newline;
-        }
-
-        public Stmt stmt() {
-            return stmt;
         }
 
         public List<Stmt> stmtList() {
@@ -166,10 +158,12 @@ public final class BlockSuite extends DisjunctionRule {
 
             result = parseTree.consumeTokenLiteral("{");
             result = result && parseTree.consumeTokenType("NEWLINE");
-            result = result && Stmt.parse(parseTree, level + 1);
             parseTree.enterCollection();
+            result = result && Stmt.parse(parseTree, level + 1);
             while (true) {
-                if (!Stmt.parse(parseTree, level + 1)) {
+                var pos = parseTree.position();
+                if (!Stmt.parse(parseTree, level + 1) ||
+                        parseTree.guardLoopExit(pos)) {
                     break;
                 }
             }

@@ -50,8 +50,8 @@ public final class Expr extends DisjunctionRule {
         boolean result;
 
         result = Expr1.parse(parseTree, level + 1);
-        if (!result) result = Disjunction.parse(parseTree, level + 1);
-        if (!result) result = Funcdef.parse(parseTree, level + 1);
+        result = result || Disjunction.parse(parseTree, level + 1);
+        result = result || Funcdef.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);
         return result;

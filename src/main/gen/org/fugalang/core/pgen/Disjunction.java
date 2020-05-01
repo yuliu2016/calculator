@@ -44,7 +44,9 @@ public final class Disjunction extends ConjunctionRule {
         result = Conjunction.parse(parseTree, level + 1);
         parseTree.enterCollection();
         while (true) {
-            if (!Disjunction2.parse(parseTree, level + 1)) {
+            var pos = parseTree.position();
+            if (!Disjunction2.parse(parseTree, level + 1) ||
+                    parseTree.guardLoopExit(pos)) {
                 break;
             }
         }

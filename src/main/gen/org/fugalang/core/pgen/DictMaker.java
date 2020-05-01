@@ -87,7 +87,7 @@ public final class DictMaker extends ConjunctionRule {
             boolean result;
 
             result = CompFor.parse(parseTree, level + 1);
-            if (!result) result = DictMaker22.parse(parseTree, level + 1);
+            result = result || DictMaker22.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);
             return result;
@@ -133,7 +133,9 @@ public final class DictMaker extends ConjunctionRule {
 
             parseTree.enterCollection();
             while (true) {
-                if (!DictMaker221.parse(parseTree, level + 1)) {
+                var pos = parseTree.position();
+                if (!DictMaker221.parse(parseTree, level + 1) ||
+                        parseTree.guardLoopExit(pos)) {
                     break;
                 }
             }

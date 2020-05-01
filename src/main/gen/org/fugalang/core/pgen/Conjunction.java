@@ -44,7 +44,9 @@ public final class Conjunction extends ConjunctionRule {
         result = Inversion.parse(parseTree, level + 1);
         parseTree.enterCollection();
         while (true) {
-            if (!Conjunction2.parse(parseTree, level + 1)) {
+            var pos = parseTree.position();
+            if (!Conjunction2.parse(parseTree, level + 1) ||
+                    parseTree.guardLoopExit(pos)) {
                 break;
             }
         }

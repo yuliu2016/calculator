@@ -53,7 +53,9 @@ public final class AtomExpr extends ConjunctionRule {
         result = result && Atom.parse(parseTree, level + 1);
         parseTree.enterCollection();
         while (true) {
-            if (!Trailer.parse(parseTree, level + 1)) {
+            var pos = parseTree.position();
+            if (!Trailer.parse(parseTree, level + 1) ||
+                    parseTree.guardLoopExit(pos)) {
                 break;
             }
         }

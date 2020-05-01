@@ -105,7 +105,7 @@ public final class Funcdef extends ConjunctionRule {
             boolean result;
 
             result = Funcdef41.parse(parseTree, level + 1);
-            if (!result) result = BlockSuite.parse(parseTree, level + 1);
+            result = result || BlockSuite.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);
             return result;

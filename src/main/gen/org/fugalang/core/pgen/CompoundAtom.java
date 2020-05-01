@@ -51,8 +51,8 @@ public final class CompoundAtom extends DisjunctionRule {
         boolean result;
 
         result = CompoundAtom1.parse(parseTree, level + 1);
-        if (!result) result = CompoundAtom2.parse(parseTree, level + 1);
-        if (!result) result = CompoundAtom3.parse(parseTree, level + 1);
+        result = result || CompoundAtom2.parse(parseTree, level + 1);
+        result = result || CompoundAtom3.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);
         return result;

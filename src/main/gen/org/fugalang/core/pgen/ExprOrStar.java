@@ -41,7 +41,7 @@ public final class ExprOrStar extends DisjunctionRule {
         boolean result;
 
         result = Expr.parse(parseTree, level + 1);
-        if (!result) result = StarExpr.parse(parseTree, level + 1);
+        result = result || StarExpr.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);
         return result;

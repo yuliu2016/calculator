@@ -52,7 +52,9 @@ public final class SimpleStmt extends ConjunctionRule {
         result = SmallStmt.parse(parseTree, level + 1);
         parseTree.enterCollection();
         while (true) {
-            if (!SimpleStmt2.parse(parseTree, level + 1)) {
+            var pos = parseTree.position();
+            if (!SimpleStmt2.parse(parseTree, level + 1) ||
+                    parseTree.guardLoopExit(pos)) {
                 break;
             }
         }

@@ -7,16 +7,6 @@ public class ClassField {
     private final FieldType fieldType;
     private final ResultSource resultSource;
 
-    public ClassField(
-            ClassName className,
-            String fieldName,
-            boolean isOptional,
-            boolean isRepeated,
-            ResultSource resultSource
-    ) {
-        this(className, fieldName, FieldType.fromBiState(isOptional, isRepeated), resultSource);
-    }
-
     public ClassField(ClassName className, String fieldName, FieldType fieldType, ResultSource resultSource) {
         this.className = className;
         this.fieldName = fieldName;
@@ -28,12 +18,12 @@ public class ClassField {
         return fieldName;
     }
 
-    public boolean isOptional() {
+    public boolean isOptionalSingle() {
         return fieldType == FieldType.Optional;
     }
 
-    public boolean isSimple() {
-        return fieldType == FieldType.Simple;
+    public boolean isRequired() {
+        return fieldType == FieldType.Required || fieldType == FieldType.RequiredList;
     }
 
     /**
@@ -64,7 +54,7 @@ public class ClassField {
         StringBuilder sb = new StringBuilder();
         sb.append("    public ");
 
-        if (isOptional()) {
+        if (isOptionalSingle()) {
             sb.append(className.wrapIn("Optional").asType());
         } else {
             sb.append(className.asType());
@@ -72,7 +62,7 @@ public class ClassField {
 
         sb.append(" ").append(fieldName).append("() {\n        return ");
 
-        if (isOptional()) {
+        if (isOptionalSingle()) {
             sb.append("Optional.ofNullable(")
                     .append(fieldName)
                     .append(")");
@@ -91,7 +81,7 @@ public class ClassField {
                 return "addChoice(\"" + fieldName + "\", " + fieldName + ");";
             }
             case Conjunction -> {
-                if (isOptional()) {
+                if (isOptionalSingle()) {
                     return "addOptional(\"" + fieldName + "\", " + fieldName + ");";
                 } else {
                     return "addRequired(\"" + fieldName + "\", " + fieldName + ");";
@@ -102,10 +92,35 @@ public class ClassField {
     }
 
     public String asParserStmt(RuleType ruleType, boolean isFirst) {
-        return switch (ruleType) {
-            case Conjunction -> asConjunctionStmt(isFirst);
-            case Disjunction -> asDisjunctionStmt(isFirst);
+        var resultExpr = getResultExpr();
+
+        return switch (fieldType) {
+            case Required -> getRequiredStmt(resultExpr, ruleType, isFirst);
+            case Optional -> resultExpr + ";\n";
+            case OptionalList -> getLoopStmt("", resultExpr);
+            case RequiredList -> getLoopStmt(getRequiredStmt(resultExpr, ruleType, isFirst), resultExpr);
         };
+    }
+
+    private String getLoopStmt(String requiredStmt, String resultExpr) {
+        return "parseTree.enterCollection();\n" + requiredStmt +
+                "while (true) {\n" +
+                "    var pos = parseTree.position();\n" +
+                "    if (!" + resultExpr + " ||\n" +
+                "            parseTree.guardLoopExit(pos)) {\n" +
+                "        break;\n" +
+                "    }\n" +
+                "}\n" +
+                "parseTree.exitCollection();\n";
+    }
+
+    private String getRequiredStmt(String resultExpr, RuleType ruleType, boolean isFirst) {
+        return isFirst ?
+                "result = " + resultExpr + ";\n" :
+                switch (ruleType) {
+                    case Conjunction -> "result = result && " + resultExpr + ";\n";
+                    case Disjunction -> "result = result || " + resultExpr + ";\n";
+                };
     }
 
     private String getResultExpr() {
@@ -115,45 +130,4 @@ public class ClassField {
             case TokenLiteral -> "parseTree.consumeTokenLiteral(\"" + resultSource.getValue() + "\")";
         };
     }
-
-    public String asConjunctionStmt(boolean isFirst) {
-
-        var resultExpr = getResultExpr();
-
-        return switch (fieldType) {
-            case Simple -> {
-                if (isFirst) {
-                    yield "result = " + resultExpr + ";\n";
-                } else {
-                    yield "result = result && " + resultExpr + ";\n";
-                }
-            }
-            case Optional -> resultExpr + ";\n";
-            case Repeated -> {
-                yield "parseTree.enterCollection();\nwhile (true) {\n    if (!" + resultExpr +
-                        ") {\n        break;\n    }\n}\nparseTree.exitCollection();\n";
-            }
-        };
-    }
-
-    public String asDisjunctionStmt(boolean isFirst) {
-        var resultExpr = getResultExpr();
-
-        return switch (fieldType) {
-
-            case Simple -> {
-                if (isFirst) {
-                    yield "result = " + resultExpr + ";\n";
-                } else {
-                    yield "if (!result) result = " + resultExpr + ";\n";
-                }
-            }
-            case Optional -> resultExpr + ";\n";
-            case Repeated -> {
-                yield  "parseTree.enterCollection();\nwhile (true) {\n    if (!" + resultExpr +
-                        ") {\n        break;\n    }\n}\nparseTree.exitCollection();\n";
-            }
-        };
-    }
-
 }

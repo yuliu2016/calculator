@@ -42,7 +42,7 @@ public final class Factor extends DisjunctionRule {
         boolean result;
 
         result = Factor1.parse(parseTree, level + 1);
-        if (!result) result = Power.parse(parseTree, level + 1);
+        result = result || Power.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);
         return result;
@@ -139,8 +139,8 @@ public final class Factor extends DisjunctionRule {
             boolean result;
 
             result = parseTree.consumeTokenLiteral("+");
-            if (!result) result = parseTree.consumeTokenLiteral("-");
-            if (!result) result = parseTree.consumeTokenLiteral("~");
+            result = result || parseTree.consumeTokenLiteral("-");
+            result = result || parseTree.consumeTokenLiteral("~");
 
             parseTree.exit(level, marker, result);
             return result;

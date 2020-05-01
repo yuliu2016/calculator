@@ -24,7 +24,11 @@ public interface ParseTree {
 
     boolean consumeTokenType(String type);
 
-    boolean consumeTokenLiteral(String type);
+    boolean consumeTokenLiteral(String literal);
+
+    int position();
+
+    boolean guardLoopExit(int position);
 
     interface Marker {
     }

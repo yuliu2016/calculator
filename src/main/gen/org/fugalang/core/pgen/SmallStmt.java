@@ -73,11 +73,11 @@ public final class SmallStmt extends DisjunctionRule {
         boolean result;
 
         result = ExprStmt.parse(parseTree, level + 1);
-        if (!result) result = DelStmt.parse(parseTree, level + 1);
-        if (!result) result = PassStmt.parse(parseTree, level + 1);
-        if (!result) result = FlowStmt.parse(parseTree, level + 1);
-        if (!result) result = ImportStmt.parse(parseTree, level + 1);
-        if (!result) result = AssertStmt.parse(parseTree, level + 1);
+        result = result || DelStmt.parse(parseTree, level + 1);
+        result = result || PassStmt.parse(parseTree, level + 1);
+        result = result || FlowStmt.parse(parseTree, level + 1);
+        result = result || ImportStmt.parse(parseTree, level + 1);
+        result = result || AssertStmt.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);
         return result;

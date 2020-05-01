@@ -43,7 +43,7 @@ public final class Subscript extends DisjunctionRule {
         boolean result;
 
         result = Expr.parse(parseTree, level + 1);
-        if (!result) result = Subscript2.parse(parseTree, level + 1);
+        result = result || Subscript2.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);
         return result;

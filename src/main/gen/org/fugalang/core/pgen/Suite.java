@@ -42,7 +42,7 @@ public final class Suite extends DisjunctionRule {
         boolean result;
 
         result = Suite1.parse(parseTree, level + 1);
-        if (!result) result = BlockSuite.parse(parseTree, level + 1);
+        result = result || BlockSuite.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);
         return result;

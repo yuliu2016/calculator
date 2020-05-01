@@ -45,7 +45,9 @@ public final class Sum extends ConjunctionRule {
         result = Term.parse(parseTree, level + 1);
         parseTree.enterCollection();
         while (true) {
-            if (!Sum2.parse(parseTree, level + 1)) {
+            var pos = parseTree.position();
+            if (!Sum2.parse(parseTree, level + 1) ||
+                    parseTree.guardLoopExit(pos)) {
                 break;
             }
         }
@@ -138,7 +140,7 @@ public final class Sum extends ConjunctionRule {
             boolean result;
 
             result = parseTree.consumeTokenLiteral("+");
-            if (!result) result = parseTree.consumeTokenLiteral("-");
+            result = result || parseTree.consumeTokenLiteral("-");
 
             parseTree.exit(level, marker, result);
             return result;

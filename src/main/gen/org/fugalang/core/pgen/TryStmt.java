@@ -97,7 +97,7 @@ public final class TryStmt extends ConjunctionRule {
             boolean result;
 
             result = TryStmt31.parse(parseTree, level + 1);
-            if (!result) result = TryStmt32.parse(parseTree, level + 1);
+            result = result || TryStmt32.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);
             return result;
@@ -108,18 +108,15 @@ public final class TryStmt extends ConjunctionRule {
     public static final class TryStmt31 extends ConjunctionRule {
         public static final String RULE_NAME = "try_stmt:3:1";
 
-        private final TryStmt311 tryStmt311;
         private final List<TryStmt311> tryStmt311List;
         private final TryStmt312 tryStmt312;
         private final TryStmt313 tryStmt313;
 
         public TryStmt31(
-                TryStmt311 tryStmt311,
                 List<TryStmt311> tryStmt311List,
                 TryStmt312 tryStmt312,
                 TryStmt313 tryStmt313
         ) {
-            this.tryStmt311 = tryStmt311;
             this.tryStmt311List = tryStmt311List;
             this.tryStmt312 = tryStmt312;
             this.tryStmt313 = tryStmt313;
@@ -128,14 +125,9 @@ public final class TryStmt extends ConjunctionRule {
         @Override
         protected void buildRule() {
             setImpliedName(RULE_NAME);
-            addRequired("tryStmt311", tryStmt311);
             addRequired("tryStmt311List", tryStmt311List);
             addOptional("tryStmt312", tryStmt312);
             addOptional("tryStmt313", tryStmt313);
-        }
-
-        public TryStmt311 tryStmt311() {
-            return tryStmt311;
         }
 
         public List<TryStmt311> tryStmt311List() {
@@ -157,10 +149,12 @@ public final class TryStmt extends ConjunctionRule {
             var marker = parseTree.enter(level, RULE_NAME);
             boolean result;
 
-            result = TryStmt311.parse(parseTree, level + 1);
             parseTree.enterCollection();
+            result = TryStmt311.parse(parseTree, level + 1);
             while (true) {
-                if (!TryStmt311.parse(parseTree, level + 1)) {
+                var pos = parseTree.position();
+                if (!TryStmt311.parse(parseTree, level + 1) ||
+                        parseTree.guardLoopExit(pos)) {
                     break;
                 }
             }

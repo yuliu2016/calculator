@@ -45,7 +45,9 @@ public final class ShiftExpr extends ConjunctionRule {
         result = Sum.parse(parseTree, level + 1);
         parseTree.enterCollection();
         while (true) {
-            if (!ShiftExpr2.parse(parseTree, level + 1)) {
+            var pos = parseTree.position();
+            if (!ShiftExpr2.parse(parseTree, level + 1) ||
+                    parseTree.guardLoopExit(pos)) {
                 break;
             }
         }
@@ -138,7 +140,7 @@ public final class ShiftExpr extends ConjunctionRule {
             boolean result;
 
             result = parseTree.consumeTokenLiteral("<<");
-            if (!result) result = parseTree.consumeTokenLiteral(">>");
+            result = result || parseTree.consumeTokenLiteral(">>");
 
             parseTree.exit(level, marker, result);
             return result;

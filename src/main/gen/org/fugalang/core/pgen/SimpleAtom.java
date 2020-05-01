@@ -73,11 +73,11 @@ public final class SimpleAtom extends DisjunctionRule {
         boolean result;
 
         result = parseTree.consumeTokenType("NAME");
-        if (!result) result = parseTree.consumeTokenType("NUMBER");
-        if (!result) result = parseTree.consumeTokenType("STRING");
-        if (!result) result = parseTree.consumeTokenLiteral("None");
-        if (!result) result = parseTree.consumeTokenLiteral("True");
-        if (!result) result = parseTree.consumeTokenLiteral("False");
+        result = result || parseTree.consumeTokenType("NUMBER");
+        result = result || parseTree.consumeTokenType("STRING");
+        result = result || parseTree.consumeTokenLiteral("None");
+        result = result || parseTree.consumeTokenLiteral("True");
+        result = result || parseTree.consumeTokenLiteral("False");
 
         parseTree.exit(level, marker, result);
         return result;

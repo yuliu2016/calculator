@@ -57,9 +57,9 @@ public final class FlowStmt extends DisjunctionRule {
         boolean result;
 
         result = BreakStmt.parse(parseTree, level + 1);
-        if (!result) result = ContinueStmt.parse(parseTree, level + 1);
-        if (!result) result = ReturnStmt.parse(parseTree, level + 1);
-        if (!result) result = RaiseStmt.parse(parseTree, level + 1);
+        result = result || ContinueStmt.parse(parseTree, level + 1);
+        result = result || ReturnStmt.parse(parseTree, level + 1);
+        result = result || RaiseStmt.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);
         return result;

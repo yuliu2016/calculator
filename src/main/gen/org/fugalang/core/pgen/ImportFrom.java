@@ -72,16 +72,13 @@ public final class ImportFrom extends ConjunctionRule {
         public static final String RULE_NAME = "import_from:2";
 
         private final ImportFrom21 importFrom21;
-        private final boolean isTokenDot;
         private final List<Boolean> isTokenDotList;
 
         public ImportFrom2(
                 ImportFrom21 importFrom21,
-                boolean isTokenDot,
                 List<Boolean> isTokenDotList
         ) {
             this.importFrom21 = importFrom21;
-            this.isTokenDot = isTokenDot;
             this.isTokenDotList = isTokenDotList;
         }
 
@@ -89,16 +86,11 @@ public final class ImportFrom extends ConjunctionRule {
         protected void buildRule() {
             setImpliedName(RULE_NAME);
             addChoice("importFrom21", importFrom21);
-            addChoice("isTokenDot", isTokenDot);
             addChoice("isTokenDotList", isTokenDotList);
         }
 
         public ImportFrom21 importFrom21() {
             return importFrom21;
-        }
-
-        public boolean isTokenDot() {
-            return isTokenDot;
         }
 
         public List<Boolean> isTokenDotList() {
@@ -113,10 +105,12 @@ public final class ImportFrom extends ConjunctionRule {
             boolean result;
 
             result = ImportFrom21.parse(parseTree, level + 1);
-            if (!result) result = parseTree.consumeTokenLiteral(".");
             parseTree.enterCollection();
+            result = result || parseTree.consumeTokenLiteral(".");
             while (true) {
-                if (!parseTree.consumeTokenLiteral(".")) {
+                var pos = parseTree.position();
+                if (!parseTree.consumeTokenLiteral(".") ||
+                        parseTree.guardLoopExit(pos)) {
                     break;
                 }
             }
@@ -166,7 +160,9 @@ public final class ImportFrom extends ConjunctionRule {
 
             parseTree.enterCollection();
             while (true) {
-                if (!parseTree.consumeTokenLiteral(".")) {
+                var pos = parseTree.position();
+                if (!parseTree.consumeTokenLiteral(".") ||
+                        parseTree.guardLoopExit(pos)) {
                     break;
                 }
             }
@@ -224,8 +220,8 @@ public final class ImportFrom extends ConjunctionRule {
             boolean result;
 
             result = parseTree.consumeTokenLiteral("*");
-            if (!result) result = ImportFrom42.parse(parseTree, level + 1);
-            if (!result) result = ImportAsNames.parse(parseTree, level + 1);
+            result = result || ImportFrom42.parse(parseTree, level + 1);
+            result = result || ImportAsNames.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);
             return result;

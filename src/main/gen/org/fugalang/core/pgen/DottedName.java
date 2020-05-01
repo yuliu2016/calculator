@@ -44,7 +44,9 @@ public final class DottedName extends ConjunctionRule {
         result = parseTree.consumeTokenType("NAME");
         parseTree.enterCollection();
         while (true) {
-            if (!DottedName2.parse(parseTree, level + 1)) {
+            var pos = parseTree.position();
+            if (!DottedName2.parse(parseTree, level + 1) ||
+                    parseTree.guardLoopExit(pos)) {
                 break;
             }
         }

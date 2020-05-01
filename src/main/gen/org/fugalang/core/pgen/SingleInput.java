@@ -50,8 +50,8 @@ public final class SingleInput extends DisjunctionRule {
         boolean result;
 
         result = parseTree.consumeTokenType("NEWLINE");
-        if (!result) result = SimpleStmt.parse(parseTree, level + 1);
-        if (!result) result = SingleInput3.parse(parseTree, level + 1);
+        result = result || SimpleStmt.parse(parseTree, level + 1);
+        result = result || SingleInput3.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);
         return result;

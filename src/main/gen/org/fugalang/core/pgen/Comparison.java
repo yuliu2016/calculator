@@ -44,7 +44,9 @@ public final class Comparison extends ConjunctionRule {
         result = BitwiseOr.parse(parseTree, level + 1);
         parseTree.enterCollection();
         while (true) {
-            if (!Comparison2.parse(parseTree, level + 1)) {
+            var pos = parseTree.position();
+            if (!Comparison2.parse(parseTree, level + 1) ||
+                    parseTree.guardLoopExit(pos)) {
                 break;
             }
         }

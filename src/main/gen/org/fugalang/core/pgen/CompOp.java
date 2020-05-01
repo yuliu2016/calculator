@@ -106,15 +106,15 @@ public final class CompOp extends DisjunctionRule {
         boolean result;
 
         result = parseTree.consumeTokenLiteral("<");
-        if (!result) result = parseTree.consumeTokenLiteral(">");
-        if (!result) result = parseTree.consumeTokenLiteral("==");
-        if (!result) result = parseTree.consumeTokenLiteral(">=");
-        if (!result) result = parseTree.consumeTokenLiteral("<=");
-        if (!result) result = parseTree.consumeTokenLiteral("!=");
-        if (!result) result = parseTree.consumeTokenLiteral("in");
-        if (!result) result = CompOp8.parse(parseTree, level + 1);
-        if (!result) result = parseTree.consumeTokenLiteral("is");
-        if (!result) result = CompOp10.parse(parseTree, level + 1);
+        result = result || parseTree.consumeTokenLiteral(">");
+        result = result || parseTree.consumeTokenLiteral("==");
+        result = result || parseTree.consumeTokenLiteral(">=");
+        result = result || parseTree.consumeTokenLiteral("<=");
+        result = result || parseTree.consumeTokenLiteral("!=");
+        result = result || parseTree.consumeTokenLiteral("in");
+        result = result || CompOp8.parse(parseTree, level + 1);
+        result = result || parseTree.consumeTokenLiteral("is");
+        result = result || CompOp10.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);
         return result;

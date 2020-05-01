@@ -44,7 +44,9 @@ public final class PipeExpr extends ConjunctionRule {
         result = AtomExpr.parse(parseTree, level + 1);
         parseTree.enterCollection();
         while (true) {
-            if (!PipeExpr2.parse(parseTree, level + 1)) {
+            var pos = parseTree.position();
+            if (!PipeExpr2.parse(parseTree, level + 1) ||
+                    parseTree.guardLoopExit(pos)) {
                 break;
             }
         }

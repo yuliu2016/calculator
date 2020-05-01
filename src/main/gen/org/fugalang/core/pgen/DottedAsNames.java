@@ -52,7 +52,9 @@ public final class DottedAsNames extends ConjunctionRule {
         result = DottedAsName.parse(parseTree, level + 1);
         parseTree.enterCollection();
         while (true) {
-            if (!DottedAsNames2.parse(parseTree, level + 1)) {
+            var pos = parseTree.position();
+            if (!DottedAsNames2.parse(parseTree, level + 1) ||
+                    parseTree.guardLoopExit(pos)) {
                 break;
             }
         }

@@ -61,7 +61,9 @@ public final class WithStmt extends ConjunctionRule {
         result = result && WithItem.parse(parseTree, level + 1);
         parseTree.enterCollection();
         while (true) {
-            if (!WithStmt3.parse(parseTree, level + 1)) {
+            var pos = parseTree.position();
+            if (!WithStmt3.parse(parseTree, level + 1) ||
+                    parseTree.guardLoopExit(pos)) {
                 break;
             }
         }

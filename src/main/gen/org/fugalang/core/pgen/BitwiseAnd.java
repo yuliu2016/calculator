@@ -44,7 +44,9 @@ public final class BitwiseAnd extends ConjunctionRule {
         result = ShiftExpr.parse(parseTree, level + 1);
         parseTree.enterCollection();
         while (true) {
-            if (!BitwiseAnd2.parse(parseTree, level + 1)) {
+            var pos = parseTree.position();
+            if (!BitwiseAnd2.parse(parseTree, level + 1) ||
+                    parseTree.guardLoopExit(pos)) {
                 break;
             }
         }

@@ -52,7 +52,9 @@ public final class EvalInput extends ConjunctionRule {
         result = Exprlist.parse(parseTree, level + 1);
         parseTree.enterCollection();
         while (true) {
-            if (!parseTree.consumeTokenType("NEWLINE")) {
+            var pos = parseTree.position();
+            if (!parseTree.consumeTokenType("NEWLINE") ||
+                    parseTree.guardLoopExit(pos)) {
                 break;
             }
         }

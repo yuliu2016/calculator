@@ -71,7 +71,9 @@ public final class IfStmt extends ConjunctionRule {
         result = result && Suite.parse(parseTree, level + 1);
         parseTree.enterCollection();
         while (true) {
-            if (!IfStmt4.parse(parseTree, level + 1)) {
+            var pos = parseTree.position();
+            if (!IfStmt4.parse(parseTree, level + 1) ||
+                    parseTree.guardLoopExit(pos)) {
                 break;
             }
         }

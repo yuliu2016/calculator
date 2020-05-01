@@ -86,7 +86,7 @@ public final class Stmt extends ConjunctionRule {
             boolean result;
 
             result = SimpleStmt.parse(parseTree, level + 1);
-            if (!result) result = CompoundStmt.parse(parseTree, level + 1);
+            result = result || CompoundStmt.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);
             return result;

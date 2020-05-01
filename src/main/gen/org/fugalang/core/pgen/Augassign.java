@@ -129,18 +129,18 @@ public final class Augassign extends DisjunctionRule {
         boolean result;
 
         result = parseTree.consumeTokenLiteral("+=");
-        if (!result) result = parseTree.consumeTokenLiteral("-=");
-        if (!result) result = parseTree.consumeTokenLiteral("*=");
-        if (!result) result = parseTree.consumeTokenLiteral("@=");
-        if (!result) result = parseTree.consumeTokenLiteral("/=");
-        if (!result) result = parseTree.consumeTokenLiteral("%=");
-        if (!result) result = parseTree.consumeTokenLiteral("&=");
-        if (!result) result = parseTree.consumeTokenLiteral("|=");
-        if (!result) result = parseTree.consumeTokenLiteral("^=");
-        if (!result) result = parseTree.consumeTokenLiteral("<<=");
-        if (!result) result = parseTree.consumeTokenLiteral(">>=");
-        if (!result) result = parseTree.consumeTokenLiteral("**=");
-        if (!result) result = parseTree.consumeTokenLiteral("//=");
+        result = result || parseTree.consumeTokenLiteral("-=");
+        result = result || parseTree.consumeTokenLiteral("*=");
+        result = result || parseTree.consumeTokenLiteral("@=");
+        result = result || parseTree.consumeTokenLiteral("/=");
+        result = result || parseTree.consumeTokenLiteral("%=");
+        result = result || parseTree.consumeTokenLiteral("&=");
+        result = result || parseTree.consumeTokenLiteral("|=");
+        result = result || parseTree.consumeTokenLiteral("^=");
+        result = result || parseTree.consumeTokenLiteral("<<=");
+        result = result || parseTree.consumeTokenLiteral(">>=");
+        result = result || parseTree.consumeTokenLiteral("**=");
+        result = result || parseTree.consumeTokenLiteral("//=");
 
         parseTree.exit(level, marker, result);
         return result;
