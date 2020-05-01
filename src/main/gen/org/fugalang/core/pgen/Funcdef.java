@@ -1,11 +1,14 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
-import java.util.Optional;
 import org.fugalang.core.parser.DisjunctionRule;
+import org.fugalang.core.parser.ParseTree;
 
-// funcdef: ['async'] 'def' ['varargslist'] (':' 'expr' | 'block_suite')
+import java.util.Optional;
+
+/**
+ * funcdef: ['async'] 'def' ['varargslist'] (':' 'expr' | 'block_suite')
+ */
 public final class Funcdef extends ConjunctionRule {
     public static final String RULE_NAME = "funcdef";
 
@@ -67,7 +70,9 @@ public final class Funcdef extends ConjunctionRule {
         return result;
     }
 
-    // ':' 'expr' | 'block_suite'
+    /**
+     * ':' 'expr' | 'block_suite'
+     */
     public static final class Funcdef4 extends DisjunctionRule {
         public static final String RULE_NAME = "funcdef:4";
 
@@ -93,8 +98,16 @@ public final class Funcdef extends ConjunctionRule {
             return funcdef41;
         }
 
+        public boolean hasFuncdef41() {
+            return funcdef41() != null;
+        }
+
         public BlockSuite blockSuite() {
             return blockSuite;
+        }
+
+        public boolean hasBlockSuite() {
+            return blockSuite() != null;
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -112,7 +125,9 @@ public final class Funcdef extends ConjunctionRule {
         }
     }
 
-    // ':' 'expr'
+    /**
+     * ':' 'expr'
+     */
     public static final class Funcdef41 extends ConjunctionRule {
         public static final String RULE_NAME = "funcdef:4:1";
 

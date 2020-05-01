@@ -1,9 +1,11 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.DisjunctionRule;
+import org.fugalang.core.parser.ParseTree;
 
-// expr_or_star: 'expr' | 'star_expr'
+/**
+ * expr_or_star: 'expr' | 'star_expr'
+ */
 public final class ExprOrStar extends DisjunctionRule {
     public static final String RULE_NAME = "expr_or_star";
 
@@ -29,8 +31,16 @@ public final class ExprOrStar extends DisjunctionRule {
         return expr;
     }
 
+    public boolean hasExpr() {
+        return expr() != null;
+    }
+
     public StarExpr starExpr() {
         return starExpr;
+    }
+
+    public boolean hasStarExpr() {
+        return starExpr() != null;
     }
 
     public static boolean parse(ParseTree parseTree, int level) {

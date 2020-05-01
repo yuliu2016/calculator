@@ -1,10 +1,13 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
+import org.fugalang.core.parser.ParseTree;
+
 import java.util.List;
 
-// disjunction: 'conjunction' ('or' 'conjunction')*
+/**
+ * disjunction: 'conjunction' ('or' 'conjunction')*
+ */
 public final class Disjunction extends ConjunctionRule {
     public static final String RULE_NAME = "disjunction";
 
@@ -56,7 +59,9 @@ public final class Disjunction extends ConjunctionRule {
         return result;
     }
 
-    // 'or' 'conjunction'
+    /**
+     * 'or' 'conjunction'
+     */
     public static final class Disjunction2 extends ConjunctionRule {
         public static final String RULE_NAME = "disjunction:2";
 

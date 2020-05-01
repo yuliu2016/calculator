@@ -18,12 +18,17 @@ public class Rules implements TreeStringElem {
         builder.setName("rules").addElems(rules);
     }
 
+    private String str = null;
+
     @Override
     public String toString() {
-        return toSimpleString();
+        if (str == null) {
+            str = toSimpleString();
+        }
+        return str;
     }
 
     public String toSimpleString() {
-        return rules.stream().map(SingleRule::toSimpleString).collect(Collectors.joining("\n"));
+        return rules.stream().map(SingleRule::toString).collect(Collectors.joining("\n"));
     }
 }

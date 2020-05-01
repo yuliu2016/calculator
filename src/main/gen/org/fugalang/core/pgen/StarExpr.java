@@ -1,9 +1,11 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
+import org.fugalang.core.parser.ParseTree;
 
-// star_expr: '*' 'bitwise_or'
+/**
+ * star_expr: '*' 'bitwise_or'
+ */
 public final class StarExpr extends ConjunctionRule {
     public static final String RULE_NAME = "star_expr";
 

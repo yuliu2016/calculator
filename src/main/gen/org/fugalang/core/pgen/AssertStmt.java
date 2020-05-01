@@ -1,10 +1,13 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
+import org.fugalang.core.parser.ParseTree;
+
 import java.util.Optional;
 
-// assert_stmt: 'assert' 'expr' [',' 'expr']
+/**
+ * assert_stmt: 'assert' 'expr' [',' 'expr']
+ */
 public final class AssertStmt extends ConjunctionRule {
     public static final String RULE_NAME = "assert_stmt";
 
@@ -57,7 +60,9 @@ public final class AssertStmt extends ConjunctionRule {
         return result;
     }
 
-    // ',' 'expr'
+    /**
+     * ',' 'expr'
+     */
     public static final class AssertStmt3 extends ConjunctionRule {
         public static final String RULE_NAME = "assert_stmt:3";
 

@@ -1,10 +1,13 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
+import org.fugalang.core.parser.ParseTree;
+
 import java.util.Optional;
 
-// while_stmt: 'while' 'namedexpr_expr' 'suite' ['else' 'suite']
+/**
+ * while_stmt: 'while' 'namedexpr_expr' 'suite' ['else' 'suite']
+ */
 public final class WhileStmt extends ConjunctionRule {
     public static final String RULE_NAME = "while_stmt";
 
@@ -66,7 +69,9 @@ public final class WhileStmt extends ConjunctionRule {
         return result;
     }
 
-    // 'else' 'suite'
+    /**
+     * 'else' 'suite'
+     */
     public static final class WhileStmt4 extends ConjunctionRule {
         public static final String RULE_NAME = "while_stmt:4";
 

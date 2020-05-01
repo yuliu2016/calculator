@@ -1,10 +1,12 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
 import org.fugalang.core.parser.DisjunctionRule;
+import org.fugalang.core.parser.ParseTree;
 
-// comp_op: '<' | '>' | '==' | '>=' | '<=' | '!=' | 'in' | 'not' 'in' | 'is' | 'is' 'not'
+/**
+ * comp_op: '<' | '>' | '==' | '>=' | '<=' | '!=' | 'in' | 'not' 'in' | 'is' | 'is' 'not'
+ */
 public final class CompOp extends DisjunctionRule {
     public static final String RULE_NAME = "comp_op";
 
@@ -90,12 +92,20 @@ public final class CompOp extends DisjunctionRule {
         return compOp8;
     }
 
+    public boolean hasCompOp8() {
+        return compOp8() != null;
+    }
+
     public boolean isTokenIs() {
         return isTokenIs;
     }
 
     public CompOp10 compOp10() {
         return compOp10;
+    }
+
+    public boolean hasCompOp10() {
+        return compOp10() != null;
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -120,7 +130,9 @@ public final class CompOp extends DisjunctionRule {
         return result;
     }
 
-    // 'not' 'in'
+    /**
+     * 'not' 'in'
+     */
     public static final class CompOp8 extends ConjunctionRule {
         public static final String RULE_NAME = "comp_op:8";
 
@@ -165,7 +177,9 @@ public final class CompOp extends DisjunctionRule {
         }
     }
 
-    // 'is' 'not'
+    /**
+     * 'is' 'not'
+     */
     public static final class CompOp10 extends ConjunctionRule {
         public static final String RULE_NAME = "comp_op:10";
 

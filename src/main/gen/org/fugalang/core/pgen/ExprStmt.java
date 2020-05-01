@@ -1,12 +1,15 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
+import org.fugalang.core.parser.DisjunctionRule;
+import org.fugalang.core.parser.ParseTree;
+
 import java.util.List;
 import java.util.Optional;
-import org.fugalang.core.parser.DisjunctionRule;
 
-// expr_stmt: 'exprlist_star' ['augassign' 'exprlist' | ('=' 'exprlist_star')*]
+/**
+ * expr_stmt: 'exprlist_star' ['augassign' 'exprlist' | ('=' 'exprlist_star')*]
+ */
 public final class ExprStmt extends ConjunctionRule {
     public static final String RULE_NAME = "expr_stmt";
 
@@ -50,7 +53,9 @@ public final class ExprStmt extends ConjunctionRule {
         return result;
     }
 
-    // 'augassign' 'exprlist' | ('=' 'exprlist_star')*
+    /**
+     * 'augassign' 'exprlist' | ('=' 'exprlist_star')*
+     */
     public static final class ExprStmt2 extends DisjunctionRule {
         public static final String RULE_NAME = "expr_stmt:2";
 
@@ -74,6 +79,10 @@ public final class ExprStmt extends ConjunctionRule {
 
         public ExprStmt21 exprStmt21() {
             return exprStmt21;
+        }
+
+        public boolean hasExprStmt21() {
+            return exprStmt21() != null;
         }
 
         public List<ExprStmt22> exprStmt22List() {
@@ -103,7 +112,9 @@ public final class ExprStmt extends ConjunctionRule {
         }
     }
 
-    // 'augassign' 'exprlist'
+    /**
+     * 'augassign' 'exprlist'
+     */
     public static final class ExprStmt21 extends ConjunctionRule {
         public static final String RULE_NAME = "expr_stmt:2:1";
 
@@ -148,7 +159,9 @@ public final class ExprStmt extends ConjunctionRule {
         }
     }
 
-    // '=' 'exprlist_star'
+    /**
+     * '=' 'exprlist_star'
+     */
     public static final class ExprStmt22 extends ConjunctionRule {
         public static final String RULE_NAME = "expr_stmt:2:2";
 

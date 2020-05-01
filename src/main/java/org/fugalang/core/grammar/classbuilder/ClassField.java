@@ -1,6 +1,8 @@
 package org.fugalang.core.grammar.classbuilder;
 
 
+import org.fugalang.core.grammar.gen.ParserStringUtil;
+
 public class ClassField {
     private final ClassName className;
     private final String fieldName;
@@ -73,6 +75,17 @@ public class ClassField {
         sb.append(";\n    }\n");
 
         return sb.toString();
+    }
+
+    public String asNullCheck() {
+        if (isOptionalSingle() || className.isNotNull()) {
+            return "";
+        }
+        return "\n    public boolean has" +
+                ParserStringUtil.capitalizeFirstCharOnly(fieldName) +
+                "() {\n" +
+                "        return " + fieldName + "() != null;\n" +
+                "    }\n";
     }
 
     public String asRuleStmt(RuleType ruleType) {

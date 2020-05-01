@@ -1,11 +1,14 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
-import java.util.List;
 import org.fugalang.core.parser.DisjunctionRule;
+import org.fugalang.core.parser.ParseTree;
 
-// block_suite: '{' 'simple_stmt' '}' | '{' 'NEWLINE' 'stmt'+ '}'
+import java.util.List;
+
+/**
+ * block_suite: '{' 'simple_stmt' '}' | '{' 'NEWLINE' 'stmt'+ '}'
+ */
 public final class BlockSuite extends DisjunctionRule {
     public static final String RULE_NAME = "block_suite";
 
@@ -31,8 +34,16 @@ public final class BlockSuite extends DisjunctionRule {
         return blockSuite1;
     }
 
+    public boolean hasBlockSuite1() {
+        return blockSuite1() != null;
+    }
+
     public BlockSuite2 blockSuite2() {
         return blockSuite2;
+    }
+
+    public boolean hasBlockSuite2() {
+        return blockSuite2() != null;
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -49,7 +60,9 @@ public final class BlockSuite extends DisjunctionRule {
         return result;
     }
 
-    // '{' 'simple_stmt' '}'
+    /**
+     * '{' 'simple_stmt' '}'
+     */
     public static final class BlockSuite1 extends ConjunctionRule {
         public static final String RULE_NAME = "block_suite:1";
 
@@ -103,7 +116,9 @@ public final class BlockSuite extends DisjunctionRule {
         }
     }
 
-    // '{' 'NEWLINE' 'stmt'+ '}'
+    /**
+     * '{' 'NEWLINE' 'stmt'+ '}'
+     */
     public static final class BlockSuite2 extends ConjunctionRule {
         public static final String RULE_NAME = "block_suite:2";
 

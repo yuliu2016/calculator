@@ -1,11 +1,14 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
+import org.fugalang.core.parser.ParseTree;
+
 import java.util.List;
 import java.util.Optional;
 
-// varargslist: 'vfpdef' ['=' 'expr'] (',' 'vfpdef' ['=' 'expr'])*
+/**
+ * varargslist: 'vfpdef' ['=' 'expr'] (',' 'vfpdef' ['=' 'expr'])*
+ */
 public final class Varargslist extends ConjunctionRule {
     public static final String RULE_NAME = "varargslist";
 
@@ -66,7 +69,9 @@ public final class Varargslist extends ConjunctionRule {
         return result;
     }
 
-    // '=' 'expr'
+    /**
+     * '=' 'expr'
+     */
     public static final class Varargslist2 extends ConjunctionRule {
         public static final String RULE_NAME = "varargslist:2";
 
@@ -111,7 +116,9 @@ public final class Varargslist extends ConjunctionRule {
         }
     }
 
-    // ',' 'vfpdef' ['=' 'expr']
+    /**
+     * ',' 'vfpdef' ['=' 'expr']
+     */
     public static final class Varargslist3 extends ConjunctionRule {
         public static final String RULE_NAME = "varargslist:3";
 
@@ -165,7 +172,9 @@ public final class Varargslist extends ConjunctionRule {
         }
     }
 
-    // '=' 'expr'
+    /**
+     * '=' 'expr'
+     */
     public static final class Varargslist33 extends ConjunctionRule {
         public static final String RULE_NAME = "varargslist:3:3";
 

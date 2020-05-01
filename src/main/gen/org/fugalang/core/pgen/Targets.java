@@ -1,11 +1,14 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
-import java.util.List;
 import org.fugalang.core.parser.DisjunctionRule;
+import org.fugalang.core.parser.ParseTree;
 
-// targets: ('bitwise_or' | 'star_expr') (',' ('bitwise_or' | 'star_expr'))* [',']
+import java.util.List;
+
+/**
+ * targets: ('bitwise_or' | 'star_expr') (',' ('bitwise_or' | 'star_expr'))* [',']
+ */
 public final class Targets extends ConjunctionRule {
     public static final String RULE_NAME = "targets";
 
@@ -66,7 +69,9 @@ public final class Targets extends ConjunctionRule {
         return result;
     }
 
-    // 'bitwise_or' | 'star_expr'
+    /**
+     * 'bitwise_or' | 'star_expr'
+     */
     public static final class Targets1 extends DisjunctionRule {
         public static final String RULE_NAME = "targets:1";
 
@@ -92,8 +97,16 @@ public final class Targets extends ConjunctionRule {
             return bitwiseOr;
         }
 
+        public boolean hasBitwiseOr() {
+            return bitwiseOr() != null;
+        }
+
         public StarExpr starExpr() {
             return starExpr;
+        }
+
+        public boolean hasStarExpr() {
+            return starExpr() != null;
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -111,7 +124,9 @@ public final class Targets extends ConjunctionRule {
         }
     }
 
-    // ',' ('bitwise_or' | 'star_expr')
+    /**
+     * ',' ('bitwise_or' | 'star_expr')
+     */
     public static final class Targets2 extends ConjunctionRule {
         public static final String RULE_NAME = "targets:2";
 
@@ -156,7 +171,9 @@ public final class Targets extends ConjunctionRule {
         }
     }
 
-    // 'bitwise_or' | 'star_expr'
+    /**
+     * 'bitwise_or' | 'star_expr'
+     */
     public static final class Targets22 extends DisjunctionRule {
         public static final String RULE_NAME = "targets:2:2";
 
@@ -182,8 +199,16 @@ public final class Targets extends ConjunctionRule {
             return bitwiseOr;
         }
 
+        public boolean hasBitwiseOr() {
+            return bitwiseOr() != null;
+        }
+
         public StarExpr starExpr() {
             return starExpr;
+        }
+
+        public boolean hasStarExpr() {
+            return starExpr() != null;
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

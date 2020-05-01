@@ -1,11 +1,14 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
-import java.util.Optional;
 import org.fugalang.core.parser.DisjunctionRule;
+import org.fugalang.core.parser.ParseTree;
 
-// subscript: 'expr' | ['expr'] ':' ['expr'] ['sliceop']
+import java.util.Optional;
+
+/**
+ * subscript: 'expr' | ['expr'] ':' ['expr'] ['sliceop']
+ */
 public final class Subscript extends DisjunctionRule {
     public static final String RULE_NAME = "subscript";
 
@@ -31,8 +34,16 @@ public final class Subscript extends DisjunctionRule {
         return expr;
     }
 
+    public boolean hasExpr() {
+        return expr() != null;
+    }
+
     public Subscript2 subscript2() {
         return subscript2;
+    }
+
+    public boolean hasSubscript2() {
+        return subscript2() != null;
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -49,7 +60,9 @@ public final class Subscript extends DisjunctionRule {
         return result;
     }
 
-    // ['expr'] ':' ['expr'] ['sliceop']
+    /**
+     * ['expr'] ':' ['expr'] ['sliceop']
+     */
     public static final class Subscript2 extends ConjunctionRule {
         public static final String RULE_NAME = "subscript:2";
 

@@ -1,10 +1,13 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
+import org.fugalang.core.parser.ParseTree;
+
 import java.util.List;
 
-// dotted_name: 'NAME' ('.' 'NAME')*
+/**
+ * dotted_name: 'NAME' ('.' 'NAME')*
+ */
 public final class DottedName extends ConjunctionRule {
     public static final String RULE_NAME = "dotted_name";
 
@@ -56,7 +59,9 @@ public final class DottedName extends ConjunctionRule {
         return result;
     }
 
-    // '.' 'NAME'
+    /**
+     * '.' 'NAME'
+     */
     public static final class DottedName2 extends ConjunctionRule {
         public static final String RULE_NAME = "dotted_name:2";
 

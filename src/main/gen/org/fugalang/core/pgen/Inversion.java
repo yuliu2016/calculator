@@ -1,10 +1,12 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
 import org.fugalang.core.parser.DisjunctionRule;
+import org.fugalang.core.parser.ParseTree;
 
-// inversion: 'not' 'inversion' | 'comparison'
+/**
+ * inversion: 'not' 'inversion' | 'comparison'
+ */
 public final class Inversion extends DisjunctionRule {
     public static final String RULE_NAME = "inversion";
 
@@ -30,8 +32,16 @@ public final class Inversion extends DisjunctionRule {
         return inversion1;
     }
 
+    public boolean hasInversion1() {
+        return inversion1() != null;
+    }
+
     public Comparison comparison() {
         return comparison;
+    }
+
+    public boolean hasComparison() {
+        return comparison() != null;
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -48,7 +58,9 @@ public final class Inversion extends DisjunctionRule {
         return result;
     }
 
-    // 'not' 'inversion'
+    /**
+     * 'not' 'inversion'
+     */
     public static final class Inversion1 extends ConjunctionRule {
         public static final String RULE_NAME = "inversion:1";
 

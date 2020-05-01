@@ -1,10 +1,12 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
 import org.fugalang.core.parser.DisjunctionRule;
+import org.fugalang.core.parser.ParseTree;
 
-// dict_item: 'expr' ':' 'expr' | '**' 'bitwise_or'
+/**
+ * dict_item: 'expr' ':' 'expr' | '**' 'bitwise_or'
+ */
 public final class DictItem extends DisjunctionRule {
     public static final String RULE_NAME = "dict_item";
 
@@ -30,8 +32,16 @@ public final class DictItem extends DisjunctionRule {
         return dictItem1;
     }
 
+    public boolean hasDictItem1() {
+        return dictItem1() != null;
+    }
+
     public DictItem2 dictItem2() {
         return dictItem2;
+    }
+
+    public boolean hasDictItem2() {
+        return dictItem2() != null;
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -48,7 +58,9 @@ public final class DictItem extends DisjunctionRule {
         return result;
     }
 
-    // 'expr' ':' 'expr'
+    /**
+     * 'expr' ':' 'expr'
+     */
     public static final class DictItem1 extends ConjunctionRule {
         public static final String RULE_NAME = "dict_item:1";
 
@@ -102,7 +114,9 @@ public final class DictItem extends DisjunctionRule {
         }
     }
 
-    // '**' 'bitwise_or'
+    /**
+     * '**' 'bitwise_or'
+     */
     public static final class DictItem2 extends ConjunctionRule {
         public static final String RULE_NAME = "dict_item:2";
 

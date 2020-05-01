@@ -1,9 +1,11 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.DisjunctionRule;
+import org.fugalang.core.parser.ParseTree;
 
-// comp_iter: 'comp_for' | 'comp_if'
+/**
+ * comp_iter: 'comp_for' | 'comp_if'
+ */
 public final class CompIter extends DisjunctionRule {
     public static final String RULE_NAME = "comp_iter";
 
@@ -29,8 +31,16 @@ public final class CompIter extends DisjunctionRule {
         return compFor;
     }
 
+    public boolean hasCompFor() {
+        return compFor() != null;
+    }
+
     public CompIf compIf() {
         return compIf;
+    }
+
+    public boolean hasCompIf() {
+        return compIf() != null;
     }
 
     public static boolean parse(ParseTree parseTree, int level) {

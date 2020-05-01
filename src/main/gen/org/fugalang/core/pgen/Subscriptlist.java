@@ -1,10 +1,13 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
+import org.fugalang.core.parser.ParseTree;
+
 import java.util.List;
 
-// subscriptlist: 'subscript' (',' 'subscript')* [',']
+/**
+ * subscriptlist: 'subscript' (',' 'subscript')* [',']
+ */
 public final class Subscriptlist extends ConjunctionRule {
     public static final String RULE_NAME = "subscriptlist";
 
@@ -65,7 +68,9 @@ public final class Subscriptlist extends ConjunctionRule {
         return result;
     }
 
-    // ',' 'subscript'
+    /**
+     * ',' 'subscript'
+     */
     public static final class Subscriptlist2 extends ConjunctionRule {
         public static final String RULE_NAME = "subscriptlist:2";
 

@@ -1,10 +1,13 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
+import org.fugalang.core.parser.ParseTree;
+
 import java.util.List;
 
-// exprlist_star: 'expr_or_star' (',' 'expr_or_star')* [',']
+/**
+ * exprlist_star: 'expr_or_star' (',' 'expr_or_star')* [',']
+ */
 public final class ExprlistStar extends ConjunctionRule {
     public static final String RULE_NAME = "exprlist_star";
 
@@ -65,7 +68,9 @@ public final class ExprlistStar extends ConjunctionRule {
         return result;
     }
 
-    // ',' 'expr_or_star'
+    /**
+     * ',' 'expr_or_star'
+     */
     public static final class ExprlistStar2 extends ConjunctionRule {
         public static final String RULE_NAME = "exprlist_star:2";
 

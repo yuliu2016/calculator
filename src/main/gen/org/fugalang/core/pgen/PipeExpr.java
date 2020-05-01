@@ -1,10 +1,13 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
+import org.fugalang.core.parser.ParseTree;
+
 import java.util.List;
 
-// pipe_expr: 'atom_expr' ('->' 'atom_expr')*
+/**
+ * pipe_expr: 'atom_expr' ('->' 'atom_expr')*
+ */
 public final class PipeExpr extends ConjunctionRule {
     public static final String RULE_NAME = "pipe_expr";
 
@@ -56,7 +59,9 @@ public final class PipeExpr extends ConjunctionRule {
         return result;
     }
 
-    // '->' 'atom_expr'
+    /**
+     * '->' 'atom_expr'
+     */
     public static final class PipeExpr2 extends ConjunctionRule {
         public static final String RULE_NAME = "pipe_expr:2";
 

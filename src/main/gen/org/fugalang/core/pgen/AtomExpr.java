@@ -1,10 +1,13 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
+import org.fugalang.core.parser.ParseTree;
+
 import java.util.List;
 
-// atom_expr: ['await'] 'atom' 'trailer'*
+/**
+ * atom_expr: ['await'] 'atom' 'trailer'*
+ */
 public final class AtomExpr extends ConjunctionRule {
     public static final String RULE_NAME = "atom_expr";
 

@@ -1,9 +1,11 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
+import org.fugalang.core.parser.ParseTree;
 
-// pass_stmt: 'pass'
+/**
+ * pass_stmt: 'pass'
+ */
 public final class PassStmt extends ConjunctionRule {
     public static final String RULE_NAME = "pass_stmt";
 

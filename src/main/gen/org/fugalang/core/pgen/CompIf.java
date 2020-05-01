@@ -1,10 +1,13 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
+import org.fugalang.core.parser.ParseTree;
+
 import java.util.Optional;
 
-// comp_if: 'if' 'expr' ['comp_iter']
+/**
+ * comp_if: 'if' 'expr' ['comp_iter']
+ */
 public final class CompIf extends ConjunctionRule {
     public static final String RULE_NAME = "comp_if";
 

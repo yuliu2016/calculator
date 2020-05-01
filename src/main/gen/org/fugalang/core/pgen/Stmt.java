@@ -1,10 +1,12 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
 import org.fugalang.core.parser.DisjunctionRule;
+import org.fugalang.core.parser.ParseTree;
 
-// stmt: ('simple_stmt' | 'compound_stmt') 'NEWLINE'
+/**
+ * stmt: ('simple_stmt' | 'compound_stmt') 'NEWLINE'
+ */
 public final class Stmt extends ConjunctionRule {
     public static final String RULE_NAME = "stmt";
 
@@ -48,7 +50,9 @@ public final class Stmt extends ConjunctionRule {
         return result;
     }
 
-    // 'simple_stmt' | 'compound_stmt'
+    /**
+     * 'simple_stmt' | 'compound_stmt'
+     */
     public static final class Stmt1 extends DisjunctionRule {
         public static final String RULE_NAME = "stmt:1";
 
@@ -74,8 +78,16 @@ public final class Stmt extends ConjunctionRule {
             return simpleStmt;
         }
 
+        public boolean hasSimpleStmt() {
+            return simpleStmt() != null;
+        }
+
         public CompoundStmt compoundStmt() {
             return compoundStmt;
+        }
+
+        public boolean hasCompoundStmt() {
+            return compoundStmt() != null;
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

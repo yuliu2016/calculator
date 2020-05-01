@@ -1,10 +1,13 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
+import org.fugalang.core.parser.ParseTree;
+
 import java.util.Optional;
 
-// sliceop: ':' ['expr']
+/**
+ * sliceop: ':' ['expr']
+ */
 public final class Sliceop extends ConjunctionRule {
     public static final String RULE_NAME = "sliceop";
 

@@ -1,10 +1,13 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
+import org.fugalang.core.parser.ParseTree;
+
 import java.util.List;
 
-// comparison: 'bitwise_or' ('comp_op' 'bitwise_or')*
+/**
+ * comparison: 'bitwise_or' ('comp_op' 'bitwise_or')*
+ */
 public final class Comparison extends ConjunctionRule {
     public static final String RULE_NAME = "comparison";
 
@@ -56,7 +59,9 @@ public final class Comparison extends ConjunctionRule {
         return result;
     }
 
-    // 'comp_op' 'bitwise_or'
+    /**
+     * 'comp_op' 'bitwise_or'
+     */
     public static final class Comparison2 extends ConjunctionRule {
         public static final String RULE_NAME = "comparison:2";
 

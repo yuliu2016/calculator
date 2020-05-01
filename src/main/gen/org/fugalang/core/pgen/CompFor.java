@@ -1,10 +1,13 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
+import org.fugalang.core.parser.ParseTree;
+
 import java.util.Optional;
 
-// comp_for: 'for' 'targets' 'in' 'disjunction' ['comp_iter']
+/**
+ * comp_for: 'for' 'targets' 'in' 'disjunction' ['comp_iter']
+ */
 public final class CompFor extends ConjunctionRule {
     public static final String RULE_NAME = "comp_for";
 

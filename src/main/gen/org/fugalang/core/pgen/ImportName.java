@@ -1,9 +1,11 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
+import org.fugalang.core.parser.ParseTree;
 
-// import_name: 'import' 'dotted_as_names'
+/**
+ * import_name: 'import' 'dotted_as_names'
+ */
 public final class ImportName extends ConjunctionRule {
     public static final String RULE_NAME = "import_name";
 

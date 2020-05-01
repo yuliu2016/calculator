@@ -1,9 +1,11 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.DisjunctionRule;
+import org.fugalang.core.parser.ParseTree;
 
-// flow_stmt: 'break_stmt' | 'continue_stmt' | 'return_stmt' | 'raise_stmt'
+/**
+ * flow_stmt: 'break_stmt' | 'continue_stmt' | 'return_stmt' | 'raise_stmt'
+ */
 public final class FlowStmt extends DisjunctionRule {
     public static final String RULE_NAME = "flow_stmt";
 
@@ -37,16 +39,32 @@ public final class FlowStmt extends DisjunctionRule {
         return breakStmt;
     }
 
+    public boolean hasBreakStmt() {
+        return breakStmt() != null;
+    }
+
     public ContinueStmt continueStmt() {
         return continueStmt;
+    }
+
+    public boolean hasContinueStmt() {
+        return continueStmt() != null;
     }
 
     public ReturnStmt returnStmt() {
         return returnStmt;
     }
 
+    public boolean hasReturnStmt() {
+        return returnStmt() != null;
+    }
+
     public RaiseStmt raiseStmt() {
         return raiseStmt;
+    }
+
+    public boolean hasRaiseStmt() {
+        return raiseStmt() != null;
     }
 
     public static boolean parse(ParseTree parseTree, int level) {

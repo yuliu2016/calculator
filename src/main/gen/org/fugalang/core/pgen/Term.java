@@ -1,11 +1,14 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
-import java.util.List;
 import org.fugalang.core.parser.DisjunctionRule;
+import org.fugalang.core.parser.ParseTree;
 
-// term: 'factor' (('*' | '@' | '/' | '%' | '//') 'factor')*
+import java.util.List;
+
+/**
+ * term: 'factor' (('*' | '@' | '/' | '%' | '//') 'factor')*
+ */
 public final class Term extends ConjunctionRule {
     public static final String RULE_NAME = "term";
 
@@ -57,7 +60,9 @@ public final class Term extends ConjunctionRule {
         return result;
     }
 
-    // ('*' | '@' | '/' | '%' | '//') 'factor'
+    /**
+     * ('*' | '@' | '/' | '%' | '//') 'factor'
+     */
     public static final class Term2 extends ConjunctionRule {
         public static final String RULE_NAME = "term:2";
 
@@ -102,7 +107,9 @@ public final class Term extends ConjunctionRule {
         }
     }
 
-    // '*' | '@' | '/' | '%' | '//'
+    /**
+     * '*' | '@' | '/' | '%' | '//'
+     */
     public static final class Term21 extends DisjunctionRule {
         public static final String RULE_NAME = "term:2:1";
 

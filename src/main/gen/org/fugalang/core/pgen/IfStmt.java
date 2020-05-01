@@ -1,11 +1,14 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
+import org.fugalang.core.parser.ParseTree;
+
 import java.util.List;
 import java.util.Optional;
 
-// if_stmt: 'if' 'namedexpr_expr' 'suite' ('elif' 'namedexpr_expr' 'suite')* ['else' 'suite']
+/**
+ * if_stmt: 'if' 'namedexpr_expr' 'suite' ('elif' 'namedexpr_expr' 'suite')* ['else' 'suite']
+ */
 public final class IfStmt extends ConjunctionRule {
     public static final String RULE_NAME = "if_stmt";
 
@@ -84,7 +87,9 @@ public final class IfStmt extends ConjunctionRule {
         return result;
     }
 
-    // 'elif' 'namedexpr_expr' 'suite'
+    /**
+     * 'elif' 'namedexpr_expr' 'suite'
+     */
     public static final class IfStmt4 extends ConjunctionRule {
         public static final String RULE_NAME = "if_stmt:4";
 
@@ -138,7 +143,9 @@ public final class IfStmt extends ConjunctionRule {
         }
     }
 
-    // 'else' 'suite'
+    /**
+     * 'else' 'suite'
+     */
     public static final class IfStmt5 extends ConjunctionRule {
         public static final String RULE_NAME = "if_stmt:5";
 

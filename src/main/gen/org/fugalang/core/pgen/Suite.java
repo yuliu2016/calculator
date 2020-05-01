@@ -1,10 +1,12 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
 import org.fugalang.core.parser.DisjunctionRule;
+import org.fugalang.core.parser.ParseTree;
 
-// suite: ':' 'simple_stmt' | 'block_suite'
+/**
+ * suite: ':' 'simple_stmt' | 'block_suite'
+ */
 public final class Suite extends DisjunctionRule {
     public static final String RULE_NAME = "suite";
 
@@ -30,8 +32,16 @@ public final class Suite extends DisjunctionRule {
         return suite1;
     }
 
+    public boolean hasSuite1() {
+        return suite1() != null;
+    }
+
     public BlockSuite blockSuite() {
         return blockSuite;
+    }
+
+    public boolean hasBlockSuite() {
+        return blockSuite() != null;
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -48,7 +58,9 @@ public final class Suite extends DisjunctionRule {
         return result;
     }
 
-    // ':' 'simple_stmt'
+    /**
+     * ':' 'simple_stmt'
+     */
     public static final class Suite1 extends ConjunctionRule {
         public static final String RULE_NAME = "suite:1";
 

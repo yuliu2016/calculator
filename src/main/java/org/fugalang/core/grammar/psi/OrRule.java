@@ -25,15 +25,20 @@ public class OrRule implements TreeStringElem {
                 .addElems(andRules);
     }
 
+    private String str = null;
+
     @Override
     public String toString() {
-        return toSimpleString();
+        if (str == null) {
+            str = toSimpleString();
+        }
+        return str;
     }
 
     public String toSimpleString() {
-        return andRule.toSimpleString() + andRules
+        return andRule.toString() + andRules
                 .stream()
-                .map(rule -> " | " + rule.toSimpleString())
+                .map(rule -> " | " + rule.toString())
                 .collect(Collectors.joining());
     }
 

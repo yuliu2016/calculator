@@ -1,10 +1,13 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
+import org.fugalang.core.parser.ParseTree;
+
 import java.util.List;
 
-// import_as_names: 'import_as_name' (',' 'import_as_name')* [',']
+/**
+ * import_as_names: 'import_as_name' (',' 'import_as_name')* [',']
+ */
 public final class ImportAsNames extends ConjunctionRule {
     public static final String RULE_NAME = "import_as_names";
 
@@ -65,7 +68,9 @@ public final class ImportAsNames extends ConjunctionRule {
         return result;
     }
 
-    // ',' 'import_as_name'
+    /**
+     * ',' 'import_as_name'
+     */
     public static final class ImportAsNames2 extends ConjunctionRule {
         public static final String RULE_NAME = "import_as_names:2";
 

@@ -1,11 +1,14 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
-import java.util.List;
 import org.fugalang.core.parser.DisjunctionRule;
+import org.fugalang.core.parser.ParseTree;
 
-// dict_maker: 'dict_item' ('comp_for' | (',' 'dict_item')* [','])
+import java.util.List;
+
+/**
+ * dict_maker: 'dict_item' ('comp_for' | (',' 'dict_item')* [','])
+ */
 public final class DictMaker extends ConjunctionRule {
     public static final String RULE_NAME = "dict_maker";
 
@@ -49,7 +52,9 @@ public final class DictMaker extends ConjunctionRule {
         return result;
     }
 
-    // 'comp_for' | (',' 'dict_item')* [',']
+    /**
+     * 'comp_for' | (',' 'dict_item')* [',']
+     */
     public static final class DictMaker2 extends DisjunctionRule {
         public static final String RULE_NAME = "dict_maker:2";
 
@@ -75,8 +80,16 @@ public final class DictMaker extends ConjunctionRule {
             return compFor;
         }
 
+        public boolean hasCompFor() {
+            return compFor() != null;
+        }
+
         public DictMaker22 dictMaker22() {
             return dictMaker22;
+        }
+
+        public boolean hasDictMaker22() {
+            return dictMaker22() != null;
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -94,7 +107,9 @@ public final class DictMaker extends ConjunctionRule {
         }
     }
 
-    // (',' 'dict_item')* [',']
+    /**
+     * (',' 'dict_item')* [',']
+     */
     public static final class DictMaker22 extends ConjunctionRule {
         public static final String RULE_NAME = "dict_maker:2:2";
 
@@ -147,7 +162,9 @@ public final class DictMaker extends ConjunctionRule {
         }
     }
 
-    // ',' 'dict_item'
+    /**
+     * ',' 'dict_item'
+     */
     public static final class DictMaker221 extends ConjunctionRule {
         public static final String RULE_NAME = "dict_maker:2:2:1";
 

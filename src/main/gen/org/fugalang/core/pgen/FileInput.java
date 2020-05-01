@@ -1,11 +1,14 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
-import java.util.List;
 import org.fugalang.core.parser.DisjunctionRule;
+import org.fugalang.core.parser.ParseTree;
 
-// file_input: ('NEWLINE' | 'stmt')* 'ENDMARKER'
+import java.util.List;
+
+/**
+ * file_input: ('NEWLINE' | 'stmt')* 'ENDMARKER'
+ */
 public final class FileInput extends ConjunctionRule {
     public static final String RULE_NAME = "file_input";
 
@@ -57,7 +60,9 @@ public final class FileInput extends ConjunctionRule {
         return result;
     }
 
-    // 'NEWLINE' | 'stmt'
+    /**
+     * 'NEWLINE' | 'stmt'
+     */
     public static final class FileInput1 extends DisjunctionRule {
         public static final String RULE_NAME = "file_input:1";
 
@@ -83,8 +88,16 @@ public final class FileInput extends ConjunctionRule {
             return newline;
         }
 
+        public boolean hasNewline() {
+            return newline() != null;
+        }
+
         public Stmt stmt() {
             return stmt;
+        }
+
+        public boolean hasStmt() {
+            return stmt() != null;
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

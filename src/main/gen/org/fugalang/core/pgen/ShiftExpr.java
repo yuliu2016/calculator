@@ -1,11 +1,14 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
-import java.util.List;
 import org.fugalang.core.parser.DisjunctionRule;
+import org.fugalang.core.parser.ParseTree;
 
-// shift_expr: 'sum' (('<<' | '>>') 'sum')*
+import java.util.List;
+
+/**
+ * shift_expr: 'sum' (('<<' | '>>') 'sum')*
+ */
 public final class ShiftExpr extends ConjunctionRule {
     public static final String RULE_NAME = "shift_expr";
 
@@ -57,7 +60,9 @@ public final class ShiftExpr extends ConjunctionRule {
         return result;
     }
 
-    // ('<<' | '>>') 'sum'
+    /**
+     * ('<<' | '>>') 'sum'
+     */
     public static final class ShiftExpr2 extends ConjunctionRule {
         public static final String RULE_NAME = "shift_expr:2";
 
@@ -102,7 +107,9 @@ public final class ShiftExpr extends ConjunctionRule {
         }
     }
 
-    // '<<' | '>>'
+    /**
+     * '<<' | '>>'
+     */
     public static final class ShiftExpr21 extends DisjunctionRule {
         public static final String RULE_NAME = "shift_expr:2:1";
 

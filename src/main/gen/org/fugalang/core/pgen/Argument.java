@@ -1,11 +1,14 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
-import java.util.Optional;
 import org.fugalang.core.parser.DisjunctionRule;
+import org.fugalang.core.parser.ParseTree;
 
-// argument: 'NAME' ['comp_for'] | 'NAME' ':=' 'expr' | 'NAME' '=' 'expr' | '**' 'expr' | '*' 'expr'
+import java.util.Optional;
+
+/**
+ * argument: 'NAME' ['comp_for'] | 'NAME' ':=' 'expr' | 'NAME' '=' 'expr' | '**' 'expr' | '*' 'expr'
+ */
 public final class Argument extends DisjunctionRule {
     public static final String RULE_NAME = "argument";
 
@@ -43,20 +46,40 @@ public final class Argument extends DisjunctionRule {
         return argument1;
     }
 
+    public boolean hasArgument1() {
+        return argument1() != null;
+    }
+
     public Argument2 argument2() {
         return argument2;
+    }
+
+    public boolean hasArgument2() {
+        return argument2() != null;
     }
 
     public Argument3 argument3() {
         return argument3;
     }
 
+    public boolean hasArgument3() {
+        return argument3() != null;
+    }
+
     public Argument4 argument4() {
         return argument4;
     }
 
+    public boolean hasArgument4() {
+        return argument4() != null;
+    }
+
     public Argument5 argument5() {
         return argument5;
+    }
+
+    public boolean hasArgument5() {
+        return argument5() != null;
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -76,7 +99,9 @@ public final class Argument extends DisjunctionRule {
         return result;
     }
 
-    // 'NAME' ['comp_for']
+    /**
+     * 'NAME' ['comp_for']
+     */
     public static final class Argument1 extends ConjunctionRule {
         public static final String RULE_NAME = "argument:1";
 
@@ -121,7 +146,9 @@ public final class Argument extends DisjunctionRule {
         }
     }
 
-    // 'NAME' ':=' 'expr'
+    /**
+     * 'NAME' ':=' 'expr'
+     */
     public static final class Argument2 extends ConjunctionRule {
         public static final String RULE_NAME = "argument:2";
 
@@ -175,7 +202,9 @@ public final class Argument extends DisjunctionRule {
         }
     }
 
-    // 'NAME' '=' 'expr'
+    /**
+     * 'NAME' '=' 'expr'
+     */
     public static final class Argument3 extends ConjunctionRule {
         public static final String RULE_NAME = "argument:3";
 
@@ -229,7 +258,9 @@ public final class Argument extends DisjunctionRule {
         }
     }
 
-    // '**' 'expr'
+    /**
+     * '**' 'expr'
+     */
     public static final class Argument4 extends ConjunctionRule {
         public static final String RULE_NAME = "argument:4";
 
@@ -274,7 +305,9 @@ public final class Argument extends DisjunctionRule {
         }
     }
 
-    // '*' 'expr'
+    /**
+     * '*' 'expr'
+     */
     public static final class Argument5 extends ConjunctionRule {
         public static final String RULE_NAME = "argument:5";
 

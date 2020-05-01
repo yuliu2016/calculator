@@ -1,10 +1,13 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
+import org.fugalang.core.parser.ParseTree;
+
 import java.util.Optional;
 
-// with_item: 'expr' ['as' 'NAME']
+/**
+ * with_item: 'expr' ['as' 'NAME']
+ */
 public final class WithItem extends ConjunctionRule {
     public static final String RULE_NAME = "with_item";
 
@@ -48,7 +51,9 @@ public final class WithItem extends ConjunctionRule {
         return result;
     }
 
-    // 'as' 'NAME'
+    /**
+     * 'as' 'NAME'
+     */
     public static final class WithItem2 extends ConjunctionRule {
         public static final String RULE_NAME = "with_item:2";
 

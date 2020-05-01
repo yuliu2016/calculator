@@ -68,6 +68,10 @@ public class ClassName {
         return ParserStringUtil.decap(typeStr);
     }
 
+    public boolean isNotNull() {
+        return !genericWrappers.isEmpty() || "boolean".equals(realClassName);
+    }
+
     @Override
     public String toString() {
         return typeStr;

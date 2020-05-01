@@ -1,10 +1,12 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
 import org.fugalang.core.parser.DisjunctionRule;
+import org.fugalang.core.parser.ParseTree;
 
-// factor: ('+' | '-' | '~') 'factor' | 'power'
+/**
+ * factor: ('+' | '-' | '~') 'factor' | 'power'
+ */
 public final class Factor extends DisjunctionRule {
     public static final String RULE_NAME = "factor";
 
@@ -30,8 +32,16 @@ public final class Factor extends DisjunctionRule {
         return factor1;
     }
 
+    public boolean hasFactor1() {
+        return factor1() != null;
+    }
+
     public Power power() {
         return power;
+    }
+
+    public boolean hasPower() {
+        return power() != null;
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -48,7 +58,9 @@ public final class Factor extends DisjunctionRule {
         return result;
     }
 
-    // ('+' | '-' | '~') 'factor'
+    /**
+     * ('+' | '-' | '~') 'factor'
+     */
     public static final class Factor1 extends ConjunctionRule {
         public static final String RULE_NAME = "factor:1";
 
@@ -93,7 +105,9 @@ public final class Factor extends DisjunctionRule {
         }
     }
 
-    // '+' | '-' | '~'
+    /**
+     * '+' | '-' | '~'
+     */
     public static final class Factor11 extends DisjunctionRule {
         public static final String RULE_NAME = "factor:1:1";
 

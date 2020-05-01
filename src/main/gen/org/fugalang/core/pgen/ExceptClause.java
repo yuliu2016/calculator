@@ -1,10 +1,13 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
+import org.fugalang.core.parser.ParseTree;
+
 import java.util.Optional;
 
-// except_clause: 'except' ['expr' ['as' 'NAME']]
+/**
+ * except_clause: 'except' ['expr' ['as' 'NAME']]
+ */
 public final class ExceptClause extends ConjunctionRule {
     public static final String RULE_NAME = "except_clause";
 
@@ -48,7 +51,9 @@ public final class ExceptClause extends ConjunctionRule {
         return result;
     }
 
-    // 'expr' ['as' 'NAME']
+    /**
+     * 'expr' ['as' 'NAME']
+     */
     public static final class ExceptClause2 extends ConjunctionRule {
         public static final String RULE_NAME = "except_clause:2";
 
@@ -93,7 +98,9 @@ public final class ExceptClause extends ConjunctionRule {
         }
     }
 
-    // 'as' 'NAME'
+    /**
+     * 'as' 'NAME'
+     */
     public static final class ExceptClause22 extends ConjunctionRule {
         public static final String RULE_NAME = "except_clause:2:2";
 

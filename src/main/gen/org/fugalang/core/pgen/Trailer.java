@@ -1,11 +1,14 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
-import java.util.Optional;
 import org.fugalang.core.parser.DisjunctionRule;
+import org.fugalang.core.parser.ParseTree;
 
-// trailer: '(' ['arglist'] ')' | '[' 'subscriptlist' ']' | '.' 'NAME' | 'block_suite'
+import java.util.Optional;
+
+/**
+ * trailer: '(' ['arglist'] ')' | '[' 'subscriptlist' ']' | '.' 'NAME' | 'block_suite'
+ */
 public final class Trailer extends DisjunctionRule {
     public static final String RULE_NAME = "trailer";
 
@@ -39,16 +42,32 @@ public final class Trailer extends DisjunctionRule {
         return trailer1;
     }
 
+    public boolean hasTrailer1() {
+        return trailer1() != null;
+    }
+
     public Trailer2 trailer2() {
         return trailer2;
+    }
+
+    public boolean hasTrailer2() {
+        return trailer2() != null;
     }
 
     public Trailer3 trailer3() {
         return trailer3;
     }
 
+    public boolean hasTrailer3() {
+        return trailer3() != null;
+    }
+
     public BlockSuite blockSuite() {
         return blockSuite;
+    }
+
+    public boolean hasBlockSuite() {
+        return blockSuite() != null;
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -67,7 +86,9 @@ public final class Trailer extends DisjunctionRule {
         return result;
     }
 
-    // '(' ['arglist'] ')'
+    /**
+     * '(' ['arglist'] ')'
+     */
     public static final class Trailer1 extends ConjunctionRule {
         public static final String RULE_NAME = "trailer:1";
 
@@ -121,7 +142,9 @@ public final class Trailer extends DisjunctionRule {
         }
     }
 
-    // '[' 'subscriptlist' ']'
+    /**
+     * '[' 'subscriptlist' ']'
+     */
     public static final class Trailer2 extends ConjunctionRule {
         public static final String RULE_NAME = "trailer:2";
 
@@ -175,7 +198,9 @@ public final class Trailer extends DisjunctionRule {
         }
     }
 
-    // '.' 'NAME'
+    /**
+     * '.' 'NAME'
+     */
     public static final class Trailer3 extends ConjunctionRule {
         public static final String RULE_NAME = "trailer:3";
 

@@ -1,11 +1,14 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
-import java.util.List;
 import org.fugalang.core.parser.DisjunctionRule;
+import org.fugalang.core.parser.ParseTree;
 
-// set_maker: 'expr_or_star' ('comp_for' | (',' 'expr_or_star')* [','])
+import java.util.List;
+
+/**
+ * set_maker: 'expr_or_star' ('comp_for' | (',' 'expr_or_star')* [','])
+ */
 public final class SetMaker extends ConjunctionRule {
     public static final String RULE_NAME = "set_maker";
 
@@ -49,7 +52,9 @@ public final class SetMaker extends ConjunctionRule {
         return result;
     }
 
-    // 'comp_for' | (',' 'expr_or_star')* [',']
+    /**
+     * 'comp_for' | (',' 'expr_or_star')* [',']
+     */
     public static final class SetMaker2 extends DisjunctionRule {
         public static final String RULE_NAME = "set_maker:2";
 
@@ -75,8 +80,16 @@ public final class SetMaker extends ConjunctionRule {
             return compFor;
         }
 
+        public boolean hasCompFor() {
+            return compFor() != null;
+        }
+
         public SetMaker22 setMaker22() {
             return setMaker22;
+        }
+
+        public boolean hasSetMaker22() {
+            return setMaker22() != null;
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -94,7 +107,9 @@ public final class SetMaker extends ConjunctionRule {
         }
     }
 
-    // (',' 'expr_or_star')* [',']
+    /**
+     * (',' 'expr_or_star')* [',']
+     */
     public static final class SetMaker22 extends ConjunctionRule {
         public static final String RULE_NAME = "set_maker:2:2";
 
@@ -147,7 +162,9 @@ public final class SetMaker extends ConjunctionRule {
         }
     }
 
-    // ',' 'expr_or_star'
+    /**
+     * ',' 'expr_or_star'
+     */
     public static final class SetMaker221 extends ConjunctionRule {
         public static final String RULE_NAME = "set_maker:2:2:1";
 

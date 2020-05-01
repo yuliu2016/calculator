@@ -1,10 +1,12 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
 import org.fugalang.core.parser.DisjunctionRule;
+import org.fugalang.core.parser.ParseTree;
 
-// single_input: 'NEWLINE' | 'simple_stmt' | 'compound_stmt' 'NEWLINE'
+/**
+ * single_input: 'NEWLINE' | 'simple_stmt' | 'compound_stmt' 'NEWLINE'
+ */
 public final class SingleInput extends DisjunctionRule {
     public static final String RULE_NAME = "single_input";
 
@@ -34,12 +36,24 @@ public final class SingleInput extends DisjunctionRule {
         return newline;
     }
 
+    public boolean hasNewline() {
+        return newline() != null;
+    }
+
     public SimpleStmt simpleStmt() {
         return simpleStmt;
     }
 
+    public boolean hasSimpleStmt() {
+        return simpleStmt() != null;
+    }
+
     public SingleInput3 singleInput3() {
         return singleInput3;
+    }
+
+    public boolean hasSingleInput3() {
+        return singleInput3() != null;
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -57,7 +71,9 @@ public final class SingleInput extends DisjunctionRule {
         return result;
     }
 
-    // 'compound_stmt' 'NEWLINE'
+    /**
+     * 'compound_stmt' 'NEWLINE'
+     */
     public static final class SingleInput3 extends ConjunctionRule {
         public static final String RULE_NAME = "single_input:3";
 

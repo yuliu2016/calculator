@@ -1,10 +1,13 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
+import org.fugalang.core.parser.ParseTree;
+
 import java.util.List;
 
-// bitwise_xor: 'bitwise_and' ('^' 'bitwise_and')*
+/**
+ * bitwise_xor: 'bitwise_and' ('^' 'bitwise_and')*
+ */
 public final class BitwiseXor extends ConjunctionRule {
     public static final String RULE_NAME = "bitwise_xor";
 
@@ -56,7 +59,9 @@ public final class BitwiseXor extends ConjunctionRule {
         return result;
     }
 
-    // '^' 'bitwise_and'
+    /**
+     * '^' 'bitwise_and'
+     */
     public static final class BitwiseXor2 extends ConjunctionRule {
         public static final String RULE_NAME = "bitwise_xor:2";
 

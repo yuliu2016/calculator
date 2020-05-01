@@ -1,9 +1,11 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.DisjunctionRule;
+import org.fugalang.core.parser.ParseTree;
 
-// import_stmt: 'import_name' | 'import_from'
+/**
+ * import_stmt: 'import_name' | 'import_from'
+ */
 public final class ImportStmt extends DisjunctionRule {
     public static final String RULE_NAME = "import_stmt";
 
@@ -29,8 +31,16 @@ public final class ImportStmt extends DisjunctionRule {
         return importName;
     }
 
+    public boolean hasImportName() {
+        return importName() != null;
+    }
+
     public ImportFrom importFrom() {
         return importFrom;
+    }
+
+    public boolean hasImportFrom() {
+        return importFrom() != null;
     }
 
     public static boolean parse(ParseTree parseTree, int level) {

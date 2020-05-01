@@ -1,10 +1,12 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
 import org.fugalang.core.parser.DisjunctionRule;
+import org.fugalang.core.parser.ParseTree;
 
-// expr: 'if' 'disjunction' '?' 'disjunction' 'else' 'expr' | 'disjunction' | 'funcdef'
+/**
+ * expr: 'if' 'disjunction' '?' 'disjunction' 'else' 'expr' | 'disjunction' | 'funcdef'
+ */
 public final class Expr extends DisjunctionRule {
     public static final String RULE_NAME = "expr";
 
@@ -34,12 +36,24 @@ public final class Expr extends DisjunctionRule {
         return expr1;
     }
 
+    public boolean hasExpr1() {
+        return expr1() != null;
+    }
+
     public Disjunction disjunction() {
         return disjunction;
     }
 
+    public boolean hasDisjunction() {
+        return disjunction() != null;
+    }
+
     public Funcdef funcdef() {
         return funcdef;
+    }
+
+    public boolean hasFuncdef() {
+        return funcdef() != null;
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -57,7 +71,9 @@ public final class Expr extends DisjunctionRule {
         return result;
     }
 
-    // 'if' 'disjunction' '?' 'disjunction' 'else' 'expr'
+    /**
+     * 'if' 'disjunction' '?' 'disjunction' 'else' 'expr'
+     */
     public static final class Expr1 extends ConjunctionRule {
         public static final String RULE_NAME = "expr:1";
 

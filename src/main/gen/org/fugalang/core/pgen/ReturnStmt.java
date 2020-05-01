@@ -1,10 +1,13 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
+import org.fugalang.core.parser.ParseTree;
+
 import java.util.Optional;
 
-// return_stmt: 'return' ['exprlist_star']
+/**
+ * return_stmt: 'return' ['exprlist_star']
+ */
 public final class ReturnStmt extends ConjunctionRule {
     public static final String RULE_NAME = "return_stmt";
 

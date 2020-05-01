@@ -1,10 +1,13 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
+import org.fugalang.core.parser.ParseTree;
+
 import java.util.Optional;
 
-// for_stmt: 'for' 'targets' 'in' 'exprlist' 'suite' ['else' 'suite']
+/**
+ * for_stmt: 'for' 'targets' 'in' 'exprlist' 'suite' ['else' 'suite']
+ */
 public final class ForStmt extends ConjunctionRule {
     public static final String RULE_NAME = "for_stmt";
 
@@ -84,7 +87,9 @@ public final class ForStmt extends ConjunctionRule {
         return result;
     }
 
-    // 'else' 'suite'
+    /**
+     * 'else' 'suite'
+     */
     public static final class ForStmt6 extends ConjunctionRule {
         public static final String RULE_NAME = "for_stmt:6";
 

@@ -1,9 +1,11 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.DisjunctionRule;
+import org.fugalang.core.parser.ParseTree;
 
-// small_stmt: 'expr_stmt' | 'del_stmt' | 'pass_stmt' | 'flow_stmt' | 'import_stmt' | 'assert_stmt'
+/**
+ * small_stmt: 'expr_stmt' | 'del_stmt' | 'pass_stmt' | 'flow_stmt' | 'import_stmt' | 'assert_stmt'
+ */
 public final class SmallStmt extends DisjunctionRule {
     public static final String RULE_NAME = "small_stmt";
 
@@ -45,24 +47,48 @@ public final class SmallStmt extends DisjunctionRule {
         return exprStmt;
     }
 
+    public boolean hasExprStmt() {
+        return exprStmt() != null;
+    }
+
     public DelStmt delStmt() {
         return delStmt;
+    }
+
+    public boolean hasDelStmt() {
+        return delStmt() != null;
     }
 
     public PassStmt passStmt() {
         return passStmt;
     }
 
+    public boolean hasPassStmt() {
+        return passStmt() != null;
+    }
+
     public FlowStmt flowStmt() {
         return flowStmt;
+    }
+
+    public boolean hasFlowStmt() {
+        return flowStmt() != null;
     }
 
     public ImportStmt importStmt() {
         return importStmt;
     }
 
+    public boolean hasImportStmt() {
+        return importStmt() != null;
+    }
+
     public AssertStmt assertStmt() {
         return assertStmt;
+    }
+
+    public boolean hasAssertStmt() {
+        return assertStmt() != null;
     }
 
     public static boolean parse(ParseTree parseTree, int level) {

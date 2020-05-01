@@ -1,9 +1,11 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.DisjunctionRule;
+import org.fugalang.core.parser.ParseTree;
 
-// exprlist_comp_sub: 'exprlist_comp' | 'subscript'
+/**
+ * exprlist_comp_sub: 'exprlist_comp' | 'subscript'
+ */
 public final class ExprlistCompSub extends DisjunctionRule {
     public static final String RULE_NAME = "exprlist_comp_sub";
 
@@ -29,8 +31,16 @@ public final class ExprlistCompSub extends DisjunctionRule {
         return exprlistComp;
     }
 
+    public boolean hasExprlistComp() {
+        return exprlistComp() != null;
+    }
+
     public Subscript subscript() {
         return subscript;
+    }
+
+    public boolean hasSubscript() {
+        return subscript() != null;
     }
 
     public static boolean parse(ParseTree parseTree, int level) {

@@ -1,9 +1,11 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.DisjunctionRule;
+import org.fugalang.core.parser.ParseTree;
 
-// simple_atom: 'NAME' | 'NUMBER' | 'STRING' | 'None' | 'True' | 'False'
+/**
+ * simple_atom: 'NAME' | 'NUMBER' | 'STRING' | 'None' | 'True' | 'False'
+ */
 public final class SimpleAtom extends DisjunctionRule {
     public static final String RULE_NAME = "simple_atom";
 
@@ -45,12 +47,24 @@ public final class SimpleAtom extends DisjunctionRule {
         return name;
     }
 
+    public boolean hasName() {
+        return name() != null;
+    }
+
     public Object number() {
         return number;
     }
 
+    public boolean hasNumber() {
+        return number() != null;
+    }
+
     public String string() {
         return string;
+    }
+
+    public boolean hasString() {
+        return string() != null;
     }
 
     public boolean isTokenNone() {

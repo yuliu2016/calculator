@@ -19,12 +19,17 @@ public class SingleRule implements TreeStringElem {
                 .addElem(orRule);
     }
 
+    private String str = null;
+
     @Override
     public String toString() {
-        return toSimpleString();
+        if (str == null) {
+            str = toSimpleString();
+        }
+        return str;
     }
 
     public String toSimpleString() {
-        return name + ": " + orRule.toSimpleString();
+        return name + ": " + orRule.toString();
     }
 }

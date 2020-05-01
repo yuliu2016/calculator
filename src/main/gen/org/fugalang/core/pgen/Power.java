@@ -1,10 +1,13 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
+import org.fugalang.core.parser.ParseTree;
+
 import java.util.Optional;
 
-// power: 'pipe_expr' ['**' 'factor']
+/**
+ * power: 'pipe_expr' ['**' 'factor']
+ */
 public final class Power extends ConjunctionRule {
     public static final String RULE_NAME = "power";
 
@@ -48,7 +51,9 @@ public final class Power extends ConjunctionRule {
         return result;
     }
 
-    // '**' 'factor'
+    /**
+     * '**' 'factor'
+     */
     public static final class Power2 extends ConjunctionRule {
         public static final String RULE_NAME = "power:2";
 

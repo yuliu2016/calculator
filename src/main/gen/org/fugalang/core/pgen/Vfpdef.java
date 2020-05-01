@@ -1,9 +1,11 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
+import org.fugalang.core.parser.ParseTree;
 
-// vfpdef: 'NAME'
+/**
+ * vfpdef: 'NAME'
+ */
 public final class Vfpdef extends ConjunctionRule {
     public static final String RULE_NAME = "vfpdef";
 

@@ -1,11 +1,14 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
-import java.util.Optional;
 import org.fugalang.core.parser.DisjunctionRule;
+import org.fugalang.core.parser.ParseTree;
 
-// compound_atom: '(' ['exprlist_comp'] ')' | '[' ['exprlist_comp_sub'] ']' | '{' ['dictorsetmaker'] '}'
+import java.util.Optional;
+
+/**
+ * compound_atom: '(' ['exprlist_comp'] ')' | '[' ['exprlist_comp_sub'] ']' | '{' ['dictorsetmaker'] '}'
+ */
 public final class CompoundAtom extends DisjunctionRule {
     public static final String RULE_NAME = "compound_atom";
 
@@ -35,12 +38,24 @@ public final class CompoundAtom extends DisjunctionRule {
         return compoundAtom1;
     }
 
+    public boolean hasCompoundAtom1() {
+        return compoundAtom1() != null;
+    }
+
     public CompoundAtom2 compoundAtom2() {
         return compoundAtom2;
     }
 
+    public boolean hasCompoundAtom2() {
+        return compoundAtom2() != null;
+    }
+
     public CompoundAtom3 compoundAtom3() {
         return compoundAtom3;
+    }
+
+    public boolean hasCompoundAtom3() {
+        return compoundAtom3() != null;
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -58,7 +73,9 @@ public final class CompoundAtom extends DisjunctionRule {
         return result;
     }
 
-    // '(' ['exprlist_comp'] ')'
+    /**
+     * '(' ['exprlist_comp'] ')'
+     */
     public static final class CompoundAtom1 extends ConjunctionRule {
         public static final String RULE_NAME = "compound_atom:1";
 
@@ -112,7 +129,9 @@ public final class CompoundAtom extends DisjunctionRule {
         }
     }
 
-    // '[' ['exprlist_comp_sub'] ']'
+    /**
+     * '[' ['exprlist_comp_sub'] ']'
+     */
     public static final class CompoundAtom2 extends ConjunctionRule {
         public static final String RULE_NAME = "compound_atom:2";
 
@@ -166,7 +185,9 @@ public final class CompoundAtom extends DisjunctionRule {
         }
     }
 
-    // '{' ['dictorsetmaker'] '}'
+    /**
+     * '{' ['dictorsetmaker'] '}'
+     */
     public static final class CompoundAtom3 extends ConjunctionRule {
         public static final String RULE_NAME = "compound_atom:3";
 

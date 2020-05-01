@@ -1,10 +1,13 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
+import org.fugalang.core.parser.ParseTree;
+
 import java.util.Optional;
 
-// namedexpr_expr: 'NAME' [':=' 'expr']
+/**
+ * namedexpr_expr: 'NAME' [':=' 'expr']
+ */
 public final class NamedexprExpr extends ConjunctionRule {
     public static final String RULE_NAME = "namedexpr_expr";
 
@@ -48,7 +51,9 @@ public final class NamedexprExpr extends ConjunctionRule {
         return result;
     }
 
-    // ':=' 'expr'
+    /**
+     * ':=' 'expr'
+     */
     public static final class NamedexprExpr2 extends ConjunctionRule {
         public static final String RULE_NAME = "namedexpr_expr:2";
 

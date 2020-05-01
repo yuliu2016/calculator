@@ -1,9 +1,11 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
+import org.fugalang.core.parser.ParseTree;
 
-// del_stmt: 'del' 'targets'
+/**
+ * del_stmt: 'del' 'targets'
+ */
 public final class DelStmt extends ConjunctionRule {
     public static final String RULE_NAME = "del_stmt";
 

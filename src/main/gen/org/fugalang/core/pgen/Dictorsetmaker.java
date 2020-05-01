@@ -1,9 +1,11 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.DisjunctionRule;
+import org.fugalang.core.parser.ParseTree;
 
-// dictorsetmaker: 'dict_maker' | 'set_maker'
+/**
+ * dictorsetmaker: 'dict_maker' | 'set_maker'
+ */
 public final class Dictorsetmaker extends DisjunctionRule {
     public static final String RULE_NAME = "dictorsetmaker";
 
@@ -29,8 +31,16 @@ public final class Dictorsetmaker extends DisjunctionRule {
         return dictMaker;
     }
 
+    public boolean hasDictMaker() {
+        return dictMaker() != null;
+    }
+
     public SetMaker setMaker() {
         return setMaker;
+    }
+
+    public boolean hasSetMaker() {
+        return setMaker() != null;
     }
 
     public static boolean parse(ParseTree parseTree, int level) {

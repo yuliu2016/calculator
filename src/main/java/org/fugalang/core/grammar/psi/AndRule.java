@@ -22,15 +22,20 @@ public class AndRule implements TreeStringElem {
         builder.setName("and").addElem(repeatRule).addElems(repeatRules);
     }
 
+    private String str = null;
+
     @Override
     public String toString() {
-        return toSimpleString();
+        if (str == null) {
+            str = toSimpleString();
+        }
+        return str;
     }
 
     public String toSimpleString() {
-        return repeatRule.toSimpleString() + repeatRules
+        return repeatRule.toString() + repeatRules
                 .stream()
-                .map(rule -> " " + rule.toSimpleString())
+                .map(rule -> " " + rule.toString())
                 .collect(Collectors.joining());
     }
 

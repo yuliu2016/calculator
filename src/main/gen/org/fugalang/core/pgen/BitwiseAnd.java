@@ -1,10 +1,13 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
+import org.fugalang.core.parser.ParseTree;
+
 import java.util.List;
 
-// bitwise_and: 'shift_expr' ('&' 'shift_expr')*
+/**
+ * bitwise_and: 'shift_expr' ('&' 'shift_expr')*
+ */
 public final class BitwiseAnd extends ConjunctionRule {
     public static final String RULE_NAME = "bitwise_and";
 
@@ -56,7 +59,9 @@ public final class BitwiseAnd extends ConjunctionRule {
         return result;
     }
 
-    // '&' 'shift_expr'
+    /**
+     * '&' 'shift_expr'
+     */
     public static final class BitwiseAnd2 extends ConjunctionRule {
         public static final String RULE_NAME = "bitwise_and:2";
 

@@ -1,6 +1,7 @@
 package org.fugalang.core.grammar.classbuilder;
 
 import org.fugalang.core.grammar.gen.ParserStringUtil;
+import org.fugalang.core.grammar.util.FirstAndMore;
 
 import java.util.*;
 
@@ -50,20 +51,38 @@ public class ClassBuilder {
                 .append(packageName)
                 .append(";\n\n");
 
-        Set<String> classImports = new HashSet<>(this.classImports);
+        Set<String> userImports = new TreeSet<>();
+        Set<String> javaImports = new TreeSet<>();
 
-        // merge the imports
-        for (ClassBuilder componentClass : componentClasses) {
-            classImports.addAll(componentClass.getClassImports());
+        var importIterator = componentClasses.stream().map(ClassBuilder::getClassImports).iterator();
+
+        for (Set<String> importSet : FirstAndMore.of(classImports, importIterator)) {
+            for (String theImport : importSet) {
+                if (theImport.startsWith("java")) {
+                    javaImports.add(theImport);
+                } else {
+                    userImports.add(theImport);
+                }
+            }
         }
 
-        for (String classImport : classImports) {
+        for (String classImport : userImports) {
             sb.append("import ")
                     .append(classImport)
                     .append(";\n");
         }
 
-        if (!classImports.isEmpty()) {
+        if (!userImports.isEmpty()) {
+            sb.append("\n");
+        }
+
+        for (String classImport : javaImports) {
+            sb.append("import ")
+                    .append(classImport)
+                    .append(";\n");
+        }
+
+        if (!javaImports.isEmpty()) {
             sb.append("\n");
         }
 
@@ -88,9 +107,9 @@ public class ClassBuilder {
         }
 
         if (headerComments != null && !headerComments.isBlank()) {
-            sb.append("// ")
+            sb.append("/**\n * ")
                     .append(headerComments)
-                    .append("\n");
+                    .append("\n */\n");
         }
 
         if (isStaticInnerClass) {
@@ -128,6 +147,9 @@ public class ClassBuilder {
         for (ClassField field : fields) {
             sb.append("\n");
             sb.append(field.asGetter());
+            if (ruleType == RuleType.Disjunction) {
+                sb.append(field.asNullCheck());
+            }
         }
 
         generateParsingFunc(sb);

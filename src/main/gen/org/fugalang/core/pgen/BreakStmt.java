@@ -1,9 +1,11 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
+import org.fugalang.core.parser.ParseTree;
 
-// break_stmt: 'break'
+/**
+ * break_stmt: 'break'
+ */
 public final class BreakStmt extends ConjunctionRule {
     public static final String RULE_NAME = "break_stmt";
 

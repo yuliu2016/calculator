@@ -1,12 +1,15 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
+import org.fugalang.core.parser.DisjunctionRule;
+import org.fugalang.core.parser.ParseTree;
+
 import java.util.List;
 import java.util.Optional;
-import org.fugalang.core.parser.DisjunctionRule;
 
-// try_stmt: 'try' 'suite' (('except_clause' 'suite')+ ['else' 'suite'] ['finally' 'suite'] | 'finally' 'suite')
+/**
+ * try_stmt: 'try' 'suite' (('except_clause' 'suite')+ ['else' 'suite'] ['finally' 'suite'] | 'finally' 'suite')
+ */
 public final class TryStmt extends ConjunctionRule {
     public static final String RULE_NAME = "try_stmt";
 
@@ -59,7 +62,9 @@ public final class TryStmt extends ConjunctionRule {
         return result;
     }
 
-    // ('except_clause' 'suite')+ ['else' 'suite'] ['finally' 'suite'] | 'finally' 'suite'
+    /**
+     * ('except_clause' 'suite')+ ['else' 'suite'] ['finally' 'suite'] | 'finally' 'suite'
+     */
     public static final class TryStmt3 extends DisjunctionRule {
         public static final String RULE_NAME = "try_stmt:3";
 
@@ -85,8 +90,16 @@ public final class TryStmt extends ConjunctionRule {
             return tryStmt31;
         }
 
+        public boolean hasTryStmt31() {
+            return tryStmt31() != null;
+        }
+
         public TryStmt32 tryStmt32() {
             return tryStmt32;
+        }
+
+        public boolean hasTryStmt32() {
+            return tryStmt32() != null;
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -104,7 +117,9 @@ public final class TryStmt extends ConjunctionRule {
         }
     }
 
-    // ('except_clause' 'suite')+ ['else' 'suite'] ['finally' 'suite']
+    /**
+     * ('except_clause' 'suite')+ ['else' 'suite'] ['finally' 'suite']
+     */
     public static final class TryStmt31 extends ConjunctionRule {
         public static final String RULE_NAME = "try_stmt:3:1";
 
@@ -167,7 +182,9 @@ public final class TryStmt extends ConjunctionRule {
         }
     }
 
-    // 'except_clause' 'suite'
+    /**
+     * 'except_clause' 'suite'
+     */
     public static final class TryStmt311 extends ConjunctionRule {
         public static final String RULE_NAME = "try_stmt:3:1:1";
 
@@ -212,7 +229,9 @@ public final class TryStmt extends ConjunctionRule {
         }
     }
 
-    // 'else' 'suite'
+    /**
+     * 'else' 'suite'
+     */
     public static final class TryStmt312 extends ConjunctionRule {
         public static final String RULE_NAME = "try_stmt:3:1:2";
 
@@ -257,7 +276,9 @@ public final class TryStmt extends ConjunctionRule {
         }
     }
 
-    // 'finally' 'suite'
+    /**
+     * 'finally' 'suite'
+     */
     public static final class TryStmt313 extends ConjunctionRule {
         public static final String RULE_NAME = "try_stmt:3:1:3";
 
@@ -302,7 +323,9 @@ public final class TryStmt extends ConjunctionRule {
         }
     }
 
-    // 'finally' 'suite'
+    /**
+     * 'finally' 'suite'
+     */
     public static final class TryStmt32 extends ConjunctionRule {
         public static final String RULE_NAME = "try_stmt:3:2";
 

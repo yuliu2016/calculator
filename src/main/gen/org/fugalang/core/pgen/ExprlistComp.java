@@ -1,11 +1,14 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
-import java.util.List;
 import org.fugalang.core.parser.DisjunctionRule;
+import org.fugalang.core.parser.ParseTree;
 
-// exprlist_comp: 'expr_or_star' ('comp_for' | (',' 'expr_or_star')* [','])
+import java.util.List;
+
+/**
+ * exprlist_comp: 'expr_or_star' ('comp_for' | (',' 'expr_or_star')* [','])
+ */
 public final class ExprlistComp extends ConjunctionRule {
     public static final String RULE_NAME = "exprlist_comp";
 
@@ -49,7 +52,9 @@ public final class ExprlistComp extends ConjunctionRule {
         return result;
     }
 
-    // 'comp_for' | (',' 'expr_or_star')* [',']
+    /**
+     * 'comp_for' | (',' 'expr_or_star')* [',']
+     */
     public static final class ExprlistComp2 extends DisjunctionRule {
         public static final String RULE_NAME = "exprlist_comp:2";
 
@@ -75,8 +80,16 @@ public final class ExprlistComp extends ConjunctionRule {
             return compFor;
         }
 
+        public boolean hasCompFor() {
+            return compFor() != null;
+        }
+
         public ExprlistComp22 exprlistComp22() {
             return exprlistComp22;
+        }
+
+        public boolean hasExprlistComp22() {
+            return exprlistComp22() != null;
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -94,7 +107,9 @@ public final class ExprlistComp extends ConjunctionRule {
         }
     }
 
-    // (',' 'expr_or_star')* [',']
+    /**
+     * (',' 'expr_or_star')* [',']
+     */
     public static final class ExprlistComp22 extends ConjunctionRule {
         public static final String RULE_NAME = "exprlist_comp:2:2";
 
@@ -147,7 +162,9 @@ public final class ExprlistComp extends ConjunctionRule {
         }
     }
 
-    // ',' 'expr_or_star'
+    /**
+     * ',' 'expr_or_star'
+     */
     public static final class ExprlistComp221 extends ConjunctionRule {
         public static final String RULE_NAME = "exprlist_comp:2:2:1";
 

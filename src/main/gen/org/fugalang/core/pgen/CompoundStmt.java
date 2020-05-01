@@ -1,9 +1,11 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.DisjunctionRule;
+import org.fugalang.core.parser.ParseTree;
 
-// compound_stmt: 'if_stmt' | 'while_stmt' | 'for_stmt' | 'try_stmt' | 'with_stmt'
+/**
+ * compound_stmt: 'if_stmt' | 'while_stmt' | 'for_stmt' | 'try_stmt' | 'with_stmt'
+ */
 public final class CompoundStmt extends DisjunctionRule {
     public static final String RULE_NAME = "compound_stmt";
 
@@ -41,20 +43,40 @@ public final class CompoundStmt extends DisjunctionRule {
         return ifStmt;
     }
 
+    public boolean hasIfStmt() {
+        return ifStmt() != null;
+    }
+
     public WhileStmt whileStmt() {
         return whileStmt;
+    }
+
+    public boolean hasWhileStmt() {
+        return whileStmt() != null;
     }
 
     public ForStmt forStmt() {
         return forStmt;
     }
 
+    public boolean hasForStmt() {
+        return forStmt() != null;
+    }
+
     public TryStmt tryStmt() {
         return tryStmt;
     }
 
+    public boolean hasTryStmt() {
+        return tryStmt() != null;
+    }
+
     public WithStmt withStmt() {
         return withStmt;
+    }
+
+    public boolean hasWithStmt() {
+        return withStmt() != null;
     }
 
     public static boolean parse(ParseTree parseTree, int level) {

@@ -1,11 +1,14 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
-import java.util.List;
 import org.fugalang.core.parser.DisjunctionRule;
+import org.fugalang.core.parser.ParseTree;
 
-// import_from: 'from' ('.'* 'dotted_name' | '.'+) 'import' ('*' | '(' 'import_as_names' ')' | 'import_as_names')
+import java.util.List;
+
+/**
+ * import_from: 'from' ('.'* 'dotted_name' | '.'+) 'import' ('*' | '(' 'import_as_names' ')' | 'import_as_names')
+ */
 public final class ImportFrom extends ConjunctionRule {
     public static final String RULE_NAME = "import_from";
 
@@ -67,7 +70,9 @@ public final class ImportFrom extends ConjunctionRule {
         return result;
     }
 
-    // '.'* 'dotted_name' | '.'+
+    /**
+     * '.'* 'dotted_name' | '.'+
+     */
     public static final class ImportFrom2 extends DisjunctionRule {
         public static final String RULE_NAME = "import_from:2";
 
@@ -91,6 +96,10 @@ public final class ImportFrom extends ConjunctionRule {
 
         public ImportFrom21 importFrom21() {
             return importFrom21;
+        }
+
+        public boolean hasImportFrom21() {
+            return importFrom21() != null;
         }
 
         public List<Boolean> isTokenDotList() {
@@ -121,7 +130,9 @@ public final class ImportFrom extends ConjunctionRule {
         }
     }
 
-    // '.'* 'dotted_name'
+    /**
+     * '.'* 'dotted_name'
+     */
     public static final class ImportFrom21 extends ConjunctionRule {
         public static final String RULE_NAME = "import_from:2:1";
 
@@ -174,7 +185,9 @@ public final class ImportFrom extends ConjunctionRule {
         }
     }
 
-    // '*' | '(' 'import_as_names' ')' | 'import_as_names'
+    /**
+     * '*' | '(' 'import_as_names' ')' | 'import_as_names'
+     */
     public static final class ImportFrom4 extends DisjunctionRule {
         public static final String RULE_NAME = "import_from:4";
 
@@ -208,8 +221,16 @@ public final class ImportFrom extends ConjunctionRule {
             return importFrom42;
         }
 
+        public boolean hasImportFrom42() {
+            return importFrom42() != null;
+        }
+
         public ImportAsNames importAsNames() {
             return importAsNames;
+        }
+
+        public boolean hasImportAsNames() {
+            return importAsNames() != null;
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -228,7 +249,9 @@ public final class ImportFrom extends ConjunctionRule {
         }
     }
 
-    // '(' 'import_as_names' ')'
+    /**
+     * '(' 'import_as_names' ')'
+     */
     public static final class ImportFrom42 extends ConjunctionRule {
         public static final String RULE_NAME = "import_from:4:2";
 

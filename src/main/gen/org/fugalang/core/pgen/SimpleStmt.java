@@ -1,10 +1,13 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
+import org.fugalang.core.parser.ParseTree;
+
 import java.util.List;
 
-// simple_stmt: 'small_stmt' (';' 'small_stmt')* [';']
+/**
+ * simple_stmt: 'small_stmt' (';' 'small_stmt')* [';']
+ */
 public final class SimpleStmt extends ConjunctionRule {
     public static final String RULE_NAME = "simple_stmt";
 
@@ -65,7 +68,9 @@ public final class SimpleStmt extends ConjunctionRule {
         return result;
     }
 
-    // ';' 'small_stmt'
+    /**
+     * ';' 'small_stmt'
+     */
     public static final class SimpleStmt2 extends ConjunctionRule {
         public static final String RULE_NAME = "simple_stmt:2";
 

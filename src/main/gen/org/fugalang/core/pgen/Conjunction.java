@@ -1,10 +1,13 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
+import org.fugalang.core.parser.ParseTree;
+
 import java.util.List;
 
-// conjunction: 'inversion' ('and' 'inversion')*
+/**
+ * conjunction: 'inversion' ('and' 'inversion')*
+ */
 public final class Conjunction extends ConjunctionRule {
     public static final String RULE_NAME = "conjunction";
 
@@ -56,7 +59,9 @@ public final class Conjunction extends ConjunctionRule {
         return result;
     }
 
-    // 'and' 'inversion'
+    /**
+     * 'and' 'inversion'
+     */
     public static final class Conjunction2 extends ConjunctionRule {
         public static final String RULE_NAME = "conjunction:2";
 

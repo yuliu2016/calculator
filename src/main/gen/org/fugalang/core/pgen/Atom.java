@@ -1,9 +1,11 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.DisjunctionRule;
+import org.fugalang.core.parser.ParseTree;
 
-// atom: 'compound_atom' | 'simple_atom'
+/**
+ * atom: 'compound_atom' | 'simple_atom'
+ */
 public final class Atom extends DisjunctionRule {
     public static final String RULE_NAME = "atom";
 
@@ -29,8 +31,16 @@ public final class Atom extends DisjunctionRule {
         return compoundAtom;
     }
 
+    public boolean hasCompoundAtom() {
+        return compoundAtom() != null;
+    }
+
     public SimpleAtom simpleAtom() {
         return simpleAtom;
+    }
+
+    public boolean hasSimpleAtom() {
+        return simpleAtom() != null;
     }
 
     public static boolean parse(ParseTree parseTree, int level) {

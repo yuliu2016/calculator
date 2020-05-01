@@ -1,11 +1,14 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.parser.ConjunctionRule;
-import java.util.List;
 import org.fugalang.core.parser.DisjunctionRule;
+import org.fugalang.core.parser.ParseTree;
 
-// sum: 'term' (('+' | '-') 'term')*
+import java.util.List;
+
+/**
+ * sum: 'term' (('+' | '-') 'term')*
+ */
 public final class Sum extends ConjunctionRule {
     public static final String RULE_NAME = "sum";
 
@@ -57,7 +60,9 @@ public final class Sum extends ConjunctionRule {
         return result;
     }
 
-    // ('+' | '-') 'term'
+    /**
+     * ('+' | '-') 'term'
+     */
     public static final class Sum2 extends ConjunctionRule {
         public static final String RULE_NAME = "sum:2";
 
@@ -102,7 +107,9 @@ public final class Sum extends ConjunctionRule {
         }
     }
 
-    // '+' | '-'
+    /**
+     * '+' | '-'
+     */
     public static final class Sum21 extends DisjunctionRule {
         public static final String RULE_NAME = "sum:2:1";
 
