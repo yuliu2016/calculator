@@ -55,7 +55,13 @@ public final class WhileStmt extends ConjunctionRule {
             return false;
         }
         var marker = parseTree.enter(level, RULE_NAME);
-        var result = false;
+        boolean result;
+
+        result = parseTree.consumeTokenLiteral("while");
+        result = result && NamedexprExpr.parse(parseTree, level + 1);
+        result = result && Suite.parse(parseTree, level + 1);
+        WhileStmt4.parse(parseTree, level + 1);
+
         parseTree.exit(level, marker, result);
         return result;
     }
@@ -95,7 +101,11 @@ public final class WhileStmt extends ConjunctionRule {
                 return false;
             }
             var marker = parseTree.enter(level, RULE_NAME);
-            var result = false;
+            boolean result;
+
+            result = parseTree.consumeTokenLiteral("else");
+            result = result && Suite.parse(parseTree, level + 1);
+
             parseTree.exit(level, marker, result);
             return result;
         }

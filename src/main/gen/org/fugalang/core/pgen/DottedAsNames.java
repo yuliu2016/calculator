@@ -47,7 +47,16 @@ public final class DottedAsNames extends ConjunctionRule {
             return false;
         }
         var marker = parseTree.enter(level, RULE_NAME);
-        var result = false;
+        boolean result;
+
+        result = DottedAsName.parse(parseTree, level + 1);
+        while (true) {
+            if (!DottedAsNames2.parse(parseTree, level + 1)) {
+                break;
+            }
+        }
+        result = result && parseTree.consumeTokenLiteral(",");
+
         parseTree.exit(level, marker, result);
         return result;
     }
@@ -87,7 +96,11 @@ public final class DottedAsNames extends ConjunctionRule {
                 return false;
             }
             var marker = parseTree.enter(level, RULE_NAME);
-            var result = false;
+            boolean result;
+
+            result = parseTree.consumeTokenLiteral(",");
+            result = result && DottedAsName.parse(parseTree, level + 1);
+
             parseTree.exit(level, marker, result);
             return result;
         }

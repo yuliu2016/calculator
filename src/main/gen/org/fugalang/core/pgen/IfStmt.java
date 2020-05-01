@@ -64,7 +64,18 @@ public final class IfStmt extends ConjunctionRule {
             return false;
         }
         var marker = parseTree.enter(level, RULE_NAME);
-        var result = false;
+        boolean result;
+
+        result = parseTree.consumeTokenLiteral("if");
+        result = result && NamedexprExpr.parse(parseTree, level + 1);
+        result = result && Suite.parse(parseTree, level + 1);
+        while (true) {
+            if (!IfStmt4.parse(parseTree, level + 1)) {
+                break;
+            }
+        }
+        IfStmt5.parse(parseTree, level + 1);
+
         parseTree.exit(level, marker, result);
         return result;
     }
@@ -112,7 +123,12 @@ public final class IfStmt extends ConjunctionRule {
                 return false;
             }
             var marker = parseTree.enter(level, RULE_NAME);
-            var result = false;
+            boolean result;
+
+            result = parseTree.consumeTokenLiteral("elif");
+            result = result && NamedexprExpr.parse(parseTree, level + 1);
+            result = result && Suite.parse(parseTree, level + 1);
+
             parseTree.exit(level, marker, result);
             return result;
         }
@@ -153,7 +169,11 @@ public final class IfStmt extends ConjunctionRule {
                 return false;
             }
             var marker = parseTree.enter(level, RULE_NAME);
-            var result = false;
+            boolean result;
+
+            result = parseTree.consumeTokenLiteral("else");
+            result = result && Suite.parse(parseTree, level + 1);
+
             parseTree.exit(level, marker, result);
             return result;
         }

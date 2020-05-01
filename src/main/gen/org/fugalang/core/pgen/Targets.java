@@ -48,7 +48,16 @@ public final class Targets extends ConjunctionRule {
             return false;
         }
         var marker = parseTree.enter(level, RULE_NAME);
-        var result = false;
+        boolean result;
+
+        result = Targets1.parse(parseTree, level + 1);
+        while (true) {
+            if (!Targets2.parse(parseTree, level + 1)) {
+                break;
+            }
+        }
+        result = result && parseTree.consumeTokenLiteral(",");
+
         parseTree.exit(level, marker, result);
         return result;
     }
@@ -88,7 +97,11 @@ public final class Targets extends ConjunctionRule {
                 return false;
             }
             var marker = parseTree.enter(level, RULE_NAME);
-            var result = false;
+            boolean result;
+
+            result = BitwiseOr.parse(parseTree, level + 1);
+            if (!result) result = StarExpr.parse(parseTree, level + 1);
+
             parseTree.exit(level, marker, result);
             return result;
         }
@@ -129,7 +142,11 @@ public final class Targets extends ConjunctionRule {
                 return false;
             }
             var marker = parseTree.enter(level, RULE_NAME);
-            var result = false;
+            boolean result;
+
+            result = parseTree.consumeTokenLiteral(",");
+            result = result && Targets22.parse(parseTree, level + 1);
+
             parseTree.exit(level, marker, result);
             return result;
         }
@@ -170,7 +187,11 @@ public final class Targets extends ConjunctionRule {
                 return false;
             }
             var marker = parseTree.enter(level, RULE_NAME);
-            var result = false;
+            boolean result;
+
+            result = BitwiseOr.parse(parseTree, level + 1);
+            if (!result) result = StarExpr.parse(parseTree, level + 1);
+
             parseTree.exit(level, marker, result);
             return result;
         }

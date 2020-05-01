@@ -71,7 +71,15 @@ public final class ForStmt extends ConjunctionRule {
             return false;
         }
         var marker = parseTree.enter(level, RULE_NAME);
-        var result = false;
+        boolean result;
+
+        result = parseTree.consumeTokenLiteral("for");
+        result = result && Targets.parse(parseTree, level + 1);
+        result = result && parseTree.consumeTokenLiteral("in");
+        result = result && Exprlist.parse(parseTree, level + 1);
+        result = result && Suite.parse(parseTree, level + 1);
+        ForStmt6.parse(parseTree, level + 1);
+
         parseTree.exit(level, marker, result);
         return result;
     }
@@ -111,7 +119,11 @@ public final class ForStmt extends ConjunctionRule {
                 return false;
             }
             var marker = parseTree.enter(level, RULE_NAME);
-            var result = false;
+            boolean result;
+
+            result = parseTree.consumeTokenLiteral("else");
+            result = result && Suite.parse(parseTree, level + 1);
+
             parseTree.exit(level, marker, result);
             return result;
         }

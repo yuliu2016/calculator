@@ -39,7 +39,15 @@ public final class PipeExpr extends ConjunctionRule {
             return false;
         }
         var marker = parseTree.enter(level, RULE_NAME);
-        var result = false;
+        boolean result;
+
+        result = AtomExpr.parse(parseTree, level + 1);
+        while (true) {
+            if (!PipeExpr2.parse(parseTree, level + 1)) {
+                break;
+            }
+        }
+
         parseTree.exit(level, marker, result);
         return result;
     }
@@ -79,7 +87,11 @@ public final class PipeExpr extends ConjunctionRule {
                 return false;
             }
             var marker = parseTree.enter(level, RULE_NAME);
-            var result = false;
+            boolean result;
+
+            result = parseTree.consumeTokenLiteral("->");
+            result = result && AtomExpr.parse(parseTree, level + 1);
+
             parseTree.exit(level, marker, result);
             return result;
         }

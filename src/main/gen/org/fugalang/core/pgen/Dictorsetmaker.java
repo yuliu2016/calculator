@@ -38,7 +38,11 @@ public final class Dictorsetmaker extends DisjunctionRule {
             return false;
         }
         var marker = parseTree.enter(level, RULE_NAME);
-        var result = false;
+        boolean result;
+
+        result = DictMaker.parse(parseTree, level + 1);
+        if (!result) result = SetMaker.parse(parseTree, level + 1);
+
         parseTree.exit(level, marker, result);
         return result;
     }

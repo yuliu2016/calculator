@@ -47,7 +47,12 @@ public final class Expr extends DisjunctionRule {
             return false;
         }
         var marker = parseTree.enter(level, RULE_NAME);
-        var result = false;
+        boolean result;
+
+        result = Expr1.parse(parseTree, level + 1);
+        if (!result) result = Disjunction.parse(parseTree, level + 1);
+        if (!result) result = Funcdef.parse(parseTree, level + 1);
+
         parseTree.exit(level, marker, result);
         return result;
     }
@@ -119,7 +124,15 @@ public final class Expr extends DisjunctionRule {
                 return false;
             }
             var marker = parseTree.enter(level, RULE_NAME);
-            var result = false;
+            boolean result;
+
+            result = parseTree.consumeTokenLiteral("if");
+            result = result && Disjunction.parse(parseTree, level + 1);
+            result = result && parseTree.consumeTokenLiteral("?");
+            result = result && Disjunction.parse(parseTree, level + 1);
+            result = result && parseTree.consumeTokenLiteral("else");
+            result = result && Expr.parse(parseTree, level + 1);
+
             parseTree.exit(level, marker, result);
             return result;
         }

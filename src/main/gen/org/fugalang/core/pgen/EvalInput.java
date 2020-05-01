@@ -47,7 +47,16 @@ public final class EvalInput extends ConjunctionRule {
             return false;
         }
         var marker = parseTree.enter(level, RULE_NAME);
-        var result = false;
+        boolean result;
+
+        result = Exprlist.parse(parseTree, level + 1);
+        while (true) {
+            if (!parseTree.consumeTokenType("NEWLINE")) {
+                break;
+            }
+        }
+        result = result && parseTree.consumeTokenType("ENDMARKER");
+
         parseTree.exit(level, marker, result);
         return result;
     }

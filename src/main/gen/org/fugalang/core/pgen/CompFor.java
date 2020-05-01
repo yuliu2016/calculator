@@ -63,7 +63,14 @@ public final class CompFor extends ConjunctionRule {
             return false;
         }
         var marker = parseTree.enter(level, RULE_NAME);
-        var result = false;
+        boolean result;
+
+        result = parseTree.consumeTokenLiteral("for");
+        result = result && Targets.parse(parseTree, level + 1);
+        result = result && parseTree.consumeTokenLiteral("in");
+        result = result && Disjunction.parse(parseTree, level + 1);
+        CompIter.parse(parseTree, level + 1);
+
         parseTree.exit(level, marker, result);
         return result;
     }

@@ -56,7 +56,13 @@ public final class Trailer extends DisjunctionRule {
             return false;
         }
         var marker = parseTree.enter(level, RULE_NAME);
-        var result = false;
+        boolean result;
+
+        result = Trailer1.parse(parseTree, level + 1);
+        if (!result) result = Trailer2.parse(parseTree, level + 1);
+        if (!result) result = Trailer3.parse(parseTree, level + 1);
+        if (!result) result = BlockSuite.parse(parseTree, level + 1);
+
         parseTree.exit(level, marker, result);
         return result;
     }
@@ -104,7 +110,12 @@ public final class Trailer extends DisjunctionRule {
                 return false;
             }
             var marker = parseTree.enter(level, RULE_NAME);
-            var result = false;
+            boolean result;
+
+            result = parseTree.consumeTokenLiteral("(");
+            Arglist.parse(parseTree, level + 1);
+            result = result && parseTree.consumeTokenLiteral(")");
+
             parseTree.exit(level, marker, result);
             return result;
         }
@@ -153,7 +164,12 @@ public final class Trailer extends DisjunctionRule {
                 return false;
             }
             var marker = parseTree.enter(level, RULE_NAME);
-            var result = false;
+            boolean result;
+
+            result = parseTree.consumeTokenLiteral("[");
+            result = result && Subscriptlist.parse(parseTree, level + 1);
+            result = result && parseTree.consumeTokenLiteral("]");
+
             parseTree.exit(level, marker, result);
             return result;
         }
@@ -194,7 +210,11 @@ public final class Trailer extends DisjunctionRule {
                 return false;
             }
             var marker = parseTree.enter(level, RULE_NAME);
-            var result = false;
+            boolean result;
+
+            result = parseTree.consumeTokenLiteral(".");
+            result = result && parseTree.consumeTokenType("NAME");
+
             parseTree.exit(level, marker, result);
             return result;
         }

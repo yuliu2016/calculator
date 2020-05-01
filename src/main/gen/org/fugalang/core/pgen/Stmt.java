@@ -39,7 +39,11 @@ public final class Stmt extends ConjunctionRule {
             return false;
         }
         var marker = parseTree.enter(level, RULE_NAME);
-        var result = false;
+        boolean result;
+
+        result = Stmt1.parse(parseTree, level + 1);
+        result = result && parseTree.consumeTokenType("NEWLINE");
+
         parseTree.exit(level, marker, result);
         return result;
     }
@@ -79,7 +83,11 @@ public final class Stmt extends ConjunctionRule {
                 return false;
             }
             var marker = parseTree.enter(level, RULE_NAME);
-            var result = false;
+            boolean result;
+
+            result = SimpleStmt.parse(parseTree, level + 1);
+            if (!result) result = CompoundStmt.parse(parseTree, level + 1);
+
             parseTree.exit(level, marker, result);
             return result;
         }

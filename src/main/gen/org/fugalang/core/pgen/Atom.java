@@ -38,7 +38,11 @@ public final class Atom extends DisjunctionRule {
             return false;
         }
         var marker = parseTree.enter(level, RULE_NAME);
-        var result = false;
+        boolean result;
+
+        result = CompoundAtom.parse(parseTree, level + 1);
+        if (!result) result = SimpleAtom.parse(parseTree, level + 1);
+
         parseTree.exit(level, marker, result);
         return result;
     }

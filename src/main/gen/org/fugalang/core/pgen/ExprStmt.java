@@ -41,7 +41,11 @@ public final class ExprStmt extends ConjunctionRule {
             return false;
         }
         var marker = parseTree.enter(level, RULE_NAME);
-        var result = false;
+        boolean result;
+
+        result = ExprlistStar.parse(parseTree, level + 1);
+        ExprStmt2.parse(parseTree, level + 1);
+
         parseTree.exit(level, marker, result);
         return result;
     }
@@ -81,7 +85,13 @@ public final class ExprStmt extends ConjunctionRule {
                 return false;
             }
             var marker = parseTree.enter(level, RULE_NAME);
-            var result = false;
+            boolean result;
+
+            result = ExprStmt21.parse(parseTree, level + 1);
+            while (true) {
+                if(!ExprStmt22.parse(parseTree, level + 1)) break;
+            }
+
             parseTree.exit(level, marker, result);
             return result;
         }
@@ -122,7 +132,11 @@ public final class ExprStmt extends ConjunctionRule {
                 return false;
             }
             var marker = parseTree.enter(level, RULE_NAME);
-            var result = false;
+            boolean result;
+
+            result = Augassign.parse(parseTree, level + 1);
+            result = result && Exprlist.parse(parseTree, level + 1);
+
             parseTree.exit(level, marker, result);
             return result;
         }
@@ -163,7 +177,11 @@ public final class ExprStmt extends ConjunctionRule {
                 return false;
             }
             var marker = parseTree.enter(level, RULE_NAME);
-            var result = false;
+            boolean result;
+
+            result = parseTree.consumeTokenLiteral("=");
+            result = result && ExprlistStar.parse(parseTree, level + 1);
+
             parseTree.exit(level, marker, result);
             return result;
         }

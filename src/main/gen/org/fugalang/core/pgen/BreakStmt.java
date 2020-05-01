@@ -30,7 +30,10 @@ public final class BreakStmt extends ConjunctionRule {
             return false;
         }
         var marker = parseTree.enter(level, RULE_NAME);
-        var result = false;
+        boolean result;
+
+        result = parseTree.consumeTokenLiteral("break");
+
         parseTree.exit(level, marker, result);
         return result;
     }

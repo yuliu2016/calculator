@@ -40,7 +40,11 @@ public final class SetMaker extends ConjunctionRule {
             return false;
         }
         var marker = parseTree.enter(level, RULE_NAME);
-        var result = false;
+        boolean result;
+
+        result = ExprOrStar.parse(parseTree, level + 1);
+        result = result && SetMaker2.parse(parseTree, level + 1);
+
         parseTree.exit(level, marker, result);
         return result;
     }
@@ -80,7 +84,11 @@ public final class SetMaker extends ConjunctionRule {
                 return false;
             }
             var marker = parseTree.enter(level, RULE_NAME);
-            var result = false;
+            boolean result;
+
+            result = CompFor.parse(parseTree, level + 1);
+            if (!result) result = SetMaker22.parse(parseTree, level + 1);
+
             parseTree.exit(level, marker, result);
             return result;
         }
@@ -121,7 +129,15 @@ public final class SetMaker extends ConjunctionRule {
                 return false;
             }
             var marker = parseTree.enter(level, RULE_NAME);
-            var result = false;
+            boolean result;
+
+            while (true) {
+                if (!SetMaker221.parse(parseTree, level + 1)) {
+                    break;
+                }
+            }
+            result = parseTree.consumeTokenLiteral(",");
+
             parseTree.exit(level, marker, result);
             return result;
         }
@@ -162,7 +178,11 @@ public final class SetMaker extends ConjunctionRule {
                 return false;
             }
             var marker = parseTree.enter(level, RULE_NAME);
-            var result = false;
+            boolean result;
+
+            result = parseTree.consumeTokenLiteral(",");
+            result = result && ExprOrStar.parse(parseTree, level + 1);
+
             parseTree.exit(level, marker, result);
             return result;
         }

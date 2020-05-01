@@ -56,7 +56,13 @@ public final class ImportFrom extends ConjunctionRule {
             return false;
         }
         var marker = parseTree.enter(level, RULE_NAME);
-        var result = false;
+        boolean result;
+
+        result = parseTree.consumeTokenLiteral("from");
+        result = result && ImportFrom2.parse(parseTree, level + 1);
+        result = result && parseTree.consumeTokenLiteral("import");
+        result = result && ImportFrom4.parse(parseTree, level + 1);
+
         parseTree.exit(level, marker, result);
         return result;
     }
@@ -104,7 +110,14 @@ public final class ImportFrom extends ConjunctionRule {
                 return false;
             }
             var marker = parseTree.enter(level, RULE_NAME);
-            var result = false;
+            boolean result;
+
+            result = ImportFrom21.parse(parseTree, level + 1);
+            if (!result) result = parseTree.consumeTokenLiteral(".");
+            while (true) {
+                if(!parseTree.consumeTokenLiteral(".")) break;
+            }
+
             parseTree.exit(level, marker, result);
             return result;
         }
@@ -145,7 +158,15 @@ public final class ImportFrom extends ConjunctionRule {
                 return false;
             }
             var marker = parseTree.enter(level, RULE_NAME);
-            var result = false;
+            boolean result;
+
+            while (true) {
+                if (!parseTree.consumeTokenLiteral(".")) {
+                    break;
+                }
+            }
+            result = DottedName.parse(parseTree, level + 1);
+
             parseTree.exit(level, marker, result);
             return result;
         }
@@ -194,7 +215,12 @@ public final class ImportFrom extends ConjunctionRule {
                 return false;
             }
             var marker = parseTree.enter(level, RULE_NAME);
-            var result = false;
+            boolean result;
+
+            result = parseTree.consumeTokenLiteral("*");
+            if (!result) result = ImportFrom42.parse(parseTree, level + 1);
+            if (!result) result = ImportAsNames.parse(parseTree, level + 1);
+
             parseTree.exit(level, marker, result);
             return result;
         }
@@ -243,7 +269,12 @@ public final class ImportFrom extends ConjunctionRule {
                 return false;
             }
             var marker = parseTree.enter(level, RULE_NAME);
-            var result = false;
+            boolean result;
+
+            result = parseTree.consumeTokenLiteral("(");
+            result = result && ImportAsNames.parse(parseTree, level + 1);
+            result = result && parseTree.consumeTokenLiteral(")");
+
             parseTree.exit(level, marker, result);
             return result;
         }

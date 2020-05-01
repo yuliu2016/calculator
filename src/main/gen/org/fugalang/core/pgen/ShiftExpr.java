@@ -40,7 +40,15 @@ public final class ShiftExpr extends ConjunctionRule {
             return false;
         }
         var marker = parseTree.enter(level, RULE_NAME);
-        var result = false;
+        boolean result;
+
+        result = Sum.parse(parseTree, level + 1);
+        while (true) {
+            if (!ShiftExpr2.parse(parseTree, level + 1)) {
+                break;
+            }
+        }
+
         parseTree.exit(level, marker, result);
         return result;
     }
@@ -80,7 +88,11 @@ public final class ShiftExpr extends ConjunctionRule {
                 return false;
             }
             var marker = parseTree.enter(level, RULE_NAME);
-            var result = false;
+            boolean result;
+
+            result = ShiftExpr21.parse(parseTree, level + 1);
+            result = result && Sum.parse(parseTree, level + 1);
+
             parseTree.exit(level, marker, result);
             return result;
         }
@@ -121,7 +133,11 @@ public final class ShiftExpr extends ConjunctionRule {
                 return false;
             }
             var marker = parseTree.enter(level, RULE_NAME);
-            var result = false;
+            boolean result;
+
+            result = parseTree.consumeTokenLiteral("<<");
+            if (!result) result = parseTree.consumeTokenLiteral(">>");
+
             parseTree.exit(level, marker, result);
             return result;
         }

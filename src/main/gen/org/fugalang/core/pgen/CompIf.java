@@ -47,7 +47,12 @@ public final class CompIf extends ConjunctionRule {
             return false;
         }
         var marker = parseTree.enter(level, RULE_NAME);
-        var result = false;
+        boolean result;
+
+        result = parseTree.consumeTokenLiteral("if");
+        result = result && Expr.parse(parseTree, level + 1);
+        CompIter.parse(parseTree, level + 1);
+
         parseTree.exit(level, marker, result);
         return result;
     }

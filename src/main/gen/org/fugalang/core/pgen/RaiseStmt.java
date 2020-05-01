@@ -39,7 +39,11 @@ public final class RaiseStmt extends ConjunctionRule {
             return false;
         }
         var marker = parseTree.enter(level, RULE_NAME);
-        var result = false;
+        boolean result;
+
+        result = parseTree.consumeTokenLiteral("raise");
+        RaiseStmt2.parse(parseTree, level + 1);
+
         parseTree.exit(level, marker, result);
         return result;
     }
@@ -79,7 +83,11 @@ public final class RaiseStmt extends ConjunctionRule {
                 return false;
             }
             var marker = parseTree.enter(level, RULE_NAME);
-            var result = false;
+            boolean result;
+
+            result = Expr.parse(parseTree, level + 1);
+            RaiseStmt22.parse(parseTree, level + 1);
+
             parseTree.exit(level, marker, result);
             return result;
         }
@@ -120,7 +128,11 @@ public final class RaiseStmt extends ConjunctionRule {
                 return false;
             }
             var marker = parseTree.enter(level, RULE_NAME);
-            var result = false;
+            boolean result;
+
+            result = parseTree.consumeTokenLiteral("from");
+            result = result && Expr.parse(parseTree, level + 1);
+
             parseTree.exit(level, marker, result);
             return result;
         }

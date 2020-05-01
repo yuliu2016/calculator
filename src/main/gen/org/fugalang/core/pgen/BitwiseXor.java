@@ -39,7 +39,15 @@ public final class BitwiseXor extends ConjunctionRule {
             return false;
         }
         var marker = parseTree.enter(level, RULE_NAME);
-        var result = false;
+        boolean result;
+
+        result = BitwiseAnd.parse(parseTree, level + 1);
+        while (true) {
+            if (!BitwiseXor2.parse(parseTree, level + 1)) {
+                break;
+            }
+        }
+
         parseTree.exit(level, marker, result);
         return result;
     }
@@ -79,7 +87,11 @@ public final class BitwiseXor extends ConjunctionRule {
                 return false;
             }
             var marker = parseTree.enter(level, RULE_NAME);
-            var result = false;
+            boolean result;
+
+            result = parseTree.consumeTokenLiteral("^");
+            result = result && BitwiseAnd.parse(parseTree, level + 1);
+
             parseTree.exit(level, marker, result);
             return result;
         }

@@ -70,7 +70,15 @@ public final class SimpleAtom extends DisjunctionRule {
             return false;
         }
         var marker = parseTree.enter(level, RULE_NAME);
-        var result = false;
+        boolean result;
+
+        result = parseTree.consumeTokenType("NAME");
+        if (!result) result = parseTree.consumeTokenType("NUMBER");
+        if (!result) result = parseTree.consumeTokenType("STRING");
+        if (!result) result = parseTree.consumeTokenLiteral("None");
+        if (!result) result = parseTree.consumeTokenLiteral("True");
+        if (!result) result = parseTree.consumeTokenLiteral("False");
+
         parseTree.exit(level, marker, result);
         return result;
     }

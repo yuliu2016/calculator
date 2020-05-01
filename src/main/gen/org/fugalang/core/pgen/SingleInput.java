@@ -47,7 +47,12 @@ public final class SingleInput extends DisjunctionRule {
             return false;
         }
         var marker = parseTree.enter(level, RULE_NAME);
-        var result = false;
+        boolean result;
+
+        result = parseTree.consumeTokenType("NEWLINE");
+        if (!result) result = SimpleStmt.parse(parseTree, level + 1);
+        if (!result) result = SingleInput3.parse(parseTree, level + 1);
+
         parseTree.exit(level, marker, result);
         return result;
     }
@@ -87,7 +92,11 @@ public final class SingleInput extends DisjunctionRule {
                 return false;
             }
             var marker = parseTree.enter(level, RULE_NAME);
-            var result = false;
+            boolean result;
+
+            result = CompoundStmt.parse(parseTree, level + 1);
+            result = result && parseTree.consumeTokenType("NEWLINE");
+
             parseTree.exit(level, marker, result);
             return result;
         }

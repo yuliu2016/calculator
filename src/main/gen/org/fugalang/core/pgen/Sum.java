@@ -40,7 +40,15 @@ public final class Sum extends ConjunctionRule {
             return false;
         }
         var marker = parseTree.enter(level, RULE_NAME);
-        var result = false;
+        boolean result;
+
+        result = Term.parse(parseTree, level + 1);
+        while (true) {
+            if (!Sum2.parse(parseTree, level + 1)) {
+                break;
+            }
+        }
+
         parseTree.exit(level, marker, result);
         return result;
     }
@@ -80,7 +88,11 @@ public final class Sum extends ConjunctionRule {
                 return false;
             }
             var marker = parseTree.enter(level, RULE_NAME);
-            var result = false;
+            boolean result;
+
+            result = Sum21.parse(parseTree, level + 1);
+            result = result && Term.parse(parseTree, level + 1);
+
             parseTree.exit(level, marker, result);
             return result;
         }
@@ -121,7 +133,11 @@ public final class Sum extends ConjunctionRule {
                 return false;
             }
             var marker = parseTree.enter(level, RULE_NAME);
-            var result = false;
+            boolean result;
+
+            result = parseTree.consumeTokenLiteral("+");
+            if (!result) result = parseTree.consumeTokenLiteral("-");
+
             parseTree.exit(level, marker, result);
             return result;
         }

@@ -103,7 +103,19 @@ public final class CompOp extends DisjunctionRule {
             return false;
         }
         var marker = parseTree.enter(level, RULE_NAME);
-        var result = false;
+        boolean result;
+
+        result = parseTree.consumeTokenLiteral("<");
+        if (!result) result = parseTree.consumeTokenLiteral(">");
+        if (!result) result = parseTree.consumeTokenLiteral("==");
+        if (!result) result = parseTree.consumeTokenLiteral(">=");
+        if (!result) result = parseTree.consumeTokenLiteral("<=");
+        if (!result) result = parseTree.consumeTokenLiteral("!=");
+        if (!result) result = parseTree.consumeTokenLiteral("in");
+        if (!result) result = CompOp8.parse(parseTree, level + 1);
+        if (!result) result = parseTree.consumeTokenLiteral("is");
+        if (!result) result = CompOp10.parse(parseTree, level + 1);
+
         parseTree.exit(level, marker, result);
         return result;
     }
@@ -143,7 +155,11 @@ public final class CompOp extends DisjunctionRule {
                 return false;
             }
             var marker = parseTree.enter(level, RULE_NAME);
-            var result = false;
+            boolean result;
+
+            result = parseTree.consumeTokenLiteral("not");
+            result = result && parseTree.consumeTokenLiteral("in");
+
             parseTree.exit(level, marker, result);
             return result;
         }
@@ -184,7 +200,11 @@ public final class CompOp extends DisjunctionRule {
                 return false;
             }
             var marker = parseTree.enter(level, RULE_NAME);
-            var result = false;
+            boolean result;
+
+            result = parseTree.consumeTokenLiteral("is");
+            result = result && parseTree.consumeTokenLiteral("not");
+
             parseTree.exit(level, marker, result);
             return result;
         }

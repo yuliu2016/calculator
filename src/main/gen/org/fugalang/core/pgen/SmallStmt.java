@@ -70,7 +70,15 @@ public final class SmallStmt extends DisjunctionRule {
             return false;
         }
         var marker = parseTree.enter(level, RULE_NAME);
-        var result = false;
+        boolean result;
+
+        result = ExprStmt.parse(parseTree, level + 1);
+        if (!result) result = DelStmt.parse(parseTree, level + 1);
+        if (!result) result = PassStmt.parse(parseTree, level + 1);
+        if (!result) result = FlowStmt.parse(parseTree, level + 1);
+        if (!result) result = ImportStmt.parse(parseTree, level + 1);
+        if (!result) result = AssertStmt.parse(parseTree, level + 1);
+
         parseTree.exit(level, marker, result);
         return result;
     }

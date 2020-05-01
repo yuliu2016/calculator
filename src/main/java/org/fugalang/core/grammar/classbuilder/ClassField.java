@@ -32,6 +32,10 @@ public class ClassField {
         return fieldType == FieldType.Optional;
     }
 
+    public boolean isSimple() {
+        return fieldType == FieldType.Simple;
+    }
+
     /**
      * Used for field name conflict resolution
      */
@@ -97,38 +101,55 @@ public class ClassField {
         }
     }
 
-    public String asParserStmt(RuleType ruleType) {
+    public String asParserStmt(RuleType ruleType, boolean isFirst) {
         return switch (ruleType) {
-            case Conjunction -> asConjunctionStmt();
-            case Disjunction -> asDisjunctionStmt();
+            case Conjunction -> asConjunctionStmt(isFirst);
+            case Disjunction -> asDisjunctionStmt(isFirst);
         };
     }
 
-    public String asConjunctionStmt() {
+    private String getResultExpr() {
+        return switch (resultSource.getSourceType()) {
+            case Class -> resultSource.getValue() + ".parse(parseTree, level + 1)";
+            case TokenType -> "parseTree.consumeTokenType(\"" + resultSource.getValue() + "\")";
+            case TokenLiteral -> "parseTree.consumeTokenLiteral(\"" + resultSource.getValue() + "\")";
+        };
+    }
+
+    public String asConjunctionStmt(boolean isFirst) {
+
+        var resultExpr = getResultExpr();
+
         return switch (fieldType) {
             case Simple -> {
-                yield "";
+                if (isFirst) {
+                    yield "result = " + resultExpr + ";\n";
+                } else {
+                    yield "result = result && " + resultExpr + ";\n";
+                }
             }
-            case Optional -> {
-                yield "";
-            }
+            case Optional -> resultExpr + ";\n";
             case Repeated -> {
-                yield "";
+                yield "while (true) {\n    if (!" + resultExpr + ") {\n        break;\n    }\n}\n";
             }
         };
     }
 
-    public String asDisjunctionStmt() {
+    public String asDisjunctionStmt(boolean isFirst) {
+        var resultExpr = getResultExpr();
+
         return switch (fieldType) {
 
             case Simple -> {
-                yield "";
+                if (isFirst) {
+                    yield "result = " + resultExpr + ";\n";
+                } else {
+                    yield "if (!result) result = " + resultExpr + ";\n";
+                }
             }
-            case Optional -> {
-                yield "";
-            }
+            case Optional -> resultExpr + ";\n";
             case Repeated -> {
-                yield "";
+                yield  "while (true) {\n    if(!" + resultExpr + ") break;\n}\n";
             }
         };
     }

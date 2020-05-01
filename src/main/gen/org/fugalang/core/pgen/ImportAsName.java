@@ -39,7 +39,11 @@ public final class ImportAsName extends ConjunctionRule {
             return false;
         }
         var marker = parseTree.enter(level, RULE_NAME);
-        var result = false;
+        boolean result;
+
+        result = parseTree.consumeTokenType("NAME");
+        ImportAsName2.parse(parseTree, level + 1);
+
         parseTree.exit(level, marker, result);
         return result;
     }
@@ -79,7 +83,11 @@ public final class ImportAsName extends ConjunctionRule {
                 return false;
             }
             var marker = parseTree.enter(level, RULE_NAME);
-            var result = false;
+            boolean result;
+
+            result = parseTree.consumeTokenLiteral("as");
+            result = result && parseTree.consumeTokenType("NAME");
+
             parseTree.exit(level, marker, result);
             return result;
         }

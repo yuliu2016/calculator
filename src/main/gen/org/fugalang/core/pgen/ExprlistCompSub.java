@@ -38,7 +38,11 @@ public final class ExprlistCompSub extends DisjunctionRule {
             return false;
         }
         var marker = parseTree.enter(level, RULE_NAME);
-        var result = false;
+        boolean result;
+
+        result = ExprlistComp.parse(parseTree, level + 1);
+        if (!result) result = Subscript.parse(parseTree, level + 1);
+
         parseTree.exit(level, marker, result);
         return result;
     }

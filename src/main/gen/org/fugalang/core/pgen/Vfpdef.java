@@ -30,7 +30,10 @@ public final class Vfpdef extends ConjunctionRule {
             return false;
         }
         var marker = parseTree.enter(level, RULE_NAME);
-        var result = false;
+        boolean result;
+
+        result = parseTree.consumeTokenType("NAME");
+
         parseTree.exit(level, marker, result);
         return result;
     }

@@ -55,7 +55,17 @@ public final class WithStmt extends ConjunctionRule {
             return false;
         }
         var marker = parseTree.enter(level, RULE_NAME);
-        var result = false;
+        boolean result;
+
+        result = parseTree.consumeTokenLiteral("with");
+        result = result && WithItem.parse(parseTree, level + 1);
+        while (true) {
+            if (!WithStmt3.parse(parseTree, level + 1)) {
+                break;
+            }
+        }
+        result = result && Suite.parse(parseTree, level + 1);
+
         parseTree.exit(level, marker, result);
         return result;
     }
@@ -95,7 +105,11 @@ public final class WithStmt extends ConjunctionRule {
                 return false;
             }
             var marker = parseTree.enter(level, RULE_NAME);
-            var result = false;
+            boolean result;
+
+            result = parseTree.consumeTokenLiteral(",");
+            result = result && WithItem.parse(parseTree, level + 1);
+
             parseTree.exit(level, marker, result);
             return result;
         }

@@ -188,13 +188,18 @@ public class ClassBuilder {
         var mb = new StringBuilder();
         mb.append("if (!ParseTree.recursionGuard(level, RULE_NAME)) {\n    return false;\n}\n");
         mb.append("var marker = parseTree.enter(level, RULE_NAME);\n");
-        mb.append("var result = false;\n");
+        mb.append("boolean result;\n\n");
 
+        var first = true;
         for (ClassField field : fields) {
-            mb.append(field.asParserStmt(ruleType));
+            var result = field.asParserStmt(ruleType, first);
+            if (field.isSimple()) {
+                first = false;
+            }
+            mb.append(result);
         }
 
-        mb.append("parseTree.exit(level, marker, result);\n");
+        mb.append("\nparseTree.exit(level, marker, result);\n");
         mb.append("return result;\n");
 
         sb.append(ParserStringUtil.indent(mb.toString(), 8));

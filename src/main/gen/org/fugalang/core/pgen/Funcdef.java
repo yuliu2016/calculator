@@ -56,7 +56,13 @@ public final class Funcdef extends ConjunctionRule {
             return false;
         }
         var marker = parseTree.enter(level, RULE_NAME);
-        var result = false;
+        boolean result;
+
+        result = parseTree.consumeTokenLiteral("async");
+        result = result && parseTree.consumeTokenLiteral("def");
+        Varargslist.parse(parseTree, level + 1);
+        result = result && Funcdef4.parse(parseTree, level + 1);
+
         parseTree.exit(level, marker, result);
         return result;
     }
@@ -96,7 +102,11 @@ public final class Funcdef extends ConjunctionRule {
                 return false;
             }
             var marker = parseTree.enter(level, RULE_NAME);
-            var result = false;
+            boolean result;
+
+            result = Funcdef41.parse(parseTree, level + 1);
+            if (!result) result = BlockSuite.parse(parseTree, level + 1);
+
             parseTree.exit(level, marker, result);
             return result;
         }
@@ -137,7 +147,11 @@ public final class Funcdef extends ConjunctionRule {
                 return false;
             }
             var marker = parseTree.enter(level, RULE_NAME);
-            var result = false;
+            boolean result;
+
+            result = parseTree.consumeTokenLiteral(":");
+            result = result && Expr.parse(parseTree, level + 1);
+
             parseTree.exit(level, marker, result);
             return result;
         }

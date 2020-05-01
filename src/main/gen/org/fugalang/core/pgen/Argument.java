@@ -64,7 +64,14 @@ public final class Argument extends DisjunctionRule {
             return false;
         }
         var marker = parseTree.enter(level, RULE_NAME);
-        var result = false;
+        boolean result;
+
+        result = Argument1.parse(parseTree, level + 1);
+        if (!result) result = Argument2.parse(parseTree, level + 1);
+        if (!result) result = Argument3.parse(parseTree, level + 1);
+        if (!result) result = Argument4.parse(parseTree, level + 1);
+        if (!result) result = Argument5.parse(parseTree, level + 1);
+
         parseTree.exit(level, marker, result);
         return result;
     }
@@ -104,7 +111,11 @@ public final class Argument extends DisjunctionRule {
                 return false;
             }
             var marker = parseTree.enter(level, RULE_NAME);
-            var result = false;
+            boolean result;
+
+            result = parseTree.consumeTokenType("NAME");
+            CompFor.parse(parseTree, level + 1);
+
             parseTree.exit(level, marker, result);
             return result;
         }
@@ -153,7 +164,12 @@ public final class Argument extends DisjunctionRule {
                 return false;
             }
             var marker = parseTree.enter(level, RULE_NAME);
-            var result = false;
+            boolean result;
+
+            result = parseTree.consumeTokenType("NAME");
+            result = result && parseTree.consumeTokenLiteral(":=");
+            result = result && Expr.parse(parseTree, level + 1);
+
             parseTree.exit(level, marker, result);
             return result;
         }
@@ -202,7 +218,12 @@ public final class Argument extends DisjunctionRule {
                 return false;
             }
             var marker = parseTree.enter(level, RULE_NAME);
-            var result = false;
+            boolean result;
+
+            result = parseTree.consumeTokenType("NAME");
+            result = result && parseTree.consumeTokenLiteral("=");
+            result = result && Expr.parse(parseTree, level + 1);
+
             parseTree.exit(level, marker, result);
             return result;
         }
@@ -243,7 +264,11 @@ public final class Argument extends DisjunctionRule {
                 return false;
             }
             var marker = parseTree.enter(level, RULE_NAME);
-            var result = false;
+            boolean result;
+
+            result = parseTree.consumeTokenLiteral("**");
+            result = result && Expr.parse(parseTree, level + 1);
+
             parseTree.exit(level, marker, result);
             return result;
         }
@@ -284,7 +309,11 @@ public final class Argument extends DisjunctionRule {
                 return false;
             }
             var marker = parseTree.enter(level, RULE_NAME);
-            var result = false;
+            boolean result;
+
+            result = parseTree.consumeTokenLiteral("*");
+            result = result && Expr.parse(parseTree, level + 1);
+
             parseTree.exit(level, marker, result);
             return result;
         }

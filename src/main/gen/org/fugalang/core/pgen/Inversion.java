@@ -39,7 +39,11 @@ public final class Inversion extends DisjunctionRule {
             return false;
         }
         var marker = parseTree.enter(level, RULE_NAME);
-        var result = false;
+        boolean result;
+
+        result = Inversion1.parse(parseTree, level + 1);
+        if (!result) result = Comparison.parse(parseTree, level + 1);
+
         parseTree.exit(level, marker, result);
         return result;
     }
@@ -79,7 +83,11 @@ public final class Inversion extends DisjunctionRule {
                 return false;
             }
             var marker = parseTree.enter(level, RULE_NAME);
-            var result = false;
+            boolean result;
+
+            result = parseTree.consumeTokenLiteral("not");
+            result = result && Inversion.parse(parseTree, level + 1);
+
             parseTree.exit(level, marker, result);
             return result;
         }
