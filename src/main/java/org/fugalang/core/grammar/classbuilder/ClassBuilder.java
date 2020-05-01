@@ -1,6 +1,6 @@
 package org.fugalang.core.grammar.classbuilder;
 
-import org.fugalang.core.grammar.gen.ParseStringUtil;
+import org.fugalang.core.grammar.gen.ParserStringUtil;
 
 import java.util.*;
 
@@ -71,7 +71,7 @@ public class ClassBuilder {
 
         for (ClassBuilder componentClass : componentClasses) {
             var classDef = componentClass.generateClassBody(true);
-            sb.append(ParseStringUtil.indent(classDef, 4));
+            sb.append(ParserStringUtil.indent(classDef, 4));
         }
 
         // add final closing bracket
@@ -197,7 +197,7 @@ public class ClassBuilder {
         mb.append("parseTree.exit(level, marker, result);\n");
         mb.append("return result;\n");
 
-        sb.append(ParseStringUtil.indent(mb.toString(), 8));
+        sb.append(ParserStringUtil.indent(mb.toString(), 8));
 
         sb.append("    }\n");
     }

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ParseStringUtil {
+public class ParserStringUtil {
     public static String convertCase(String s) {
         var words = s.split("_");
         var sb = new StringBuilder();

@@ -1,6 +1,6 @@
 package org.fugalang.core.grammar.classbuilder;
 
-import org.fugalang.core.grammar.gen.ParseStringUtil;
+import org.fugalang.core.grammar.gen.ParserStringUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +32,7 @@ public class ClassName {
 
         // assuming classes start with upper-case,
         // this deals with booleans
-        sb.append(ParseStringUtil.capitalizeFirstCharOnly(realClassName));
+        sb.append(ParserStringUtil.capitalizeFirstCharOnly(realClassName));
 
         sb.append(">".repeat(genericWrappers.size()));
         return sb.toString();
@@ -65,7 +65,7 @@ public class ClassName {
     }
 
     public String decapName() {
-        return ParseStringUtil.decap(typeStr);
+        return ParserStringUtil.decap(typeStr);
     }
 
     @Override

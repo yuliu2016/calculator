@@ -4,18 +4,24 @@ package org.fugalang.core.grammar.classbuilder;
 public class ClassField {
     private final ClassName className;
     private final String fieldName;
-    private final boolean isOptional;
-    private final boolean isRepeated;
+    private final FieldType fieldType;
+    private final ResultSource resultSource;
 
-    public ClassField(ClassName className, String fieldName, boolean isOptional, boolean isRepeated) {
+    public ClassField(
+            ClassName className,
+            String fieldName,
+            boolean isOptional,
+            boolean isRepeated,
+            ResultSource resultSource
+    ) {
+        this(className, fieldName, FieldType.fromBiState(isOptional, isRepeated), resultSource);
+    }
+
+    public ClassField(ClassName className, String fieldName, FieldType fieldType, ResultSource resultSource) {
         this.className = className;
         this.fieldName = fieldName;
-        this.isOptional = isOptional;
-        this.isRepeated = isRepeated;
-
-        if (isOptional && isRepeated) {
-            throw new IllegalArgumentException("ClassField: Cannot be optional and repeated at the same time");
-        }
+        this.fieldType = fieldType;
+        this.resultSource = resultSource;
     }
 
     public String getFieldName() {
@@ -23,14 +29,14 @@ public class ClassField {
     }
 
     public boolean isOptional() {
-        return isOptional;
+        return fieldType == FieldType.Optional;
     }
 
     /**
      * Used for field name conflict resolution
      */
     public ClassField withFieldName(String newFieldName) {
-        return new ClassField(className, newFieldName, isOptional, isRepeated);
+        return new ClassField(className, newFieldName, fieldType, resultSource);
     }
 
     @Override
@@ -54,7 +60,7 @@ public class ClassField {
         StringBuilder sb = new StringBuilder();
         sb.append("    public ");
 
-        if (isOptional) {
+        if (isOptional()) {
             sb.append(className.wrapIn("Optional").asType());
         } else {
             sb.append(className.asType());
@@ -62,7 +68,7 @@ public class ClassField {
 
         sb.append(" ").append(fieldName).append("() {\n        return ");
 
-        if (isOptional) {
+        if (isOptional()) {
             sb.append("Optional.ofNullable(")
                     .append(fieldName)
                     .append(")");
@@ -81,7 +87,7 @@ public class ClassField {
                 return "addChoice(\"" + fieldName + "\", " + fieldName + ");";
             }
             case Conjunction -> {
-                if (isOptional) {
+                if (isOptional()) {
                     return "addOptional(\"" + fieldName + "\", " + fieldName + ");";
                 } else {
                     return "addRequired(\"" + fieldName + "\", " + fieldName + ");";
@@ -92,6 +98,39 @@ public class ClassField {
     }
 
     public String asParserStmt(RuleType ruleType) {
-        return "";
+        return switch (ruleType) {
+            case Conjunction -> asConjunctionStmt();
+            case Disjunction -> asDisjunctionStmt();
+        };
     }
+
+    public String asConjunctionStmt() {
+        return switch (fieldType) {
+            case Simple -> {
+                yield "";
+            }
+            case Optional -> {
+                yield "";
+            }
+            case Repeated -> {
+                yield "";
+            }
+        };
+    }
+
+    public String asDisjunctionStmt() {
+        return switch (fieldType) {
+
+            case Simple -> {
+                yield "";
+            }
+            case Optional -> {
+                yield "";
+            }
+            case Repeated -> {
+                yield "";
+            }
+        };
+    }
+
 }

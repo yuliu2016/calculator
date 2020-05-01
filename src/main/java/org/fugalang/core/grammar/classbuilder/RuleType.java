@@ -1,6 +1,6 @@
 package org.fugalang.core.grammar.classbuilder;
 
-public enum  RuleType {
+public enum RuleType {
     Disjunction("org.fugalang.core.parser.DisjunctionRule"),
     Conjunction("org.fugalang.core.parser.ConjunctionRule");
 

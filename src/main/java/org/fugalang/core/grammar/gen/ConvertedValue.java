@@ -5,10 +5,12 @@ import java.util.Objects;
 public class ConvertedValue {
     private final String className;
     private final String fieldName;
+    private final String sourceLiteral;
 
-    public ConvertedValue(String className, String fieldName) {
+    public ConvertedValue(String className, String fieldName, String sourceLiteral) {
         this.className = className;
         this.fieldName = fieldName;
+        this.sourceLiteral = sourceLiteral;
     }
 
     public String getClassName() {
@@ -17,6 +19,10 @@ public class ConvertedValue {
 
     public String getFieldName() {
         return fieldName;
+    }
+
+    public String getSourceLiteral() {
+        return sourceLiteral;
     }
 
     @Override

@@ -34,17 +34,21 @@ public class MetaGenerator {
 
     private static Optional<ConvertedValue> checkToken(String s) {
         return switch (s) {
-            case "NEWLINE" -> Optional.of(new ConvertedValue("boolean", "newline"));
-            case "TOK" -> Optional.of(new ConvertedValue("String", "token"));
-            case ":" -> Optional.of(new ConvertedValue("boolean", "colon"));
-            case "(" -> Optional.of(new ConvertedValue("boolean", "lpar"));
-            case ")" -> Optional.of(new ConvertedValue("boolean", "rpar"));
-            case "[" -> Optional.of(new ConvertedValue("boolean", "lsqb"));
-            case "]" -> Optional.of(new ConvertedValue("boolean", "rsqb"));
-            case "+" -> Optional.of(new ConvertedValue("boolean", "plus"));
-            case "*" -> Optional.of(new ConvertedValue("boolean", "star"));
-            case "|" -> Optional.of(new ConvertedValue("boolean", "or"));
+            case "NEWLINE" -> of("boolean", "newline", "NEWLINE");
+            case "TOK" -> of("String", "token", "TOK");
+            case ":" -> of("boolean", "colon", ":");
+            case "(" -> of("boolean", "lpar", "(");
+            case ")" -> of("boolean", "rpar", ")");
+            case "[" -> of("boolean", "lsqb", "[");
+            case "]" -> of("boolean", "rsqb", "]");
+            case "+" -> of("boolean", "plus", "+");
+            case "*" -> of("boolean", "star", "*");
+            case "|" -> of("boolean", "or", "|");
             default -> Optional.empty();
         };
+    }
+
+    private static Optional<ConvertedValue> of(String className, String fieldName, String literal) {
+        return Optional.of(new ConvertedValue(className, fieldName, literal));
     }
 }
