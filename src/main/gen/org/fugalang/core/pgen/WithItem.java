@@ -5,20 +5,17 @@ import org.fugalang.core.parser.*;
 /**
  * with_item: 'expr' ['as' 'NAME']
  */
-public final class WithItem extends ConjunctionRule {
+public final class WithItem extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("with_item", RuleType.Conjunction, true);
 
-    private final Expr expr;
-    private final WithItem2 withItem2;
+    public static WithItem of(ParseTreeNode node) {
+        return new WithItem(node);
+    }
 
-    public WithItem(
-            Expr expr,
-            WithItem2 withItem2
-    ) {
-        this.expr = expr;
-        this.withItem2 = withItem2;
+    private WithItem(ParseTreeNode node) {
+        super(RULE, node);
     }
 
     @Override
@@ -28,11 +25,15 @@ public final class WithItem extends ConjunctionRule {
     }
 
     public Expr expr() {
-        return expr;
+        var element = getItem(0);
+        if (!element.isPresent()) return null;
+        return Expr.of(element);
     }
 
     public WithItem2 withItem2() {
-        return withItem2;
+        var element = getItem(1);
+        if (!element.isPresent()) return null;
+        return WithItem2.of(element);
     }
 
     public boolean hasWithItem2() {
@@ -56,20 +57,17 @@ public final class WithItem extends ConjunctionRule {
     /**
      * 'as' 'NAME'
      */
-    public static final class WithItem2 extends ConjunctionRule {
+    public static final class WithItem2 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("with_item:2", RuleType.Conjunction, false);
 
-        private final boolean isTokenAs;
-        private final String name;
+        public static WithItem2 of(ParseTreeNode node) {
+            return new WithItem2(node);
+        }
 
-        public WithItem2(
-                boolean isTokenAs,
-                String name
-        ) {
-            this.isTokenAs = isTokenAs;
-            this.name = name;
+        private WithItem2(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -79,11 +77,14 @@ public final class WithItem extends ConjunctionRule {
         }
 
         public boolean isTokenAs() {
-            return isTokenAs;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public String name() {
-            return name;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return (String) element.asObject();
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

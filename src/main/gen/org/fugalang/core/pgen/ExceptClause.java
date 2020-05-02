@@ -5,20 +5,17 @@ import org.fugalang.core.parser.*;
 /**
  * except_clause: 'except' ['expr' ['as' 'NAME']]
  */
-public final class ExceptClause extends ConjunctionRule {
+public final class ExceptClause extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("except_clause", RuleType.Conjunction, true);
 
-    private final boolean isTokenExcept;
-    private final ExceptClause2 exceptClause2;
+    public static ExceptClause of(ParseTreeNode node) {
+        return new ExceptClause(node);
+    }
 
-    public ExceptClause(
-            boolean isTokenExcept,
-            ExceptClause2 exceptClause2
-    ) {
-        this.isTokenExcept = isTokenExcept;
-        this.exceptClause2 = exceptClause2;
+    private ExceptClause(ParseTreeNode node) {
+        super(RULE, node);
     }
 
     @Override
@@ -28,11 +25,14 @@ public final class ExceptClause extends ConjunctionRule {
     }
 
     public boolean isTokenExcept() {
-        return isTokenExcept;
+        var element = getItem(0);
+        return element.asBoolean();
     }
 
     public ExceptClause2 exceptClause2() {
-        return exceptClause2;
+        var element = getItem(1);
+        if (!element.isPresent()) return null;
+        return ExceptClause2.of(element);
     }
 
     public boolean hasExceptClause2() {
@@ -56,20 +56,17 @@ public final class ExceptClause extends ConjunctionRule {
     /**
      * 'expr' ['as' 'NAME']
      */
-    public static final class ExceptClause2 extends ConjunctionRule {
+    public static final class ExceptClause2 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("except_clause:2", RuleType.Conjunction, false);
 
-        private final Expr expr;
-        private final ExceptClause22 exceptClause22;
+        public static ExceptClause2 of(ParseTreeNode node) {
+            return new ExceptClause2(node);
+        }
 
-        public ExceptClause2(
-                Expr expr,
-                ExceptClause22 exceptClause22
-        ) {
-            this.expr = expr;
-            this.exceptClause22 = exceptClause22;
+        private ExceptClause2(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -79,11 +76,15 @@ public final class ExceptClause extends ConjunctionRule {
         }
 
         public Expr expr() {
-            return expr;
+            var element = getItem(0);
+            if (!element.isPresent()) return null;
+            return Expr.of(element);
         }
 
         public ExceptClause22 exceptClause22() {
-            return exceptClause22;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return ExceptClause22.of(element);
         }
 
         public boolean hasExceptClause22() {
@@ -108,20 +109,17 @@ public final class ExceptClause extends ConjunctionRule {
     /**
      * 'as' 'NAME'
      */
-    public static final class ExceptClause22 extends ConjunctionRule {
+    public static final class ExceptClause22 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("except_clause:2:2", RuleType.Conjunction, false);
 
-        private final boolean isTokenAs;
-        private final String name;
+        public static ExceptClause22 of(ParseTreeNode node) {
+            return new ExceptClause22(node);
+        }
 
-        public ExceptClause22(
-                boolean isTokenAs,
-                String name
-        ) {
-            this.isTokenAs = isTokenAs;
-            this.name = name;
+        private ExceptClause22(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -131,11 +129,14 @@ public final class ExceptClause extends ConjunctionRule {
         }
 
         public boolean isTokenAs() {
-            return isTokenAs;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public String name() {
-            return name;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return (String) element.asObject();
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

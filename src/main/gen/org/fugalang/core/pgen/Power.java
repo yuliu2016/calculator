@@ -5,20 +5,17 @@ import org.fugalang.core.parser.*;
 /**
  * power: 'pipe_expr' ['**' 'factor']
  */
-public final class Power extends ConjunctionRule {
+public final class Power extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("power", RuleType.Conjunction, true);
 
-    private final PipeExpr pipeExpr;
-    private final Power2 power2;
+    public static Power of(ParseTreeNode node) {
+        return new Power(node);
+    }
 
-    public Power(
-            PipeExpr pipeExpr,
-            Power2 power2
-    ) {
-        this.pipeExpr = pipeExpr;
-        this.power2 = power2;
+    private Power(ParseTreeNode node) {
+        super(RULE, node);
     }
 
     @Override
@@ -28,11 +25,15 @@ public final class Power extends ConjunctionRule {
     }
 
     public PipeExpr pipeExpr() {
-        return pipeExpr;
+        var element = getItem(0);
+        if (!element.isPresent()) return null;
+        return PipeExpr.of(element);
     }
 
     public Power2 power2() {
-        return power2;
+        var element = getItem(1);
+        if (!element.isPresent()) return null;
+        return Power2.of(element);
     }
 
     public boolean hasPower2() {
@@ -56,20 +57,17 @@ public final class Power extends ConjunctionRule {
     /**
      * '**' 'factor'
      */
-    public static final class Power2 extends ConjunctionRule {
+    public static final class Power2 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("power:2", RuleType.Conjunction, false);
 
-        private final boolean isTokenPower;
-        private final Factor factor;
+        public static Power2 of(ParseTreeNode node) {
+            return new Power2(node);
+        }
 
-        public Power2(
-                boolean isTokenPower,
-                Factor factor
-        ) {
-            this.isTokenPower = isTokenPower;
-            this.factor = factor;
+        private Power2(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -79,11 +77,14 @@ public final class Power extends ConjunctionRule {
         }
 
         public boolean isTokenPower() {
-            return isTokenPower;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public Factor factor() {
-            return factor;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return Factor.of(element);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

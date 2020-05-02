@@ -5,26 +5,17 @@ import org.fugalang.core.parser.*;
 /**
  * flow_stmt: 'break_stmt' | 'continue_stmt' | 'return_stmt' | 'raise_stmt'
  */
-public final class FlowStmt extends DisjunctionRule {
+public final class FlowStmt extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("flow_stmt", RuleType.Disjunction, true);
 
-    private final BreakStmt breakStmt;
-    private final ContinueStmt continueStmt;
-    private final ReturnStmt returnStmt;
-    private final RaiseStmt raiseStmt;
+    public static FlowStmt of(ParseTreeNode node) {
+        return new FlowStmt(node);
+    }
 
-    public FlowStmt(
-            BreakStmt breakStmt,
-            ContinueStmt continueStmt,
-            ReturnStmt returnStmt,
-            RaiseStmt raiseStmt
-    ) {
-        this.breakStmt = breakStmt;
-        this.continueStmt = continueStmt;
-        this.returnStmt = returnStmt;
-        this.raiseStmt = raiseStmt;
+    private FlowStmt(ParseTreeNode node) {
+        super(RULE, node);
     }
 
     @Override
@@ -36,7 +27,9 @@ public final class FlowStmt extends DisjunctionRule {
     }
 
     public BreakStmt breakStmt() {
-        return breakStmt;
+        var element = getItem(0);
+        if (!element.isPresent()) return null;
+        return BreakStmt.of(element);
     }
 
     public boolean hasBreakStmt() {
@@ -44,7 +37,9 @@ public final class FlowStmt extends DisjunctionRule {
     }
 
     public ContinueStmt continueStmt() {
-        return continueStmt;
+        var element = getItem(1);
+        if (!element.isPresent()) return null;
+        return ContinueStmt.of(element);
     }
 
     public boolean hasContinueStmt() {
@@ -52,7 +47,9 @@ public final class FlowStmt extends DisjunctionRule {
     }
 
     public ReturnStmt returnStmt() {
-        return returnStmt;
+        var element = getItem(2);
+        if (!element.isPresent()) return null;
+        return ReturnStmt.of(element);
     }
 
     public boolean hasReturnStmt() {
@@ -60,7 +57,9 @@ public final class FlowStmt extends DisjunctionRule {
     }
 
     public RaiseStmt raiseStmt() {
-        return raiseStmt;
+        var element = getItem(3);
+        if (!element.isPresent()) return null;
+        return RaiseStmt.of(element);
     }
 
     public boolean hasRaiseStmt() {

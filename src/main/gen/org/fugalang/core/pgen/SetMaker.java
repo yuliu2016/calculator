@@ -7,20 +7,17 @@ import java.util.List;
 /**
  * set_maker: 'expr_or_star' ('comp_for' | (',' 'expr_or_star')* [','])
  */
-public final class SetMaker extends ConjunctionRule {
+public final class SetMaker extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("set_maker", RuleType.Conjunction, true);
 
-    private final ExprOrStar exprOrStar;
-    private final SetMaker2 setMaker2;
+    public static SetMaker of(ParseTreeNode node) {
+        return new SetMaker(node);
+    }
 
-    public SetMaker(
-            ExprOrStar exprOrStar,
-            SetMaker2 setMaker2
-    ) {
-        this.exprOrStar = exprOrStar;
-        this.setMaker2 = setMaker2;
+    private SetMaker(ParseTreeNode node) {
+        super(RULE, node);
     }
 
     @Override
@@ -30,11 +27,15 @@ public final class SetMaker extends ConjunctionRule {
     }
 
     public ExprOrStar exprOrStar() {
-        return exprOrStar;
+        var element = getItem(0);
+        if (!element.isPresent()) return null;
+        return ExprOrStar.of(element);
     }
 
     public SetMaker2 setMaker2() {
-        return setMaker2;
+        var element = getItem(1);
+        if (!element.isPresent()) return null;
+        return SetMaker2.of(element);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -54,20 +55,17 @@ public final class SetMaker extends ConjunctionRule {
     /**
      * 'comp_for' | (',' 'expr_or_star')* [',']
      */
-    public static final class SetMaker2 extends DisjunctionRule {
+    public static final class SetMaker2 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("set_maker:2", RuleType.Disjunction, false);
 
-        private final CompFor compFor;
-        private final SetMaker22 setMaker22;
+        public static SetMaker2 of(ParseTreeNode node) {
+            return new SetMaker2(node);
+        }
 
-        public SetMaker2(
-                CompFor compFor,
-                SetMaker22 setMaker22
-        ) {
-            this.compFor = compFor;
-            this.setMaker22 = setMaker22;
+        private SetMaker2(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -77,7 +75,9 @@ public final class SetMaker extends ConjunctionRule {
         }
 
         public CompFor compFor() {
-            return compFor;
+            var element = getItem(0);
+            if (!element.isPresent()) return null;
+            return CompFor.of(element);
         }
 
         public boolean hasCompFor() {
@@ -85,7 +85,9 @@ public final class SetMaker extends ConjunctionRule {
         }
 
         public SetMaker22 setMaker22() {
-            return setMaker22;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return SetMaker22.of(element);
         }
 
         public boolean hasSetMaker22() {
@@ -110,21 +112,20 @@ public final class SetMaker extends ConjunctionRule {
     /**
      * (',' 'expr_or_star')* [',']
      */
-    public static final class SetMaker22 extends ConjunctionRule {
+    public static final class SetMaker22 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("set_maker:2:2", RuleType.Conjunction, false);
 
-        private final List<SetMaker221> setMaker221List;
-        private final boolean isTokenComma;
-
-        public SetMaker22(
-                List<SetMaker221> setMaker221List,
-                boolean isTokenComma
-        ) {
-            this.setMaker221List = setMaker221List;
-            this.isTokenComma = isTokenComma;
+        public static SetMaker22 of(ParseTreeNode node) {
+            return new SetMaker22(node);
         }
+
+        private SetMaker22(ParseTreeNode node) {
+            super(RULE, node);
+        }
+
+        private List<SetMaker221> setMaker221List;
 
         @Override
         protected void buildRule() {
@@ -137,7 +138,8 @@ public final class SetMaker extends ConjunctionRule {
         }
 
         public boolean isTokenComma() {
-            return isTokenComma;
+            var element = getItem(1);
+            return element.asBoolean();
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -166,20 +168,17 @@ public final class SetMaker extends ConjunctionRule {
     /**
      * ',' 'expr_or_star'
      */
-    public static final class SetMaker221 extends ConjunctionRule {
+    public static final class SetMaker221 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("set_maker:2:2:1", RuleType.Conjunction, false);
 
-        private final boolean isTokenComma;
-        private final ExprOrStar exprOrStar;
+        public static SetMaker221 of(ParseTreeNode node) {
+            return new SetMaker221(node);
+        }
 
-        public SetMaker221(
-                boolean isTokenComma,
-                ExprOrStar exprOrStar
-        ) {
-            this.isTokenComma = isTokenComma;
-            this.exprOrStar = exprOrStar;
+        private SetMaker221(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -189,11 +188,14 @@ public final class SetMaker extends ConjunctionRule {
         }
 
         public boolean isTokenComma() {
-            return isTokenComma;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public ExprOrStar exprOrStar() {
-            return exprOrStar;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return ExprOrStar.of(element);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

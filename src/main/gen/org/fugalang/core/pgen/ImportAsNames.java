@@ -7,24 +7,20 @@ import java.util.List;
 /**
  * import_as_names: 'import_as_name' (',' 'import_as_name')* [',']
  */
-public final class ImportAsNames extends ConjunctionRule {
+public final class ImportAsNames extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("import_as_names", RuleType.Conjunction, true);
 
-    private final ImportAsName importAsName;
-    private final List<ImportAsNames2> importAsNames2List;
-    private final boolean isTokenComma;
-
-    public ImportAsNames(
-            ImportAsName importAsName,
-            List<ImportAsNames2> importAsNames2List,
-            boolean isTokenComma
-    ) {
-        this.importAsName = importAsName;
-        this.importAsNames2List = importAsNames2List;
-        this.isTokenComma = isTokenComma;
+    public static ImportAsNames of(ParseTreeNode node) {
+        return new ImportAsNames(node);
     }
+
+    private ImportAsNames(ParseTreeNode node) {
+        super(RULE, node);
+    }
+
+    private List<ImportAsNames2> importAsNames2List;
 
     @Override
     protected void buildRule() {
@@ -34,7 +30,9 @@ public final class ImportAsNames extends ConjunctionRule {
     }
 
     public ImportAsName importAsName() {
-        return importAsName;
+        var element = getItem(0);
+        if (!element.isPresent()) return null;
+        return ImportAsName.of(element);
     }
 
     public List<ImportAsNames2> importAsNames2List() {
@@ -42,7 +40,8 @@ public final class ImportAsNames extends ConjunctionRule {
     }
 
     public boolean isTokenComma() {
-        return isTokenComma;
+        var element = getItem(2);
+        return element.asBoolean();
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -71,20 +70,17 @@ public final class ImportAsNames extends ConjunctionRule {
     /**
      * ',' 'import_as_name'
      */
-    public static final class ImportAsNames2 extends ConjunctionRule {
+    public static final class ImportAsNames2 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("import_as_names:2", RuleType.Conjunction, false);
 
-        private final boolean isTokenComma;
-        private final ImportAsName importAsName;
+        public static ImportAsNames2 of(ParseTreeNode node) {
+            return new ImportAsNames2(node);
+        }
 
-        public ImportAsNames2(
-                boolean isTokenComma,
-                ImportAsName importAsName
-        ) {
-            this.isTokenComma = isTokenComma;
-            this.importAsName = importAsName;
+        private ImportAsNames2(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -94,11 +90,14 @@ public final class ImportAsNames extends ConjunctionRule {
         }
 
         public boolean isTokenComma() {
-            return isTokenComma;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public ImportAsName importAsName() {
-            return importAsName;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return ImportAsName.of(element);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

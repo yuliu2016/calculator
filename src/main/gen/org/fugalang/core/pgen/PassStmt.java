@@ -5,17 +5,17 @@ import org.fugalang.core.parser.*;
 /**
  * pass_stmt: 'pass'
  */
-public final class PassStmt extends ConjunctionRule {
+public final class PassStmt extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("pass_stmt", RuleType.Conjunction, true);
 
-    private final boolean isTokenPass;
+    public static PassStmt of(ParseTreeNode node) {
+        return new PassStmt(node);
+    }
 
-    public PassStmt(
-            boolean isTokenPass
-    ) {
-        this.isTokenPass = isTokenPass;
+    private PassStmt(ParseTreeNode node) {
+        super(RULE, node);
     }
 
     @Override
@@ -24,7 +24,8 @@ public final class PassStmt extends ConjunctionRule {
     }
 
     public boolean isTokenPass() {
-        return isTokenPass;
+        var element = getItem(0);
+        return element.asBoolean();
     }
 
     public static boolean parse(ParseTree parseTree, int level) {

@@ -7,21 +7,20 @@ import java.util.List;
 /**
  * bitwise_or: 'bitwise_xor' ('|' 'bitwise_xor')*
  */
-public final class BitwiseOr extends ConjunctionRule {
+public final class BitwiseOr extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("bitwise_or", RuleType.Conjunction, true);
 
-    private final BitwiseXor bitwiseXor;
-    private final List<BitwiseOr2> bitwiseOr2List;
-
-    public BitwiseOr(
-            BitwiseXor bitwiseXor,
-            List<BitwiseOr2> bitwiseOr2List
-    ) {
-        this.bitwiseXor = bitwiseXor;
-        this.bitwiseOr2List = bitwiseOr2List;
+    public static BitwiseOr of(ParseTreeNode node) {
+        return new BitwiseOr(node);
     }
+
+    private BitwiseOr(ParseTreeNode node) {
+        super(RULE, node);
+    }
+
+    private List<BitwiseOr2> bitwiseOr2List;
 
     @Override
     protected void buildRule() {
@@ -30,7 +29,9 @@ public final class BitwiseOr extends ConjunctionRule {
     }
 
     public BitwiseXor bitwiseXor() {
-        return bitwiseXor;
+        var element = getItem(0);
+        if (!element.isPresent()) return null;
+        return BitwiseXor.of(element);
     }
 
     public List<BitwiseOr2> bitwiseOr2List() {
@@ -62,20 +63,17 @@ public final class BitwiseOr extends ConjunctionRule {
     /**
      * '|' 'bitwise_xor'
      */
-    public static final class BitwiseOr2 extends ConjunctionRule {
+    public static final class BitwiseOr2 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("bitwise_or:2", RuleType.Conjunction, false);
 
-        private final boolean isTokenBitOr;
-        private final BitwiseXor bitwiseXor;
+        public static BitwiseOr2 of(ParseTreeNode node) {
+            return new BitwiseOr2(node);
+        }
 
-        public BitwiseOr2(
-                boolean isTokenBitOr,
-                BitwiseXor bitwiseXor
-        ) {
-            this.isTokenBitOr = isTokenBitOr;
-            this.bitwiseXor = bitwiseXor;
+        private BitwiseOr2(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -85,11 +83,14 @@ public final class BitwiseOr extends ConjunctionRule {
         }
 
         public boolean isTokenBitOr() {
-            return isTokenBitOr;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public BitwiseXor bitwiseXor() {
-            return bitwiseXor;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return BitwiseXor.of(element);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

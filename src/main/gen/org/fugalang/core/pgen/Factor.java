@@ -5,20 +5,17 @@ import org.fugalang.core.parser.*;
 /**
  * factor: ('+' | '-' | '~') 'factor' | 'power'
  */
-public final class Factor extends DisjunctionRule {
+public final class Factor extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("factor", RuleType.Disjunction, true);
 
-    private final Factor1 factor1;
-    private final Power power;
+    public static Factor of(ParseTreeNode node) {
+        return new Factor(node);
+    }
 
-    public Factor(
-            Factor1 factor1,
-            Power power
-    ) {
-        this.factor1 = factor1;
-        this.power = power;
+    private Factor(ParseTreeNode node) {
+        super(RULE, node);
     }
 
     @Override
@@ -28,7 +25,9 @@ public final class Factor extends DisjunctionRule {
     }
 
     public Factor1 factor1() {
-        return factor1;
+        var element = getItem(0);
+        if (!element.isPresent()) return null;
+        return Factor1.of(element);
     }
 
     public boolean hasFactor1() {
@@ -36,7 +35,9 @@ public final class Factor extends DisjunctionRule {
     }
 
     public Power power() {
-        return power;
+        var element = getItem(1);
+        if (!element.isPresent()) return null;
+        return Power.of(element);
     }
 
     public boolean hasPower() {
@@ -60,20 +61,17 @@ public final class Factor extends DisjunctionRule {
     /**
      * ('+' | '-' | '~') 'factor'
      */
-    public static final class Factor1 extends ConjunctionRule {
+    public static final class Factor1 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("factor:1", RuleType.Conjunction, false);
 
-        private final Factor11 factor11;
-        private final Factor factor;
+        public static Factor1 of(ParseTreeNode node) {
+            return new Factor1(node);
+        }
 
-        public Factor1(
-                Factor11 factor11,
-                Factor factor
-        ) {
-            this.factor11 = factor11;
-            this.factor = factor;
+        private Factor1(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -83,11 +81,15 @@ public final class Factor extends DisjunctionRule {
         }
 
         public Factor11 factor11() {
-            return factor11;
+            var element = getItem(0);
+            if (!element.isPresent()) return null;
+            return Factor11.of(element);
         }
 
         public Factor factor() {
-            return factor;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return Factor.of(element);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -108,23 +110,17 @@ public final class Factor extends DisjunctionRule {
     /**
      * '+' | '-' | '~'
      */
-    public static final class Factor11 extends DisjunctionRule {
+    public static final class Factor11 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("factor:1:1", RuleType.Disjunction, false);
 
-        private final boolean isTokenPlus;
-        private final boolean isTokenMinus;
-        private final boolean isTokenBitNot;
+        public static Factor11 of(ParseTreeNode node) {
+            return new Factor11(node);
+        }
 
-        public Factor11(
-                boolean isTokenPlus,
-                boolean isTokenMinus,
-                boolean isTokenBitNot
-        ) {
-            this.isTokenPlus = isTokenPlus;
-            this.isTokenMinus = isTokenMinus;
-            this.isTokenBitNot = isTokenBitNot;
+        private Factor11(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -135,15 +131,18 @@ public final class Factor extends DisjunctionRule {
         }
 
         public boolean isTokenPlus() {
-            return isTokenPlus;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public boolean isTokenMinus() {
-            return isTokenMinus;
+            var element = getItem(1);
+            return element.asBoolean();
         }
 
         public boolean isTokenBitNot() {
-            return isTokenBitNot;
+            var element = getItem(2);
+            return element.asBoolean();
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

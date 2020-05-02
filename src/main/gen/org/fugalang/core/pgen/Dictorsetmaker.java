@@ -5,20 +5,17 @@ import org.fugalang.core.parser.*;
 /**
  * dictorsetmaker: 'dict_maker' | 'set_maker'
  */
-public final class Dictorsetmaker extends DisjunctionRule {
+public final class Dictorsetmaker extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("dictorsetmaker", RuleType.Disjunction, true);
 
-    private final DictMaker dictMaker;
-    private final SetMaker setMaker;
+    public static Dictorsetmaker of(ParseTreeNode node) {
+        return new Dictorsetmaker(node);
+    }
 
-    public Dictorsetmaker(
-            DictMaker dictMaker,
-            SetMaker setMaker
-    ) {
-        this.dictMaker = dictMaker;
-        this.setMaker = setMaker;
+    private Dictorsetmaker(ParseTreeNode node) {
+        super(RULE, node);
     }
 
     @Override
@@ -28,7 +25,9 @@ public final class Dictorsetmaker extends DisjunctionRule {
     }
 
     public DictMaker dictMaker() {
-        return dictMaker;
+        var element = getItem(0);
+        if (!element.isPresent()) return null;
+        return DictMaker.of(element);
     }
 
     public boolean hasDictMaker() {
@@ -36,7 +35,9 @@ public final class Dictorsetmaker extends DisjunctionRule {
     }
 
     public SetMaker setMaker() {
-        return setMaker;
+        var element = getItem(1);
+        if (!element.isPresent()) return null;
+        return SetMaker.of(element);
     }
 
     public boolean hasSetMaker() {

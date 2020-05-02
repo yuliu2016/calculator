@@ -5,23 +5,17 @@ import org.fugalang.core.parser.*;
 /**
  * compound_atom: '(' ['exprlist_comp'] ')' | '[' ['exprlist_comp_sub'] ']' | '{' ['dictorsetmaker'] '}'
  */
-public final class CompoundAtom extends DisjunctionRule {
+public final class CompoundAtom extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("compound_atom", RuleType.Disjunction, true);
 
-    private final CompoundAtom1 compoundAtom1;
-    private final CompoundAtom2 compoundAtom2;
-    private final CompoundAtom3 compoundAtom3;
+    public static CompoundAtom of(ParseTreeNode node) {
+        return new CompoundAtom(node);
+    }
 
-    public CompoundAtom(
-            CompoundAtom1 compoundAtom1,
-            CompoundAtom2 compoundAtom2,
-            CompoundAtom3 compoundAtom3
-    ) {
-        this.compoundAtom1 = compoundAtom1;
-        this.compoundAtom2 = compoundAtom2;
-        this.compoundAtom3 = compoundAtom3;
+    private CompoundAtom(ParseTreeNode node) {
+        super(RULE, node);
     }
 
     @Override
@@ -32,7 +26,9 @@ public final class CompoundAtom extends DisjunctionRule {
     }
 
     public CompoundAtom1 compoundAtom1() {
-        return compoundAtom1;
+        var element = getItem(0);
+        if (!element.isPresent()) return null;
+        return CompoundAtom1.of(element);
     }
 
     public boolean hasCompoundAtom1() {
@@ -40,7 +36,9 @@ public final class CompoundAtom extends DisjunctionRule {
     }
 
     public CompoundAtom2 compoundAtom2() {
-        return compoundAtom2;
+        var element = getItem(1);
+        if (!element.isPresent()) return null;
+        return CompoundAtom2.of(element);
     }
 
     public boolean hasCompoundAtom2() {
@@ -48,7 +46,9 @@ public final class CompoundAtom extends DisjunctionRule {
     }
 
     public CompoundAtom3 compoundAtom3() {
-        return compoundAtom3;
+        var element = getItem(2);
+        if (!element.isPresent()) return null;
+        return CompoundAtom3.of(element);
     }
 
     public boolean hasCompoundAtom3() {
@@ -73,23 +73,17 @@ public final class CompoundAtom extends DisjunctionRule {
     /**
      * '(' ['exprlist_comp'] ')'
      */
-    public static final class CompoundAtom1 extends ConjunctionRule {
+    public static final class CompoundAtom1 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("compound_atom:1", RuleType.Conjunction, false);
 
-        private final boolean isTokenLpar;
-        private final ExprlistComp exprlistComp;
-        private final boolean isTokenRpar;
+        public static CompoundAtom1 of(ParseTreeNode node) {
+            return new CompoundAtom1(node);
+        }
 
-        public CompoundAtom1(
-                boolean isTokenLpar,
-                ExprlistComp exprlistComp,
-                boolean isTokenRpar
-        ) {
-            this.isTokenLpar = isTokenLpar;
-            this.exprlistComp = exprlistComp;
-            this.isTokenRpar = isTokenRpar;
+        private CompoundAtom1(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -100,11 +94,14 @@ public final class CompoundAtom extends DisjunctionRule {
         }
 
         public boolean isTokenLpar() {
-            return isTokenLpar;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public ExprlistComp exprlistComp() {
-            return exprlistComp;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return ExprlistComp.of(element);
         }
 
         public boolean hasExprlistComp() {
@@ -112,7 +109,8 @@ public final class CompoundAtom extends DisjunctionRule {
         }
 
         public boolean isTokenRpar() {
-            return isTokenRpar;
+            var element = getItem(2);
+            return element.asBoolean();
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -134,23 +132,17 @@ public final class CompoundAtom extends DisjunctionRule {
     /**
      * '[' ['exprlist_comp_sub'] ']'
      */
-    public static final class CompoundAtom2 extends ConjunctionRule {
+    public static final class CompoundAtom2 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("compound_atom:2", RuleType.Conjunction, false);
 
-        private final boolean isTokenLsqb;
-        private final ExprlistCompSub exprlistCompSub;
-        private final boolean isTokenRsqb;
+        public static CompoundAtom2 of(ParseTreeNode node) {
+            return new CompoundAtom2(node);
+        }
 
-        public CompoundAtom2(
-                boolean isTokenLsqb,
-                ExprlistCompSub exprlistCompSub,
-                boolean isTokenRsqb
-        ) {
-            this.isTokenLsqb = isTokenLsqb;
-            this.exprlistCompSub = exprlistCompSub;
-            this.isTokenRsqb = isTokenRsqb;
+        private CompoundAtom2(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -161,11 +153,14 @@ public final class CompoundAtom extends DisjunctionRule {
         }
 
         public boolean isTokenLsqb() {
-            return isTokenLsqb;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public ExprlistCompSub exprlistCompSub() {
-            return exprlistCompSub;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return ExprlistCompSub.of(element);
         }
 
         public boolean hasExprlistCompSub() {
@@ -173,7 +168,8 @@ public final class CompoundAtom extends DisjunctionRule {
         }
 
         public boolean isTokenRsqb() {
-            return isTokenRsqb;
+            var element = getItem(2);
+            return element.asBoolean();
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -195,23 +191,17 @@ public final class CompoundAtom extends DisjunctionRule {
     /**
      * '{' ['dictorsetmaker'] '}'
      */
-    public static final class CompoundAtom3 extends ConjunctionRule {
+    public static final class CompoundAtom3 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("compound_atom:3", RuleType.Conjunction, false);
 
-        private final boolean isTokenLbrace;
-        private final Dictorsetmaker dictorsetmaker;
-        private final boolean isTokenRbrace;
+        public static CompoundAtom3 of(ParseTreeNode node) {
+            return new CompoundAtom3(node);
+        }
 
-        public CompoundAtom3(
-                boolean isTokenLbrace,
-                Dictorsetmaker dictorsetmaker,
-                boolean isTokenRbrace
-        ) {
-            this.isTokenLbrace = isTokenLbrace;
-            this.dictorsetmaker = dictorsetmaker;
-            this.isTokenRbrace = isTokenRbrace;
+        private CompoundAtom3(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -222,11 +212,14 @@ public final class CompoundAtom extends DisjunctionRule {
         }
 
         public boolean isTokenLbrace() {
-            return isTokenLbrace;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public Dictorsetmaker dictorsetmaker() {
-            return dictorsetmaker;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return Dictorsetmaker.of(element);
         }
 
         public boolean hasDictorsetmaker() {
@@ -234,7 +227,8 @@ public final class CompoundAtom extends DisjunctionRule {
         }
 
         public boolean isTokenRbrace() {
-            return isTokenRbrace;
+            var element = getItem(2);
+            return element.asBoolean();
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

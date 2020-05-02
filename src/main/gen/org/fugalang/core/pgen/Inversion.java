@@ -5,20 +5,17 @@ import org.fugalang.core.parser.*;
 /**
  * inversion: 'not' 'inversion' | 'comparison'
  */
-public final class Inversion extends DisjunctionRule {
+public final class Inversion extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("inversion", RuleType.Disjunction, true);
 
-    private final Inversion1 inversion1;
-    private final Comparison comparison;
+    public static Inversion of(ParseTreeNode node) {
+        return new Inversion(node);
+    }
 
-    public Inversion(
-            Inversion1 inversion1,
-            Comparison comparison
-    ) {
-        this.inversion1 = inversion1;
-        this.comparison = comparison;
+    private Inversion(ParseTreeNode node) {
+        super(RULE, node);
     }
 
     @Override
@@ -28,7 +25,9 @@ public final class Inversion extends DisjunctionRule {
     }
 
     public Inversion1 inversion1() {
-        return inversion1;
+        var element = getItem(0);
+        if (!element.isPresent()) return null;
+        return Inversion1.of(element);
     }
 
     public boolean hasInversion1() {
@@ -36,7 +35,9 @@ public final class Inversion extends DisjunctionRule {
     }
 
     public Comparison comparison() {
-        return comparison;
+        var element = getItem(1);
+        if (!element.isPresent()) return null;
+        return Comparison.of(element);
     }
 
     public boolean hasComparison() {
@@ -60,20 +61,17 @@ public final class Inversion extends DisjunctionRule {
     /**
      * 'not' 'inversion'
      */
-    public static final class Inversion1 extends ConjunctionRule {
+    public static final class Inversion1 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("inversion:1", RuleType.Conjunction, false);
 
-        private final boolean isTokenNot;
-        private final Inversion inversion;
+        public static Inversion1 of(ParseTreeNode node) {
+            return new Inversion1(node);
+        }
 
-        public Inversion1(
-                boolean isTokenNot,
-                Inversion inversion
-        ) {
-            this.isTokenNot = isTokenNot;
-            this.inversion = inversion;
+        private Inversion1(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -83,11 +81,14 @@ public final class Inversion extends DisjunctionRule {
         }
 
         public boolean isTokenNot() {
-            return isTokenNot;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public Inversion inversion() {
-            return inversion;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return Inversion.of(element);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

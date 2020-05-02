@@ -5,20 +5,17 @@ import org.fugalang.core.parser.*;
 /**
  * subscript: 'expr' | ['expr'] ':' ['expr'] ['sliceop']
  */
-public final class Subscript extends DisjunctionRule {
+public final class Subscript extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("subscript", RuleType.Disjunction, true);
 
-    private final Expr expr;
-    private final Subscript2 subscript2;
+    public static Subscript of(ParseTreeNode node) {
+        return new Subscript(node);
+    }
 
-    public Subscript(
-            Expr expr,
-            Subscript2 subscript2
-    ) {
-        this.expr = expr;
-        this.subscript2 = subscript2;
+    private Subscript(ParseTreeNode node) {
+        super(RULE, node);
     }
 
     @Override
@@ -28,7 +25,9 @@ public final class Subscript extends DisjunctionRule {
     }
 
     public Expr expr() {
-        return expr;
+        var element = getItem(0);
+        if (!element.isPresent()) return null;
+        return Expr.of(element);
     }
 
     public boolean hasExpr() {
@@ -36,7 +35,9 @@ public final class Subscript extends DisjunctionRule {
     }
 
     public Subscript2 subscript2() {
-        return subscript2;
+        var element = getItem(1);
+        if (!element.isPresent()) return null;
+        return Subscript2.of(element);
     }
 
     public boolean hasSubscript2() {
@@ -60,26 +61,17 @@ public final class Subscript extends DisjunctionRule {
     /**
      * ['expr'] ':' ['expr'] ['sliceop']
      */
-    public static final class Subscript2 extends ConjunctionRule {
+    public static final class Subscript2 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("subscript:2", RuleType.Conjunction, false);
 
-        private final Expr expr;
-        private final boolean isTokenColon;
-        private final Expr expr1;
-        private final Sliceop sliceop;
+        public static Subscript2 of(ParseTreeNode node) {
+            return new Subscript2(node);
+        }
 
-        public Subscript2(
-                Expr expr,
-                boolean isTokenColon,
-                Expr expr1,
-                Sliceop sliceop
-        ) {
-            this.expr = expr;
-            this.isTokenColon = isTokenColon;
-            this.expr1 = expr1;
-            this.sliceop = sliceop;
+        private Subscript2(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -91,7 +83,9 @@ public final class Subscript extends DisjunctionRule {
         }
 
         public Expr expr() {
-            return expr;
+            var element = getItem(0);
+            if (!element.isPresent()) return null;
+            return Expr.of(element);
         }
 
         public boolean hasExpr() {
@@ -99,11 +93,14 @@ public final class Subscript extends DisjunctionRule {
         }
 
         public boolean isTokenColon() {
-            return isTokenColon;
+            var element = getItem(1);
+            return element.asBoolean();
         }
 
         public Expr expr1() {
-            return expr1;
+            var element = getItem(2);
+            if (!element.isPresent()) return null;
+            return Expr.of(element);
         }
 
         public boolean hasExpr1() {
@@ -111,7 +108,9 @@ public final class Subscript extends DisjunctionRule {
         }
 
         public Sliceop sliceop() {
-            return sliceop;
+            var element = getItem(3);
+            if (!element.isPresent()) return null;
+            return Sliceop.of(element);
         }
 
         public boolean hasSliceop() {

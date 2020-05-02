@@ -3,11 +3,13 @@ package org.fugalang.core.parser;
 public interface ParseTreeNode {
     ParseTreeNode getItem(int index);
 
-    public ParseTreeNode orElseThrow();
+    ParseTreeNode orElseThrow();
 
-    public boolean isPresent();
+    boolean isPresent();
 
     Iterable<ParseTreeNode> asCollection();
 
     boolean asBoolean();
+
+    Object asObject();
 }

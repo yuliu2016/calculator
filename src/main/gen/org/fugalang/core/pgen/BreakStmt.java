@@ -5,17 +5,17 @@ import org.fugalang.core.parser.*;
 /**
  * break_stmt: 'break'
  */
-public final class BreakStmt extends ConjunctionRule {
+public final class BreakStmt extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("break_stmt", RuleType.Conjunction, true);
 
-    private final boolean isTokenBreak;
+    public static BreakStmt of(ParseTreeNode node) {
+        return new BreakStmt(node);
+    }
 
-    public BreakStmt(
-            boolean isTokenBreak
-    ) {
-        this.isTokenBreak = isTokenBreak;
+    private BreakStmt(ParseTreeNode node) {
+        super(RULE, node);
     }
 
     @Override
@@ -24,7 +24,8 @@ public final class BreakStmt extends ConjunctionRule {
     }
 
     public boolean isTokenBreak() {
-        return isTokenBreak;
+        var element = getItem(0);
+        return element.asBoolean();
     }
 
     public static boolean parse(ParseTree parseTree, int level) {

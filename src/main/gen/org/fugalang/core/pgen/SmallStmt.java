@@ -5,32 +5,17 @@ import org.fugalang.core.parser.*;
 /**
  * small_stmt: 'expr_stmt' | 'del_stmt' | 'pass_stmt' | 'flow_stmt' | 'import_stmt' | 'assert_stmt'
  */
-public final class SmallStmt extends DisjunctionRule {
+public final class SmallStmt extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("small_stmt", RuleType.Disjunction, true);
 
-    private final ExprStmt exprStmt;
-    private final DelStmt delStmt;
-    private final PassStmt passStmt;
-    private final FlowStmt flowStmt;
-    private final ImportStmt importStmt;
-    private final AssertStmt assertStmt;
+    public static SmallStmt of(ParseTreeNode node) {
+        return new SmallStmt(node);
+    }
 
-    public SmallStmt(
-            ExprStmt exprStmt,
-            DelStmt delStmt,
-            PassStmt passStmt,
-            FlowStmt flowStmt,
-            ImportStmt importStmt,
-            AssertStmt assertStmt
-    ) {
-        this.exprStmt = exprStmt;
-        this.delStmt = delStmt;
-        this.passStmt = passStmt;
-        this.flowStmt = flowStmt;
-        this.importStmt = importStmt;
-        this.assertStmt = assertStmt;
+    private SmallStmt(ParseTreeNode node) {
+        super(RULE, node);
     }
 
     @Override
@@ -44,7 +29,9 @@ public final class SmallStmt extends DisjunctionRule {
     }
 
     public ExprStmt exprStmt() {
-        return exprStmt;
+        var element = getItem(0);
+        if (!element.isPresent()) return null;
+        return ExprStmt.of(element);
     }
 
     public boolean hasExprStmt() {
@@ -52,7 +39,9 @@ public final class SmallStmt extends DisjunctionRule {
     }
 
     public DelStmt delStmt() {
-        return delStmt;
+        var element = getItem(1);
+        if (!element.isPresent()) return null;
+        return DelStmt.of(element);
     }
 
     public boolean hasDelStmt() {
@@ -60,7 +49,9 @@ public final class SmallStmt extends DisjunctionRule {
     }
 
     public PassStmt passStmt() {
-        return passStmt;
+        var element = getItem(2);
+        if (!element.isPresent()) return null;
+        return PassStmt.of(element);
     }
 
     public boolean hasPassStmt() {
@@ -68,7 +59,9 @@ public final class SmallStmt extends DisjunctionRule {
     }
 
     public FlowStmt flowStmt() {
-        return flowStmt;
+        var element = getItem(3);
+        if (!element.isPresent()) return null;
+        return FlowStmt.of(element);
     }
 
     public boolean hasFlowStmt() {
@@ -76,7 +69,9 @@ public final class SmallStmt extends DisjunctionRule {
     }
 
     public ImportStmt importStmt() {
-        return importStmt;
+        var element = getItem(4);
+        if (!element.isPresent()) return null;
+        return ImportStmt.of(element);
     }
 
     public boolean hasImportStmt() {
@@ -84,7 +79,9 @@ public final class SmallStmt extends DisjunctionRule {
     }
 
     public AssertStmt assertStmt() {
-        return assertStmt;
+        var element = getItem(5);
+        if (!element.isPresent()) return null;
+        return AssertStmt.of(element);
     }
 
     public boolean hasAssertStmt() {

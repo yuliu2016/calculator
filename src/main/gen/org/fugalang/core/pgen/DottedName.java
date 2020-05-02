@@ -7,21 +7,20 @@ import java.util.List;
 /**
  * dotted_name: 'NAME' ('.' 'NAME')*
  */
-public final class DottedName extends ConjunctionRule {
+public final class DottedName extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("dotted_name", RuleType.Conjunction, true);
 
-    private final String name;
-    private final List<DottedName2> dottedName2List;
-
-    public DottedName(
-            String name,
-            List<DottedName2> dottedName2List
-    ) {
-        this.name = name;
-        this.dottedName2List = dottedName2List;
+    public static DottedName of(ParseTreeNode node) {
+        return new DottedName(node);
     }
+
+    private DottedName(ParseTreeNode node) {
+        super(RULE, node);
+    }
+
+    private List<DottedName2> dottedName2List;
 
     @Override
     protected void buildRule() {
@@ -30,7 +29,9 @@ public final class DottedName extends ConjunctionRule {
     }
 
     public String name() {
-        return name;
+        var element = getItem(0);
+        if (!element.isPresent()) return null;
+        return (String) element.asObject();
     }
 
     public List<DottedName2> dottedName2List() {
@@ -62,20 +63,17 @@ public final class DottedName extends ConjunctionRule {
     /**
      * '.' 'NAME'
      */
-    public static final class DottedName2 extends ConjunctionRule {
+    public static final class DottedName2 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("dotted_name:2", RuleType.Conjunction, false);
 
-        private final boolean isTokenDot;
-        private final String name;
+        public static DottedName2 of(ParseTreeNode node) {
+            return new DottedName2(node);
+        }
 
-        public DottedName2(
-                boolean isTokenDot,
-                String name
-        ) {
-            this.isTokenDot = isTokenDot;
-            this.name = name;
+        private DottedName2(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -85,11 +83,14 @@ public final class DottedName extends ConjunctionRule {
         }
 
         public boolean isTokenDot() {
-            return isTokenDot;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public String name() {
-            return name;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return (String) element.asObject();
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

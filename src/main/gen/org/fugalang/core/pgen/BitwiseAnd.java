@@ -7,21 +7,20 @@ import java.util.List;
 /**
  * bitwise_and: 'shift_expr' ('&' 'shift_expr')*
  */
-public final class BitwiseAnd extends ConjunctionRule {
+public final class BitwiseAnd extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("bitwise_and", RuleType.Conjunction, true);
 
-    private final ShiftExpr shiftExpr;
-    private final List<BitwiseAnd2> bitwiseAnd2List;
-
-    public BitwiseAnd(
-            ShiftExpr shiftExpr,
-            List<BitwiseAnd2> bitwiseAnd2List
-    ) {
-        this.shiftExpr = shiftExpr;
-        this.bitwiseAnd2List = bitwiseAnd2List;
+    public static BitwiseAnd of(ParseTreeNode node) {
+        return new BitwiseAnd(node);
     }
+
+    private BitwiseAnd(ParseTreeNode node) {
+        super(RULE, node);
+    }
+
+    private List<BitwiseAnd2> bitwiseAnd2List;
 
     @Override
     protected void buildRule() {
@@ -30,7 +29,9 @@ public final class BitwiseAnd extends ConjunctionRule {
     }
 
     public ShiftExpr shiftExpr() {
-        return shiftExpr;
+        var element = getItem(0);
+        if (!element.isPresent()) return null;
+        return ShiftExpr.of(element);
     }
 
     public List<BitwiseAnd2> bitwiseAnd2List() {
@@ -62,20 +63,17 @@ public final class BitwiseAnd extends ConjunctionRule {
     /**
      * '&' 'shift_expr'
      */
-    public static final class BitwiseAnd2 extends ConjunctionRule {
+    public static final class BitwiseAnd2 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("bitwise_and:2", RuleType.Conjunction, false);
 
-        private final boolean isTokenBitAnd;
-        private final ShiftExpr shiftExpr;
+        public static BitwiseAnd2 of(ParseTreeNode node) {
+            return new BitwiseAnd2(node);
+        }
 
-        public BitwiseAnd2(
-                boolean isTokenBitAnd,
-                ShiftExpr shiftExpr
-        ) {
-            this.isTokenBitAnd = isTokenBitAnd;
-            this.shiftExpr = shiftExpr;
+        private BitwiseAnd2(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -85,11 +83,14 @@ public final class BitwiseAnd extends ConjunctionRule {
         }
 
         public boolean isTokenBitAnd() {
-            return isTokenBitAnd;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public ShiftExpr shiftExpr() {
-            return shiftExpr;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return ShiftExpr.of(element);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

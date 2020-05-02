@@ -7,21 +7,20 @@ import java.util.List;
 /**
  * term: 'factor' (('*' | '@' | '/' | '%' | '//') 'factor')*
  */
-public final class Term extends ConjunctionRule {
+public final class Term extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("term", RuleType.Conjunction, true);
 
-    private final Factor factor;
-    private final List<Term2> term2List;
-
-    public Term(
-            Factor factor,
-            List<Term2> term2List
-    ) {
-        this.factor = factor;
-        this.term2List = term2List;
+    public static Term of(ParseTreeNode node) {
+        return new Term(node);
     }
+
+    private Term(ParseTreeNode node) {
+        super(RULE, node);
+    }
+
+    private List<Term2> term2List;
 
     @Override
     protected void buildRule() {
@@ -30,7 +29,9 @@ public final class Term extends ConjunctionRule {
     }
 
     public Factor factor() {
-        return factor;
+        var element = getItem(0);
+        if (!element.isPresent()) return null;
+        return Factor.of(element);
     }
 
     public List<Term2> term2List() {
@@ -62,20 +63,17 @@ public final class Term extends ConjunctionRule {
     /**
      * ('*' | '@' | '/' | '%' | '//') 'factor'
      */
-    public static final class Term2 extends ConjunctionRule {
+    public static final class Term2 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("term:2", RuleType.Conjunction, false);
 
-        private final Term21 term21;
-        private final Factor factor;
+        public static Term2 of(ParseTreeNode node) {
+            return new Term2(node);
+        }
 
-        public Term2(
-                Term21 term21,
-                Factor factor
-        ) {
-            this.term21 = term21;
-            this.factor = factor;
+        private Term2(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -85,11 +83,15 @@ public final class Term extends ConjunctionRule {
         }
 
         public Term21 term21() {
-            return term21;
+            var element = getItem(0);
+            if (!element.isPresent()) return null;
+            return Term21.of(element);
         }
 
         public Factor factor() {
-            return factor;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return Factor.of(element);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -110,29 +112,17 @@ public final class Term extends ConjunctionRule {
     /**
      * '*' | '@' | '/' | '%' | '//'
      */
-    public static final class Term21 extends DisjunctionRule {
+    public static final class Term21 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("term:2:1", RuleType.Disjunction, false);
 
-        private final boolean isTokenTimes;
-        private final boolean isTokenMatrixTimes;
-        private final boolean isTokenDiv;
-        private final boolean isTokenModulus;
-        private final boolean isTokenFloorDiv;
+        public static Term21 of(ParseTreeNode node) {
+            return new Term21(node);
+        }
 
-        public Term21(
-                boolean isTokenTimes,
-                boolean isTokenMatrixTimes,
-                boolean isTokenDiv,
-                boolean isTokenModulus,
-                boolean isTokenFloorDiv
-        ) {
-            this.isTokenTimes = isTokenTimes;
-            this.isTokenMatrixTimes = isTokenMatrixTimes;
-            this.isTokenDiv = isTokenDiv;
-            this.isTokenModulus = isTokenModulus;
-            this.isTokenFloorDiv = isTokenFloorDiv;
+        private Term21(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -145,23 +135,28 @@ public final class Term extends ConjunctionRule {
         }
 
         public boolean isTokenTimes() {
-            return isTokenTimes;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public boolean isTokenMatrixTimes() {
-            return isTokenMatrixTimes;
+            var element = getItem(1);
+            return element.asBoolean();
         }
 
         public boolean isTokenDiv() {
-            return isTokenDiv;
+            var element = getItem(2);
+            return element.asBoolean();
         }
 
         public boolean isTokenModulus() {
-            return isTokenModulus;
+            var element = getItem(3);
+            return element.asBoolean();
         }
 
         public boolean isTokenFloorDiv() {
-            return isTokenFloorDiv;
+            var element = getItem(4);
+            return element.asBoolean();
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

@@ -7,21 +7,20 @@ import java.util.List;
 /**
  * conjunction: 'inversion' ('and' 'inversion')*
  */
-public final class Conjunction extends ConjunctionRule {
+public final class Conjunction extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("conjunction", RuleType.Conjunction, true);
 
-    private final Inversion inversion;
-    private final List<Conjunction2> conjunction2List;
-
-    public Conjunction(
-            Inversion inversion,
-            List<Conjunction2> conjunction2List
-    ) {
-        this.inversion = inversion;
-        this.conjunction2List = conjunction2List;
+    public static Conjunction of(ParseTreeNode node) {
+        return new Conjunction(node);
     }
+
+    private Conjunction(ParseTreeNode node) {
+        super(RULE, node);
+    }
+
+    private List<Conjunction2> conjunction2List;
 
     @Override
     protected void buildRule() {
@@ -30,7 +29,9 @@ public final class Conjunction extends ConjunctionRule {
     }
 
     public Inversion inversion() {
-        return inversion;
+        var element = getItem(0);
+        if (!element.isPresent()) return null;
+        return Inversion.of(element);
     }
 
     public List<Conjunction2> conjunction2List() {
@@ -62,20 +63,17 @@ public final class Conjunction extends ConjunctionRule {
     /**
      * 'and' 'inversion'
      */
-    public static final class Conjunction2 extends ConjunctionRule {
+    public static final class Conjunction2 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("conjunction:2", RuleType.Conjunction, false);
 
-        private final boolean isTokenAnd;
-        private final Inversion inversion;
+        public static Conjunction2 of(ParseTreeNode node) {
+            return new Conjunction2(node);
+        }
 
-        public Conjunction2(
-                boolean isTokenAnd,
-                Inversion inversion
-        ) {
-            this.isTokenAnd = isTokenAnd;
-            this.inversion = inversion;
+        private Conjunction2(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -85,11 +83,14 @@ public final class Conjunction extends ConjunctionRule {
         }
 
         public boolean isTokenAnd() {
-            return isTokenAnd;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public Inversion inversion() {
-            return inversion;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return Inversion.of(element);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

@@ -5,20 +5,17 @@ import org.fugalang.core.parser.*;
 /**
  * import_stmt: 'import_name' | 'import_from'
  */
-public final class ImportStmt extends DisjunctionRule {
+public final class ImportStmt extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("import_stmt", RuleType.Disjunction, true);
 
-    private final ImportName importName;
-    private final ImportFrom importFrom;
+    public static ImportStmt of(ParseTreeNode node) {
+        return new ImportStmt(node);
+    }
 
-    public ImportStmt(
-            ImportName importName,
-            ImportFrom importFrom
-    ) {
-        this.importName = importName;
-        this.importFrom = importFrom;
+    private ImportStmt(ParseTreeNode node) {
+        super(RULE, node);
     }
 
     @Override
@@ -28,7 +25,9 @@ public final class ImportStmt extends DisjunctionRule {
     }
 
     public ImportName importName() {
-        return importName;
+        var element = getItem(0);
+        if (!element.isPresent()) return null;
+        return ImportName.of(element);
     }
 
     public boolean hasImportName() {
@@ -36,7 +35,9 @@ public final class ImportStmt extends DisjunctionRule {
     }
 
     public ImportFrom importFrom() {
-        return importFrom;
+        var element = getItem(1);
+        if (!element.isPresent()) return null;
+        return ImportFrom.of(element);
     }
 
     public boolean hasImportFrom() {

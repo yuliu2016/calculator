@@ -5,32 +5,17 @@ import org.fugalang.core.parser.*;
 /**
  * for_stmt: 'for' 'targets' 'in' 'exprlist' 'suite' ['else' 'suite']
  */
-public final class ForStmt extends ConjunctionRule {
+public final class ForStmt extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("for_stmt", RuleType.Conjunction, true);
 
-    private final boolean isTokenFor;
-    private final Targets targets;
-    private final boolean isTokenIn;
-    private final Exprlist exprlist;
-    private final Suite suite;
-    private final ForStmt6 forStmt6;
+    public static ForStmt of(ParseTreeNode node) {
+        return new ForStmt(node);
+    }
 
-    public ForStmt(
-            boolean isTokenFor,
-            Targets targets,
-            boolean isTokenIn,
-            Exprlist exprlist,
-            Suite suite,
-            ForStmt6 forStmt6
-    ) {
-        this.isTokenFor = isTokenFor;
-        this.targets = targets;
-        this.isTokenIn = isTokenIn;
-        this.exprlist = exprlist;
-        this.suite = suite;
-        this.forStmt6 = forStmt6;
+    private ForStmt(ParseTreeNode node) {
+        super(RULE, node);
     }
 
     @Override
@@ -44,27 +29,37 @@ public final class ForStmt extends ConjunctionRule {
     }
 
     public boolean isTokenFor() {
-        return isTokenFor;
+        var element = getItem(0);
+        return element.asBoolean();
     }
 
     public Targets targets() {
-        return targets;
+        var element = getItem(1);
+        if (!element.isPresent()) return null;
+        return Targets.of(element);
     }
 
     public boolean isTokenIn() {
-        return isTokenIn;
+        var element = getItem(2);
+        return element.asBoolean();
     }
 
     public Exprlist exprlist() {
-        return exprlist;
+        var element = getItem(3);
+        if (!element.isPresent()) return null;
+        return Exprlist.of(element);
     }
 
     public Suite suite() {
-        return suite;
+        var element = getItem(4);
+        if (!element.isPresent()) return null;
+        return Suite.of(element);
     }
 
     public ForStmt6 forStmt6() {
-        return forStmt6;
+        var element = getItem(5);
+        if (!element.isPresent()) return null;
+        return ForStmt6.of(element);
     }
 
     public boolean hasForStmt6() {
@@ -92,20 +87,17 @@ public final class ForStmt extends ConjunctionRule {
     /**
      * 'else' 'suite'
      */
-    public static final class ForStmt6 extends ConjunctionRule {
+    public static final class ForStmt6 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("for_stmt:6", RuleType.Conjunction, false);
 
-        private final boolean isTokenElse;
-        private final Suite suite;
+        public static ForStmt6 of(ParseTreeNode node) {
+            return new ForStmt6(node);
+        }
 
-        public ForStmt6(
-                boolean isTokenElse,
-                Suite suite
-        ) {
-            this.isTokenElse = isTokenElse;
-            this.suite = suite;
+        private ForStmt6(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -115,11 +107,14 @@ public final class ForStmt extends ConjunctionRule {
         }
 
         public boolean isTokenElse() {
-            return isTokenElse;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public Suite suite() {
-            return suite;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return Suite.of(element);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

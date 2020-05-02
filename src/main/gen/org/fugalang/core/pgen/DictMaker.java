@@ -7,20 +7,17 @@ import java.util.List;
 /**
  * dict_maker: 'dict_item' ('comp_for' | (',' 'dict_item')* [','])
  */
-public final class DictMaker extends ConjunctionRule {
+public final class DictMaker extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("dict_maker", RuleType.Conjunction, true);
 
-    private final DictItem dictItem;
-    private final DictMaker2 dictMaker2;
+    public static DictMaker of(ParseTreeNode node) {
+        return new DictMaker(node);
+    }
 
-    public DictMaker(
-            DictItem dictItem,
-            DictMaker2 dictMaker2
-    ) {
-        this.dictItem = dictItem;
-        this.dictMaker2 = dictMaker2;
+    private DictMaker(ParseTreeNode node) {
+        super(RULE, node);
     }
 
     @Override
@@ -30,11 +27,15 @@ public final class DictMaker extends ConjunctionRule {
     }
 
     public DictItem dictItem() {
-        return dictItem;
+        var element = getItem(0);
+        if (!element.isPresent()) return null;
+        return DictItem.of(element);
     }
 
     public DictMaker2 dictMaker2() {
-        return dictMaker2;
+        var element = getItem(1);
+        if (!element.isPresent()) return null;
+        return DictMaker2.of(element);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -54,20 +55,17 @@ public final class DictMaker extends ConjunctionRule {
     /**
      * 'comp_for' | (',' 'dict_item')* [',']
      */
-    public static final class DictMaker2 extends DisjunctionRule {
+    public static final class DictMaker2 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("dict_maker:2", RuleType.Disjunction, false);
 
-        private final CompFor compFor;
-        private final DictMaker22 dictMaker22;
+        public static DictMaker2 of(ParseTreeNode node) {
+            return new DictMaker2(node);
+        }
 
-        public DictMaker2(
-                CompFor compFor,
-                DictMaker22 dictMaker22
-        ) {
-            this.compFor = compFor;
-            this.dictMaker22 = dictMaker22;
+        private DictMaker2(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -77,7 +75,9 @@ public final class DictMaker extends ConjunctionRule {
         }
 
         public CompFor compFor() {
-            return compFor;
+            var element = getItem(0);
+            if (!element.isPresent()) return null;
+            return CompFor.of(element);
         }
 
         public boolean hasCompFor() {
@@ -85,7 +85,9 @@ public final class DictMaker extends ConjunctionRule {
         }
 
         public DictMaker22 dictMaker22() {
-            return dictMaker22;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return DictMaker22.of(element);
         }
 
         public boolean hasDictMaker22() {
@@ -110,21 +112,20 @@ public final class DictMaker extends ConjunctionRule {
     /**
      * (',' 'dict_item')* [',']
      */
-    public static final class DictMaker22 extends ConjunctionRule {
+    public static final class DictMaker22 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("dict_maker:2:2", RuleType.Conjunction, false);
 
-        private final List<DictMaker221> dictMaker221List;
-        private final boolean isTokenComma;
-
-        public DictMaker22(
-                List<DictMaker221> dictMaker221List,
-                boolean isTokenComma
-        ) {
-            this.dictMaker221List = dictMaker221List;
-            this.isTokenComma = isTokenComma;
+        public static DictMaker22 of(ParseTreeNode node) {
+            return new DictMaker22(node);
         }
+
+        private DictMaker22(ParseTreeNode node) {
+            super(RULE, node);
+        }
+
+        private List<DictMaker221> dictMaker221List;
 
         @Override
         protected void buildRule() {
@@ -137,7 +138,8 @@ public final class DictMaker extends ConjunctionRule {
         }
 
         public boolean isTokenComma() {
-            return isTokenComma;
+            var element = getItem(1);
+            return element.asBoolean();
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -166,20 +168,17 @@ public final class DictMaker extends ConjunctionRule {
     /**
      * ',' 'dict_item'
      */
-    public static final class DictMaker221 extends ConjunctionRule {
+    public static final class DictMaker221 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("dict_maker:2:2:1", RuleType.Conjunction, false);
 
-        private final boolean isTokenComma;
-        private final DictItem dictItem;
+        public static DictMaker221 of(ParseTreeNode node) {
+            return new DictMaker221(node);
+        }
 
-        public DictMaker221(
-                boolean isTokenComma,
-                DictItem dictItem
-        ) {
-            this.isTokenComma = isTokenComma;
-            this.dictItem = dictItem;
+        private DictMaker221(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -189,11 +188,14 @@ public final class DictMaker extends ConjunctionRule {
         }
 
         public boolean isTokenComma() {
-            return isTokenComma;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public DictItem dictItem() {
-            return dictItem;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return DictItem.of(element);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

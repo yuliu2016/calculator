@@ -5,20 +5,17 @@ import org.fugalang.core.parser.*;
 /**
  * sliceop: ':' ['expr']
  */
-public final class Sliceop extends ConjunctionRule {
+public final class Sliceop extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("sliceop", RuleType.Conjunction, true);
 
-    private final boolean isTokenColon;
-    private final Expr expr;
+    public static Sliceop of(ParseTreeNode node) {
+        return new Sliceop(node);
+    }
 
-    public Sliceop(
-            boolean isTokenColon,
-            Expr expr
-    ) {
-        this.isTokenColon = isTokenColon;
-        this.expr = expr;
+    private Sliceop(ParseTreeNode node) {
+        super(RULE, node);
     }
 
     @Override
@@ -28,11 +25,14 @@ public final class Sliceop extends ConjunctionRule {
     }
 
     public boolean isTokenColon() {
-        return isTokenColon;
+        var element = getItem(0);
+        return element.asBoolean();
     }
 
     public Expr expr() {
-        return expr;
+        var element = getItem(1);
+        if (!element.isPresent()) return null;
+        return Expr.of(element);
     }
 
     public boolean hasExpr() {

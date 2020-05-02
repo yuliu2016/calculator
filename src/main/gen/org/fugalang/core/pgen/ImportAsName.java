@@ -5,20 +5,17 @@ import org.fugalang.core.parser.*;
 /**
  * import_as_name: 'NAME' ['as' 'NAME']
  */
-public final class ImportAsName extends ConjunctionRule {
+public final class ImportAsName extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("import_as_name", RuleType.Conjunction, true);
 
-    private final String name;
-    private final ImportAsName2 importAsName2;
+    public static ImportAsName of(ParseTreeNode node) {
+        return new ImportAsName(node);
+    }
 
-    public ImportAsName(
-            String name,
-            ImportAsName2 importAsName2
-    ) {
-        this.name = name;
-        this.importAsName2 = importAsName2;
+    private ImportAsName(ParseTreeNode node) {
+        super(RULE, node);
     }
 
     @Override
@@ -28,11 +25,15 @@ public final class ImportAsName extends ConjunctionRule {
     }
 
     public String name() {
-        return name;
+        var element = getItem(0);
+        if (!element.isPresent()) return null;
+        return (String) element.asObject();
     }
 
     public ImportAsName2 importAsName2() {
-        return importAsName2;
+        var element = getItem(1);
+        if (!element.isPresent()) return null;
+        return ImportAsName2.of(element);
     }
 
     public boolean hasImportAsName2() {
@@ -56,20 +57,17 @@ public final class ImportAsName extends ConjunctionRule {
     /**
      * 'as' 'NAME'
      */
-    public static final class ImportAsName2 extends ConjunctionRule {
+    public static final class ImportAsName2 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("import_as_name:2", RuleType.Conjunction, false);
 
-        private final boolean isTokenAs;
-        private final String name;
+        public static ImportAsName2 of(ParseTreeNode node) {
+            return new ImportAsName2(node);
+        }
 
-        public ImportAsName2(
-                boolean isTokenAs,
-                String name
-        ) {
-            this.isTokenAs = isTokenAs;
-            this.name = name;
+        private ImportAsName2(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -79,11 +77,14 @@ public final class ImportAsName extends ConjunctionRule {
         }
 
         public boolean isTokenAs() {
-            return isTokenAs;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public String name() {
-            return name;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return (String) element.asObject();
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

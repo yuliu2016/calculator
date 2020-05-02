@@ -7,26 +7,17 @@ import java.util.List;
 /**
  * import_from: 'from' ('.'* 'dotted_name' | '.'+) 'import' ('*' | '(' 'import_as_names' ')' | 'import_as_names')
  */
-public final class ImportFrom extends ConjunctionRule {
+public final class ImportFrom extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("import_from", RuleType.Conjunction, true);
 
-    private final boolean isTokenFrom;
-    private final ImportFrom2 importFrom2;
-    private final boolean isTokenImport;
-    private final ImportFrom4 importFrom4;
+    public static ImportFrom of(ParseTreeNode node) {
+        return new ImportFrom(node);
+    }
 
-    public ImportFrom(
-            boolean isTokenFrom,
-            ImportFrom2 importFrom2,
-            boolean isTokenImport,
-            ImportFrom4 importFrom4
-    ) {
-        this.isTokenFrom = isTokenFrom;
-        this.importFrom2 = importFrom2;
-        this.isTokenImport = isTokenImport;
-        this.importFrom4 = importFrom4;
+    private ImportFrom(ParseTreeNode node) {
+        super(RULE, node);
     }
 
     @Override
@@ -38,19 +29,25 @@ public final class ImportFrom extends ConjunctionRule {
     }
 
     public boolean isTokenFrom() {
-        return isTokenFrom;
+        var element = getItem(0);
+        return element.asBoolean();
     }
 
     public ImportFrom2 importFrom2() {
-        return importFrom2;
+        var element = getItem(1);
+        if (!element.isPresent()) return null;
+        return ImportFrom2.of(element);
     }
 
     public boolean isTokenImport() {
-        return isTokenImport;
+        var element = getItem(2);
+        return element.asBoolean();
     }
 
     public ImportFrom4 importFrom4() {
-        return importFrom4;
+        var element = getItem(3);
+        if (!element.isPresent()) return null;
+        return ImportFrom4.of(element);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -72,21 +69,20 @@ public final class ImportFrom extends ConjunctionRule {
     /**
      * '.'* 'dotted_name' | '.'+
      */
-    public static final class ImportFrom2 extends DisjunctionRule {
+    public static final class ImportFrom2 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("import_from:2", RuleType.Disjunction, false);
 
-        private final ImportFrom21 importFrom21;
-        private final List<Boolean> isTokenDotList;
-
-        public ImportFrom2(
-                ImportFrom21 importFrom21,
-                List<Boolean> isTokenDotList
-        ) {
-            this.importFrom21 = importFrom21;
-            this.isTokenDotList = isTokenDotList;
+        public static ImportFrom2 of(ParseTreeNode node) {
+            return new ImportFrom2(node);
         }
+
+        private ImportFrom2(ParseTreeNode node) {
+            super(RULE, node);
+        }
+
+        private List<Boolean> isTokenDotList;
 
         @Override
         protected void buildRule() {
@@ -95,7 +91,9 @@ public final class ImportFrom extends ConjunctionRule {
         }
 
         public ImportFrom21 importFrom21() {
-            return importFrom21;
+            var element = getItem(0);
+            if (!element.isPresent()) return null;
+            return ImportFrom21.of(element);
         }
 
         public boolean hasImportFrom21() {
@@ -133,21 +131,20 @@ public final class ImportFrom extends ConjunctionRule {
     /**
      * '.'* 'dotted_name'
      */
-    public static final class ImportFrom21 extends ConjunctionRule {
+    public static final class ImportFrom21 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("import_from:2:1", RuleType.Conjunction, false);
 
-        private final List<Boolean> isTokenDotList;
-        private final DottedName dottedName;
-
-        public ImportFrom21(
-                List<Boolean> isTokenDotList,
-                DottedName dottedName
-        ) {
-            this.isTokenDotList = isTokenDotList;
-            this.dottedName = dottedName;
+        public static ImportFrom21 of(ParseTreeNode node) {
+            return new ImportFrom21(node);
         }
+
+        private ImportFrom21(ParseTreeNode node) {
+            super(RULE, node);
+        }
+
+        private List<Boolean> isTokenDotList;
 
         @Override
         protected void buildRule() {
@@ -160,7 +157,9 @@ public final class ImportFrom extends ConjunctionRule {
         }
 
         public DottedName dottedName() {
-            return dottedName;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return DottedName.of(element);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -189,23 +188,17 @@ public final class ImportFrom extends ConjunctionRule {
     /**
      * '*' | '(' 'import_as_names' ')' | 'import_as_names'
      */
-    public static final class ImportFrom4 extends DisjunctionRule {
+    public static final class ImportFrom4 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("import_from:4", RuleType.Disjunction, false);
 
-        private final boolean isTokenTimes;
-        private final ImportFrom42 importFrom42;
-        private final ImportAsNames importAsNames;
+        public static ImportFrom4 of(ParseTreeNode node) {
+            return new ImportFrom4(node);
+        }
 
-        public ImportFrom4(
-                boolean isTokenTimes,
-                ImportFrom42 importFrom42,
-                ImportAsNames importAsNames
-        ) {
-            this.isTokenTimes = isTokenTimes;
-            this.importFrom42 = importFrom42;
-            this.importAsNames = importAsNames;
+        private ImportFrom4(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -216,11 +209,14 @@ public final class ImportFrom extends ConjunctionRule {
         }
 
         public boolean isTokenTimes() {
-            return isTokenTimes;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public ImportFrom42 importFrom42() {
-            return importFrom42;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return ImportFrom42.of(element);
         }
 
         public boolean hasImportFrom42() {
@@ -228,7 +224,9 @@ public final class ImportFrom extends ConjunctionRule {
         }
 
         public ImportAsNames importAsNames() {
-            return importAsNames;
+            var element = getItem(2);
+            if (!element.isPresent()) return null;
+            return ImportAsNames.of(element);
         }
 
         public boolean hasImportAsNames() {
@@ -254,23 +252,17 @@ public final class ImportFrom extends ConjunctionRule {
     /**
      * '(' 'import_as_names' ')'
      */
-    public static final class ImportFrom42 extends ConjunctionRule {
+    public static final class ImportFrom42 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("import_from:4:2", RuleType.Conjunction, false);
 
-        private final boolean isTokenLpar;
-        private final ImportAsNames importAsNames;
-        private final boolean isTokenRpar;
+        public static ImportFrom42 of(ParseTreeNode node) {
+            return new ImportFrom42(node);
+        }
 
-        public ImportFrom42(
-                boolean isTokenLpar,
-                ImportAsNames importAsNames,
-                boolean isTokenRpar
-        ) {
-            this.isTokenLpar = isTokenLpar;
-            this.importAsNames = importAsNames;
-            this.isTokenRpar = isTokenRpar;
+        private ImportFrom42(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -281,15 +273,19 @@ public final class ImportFrom extends ConjunctionRule {
         }
 
         public boolean isTokenLpar() {
-            return isTokenLpar;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public ImportAsNames importAsNames() {
-            return importAsNames;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return ImportAsNames.of(element);
         }
 
         public boolean isTokenRpar() {
-            return isTokenRpar;
+            var element = getItem(2);
+            return element.asBoolean();
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

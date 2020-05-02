@@ -5,20 +5,17 @@ import org.fugalang.core.parser.*;
 /**
  * exprlist_comp_sub: 'exprlist_comp' | 'subscript'
  */
-public final class ExprlistCompSub extends DisjunctionRule {
+public final class ExprlistCompSub extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("exprlist_comp_sub", RuleType.Disjunction, true);
 
-    private final ExprlistComp exprlistComp;
-    private final Subscript subscript;
+    public static ExprlistCompSub of(ParseTreeNode node) {
+        return new ExprlistCompSub(node);
+    }
 
-    public ExprlistCompSub(
-            ExprlistComp exprlistComp,
-            Subscript subscript
-    ) {
-        this.exprlistComp = exprlistComp;
-        this.subscript = subscript;
+    private ExprlistCompSub(ParseTreeNode node) {
+        super(RULE, node);
     }
 
     @Override
@@ -28,7 +25,9 @@ public final class ExprlistCompSub extends DisjunctionRule {
     }
 
     public ExprlistComp exprlistComp() {
-        return exprlistComp;
+        var element = getItem(0);
+        if (!element.isPresent()) return null;
+        return ExprlistComp.of(element);
     }
 
     public boolean hasExprlistComp() {
@@ -36,7 +35,9 @@ public final class ExprlistCompSub extends DisjunctionRule {
     }
 
     public Subscript subscript() {
-        return subscript;
+        var element = getItem(1);
+        if (!element.isPresent()) return null;
+        return Subscript.of(element);
     }
 
     public boolean hasSubscript() {

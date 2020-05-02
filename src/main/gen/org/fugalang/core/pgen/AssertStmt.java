@@ -5,23 +5,17 @@ import org.fugalang.core.parser.*;
 /**
  * assert_stmt: 'assert' 'expr' [',' 'expr']
  */
-public final class AssertStmt extends ConjunctionRule {
+public final class AssertStmt extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("assert_stmt", RuleType.Conjunction, true);
 
-    private final boolean isTokenAssert;
-    private final Expr expr;
-    private final AssertStmt3 assertStmt3;
+    public static AssertStmt of(ParseTreeNode node) {
+        return new AssertStmt(node);
+    }
 
-    public AssertStmt(
-            boolean isTokenAssert,
-            Expr expr,
-            AssertStmt3 assertStmt3
-    ) {
-        this.isTokenAssert = isTokenAssert;
-        this.expr = expr;
-        this.assertStmt3 = assertStmt3;
+    private AssertStmt(ParseTreeNode node) {
+        super(RULE, node);
     }
 
     @Override
@@ -32,15 +26,20 @@ public final class AssertStmt extends ConjunctionRule {
     }
 
     public boolean isTokenAssert() {
-        return isTokenAssert;
+        var element = getItem(0);
+        return element.asBoolean();
     }
 
     public Expr expr() {
-        return expr;
+        var element = getItem(1);
+        if (!element.isPresent()) return null;
+        return Expr.of(element);
     }
 
     public AssertStmt3 assertStmt3() {
-        return assertStmt3;
+        var element = getItem(2);
+        if (!element.isPresent()) return null;
+        return AssertStmt3.of(element);
     }
 
     public boolean hasAssertStmt3() {
@@ -65,20 +64,17 @@ public final class AssertStmt extends ConjunctionRule {
     /**
      * ',' 'expr'
      */
-    public static final class AssertStmt3 extends ConjunctionRule {
+    public static final class AssertStmt3 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("assert_stmt:3", RuleType.Conjunction, false);
 
-        private final boolean isTokenComma;
-        private final Expr expr;
+        public static AssertStmt3 of(ParseTreeNode node) {
+            return new AssertStmt3(node);
+        }
 
-        public AssertStmt3(
-                boolean isTokenComma,
-                Expr expr
-        ) {
-            this.isTokenComma = isTokenComma;
-            this.expr = expr;
+        private AssertStmt3(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -88,11 +84,14 @@ public final class AssertStmt extends ConjunctionRule {
         }
 
         public boolean isTokenComma() {
-            return isTokenComma;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public Expr expr() {
-            return expr;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return Expr.of(element);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

@@ -7,20 +7,17 @@ import java.util.List;
 /**
  * exprlist_comp: 'expr_or_star' ('comp_for' | (',' 'expr_or_star')* [','])
  */
-public final class ExprlistComp extends ConjunctionRule {
+public final class ExprlistComp extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("exprlist_comp", RuleType.Conjunction, true);
 
-    private final ExprOrStar exprOrStar;
-    private final ExprlistComp2 exprlistComp2;
+    public static ExprlistComp of(ParseTreeNode node) {
+        return new ExprlistComp(node);
+    }
 
-    public ExprlistComp(
-            ExprOrStar exprOrStar,
-            ExprlistComp2 exprlistComp2
-    ) {
-        this.exprOrStar = exprOrStar;
-        this.exprlistComp2 = exprlistComp2;
+    private ExprlistComp(ParseTreeNode node) {
+        super(RULE, node);
     }
 
     @Override
@@ -30,11 +27,15 @@ public final class ExprlistComp extends ConjunctionRule {
     }
 
     public ExprOrStar exprOrStar() {
-        return exprOrStar;
+        var element = getItem(0);
+        if (!element.isPresent()) return null;
+        return ExprOrStar.of(element);
     }
 
     public ExprlistComp2 exprlistComp2() {
-        return exprlistComp2;
+        var element = getItem(1);
+        if (!element.isPresent()) return null;
+        return ExprlistComp2.of(element);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -54,20 +55,17 @@ public final class ExprlistComp extends ConjunctionRule {
     /**
      * 'comp_for' | (',' 'expr_or_star')* [',']
      */
-    public static final class ExprlistComp2 extends DisjunctionRule {
+    public static final class ExprlistComp2 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("exprlist_comp:2", RuleType.Disjunction, false);
 
-        private final CompFor compFor;
-        private final ExprlistComp22 exprlistComp22;
+        public static ExprlistComp2 of(ParseTreeNode node) {
+            return new ExprlistComp2(node);
+        }
 
-        public ExprlistComp2(
-                CompFor compFor,
-                ExprlistComp22 exprlistComp22
-        ) {
-            this.compFor = compFor;
-            this.exprlistComp22 = exprlistComp22;
+        private ExprlistComp2(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -77,7 +75,9 @@ public final class ExprlistComp extends ConjunctionRule {
         }
 
         public CompFor compFor() {
-            return compFor;
+            var element = getItem(0);
+            if (!element.isPresent()) return null;
+            return CompFor.of(element);
         }
 
         public boolean hasCompFor() {
@@ -85,7 +85,9 @@ public final class ExprlistComp extends ConjunctionRule {
         }
 
         public ExprlistComp22 exprlistComp22() {
-            return exprlistComp22;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return ExprlistComp22.of(element);
         }
 
         public boolean hasExprlistComp22() {
@@ -110,21 +112,20 @@ public final class ExprlistComp extends ConjunctionRule {
     /**
      * (',' 'expr_or_star')* [',']
      */
-    public static final class ExprlistComp22 extends ConjunctionRule {
+    public static final class ExprlistComp22 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("exprlist_comp:2:2", RuleType.Conjunction, false);
 
-        private final List<ExprlistComp221> exprlistComp221List;
-        private final boolean isTokenComma;
-
-        public ExprlistComp22(
-                List<ExprlistComp221> exprlistComp221List,
-                boolean isTokenComma
-        ) {
-            this.exprlistComp221List = exprlistComp221List;
-            this.isTokenComma = isTokenComma;
+        public static ExprlistComp22 of(ParseTreeNode node) {
+            return new ExprlistComp22(node);
         }
+
+        private ExprlistComp22(ParseTreeNode node) {
+            super(RULE, node);
+        }
+
+        private List<ExprlistComp221> exprlistComp221List;
 
         @Override
         protected void buildRule() {
@@ -137,7 +138,8 @@ public final class ExprlistComp extends ConjunctionRule {
         }
 
         public boolean isTokenComma() {
-            return isTokenComma;
+            var element = getItem(1);
+            return element.asBoolean();
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -166,20 +168,17 @@ public final class ExprlistComp extends ConjunctionRule {
     /**
      * ',' 'expr_or_star'
      */
-    public static final class ExprlistComp221 extends ConjunctionRule {
+    public static final class ExprlistComp221 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("exprlist_comp:2:2:1", RuleType.Conjunction, false);
 
-        private final boolean isTokenComma;
-        private final ExprOrStar exprOrStar;
+        public static ExprlistComp221 of(ParseTreeNode node) {
+            return new ExprlistComp221(node);
+        }
 
-        public ExprlistComp221(
-                boolean isTokenComma,
-                ExprOrStar exprOrStar
-        ) {
-            this.isTokenComma = isTokenComma;
-            this.exprOrStar = exprOrStar;
+        private ExprlistComp221(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -189,11 +188,14 @@ public final class ExprlistComp extends ConjunctionRule {
         }
 
         public boolean isTokenComma() {
-            return isTokenComma;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public ExprOrStar exprOrStar() {
-            return exprOrStar;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return ExprOrStar.of(element);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

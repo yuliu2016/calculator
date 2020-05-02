@@ -7,24 +7,20 @@ import java.util.List;
 /**
  * atom_expr: ['await'] 'atom' 'trailer'*
  */
-public final class AtomExpr extends ConjunctionRule {
+public final class AtomExpr extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("atom_expr", RuleType.Conjunction, true);
 
-    private final boolean isTokenAwait;
-    private final Atom atom;
-    private final List<Trailer> trailerList;
-
-    public AtomExpr(
-            boolean isTokenAwait,
-            Atom atom,
-            List<Trailer> trailerList
-    ) {
-        this.isTokenAwait = isTokenAwait;
-        this.atom = atom;
-        this.trailerList = trailerList;
+    public static AtomExpr of(ParseTreeNode node) {
+        return new AtomExpr(node);
     }
+
+    private AtomExpr(ParseTreeNode node) {
+        super(RULE, node);
+    }
+
+    private List<Trailer> trailerList;
 
     @Override
     protected void buildRule() {
@@ -34,11 +30,14 @@ public final class AtomExpr extends ConjunctionRule {
     }
 
     public boolean isTokenAwait() {
-        return isTokenAwait;
+        var element = getItem(0);
+        return element.asBoolean();
     }
 
     public Atom atom() {
-        return atom;
+        var element = getItem(1);
+        if (!element.isPresent()) return null;
+        return Atom.of(element);
     }
 
     public List<Trailer> trailerList() {

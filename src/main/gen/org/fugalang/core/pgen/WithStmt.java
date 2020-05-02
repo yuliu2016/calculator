@@ -7,27 +7,20 @@ import java.util.List;
 /**
  * with_stmt: 'with' 'with_item' (',' 'with_item')* 'suite'
  */
-public final class WithStmt extends ConjunctionRule {
+public final class WithStmt extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("with_stmt", RuleType.Conjunction, true);
 
-    private final boolean isTokenWith;
-    private final WithItem withItem;
-    private final List<WithStmt3> withStmt3List;
-    private final Suite suite;
-
-    public WithStmt(
-            boolean isTokenWith,
-            WithItem withItem,
-            List<WithStmt3> withStmt3List,
-            Suite suite
-    ) {
-        this.isTokenWith = isTokenWith;
-        this.withItem = withItem;
-        this.withStmt3List = withStmt3List;
-        this.suite = suite;
+    public static WithStmt of(ParseTreeNode node) {
+        return new WithStmt(node);
     }
+
+    private WithStmt(ParseTreeNode node) {
+        super(RULE, node);
+    }
+
+    private List<WithStmt3> withStmt3List;
 
     @Override
     protected void buildRule() {
@@ -38,11 +31,14 @@ public final class WithStmt extends ConjunctionRule {
     }
 
     public boolean isTokenWith() {
-        return isTokenWith;
+        var element = getItem(0);
+        return element.asBoolean();
     }
 
     public WithItem withItem() {
-        return withItem;
+        var element = getItem(1);
+        if (!element.isPresent()) return null;
+        return WithItem.of(element);
     }
 
     public List<WithStmt3> withStmt3List() {
@@ -50,7 +46,9 @@ public final class WithStmt extends ConjunctionRule {
     }
 
     public Suite suite() {
-        return suite;
+        var element = getItem(3);
+        if (!element.isPresent()) return null;
+        return Suite.of(element);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -80,20 +78,17 @@ public final class WithStmt extends ConjunctionRule {
     /**
      * ',' 'with_item'
      */
-    public static final class WithStmt3 extends ConjunctionRule {
+    public static final class WithStmt3 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("with_stmt:3", RuleType.Conjunction, false);
 
-        private final boolean isTokenComma;
-        private final WithItem withItem;
+        public static WithStmt3 of(ParseTreeNode node) {
+            return new WithStmt3(node);
+        }
 
-        public WithStmt3(
-                boolean isTokenComma,
-                WithItem withItem
-        ) {
-            this.isTokenComma = isTokenComma;
-            this.withItem = withItem;
+        private WithStmt3(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -103,11 +98,14 @@ public final class WithStmt extends ConjunctionRule {
         }
 
         public boolean isTokenComma() {
-            return isTokenComma;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public WithItem withItem() {
-            return withItem;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return WithItem.of(element);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

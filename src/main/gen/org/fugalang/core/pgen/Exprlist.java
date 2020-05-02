@@ -7,24 +7,20 @@ import java.util.List;
 /**
  * exprlist: 'expr' (',' 'expr')* [',']
  */
-public final class Exprlist extends ConjunctionRule {
+public final class Exprlist extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("exprlist", RuleType.Conjunction, true);
 
-    private final Expr expr;
-    private final List<Exprlist2> exprlist2List;
-    private final boolean isTokenComma;
-
-    public Exprlist(
-            Expr expr,
-            List<Exprlist2> exprlist2List,
-            boolean isTokenComma
-    ) {
-        this.expr = expr;
-        this.exprlist2List = exprlist2List;
-        this.isTokenComma = isTokenComma;
+    public static Exprlist of(ParseTreeNode node) {
+        return new Exprlist(node);
     }
+
+    private Exprlist(ParseTreeNode node) {
+        super(RULE, node);
+    }
+
+    private List<Exprlist2> exprlist2List;
 
     @Override
     protected void buildRule() {
@@ -34,7 +30,9 @@ public final class Exprlist extends ConjunctionRule {
     }
 
     public Expr expr() {
-        return expr;
+        var element = getItem(0);
+        if (!element.isPresent()) return null;
+        return Expr.of(element);
     }
 
     public List<Exprlist2> exprlist2List() {
@@ -42,7 +40,8 @@ public final class Exprlist extends ConjunctionRule {
     }
 
     public boolean isTokenComma() {
-        return isTokenComma;
+        var element = getItem(2);
+        return element.asBoolean();
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -71,20 +70,17 @@ public final class Exprlist extends ConjunctionRule {
     /**
      * ',' 'expr'
      */
-    public static final class Exprlist2 extends ConjunctionRule {
+    public static final class Exprlist2 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("exprlist:2", RuleType.Conjunction, false);
 
-        private final boolean isTokenComma;
-        private final Expr expr;
+        public static Exprlist2 of(ParseTreeNode node) {
+            return new Exprlist2(node);
+        }
 
-        public Exprlist2(
-                boolean isTokenComma,
-                Expr expr
-        ) {
-            this.isTokenComma = isTokenComma;
-            this.expr = expr;
+        private Exprlist2(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -94,11 +90,14 @@ public final class Exprlist extends ConjunctionRule {
         }
 
         public boolean isTokenComma() {
-            return isTokenComma;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public Expr expr() {
-            return expr;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return Expr.of(element);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

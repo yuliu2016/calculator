@@ -5,17 +5,17 @@ import org.fugalang.core.parser.*;
 /**
  * vfpdef: 'NAME'
  */
-public final class Vfpdef extends ConjunctionRule {
+public final class Vfpdef extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("vfpdef", RuleType.Conjunction, true);
 
-    private final String name;
+    public static Vfpdef of(ParseTreeNode node) {
+        return new Vfpdef(node);
+    }
 
-    public Vfpdef(
-            String name
-    ) {
-        this.name = name;
+    private Vfpdef(ParseTreeNode node) {
+        super(RULE, node);
     }
 
     @Override
@@ -24,7 +24,9 @@ public final class Vfpdef extends ConjunctionRule {
     }
 
     public String name() {
-        return name;
+        var element = getItem(0);
+        if (!element.isPresent()) return null;
+        return (String) element.asObject();
     }
 
     public static boolean parse(ParseTree parseTree, int level) {

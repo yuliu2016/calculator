@@ -5,20 +5,17 @@ import org.fugalang.core.parser.*;
 /**
  * del_stmt: 'del' 'targets'
  */
-public final class DelStmt extends ConjunctionRule {
+public final class DelStmt extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("del_stmt", RuleType.Conjunction, true);
 
-    private final boolean isTokenDel;
-    private final Targets targets;
+    public static DelStmt of(ParseTreeNode node) {
+        return new DelStmt(node);
+    }
 
-    public DelStmt(
-            boolean isTokenDel,
-            Targets targets
-    ) {
-        this.isTokenDel = isTokenDel;
-        this.targets = targets;
+    private DelStmt(ParseTreeNode node) {
+        super(RULE, node);
     }
 
     @Override
@@ -28,11 +25,14 @@ public final class DelStmt extends ConjunctionRule {
     }
 
     public boolean isTokenDel() {
-        return isTokenDel;
+        var element = getItem(0);
+        return element.asBoolean();
     }
 
     public Targets targets() {
-        return targets;
+        var element = getItem(1);
+        if (!element.isPresent()) return null;
+        return Targets.of(element);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {

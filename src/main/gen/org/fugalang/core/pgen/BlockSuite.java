@@ -7,20 +7,17 @@ import java.util.List;
 /**
  * block_suite: '{' 'simple_stmt' '}' | '{' 'NEWLINE' 'stmt'+ '}'
  */
-public final class BlockSuite extends DisjunctionRule {
+public final class BlockSuite extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("block_suite", RuleType.Disjunction, true);
 
-    private final BlockSuite1 blockSuite1;
-    private final BlockSuite2 blockSuite2;
+    public static BlockSuite of(ParseTreeNode node) {
+        return new BlockSuite(node);
+    }
 
-    public BlockSuite(
-            BlockSuite1 blockSuite1,
-            BlockSuite2 blockSuite2
-    ) {
-        this.blockSuite1 = blockSuite1;
-        this.blockSuite2 = blockSuite2;
+    private BlockSuite(ParseTreeNode node) {
+        super(RULE, node);
     }
 
     @Override
@@ -30,7 +27,9 @@ public final class BlockSuite extends DisjunctionRule {
     }
 
     public BlockSuite1 blockSuite1() {
-        return blockSuite1;
+        var element = getItem(0);
+        if (!element.isPresent()) return null;
+        return BlockSuite1.of(element);
     }
 
     public boolean hasBlockSuite1() {
@@ -38,7 +37,9 @@ public final class BlockSuite extends DisjunctionRule {
     }
 
     public BlockSuite2 blockSuite2() {
-        return blockSuite2;
+        var element = getItem(1);
+        if (!element.isPresent()) return null;
+        return BlockSuite2.of(element);
     }
 
     public boolean hasBlockSuite2() {
@@ -62,23 +63,17 @@ public final class BlockSuite extends DisjunctionRule {
     /**
      * '{' 'simple_stmt' '}'
      */
-    public static final class BlockSuite1 extends ConjunctionRule {
+    public static final class BlockSuite1 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("block_suite:1", RuleType.Conjunction, false);
 
-        private final boolean isTokenLbrace;
-        private final SimpleStmt simpleStmt;
-        private final boolean isTokenRbrace;
+        public static BlockSuite1 of(ParseTreeNode node) {
+            return new BlockSuite1(node);
+        }
 
-        public BlockSuite1(
-                boolean isTokenLbrace,
-                SimpleStmt simpleStmt,
-                boolean isTokenRbrace
-        ) {
-            this.isTokenLbrace = isTokenLbrace;
-            this.simpleStmt = simpleStmt;
-            this.isTokenRbrace = isTokenRbrace;
+        private BlockSuite1(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -89,15 +84,19 @@ public final class BlockSuite extends DisjunctionRule {
         }
 
         public boolean isTokenLbrace() {
-            return isTokenLbrace;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public SimpleStmt simpleStmt() {
-            return simpleStmt;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return SimpleStmt.of(element);
         }
 
         public boolean isTokenRbrace() {
-            return isTokenRbrace;
+            var element = getItem(2);
+            return element.asBoolean();
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -119,27 +118,20 @@ public final class BlockSuite extends DisjunctionRule {
     /**
      * '{' 'NEWLINE' 'stmt'+ '}'
      */
-    public static final class BlockSuite2 extends ConjunctionRule {
+    public static final class BlockSuite2 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("block_suite:2", RuleType.Conjunction, false);
 
-        private final boolean isTokenLbrace;
-        private final Object newline;
-        private final List<Stmt> stmtList;
-        private final boolean isTokenRbrace;
-
-        public BlockSuite2(
-                boolean isTokenLbrace,
-                Object newline,
-                List<Stmt> stmtList,
-                boolean isTokenRbrace
-        ) {
-            this.isTokenLbrace = isTokenLbrace;
-            this.newline = newline;
-            this.stmtList = stmtList;
-            this.isTokenRbrace = isTokenRbrace;
+        public static BlockSuite2 of(ParseTreeNode node) {
+            return new BlockSuite2(node);
         }
+
+        private BlockSuite2(ParseTreeNode node) {
+            super(RULE, node);
+        }
+
+        private List<Stmt> stmtList;
 
         @Override
         protected void buildRule() {
@@ -150,11 +142,14 @@ public final class BlockSuite extends DisjunctionRule {
         }
 
         public boolean isTokenLbrace() {
-            return isTokenLbrace;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public Object newline() {
-            return newline;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return element.asObject();
         }
 
         public List<Stmt> stmtList() {
@@ -162,7 +157,8 @@ public final class BlockSuite extends DisjunctionRule {
         }
 
         public boolean isTokenRbrace() {
-            return isTokenRbrace;
+            var element = getItem(3);
+            return element.asBoolean();
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

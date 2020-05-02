@@ -7,24 +7,20 @@ import java.util.List;
 /**
  * arglist: 'argument' (',' 'argument')* [',']
  */
-public final class Arglist extends ConjunctionRule {
+public final class Arglist extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("arglist", RuleType.Conjunction, true);
 
-    private final Argument argument;
-    private final List<Arglist2> arglist2List;
-    private final boolean isTokenComma;
-
-    public Arglist(
-            Argument argument,
-            List<Arglist2> arglist2List,
-            boolean isTokenComma
-    ) {
-        this.argument = argument;
-        this.arglist2List = arglist2List;
-        this.isTokenComma = isTokenComma;
+    public static Arglist of(ParseTreeNode node) {
+        return new Arglist(node);
     }
+
+    private Arglist(ParseTreeNode node) {
+        super(RULE, node);
+    }
+
+    private List<Arglist2> arglist2List;
 
     @Override
     protected void buildRule() {
@@ -34,7 +30,9 @@ public final class Arglist extends ConjunctionRule {
     }
 
     public Argument argument() {
-        return argument;
+        var element = getItem(0);
+        if (!element.isPresent()) return null;
+        return Argument.of(element);
     }
 
     public List<Arglist2> arglist2List() {
@@ -42,7 +40,8 @@ public final class Arglist extends ConjunctionRule {
     }
 
     public boolean isTokenComma() {
-        return isTokenComma;
+        var element = getItem(2);
+        return element.asBoolean();
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -71,20 +70,17 @@ public final class Arglist extends ConjunctionRule {
     /**
      * ',' 'argument'
      */
-    public static final class Arglist2 extends ConjunctionRule {
+    public static final class Arglist2 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("arglist:2", RuleType.Conjunction, false);
 
-        private final boolean isTokenComma;
-        private final Argument argument;
+        public static Arglist2 of(ParseTreeNode node) {
+            return new Arglist2(node);
+        }
 
-        public Arglist2(
-                boolean isTokenComma,
-                Argument argument
-        ) {
-            this.isTokenComma = isTokenComma;
-            this.argument = argument;
+        private Arglist2(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -94,11 +90,14 @@ public final class Arglist extends ConjunctionRule {
         }
 
         public boolean isTokenComma() {
-            return isTokenComma;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public Argument argument() {
-            return argument;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return Argument.of(element);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

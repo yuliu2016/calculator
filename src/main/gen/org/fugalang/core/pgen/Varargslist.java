@@ -7,24 +7,20 @@ import java.util.List;
 /**
  * varargslist: 'vfpdef' ['=' 'expr'] (',' 'vfpdef' ['=' 'expr'])*
  */
-public final class Varargslist extends ConjunctionRule {
+public final class Varargslist extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("varargslist", RuleType.Conjunction, true);
 
-    private final Vfpdef vfpdef;
-    private final Varargslist2 varargslist2;
-    private final List<Varargslist3> varargslist3List;
-
-    public Varargslist(
-            Vfpdef vfpdef,
-            Varargslist2 varargslist2,
-            List<Varargslist3> varargslist3List
-    ) {
-        this.vfpdef = vfpdef;
-        this.varargslist2 = varargslist2;
-        this.varargslist3List = varargslist3List;
+    public static Varargslist of(ParseTreeNode node) {
+        return new Varargslist(node);
     }
+
+    private Varargslist(ParseTreeNode node) {
+        super(RULE, node);
+    }
+
+    private List<Varargslist3> varargslist3List;
 
     @Override
     protected void buildRule() {
@@ -34,11 +30,15 @@ public final class Varargslist extends ConjunctionRule {
     }
 
     public Vfpdef vfpdef() {
-        return vfpdef;
+        var element = getItem(0);
+        if (!element.isPresent()) return null;
+        return Vfpdef.of(element);
     }
 
     public Varargslist2 varargslist2() {
-        return varargslist2;
+        var element = getItem(1);
+        if (!element.isPresent()) return null;
+        return Varargslist2.of(element);
     }
 
     public boolean hasVarargslist2() {
@@ -75,20 +75,17 @@ public final class Varargslist extends ConjunctionRule {
     /**
      * '=' 'expr'
      */
-    public static final class Varargslist2 extends ConjunctionRule {
+    public static final class Varargslist2 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("varargslist:2", RuleType.Conjunction, false);
 
-        private final boolean isTokenAssign;
-        private final Expr expr;
+        public static Varargslist2 of(ParseTreeNode node) {
+            return new Varargslist2(node);
+        }
 
-        public Varargslist2(
-                boolean isTokenAssign,
-                Expr expr
-        ) {
-            this.isTokenAssign = isTokenAssign;
-            this.expr = expr;
+        private Varargslist2(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -98,11 +95,14 @@ public final class Varargslist extends ConjunctionRule {
         }
 
         public boolean isTokenAssign() {
-            return isTokenAssign;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public Expr expr() {
-            return expr;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return Expr.of(element);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -123,23 +123,17 @@ public final class Varargslist extends ConjunctionRule {
     /**
      * ',' 'vfpdef' ['=' 'expr']
      */
-    public static final class Varargslist3 extends ConjunctionRule {
+    public static final class Varargslist3 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("varargslist:3", RuleType.Conjunction, false);
 
-        private final boolean isTokenComma;
-        private final Vfpdef vfpdef;
-        private final Varargslist33 varargslist33;
+        public static Varargslist3 of(ParseTreeNode node) {
+            return new Varargslist3(node);
+        }
 
-        public Varargslist3(
-                boolean isTokenComma,
-                Vfpdef vfpdef,
-                Varargslist33 varargslist33
-        ) {
-            this.isTokenComma = isTokenComma;
-            this.vfpdef = vfpdef;
-            this.varargslist33 = varargslist33;
+        private Varargslist3(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -150,15 +144,20 @@ public final class Varargslist extends ConjunctionRule {
         }
 
         public boolean isTokenComma() {
-            return isTokenComma;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public Vfpdef vfpdef() {
-            return vfpdef;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return Vfpdef.of(element);
         }
 
         public Varargslist33 varargslist33() {
-            return varargslist33;
+            var element = getItem(2);
+            if (!element.isPresent()) return null;
+            return Varargslist33.of(element);
         }
 
         public boolean hasVarargslist33() {
@@ -184,20 +183,17 @@ public final class Varargslist extends ConjunctionRule {
     /**
      * '=' 'expr'
      */
-    public static final class Varargslist33 extends ConjunctionRule {
+    public static final class Varargslist33 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("varargslist:3:3", RuleType.Conjunction, false);
 
-        private final boolean isTokenAssign;
-        private final Expr expr;
+        public static Varargslist33 of(ParseTreeNode node) {
+            return new Varargslist33(node);
+        }
 
-        public Varargslist33(
-                boolean isTokenAssign,
-                Expr expr
-        ) {
-            this.isTokenAssign = isTokenAssign;
-            this.expr = expr;
+        private Varargslist33(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -207,11 +203,14 @@ public final class Varargslist extends ConjunctionRule {
         }
 
         public boolean isTokenAssign() {
-            return isTokenAssign;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public Expr expr() {
-            return expr;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return Expr.of(element);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

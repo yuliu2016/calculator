@@ -5,20 +5,17 @@ import org.fugalang.core.parser.*;
 /**
  * atom: 'compound_atom' | 'simple_atom'
  */
-public final class Atom extends DisjunctionRule {
+public final class Atom extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("atom", RuleType.Disjunction, true);
 
-    private final CompoundAtom compoundAtom;
-    private final SimpleAtom simpleAtom;
+    public static Atom of(ParseTreeNode node) {
+        return new Atom(node);
+    }
 
-    public Atom(
-            CompoundAtom compoundAtom,
-            SimpleAtom simpleAtom
-    ) {
-        this.compoundAtom = compoundAtom;
-        this.simpleAtom = simpleAtom;
+    private Atom(ParseTreeNode node) {
+        super(RULE, node);
     }
 
     @Override
@@ -28,7 +25,9 @@ public final class Atom extends DisjunctionRule {
     }
 
     public CompoundAtom compoundAtom() {
-        return compoundAtom;
+        var element = getItem(0);
+        if (!element.isPresent()) return null;
+        return CompoundAtom.of(element);
     }
 
     public boolean hasCompoundAtom() {
@@ -36,7 +35,9 @@ public final class Atom extends DisjunctionRule {
     }
 
     public SimpleAtom simpleAtom() {
-        return simpleAtom;
+        var element = getItem(1);
+        if (!element.isPresent()) return null;
+        return SimpleAtom.of(element);
     }
 
     public boolean hasSimpleAtom() {

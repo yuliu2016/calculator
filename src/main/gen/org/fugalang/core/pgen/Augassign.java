@@ -5,53 +5,17 @@ import org.fugalang.core.parser.*;
 /**
  * augassign: '+=' | '-=' | '*=' | '@=' | '/=' | '%=' | '&=' | '|=' | '^=' | '<<=' | '>>=' | '**=' | '//='
  */
-public final class Augassign extends DisjunctionRule {
+public final class Augassign extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("augassign", RuleType.Disjunction, true);
 
-    private final boolean isTokenPlusAssign;
-    private final boolean isTokenMinusAssign;
-    private final boolean isTokenTimesAssign;
-    private final boolean isTokenMatrixTimesAssign;
-    private final boolean isTokenDivAssign;
-    private final boolean isTokenModulusAssign;
-    private final boolean isTokenBitAndAssign;
-    private final boolean isTokenBitOrAssign;
-    private final boolean isTokenBitXorAssign;
-    private final boolean isTokenLshiftAssign;
-    private final boolean isTokenRshiftAssign;
-    private final boolean isTokenPowerAssign;
-    private final boolean isTokenFloorDivAssign;
+    public static Augassign of(ParseTreeNode node) {
+        return new Augassign(node);
+    }
 
-    public Augassign(
-            boolean isTokenPlusAssign,
-            boolean isTokenMinusAssign,
-            boolean isTokenTimesAssign,
-            boolean isTokenMatrixTimesAssign,
-            boolean isTokenDivAssign,
-            boolean isTokenModulusAssign,
-            boolean isTokenBitAndAssign,
-            boolean isTokenBitOrAssign,
-            boolean isTokenBitXorAssign,
-            boolean isTokenLshiftAssign,
-            boolean isTokenRshiftAssign,
-            boolean isTokenPowerAssign,
-            boolean isTokenFloorDivAssign
-    ) {
-        this.isTokenPlusAssign = isTokenPlusAssign;
-        this.isTokenMinusAssign = isTokenMinusAssign;
-        this.isTokenTimesAssign = isTokenTimesAssign;
-        this.isTokenMatrixTimesAssign = isTokenMatrixTimesAssign;
-        this.isTokenDivAssign = isTokenDivAssign;
-        this.isTokenModulusAssign = isTokenModulusAssign;
-        this.isTokenBitAndAssign = isTokenBitAndAssign;
-        this.isTokenBitOrAssign = isTokenBitOrAssign;
-        this.isTokenBitXorAssign = isTokenBitXorAssign;
-        this.isTokenLshiftAssign = isTokenLshiftAssign;
-        this.isTokenRshiftAssign = isTokenRshiftAssign;
-        this.isTokenPowerAssign = isTokenPowerAssign;
-        this.isTokenFloorDivAssign = isTokenFloorDivAssign;
+    private Augassign(ParseTreeNode node) {
+        super(RULE, node);
     }
 
     @Override
@@ -72,55 +36,68 @@ public final class Augassign extends DisjunctionRule {
     }
 
     public boolean isTokenPlusAssign() {
-        return isTokenPlusAssign;
+        var element = getItem(0);
+        return element.asBoolean();
     }
 
     public boolean isTokenMinusAssign() {
-        return isTokenMinusAssign;
+        var element = getItem(1);
+        return element.asBoolean();
     }
 
     public boolean isTokenTimesAssign() {
-        return isTokenTimesAssign;
+        var element = getItem(2);
+        return element.asBoolean();
     }
 
     public boolean isTokenMatrixTimesAssign() {
-        return isTokenMatrixTimesAssign;
+        var element = getItem(3);
+        return element.asBoolean();
     }
 
     public boolean isTokenDivAssign() {
-        return isTokenDivAssign;
+        var element = getItem(4);
+        return element.asBoolean();
     }
 
     public boolean isTokenModulusAssign() {
-        return isTokenModulusAssign;
+        var element = getItem(5);
+        return element.asBoolean();
     }
 
     public boolean isTokenBitAndAssign() {
-        return isTokenBitAndAssign;
+        var element = getItem(6);
+        return element.asBoolean();
     }
 
     public boolean isTokenBitOrAssign() {
-        return isTokenBitOrAssign;
+        var element = getItem(7);
+        return element.asBoolean();
     }
 
     public boolean isTokenBitXorAssign() {
-        return isTokenBitXorAssign;
+        var element = getItem(8);
+        return element.asBoolean();
     }
 
     public boolean isTokenLshiftAssign() {
-        return isTokenLshiftAssign;
+        var element = getItem(9);
+        return element.asBoolean();
     }
 
     public boolean isTokenRshiftAssign() {
-        return isTokenRshiftAssign;
+        var element = getItem(10);
+        return element.asBoolean();
     }
 
     public boolean isTokenPowerAssign() {
-        return isTokenPowerAssign;
+        var element = getItem(11);
+        return element.asBoolean();
     }
 
     public boolean isTokenFloorDivAssign() {
-        return isTokenFloorDivAssign;
+        var element = getItem(12);
+        return element.asBoolean();
     }
 
     public static boolean parse(ParseTree parseTree, int level) {

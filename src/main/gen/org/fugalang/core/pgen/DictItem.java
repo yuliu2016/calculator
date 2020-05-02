@@ -5,20 +5,17 @@ import org.fugalang.core.parser.*;
 /**
  * dict_item: 'expr' ':' 'expr' | '**' 'bitwise_or'
  */
-public final class DictItem extends DisjunctionRule {
+public final class DictItem extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("dict_item", RuleType.Disjunction, true);
 
-    private final DictItem1 dictItem1;
-    private final DictItem2 dictItem2;
+    public static DictItem of(ParseTreeNode node) {
+        return new DictItem(node);
+    }
 
-    public DictItem(
-            DictItem1 dictItem1,
-            DictItem2 dictItem2
-    ) {
-        this.dictItem1 = dictItem1;
-        this.dictItem2 = dictItem2;
+    private DictItem(ParseTreeNode node) {
+        super(RULE, node);
     }
 
     @Override
@@ -28,7 +25,9 @@ public final class DictItem extends DisjunctionRule {
     }
 
     public DictItem1 dictItem1() {
-        return dictItem1;
+        var element = getItem(0);
+        if (!element.isPresent()) return null;
+        return DictItem1.of(element);
     }
 
     public boolean hasDictItem1() {
@@ -36,7 +35,9 @@ public final class DictItem extends DisjunctionRule {
     }
 
     public DictItem2 dictItem2() {
-        return dictItem2;
+        var element = getItem(1);
+        if (!element.isPresent()) return null;
+        return DictItem2.of(element);
     }
 
     public boolean hasDictItem2() {
@@ -60,23 +61,17 @@ public final class DictItem extends DisjunctionRule {
     /**
      * 'expr' ':' 'expr'
      */
-    public static final class DictItem1 extends ConjunctionRule {
+    public static final class DictItem1 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("dict_item:1", RuleType.Conjunction, false);
 
-        private final Expr expr;
-        private final boolean isTokenColon;
-        private final Expr expr1;
+        public static DictItem1 of(ParseTreeNode node) {
+            return new DictItem1(node);
+        }
 
-        public DictItem1(
-                Expr expr,
-                boolean isTokenColon,
-                Expr expr1
-        ) {
-            this.expr = expr;
-            this.isTokenColon = isTokenColon;
-            this.expr1 = expr1;
+        private DictItem1(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -87,15 +82,20 @@ public final class DictItem extends DisjunctionRule {
         }
 
         public Expr expr() {
-            return expr;
+            var element = getItem(0);
+            if (!element.isPresent()) return null;
+            return Expr.of(element);
         }
 
         public boolean isTokenColon() {
-            return isTokenColon;
+            var element = getItem(1);
+            return element.asBoolean();
         }
 
         public Expr expr1() {
-            return expr1;
+            var element = getItem(2);
+            if (!element.isPresent()) return null;
+            return Expr.of(element);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -117,20 +117,17 @@ public final class DictItem extends DisjunctionRule {
     /**
      * '**' 'bitwise_or'
      */
-    public static final class DictItem2 extends ConjunctionRule {
+    public static final class DictItem2 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("dict_item:2", RuleType.Conjunction, false);
 
-        private final boolean isTokenPower;
-        private final BitwiseOr bitwiseOr;
+        public static DictItem2 of(ParseTreeNode node) {
+            return new DictItem2(node);
+        }
 
-        public DictItem2(
-                boolean isTokenPower,
-                BitwiseOr bitwiseOr
-        ) {
-            this.isTokenPower = isTokenPower;
-            this.bitwiseOr = bitwiseOr;
+        private DictItem2(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -140,11 +137,14 @@ public final class DictItem extends DisjunctionRule {
         }
 
         public boolean isTokenPower() {
-            return isTokenPower;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public BitwiseOr bitwiseOr() {
-            return bitwiseOr;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return BitwiseOr.of(element);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

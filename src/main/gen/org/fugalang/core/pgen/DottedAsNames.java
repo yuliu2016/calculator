@@ -7,24 +7,20 @@ import java.util.List;
 /**
  * dotted_as_names: 'dotted_as_name' (',' 'dotted_as_name')* [',']
  */
-public final class DottedAsNames extends ConjunctionRule {
+public final class DottedAsNames extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("dotted_as_names", RuleType.Conjunction, true);
 
-    private final DottedAsName dottedAsName;
-    private final List<DottedAsNames2> dottedAsNames2List;
-    private final boolean isTokenComma;
-
-    public DottedAsNames(
-            DottedAsName dottedAsName,
-            List<DottedAsNames2> dottedAsNames2List,
-            boolean isTokenComma
-    ) {
-        this.dottedAsName = dottedAsName;
-        this.dottedAsNames2List = dottedAsNames2List;
-        this.isTokenComma = isTokenComma;
+    public static DottedAsNames of(ParseTreeNode node) {
+        return new DottedAsNames(node);
     }
+
+    private DottedAsNames(ParseTreeNode node) {
+        super(RULE, node);
+    }
+
+    private List<DottedAsNames2> dottedAsNames2List;
 
     @Override
     protected void buildRule() {
@@ -34,7 +30,9 @@ public final class DottedAsNames extends ConjunctionRule {
     }
 
     public DottedAsName dottedAsName() {
-        return dottedAsName;
+        var element = getItem(0);
+        if (!element.isPresent()) return null;
+        return DottedAsName.of(element);
     }
 
     public List<DottedAsNames2> dottedAsNames2List() {
@@ -42,7 +40,8 @@ public final class DottedAsNames extends ConjunctionRule {
     }
 
     public boolean isTokenComma() {
-        return isTokenComma;
+        var element = getItem(2);
+        return element.asBoolean();
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -71,20 +70,17 @@ public final class DottedAsNames extends ConjunctionRule {
     /**
      * ',' 'dotted_as_name'
      */
-    public static final class DottedAsNames2 extends ConjunctionRule {
+    public static final class DottedAsNames2 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("dotted_as_names:2", RuleType.Conjunction, false);
 
-        private final boolean isTokenComma;
-        private final DottedAsName dottedAsName;
+        public static DottedAsNames2 of(ParseTreeNode node) {
+            return new DottedAsNames2(node);
+        }
 
-        public DottedAsNames2(
-                boolean isTokenComma,
-                DottedAsName dottedAsName
-        ) {
-            this.isTokenComma = isTokenComma;
-            this.dottedAsName = dottedAsName;
+        private DottedAsNames2(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -94,11 +90,14 @@ public final class DottedAsNames extends ConjunctionRule {
         }
 
         public boolean isTokenComma() {
-            return isTokenComma;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public DottedAsName dottedAsName() {
-            return dottedAsName;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return DottedAsName.of(element);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

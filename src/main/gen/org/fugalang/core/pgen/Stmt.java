@@ -5,20 +5,17 @@ import org.fugalang.core.parser.*;
 /**
  * stmt: ('simple_stmt' | 'compound_stmt') 'NEWLINE'
  */
-public final class Stmt extends ConjunctionRule {
+public final class Stmt extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("stmt", RuleType.Conjunction, true);
 
-    private final Stmt1 stmt1;
-    private final Object newline;
+    public static Stmt of(ParseTreeNode node) {
+        return new Stmt(node);
+    }
 
-    public Stmt(
-            Stmt1 stmt1,
-            Object newline
-    ) {
-        this.stmt1 = stmt1;
-        this.newline = newline;
+    private Stmt(ParseTreeNode node) {
+        super(RULE, node);
     }
 
     @Override
@@ -28,11 +25,15 @@ public final class Stmt extends ConjunctionRule {
     }
 
     public Stmt1 stmt1() {
-        return stmt1;
+        var element = getItem(0);
+        if (!element.isPresent()) return null;
+        return Stmt1.of(element);
     }
 
     public Object newline() {
-        return newline;
+        var element = getItem(1);
+        if (!element.isPresent()) return null;
+        return element.asObject();
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -52,20 +53,17 @@ public final class Stmt extends ConjunctionRule {
     /**
      * 'simple_stmt' | 'compound_stmt'
      */
-    public static final class Stmt1 extends DisjunctionRule {
+    public static final class Stmt1 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("stmt:1", RuleType.Disjunction, false);
 
-        private final SimpleStmt simpleStmt;
-        private final CompoundStmt compoundStmt;
+        public static Stmt1 of(ParseTreeNode node) {
+            return new Stmt1(node);
+        }
 
-        public Stmt1(
-                SimpleStmt simpleStmt,
-                CompoundStmt compoundStmt
-        ) {
-            this.simpleStmt = simpleStmt;
-            this.compoundStmt = compoundStmt;
+        private Stmt1(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -75,7 +73,9 @@ public final class Stmt extends ConjunctionRule {
         }
 
         public SimpleStmt simpleStmt() {
-            return simpleStmt;
+            var element = getItem(0);
+            if (!element.isPresent()) return null;
+            return SimpleStmt.of(element);
         }
 
         public boolean hasSimpleStmt() {
@@ -83,7 +83,9 @@ public final class Stmt extends ConjunctionRule {
         }
 
         public CompoundStmt compoundStmt() {
-            return compoundStmt;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return CompoundStmt.of(element);
         }
 
         public boolean hasCompoundStmt() {

@@ -7,24 +7,20 @@ import java.util.List;
 /**
  * targets: ('bitwise_or' | 'star_expr') (',' ('bitwise_or' | 'star_expr'))* [',']
  */
-public final class Targets extends ConjunctionRule {
+public final class Targets extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("targets", RuleType.Conjunction, true);
 
-    private final Targets1 targets1;
-    private final List<Targets2> targets2List;
-    private final boolean isTokenComma;
-
-    public Targets(
-            Targets1 targets1,
-            List<Targets2> targets2List,
-            boolean isTokenComma
-    ) {
-        this.targets1 = targets1;
-        this.targets2List = targets2List;
-        this.isTokenComma = isTokenComma;
+    public static Targets of(ParseTreeNode node) {
+        return new Targets(node);
     }
+
+    private Targets(ParseTreeNode node) {
+        super(RULE, node);
+    }
+
+    private List<Targets2> targets2List;
 
     @Override
     protected void buildRule() {
@@ -34,7 +30,9 @@ public final class Targets extends ConjunctionRule {
     }
 
     public Targets1 targets1() {
-        return targets1;
+        var element = getItem(0);
+        if (!element.isPresent()) return null;
+        return Targets1.of(element);
     }
 
     public List<Targets2> targets2List() {
@@ -42,7 +40,8 @@ public final class Targets extends ConjunctionRule {
     }
 
     public boolean isTokenComma() {
-        return isTokenComma;
+        var element = getItem(2);
+        return element.asBoolean();
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -71,20 +70,17 @@ public final class Targets extends ConjunctionRule {
     /**
      * 'bitwise_or' | 'star_expr'
      */
-    public static final class Targets1 extends DisjunctionRule {
+    public static final class Targets1 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("targets:1", RuleType.Disjunction, false);
 
-        private final BitwiseOr bitwiseOr;
-        private final StarExpr starExpr;
+        public static Targets1 of(ParseTreeNode node) {
+            return new Targets1(node);
+        }
 
-        public Targets1(
-                BitwiseOr bitwiseOr,
-                StarExpr starExpr
-        ) {
-            this.bitwiseOr = bitwiseOr;
-            this.starExpr = starExpr;
+        private Targets1(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -94,7 +90,9 @@ public final class Targets extends ConjunctionRule {
         }
 
         public BitwiseOr bitwiseOr() {
-            return bitwiseOr;
+            var element = getItem(0);
+            if (!element.isPresent()) return null;
+            return BitwiseOr.of(element);
         }
 
         public boolean hasBitwiseOr() {
@@ -102,7 +100,9 @@ public final class Targets extends ConjunctionRule {
         }
 
         public StarExpr starExpr() {
-            return starExpr;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return StarExpr.of(element);
         }
 
         public boolean hasStarExpr() {
@@ -127,20 +127,17 @@ public final class Targets extends ConjunctionRule {
     /**
      * ',' ('bitwise_or' | 'star_expr')
      */
-    public static final class Targets2 extends ConjunctionRule {
+    public static final class Targets2 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("targets:2", RuleType.Conjunction, false);
 
-        private final boolean isTokenComma;
-        private final Targets22 targets22;
+        public static Targets2 of(ParseTreeNode node) {
+            return new Targets2(node);
+        }
 
-        public Targets2(
-                boolean isTokenComma,
-                Targets22 targets22
-        ) {
-            this.isTokenComma = isTokenComma;
-            this.targets22 = targets22;
+        private Targets2(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -150,11 +147,14 @@ public final class Targets extends ConjunctionRule {
         }
 
         public boolean isTokenComma() {
-            return isTokenComma;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public Targets22 targets22() {
-            return targets22;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return Targets22.of(element);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -175,20 +175,17 @@ public final class Targets extends ConjunctionRule {
     /**
      * 'bitwise_or' | 'star_expr'
      */
-    public static final class Targets22 extends DisjunctionRule {
+    public static final class Targets22 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("targets:2:2", RuleType.Disjunction, false);
 
-        private final BitwiseOr bitwiseOr;
-        private final StarExpr starExpr;
+        public static Targets22 of(ParseTreeNode node) {
+            return new Targets22(node);
+        }
 
-        public Targets22(
-                BitwiseOr bitwiseOr,
-                StarExpr starExpr
-        ) {
-            this.bitwiseOr = bitwiseOr;
-            this.starExpr = starExpr;
+        private Targets22(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -198,7 +195,9 @@ public final class Targets extends ConjunctionRule {
         }
 
         public BitwiseOr bitwiseOr() {
-            return bitwiseOr;
+            var element = getItem(0);
+            if (!element.isPresent()) return null;
+            return BitwiseOr.of(element);
         }
 
         public boolean hasBitwiseOr() {
@@ -206,7 +205,9 @@ public final class Targets extends ConjunctionRule {
         }
 
         public StarExpr starExpr() {
-            return starExpr;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return StarExpr.of(element);
         }
 
         public boolean hasStarExpr() {

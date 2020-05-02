@@ -5,29 +5,17 @@ import org.fugalang.core.parser.*;
 /**
  * argument: 'NAME' ['comp_for'] | 'NAME' ':=' 'expr' | 'NAME' '=' 'expr' | '**' 'expr' | '*' 'expr'
  */
-public final class Argument extends DisjunctionRule {
+public final class Argument extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("argument", RuleType.Disjunction, true);
 
-    private final Argument1 argument1;
-    private final Argument2 argument2;
-    private final Argument3 argument3;
-    private final Argument4 argument4;
-    private final Argument5 argument5;
+    public static Argument of(ParseTreeNode node) {
+        return new Argument(node);
+    }
 
-    public Argument(
-            Argument1 argument1,
-            Argument2 argument2,
-            Argument3 argument3,
-            Argument4 argument4,
-            Argument5 argument5
-    ) {
-        this.argument1 = argument1;
-        this.argument2 = argument2;
-        this.argument3 = argument3;
-        this.argument4 = argument4;
-        this.argument5 = argument5;
+    private Argument(ParseTreeNode node) {
+        super(RULE, node);
     }
 
     @Override
@@ -40,7 +28,9 @@ public final class Argument extends DisjunctionRule {
     }
 
     public Argument1 argument1() {
-        return argument1;
+        var element = getItem(0);
+        if (!element.isPresent()) return null;
+        return Argument1.of(element);
     }
 
     public boolean hasArgument1() {
@@ -48,7 +38,9 @@ public final class Argument extends DisjunctionRule {
     }
 
     public Argument2 argument2() {
-        return argument2;
+        var element = getItem(1);
+        if (!element.isPresent()) return null;
+        return Argument2.of(element);
     }
 
     public boolean hasArgument2() {
@@ -56,7 +48,9 @@ public final class Argument extends DisjunctionRule {
     }
 
     public Argument3 argument3() {
-        return argument3;
+        var element = getItem(2);
+        if (!element.isPresent()) return null;
+        return Argument3.of(element);
     }
 
     public boolean hasArgument3() {
@@ -64,7 +58,9 @@ public final class Argument extends DisjunctionRule {
     }
 
     public Argument4 argument4() {
-        return argument4;
+        var element = getItem(3);
+        if (!element.isPresent()) return null;
+        return Argument4.of(element);
     }
 
     public boolean hasArgument4() {
@@ -72,7 +68,9 @@ public final class Argument extends DisjunctionRule {
     }
 
     public Argument5 argument5() {
-        return argument5;
+        var element = getItem(4);
+        if (!element.isPresent()) return null;
+        return Argument5.of(element);
     }
 
     public boolean hasArgument5() {
@@ -99,20 +97,17 @@ public final class Argument extends DisjunctionRule {
     /**
      * 'NAME' ['comp_for']
      */
-    public static final class Argument1 extends ConjunctionRule {
+    public static final class Argument1 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("argument:1", RuleType.Conjunction, false);
 
-        private final String name;
-        private final CompFor compFor;
+        public static Argument1 of(ParseTreeNode node) {
+            return new Argument1(node);
+        }
 
-        public Argument1(
-                String name,
-                CompFor compFor
-        ) {
-            this.name = name;
-            this.compFor = compFor;
+        private Argument1(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -122,11 +117,15 @@ public final class Argument extends DisjunctionRule {
         }
 
         public String name() {
-            return name;
+            var element = getItem(0);
+            if (!element.isPresent()) return null;
+            return (String) element.asObject();
         }
 
         public CompFor compFor() {
-            return compFor;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return CompFor.of(element);
         }
 
         public boolean hasCompFor() {
@@ -151,23 +150,17 @@ public final class Argument extends DisjunctionRule {
     /**
      * 'NAME' ':=' 'expr'
      */
-    public static final class Argument2 extends ConjunctionRule {
+    public static final class Argument2 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("argument:2", RuleType.Conjunction, false);
 
-        private final String name;
-        private final boolean isTokenAsgnExpr;
-        private final Expr expr;
+        public static Argument2 of(ParseTreeNode node) {
+            return new Argument2(node);
+        }
 
-        public Argument2(
-                String name,
-                boolean isTokenAsgnExpr,
-                Expr expr
-        ) {
-            this.name = name;
-            this.isTokenAsgnExpr = isTokenAsgnExpr;
-            this.expr = expr;
+        private Argument2(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -178,15 +171,20 @@ public final class Argument extends DisjunctionRule {
         }
 
         public String name() {
-            return name;
+            var element = getItem(0);
+            if (!element.isPresent()) return null;
+            return (String) element.asObject();
         }
 
         public boolean isTokenAsgnExpr() {
-            return isTokenAsgnExpr;
+            var element = getItem(1);
+            return element.asBoolean();
         }
 
         public Expr expr() {
-            return expr;
+            var element = getItem(2);
+            if (!element.isPresent()) return null;
+            return Expr.of(element);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -208,23 +206,17 @@ public final class Argument extends DisjunctionRule {
     /**
      * 'NAME' '=' 'expr'
      */
-    public static final class Argument3 extends ConjunctionRule {
+    public static final class Argument3 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("argument:3", RuleType.Conjunction, false);
 
-        private final String name;
-        private final boolean isTokenAssign;
-        private final Expr expr;
+        public static Argument3 of(ParseTreeNode node) {
+            return new Argument3(node);
+        }
 
-        public Argument3(
-                String name,
-                boolean isTokenAssign,
-                Expr expr
-        ) {
-            this.name = name;
-            this.isTokenAssign = isTokenAssign;
-            this.expr = expr;
+        private Argument3(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -235,15 +227,20 @@ public final class Argument extends DisjunctionRule {
         }
 
         public String name() {
-            return name;
+            var element = getItem(0);
+            if (!element.isPresent()) return null;
+            return (String) element.asObject();
         }
 
         public boolean isTokenAssign() {
-            return isTokenAssign;
+            var element = getItem(1);
+            return element.asBoolean();
         }
 
         public Expr expr() {
-            return expr;
+            var element = getItem(2);
+            if (!element.isPresent()) return null;
+            return Expr.of(element);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -265,20 +262,17 @@ public final class Argument extends DisjunctionRule {
     /**
      * '**' 'expr'
      */
-    public static final class Argument4 extends ConjunctionRule {
+    public static final class Argument4 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("argument:4", RuleType.Conjunction, false);
 
-        private final boolean isTokenPower;
-        private final Expr expr;
+        public static Argument4 of(ParseTreeNode node) {
+            return new Argument4(node);
+        }
 
-        public Argument4(
-                boolean isTokenPower,
-                Expr expr
-        ) {
-            this.isTokenPower = isTokenPower;
-            this.expr = expr;
+        private Argument4(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -288,11 +282,14 @@ public final class Argument extends DisjunctionRule {
         }
 
         public boolean isTokenPower() {
-            return isTokenPower;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public Expr expr() {
-            return expr;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return Expr.of(element);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -313,20 +310,17 @@ public final class Argument extends DisjunctionRule {
     /**
      * '*' 'expr'
      */
-    public static final class Argument5 extends ConjunctionRule {
+    public static final class Argument5 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("argument:5", RuleType.Conjunction, false);
 
-        private final boolean isTokenTimes;
-        private final Expr expr;
+        public static Argument5 of(ParseTreeNode node) {
+            return new Argument5(node);
+        }
 
-        public Argument5(
-                boolean isTokenTimes,
-                Expr expr
-        ) {
-            this.isTokenTimes = isTokenTimes;
-            this.expr = expr;
+        private Argument5(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -336,11 +330,14 @@ public final class Argument extends DisjunctionRule {
         }
 
         public boolean isTokenTimes() {
-            return isTokenTimes;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public Expr expr() {
-            return expr;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return Expr.of(element);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

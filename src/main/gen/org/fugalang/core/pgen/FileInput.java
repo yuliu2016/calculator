@@ -7,21 +7,20 @@ import java.util.List;
 /**
  * file_input: ('NEWLINE' | 'stmt')* 'ENDMARKER'
  */
-public final class FileInput extends ConjunctionRule {
+public final class FileInput extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("file_input", RuleType.Conjunction, true);
 
-    private final List<FileInput1> fileInput1List;
-    private final Object endmarker;
-
-    public FileInput(
-            List<FileInput1> fileInput1List,
-            Object endmarker
-    ) {
-        this.fileInput1List = fileInput1List;
-        this.endmarker = endmarker;
+    public static FileInput of(ParseTreeNode node) {
+        return new FileInput(node);
     }
+
+    private FileInput(ParseTreeNode node) {
+        super(RULE, node);
+    }
+
+    private List<FileInput1> fileInput1List;
 
     @Override
     protected void buildRule() {
@@ -34,7 +33,9 @@ public final class FileInput extends ConjunctionRule {
     }
 
     public Object endmarker() {
-        return endmarker;
+        var element = getItem(1);
+        if (!element.isPresent()) return null;
+        return element.asObject();
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -62,20 +63,17 @@ public final class FileInput extends ConjunctionRule {
     /**
      * 'NEWLINE' | 'stmt'
      */
-    public static final class FileInput1 extends DisjunctionRule {
+    public static final class FileInput1 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("file_input:1", RuleType.Disjunction, false);
 
-        private final Object newline;
-        private final Stmt stmt;
+        public static FileInput1 of(ParseTreeNode node) {
+            return new FileInput1(node);
+        }
 
-        public FileInput1(
-                Object newline,
-                Stmt stmt
-        ) {
-            this.newline = newline;
-            this.stmt = stmt;
+        private FileInput1(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -85,7 +83,9 @@ public final class FileInput extends ConjunctionRule {
         }
 
         public Object newline() {
-            return newline;
+            var element = getItem(0);
+            if (!element.isPresent()) return null;
+            return element.asObject();
         }
 
         public boolean hasNewline() {
@@ -93,7 +93,9 @@ public final class FileInput extends ConjunctionRule {
         }
 
         public Stmt stmt() {
-            return stmt;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return Stmt.of(element);
         }
 
         public boolean hasStmt() {

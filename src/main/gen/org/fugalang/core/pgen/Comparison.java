@@ -7,21 +7,20 @@ import java.util.List;
 /**
  * comparison: 'bitwise_or' ('comp_op' 'bitwise_or')*
  */
-public final class Comparison extends ConjunctionRule {
+public final class Comparison extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("comparison", RuleType.Conjunction, true);
 
-    private final BitwiseOr bitwiseOr;
-    private final List<Comparison2> comparison2List;
-
-    public Comparison(
-            BitwiseOr bitwiseOr,
-            List<Comparison2> comparison2List
-    ) {
-        this.bitwiseOr = bitwiseOr;
-        this.comparison2List = comparison2List;
+    public static Comparison of(ParseTreeNode node) {
+        return new Comparison(node);
     }
+
+    private Comparison(ParseTreeNode node) {
+        super(RULE, node);
+    }
+
+    private List<Comparison2> comparison2List;
 
     @Override
     protected void buildRule() {
@@ -30,7 +29,9 @@ public final class Comparison extends ConjunctionRule {
     }
 
     public BitwiseOr bitwiseOr() {
-        return bitwiseOr;
+        var element = getItem(0);
+        if (!element.isPresent()) return null;
+        return BitwiseOr.of(element);
     }
 
     public List<Comparison2> comparison2List() {
@@ -62,20 +63,17 @@ public final class Comparison extends ConjunctionRule {
     /**
      * 'comp_op' 'bitwise_or'
      */
-    public static final class Comparison2 extends ConjunctionRule {
+    public static final class Comparison2 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("comparison:2", RuleType.Conjunction, false);
 
-        private final CompOp compOp;
-        private final BitwiseOr bitwiseOr;
+        public static Comparison2 of(ParseTreeNode node) {
+            return new Comparison2(node);
+        }
 
-        public Comparison2(
-                CompOp compOp,
-                BitwiseOr bitwiseOr
-        ) {
-            this.compOp = compOp;
-            this.bitwiseOr = bitwiseOr;
+        private Comparison2(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -85,11 +83,15 @@ public final class Comparison extends ConjunctionRule {
         }
 
         public CompOp compOp() {
-            return compOp;
+            var element = getItem(0);
+            if (!element.isPresent()) return null;
+            return CompOp.of(element);
         }
 
         public BitwiseOr bitwiseOr() {
-            return bitwiseOr;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return BitwiseOr.of(element);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

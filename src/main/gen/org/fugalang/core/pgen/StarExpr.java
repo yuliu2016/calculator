@@ -5,20 +5,17 @@ import org.fugalang.core.parser.*;
 /**
  * star_expr: '*' 'bitwise_or'
  */
-public final class StarExpr extends ConjunctionRule {
+public final class StarExpr extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("star_expr", RuleType.Conjunction, true);
 
-    private final boolean isTokenTimes;
-    private final BitwiseOr bitwiseOr;
+    public static StarExpr of(ParseTreeNode node) {
+        return new StarExpr(node);
+    }
 
-    public StarExpr(
-            boolean isTokenTimes,
-            BitwiseOr bitwiseOr
-    ) {
-        this.isTokenTimes = isTokenTimes;
-        this.bitwiseOr = bitwiseOr;
+    private StarExpr(ParseTreeNode node) {
+        super(RULE, node);
     }
 
     @Override
@@ -28,11 +25,14 @@ public final class StarExpr extends ConjunctionRule {
     }
 
     public boolean isTokenTimes() {
-        return isTokenTimes;
+        var element = getItem(0);
+        return element.asBoolean();
     }
 
     public BitwiseOr bitwiseOr() {
-        return bitwiseOr;
+        var element = getItem(1);
+        if (!element.isPresent()) return null;
+        return BitwiseOr.of(element);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {

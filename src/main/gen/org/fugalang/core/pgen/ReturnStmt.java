@@ -5,20 +5,17 @@ import org.fugalang.core.parser.*;
 /**
  * return_stmt: 'return' ['exprlist_star']
  */
-public final class ReturnStmt extends ConjunctionRule {
+public final class ReturnStmt extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("return_stmt", RuleType.Conjunction, true);
 
-    private final boolean isTokenReturn;
-    private final ExprlistStar exprlistStar;
+    public static ReturnStmt of(ParseTreeNode node) {
+        return new ReturnStmt(node);
+    }
 
-    public ReturnStmt(
-            boolean isTokenReturn,
-            ExprlistStar exprlistStar
-    ) {
-        this.isTokenReturn = isTokenReturn;
-        this.exprlistStar = exprlistStar;
+    private ReturnStmt(ParseTreeNode node) {
+        super(RULE, node);
     }
 
     @Override
@@ -28,11 +25,14 @@ public final class ReturnStmt extends ConjunctionRule {
     }
 
     public boolean isTokenReturn() {
-        return isTokenReturn;
+        var element = getItem(0);
+        return element.asBoolean();
     }
 
     public ExprlistStar exprlistStar() {
-        return exprlistStar;
+        var element = getItem(1);
+        if (!element.isPresent()) return null;
+        return ExprlistStar.of(element);
     }
 
     public boolean hasExprlistStar() {

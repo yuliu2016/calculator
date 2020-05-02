@@ -7,21 +7,20 @@ import java.util.List;
 /**
  * sum: 'term' (('+' | '-') 'term')*
  */
-public final class Sum extends ConjunctionRule {
+public final class Sum extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("sum", RuleType.Conjunction, true);
 
-    private final Term term;
-    private final List<Sum2> sum2List;
-
-    public Sum(
-            Term term,
-            List<Sum2> sum2List
-    ) {
-        this.term = term;
-        this.sum2List = sum2List;
+    public static Sum of(ParseTreeNode node) {
+        return new Sum(node);
     }
+
+    private Sum(ParseTreeNode node) {
+        super(RULE, node);
+    }
+
+    private List<Sum2> sum2List;
 
     @Override
     protected void buildRule() {
@@ -30,7 +29,9 @@ public final class Sum extends ConjunctionRule {
     }
 
     public Term term() {
-        return term;
+        var element = getItem(0);
+        if (!element.isPresent()) return null;
+        return Term.of(element);
     }
 
     public List<Sum2> sum2List() {
@@ -62,20 +63,17 @@ public final class Sum extends ConjunctionRule {
     /**
      * ('+' | '-') 'term'
      */
-    public static final class Sum2 extends ConjunctionRule {
+    public static final class Sum2 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("sum:2", RuleType.Conjunction, false);
 
-        private final Sum21 sum21;
-        private final Term term;
+        public static Sum2 of(ParseTreeNode node) {
+            return new Sum2(node);
+        }
 
-        public Sum2(
-                Sum21 sum21,
-                Term term
-        ) {
-            this.sum21 = sum21;
-            this.term = term;
+        private Sum2(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -85,11 +83,15 @@ public final class Sum extends ConjunctionRule {
         }
 
         public Sum21 sum21() {
-            return sum21;
+            var element = getItem(0);
+            if (!element.isPresent()) return null;
+            return Sum21.of(element);
         }
 
         public Term term() {
-            return term;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return Term.of(element);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -110,20 +112,17 @@ public final class Sum extends ConjunctionRule {
     /**
      * '+' | '-'
      */
-    public static final class Sum21 extends DisjunctionRule {
+    public static final class Sum21 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("sum:2:1", RuleType.Disjunction, false);
 
-        private final boolean isTokenPlus;
-        private final boolean isTokenMinus;
+        public static Sum21 of(ParseTreeNode node) {
+            return new Sum21(node);
+        }
 
-        public Sum21(
-                boolean isTokenPlus,
-                boolean isTokenMinus
-        ) {
-            this.isTokenPlus = isTokenPlus;
-            this.isTokenMinus = isTokenMinus;
+        private Sum21(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -133,11 +132,13 @@ public final class Sum extends ConjunctionRule {
         }
 
         public boolean isTokenPlus() {
-            return isTokenPlus;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public boolean isTokenMinus() {
-            return isTokenMinus;
+            var element = getItem(1);
+            return element.asBoolean();
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

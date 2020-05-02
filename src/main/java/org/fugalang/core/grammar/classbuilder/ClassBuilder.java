@@ -125,7 +125,7 @@ public class ClassBuilder {
 
         if (ruleType != null) {
             // add the parent classes
-            sb.append(" extends ").append(ruleType.getSuperClassShort());
+            sb.append(" extends NodeWrapper");
         } else {
             throw new IllegalStateException("No Rule Type");
         }
@@ -142,17 +142,43 @@ public class ClassBuilder {
                 .append(isStaticInnerClass ? "false": "true")
                 .append(");\n\n");
 
-        for (ClassField field : fields) {
-            sb.append("    ");
-            sb.append(field.asFieldDeclaration());
+        sb.append("    public static ").append(className).append(" of(ParseTreeNode node) {\n")
+                .append("        return new ").append(className).append("(node);\n")
+                .append("    }\n\n");
+
+        sb.append("    private ")
+                .append(className);
+
+        sb.append("(ParseTreeNode node) {\n" +
+                "        super(RULE, node);\n" +
+                "    }\n\n");
+
+        var empty = true;
+        for (int i = 0; i < fields.size(); i++) {
+            ClassField field = fields.get(i);
+            var declaration = field.asFieldDeclaration(i);
+            if (!declaration.isEmpty()) {
+                empty = false;
+                sb.append(declaration);
+            }
+        }
+        if (!empty) {
             sb.append("\n");
         }
 
-        generateConstructorAndOverride(sb, isStaticInnerClass);
+        sb.append("    @Override\n    protected void buildRule() {\n");
 
         for (ClassField field : fields) {
+            sb.append("        ");
+            sb.append(field.asRuleStmt(ruleType));
             sb.append("\n");
-            sb.append(field.asGetter());
+        }
+        sb.append("    }\n");
+
+        for (int i = 0; i < fields.size(); i++) {
+            ClassField field = fields.get(i);
+            sb.append("\n");
+            sb.append(field.asGetter(i));
             if (ruleType == RuleType.Disjunction || field.isOptionalSingle()) {
                 sb.append(field.asNullCheck());
             }
@@ -167,40 +193,6 @@ public class ClassBuilder {
         // to add the final quotes
 
         return sb.toString();
-    }
-
-    private void generateConstructorAndOverride(StringBuilder sb, boolean isStaticInnerClass) {
-        sb.append("\n")
-                .append("    public ")
-                .append(className)
-                .append("(\n");
-
-        for (int i = 0; i < fields.size(); i++) {
-            ClassField field = fields.get(i);
-            sb.append("            ");
-            sb.append(field.asConstructorArg());
-            if (i < fields.size() - 1) {
-                sb.append(",");
-            }
-            sb.append("\n");
-        }
-
-        sb.append("    ) {\n");
-
-        for (ClassField field : fields) {
-            sb.append("        ");
-            sb.append(field.asConstructorStmt());
-            sb.append("\n");
-        }
-        sb.append("    }\n\n");
-        sb.append("    @Override\n    protected void buildRule() {\n");
-
-        for (ClassField field : fields) {
-            sb.append("        ");
-            sb.append(field.asRuleStmt(ruleType));
-            sb.append("\n");
-        }
-        sb.append("    }\n");
     }
 
     private void generateParsingFunc(StringBuilder sb) {

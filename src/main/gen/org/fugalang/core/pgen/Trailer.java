@@ -5,26 +5,17 @@ import org.fugalang.core.parser.*;
 /**
  * trailer: '(' ['arglist'] ')' | '[' 'subscriptlist' ']' | '.' 'NAME' | 'block_suite'
  */
-public final class Trailer extends DisjunctionRule {
+public final class Trailer extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("trailer", RuleType.Disjunction, true);
 
-    private final Trailer1 trailer1;
-    private final Trailer2 trailer2;
-    private final Trailer3 trailer3;
-    private final BlockSuite blockSuite;
+    public static Trailer of(ParseTreeNode node) {
+        return new Trailer(node);
+    }
 
-    public Trailer(
-            Trailer1 trailer1,
-            Trailer2 trailer2,
-            Trailer3 trailer3,
-            BlockSuite blockSuite
-    ) {
-        this.trailer1 = trailer1;
-        this.trailer2 = trailer2;
-        this.trailer3 = trailer3;
-        this.blockSuite = blockSuite;
+    private Trailer(ParseTreeNode node) {
+        super(RULE, node);
     }
 
     @Override
@@ -36,7 +27,9 @@ public final class Trailer extends DisjunctionRule {
     }
 
     public Trailer1 trailer1() {
-        return trailer1;
+        var element = getItem(0);
+        if (!element.isPresent()) return null;
+        return Trailer1.of(element);
     }
 
     public boolean hasTrailer1() {
@@ -44,7 +37,9 @@ public final class Trailer extends DisjunctionRule {
     }
 
     public Trailer2 trailer2() {
-        return trailer2;
+        var element = getItem(1);
+        if (!element.isPresent()) return null;
+        return Trailer2.of(element);
     }
 
     public boolean hasTrailer2() {
@@ -52,7 +47,9 @@ public final class Trailer extends DisjunctionRule {
     }
 
     public Trailer3 trailer3() {
-        return trailer3;
+        var element = getItem(2);
+        if (!element.isPresent()) return null;
+        return Trailer3.of(element);
     }
 
     public boolean hasTrailer3() {
@@ -60,7 +57,9 @@ public final class Trailer extends DisjunctionRule {
     }
 
     public BlockSuite blockSuite() {
-        return blockSuite;
+        var element = getItem(3);
+        if (!element.isPresent()) return null;
+        return BlockSuite.of(element);
     }
 
     public boolean hasBlockSuite() {
@@ -86,23 +85,17 @@ public final class Trailer extends DisjunctionRule {
     /**
      * '(' ['arglist'] ')'
      */
-    public static final class Trailer1 extends ConjunctionRule {
+    public static final class Trailer1 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("trailer:1", RuleType.Conjunction, false);
 
-        private final boolean isTokenLpar;
-        private final Arglist arglist;
-        private final boolean isTokenRpar;
+        public static Trailer1 of(ParseTreeNode node) {
+            return new Trailer1(node);
+        }
 
-        public Trailer1(
-                boolean isTokenLpar,
-                Arglist arglist,
-                boolean isTokenRpar
-        ) {
-            this.isTokenLpar = isTokenLpar;
-            this.arglist = arglist;
-            this.isTokenRpar = isTokenRpar;
+        private Trailer1(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -113,11 +106,14 @@ public final class Trailer extends DisjunctionRule {
         }
 
         public boolean isTokenLpar() {
-            return isTokenLpar;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public Arglist arglist() {
-            return arglist;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return Arglist.of(element);
         }
 
         public boolean hasArglist() {
@@ -125,7 +121,8 @@ public final class Trailer extends DisjunctionRule {
         }
 
         public boolean isTokenRpar() {
-            return isTokenRpar;
+            var element = getItem(2);
+            return element.asBoolean();
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -147,23 +144,17 @@ public final class Trailer extends DisjunctionRule {
     /**
      * '[' 'subscriptlist' ']'
      */
-    public static final class Trailer2 extends ConjunctionRule {
+    public static final class Trailer2 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("trailer:2", RuleType.Conjunction, false);
 
-        private final boolean isTokenLsqb;
-        private final Subscriptlist subscriptlist;
-        private final boolean isTokenRsqb;
+        public static Trailer2 of(ParseTreeNode node) {
+            return new Trailer2(node);
+        }
 
-        public Trailer2(
-                boolean isTokenLsqb,
-                Subscriptlist subscriptlist,
-                boolean isTokenRsqb
-        ) {
-            this.isTokenLsqb = isTokenLsqb;
-            this.subscriptlist = subscriptlist;
-            this.isTokenRsqb = isTokenRsqb;
+        private Trailer2(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -174,15 +165,19 @@ public final class Trailer extends DisjunctionRule {
         }
 
         public boolean isTokenLsqb() {
-            return isTokenLsqb;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public Subscriptlist subscriptlist() {
-            return subscriptlist;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return Subscriptlist.of(element);
         }
 
         public boolean isTokenRsqb() {
-            return isTokenRsqb;
+            var element = getItem(2);
+            return element.asBoolean();
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -204,20 +199,17 @@ public final class Trailer extends DisjunctionRule {
     /**
      * '.' 'NAME'
      */
-    public static final class Trailer3 extends ConjunctionRule {
+    public static final class Trailer3 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("trailer:3", RuleType.Conjunction, false);
 
-        private final boolean isTokenDot;
-        private final String name;
+        public static Trailer3 of(ParseTreeNode node) {
+            return new Trailer3(node);
+        }
 
-        public Trailer3(
-                boolean isTokenDot,
-                String name
-        ) {
-            this.isTokenDot = isTokenDot;
-            this.name = name;
+        private Trailer3(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -227,11 +219,14 @@ public final class Trailer extends DisjunctionRule {
         }
 
         public boolean isTokenDot() {
-            return isTokenDot;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public String name() {
-            return name;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return (String) element.asObject();
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

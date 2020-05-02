@@ -5,23 +5,17 @@ import org.fugalang.core.parser.*;
 /**
  * expr: 'if' 'disjunction' '?' 'disjunction' 'else' 'expr' | 'disjunction' | 'funcdef'
  */
-public final class Expr extends DisjunctionRule {
+public final class Expr extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("expr", RuleType.Disjunction, true);
 
-    private final Expr1 expr1;
-    private final Disjunction disjunction;
-    private final Funcdef funcdef;
+    public static Expr of(ParseTreeNode node) {
+        return new Expr(node);
+    }
 
-    public Expr(
-            Expr1 expr1,
-            Disjunction disjunction,
-            Funcdef funcdef
-    ) {
-        this.expr1 = expr1;
-        this.disjunction = disjunction;
-        this.funcdef = funcdef;
+    private Expr(ParseTreeNode node) {
+        super(RULE, node);
     }
 
     @Override
@@ -32,7 +26,9 @@ public final class Expr extends DisjunctionRule {
     }
 
     public Expr1 expr1() {
-        return expr1;
+        var element = getItem(0);
+        if (!element.isPresent()) return null;
+        return Expr1.of(element);
     }
 
     public boolean hasExpr1() {
@@ -40,7 +36,9 @@ public final class Expr extends DisjunctionRule {
     }
 
     public Disjunction disjunction() {
-        return disjunction;
+        var element = getItem(1);
+        if (!element.isPresent()) return null;
+        return Disjunction.of(element);
     }
 
     public boolean hasDisjunction() {
@@ -48,7 +46,9 @@ public final class Expr extends DisjunctionRule {
     }
 
     public Funcdef funcdef() {
-        return funcdef;
+        var element = getItem(2);
+        if (!element.isPresent()) return null;
+        return Funcdef.of(element);
     }
 
     public boolean hasFuncdef() {
@@ -73,32 +73,17 @@ public final class Expr extends DisjunctionRule {
     /**
      * 'if' 'disjunction' '?' 'disjunction' 'else' 'expr'
      */
-    public static final class Expr1 extends ConjunctionRule {
+    public static final class Expr1 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("expr:1", RuleType.Conjunction, false);
 
-        private final boolean isTokenIf;
-        private final Disjunction disjunction;
-        private final boolean isTokenTernery;
-        private final Disjunction disjunction1;
-        private final boolean isTokenElse;
-        private final Expr expr;
+        public static Expr1 of(ParseTreeNode node) {
+            return new Expr1(node);
+        }
 
-        public Expr1(
-                boolean isTokenIf,
-                Disjunction disjunction,
-                boolean isTokenTernery,
-                Disjunction disjunction1,
-                boolean isTokenElse,
-                Expr expr
-        ) {
-            this.isTokenIf = isTokenIf;
-            this.disjunction = disjunction;
-            this.isTokenTernery = isTokenTernery;
-            this.disjunction1 = disjunction1;
-            this.isTokenElse = isTokenElse;
-            this.expr = expr;
+        private Expr1(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -112,27 +97,36 @@ public final class Expr extends DisjunctionRule {
         }
 
         public boolean isTokenIf() {
-            return isTokenIf;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public Disjunction disjunction() {
-            return disjunction;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return Disjunction.of(element);
         }
 
         public boolean isTokenTernery() {
-            return isTokenTernery;
+            var element = getItem(2);
+            return element.asBoolean();
         }
 
         public Disjunction disjunction1() {
-            return disjunction1;
+            var element = getItem(3);
+            if (!element.isPresent()) return null;
+            return Disjunction.of(element);
         }
 
         public boolean isTokenElse() {
-            return isTokenElse;
+            var element = getItem(4);
+            return element.asBoolean();
         }
 
         public Expr expr() {
-            return expr;
+            var element = getItem(5);
+            if (!element.isPresent()) return null;
+            return Expr.of(element);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

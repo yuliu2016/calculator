@@ -5,26 +5,17 @@ import org.fugalang.core.parser.*;
 /**
  * while_stmt: 'while' 'namedexpr_expr' 'suite' ['else' 'suite']
  */
-public final class WhileStmt extends ConjunctionRule {
+public final class WhileStmt extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("while_stmt", RuleType.Conjunction, true);
 
-    private final boolean isTokenWhile;
-    private final NamedexprExpr namedexprExpr;
-    private final Suite suite;
-    private final WhileStmt4 whileStmt4;
+    public static WhileStmt of(ParseTreeNode node) {
+        return new WhileStmt(node);
+    }
 
-    public WhileStmt(
-            boolean isTokenWhile,
-            NamedexprExpr namedexprExpr,
-            Suite suite,
-            WhileStmt4 whileStmt4
-    ) {
-        this.isTokenWhile = isTokenWhile;
-        this.namedexprExpr = namedexprExpr;
-        this.suite = suite;
-        this.whileStmt4 = whileStmt4;
+    private WhileStmt(ParseTreeNode node) {
+        super(RULE, node);
     }
 
     @Override
@@ -36,19 +27,26 @@ public final class WhileStmt extends ConjunctionRule {
     }
 
     public boolean isTokenWhile() {
-        return isTokenWhile;
+        var element = getItem(0);
+        return element.asBoolean();
     }
 
     public NamedexprExpr namedexprExpr() {
-        return namedexprExpr;
+        var element = getItem(1);
+        if (!element.isPresent()) return null;
+        return NamedexprExpr.of(element);
     }
 
     public Suite suite() {
-        return suite;
+        var element = getItem(2);
+        if (!element.isPresent()) return null;
+        return Suite.of(element);
     }
 
     public WhileStmt4 whileStmt4() {
-        return whileStmt4;
+        var element = getItem(3);
+        if (!element.isPresent()) return null;
+        return WhileStmt4.of(element);
     }
 
     public boolean hasWhileStmt4() {
@@ -74,20 +72,17 @@ public final class WhileStmt extends ConjunctionRule {
     /**
      * 'else' 'suite'
      */
-    public static final class WhileStmt4 extends ConjunctionRule {
+    public static final class WhileStmt4 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("while_stmt:4", RuleType.Conjunction, false);
 
-        private final boolean isTokenElse;
-        private final Suite suite;
+        public static WhileStmt4 of(ParseTreeNode node) {
+            return new WhileStmt4(node);
+        }
 
-        public WhileStmt4(
-                boolean isTokenElse,
-                Suite suite
-        ) {
-            this.isTokenElse = isTokenElse;
-            this.suite = suite;
+        private WhileStmt4(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -97,11 +92,14 @@ public final class WhileStmt extends ConjunctionRule {
         }
 
         public boolean isTokenElse() {
-            return isTokenElse;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public Suite suite() {
-            return suite;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return Suite.of(element);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

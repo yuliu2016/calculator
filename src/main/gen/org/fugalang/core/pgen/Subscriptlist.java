@@ -7,24 +7,20 @@ import java.util.List;
 /**
  * subscriptlist: 'subscript' (',' 'subscript')* [',']
  */
-public final class Subscriptlist extends ConjunctionRule {
+public final class Subscriptlist extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("subscriptlist", RuleType.Conjunction, true);
 
-    private final Subscript subscript;
-    private final List<Subscriptlist2> subscriptlist2List;
-    private final boolean isTokenComma;
-
-    public Subscriptlist(
-            Subscript subscript,
-            List<Subscriptlist2> subscriptlist2List,
-            boolean isTokenComma
-    ) {
-        this.subscript = subscript;
-        this.subscriptlist2List = subscriptlist2List;
-        this.isTokenComma = isTokenComma;
+    public static Subscriptlist of(ParseTreeNode node) {
+        return new Subscriptlist(node);
     }
+
+    private Subscriptlist(ParseTreeNode node) {
+        super(RULE, node);
+    }
+
+    private List<Subscriptlist2> subscriptlist2List;
 
     @Override
     protected void buildRule() {
@@ -34,7 +30,9 @@ public final class Subscriptlist extends ConjunctionRule {
     }
 
     public Subscript subscript() {
-        return subscript;
+        var element = getItem(0);
+        if (!element.isPresent()) return null;
+        return Subscript.of(element);
     }
 
     public List<Subscriptlist2> subscriptlist2List() {
@@ -42,7 +40,8 @@ public final class Subscriptlist extends ConjunctionRule {
     }
 
     public boolean isTokenComma() {
-        return isTokenComma;
+        var element = getItem(2);
+        return element.asBoolean();
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -71,20 +70,17 @@ public final class Subscriptlist extends ConjunctionRule {
     /**
      * ',' 'subscript'
      */
-    public static final class Subscriptlist2 extends ConjunctionRule {
+    public static final class Subscriptlist2 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("subscriptlist:2", RuleType.Conjunction, false);
 
-        private final boolean isTokenComma;
-        private final Subscript subscript;
+        public static Subscriptlist2 of(ParseTreeNode node) {
+            return new Subscriptlist2(node);
+        }
 
-        public Subscriptlist2(
-                boolean isTokenComma,
-                Subscript subscript
-        ) {
-            this.isTokenComma = isTokenComma;
-            this.subscript = subscript;
+        private Subscriptlist2(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -94,11 +90,14 @@ public final class Subscriptlist extends ConjunctionRule {
         }
 
         public boolean isTokenComma() {
-            return isTokenComma;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public Subscript subscript() {
-            return subscript;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return Subscript.of(element);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

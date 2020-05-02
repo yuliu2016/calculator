@@ -5,20 +5,17 @@ import org.fugalang.core.parser.*;
 /**
  * suite: ':' 'simple_stmt' | 'block_suite'
  */
-public final class Suite extends DisjunctionRule {
+public final class Suite extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("suite", RuleType.Disjunction, true);
 
-    private final Suite1 suite1;
-    private final BlockSuite blockSuite;
+    public static Suite of(ParseTreeNode node) {
+        return new Suite(node);
+    }
 
-    public Suite(
-            Suite1 suite1,
-            BlockSuite blockSuite
-    ) {
-        this.suite1 = suite1;
-        this.blockSuite = blockSuite;
+    private Suite(ParseTreeNode node) {
+        super(RULE, node);
     }
 
     @Override
@@ -28,7 +25,9 @@ public final class Suite extends DisjunctionRule {
     }
 
     public Suite1 suite1() {
-        return suite1;
+        var element = getItem(0);
+        if (!element.isPresent()) return null;
+        return Suite1.of(element);
     }
 
     public boolean hasSuite1() {
@@ -36,7 +35,9 @@ public final class Suite extends DisjunctionRule {
     }
 
     public BlockSuite blockSuite() {
-        return blockSuite;
+        var element = getItem(1);
+        if (!element.isPresent()) return null;
+        return BlockSuite.of(element);
     }
 
     public boolean hasBlockSuite() {
@@ -60,20 +61,17 @@ public final class Suite extends DisjunctionRule {
     /**
      * ':' 'simple_stmt'
      */
-    public static final class Suite1 extends ConjunctionRule {
+    public static final class Suite1 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("suite:1", RuleType.Conjunction, false);
 
-        private final boolean isTokenColon;
-        private final SimpleStmt simpleStmt;
+        public static Suite1 of(ParseTreeNode node) {
+            return new Suite1(node);
+        }
 
-        public Suite1(
-                boolean isTokenColon,
-                SimpleStmt simpleStmt
-        ) {
-            this.isTokenColon = isTokenColon;
-            this.simpleStmt = simpleStmt;
+        private Suite1(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -83,11 +81,14 @@ public final class Suite extends DisjunctionRule {
         }
 
         public boolean isTokenColon() {
-            return isTokenColon;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public SimpleStmt simpleStmt() {
-            return simpleStmt;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return SimpleStmt.of(element);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

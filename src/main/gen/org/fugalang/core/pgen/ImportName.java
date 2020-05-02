@@ -5,20 +5,17 @@ import org.fugalang.core.parser.*;
 /**
  * import_name: 'import' 'dotted_as_names'
  */
-public final class ImportName extends ConjunctionRule {
+public final class ImportName extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("import_name", RuleType.Conjunction, true);
 
-    private final boolean isTokenImport;
-    private final DottedAsNames dottedAsNames;
+    public static ImportName of(ParseTreeNode node) {
+        return new ImportName(node);
+    }
 
-    public ImportName(
-            boolean isTokenImport,
-            DottedAsNames dottedAsNames
-    ) {
-        this.isTokenImport = isTokenImport;
-        this.dottedAsNames = dottedAsNames;
+    private ImportName(ParseTreeNode node) {
+        super(RULE, node);
     }
 
     @Override
@@ -28,11 +25,14 @@ public final class ImportName extends ConjunctionRule {
     }
 
     public boolean isTokenImport() {
-        return isTokenImport;
+        var element = getItem(0);
+        return element.asBoolean();
     }
 
     public DottedAsNames dottedAsNames() {
-        return dottedAsNames;
+        var element = getItem(1);
+        if (!element.isPresent()) return null;
+        return DottedAsNames.of(element);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {

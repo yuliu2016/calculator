@@ -7,30 +7,20 @@ import java.util.List;
 /**
  * if_stmt: 'if' 'namedexpr_expr' 'suite' ('elif' 'namedexpr_expr' 'suite')* ['else' 'suite']
  */
-public final class IfStmt extends ConjunctionRule {
+public final class IfStmt extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("if_stmt", RuleType.Conjunction, true);
 
-    private final boolean isTokenIf;
-    private final NamedexprExpr namedexprExpr;
-    private final Suite suite;
-    private final List<IfStmt4> ifStmt4List;
-    private final IfStmt5 ifStmt5;
-
-    public IfStmt(
-            boolean isTokenIf,
-            NamedexprExpr namedexprExpr,
-            Suite suite,
-            List<IfStmt4> ifStmt4List,
-            IfStmt5 ifStmt5
-    ) {
-        this.isTokenIf = isTokenIf;
-        this.namedexprExpr = namedexprExpr;
-        this.suite = suite;
-        this.ifStmt4List = ifStmt4List;
-        this.ifStmt5 = ifStmt5;
+    public static IfStmt of(ParseTreeNode node) {
+        return new IfStmt(node);
     }
+
+    private IfStmt(ParseTreeNode node) {
+        super(RULE, node);
+    }
+
+    private List<IfStmt4> ifStmt4List;
 
     @Override
     protected void buildRule() {
@@ -42,15 +32,20 @@ public final class IfStmt extends ConjunctionRule {
     }
 
     public boolean isTokenIf() {
-        return isTokenIf;
+        var element = getItem(0);
+        return element.asBoolean();
     }
 
     public NamedexprExpr namedexprExpr() {
-        return namedexprExpr;
+        var element = getItem(1);
+        if (!element.isPresent()) return null;
+        return NamedexprExpr.of(element);
     }
 
     public Suite suite() {
-        return suite;
+        var element = getItem(2);
+        if (!element.isPresent()) return null;
+        return Suite.of(element);
     }
 
     public List<IfStmt4> ifStmt4List() {
@@ -58,7 +53,9 @@ public final class IfStmt extends ConjunctionRule {
     }
 
     public IfStmt5 ifStmt5() {
-        return ifStmt5;
+        var element = getItem(4);
+        if (!element.isPresent()) return null;
+        return IfStmt5.of(element);
     }
 
     public boolean hasIfStmt5() {
@@ -93,23 +90,17 @@ public final class IfStmt extends ConjunctionRule {
     /**
      * 'elif' 'namedexpr_expr' 'suite'
      */
-    public static final class IfStmt4 extends ConjunctionRule {
+    public static final class IfStmt4 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("if_stmt:4", RuleType.Conjunction, false);
 
-        private final boolean isTokenElif;
-        private final NamedexprExpr namedexprExpr;
-        private final Suite suite;
+        public static IfStmt4 of(ParseTreeNode node) {
+            return new IfStmt4(node);
+        }
 
-        public IfStmt4(
-                boolean isTokenElif,
-                NamedexprExpr namedexprExpr,
-                Suite suite
-        ) {
-            this.isTokenElif = isTokenElif;
-            this.namedexprExpr = namedexprExpr;
-            this.suite = suite;
+        private IfStmt4(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -120,15 +111,20 @@ public final class IfStmt extends ConjunctionRule {
         }
 
         public boolean isTokenElif() {
-            return isTokenElif;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public NamedexprExpr namedexprExpr() {
-            return namedexprExpr;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return NamedexprExpr.of(element);
         }
 
         public Suite suite() {
-            return suite;
+            var element = getItem(2);
+            if (!element.isPresent()) return null;
+            return Suite.of(element);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -150,20 +146,17 @@ public final class IfStmt extends ConjunctionRule {
     /**
      * 'else' 'suite'
      */
-    public static final class IfStmt5 extends ConjunctionRule {
+    public static final class IfStmt5 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("if_stmt:5", RuleType.Conjunction, false);
 
-        private final boolean isTokenElse;
-        private final Suite suite;
+        public static IfStmt5 of(ParseTreeNode node) {
+            return new IfStmt5(node);
+        }
 
-        public IfStmt5(
-                boolean isTokenElse,
-                Suite suite
-        ) {
-            this.isTokenElse = isTokenElse;
-            this.suite = suite;
+        private IfStmt5(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -173,11 +166,14 @@ public final class IfStmt extends ConjunctionRule {
         }
 
         public boolean isTokenElse() {
-            return isTokenElse;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public Suite suite() {
-            return suite;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return Suite.of(element);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

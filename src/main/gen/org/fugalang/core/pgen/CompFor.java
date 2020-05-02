@@ -5,29 +5,17 @@ import org.fugalang.core.parser.*;
 /**
  * comp_for: 'for' 'targets' 'in' 'disjunction' ['comp_iter']
  */
-public final class CompFor extends ConjunctionRule {
+public final class CompFor extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("comp_for", RuleType.Conjunction, true);
 
-    private final boolean isTokenFor;
-    private final Targets targets;
-    private final boolean isTokenIn;
-    private final Disjunction disjunction;
-    private final CompIter compIter;
+    public static CompFor of(ParseTreeNode node) {
+        return new CompFor(node);
+    }
 
-    public CompFor(
-            boolean isTokenFor,
-            Targets targets,
-            boolean isTokenIn,
-            Disjunction disjunction,
-            CompIter compIter
-    ) {
-        this.isTokenFor = isTokenFor;
-        this.targets = targets;
-        this.isTokenIn = isTokenIn;
-        this.disjunction = disjunction;
-        this.compIter = compIter;
+    private CompFor(ParseTreeNode node) {
+        super(RULE, node);
     }
 
     @Override
@@ -40,23 +28,31 @@ public final class CompFor extends ConjunctionRule {
     }
 
     public boolean isTokenFor() {
-        return isTokenFor;
+        var element = getItem(0);
+        return element.asBoolean();
     }
 
     public Targets targets() {
-        return targets;
+        var element = getItem(1);
+        if (!element.isPresent()) return null;
+        return Targets.of(element);
     }
 
     public boolean isTokenIn() {
-        return isTokenIn;
+        var element = getItem(2);
+        return element.asBoolean();
     }
 
     public Disjunction disjunction() {
-        return disjunction;
+        var element = getItem(3);
+        if (!element.isPresent()) return null;
+        return Disjunction.of(element);
     }
 
     public CompIter compIter() {
-        return compIter;
+        var element = getItem(4);
+        if (!element.isPresent()) return null;
+        return CompIter.of(element);
     }
 
     public boolean hasCompIter() {

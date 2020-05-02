@@ -7,24 +7,20 @@ import java.util.List;
 /**
  * eval_input: 'exprlist' 'NEWLINE'* 'ENDMARKER'
  */
-public final class EvalInput extends ConjunctionRule {
+public final class EvalInput extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("eval_input", RuleType.Conjunction, true);
 
-    private final Exprlist exprlist;
-    private final List<Object> newlineList;
-    private final Object endmarker;
-
-    public EvalInput(
-            Exprlist exprlist,
-            List<Object> newlineList,
-            Object endmarker
-    ) {
-        this.exprlist = exprlist;
-        this.newlineList = newlineList;
-        this.endmarker = endmarker;
+    public static EvalInput of(ParseTreeNode node) {
+        return new EvalInput(node);
     }
+
+    private EvalInput(ParseTreeNode node) {
+        super(RULE, node);
+    }
+
+    private List<Object> newlineList;
 
     @Override
     protected void buildRule() {
@@ -34,7 +30,9 @@ public final class EvalInput extends ConjunctionRule {
     }
 
     public Exprlist exprlist() {
-        return exprlist;
+        var element = getItem(0);
+        if (!element.isPresent()) return null;
+        return Exprlist.of(element);
     }
 
     public List<Object> newlineList() {
@@ -42,7 +40,9 @@ public final class EvalInput extends ConjunctionRule {
     }
 
     public Object endmarker() {
-        return endmarker;
+        var element = getItem(2);
+        if (!element.isPresent()) return null;
+        return element.asObject();
     }
 
     public static boolean parse(ParseTree parseTree, int level) {

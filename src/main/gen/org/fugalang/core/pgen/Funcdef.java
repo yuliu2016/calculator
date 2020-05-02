@@ -5,26 +5,17 @@ import org.fugalang.core.parser.*;
 /**
  * funcdef: ['async'] 'def' ['varargslist'] (':' 'expr' | 'block_suite')
  */
-public final class Funcdef extends ConjunctionRule {
+public final class Funcdef extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("funcdef", RuleType.Conjunction, true);
 
-    private final boolean isTokenAsync;
-    private final boolean isTokenDef;
-    private final Varargslist varargslist;
-    private final Funcdef4 funcdef4;
+    public static Funcdef of(ParseTreeNode node) {
+        return new Funcdef(node);
+    }
 
-    public Funcdef(
-            boolean isTokenAsync,
-            boolean isTokenDef,
-            Varargslist varargslist,
-            Funcdef4 funcdef4
-    ) {
-        this.isTokenAsync = isTokenAsync;
-        this.isTokenDef = isTokenDef;
-        this.varargslist = varargslist;
-        this.funcdef4 = funcdef4;
+    private Funcdef(ParseTreeNode node) {
+        super(RULE, node);
     }
 
     @Override
@@ -36,15 +27,19 @@ public final class Funcdef extends ConjunctionRule {
     }
 
     public boolean isTokenAsync() {
-        return isTokenAsync;
+        var element = getItem(0);
+        return element.asBoolean();
     }
 
     public boolean isTokenDef() {
-        return isTokenDef;
+        var element = getItem(1);
+        return element.asBoolean();
     }
 
     public Varargslist varargslist() {
-        return varargslist;
+        var element = getItem(2);
+        if (!element.isPresent()) return null;
+        return Varargslist.of(element);
     }
 
     public boolean hasVarargslist() {
@@ -52,7 +47,9 @@ public final class Funcdef extends ConjunctionRule {
     }
 
     public Funcdef4 funcdef4() {
-        return funcdef4;
+        var element = getItem(3);
+        if (!element.isPresent()) return null;
+        return Funcdef4.of(element);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -74,20 +71,17 @@ public final class Funcdef extends ConjunctionRule {
     /**
      * ':' 'expr' | 'block_suite'
      */
-    public static final class Funcdef4 extends DisjunctionRule {
+    public static final class Funcdef4 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("funcdef:4", RuleType.Disjunction, false);
 
-        private final Funcdef41 funcdef41;
-        private final BlockSuite blockSuite;
+        public static Funcdef4 of(ParseTreeNode node) {
+            return new Funcdef4(node);
+        }
 
-        public Funcdef4(
-                Funcdef41 funcdef41,
-                BlockSuite blockSuite
-        ) {
-            this.funcdef41 = funcdef41;
-            this.blockSuite = blockSuite;
+        private Funcdef4(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -97,7 +91,9 @@ public final class Funcdef extends ConjunctionRule {
         }
 
         public Funcdef41 funcdef41() {
-            return funcdef41;
+            var element = getItem(0);
+            if (!element.isPresent()) return null;
+            return Funcdef41.of(element);
         }
 
         public boolean hasFuncdef41() {
@@ -105,7 +101,9 @@ public final class Funcdef extends ConjunctionRule {
         }
 
         public BlockSuite blockSuite() {
-            return blockSuite;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return BlockSuite.of(element);
         }
 
         public boolean hasBlockSuite() {
@@ -130,20 +128,17 @@ public final class Funcdef extends ConjunctionRule {
     /**
      * ':' 'expr'
      */
-    public static final class Funcdef41 extends ConjunctionRule {
+    public static final class Funcdef41 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("funcdef:4:1", RuleType.Conjunction, false);
 
-        private final boolean isTokenColon;
-        private final Expr expr;
+        public static Funcdef41 of(ParseTreeNode node) {
+            return new Funcdef41(node);
+        }
 
-        public Funcdef41(
-                boolean isTokenColon,
-                Expr expr
-        ) {
-            this.isTokenColon = isTokenColon;
-            this.expr = expr;
+        private Funcdef41(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -153,11 +148,14 @@ public final class Funcdef extends ConjunctionRule {
         }
 
         public boolean isTokenColon() {
-            return isTokenColon;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public Expr expr() {
-            return expr;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return Expr.of(element);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

@@ -5,20 +5,17 @@ import org.fugalang.core.parser.*;
 /**
  * namedexpr_expr: 'NAME' [':=' 'expr']
  */
-public final class NamedexprExpr extends ConjunctionRule {
+public final class NamedexprExpr extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("namedexpr_expr", RuleType.Conjunction, true);
 
-    private final String name;
-    private final NamedexprExpr2 namedexprExpr2;
+    public static NamedexprExpr of(ParseTreeNode node) {
+        return new NamedexprExpr(node);
+    }
 
-    public NamedexprExpr(
-            String name,
-            NamedexprExpr2 namedexprExpr2
-    ) {
-        this.name = name;
-        this.namedexprExpr2 = namedexprExpr2;
+    private NamedexprExpr(ParseTreeNode node) {
+        super(RULE, node);
     }
 
     @Override
@@ -28,11 +25,15 @@ public final class NamedexprExpr extends ConjunctionRule {
     }
 
     public String name() {
-        return name;
+        var element = getItem(0);
+        if (!element.isPresent()) return null;
+        return (String) element.asObject();
     }
 
     public NamedexprExpr2 namedexprExpr2() {
-        return namedexprExpr2;
+        var element = getItem(1);
+        if (!element.isPresent()) return null;
+        return NamedexprExpr2.of(element);
     }
 
     public boolean hasNamedexprExpr2() {
@@ -56,20 +57,17 @@ public final class NamedexprExpr extends ConjunctionRule {
     /**
      * ':=' 'expr'
      */
-    public static final class NamedexprExpr2 extends ConjunctionRule {
+    public static final class NamedexprExpr2 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("namedexpr_expr:2", RuleType.Conjunction, false);
 
-        private final boolean isTokenAsgnExpr;
-        private final Expr expr;
+        public static NamedexprExpr2 of(ParseTreeNode node) {
+            return new NamedexprExpr2(node);
+        }
 
-        public NamedexprExpr2(
-                boolean isTokenAsgnExpr,
-                Expr expr
-        ) {
-            this.isTokenAsgnExpr = isTokenAsgnExpr;
-            this.expr = expr;
+        private NamedexprExpr2(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -79,11 +77,14 @@ public final class NamedexprExpr extends ConjunctionRule {
         }
 
         public boolean isTokenAsgnExpr() {
-            return isTokenAsgnExpr;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public Expr expr() {
-            return expr;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return Expr.of(element);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

@@ -29,6 +29,10 @@ public class ClassField {
         return fieldType == FieldType.Required || fieldType == FieldType.RequiredList;
     }
 
+    public boolean isSingular() {
+        return fieldType == FieldType.Required || fieldType == FieldType.Optional;
+    }
+
     /**
      * Used for field name conflict resolution
      */
@@ -36,36 +40,49 @@ public class ClassField {
         return new ClassField(className, newFieldName, fieldType, resultSource);
     }
 
-    @Override
-    public String toString() {
-        return "ClassField{" + asFieldDeclaration() + "}";
+    public String asFieldDeclaration(int index) {
+        if (isSingular()) {
+            return "";
+        }
+        return "    private " + className.asType() + " " + fieldName + ";\n";
     }
 
-    public String asFieldDeclaration() {
-        return String.format("private final %s %s;", className.asType(), fieldName);
+    public String asGetter(int index) {
+        return "    public " + className.asType() + " " + fieldName + "() {\n" +
+                asGetterBody(index) +
+                "    }\n";
     }
 
-    public String asConstructorArg() {
-        return String.format("%s %s", className.asType(), fieldName);
-    }
+    private String asGetterBody(int index) {
+        return switch (resultSource.getSourceType()) {
+            case Class -> {
+                if (isSingular()) {
+                    yield "        var element = getItem(" + index + ");\n" +
+                            "        if (!element.isPresent()) return null;\n" +
+                            "        return " + className.asType() + ".of(element);\n";
+                }
+                yield "        return " + fieldName + ";\n";
+            }
 
-    public String asConstructorStmt() {
-        return String.format("this.%s = %s;", fieldName, fieldName);
-    }
-
-    public String asGetter() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("    public ");
-
-        sb.append(className.asType());
-
-        sb.append(" ").append(fieldName).append("() {\n        return ");
-
-        sb.append(fieldName);
-
-        sb.append(";\n    }\n");
-
-        return sb.toString();
+            case TokenType -> {
+                if (isSingular()) {
+                    var cast = className.asType().equals("Object") ? "" :
+                            "(" + className.asType() + ") ";
+                    yield "        var element = getItem(" + index + ");\n" +
+                            "        if (!element.isPresent()) return null;\n" +
+                            "        return " + cast + "element.asObject();\n";
+                }
+                yield "        return " + fieldName + ";\n";
+            }
+            case TokenLiteral -> {
+                if (isSingular()) {
+                    yield "        var element = getItem(" + index + ");\n" +
+                            "        return element.asBoolean();\n";
+                } else {
+                    yield "        return " + fieldName + ";\n";
+                }
+            }
+        };
     }
 
     public String asNullCheck() {

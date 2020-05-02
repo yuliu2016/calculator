@@ -7,20 +7,17 @@ import java.util.List;
 /**
  * expr_stmt: 'exprlist_star' ['augassign' 'exprlist' | ('=' 'exprlist_star')*]
  */
-public final class ExprStmt extends ConjunctionRule {
+public final class ExprStmt extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("expr_stmt", RuleType.Conjunction, true);
 
-    private final ExprlistStar exprlistStar;
-    private final ExprStmt2 exprStmt2;
+    public static ExprStmt of(ParseTreeNode node) {
+        return new ExprStmt(node);
+    }
 
-    public ExprStmt(
-            ExprlistStar exprlistStar,
-            ExprStmt2 exprStmt2
-    ) {
-        this.exprlistStar = exprlistStar;
-        this.exprStmt2 = exprStmt2;
+    private ExprStmt(ParseTreeNode node) {
+        super(RULE, node);
     }
 
     @Override
@@ -30,11 +27,15 @@ public final class ExprStmt extends ConjunctionRule {
     }
 
     public ExprlistStar exprlistStar() {
-        return exprlistStar;
+        var element = getItem(0);
+        if (!element.isPresent()) return null;
+        return ExprlistStar.of(element);
     }
 
     public ExprStmt2 exprStmt2() {
-        return exprStmt2;
+        var element = getItem(1);
+        if (!element.isPresent()) return null;
+        return ExprStmt2.of(element);
     }
 
     public boolean hasExprStmt2() {
@@ -58,21 +59,20 @@ public final class ExprStmt extends ConjunctionRule {
     /**
      * 'augassign' 'exprlist' | ('=' 'exprlist_star')*
      */
-    public static final class ExprStmt2 extends DisjunctionRule {
+    public static final class ExprStmt2 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("expr_stmt:2", RuleType.Disjunction, false);
 
-        private final ExprStmt21 exprStmt21;
-        private final List<ExprStmt22> exprStmt22List;
-
-        public ExprStmt2(
-                ExprStmt21 exprStmt21,
-                List<ExprStmt22> exprStmt22List
-        ) {
-            this.exprStmt21 = exprStmt21;
-            this.exprStmt22List = exprStmt22List;
+        public static ExprStmt2 of(ParseTreeNode node) {
+            return new ExprStmt2(node);
         }
+
+        private ExprStmt2(ParseTreeNode node) {
+            super(RULE, node);
+        }
+
+        private List<ExprStmt22> exprStmt22List;
 
         @Override
         protected void buildRule() {
@@ -81,7 +81,9 @@ public final class ExprStmt extends ConjunctionRule {
         }
 
         public ExprStmt21 exprStmt21() {
-            return exprStmt21;
+            var element = getItem(0);
+            if (!element.isPresent()) return null;
+            return ExprStmt21.of(element);
         }
 
         public boolean hasExprStmt21() {
@@ -118,20 +120,17 @@ public final class ExprStmt extends ConjunctionRule {
     /**
      * 'augassign' 'exprlist'
      */
-    public static final class ExprStmt21 extends ConjunctionRule {
+    public static final class ExprStmt21 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("expr_stmt:2:1", RuleType.Conjunction, false);
 
-        private final Augassign augassign;
-        private final Exprlist exprlist;
+        public static ExprStmt21 of(ParseTreeNode node) {
+            return new ExprStmt21(node);
+        }
 
-        public ExprStmt21(
-                Augassign augassign,
-                Exprlist exprlist
-        ) {
-            this.augassign = augassign;
-            this.exprlist = exprlist;
+        private ExprStmt21(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -141,11 +140,15 @@ public final class ExprStmt extends ConjunctionRule {
         }
 
         public Augassign augassign() {
-            return augassign;
+            var element = getItem(0);
+            if (!element.isPresent()) return null;
+            return Augassign.of(element);
         }
 
         public Exprlist exprlist() {
-            return exprlist;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return Exprlist.of(element);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -166,20 +169,17 @@ public final class ExprStmt extends ConjunctionRule {
     /**
      * '=' 'exprlist_star'
      */
-    public static final class ExprStmt22 extends ConjunctionRule {
+    public static final class ExprStmt22 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("expr_stmt:2:2", RuleType.Conjunction, false);
 
-        private final boolean isTokenAssign;
-        private final ExprlistStar exprlistStar;
+        public static ExprStmt22 of(ParseTreeNode node) {
+            return new ExprStmt22(node);
+        }
 
-        public ExprStmt22(
-                boolean isTokenAssign,
-                ExprlistStar exprlistStar
-        ) {
-            this.isTokenAssign = isTokenAssign;
-            this.exprlistStar = exprlistStar;
+        private ExprStmt22(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -189,11 +189,14 @@ public final class ExprStmt extends ConjunctionRule {
         }
 
         public boolean isTokenAssign() {
-            return isTokenAssign;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public ExprlistStar exprlistStar() {
-            return exprlistStar;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return ExprlistStar.of(element);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

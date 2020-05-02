@@ -5,23 +5,17 @@ import org.fugalang.core.parser.*;
 /**
  * comp_if: 'if' 'expr' ['comp_iter']
  */
-public final class CompIf extends ConjunctionRule {
+public final class CompIf extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("comp_if", RuleType.Conjunction, true);
 
-    private final boolean isTokenIf;
-    private final Expr expr;
-    private final CompIter compIter;
+    public static CompIf of(ParseTreeNode node) {
+        return new CompIf(node);
+    }
 
-    public CompIf(
-            boolean isTokenIf,
-            Expr expr,
-            CompIter compIter
-    ) {
-        this.isTokenIf = isTokenIf;
-        this.expr = expr;
-        this.compIter = compIter;
+    private CompIf(ParseTreeNode node) {
+        super(RULE, node);
     }
 
     @Override
@@ -32,15 +26,20 @@ public final class CompIf extends ConjunctionRule {
     }
 
     public boolean isTokenIf() {
-        return isTokenIf;
+        var element = getItem(0);
+        return element.asBoolean();
     }
 
     public Expr expr() {
-        return expr;
+        var element = getItem(1);
+        if (!element.isPresent()) return null;
+        return Expr.of(element);
     }
 
     public CompIter compIter() {
-        return compIter;
+        var element = getItem(2);
+        if (!element.isPresent()) return null;
+        return CompIter.of(element);
     }
 
     public boolean hasCompIter() {

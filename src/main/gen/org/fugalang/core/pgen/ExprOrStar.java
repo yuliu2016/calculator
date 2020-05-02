@@ -5,20 +5,17 @@ import org.fugalang.core.parser.*;
 /**
  * expr_or_star: 'expr' | 'star_expr'
  */
-public final class ExprOrStar extends DisjunctionRule {
+public final class ExprOrStar extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("expr_or_star", RuleType.Disjunction, true);
 
-    private final Expr expr;
-    private final StarExpr starExpr;
+    public static ExprOrStar of(ParseTreeNode node) {
+        return new ExprOrStar(node);
+    }
 
-    public ExprOrStar(
-            Expr expr,
-            StarExpr starExpr
-    ) {
-        this.expr = expr;
-        this.starExpr = starExpr;
+    private ExprOrStar(ParseTreeNode node) {
+        super(RULE, node);
     }
 
     @Override
@@ -28,7 +25,9 @@ public final class ExprOrStar extends DisjunctionRule {
     }
 
     public Expr expr() {
-        return expr;
+        var element = getItem(0);
+        if (!element.isPresent()) return null;
+        return Expr.of(element);
     }
 
     public boolean hasExpr() {
@@ -36,7 +35,9 @@ public final class ExprOrStar extends DisjunctionRule {
     }
 
     public StarExpr starExpr() {
-        return starExpr;
+        var element = getItem(1);
+        if (!element.isPresent()) return null;
+        return StarExpr.of(element);
     }
 
     public boolean hasStarExpr() {

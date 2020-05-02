@@ -5,20 +5,17 @@ import org.fugalang.core.parser.*;
 /**
  * dotted_as_name: 'dotted_name' ['as' 'NAME']
  */
-public final class DottedAsName extends ConjunctionRule {
+public final class DottedAsName extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("dotted_as_name", RuleType.Conjunction, true);
 
-    private final DottedName dottedName;
-    private final DottedAsName2 dottedAsName2;
+    public static DottedAsName of(ParseTreeNode node) {
+        return new DottedAsName(node);
+    }
 
-    public DottedAsName(
-            DottedName dottedName,
-            DottedAsName2 dottedAsName2
-    ) {
-        this.dottedName = dottedName;
-        this.dottedAsName2 = dottedAsName2;
+    private DottedAsName(ParseTreeNode node) {
+        super(RULE, node);
     }
 
     @Override
@@ -28,11 +25,15 @@ public final class DottedAsName extends ConjunctionRule {
     }
 
     public DottedName dottedName() {
-        return dottedName;
+        var element = getItem(0);
+        if (!element.isPresent()) return null;
+        return DottedName.of(element);
     }
 
     public DottedAsName2 dottedAsName2() {
-        return dottedAsName2;
+        var element = getItem(1);
+        if (!element.isPresent()) return null;
+        return DottedAsName2.of(element);
     }
 
     public boolean hasDottedAsName2() {
@@ -56,20 +57,17 @@ public final class DottedAsName extends ConjunctionRule {
     /**
      * 'as' 'NAME'
      */
-    public static final class DottedAsName2 extends ConjunctionRule {
+    public static final class DottedAsName2 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("dotted_as_name:2", RuleType.Conjunction, false);
 
-        private final boolean isTokenAs;
-        private final String name;
+        public static DottedAsName2 of(ParseTreeNode node) {
+            return new DottedAsName2(node);
+        }
 
-        public DottedAsName2(
-                boolean isTokenAs,
-                String name
-        ) {
-            this.isTokenAs = isTokenAs;
-            this.name = name;
+        private DottedAsName2(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -79,11 +77,14 @@ public final class DottedAsName extends ConjunctionRule {
         }
 
         public boolean isTokenAs() {
-            return isTokenAs;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public String name() {
-            return name;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return (String) element.asObject();
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

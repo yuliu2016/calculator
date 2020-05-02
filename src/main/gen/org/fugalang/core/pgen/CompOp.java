@@ -5,44 +5,17 @@ import org.fugalang.core.parser.*;
 /**
  * comp_op: '<' | '>' | '==' | '>=' | '<=' | '!=' | 'in' | 'not' 'in' | 'is' | 'is' 'not'
  */
-public final class CompOp extends DisjunctionRule {
+public final class CompOp extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("comp_op", RuleType.Disjunction, true);
 
-    private final boolean isTokenLess;
-    private final boolean isTokenGreater;
-    private final boolean isTokenEqual;
-    private final boolean isTokenMoreEqual;
-    private final boolean isTokenLessEqual;
-    private final boolean isTokenNequal;
-    private final boolean isTokenIn;
-    private final CompOp8 compOp8;
-    private final boolean isTokenIs;
-    private final CompOp10 compOp10;
+    public static CompOp of(ParseTreeNode node) {
+        return new CompOp(node);
+    }
 
-    public CompOp(
-            boolean isTokenLess,
-            boolean isTokenGreater,
-            boolean isTokenEqual,
-            boolean isTokenMoreEqual,
-            boolean isTokenLessEqual,
-            boolean isTokenNequal,
-            boolean isTokenIn,
-            CompOp8 compOp8,
-            boolean isTokenIs,
-            CompOp10 compOp10
-    ) {
-        this.isTokenLess = isTokenLess;
-        this.isTokenGreater = isTokenGreater;
-        this.isTokenEqual = isTokenEqual;
-        this.isTokenMoreEqual = isTokenMoreEqual;
-        this.isTokenLessEqual = isTokenLessEqual;
-        this.isTokenNequal = isTokenNequal;
-        this.isTokenIn = isTokenIn;
-        this.compOp8 = compOp8;
-        this.isTokenIs = isTokenIs;
-        this.compOp10 = compOp10;
+    private CompOp(ParseTreeNode node) {
+        super(RULE, node);
     }
 
     @Override
@@ -60,35 +33,44 @@ public final class CompOp extends DisjunctionRule {
     }
 
     public boolean isTokenLess() {
-        return isTokenLess;
+        var element = getItem(0);
+        return element.asBoolean();
     }
 
     public boolean isTokenGreater() {
-        return isTokenGreater;
+        var element = getItem(1);
+        return element.asBoolean();
     }
 
     public boolean isTokenEqual() {
-        return isTokenEqual;
+        var element = getItem(2);
+        return element.asBoolean();
     }
 
     public boolean isTokenMoreEqual() {
-        return isTokenMoreEqual;
+        var element = getItem(3);
+        return element.asBoolean();
     }
 
     public boolean isTokenLessEqual() {
-        return isTokenLessEqual;
+        var element = getItem(4);
+        return element.asBoolean();
     }
 
     public boolean isTokenNequal() {
-        return isTokenNequal;
+        var element = getItem(5);
+        return element.asBoolean();
     }
 
     public boolean isTokenIn() {
-        return isTokenIn;
+        var element = getItem(6);
+        return element.asBoolean();
     }
 
     public CompOp8 compOp8() {
-        return compOp8;
+        var element = getItem(7);
+        if (!element.isPresent()) return null;
+        return CompOp8.of(element);
     }
 
     public boolean hasCompOp8() {
@@ -96,11 +78,14 @@ public final class CompOp extends DisjunctionRule {
     }
 
     public boolean isTokenIs() {
-        return isTokenIs;
+        var element = getItem(8);
+        return element.asBoolean();
     }
 
     public CompOp10 compOp10() {
-        return compOp10;
+        var element = getItem(9);
+        if (!element.isPresent()) return null;
+        return CompOp10.of(element);
     }
 
     public boolean hasCompOp10() {
@@ -132,20 +117,17 @@ public final class CompOp extends DisjunctionRule {
     /**
      * 'not' 'in'
      */
-    public static final class CompOp8 extends ConjunctionRule {
+    public static final class CompOp8 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("comp_op:8", RuleType.Conjunction, false);
 
-        private final boolean isTokenNot;
-        private final boolean isTokenIn;
+        public static CompOp8 of(ParseTreeNode node) {
+            return new CompOp8(node);
+        }
 
-        public CompOp8(
-                boolean isTokenNot,
-                boolean isTokenIn
-        ) {
-            this.isTokenNot = isTokenNot;
-            this.isTokenIn = isTokenIn;
+        private CompOp8(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -155,11 +137,13 @@ public final class CompOp extends DisjunctionRule {
         }
 
         public boolean isTokenNot() {
-            return isTokenNot;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public boolean isTokenIn() {
-            return isTokenIn;
+            var element = getItem(1);
+            return element.asBoolean();
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -180,20 +164,17 @@ public final class CompOp extends DisjunctionRule {
     /**
      * 'is' 'not'
      */
-    public static final class CompOp10 extends ConjunctionRule {
+    public static final class CompOp10 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("comp_op:10", RuleType.Conjunction, false);
 
-        private final boolean isTokenIs;
-        private final boolean isTokenNot;
+        public static CompOp10 of(ParseTreeNode node) {
+            return new CompOp10(node);
+        }
 
-        public CompOp10(
-                boolean isTokenIs,
-                boolean isTokenNot
-        ) {
-            this.isTokenIs = isTokenIs;
-            this.isTokenNot = isTokenNot;
+        private CompOp10(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -203,11 +184,13 @@ public final class CompOp extends DisjunctionRule {
         }
 
         public boolean isTokenIs() {
-            return isTokenIs;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public boolean isTokenNot() {
-            return isTokenNot;
+            var element = getItem(1);
+            return element.asBoolean();
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

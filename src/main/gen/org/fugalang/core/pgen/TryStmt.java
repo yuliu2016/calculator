@@ -7,23 +7,17 @@ import java.util.List;
 /**
  * try_stmt: 'try' 'suite' (('except_clause' 'suite')+ ['else' 'suite'] ['finally' 'suite'] | 'finally' 'suite')
  */
-public final class TryStmt extends ConjunctionRule {
+public final class TryStmt extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("try_stmt", RuleType.Conjunction, true);
 
-    private final boolean isTokenTry;
-    private final Suite suite;
-    private final TryStmt3 tryStmt3;
+    public static TryStmt of(ParseTreeNode node) {
+        return new TryStmt(node);
+    }
 
-    public TryStmt(
-            boolean isTokenTry,
-            Suite suite,
-            TryStmt3 tryStmt3
-    ) {
-        this.isTokenTry = isTokenTry;
-        this.suite = suite;
-        this.tryStmt3 = tryStmt3;
+    private TryStmt(ParseTreeNode node) {
+        super(RULE, node);
     }
 
     @Override
@@ -34,15 +28,20 @@ public final class TryStmt extends ConjunctionRule {
     }
 
     public boolean isTokenTry() {
-        return isTokenTry;
+        var element = getItem(0);
+        return element.asBoolean();
     }
 
     public Suite suite() {
-        return suite;
+        var element = getItem(1);
+        if (!element.isPresent()) return null;
+        return Suite.of(element);
     }
 
     public TryStmt3 tryStmt3() {
-        return tryStmt3;
+        var element = getItem(2);
+        if (!element.isPresent()) return null;
+        return TryStmt3.of(element);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -63,20 +62,17 @@ public final class TryStmt extends ConjunctionRule {
     /**
      * ('except_clause' 'suite')+ ['else' 'suite'] ['finally' 'suite'] | 'finally' 'suite'
      */
-    public static final class TryStmt3 extends DisjunctionRule {
+    public static final class TryStmt3 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("try_stmt:3", RuleType.Disjunction, false);
 
-        private final TryStmt31 tryStmt31;
-        private final TryStmt32 tryStmt32;
+        public static TryStmt3 of(ParseTreeNode node) {
+            return new TryStmt3(node);
+        }
 
-        public TryStmt3(
-                TryStmt31 tryStmt31,
-                TryStmt32 tryStmt32
-        ) {
-            this.tryStmt31 = tryStmt31;
-            this.tryStmt32 = tryStmt32;
+        private TryStmt3(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -86,7 +82,9 @@ public final class TryStmt extends ConjunctionRule {
         }
 
         public TryStmt31 tryStmt31() {
-            return tryStmt31;
+            var element = getItem(0);
+            if (!element.isPresent()) return null;
+            return TryStmt31.of(element);
         }
 
         public boolean hasTryStmt31() {
@@ -94,7 +92,9 @@ public final class TryStmt extends ConjunctionRule {
         }
 
         public TryStmt32 tryStmt32() {
-            return tryStmt32;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return TryStmt32.of(element);
         }
 
         public boolean hasTryStmt32() {
@@ -119,24 +119,20 @@ public final class TryStmt extends ConjunctionRule {
     /**
      * ('except_clause' 'suite')+ ['else' 'suite'] ['finally' 'suite']
      */
-    public static final class TryStmt31 extends ConjunctionRule {
+    public static final class TryStmt31 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("try_stmt:3:1", RuleType.Conjunction, false);
 
-        private final List<TryStmt311> tryStmt311List;
-        private final TryStmt312 tryStmt312;
-        private final TryStmt313 tryStmt313;
-
-        public TryStmt31(
-                List<TryStmt311> tryStmt311List,
-                TryStmt312 tryStmt312,
-                TryStmt313 tryStmt313
-        ) {
-            this.tryStmt311List = tryStmt311List;
-            this.tryStmt312 = tryStmt312;
-            this.tryStmt313 = tryStmt313;
+        public static TryStmt31 of(ParseTreeNode node) {
+            return new TryStmt31(node);
         }
+
+        private TryStmt31(ParseTreeNode node) {
+            super(RULE, node);
+        }
+
+        private List<TryStmt311> tryStmt311List;
 
         @Override
         protected void buildRule() {
@@ -150,7 +146,9 @@ public final class TryStmt extends ConjunctionRule {
         }
 
         public TryStmt312 tryStmt312() {
-            return tryStmt312;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return TryStmt312.of(element);
         }
 
         public boolean hasTryStmt312() {
@@ -158,7 +156,9 @@ public final class TryStmt extends ConjunctionRule {
         }
 
         public TryStmt313 tryStmt313() {
-            return tryStmt313;
+            var element = getItem(2);
+            if (!element.isPresent()) return null;
+            return TryStmt313.of(element);
         }
 
         public boolean hasTryStmt313() {
@@ -193,20 +193,17 @@ public final class TryStmt extends ConjunctionRule {
     /**
      * 'except_clause' 'suite'
      */
-    public static final class TryStmt311 extends ConjunctionRule {
+    public static final class TryStmt311 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("try_stmt:3:1:1", RuleType.Conjunction, false);
 
-        private final ExceptClause exceptClause;
-        private final Suite suite;
+        public static TryStmt311 of(ParseTreeNode node) {
+            return new TryStmt311(node);
+        }
 
-        public TryStmt311(
-                ExceptClause exceptClause,
-                Suite suite
-        ) {
-            this.exceptClause = exceptClause;
-            this.suite = suite;
+        private TryStmt311(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -216,11 +213,15 @@ public final class TryStmt extends ConjunctionRule {
         }
 
         public ExceptClause exceptClause() {
-            return exceptClause;
+            var element = getItem(0);
+            if (!element.isPresent()) return null;
+            return ExceptClause.of(element);
         }
 
         public Suite suite() {
-            return suite;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return Suite.of(element);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -241,20 +242,17 @@ public final class TryStmt extends ConjunctionRule {
     /**
      * 'else' 'suite'
      */
-    public static final class TryStmt312 extends ConjunctionRule {
+    public static final class TryStmt312 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("try_stmt:3:1:2", RuleType.Conjunction, false);
 
-        private final boolean isTokenElse;
-        private final Suite suite;
+        public static TryStmt312 of(ParseTreeNode node) {
+            return new TryStmt312(node);
+        }
 
-        public TryStmt312(
-                boolean isTokenElse,
-                Suite suite
-        ) {
-            this.isTokenElse = isTokenElse;
-            this.suite = suite;
+        private TryStmt312(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -264,11 +262,14 @@ public final class TryStmt extends ConjunctionRule {
         }
 
         public boolean isTokenElse() {
-            return isTokenElse;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public Suite suite() {
-            return suite;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return Suite.of(element);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -289,20 +290,17 @@ public final class TryStmt extends ConjunctionRule {
     /**
      * 'finally' 'suite'
      */
-    public static final class TryStmt313 extends ConjunctionRule {
+    public static final class TryStmt313 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("try_stmt:3:1:3", RuleType.Conjunction, false);
 
-        private final boolean isTokenFinally;
-        private final Suite suite;
+        public static TryStmt313 of(ParseTreeNode node) {
+            return new TryStmt313(node);
+        }
 
-        public TryStmt313(
-                boolean isTokenFinally,
-                Suite suite
-        ) {
-            this.isTokenFinally = isTokenFinally;
-            this.suite = suite;
+        private TryStmt313(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -312,11 +310,14 @@ public final class TryStmt extends ConjunctionRule {
         }
 
         public boolean isTokenFinally() {
-            return isTokenFinally;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public Suite suite() {
-            return suite;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return Suite.of(element);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -337,20 +338,17 @@ public final class TryStmt extends ConjunctionRule {
     /**
      * 'finally' 'suite'
      */
-    public static final class TryStmt32 extends ConjunctionRule {
+    public static final class TryStmt32 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("try_stmt:3:2", RuleType.Conjunction, false);
 
-        private final boolean isTokenFinally;
-        private final Suite suite;
+        public static TryStmt32 of(ParseTreeNode node) {
+            return new TryStmt32(node);
+        }
 
-        public TryStmt32(
-                boolean isTokenFinally,
-                Suite suite
-        ) {
-            this.isTokenFinally = isTokenFinally;
-            this.suite = suite;
+        private TryStmt32(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -360,11 +358,14 @@ public final class TryStmt extends ConjunctionRule {
         }
 
         public boolean isTokenFinally() {
-            return isTokenFinally;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public Suite suite() {
-            return suite;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return Suite.of(element);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

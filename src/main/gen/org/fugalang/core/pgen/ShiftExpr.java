@@ -7,21 +7,20 @@ import java.util.List;
 /**
  * shift_expr: 'sum' (('<<' | '>>') 'sum')*
  */
-public final class ShiftExpr extends ConjunctionRule {
+public final class ShiftExpr extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("shift_expr", RuleType.Conjunction, true);
 
-    private final Sum sum;
-    private final List<ShiftExpr2> shiftExpr2List;
-
-    public ShiftExpr(
-            Sum sum,
-            List<ShiftExpr2> shiftExpr2List
-    ) {
-        this.sum = sum;
-        this.shiftExpr2List = shiftExpr2List;
+    public static ShiftExpr of(ParseTreeNode node) {
+        return new ShiftExpr(node);
     }
+
+    private ShiftExpr(ParseTreeNode node) {
+        super(RULE, node);
+    }
+
+    private List<ShiftExpr2> shiftExpr2List;
 
     @Override
     protected void buildRule() {
@@ -30,7 +29,9 @@ public final class ShiftExpr extends ConjunctionRule {
     }
 
     public Sum sum() {
-        return sum;
+        var element = getItem(0);
+        if (!element.isPresent()) return null;
+        return Sum.of(element);
     }
 
     public List<ShiftExpr2> shiftExpr2List() {
@@ -62,20 +63,17 @@ public final class ShiftExpr extends ConjunctionRule {
     /**
      * ('<<' | '>>') 'sum'
      */
-    public static final class ShiftExpr2 extends ConjunctionRule {
+    public static final class ShiftExpr2 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("shift_expr:2", RuleType.Conjunction, false);
 
-        private final ShiftExpr21 shiftExpr21;
-        private final Sum sum;
+        public static ShiftExpr2 of(ParseTreeNode node) {
+            return new ShiftExpr2(node);
+        }
 
-        public ShiftExpr2(
-                ShiftExpr21 shiftExpr21,
-                Sum sum
-        ) {
-            this.shiftExpr21 = shiftExpr21;
-            this.sum = sum;
+        private ShiftExpr2(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -85,11 +83,15 @@ public final class ShiftExpr extends ConjunctionRule {
         }
 
         public ShiftExpr21 shiftExpr21() {
-            return shiftExpr21;
+            var element = getItem(0);
+            if (!element.isPresent()) return null;
+            return ShiftExpr21.of(element);
         }
 
         public Sum sum() {
-            return sum;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return Sum.of(element);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -110,20 +112,17 @@ public final class ShiftExpr extends ConjunctionRule {
     /**
      * '<<' | '>>'
      */
-    public static final class ShiftExpr21 extends DisjunctionRule {
+    public static final class ShiftExpr21 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("shift_expr:2:1", RuleType.Disjunction, false);
 
-        private final boolean isTokenLshift;
-        private final boolean isTokenRshift;
+        public static ShiftExpr21 of(ParseTreeNode node) {
+            return new ShiftExpr21(node);
+        }
 
-        public ShiftExpr21(
-                boolean isTokenLshift,
-                boolean isTokenRshift
-        ) {
-            this.isTokenLshift = isTokenLshift;
-            this.isTokenRshift = isTokenRshift;
+        private ShiftExpr21(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -133,11 +132,13 @@ public final class ShiftExpr extends ConjunctionRule {
         }
 
         public boolean isTokenLshift() {
-            return isTokenLshift;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public boolean isTokenRshift() {
-            return isTokenRshift;
+            var element = getItem(1);
+            return element.asBoolean();
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

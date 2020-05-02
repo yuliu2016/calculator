@@ -5,20 +5,17 @@ import org.fugalang.core.parser.*;
 /**
  * raise_stmt: 'raise' ['expr' ['from' 'expr']]
  */
-public final class RaiseStmt extends ConjunctionRule {
+public final class RaiseStmt extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("raise_stmt", RuleType.Conjunction, true);
 
-    private final boolean isTokenRaise;
-    private final RaiseStmt2 raiseStmt2;
+    public static RaiseStmt of(ParseTreeNode node) {
+        return new RaiseStmt(node);
+    }
 
-    public RaiseStmt(
-            boolean isTokenRaise,
-            RaiseStmt2 raiseStmt2
-    ) {
-        this.isTokenRaise = isTokenRaise;
-        this.raiseStmt2 = raiseStmt2;
+    private RaiseStmt(ParseTreeNode node) {
+        super(RULE, node);
     }
 
     @Override
@@ -28,11 +25,14 @@ public final class RaiseStmt extends ConjunctionRule {
     }
 
     public boolean isTokenRaise() {
-        return isTokenRaise;
+        var element = getItem(0);
+        return element.asBoolean();
     }
 
     public RaiseStmt2 raiseStmt2() {
-        return raiseStmt2;
+        var element = getItem(1);
+        if (!element.isPresent()) return null;
+        return RaiseStmt2.of(element);
     }
 
     public boolean hasRaiseStmt2() {
@@ -56,20 +56,17 @@ public final class RaiseStmt extends ConjunctionRule {
     /**
      * 'expr' ['from' 'expr']
      */
-    public static final class RaiseStmt2 extends ConjunctionRule {
+    public static final class RaiseStmt2 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("raise_stmt:2", RuleType.Conjunction, false);
 
-        private final Expr expr;
-        private final RaiseStmt22 raiseStmt22;
+        public static RaiseStmt2 of(ParseTreeNode node) {
+            return new RaiseStmt2(node);
+        }
 
-        public RaiseStmt2(
-                Expr expr,
-                RaiseStmt22 raiseStmt22
-        ) {
-            this.expr = expr;
-            this.raiseStmt22 = raiseStmt22;
+        private RaiseStmt2(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -79,11 +76,15 @@ public final class RaiseStmt extends ConjunctionRule {
         }
 
         public Expr expr() {
-            return expr;
+            var element = getItem(0);
+            if (!element.isPresent()) return null;
+            return Expr.of(element);
         }
 
         public RaiseStmt22 raiseStmt22() {
-            return raiseStmt22;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return RaiseStmt22.of(element);
         }
 
         public boolean hasRaiseStmt22() {
@@ -108,20 +109,17 @@ public final class RaiseStmt extends ConjunctionRule {
     /**
      * 'from' 'expr'
      */
-    public static final class RaiseStmt22 extends ConjunctionRule {
+    public static final class RaiseStmt22 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("raise_stmt:2:2", RuleType.Conjunction, false);
 
-        private final boolean isTokenFrom;
-        private final Expr expr;
+        public static RaiseStmt22 of(ParseTreeNode node) {
+            return new RaiseStmt22(node);
+        }
 
-        public RaiseStmt22(
-                boolean isTokenFrom,
-                Expr expr
-        ) {
-            this.isTokenFrom = isTokenFrom;
-            this.expr = expr;
+        private RaiseStmt22(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -131,11 +129,14 @@ public final class RaiseStmt extends ConjunctionRule {
         }
 
         public boolean isTokenFrom() {
-            return isTokenFrom;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public Expr expr() {
-            return expr;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return Expr.of(element);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

@@ -5,17 +5,17 @@ import org.fugalang.core.parser.*;
 /**
  * continue_stmt: 'continue'
  */
-public final class ContinueStmt extends ConjunctionRule {
+public final class ContinueStmt extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("continue_stmt", RuleType.Conjunction, true);
 
-    private final boolean isTokenContinue;
+    public static ContinueStmt of(ParseTreeNode node) {
+        return new ContinueStmt(node);
+    }
 
-    public ContinueStmt(
-            boolean isTokenContinue
-    ) {
-        this.isTokenContinue = isTokenContinue;
+    private ContinueStmt(ParseTreeNode node) {
+        super(RULE, node);
     }
 
     @Override
@@ -24,7 +24,8 @@ public final class ContinueStmt extends ConjunctionRule {
     }
 
     public boolean isTokenContinue() {
-        return isTokenContinue;
+        var element = getItem(0);
+        return element.asBoolean();
     }
 
     public static boolean parse(ParseTree parseTree, int level) {

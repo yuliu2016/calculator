@@ -5,32 +5,17 @@ import org.fugalang.core.parser.*;
 /**
  * simple_atom: 'NAME' | 'NUMBER' | 'STRING' | 'None' | 'True' | 'False'
  */
-public final class SimpleAtom extends DisjunctionRule {
+public final class SimpleAtom extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("simple_atom", RuleType.Disjunction, true);
 
-    private final String name;
-    private final Object number;
-    private final String string;
-    private final boolean isTokenNone;
-    private final boolean isTokenTrue;
-    private final boolean isTokenFalse;
+    public static SimpleAtom of(ParseTreeNode node) {
+        return new SimpleAtom(node);
+    }
 
-    public SimpleAtom(
-            String name,
-            Object number,
-            String string,
-            boolean isTokenNone,
-            boolean isTokenTrue,
-            boolean isTokenFalse
-    ) {
-        this.name = name;
-        this.number = number;
-        this.string = string;
-        this.isTokenNone = isTokenNone;
-        this.isTokenTrue = isTokenTrue;
-        this.isTokenFalse = isTokenFalse;
+    private SimpleAtom(ParseTreeNode node) {
+        super(RULE, node);
     }
 
     @Override
@@ -44,7 +29,9 @@ public final class SimpleAtom extends DisjunctionRule {
     }
 
     public String name() {
-        return name;
+        var element = getItem(0);
+        if (!element.isPresent()) return null;
+        return (String) element.asObject();
     }
 
     public boolean hasName() {
@@ -52,7 +39,9 @@ public final class SimpleAtom extends DisjunctionRule {
     }
 
     public Object number() {
-        return number;
+        var element = getItem(1);
+        if (!element.isPresent()) return null;
+        return element.asObject();
     }
 
     public boolean hasNumber() {
@@ -60,7 +49,9 @@ public final class SimpleAtom extends DisjunctionRule {
     }
 
     public String string() {
-        return string;
+        var element = getItem(2);
+        if (!element.isPresent()) return null;
+        return (String) element.asObject();
     }
 
     public boolean hasString() {
@@ -68,15 +59,18 @@ public final class SimpleAtom extends DisjunctionRule {
     }
 
     public boolean isTokenNone() {
-        return isTokenNone;
+        var element = getItem(3);
+        return element.asBoolean();
     }
 
     public boolean isTokenTrue() {
-        return isTokenTrue;
+        var element = getItem(4);
+        return element.asBoolean();
     }
 
     public boolean isTokenFalse() {
-        return isTokenFalse;
+        var element = getItem(5);
+        return element.asBoolean();
     }
 
     public static boolean parse(ParseTree parseTree, int level) {

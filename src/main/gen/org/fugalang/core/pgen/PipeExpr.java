@@ -7,21 +7,20 @@ import java.util.List;
 /**
  * pipe_expr: 'atom_expr' ('->' 'atom_expr')*
  */
-public final class PipeExpr extends ConjunctionRule {
+public final class PipeExpr extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("pipe_expr", RuleType.Conjunction, true);
 
-    private final AtomExpr atomExpr;
-    private final List<PipeExpr2> pipeExpr2List;
-
-    public PipeExpr(
-            AtomExpr atomExpr,
-            List<PipeExpr2> pipeExpr2List
-    ) {
-        this.atomExpr = atomExpr;
-        this.pipeExpr2List = pipeExpr2List;
+    public static PipeExpr of(ParseTreeNode node) {
+        return new PipeExpr(node);
     }
+
+    private PipeExpr(ParseTreeNode node) {
+        super(RULE, node);
+    }
+
+    private List<PipeExpr2> pipeExpr2List;
 
     @Override
     protected void buildRule() {
@@ -30,7 +29,9 @@ public final class PipeExpr extends ConjunctionRule {
     }
 
     public AtomExpr atomExpr() {
-        return atomExpr;
+        var element = getItem(0);
+        if (!element.isPresent()) return null;
+        return AtomExpr.of(element);
     }
 
     public List<PipeExpr2> pipeExpr2List() {
@@ -62,20 +63,17 @@ public final class PipeExpr extends ConjunctionRule {
     /**
      * '->' 'atom_expr'
      */
-    public static final class PipeExpr2 extends ConjunctionRule {
+    public static final class PipeExpr2 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("pipe_expr:2", RuleType.Conjunction, false);
 
-        private final boolean isTokenPipe;
-        private final AtomExpr atomExpr;
+        public static PipeExpr2 of(ParseTreeNode node) {
+            return new PipeExpr2(node);
+        }
 
-        public PipeExpr2(
-                boolean isTokenPipe,
-                AtomExpr atomExpr
-        ) {
-            this.isTokenPipe = isTokenPipe;
-            this.atomExpr = atomExpr;
+        private PipeExpr2(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -85,11 +83,14 @@ public final class PipeExpr extends ConjunctionRule {
         }
 
         public boolean isTokenPipe() {
-            return isTokenPipe;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public AtomExpr atomExpr() {
-            return atomExpr;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return AtomExpr.of(element);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

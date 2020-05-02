@@ -5,23 +5,17 @@ import org.fugalang.core.parser.*;
 /**
  * single_input: 'NEWLINE' | 'simple_stmt' | 'compound_stmt' 'NEWLINE'
  */
-public final class SingleInput extends DisjunctionRule {
+public final class SingleInput extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("single_input", RuleType.Disjunction, true);
 
-    private final Object newline;
-    private final SimpleStmt simpleStmt;
-    private final SingleInput3 singleInput3;
+    public static SingleInput of(ParseTreeNode node) {
+        return new SingleInput(node);
+    }
 
-    public SingleInput(
-            Object newline,
-            SimpleStmt simpleStmt,
-            SingleInput3 singleInput3
-    ) {
-        this.newline = newline;
-        this.simpleStmt = simpleStmt;
-        this.singleInput3 = singleInput3;
+    private SingleInput(ParseTreeNode node) {
+        super(RULE, node);
     }
 
     @Override
@@ -32,7 +26,9 @@ public final class SingleInput extends DisjunctionRule {
     }
 
     public Object newline() {
-        return newline;
+        var element = getItem(0);
+        if (!element.isPresent()) return null;
+        return element.asObject();
     }
 
     public boolean hasNewline() {
@@ -40,7 +36,9 @@ public final class SingleInput extends DisjunctionRule {
     }
 
     public SimpleStmt simpleStmt() {
-        return simpleStmt;
+        var element = getItem(1);
+        if (!element.isPresent()) return null;
+        return SimpleStmt.of(element);
     }
 
     public boolean hasSimpleStmt() {
@@ -48,7 +46,9 @@ public final class SingleInput extends DisjunctionRule {
     }
 
     public SingleInput3 singleInput3() {
-        return singleInput3;
+        var element = getItem(2);
+        if (!element.isPresent()) return null;
+        return SingleInput3.of(element);
     }
 
     public boolean hasSingleInput3() {
@@ -73,20 +73,17 @@ public final class SingleInput extends DisjunctionRule {
     /**
      * 'compound_stmt' 'NEWLINE'
      */
-    public static final class SingleInput3 extends ConjunctionRule {
+    public static final class SingleInput3 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("single_input:3", RuleType.Conjunction, false);
 
-        private final CompoundStmt compoundStmt;
-        private final Object newline;
+        public static SingleInput3 of(ParseTreeNode node) {
+            return new SingleInput3(node);
+        }
 
-        public SingleInput3(
-                CompoundStmt compoundStmt,
-                Object newline
-        ) {
-            this.compoundStmt = compoundStmt;
-            this.newline = newline;
+        private SingleInput3(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -96,11 +93,15 @@ public final class SingleInput extends DisjunctionRule {
         }
 
         public CompoundStmt compoundStmt() {
-            return compoundStmt;
+            var element = getItem(0);
+            if (!element.isPresent()) return null;
+            return CompoundStmt.of(element);
         }
 
         public Object newline() {
-            return newline;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return element.asObject();
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

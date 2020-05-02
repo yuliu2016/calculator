@@ -5,20 +5,17 @@ import org.fugalang.core.parser.*;
 /**
  * comp_iter: 'comp_for' | 'comp_if'
  */
-public final class CompIter extends DisjunctionRule {
+public final class CompIter extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("comp_iter", RuleType.Disjunction, true);
 
-    private final CompFor compFor;
-    private final CompIf compIf;
+    public static CompIter of(ParseTreeNode node) {
+        return new CompIter(node);
+    }
 
-    public CompIter(
-            CompFor compFor,
-            CompIf compIf
-    ) {
-        this.compFor = compFor;
-        this.compIf = compIf;
+    private CompIter(ParseTreeNode node) {
+        super(RULE, node);
     }
 
     @Override
@@ -28,7 +25,9 @@ public final class CompIter extends DisjunctionRule {
     }
 
     public CompFor compFor() {
-        return compFor;
+        var element = getItem(0);
+        if (!element.isPresent()) return null;
+        return CompFor.of(element);
     }
 
     public boolean hasCompFor() {
@@ -36,7 +35,9 @@ public final class CompIter extends DisjunctionRule {
     }
 
     public CompIf compIf() {
-        return compIf;
+        var element = getItem(1);
+        if (!element.isPresent()) return null;
+        return CompIf.of(element);
     }
 
     public boolean hasCompIf() {

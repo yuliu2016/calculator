@@ -7,24 +7,20 @@ import java.util.List;
 /**
  * simple_stmt: 'small_stmt' (';' 'small_stmt')* [';']
  */
-public final class SimpleStmt extends ConjunctionRule {
+public final class SimpleStmt extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("simple_stmt", RuleType.Conjunction, true);
 
-    private final SmallStmt smallStmt;
-    private final List<SimpleStmt2> simpleStmt2List;
-    private final boolean isTokenSemicolon;
-
-    public SimpleStmt(
-            SmallStmt smallStmt,
-            List<SimpleStmt2> simpleStmt2List,
-            boolean isTokenSemicolon
-    ) {
-        this.smallStmt = smallStmt;
-        this.simpleStmt2List = simpleStmt2List;
-        this.isTokenSemicolon = isTokenSemicolon;
+    public static SimpleStmt of(ParseTreeNode node) {
+        return new SimpleStmt(node);
     }
+
+    private SimpleStmt(ParseTreeNode node) {
+        super(RULE, node);
+    }
+
+    private List<SimpleStmt2> simpleStmt2List;
 
     @Override
     protected void buildRule() {
@@ -34,7 +30,9 @@ public final class SimpleStmt extends ConjunctionRule {
     }
 
     public SmallStmt smallStmt() {
-        return smallStmt;
+        var element = getItem(0);
+        if (!element.isPresent()) return null;
+        return SmallStmt.of(element);
     }
 
     public List<SimpleStmt2> simpleStmt2List() {
@@ -42,7 +40,8 @@ public final class SimpleStmt extends ConjunctionRule {
     }
 
     public boolean isTokenSemicolon() {
-        return isTokenSemicolon;
+        var element = getItem(2);
+        return element.asBoolean();
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -71,20 +70,17 @@ public final class SimpleStmt extends ConjunctionRule {
     /**
      * ';' 'small_stmt'
      */
-    public static final class SimpleStmt2 extends ConjunctionRule {
+    public static final class SimpleStmt2 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("simple_stmt:2", RuleType.Conjunction, false);
 
-        private final boolean isTokenSemicolon;
-        private final SmallStmt smallStmt;
+        public static SimpleStmt2 of(ParseTreeNode node) {
+            return new SimpleStmt2(node);
+        }
 
-        public SimpleStmt2(
-                boolean isTokenSemicolon,
-                SmallStmt smallStmt
-        ) {
-            this.isTokenSemicolon = isTokenSemicolon;
-            this.smallStmt = smallStmt;
+        private SimpleStmt2(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -94,11 +90,14 @@ public final class SimpleStmt extends ConjunctionRule {
         }
 
         public boolean isTokenSemicolon() {
-            return isTokenSemicolon;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public SmallStmt smallStmt() {
-            return smallStmt;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return SmallStmt.of(element);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
