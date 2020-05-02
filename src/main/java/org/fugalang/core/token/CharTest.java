@@ -3,6 +3,7 @@ package org.fugalang.core.token;
 import static java.lang.Character.isDigit;
 import static java.lang.Character.isLetterOrDigit;
 
+@SuppressWarnings("BooleanMethodIsAlwaysInverted")
 public class CharTest {
     public static boolean isNewline(char ch) {
         return ch == '\n' || ch == '\r';
@@ -57,7 +58,15 @@ public class CharTest {
     }
 
     public static boolean isComplexDelimiter(char ch) {
-        return ch == 'j';
+        return ch == 'j' || ch == 'J';
+    }
+
+    public static boolean isExponentDelimiter(char ch) {
+        return ch == 'e' || ch == 'E';
+    }
+
+    public static boolean isExponentSignDelimiter(char ch) {
+        return ch == '+' || ch == '-';
     }
 
     public static boolean isAnyHex(char ch) {

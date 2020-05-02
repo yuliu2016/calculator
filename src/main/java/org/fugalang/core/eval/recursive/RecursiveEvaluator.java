@@ -15,12 +15,12 @@ import java.util.Scanner;
 
 public class RecursiveEvaluator {
 
-    private static int evaluate(List<Token> tokens) {
+    private static double evaluate(List<Token> tokens) {
         var expr = ((ArithmeticExpr) SimpleParser.parse(tokens));
         return evaluate0(expr);
     }
 
-    private static int evaluate0(ArithmeticExpr expr) {
+    private static double evaluate0(ArithmeticExpr expr) {
         var sum = evaluate0(expr.getFirstTerm());
 
         for (int i = 0; i < expr.getOps().size(); i++) {
@@ -40,7 +40,7 @@ public class RecursiveEvaluator {
         return sum;
     }
 
-    private static int evaluate0(Term term) {
+    private static double evaluate0(Term term) {
         var product = evaluate0(term.getFirstAtom());
 
         for (int i = 0; i < term.getOps().size(); i++) {
@@ -60,10 +60,23 @@ public class RecursiveEvaluator {
         return product;
     }
 
-    private static int evaluate0(Atom atom) {
+    private static double evaluate0(Atom atom) {
         var val = atom.getVal();
         if (val instanceof String) {
-            return Integer.parseInt((String) val);
+            var valStr = ((String) val)
+                    .replace("_", "")
+                    .replace("j", "");
+
+            if (valStr.startsWith("0x")) {
+                return Integer.parseInt(valStr.substring(2), 16);
+            }
+            if (valStr.startsWith("0b")) {
+                return Integer.parseInt(valStr.substring(2), 2);
+            }
+            if (valStr.startsWith("0o")) {
+                return Integer.parseInt(valStr.substring(2), 8);
+            }
+            return Double.parseDouble(valStr);
         } else if (val instanceof ArithmeticExpr) {
             return evaluate0((ArithmeticExpr) val);
         }

@@ -159,18 +159,29 @@ public class Tokenizer {
 
         var j = visitor.i + 1;
 
-        while (j < visitor.size - 1) {
+        var closed = false;
+
+        while (j < visitor.size) {
             var ch = visitor.code.charAt(j);
             if (ch == open_char) {
+                closed = true;
                 break;
             }
 
             // Fix: Only allow normal strings to span a single line
-            if (CharTest.isNewline(ch) || CharTest.isCRLF(visitor.code.substring(j, j + 1))) {
-                throw new SyntaxError("String not closed; Unexpected EOL");
+            if ((j < visitor.size - 1 &&
+                    CharTest.isCRLF(visitor.code.substring(j, j + 2)))) {
+                break;
+            }
+            if (CharTest.isNewline(ch)) {
+                break;
             }
 
             j++;
+        }
+
+        if (!closed) {
+            throw new SyntaxError("String not closed; Unexpected EOL");
         }
 
         sequence.add(STRING, visitor.code.substring(visitor.i + 1, j));
@@ -183,31 +194,27 @@ public class Tokenizer {
     }
 
     /**
-     * Add a integer to the sequence, to be parsed from a string
+     * Add a number to the sequence, to be parsed from a string
      *
-     * @param s the integer
+     * @param s the number
      */
-    private void addInteger(String s) {
+    private void addNumber(String s) {
         sequence.add(NUMBER, s);
     }
 
     /**
      * Tokenize a hexadecimal number
+     * <p>
+     * hex_number: '0x' ('_' | hex_digit)* hex_digit
      */
     private boolean tokenizeHex() {
         // add 2 because hex has a 2-char lead
         var j = visitor.i + 2;
 
-        var sb = new StringBuilder();
-
         while (j < visitor.size) {
             var ch = visitor.code.charAt(j);
-            if (!CharTest.isUnderscore(ch)) {
-                if (CharTest.isAnyHex(ch)) {
-                    sb.append(ch);
-                } else {
-                    break;
-                }
+            if (!CharTest.isUnderscore(ch) && !CharTest.isAnyHex(ch)) {
+                break;
             }
             j++;
         }
@@ -217,7 +224,12 @@ public class Tokenizer {
             throw new SyntaxError("Error parsing hex: EOF after leading literal");
         }
 
-        addInteger(sb.toString());
+        if (CharTest.isUnderscore(visitor.code.charAt(visitor.i + 2)) ||
+                CharTest.isUnderscore(visitor.code.charAt(j - 1))) {
+            throw new SyntaxError("Invalid hex literal");
+        }
+
+        addNumber(visitor.code.substring(visitor.i, j));
 
         visitor.i = j;
         return true;
@@ -230,16 +242,13 @@ public class Tokenizer {
         // add 2 because bin has a 2-char lead
         var j = visitor.i + 2;
 
-        var sb = new StringBuilder();
-
         while (j < visitor.size) {
             var ch = visitor.code.charAt(j);
-            if (!CharTest.isUnderscore(ch)) {
-                if (CharTest.isAnyBin(ch)) {
-                    sb.append(ch);
-                } else {
-                    break;
+            if (!CharTest.isUnderscore(ch) && !CharTest.isAnyBin(ch)) {
+                if (CharTest.isNumeric(ch)) {
+                    throw new SyntaxError("Invalid digit '" + ch +"' in binary literal");
                 }
+                break;
             }
             j++;
         }
@@ -249,7 +258,12 @@ public class Tokenizer {
             throw new SyntaxError("Error parsing bin: EOF after leading literal");
         }
 
-        addInteger(sb.toString());
+        if (CharTest.isUnderscore(visitor.code.charAt(visitor.i + 2)) ||
+                CharTest.isUnderscore(visitor.code.charAt(j - 1))) {
+            throw new SyntaxError("Invalid bin literal");
+        }
+
+        addNumber(visitor.code.substring(visitor.i, j));
 
         visitor.i = j;
         return true;
@@ -262,16 +276,13 @@ public class Tokenizer {
         // add 2 because oct has a 2-char lead
         var j = visitor.i + 2;
 
-        var sb = new StringBuilder();
-
         while (j < visitor.size) {
             var ch = visitor.code.charAt(j);
-            if (!CharTest.isUnderscore(ch)) {
-                if (CharTest.isAnyOct(ch)) {
-                    sb.append(ch);
-                } else {
-                    break;
+            if (!CharTest.isUnderscore(ch) && !CharTest.isAnyOct(ch)) {
+                if (CharTest.isNumeric(ch)) {
+                    throw new SyntaxError("Invalid digit '" + ch +"' in octal literal");
                 }
+                break;
             }
             j++;
         }
@@ -281,7 +292,78 @@ public class Tokenizer {
             throw new SyntaxError("Error parsing oct: EOF after leading literal");
         }
 
-        addInteger(sb.toString());
+        if (CharTest.isUnderscore(visitor.code.charAt(visitor.i + 2)) ||
+                CharTest.isUnderscore(visitor.code.charAt(j - 1))) {
+            throw new SyntaxError("Invalid oct literal");
+        }
+
+        addNumber(visitor.code.substring(visitor.i, j));
+
+        visitor.i = j;
+        return true;
+    }
+
+    private int tokenizeDecimalSequence(int i) {
+        int j = i;
+        while (j < visitor.size) {
+            var ch = visitor.code.charAt(j);
+            if (!CharTest.isUnderscore(ch) && !CharTest.isNumeric(ch)) {
+                break;
+            }
+            j++;
+        }
+        if (j == i || CharTest.isUnderscore(visitor.code.charAt(i)) ||
+                CharTest.isUnderscore(visitor.code.charAt(j - 1))) {
+            throw new SyntaxError("Invalid decimal literal");
+        }
+        return j;
+    }
+
+    /**
+     * dec_small: dec_digit | dec_digit ('_' | dec_digit)* dec_digit
+     * dec_big: '.' dec_small | dec_small ['.' [dec_small]]
+     * exponent: ('e' | 'E') ['+' | '-'] dec_small
+     * dec_number: dec_big [exponent] ['j']
+     */
+    private boolean tokenizeDecimalNumber() {
+
+        var is_floating_point = CharTest.isFloatingPoint(visitor.p1);
+        var j = visitor.i;
+
+        if (is_floating_point) {
+            j++;
+            j = tokenizeDecimalSequence(j);
+        } else {
+            if (!CharTest.isNumeric(visitor.p1)) {
+                return false;
+            }
+            j = tokenizeDecimalSequence(j);
+            if (j < visitor.size && CharTest
+                    .isFloatingPoint(visitor.code.charAt(j))) {
+                is_floating_point = true;
+                j++;
+                j = tokenizeDecimalSequence(j);
+            }
+        }
+
+        if (j < visitor.size && CharTest
+                .isExponentDelimiter(visitor.code.charAt(j))) {
+            j++;
+            if (j < visitor.size && CharTest
+                    .isExponentSignDelimiter(visitor.code.charAt(j))) j++;
+
+            j = tokenizeDecimalSequence(j);
+        }
+
+        if (j < visitor.size && CharTest.
+                isComplexDelimiter(visitor.code.charAt(j))) j++;
+
+        var s = visitor.code.substring(visitor.i, j);
+
+        if (!is_floating_point && s.startsWith("0") && s.length() > 1) {
+            throw new SyntaxError("Integer with leading zero; use 0o for octal numbers");
+        }
+        addNumber(s);
 
         visitor.i = j;
         return true;
@@ -291,80 +373,38 @@ public class Tokenizer {
      * Tokenize a numerical value that starts with a digit
      * <p>
      * Note that this doesn't account for negative values;
-     * negatives are represented as an OPERATOR
+     * negatives are represented as an OPERATOR.
+     * <p>
+     * Rules for number parsing:
+     * <p>
+     * number: hex_number | oct_number | bin_number | dec_number
+     * <p>
+     * hex_number: '0x' ('_' | hex_digit)* hex_digit
+     * oct_number: '0o' ('_' | oct_digit)* oct_digit
+     * bin_number: '0b' ('_' | bin_digit)* bin_digit
+     * <p>
+     * hex_digit: dec_digit | 'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'A' | 'B' | 'C' | 'D' | 'E' | 'F'
+     * dec_digit: oct_digit | '8' | '9'
+     * oct_digit: bin_digit | '2' | '3' | '4' | '5' | '6' | '7'
+     * bin_digit: '0' | '1'
+     * <p>
+     * dec_small: dec_digit | dec_digit ('_' | dec_digit)* dec_digit
+     * dec_big: '.' dec_small | dec_small ['.' [dec_small]]
+     * exponent: ('e' | 'E') ['-'] dec_digit+
+     * dec_number: dec_big [exponent] ['j']
      */
     private boolean tokenizeNumber() {
-        if (!CharTest.isNumeric(visitor.p1)) {
-            return false;
-        }
 
-        var leading_zero = CharTest.isZero(visitor.p1);
-
-        if (leading_zero) {
-            // delegate to other methods if literal is in another base
-            if (CharTest.isHexLead(visitor.p2)) {
-                return tokenizeHex();
-            } else if (CharTest.isBinLead(visitor.p2)) {
-                return tokenizeBin();
-            } else if (CharTest.isOctLead(visitor.p2)) {
-                return tokenizeOct();
-            }
-        }
-
-        var is_float = false;
-        var is_complex = false;
-
-        var sb = new StringBuilder();
-
-        // there is already a digit in here
-        sb.append(visitor.p1);
-
-        var j = visitor.i + 1;
-
-        while (j < visitor.size) {
-            var ch = visitor.code.charAt(j);
-            if (CharTest.isFloatingPoint(ch)) {
-                if (is_float) {
-                    // Fix: A second floating point is no longer a number
-
-                    break;
-                } else {
-                    is_float = true;
-                    sb.append(".");
-                }
-            } else if (CharTest.isNumeric(ch)) {
-                sb.append(ch);
-            } else if (CharTest.isComplexDelimiter(ch)) {
-                is_complex = true;
-                // the number literal includes an extra char
-                // that need to be skipped
-                j++;
-                break;
-            } else {
-                // not a part of the number
-                break;
-            }
-            j++;
-        }
-
-        var s = sb.toString();
-
-        // Fix: change the order to complex, then float, since
-        // a complex literal may also be a float
-
-        if (is_float || is_complex) {
-            sequence.add(NUMBER, s);
+        // delegate to other methods if literal is in another base
+        if (CharTest.isHexLead(visitor.p2)) {
+            return tokenizeHex();
+        } else if (CharTest.isBinLead(visitor.p2)) {
+            return tokenizeBin();
+        } else if (CharTest.isOctLead(visitor.p2)) {
+            return tokenizeOct();
         } else {
-            // Fix: the special case of 0 should not throw a syntax error
-            if (leading_zero && s.length() > 1) {
-                throw new SyntaxError("Integer with leading zero");
-            } else {
-                addInteger(s);
-            }
+            return tokenizeDecimalNumber();
         }
-
-        visitor.i = j;
-        return true;
     }
 
     public List<Token> tokenizeAll() {
