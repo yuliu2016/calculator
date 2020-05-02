@@ -2,6 +2,8 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.*;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -36,6 +38,16 @@ public final class Subscriptlist extends NodeWrapper {
     }
 
     public List<Subscriptlist2> subscriptlist2List() {
+        if (subscriptlist2List != null) {
+            return subscriptlist2List;
+        }
+        List<Subscriptlist2> result = null;
+        var element = getItem(1);
+        for (var node : element.asCollection()) {
+            if (result == null) result = new ArrayList<>();
+            result.add(Subscriptlist2.of(node));
+        }
+        subscriptlist2List = result == null ? Collections.emptyList() : result;
         return subscriptlist2List;
     }
 

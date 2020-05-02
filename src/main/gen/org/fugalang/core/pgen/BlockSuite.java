@@ -2,6 +2,8 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.*;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -153,6 +155,16 @@ public final class BlockSuite extends NodeWrapper {
         }
 
         public List<Stmt> stmtList() {
+            if (stmtList != null) {
+                return stmtList;
+            }
+            List<Stmt> result = null;
+            var element = getItem(2);
+            for (var node : element.asCollection()) {
+                if (result == null) result = new ArrayList<>();
+                result.add(Stmt.of(node));
+            }
+            stmtList = result == null ? Collections.emptyList() : result;
             return stmtList;
         }
 

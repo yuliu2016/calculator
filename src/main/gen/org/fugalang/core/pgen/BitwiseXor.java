@@ -2,6 +2,8 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.*;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -35,6 +37,16 @@ public final class BitwiseXor extends NodeWrapper {
     }
 
     public List<BitwiseXor2> bitwiseXor2List() {
+        if (bitwiseXor2List != null) {
+            return bitwiseXor2List;
+        }
+        List<BitwiseXor2> result = null;
+        var element = getItem(1);
+        for (var node : element.asCollection()) {
+            if (result == null) result = new ArrayList<>();
+            result.add(BitwiseXor2.of(node));
+        }
+        bitwiseXor2List = result == null ? Collections.emptyList() : result;
         return bitwiseXor2List;
     }
 

@@ -2,26 +2,27 @@ package org.fugalang.core.grammar.pgen;
 
 import org.fugalang.core.parser.*;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
  * or_rule: 'and_rule' ('|' 'and_rule')*
  */
-public final class OrRule extends ConjunctionRule {
+public final class OrRule extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("or_rule", RuleType.Conjunction, true);
 
-    private final AndRule andRule;
-    private final List<OrRule2> orRule2List;
-
-    public OrRule(
-            AndRule andRule,
-            List<OrRule2> orRule2List
-    ) {
-        this.andRule = andRule;
-        this.orRule2List = orRule2List;
+    public static OrRule of(ParseTreeNode node) {
+        return new OrRule(node);
     }
+
+    private OrRule(ParseTreeNode node) {
+        super(RULE, node);
+    }
+
+    private List<OrRule2> orRule2List;
 
     @Override
     protected void buildRule() {
@@ -30,10 +31,22 @@ public final class OrRule extends ConjunctionRule {
     }
 
     public AndRule andRule() {
-        return andRule;
+        var element = getItem(0);
+        if (!element.isPresent()) return null;
+        return AndRule.of(element);
     }
 
     public List<OrRule2> orRule2List() {
+        if (orRule2List != null) {
+            return orRule2List;
+        }
+        List<OrRule2> result = null;
+        var element = getItem(1);
+        for (var node : element.asCollection()) {
+            if (result == null) result = new ArrayList<>();
+            result.add(OrRule2.of(node));
+        }
+        orRule2List = result == null ? Collections.emptyList() : result;
         return orRule2List;
     }
 
@@ -62,20 +75,17 @@ public final class OrRule extends ConjunctionRule {
     /**
      * '|' 'and_rule'
      */
-    public static final class OrRule2 extends ConjunctionRule {
+    public static final class OrRule2 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("or_rule:2", RuleType.Conjunction, false);
 
-        private final boolean isTokenOr;
-        private final AndRule andRule;
+        public static OrRule2 of(ParseTreeNode node) {
+            return new OrRule2(node);
+        }
 
-        public OrRule2(
-                boolean isTokenOr,
-                AndRule andRule
-        ) {
-            this.isTokenOr = isTokenOr;
-            this.andRule = andRule;
+        private OrRule2(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -85,11 +95,14 @@ public final class OrRule extends ConjunctionRule {
         }
 
         public boolean isTokenOr() {
-            return isTokenOr;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public AndRule andRule() {
-            return andRule;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return AndRule.of(element);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

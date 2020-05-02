@@ -5,23 +5,17 @@ import org.fugalang.core.parser.*;
 /**
  * sub_rule: '(' 'or_rule' ')' | '[' 'or_rule' ']' | 'TOK'
  */
-public final class SubRule extends DisjunctionRule {
+public final class SubRule extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("sub_rule", RuleType.Disjunction, true);
 
-    private final SubRule1 subRule1;
-    private final SubRule2 subRule2;
-    private final String token;
+    public static SubRule of(ParseTreeNode node) {
+        return new SubRule(node);
+    }
 
-    public SubRule(
-            SubRule1 subRule1,
-            SubRule2 subRule2,
-            String token
-    ) {
-        this.subRule1 = subRule1;
-        this.subRule2 = subRule2;
-        this.token = token;
+    private SubRule(ParseTreeNode node) {
+        super(RULE, node);
     }
 
     @Override
@@ -32,7 +26,9 @@ public final class SubRule extends DisjunctionRule {
     }
 
     public SubRule1 subRule1() {
-        return subRule1;
+        var element = getItem(0);
+        if (!element.isPresent()) return null;
+        return SubRule1.of(element);
     }
 
     public boolean hasSubRule1() {
@@ -40,7 +36,9 @@ public final class SubRule extends DisjunctionRule {
     }
 
     public SubRule2 subRule2() {
-        return subRule2;
+        var element = getItem(1);
+        if (!element.isPresent()) return null;
+        return SubRule2.of(element);
     }
 
     public boolean hasSubRule2() {
@@ -48,7 +46,9 @@ public final class SubRule extends DisjunctionRule {
     }
 
     public String token() {
-        return token;
+        var element = getItem(2);
+        if (!element.isPresent()) return null;
+        return (String) element.asObject();
     }
 
     public boolean hasToken() {
@@ -73,23 +73,17 @@ public final class SubRule extends DisjunctionRule {
     /**
      * '(' 'or_rule' ')'
      */
-    public static final class SubRule1 extends ConjunctionRule {
+    public static final class SubRule1 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("sub_rule:1", RuleType.Conjunction, false);
 
-        private final boolean isTokenLpar;
-        private final OrRule orRule;
-        private final boolean isTokenRpar;
+        public static SubRule1 of(ParseTreeNode node) {
+            return new SubRule1(node);
+        }
 
-        public SubRule1(
-                boolean isTokenLpar,
-                OrRule orRule,
-                boolean isTokenRpar
-        ) {
-            this.isTokenLpar = isTokenLpar;
-            this.orRule = orRule;
-            this.isTokenRpar = isTokenRpar;
+        private SubRule1(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -100,15 +94,19 @@ public final class SubRule extends DisjunctionRule {
         }
 
         public boolean isTokenLpar() {
-            return isTokenLpar;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public OrRule orRule() {
-            return orRule;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return OrRule.of(element);
         }
 
         public boolean isTokenRpar() {
-            return isTokenRpar;
+            var element = getItem(2);
+            return element.asBoolean();
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -130,23 +128,17 @@ public final class SubRule extends DisjunctionRule {
     /**
      * '[' 'or_rule' ']'
      */
-    public static final class SubRule2 extends ConjunctionRule {
+    public static final class SubRule2 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("sub_rule:2", RuleType.Conjunction, false);
 
-        private final boolean isTokenLsqb;
-        private final OrRule orRule;
-        private final boolean isTokenRsqb;
+        public static SubRule2 of(ParseTreeNode node) {
+            return new SubRule2(node);
+        }
 
-        public SubRule2(
-                boolean isTokenLsqb,
-                OrRule orRule,
-                boolean isTokenRsqb
-        ) {
-            this.isTokenLsqb = isTokenLsqb;
-            this.orRule = orRule;
-            this.isTokenRsqb = isTokenRsqb;
+        private SubRule2(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -157,15 +149,19 @@ public final class SubRule extends DisjunctionRule {
         }
 
         public boolean isTokenLsqb() {
-            return isTokenLsqb;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public OrRule orRule() {
-            return orRule;
+            var element = getItem(1);
+            if (!element.isPresent()) return null;
+            return OrRule.of(element);
         }
 
         public boolean isTokenRsqb() {
-            return isTokenRsqb;
+            var element = getItem(2);
+            return element.asBoolean();
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

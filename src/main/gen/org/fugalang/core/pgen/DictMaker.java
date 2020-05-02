@@ -2,6 +2,8 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.*;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -134,6 +136,16 @@ public final class DictMaker extends NodeWrapper {
         }
 
         public List<DictMaker221> dictMaker221List() {
+            if (dictMaker221List != null) {
+                return dictMaker221List;
+            }
+            List<DictMaker221> result = null;
+            var element = getItem(0);
+            for (var node : element.asCollection()) {
+                if (result == null) result = new ArrayList<>();
+                result.add(DictMaker221.of(node));
+            }
+            dictMaker221List = result == null ? Collections.emptyList() : result;
             return dictMaker221List;
         }
 

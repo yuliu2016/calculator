@@ -2,6 +2,8 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.*;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -134,6 +136,16 @@ public final class ExprlistComp extends NodeWrapper {
         }
 
         public List<ExprlistComp221> exprlistComp221List() {
+            if (exprlistComp221List != null) {
+                return exprlistComp221List;
+            }
+            List<ExprlistComp221> result = null;
+            var element = getItem(0);
+            for (var node : element.asCollection()) {
+                if (result == null) result = new ArrayList<>();
+                result.add(ExprlistComp221.of(node));
+            }
+            exprlistComp221List = result == null ? Collections.emptyList() : result;
             return exprlistComp221List;
         }
 

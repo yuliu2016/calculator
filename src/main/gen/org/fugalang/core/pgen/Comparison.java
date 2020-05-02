@@ -2,6 +2,8 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.*;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -35,6 +37,16 @@ public final class Comparison extends NodeWrapper {
     }
 
     public List<Comparison2> comparison2List() {
+        if (comparison2List != null) {
+            return comparison2List;
+        }
+        List<Comparison2> result = null;
+        var element = getItem(1);
+        for (var node : element.asCollection()) {
+            if (result == null) result = new ArrayList<>();
+            result.add(Comparison2.of(node));
+        }
+        comparison2List = result == null ? Collections.emptyList() : result;
         return comparison2List;
     }
 

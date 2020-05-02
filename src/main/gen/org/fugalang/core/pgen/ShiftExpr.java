@@ -2,6 +2,8 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.*;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -35,6 +37,16 @@ public final class ShiftExpr extends NodeWrapper {
     }
 
     public List<ShiftExpr2> shiftExpr2List() {
+        if (shiftExpr2List != null) {
+            return shiftExpr2List;
+        }
+        List<ShiftExpr2> result = null;
+        var element = getItem(1);
+        for (var node : element.asCollection()) {
+            if (result == null) result = new ArrayList<>();
+            result.add(ShiftExpr2.of(node));
+        }
+        shiftExpr2List = result == null ? Collections.emptyList() : result;
         return shiftExpr2List;
     }
 

@@ -2,6 +2,8 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.*;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -35,6 +37,16 @@ public final class BitwiseAnd extends NodeWrapper {
     }
 
     public List<BitwiseAnd2> bitwiseAnd2List() {
+        if (bitwiseAnd2List != null) {
+            return bitwiseAnd2List;
+        }
+        List<BitwiseAnd2> result = null;
+        var element = getItem(1);
+        for (var node : element.asCollection()) {
+            if (result == null) result = new ArrayList<>();
+            result.add(BitwiseAnd2.of(node));
+        }
+        bitwiseAnd2List = result == null ? Collections.emptyList() : result;
         return bitwiseAnd2List;
     }
 

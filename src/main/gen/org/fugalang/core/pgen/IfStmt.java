@@ -2,6 +2,8 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.*;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -49,6 +51,16 @@ public final class IfStmt extends NodeWrapper {
     }
 
     public List<IfStmt4> ifStmt4List() {
+        if (ifStmt4List != null) {
+            return ifStmt4List;
+        }
+        List<IfStmt4> result = null;
+        var element = getItem(3);
+        for (var node : element.asCollection()) {
+            if (result == null) result = new ArrayList<>();
+            result.add(IfStmt4.of(node));
+        }
+        ifStmt4List = result == null ? Collections.emptyList() : result;
         return ifStmt4List;
     }
 

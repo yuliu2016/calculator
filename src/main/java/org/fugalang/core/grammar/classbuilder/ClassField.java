@@ -61,7 +61,7 @@ public class ClassField {
                             "        if (!element.isPresent()) return null;\n" +
                             "        return " + className.asType() + ".of(element);\n";
                 }
-                yield "        return " + fieldName + ";\n";
+                yield listTemplate(index, className.getRealClassName() + ".of(node)");
             }
 
             case TokenType -> {
@@ -72,17 +72,32 @@ public class ClassField {
                             "        if (!element.isPresent()) return null;\n" +
                             "        return " + cast + "element.asObject();\n";
                 }
-                yield "        return " + fieldName + ";\n";
+                var cast = className.getRealClassName().equals("Object") ? "" :
+                        "(" + className.getRealClassName() + ") ";
+                yield listTemplate(index, cast + "node.asObject()");
             }
             case TokenLiteral -> {
                 if (isSingular()) {
                     yield "        var element = getItem(" + index + ");\n" +
                             "        return element.asBoolean();\n";
-                } else {
-                    yield "        return " + fieldName + ";\n";
                 }
+                yield listTemplate(index, "node.asBoolean()");
             }
         };
+    }
+
+    private String listTemplate(int index, String covertExpr) {
+        return "        if (" + fieldName + " != null) {\n" +
+                "            return " + fieldName + ";\n" +
+                "        }\n" +
+                "        " + className.asType() + " result = null;\n" +
+                "        var element = getItem(" + index + ");\n" +
+                "        for (var node : element.asCollection()) {\n" +
+                "            if (result == null) result = new ArrayList<>();\n" +
+                "            result.add(" + covertExpr + ");\n" +
+                "        }\n" +
+                "        " + fieldName + " = result == null ? Collections.emptyList() : result;\n" +
+                "        return " + fieldName + ";\n";
     }
 
     public String asNullCheck() {

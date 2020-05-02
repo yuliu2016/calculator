@@ -2,6 +2,8 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.*;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -41,6 +43,16 @@ public final class AtomExpr extends NodeWrapper {
     }
 
     public List<Trailer> trailerList() {
+        if (trailerList != null) {
+            return trailerList;
+        }
+        List<Trailer> result = null;
+        var element = getItem(2);
+        for (var node : element.asCollection()) {
+            if (result == null) result = new ArrayList<>();
+            result.add(Trailer.of(node));
+        }
+        trailerList = result == null ? Collections.emptyList() : result;
         return trailerList;
     }
 

@@ -2,26 +2,27 @@ package org.fugalang.core.grammar.pgen;
 
 import org.fugalang.core.parser.*;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
  * and_rule: 'repeat_rule' ('repeat_rule')*
  */
-public final class AndRule extends ConjunctionRule {
+public final class AndRule extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("and_rule", RuleType.Conjunction, true);
 
-    private final RepeatRule repeatRule;
-    private final List<AndRule2> andRule2List;
-
-    public AndRule(
-            RepeatRule repeatRule,
-            List<AndRule2> andRule2List
-    ) {
-        this.repeatRule = repeatRule;
-        this.andRule2List = andRule2List;
+    public static AndRule of(ParseTreeNode node) {
+        return new AndRule(node);
     }
+
+    private AndRule(ParseTreeNode node) {
+        super(RULE, node);
+    }
+
+    private List<AndRule2> andRule2List;
 
     @Override
     protected void buildRule() {
@@ -30,10 +31,22 @@ public final class AndRule extends ConjunctionRule {
     }
 
     public RepeatRule repeatRule() {
-        return repeatRule;
+        var element = getItem(0);
+        if (!element.isPresent()) return null;
+        return RepeatRule.of(element);
     }
 
     public List<AndRule2> andRule2List() {
+        if (andRule2List != null) {
+            return andRule2List;
+        }
+        List<AndRule2> result = null;
+        var element = getItem(1);
+        for (var node : element.asCollection()) {
+            if (result == null) result = new ArrayList<>();
+            result.add(AndRule2.of(node));
+        }
+        andRule2List = result == null ? Collections.emptyList() : result;
         return andRule2List;
     }
 
@@ -62,17 +75,17 @@ public final class AndRule extends ConjunctionRule {
     /**
      * 'repeat_rule'
      */
-    public static final class AndRule2 extends ConjunctionRule {
+    public static final class AndRule2 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("and_rule:2", RuleType.Conjunction, false);
 
-        private final RepeatRule repeatRule;
+        public static AndRule2 of(ParseTreeNode node) {
+            return new AndRule2(node);
+        }
 
-        public AndRule2(
-                RepeatRule repeatRule
-        ) {
-            this.repeatRule = repeatRule;
+        private AndRule2(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -81,7 +94,9 @@ public final class AndRule extends ConjunctionRule {
         }
 
         public RepeatRule repeatRule() {
-            return repeatRule;
+            var element = getItem(0);
+            if (!element.isPresent()) return null;
+            return RepeatRule.of(element);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

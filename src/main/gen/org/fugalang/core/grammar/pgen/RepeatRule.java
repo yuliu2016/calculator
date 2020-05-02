@@ -2,25 +2,20 @@ package org.fugalang.core.grammar.pgen;
 
 import org.fugalang.core.parser.*;
 
-import java.util.Optional;
-
 /**
  * repeat_rule: 'sub_rule' ['*' | '+']
  */
-public final class RepeatRule extends ConjunctionRule {
+public final class RepeatRule extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("repeat_rule", RuleType.Conjunction, true);
 
-    private final SubRule subRule;
-    private final RepeatRule2 repeatRule2;
+    public static RepeatRule of(ParseTreeNode node) {
+        return new RepeatRule(node);
+    }
 
-    public RepeatRule(
-            SubRule subRule,
-            RepeatRule2 repeatRule2
-    ) {
-        this.subRule = subRule;
-        this.repeatRule2 = repeatRule2;
+    private RepeatRule(ParseTreeNode node) {
+        super(RULE, node);
     }
 
     @Override
@@ -30,11 +25,15 @@ public final class RepeatRule extends ConjunctionRule {
     }
 
     public SubRule subRule() {
-        return subRule;
+        var element = getItem(0);
+        if (!element.isPresent()) return null;
+        return SubRule.of(element);
     }
 
     public RepeatRule2 repeatRule2() {
-        return repeatRule2;
+        var element = getItem(1);
+        if (!element.isPresent()) return null;
+        return RepeatRule2.of(element);
     }
 
     public boolean hasRepeatRule2() {
@@ -58,20 +57,17 @@ public final class RepeatRule extends ConjunctionRule {
     /**
      * '*' | '+'
      */
-    public static final class RepeatRule2 extends DisjunctionRule {
+    public static final class RepeatRule2 extends NodeWrapper {
 
         public static final ParserRule RULE =
                 new ParserRule("repeat_rule:2", RuleType.Disjunction, false);
 
-        private final boolean isTokenStar;
-        private final boolean isTokenPlus;
+        public static RepeatRule2 of(ParseTreeNode node) {
+            return new RepeatRule2(node);
+        }
 
-        public RepeatRule2(
-                boolean isTokenStar,
-                boolean isTokenPlus
-        ) {
-            this.isTokenStar = isTokenStar;
-            this.isTokenPlus = isTokenPlus;
+        private RepeatRule2(ParseTreeNode node) {
+            super(RULE, node);
         }
 
         @Override
@@ -81,11 +77,13 @@ public final class RepeatRule extends ConjunctionRule {
         }
 
         public boolean isTokenStar() {
-            return isTokenStar;
+            var element = getItem(0);
+            return element.asBoolean();
         }
 
         public boolean isTokenPlus() {
-            return isTokenPlus;
+            var element = getItem(1);
+            return element.asBoolean();
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

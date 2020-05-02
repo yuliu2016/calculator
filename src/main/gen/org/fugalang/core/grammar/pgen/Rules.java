@@ -2,23 +2,27 @@ package org.fugalang.core.grammar.pgen;
 
 import org.fugalang.core.parser.*;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
  * rules: 'single_rule'+
  */
-public final class Rules extends ConjunctionRule {
+public final class Rules extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("rules", RuleType.Conjunction, true);
 
-    private final List<SingleRule> singleRuleList;
-
-    public Rules(
-            List<SingleRule> singleRuleList
-    ) {
-        this.singleRuleList = singleRuleList;
+    public static Rules of(ParseTreeNode node) {
+        return new Rules(node);
     }
+
+    private Rules(ParseTreeNode node) {
+        super(RULE, node);
+    }
+
+    private List<SingleRule> singleRuleList;
 
     @Override
     protected void buildRule() {
@@ -26,6 +30,16 @@ public final class Rules extends ConjunctionRule {
     }
 
     public List<SingleRule> singleRuleList() {
+        if (singleRuleList != null) {
+            return singleRuleList;
+        }
+        List<SingleRule> result = null;
+        var element = getItem(0);
+        for (var node : element.asCollection()) {
+            if (result == null) result = new ArrayList<>();
+            result.add(SingleRule.of(node));
+        }
+        singleRuleList = result == null ? Collections.emptyList() : result;
         return singleRuleList;
     }
 

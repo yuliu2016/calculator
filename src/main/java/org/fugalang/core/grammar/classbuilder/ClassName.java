@@ -42,6 +42,10 @@ public class ClassName {
         return typeStr;
     }
 
+    public String getRealClassName() {
+        return realClassName;
+    }
+
     public String asPrintName() {
         if (printName == null) {
             throw new RuntimeException("Cannot get a null print name");

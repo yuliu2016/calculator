@@ -5,26 +5,17 @@ import org.fugalang.core.parser.*;
 /**
  * single_rule: 'TOK' ':' 'or_rule' 'NEWLINE'
  */
-public final class SingleRule extends ConjunctionRule {
+public final class SingleRule extends NodeWrapper {
 
     public static final ParserRule RULE =
             new ParserRule("single_rule", RuleType.Conjunction, true);
 
-    private final String token;
-    private final boolean isTokenColon;
-    private final OrRule orRule;
-    private final boolean isTokenNewline;
+    public static SingleRule of(ParseTreeNode node) {
+        return new SingleRule(node);
+    }
 
-    public SingleRule(
-            String token,
-            boolean isTokenColon,
-            OrRule orRule,
-            boolean isTokenNewline
-    ) {
-        this.token = token;
-        this.isTokenColon = isTokenColon;
-        this.orRule = orRule;
-        this.isTokenNewline = isTokenNewline;
+    private SingleRule(ParseTreeNode node) {
+        super(RULE, node);
     }
 
     @Override
@@ -36,19 +27,25 @@ public final class SingleRule extends ConjunctionRule {
     }
 
     public String token() {
-        return token;
+        var element = getItem(0);
+        if (!element.isPresent()) return null;
+        return (String) element.asObject();
     }
 
     public boolean isTokenColon() {
-        return isTokenColon;
+        var element = getItem(1);
+        return element.asBoolean();
     }
 
     public OrRule orRule() {
-        return orRule;
+        var element = getItem(2);
+        if (!element.isPresent()) return null;
+        return OrRule.of(element);
     }
 
     public boolean isTokenNewline() {
-        return isTokenNewline;
+        var element = getItem(3);
+        return element.asBoolean();
     }
 
     public static boolean parse(ParseTree parseTree, int level) {

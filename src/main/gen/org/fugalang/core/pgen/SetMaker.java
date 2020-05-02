@@ -2,6 +2,8 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.*;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -134,6 +136,16 @@ public final class SetMaker extends NodeWrapper {
         }
 
         public List<SetMaker221> setMaker221List() {
+            if (setMaker221List != null) {
+                return setMaker221List;
+            }
+            List<SetMaker221> result = null;
+            var element = getItem(0);
+            for (var node : element.asCollection()) {
+                if (result == null) result = new ArrayList<>();
+                result.add(SetMaker221.of(node));
+            }
+            setMaker221List = result == null ? Collections.emptyList() : result;
             return setMaker221List;
         }
 

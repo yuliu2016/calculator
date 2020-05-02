@@ -2,6 +2,8 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.*;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -35,6 +37,16 @@ public final class Conjunction extends NodeWrapper {
     }
 
     public List<Conjunction2> conjunction2List() {
+        if (conjunction2List != null) {
+            return conjunction2List;
+        }
+        List<Conjunction2> result = null;
+        var element = getItem(1);
+        for (var node : element.asCollection()) {
+            if (result == null) result = new ArrayList<>();
+            result.add(Conjunction2.of(node));
+        }
+        conjunction2List = result == null ? Collections.emptyList() : result;
         return conjunction2List;
     }
 

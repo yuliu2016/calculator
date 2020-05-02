@@ -2,6 +2,8 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.*;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -35,6 +37,16 @@ public final class DottedName extends NodeWrapper {
     }
 
     public List<DottedName2> dottedName2List() {
+        if (dottedName2List != null) {
+            return dottedName2List;
+        }
+        List<DottedName2> result = null;
+        var element = getItem(1);
+        for (var node : element.asCollection()) {
+            if (result == null) result = new ArrayList<>();
+            result.add(DottedName2.of(node));
+        }
+        dottedName2List = result == null ? Collections.emptyList() : result;
         return dottedName2List;
     }
 

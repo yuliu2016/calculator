@@ -282,6 +282,8 @@ public class ParserGenerator {
             cb.addField(field);
         } else {
             cb.addImport("java.util.List");
+            cb.addImport("java.util.ArrayList");
+            cb.addImport("java.util.Collections");
             var newClassName = className.wrapIn("List");
             var newFieldName = fieldName + "List";
 

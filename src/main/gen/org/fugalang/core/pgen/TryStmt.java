@@ -2,6 +2,8 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.*;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -142,6 +144,16 @@ public final class TryStmt extends NodeWrapper {
         }
 
         public List<TryStmt311> tryStmt311List() {
+            if (tryStmt311List != null) {
+                return tryStmt311List;
+            }
+            List<TryStmt311> result = null;
+            var element = getItem(0);
+            for (var node : element.asCollection()) {
+                if (result == null) result = new ArrayList<>();
+                result.add(TryStmt311.of(node));
+            }
+            tryStmt311List = result == null ? Collections.emptyList() : result;
             return tryStmt311List;
         }
 

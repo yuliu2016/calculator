@@ -2,6 +2,8 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.*;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -29,6 +31,16 @@ public final class FileInput extends NodeWrapper {
     }
 
     public List<FileInput1> fileInput1List() {
+        if (fileInput1List != null) {
+            return fileInput1List;
+        }
+        List<FileInput1> result = null;
+        var element = getItem(0);
+        for (var node : element.asCollection()) {
+            if (result == null) result = new ArrayList<>();
+            result.add(FileInput1.of(node));
+        }
+        fileInput1List = result == null ? Collections.emptyList() : result;
         return fileInput1List;
     }
 
