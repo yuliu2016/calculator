@@ -1,13 +1,14 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.DisjunctionRule;
-import org.fugalang.core.parser.ParseTree;
+import org.fugalang.core.parser.*;
 
 /**
  * import_stmt: 'import_name' | 'import_from'
  */
 public final class ImportStmt extends DisjunctionRule {
-    public static final String RULE_NAME = "import_stmt";
+
+    public static final ParserRule RULE =
+            new ParserRule("import_stmt", RuleType.Disjunction, true);
 
     private final ImportName importName;
     private final ImportFrom importFrom;
@@ -22,9 +23,8 @@ public final class ImportStmt extends DisjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addChoice("importName", importName);
-        addChoice("importFrom", importFrom);
+        addChoice("importName", importName());
+        addChoice("importFrom", importFrom());
     }
 
     public ImportName importName() {
@@ -44,10 +44,10 @@ public final class ImportStmt extends DisjunctionRule {
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = ImportName.parse(parseTree, level + 1);

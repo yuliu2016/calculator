@@ -1,17 +1,16 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ConjunctionRule;
-import org.fugalang.core.parser.DisjunctionRule;
-import org.fugalang.core.parser.ParseTree;
+import org.fugalang.core.parser.*;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * try_stmt: 'try' 'suite' (('except_clause' 'suite')+ ['else' 'suite'] ['finally' 'suite'] | 'finally' 'suite')
  */
 public final class TryStmt extends ConjunctionRule {
-    public static final String RULE_NAME = "try_stmt";
+
+    public static final ParserRule RULE =
+            new ParserRule("try_stmt", RuleType.Conjunction, true);
 
     private final boolean isTokenTry;
     private final Suite suite;
@@ -29,10 +28,9 @@ public final class TryStmt extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addRequired("isTokenTry", isTokenTry);
-        addRequired("suite", suite);
-        addRequired("tryStmt3", tryStmt3);
+        addRequired("isTokenTry", isTokenTry());
+        addRequired("suite", suite());
+        addRequired("tryStmt3", tryStmt3());
     }
 
     public boolean isTokenTry() {
@@ -48,10 +46,10 @@ public final class TryStmt extends ConjunctionRule {
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = parseTree.consumeTokenLiteral("try");
@@ -66,7 +64,9 @@ public final class TryStmt extends ConjunctionRule {
      * ('except_clause' 'suite')+ ['else' 'suite'] ['finally' 'suite'] | 'finally' 'suite'
      */
     public static final class TryStmt3 extends DisjunctionRule {
-        public static final String RULE_NAME = "try_stmt:3";
+
+        public static final ParserRule RULE =
+                new ParserRule("try_stmt:3", RuleType.Disjunction, false);
 
         private final TryStmt31 tryStmt31;
         private final TryStmt32 tryStmt32;
@@ -81,9 +81,8 @@ public final class TryStmt extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addChoice("tryStmt31", tryStmt31);
-            addChoice("tryStmt32", tryStmt32);
+            addChoice("tryStmt31", tryStmt31());
+            addChoice("tryStmt32", tryStmt32());
         }
 
         public TryStmt31 tryStmt31() {
@@ -103,10 +102,10 @@ public final class TryStmt extends ConjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = TryStmt31.parse(parseTree, level + 1);
@@ -121,7 +120,9 @@ public final class TryStmt extends ConjunctionRule {
      * ('except_clause' 'suite')+ ['else' 'suite'] ['finally' 'suite']
      */
     public static final class TryStmt31 extends ConjunctionRule {
-        public static final String RULE_NAME = "try_stmt:3:1";
+
+        public static final ParserRule RULE =
+                new ParserRule("try_stmt:3:1", RuleType.Conjunction, false);
 
         private final List<TryStmt311> tryStmt311List;
         private final TryStmt312 tryStmt312;
@@ -139,29 +140,36 @@ public final class TryStmt extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("tryStmt311List", tryStmt311List);
-            addOptional("tryStmt312", tryStmt312);
-            addOptional("tryStmt313", tryStmt313);
+            addRequired("tryStmt311List", tryStmt311List());
+            addOptional("tryStmt312", tryStmt312());
+            addOptional("tryStmt313", tryStmt313());
         }
 
         public List<TryStmt311> tryStmt311List() {
             return tryStmt311List;
         }
 
-        public Optional<TryStmt312> tryStmt312() {
-            return Optional.ofNullable(tryStmt312);
+        public TryStmt312 tryStmt312() {
+            return tryStmt312;
         }
 
-        public Optional<TryStmt313> tryStmt313() {
-            return Optional.ofNullable(tryStmt313);
+        public boolean hasTryStmt312() {
+            return tryStmt312() != null;
+        }
+
+        public TryStmt313 tryStmt313() {
+            return tryStmt313;
+        }
+
+        public boolean hasTryStmt313() {
+            return tryStmt313() != null;
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             parseTree.enterCollection();
@@ -186,7 +194,9 @@ public final class TryStmt extends ConjunctionRule {
      * 'except_clause' 'suite'
      */
     public static final class TryStmt311 extends ConjunctionRule {
-        public static final String RULE_NAME = "try_stmt:3:1:1";
+
+        public static final ParserRule RULE =
+                new ParserRule("try_stmt:3:1:1", RuleType.Conjunction, false);
 
         private final ExceptClause exceptClause;
         private final Suite suite;
@@ -201,9 +211,8 @@ public final class TryStmt extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("exceptClause", exceptClause);
-            addRequired("suite", suite);
+            addRequired("exceptClause", exceptClause());
+            addRequired("suite", suite());
         }
 
         public ExceptClause exceptClause() {
@@ -215,10 +224,10 @@ public final class TryStmt extends ConjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = ExceptClause.parse(parseTree, level + 1);
@@ -233,7 +242,9 @@ public final class TryStmt extends ConjunctionRule {
      * 'else' 'suite'
      */
     public static final class TryStmt312 extends ConjunctionRule {
-        public static final String RULE_NAME = "try_stmt:3:1:2";
+
+        public static final ParserRule RULE =
+                new ParserRule("try_stmt:3:1:2", RuleType.Conjunction, false);
 
         private final boolean isTokenElse;
         private final Suite suite;
@@ -248,9 +259,8 @@ public final class TryStmt extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("isTokenElse", isTokenElse);
-            addRequired("suite", suite);
+            addRequired("isTokenElse", isTokenElse());
+            addRequired("suite", suite());
         }
 
         public boolean isTokenElse() {
@@ -262,10 +272,10 @@ public final class TryStmt extends ConjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeTokenLiteral("else");
@@ -280,7 +290,9 @@ public final class TryStmt extends ConjunctionRule {
      * 'finally' 'suite'
      */
     public static final class TryStmt313 extends ConjunctionRule {
-        public static final String RULE_NAME = "try_stmt:3:1:3";
+
+        public static final ParserRule RULE =
+                new ParserRule("try_stmt:3:1:3", RuleType.Conjunction, false);
 
         private final boolean isTokenFinally;
         private final Suite suite;
@@ -295,9 +307,8 @@ public final class TryStmt extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("isTokenFinally", isTokenFinally);
-            addRequired("suite", suite);
+            addRequired("isTokenFinally", isTokenFinally());
+            addRequired("suite", suite());
         }
 
         public boolean isTokenFinally() {
@@ -309,10 +320,10 @@ public final class TryStmt extends ConjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeTokenLiteral("finally");
@@ -327,7 +338,9 @@ public final class TryStmt extends ConjunctionRule {
      * 'finally' 'suite'
      */
     public static final class TryStmt32 extends ConjunctionRule {
-        public static final String RULE_NAME = "try_stmt:3:2";
+
+        public static final ParserRule RULE =
+                new ParserRule("try_stmt:3:2", RuleType.Conjunction, false);
 
         private final boolean isTokenFinally;
         private final Suite suite;
@@ -342,9 +355,8 @@ public final class TryStmt extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("isTokenFinally", isTokenFinally);
-            addRequired("suite", suite);
+            addRequired("isTokenFinally", isTokenFinally());
+            addRequired("suite", suite());
         }
 
         public boolean isTokenFinally() {
@@ -356,10 +368,10 @@ public final class TryStmt extends ConjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeTokenLiteral("finally");

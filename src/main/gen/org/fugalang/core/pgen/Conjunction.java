@@ -1,7 +1,6 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ConjunctionRule;
-import org.fugalang.core.parser.ParseTree;
+import org.fugalang.core.parser.*;
 
 import java.util.List;
 
@@ -9,7 +8,9 @@ import java.util.List;
  * conjunction: 'inversion' ('and' 'inversion')*
  */
 public final class Conjunction extends ConjunctionRule {
-    public static final String RULE_NAME = "conjunction";
+
+    public static final ParserRule RULE =
+            new ParserRule("conjunction", RuleType.Conjunction, true);
 
     private final Inversion inversion;
     private final List<Conjunction2> conjunction2List;
@@ -24,9 +25,8 @@ public final class Conjunction extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addRequired("inversion", inversion);
-        addRequired("conjunction2List", conjunction2List);
+        addRequired("inversion", inversion());
+        addRequired("conjunction2List", conjunction2List());
     }
 
     public Inversion inversion() {
@@ -38,10 +38,10 @@ public final class Conjunction extends ConjunctionRule {
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = Inversion.parse(parseTree, level + 1);
@@ -63,7 +63,9 @@ public final class Conjunction extends ConjunctionRule {
      * 'and' 'inversion'
      */
     public static final class Conjunction2 extends ConjunctionRule {
-        public static final String RULE_NAME = "conjunction:2";
+
+        public static final ParserRule RULE =
+                new ParserRule("conjunction:2", RuleType.Conjunction, false);
 
         private final boolean isTokenAnd;
         private final Inversion inversion;
@@ -78,9 +80,8 @@ public final class Conjunction extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("isTokenAnd", isTokenAnd);
-            addRequired("inversion", inversion);
+            addRequired("isTokenAnd", isTokenAnd());
+            addRequired("inversion", inversion());
         }
 
         public boolean isTokenAnd() {
@@ -92,10 +93,10 @@ public final class Conjunction extends ConjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeTokenLiteral("and");

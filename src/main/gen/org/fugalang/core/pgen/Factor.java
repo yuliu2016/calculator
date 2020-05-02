@@ -1,14 +1,14 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ConjunctionRule;
-import org.fugalang.core.parser.DisjunctionRule;
-import org.fugalang.core.parser.ParseTree;
+import org.fugalang.core.parser.*;
 
 /**
  * factor: ('+' | '-' | '~') 'factor' | 'power'
  */
 public final class Factor extends DisjunctionRule {
-    public static final String RULE_NAME = "factor";
+
+    public static final ParserRule RULE =
+            new ParserRule("factor", RuleType.Disjunction, true);
 
     private final Factor1 factor1;
     private final Power power;
@@ -23,9 +23,8 @@ public final class Factor extends DisjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addChoice("factor1", factor1);
-        addChoice("power", power);
+        addChoice("factor1", factor1());
+        addChoice("power", power());
     }
 
     public Factor1 factor1() {
@@ -45,10 +44,10 @@ public final class Factor extends DisjunctionRule {
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = Factor1.parse(parseTree, level + 1);
@@ -62,7 +61,9 @@ public final class Factor extends DisjunctionRule {
      * ('+' | '-' | '~') 'factor'
      */
     public static final class Factor1 extends ConjunctionRule {
-        public static final String RULE_NAME = "factor:1";
+
+        public static final ParserRule RULE =
+                new ParserRule("factor:1", RuleType.Conjunction, false);
 
         private final Factor11 factor11;
         private final Factor factor;
@@ -77,9 +78,8 @@ public final class Factor extends DisjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("factor11", factor11);
-            addRequired("factor", factor);
+            addRequired("factor11", factor11());
+            addRequired("factor", factor());
         }
 
         public Factor11 factor11() {
@@ -91,10 +91,10 @@ public final class Factor extends DisjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = Factor11.parse(parseTree, level + 1);
@@ -109,7 +109,9 @@ public final class Factor extends DisjunctionRule {
      * '+' | '-' | '~'
      */
     public static final class Factor11 extends DisjunctionRule {
-        public static final String RULE_NAME = "factor:1:1";
+
+        public static final ParserRule RULE =
+                new ParserRule("factor:1:1", RuleType.Disjunction, false);
 
         private final boolean isTokenPlus;
         private final boolean isTokenMinus;
@@ -127,10 +129,9 @@ public final class Factor extends DisjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addChoice("isTokenPlus", isTokenPlus);
-            addChoice("isTokenMinus", isTokenMinus);
-            addChoice("isTokenBitNot", isTokenBitNot);
+            addChoice("isTokenPlus", isTokenPlus());
+            addChoice("isTokenMinus", isTokenMinus());
+            addChoice("isTokenBitNot", isTokenBitNot());
         }
 
         public boolean isTokenPlus() {
@@ -146,10 +147,10 @@ public final class Factor extends DisjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeTokenLiteral("+");

@@ -1,15 +1,14 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ConjunctionRule;
-import org.fugalang.core.parser.ParseTree;
-
-import java.util.Optional;
+import org.fugalang.core.parser.*;
 
 /**
  * namedexpr_expr: 'NAME' [':=' 'expr']
  */
 public final class NamedexprExpr extends ConjunctionRule {
-    public static final String RULE_NAME = "namedexpr_expr";
+
+    public static final ParserRule RULE =
+            new ParserRule("namedexpr_expr", RuleType.Conjunction, true);
 
     private final String name;
     private final NamedexprExpr2 namedexprExpr2;
@@ -24,24 +23,27 @@ public final class NamedexprExpr extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addRequired("name", name);
-        addOptional("namedexprExpr2", namedexprExpr2);
+        addRequired("name", name());
+        addOptional("namedexprExpr2", namedexprExpr2());
     }
 
     public String name() {
         return name;
     }
 
-    public Optional<NamedexprExpr2> namedexprExpr2() {
-        return Optional.ofNullable(namedexprExpr2);
+    public NamedexprExpr2 namedexprExpr2() {
+        return namedexprExpr2;
+    }
+
+    public boolean hasNamedexprExpr2() {
+        return namedexprExpr2() != null;
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = parseTree.consumeTokenType("NAME");
@@ -55,7 +57,9 @@ public final class NamedexprExpr extends ConjunctionRule {
      * ':=' 'expr'
      */
     public static final class NamedexprExpr2 extends ConjunctionRule {
-        public static final String RULE_NAME = "namedexpr_expr:2";
+
+        public static final ParserRule RULE =
+                new ParserRule("namedexpr_expr:2", RuleType.Conjunction, false);
 
         private final boolean isTokenAsgnExpr;
         private final Expr expr;
@@ -70,9 +74,8 @@ public final class NamedexprExpr extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("isTokenAsgnExpr", isTokenAsgnExpr);
-            addRequired("expr", expr);
+            addRequired("isTokenAsgnExpr", isTokenAsgnExpr());
+            addRequired("expr", expr());
         }
 
         public boolean isTokenAsgnExpr() {
@@ -84,10 +87,10 @@ public final class NamedexprExpr extends ConjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeTokenLiteral(":=");

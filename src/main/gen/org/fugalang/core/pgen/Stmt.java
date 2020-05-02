@@ -1,14 +1,14 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ConjunctionRule;
-import org.fugalang.core.parser.DisjunctionRule;
-import org.fugalang.core.parser.ParseTree;
+import org.fugalang.core.parser.*;
 
 /**
  * stmt: ('simple_stmt' | 'compound_stmt') 'NEWLINE'
  */
 public final class Stmt extends ConjunctionRule {
-    public static final String RULE_NAME = "stmt";
+
+    public static final ParserRule RULE =
+            new ParserRule("stmt", RuleType.Conjunction, true);
 
     private final Stmt1 stmt1;
     private final Object newline;
@@ -23,9 +23,8 @@ public final class Stmt extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addRequired("stmt1", stmt1);
-        addRequired("newline", newline);
+        addRequired("stmt1", stmt1());
+        addRequired("newline", newline());
     }
 
     public Stmt1 stmt1() {
@@ -37,10 +36,10 @@ public final class Stmt extends ConjunctionRule {
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = Stmt1.parse(parseTree, level + 1);
@@ -54,7 +53,9 @@ public final class Stmt extends ConjunctionRule {
      * 'simple_stmt' | 'compound_stmt'
      */
     public static final class Stmt1 extends DisjunctionRule {
-        public static final String RULE_NAME = "stmt:1";
+
+        public static final ParserRule RULE =
+                new ParserRule("stmt:1", RuleType.Disjunction, false);
 
         private final SimpleStmt simpleStmt;
         private final CompoundStmt compoundStmt;
@@ -69,9 +70,8 @@ public final class Stmt extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addChoice("simpleStmt", simpleStmt);
-            addChoice("compoundStmt", compoundStmt);
+            addChoice("simpleStmt", simpleStmt());
+            addChoice("compoundStmt", compoundStmt());
         }
 
         public SimpleStmt simpleStmt() {
@@ -91,10 +91,10 @@ public final class Stmt extends ConjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = SimpleStmt.parse(parseTree, level + 1);

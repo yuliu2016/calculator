@@ -1,14 +1,14 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ConjunctionRule;
-import org.fugalang.core.parser.DisjunctionRule;
-import org.fugalang.core.parser.ParseTree;
+import org.fugalang.core.parser.*;
 
 /**
  * single_input: 'NEWLINE' | 'simple_stmt' | 'compound_stmt' 'NEWLINE'
  */
 public final class SingleInput extends DisjunctionRule {
-    public static final String RULE_NAME = "single_input";
+
+    public static final ParserRule RULE =
+            new ParserRule("single_input", RuleType.Disjunction, true);
 
     private final Object newline;
     private final SimpleStmt simpleStmt;
@@ -26,10 +26,9 @@ public final class SingleInput extends DisjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addChoice("newline", newline);
-        addChoice("simpleStmt", simpleStmt);
-        addChoice("singleInput3", singleInput3);
+        addChoice("newline", newline());
+        addChoice("simpleStmt", simpleStmt());
+        addChoice("singleInput3", singleInput3());
     }
 
     public Object newline() {
@@ -57,10 +56,10 @@ public final class SingleInput extends DisjunctionRule {
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = parseTree.consumeTokenType("NEWLINE");
@@ -75,7 +74,9 @@ public final class SingleInput extends DisjunctionRule {
      * 'compound_stmt' 'NEWLINE'
      */
     public static final class SingleInput3 extends ConjunctionRule {
-        public static final String RULE_NAME = "single_input:3";
+
+        public static final ParserRule RULE =
+                new ParserRule("single_input:3", RuleType.Conjunction, false);
 
         private final CompoundStmt compoundStmt;
         private final Object newline;
@@ -90,9 +91,8 @@ public final class SingleInput extends DisjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("compoundStmt", compoundStmt);
-            addRequired("newline", newline);
+            addRequired("compoundStmt", compoundStmt());
+            addRequired("newline", newline());
         }
 
         public CompoundStmt compoundStmt() {
@@ -104,10 +104,10 @@ public final class SingleInput extends DisjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = CompoundStmt.parse(parseTree, level + 1);

@@ -1,8 +1,6 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ConjunctionRule;
-import org.fugalang.core.parser.DisjunctionRule;
-import org.fugalang.core.parser.ParseTree;
+import org.fugalang.core.parser.*;
 
 import java.util.List;
 
@@ -10,7 +8,9 @@ import java.util.List;
  * block_suite: '{' 'simple_stmt' '}' | '{' 'NEWLINE' 'stmt'+ '}'
  */
 public final class BlockSuite extends DisjunctionRule {
-    public static final String RULE_NAME = "block_suite";
+
+    public static final ParserRule RULE =
+            new ParserRule("block_suite", RuleType.Disjunction, true);
 
     private final BlockSuite1 blockSuite1;
     private final BlockSuite2 blockSuite2;
@@ -25,9 +25,8 @@ public final class BlockSuite extends DisjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addChoice("blockSuite1", blockSuite1);
-        addChoice("blockSuite2", blockSuite2);
+        addChoice("blockSuite1", blockSuite1());
+        addChoice("blockSuite2", blockSuite2());
     }
 
     public BlockSuite1 blockSuite1() {
@@ -47,10 +46,10 @@ public final class BlockSuite extends DisjunctionRule {
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = BlockSuite1.parse(parseTree, level + 1);
@@ -64,7 +63,9 @@ public final class BlockSuite extends DisjunctionRule {
      * '{' 'simple_stmt' '}'
      */
     public static final class BlockSuite1 extends ConjunctionRule {
-        public static final String RULE_NAME = "block_suite:1";
+
+        public static final ParserRule RULE =
+                new ParserRule("block_suite:1", RuleType.Conjunction, false);
 
         private final boolean isTokenLbrace;
         private final SimpleStmt simpleStmt;
@@ -82,10 +83,9 @@ public final class BlockSuite extends DisjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("isTokenLbrace", isTokenLbrace);
-            addRequired("simpleStmt", simpleStmt);
-            addRequired("isTokenRbrace", isTokenRbrace);
+            addRequired("isTokenLbrace", isTokenLbrace());
+            addRequired("simpleStmt", simpleStmt());
+            addRequired("isTokenRbrace", isTokenRbrace());
         }
 
         public boolean isTokenLbrace() {
@@ -101,10 +101,10 @@ public final class BlockSuite extends DisjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeTokenLiteral("{");
@@ -120,7 +120,9 @@ public final class BlockSuite extends DisjunctionRule {
      * '{' 'NEWLINE' 'stmt'+ '}'
      */
     public static final class BlockSuite2 extends ConjunctionRule {
-        public static final String RULE_NAME = "block_suite:2";
+
+        public static final ParserRule RULE =
+                new ParserRule("block_suite:2", RuleType.Conjunction, false);
 
         private final boolean isTokenLbrace;
         private final Object newline;
@@ -141,11 +143,10 @@ public final class BlockSuite extends DisjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("isTokenLbrace", isTokenLbrace);
-            addRequired("newline", newline);
-            addRequired("stmtList", stmtList);
-            addRequired("isTokenRbrace", isTokenRbrace);
+            addRequired("isTokenLbrace", isTokenLbrace());
+            addRequired("newline", newline());
+            addRequired("stmtList", stmtList());
+            addRequired("isTokenRbrace", isTokenRbrace());
         }
 
         public boolean isTokenLbrace() {
@@ -165,10 +166,10 @@ public final class BlockSuite extends DisjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeTokenLiteral("{");

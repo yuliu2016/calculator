@@ -1,8 +1,6 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ConjunctionRule;
-import org.fugalang.core.parser.DisjunctionRule;
-import org.fugalang.core.parser.ParseTree;
+import org.fugalang.core.parser.*;
 
 import java.util.List;
 
@@ -10,7 +8,9 @@ import java.util.List;
  * term: 'factor' (('*' | '@' | '/' | '%' | '//') 'factor')*
  */
 public final class Term extends ConjunctionRule {
-    public static final String RULE_NAME = "term";
+
+    public static final ParserRule RULE =
+            new ParserRule("term", RuleType.Conjunction, true);
 
     private final Factor factor;
     private final List<Term2> term2List;
@@ -25,9 +25,8 @@ public final class Term extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addRequired("factor", factor);
-        addRequired("term2List", term2List);
+        addRequired("factor", factor());
+        addRequired("term2List", term2List());
     }
 
     public Factor factor() {
@@ -39,10 +38,10 @@ public final class Term extends ConjunctionRule {
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = Factor.parse(parseTree, level + 1);
@@ -64,7 +63,9 @@ public final class Term extends ConjunctionRule {
      * ('*' | '@' | '/' | '%' | '//') 'factor'
      */
     public static final class Term2 extends ConjunctionRule {
-        public static final String RULE_NAME = "term:2";
+
+        public static final ParserRule RULE =
+                new ParserRule("term:2", RuleType.Conjunction, false);
 
         private final Term21 term21;
         private final Factor factor;
@@ -79,9 +80,8 @@ public final class Term extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("term21", term21);
-            addRequired("factor", factor);
+            addRequired("term21", term21());
+            addRequired("factor", factor());
         }
 
         public Term21 term21() {
@@ -93,10 +93,10 @@ public final class Term extends ConjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = Term21.parse(parseTree, level + 1);
@@ -111,7 +111,9 @@ public final class Term extends ConjunctionRule {
      * '*' | '@' | '/' | '%' | '//'
      */
     public static final class Term21 extends DisjunctionRule {
-        public static final String RULE_NAME = "term:2:1";
+
+        public static final ParserRule RULE =
+                new ParserRule("term:2:1", RuleType.Disjunction, false);
 
         private final boolean isTokenTimes;
         private final boolean isTokenMatrixTimes;
@@ -135,12 +137,11 @@ public final class Term extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addChoice("isTokenTimes", isTokenTimes);
-            addChoice("isTokenMatrixTimes", isTokenMatrixTimes);
-            addChoice("isTokenDiv", isTokenDiv);
-            addChoice("isTokenModulus", isTokenModulus);
-            addChoice("isTokenFloorDiv", isTokenFloorDiv);
+            addChoice("isTokenTimes", isTokenTimes());
+            addChoice("isTokenMatrixTimes", isTokenMatrixTimes());
+            addChoice("isTokenDiv", isTokenDiv());
+            addChoice("isTokenModulus", isTokenModulus());
+            addChoice("isTokenFloorDiv", isTokenFloorDiv());
         }
 
         public boolean isTokenTimes() {
@@ -164,10 +165,10 @@ public final class Term extends ConjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeTokenLiteral("*");

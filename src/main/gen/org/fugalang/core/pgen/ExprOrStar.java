@@ -1,13 +1,14 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.DisjunctionRule;
-import org.fugalang.core.parser.ParseTree;
+import org.fugalang.core.parser.*;
 
 /**
  * expr_or_star: 'expr' | 'star_expr'
  */
 public final class ExprOrStar extends DisjunctionRule {
-    public static final String RULE_NAME = "expr_or_star";
+
+    public static final ParserRule RULE =
+            new ParserRule("expr_or_star", RuleType.Disjunction, true);
 
     private final Expr expr;
     private final StarExpr starExpr;
@@ -22,9 +23,8 @@ public final class ExprOrStar extends DisjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addChoice("expr", expr);
-        addChoice("starExpr", starExpr);
+        addChoice("expr", expr());
+        addChoice("starExpr", starExpr());
     }
 
     public Expr expr() {
@@ -44,10 +44,10 @@ public final class ExprOrStar extends DisjunctionRule {
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = Expr.parse(parseTree, level + 1);

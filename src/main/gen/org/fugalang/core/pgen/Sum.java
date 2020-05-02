@@ -1,8 +1,6 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ConjunctionRule;
-import org.fugalang.core.parser.DisjunctionRule;
-import org.fugalang.core.parser.ParseTree;
+import org.fugalang.core.parser.*;
 
 import java.util.List;
 
@@ -10,7 +8,9 @@ import java.util.List;
  * sum: 'term' (('+' | '-') 'term')*
  */
 public final class Sum extends ConjunctionRule {
-    public static final String RULE_NAME = "sum";
+
+    public static final ParserRule RULE =
+            new ParserRule("sum", RuleType.Conjunction, true);
 
     private final Term term;
     private final List<Sum2> sum2List;
@@ -25,9 +25,8 @@ public final class Sum extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addRequired("term", term);
-        addRequired("sum2List", sum2List);
+        addRequired("term", term());
+        addRequired("sum2List", sum2List());
     }
 
     public Term term() {
@@ -39,10 +38,10 @@ public final class Sum extends ConjunctionRule {
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = Term.parse(parseTree, level + 1);
@@ -64,7 +63,9 @@ public final class Sum extends ConjunctionRule {
      * ('+' | '-') 'term'
      */
     public static final class Sum2 extends ConjunctionRule {
-        public static final String RULE_NAME = "sum:2";
+
+        public static final ParserRule RULE =
+                new ParserRule("sum:2", RuleType.Conjunction, false);
 
         private final Sum21 sum21;
         private final Term term;
@@ -79,9 +80,8 @@ public final class Sum extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("sum21", sum21);
-            addRequired("term", term);
+            addRequired("sum21", sum21());
+            addRequired("term", term());
         }
 
         public Sum21 sum21() {
@@ -93,10 +93,10 @@ public final class Sum extends ConjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = Sum21.parse(parseTree, level + 1);
@@ -111,7 +111,9 @@ public final class Sum extends ConjunctionRule {
      * '+' | '-'
      */
     public static final class Sum21 extends DisjunctionRule {
-        public static final String RULE_NAME = "sum:2:1";
+
+        public static final ParserRule RULE =
+                new ParserRule("sum:2:1", RuleType.Disjunction, false);
 
         private final boolean isTokenPlus;
         private final boolean isTokenMinus;
@@ -126,9 +128,8 @@ public final class Sum extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addChoice("isTokenPlus", isTokenPlus);
-            addChoice("isTokenMinus", isTokenMinus);
+            addChoice("isTokenPlus", isTokenPlus());
+            addChoice("isTokenMinus", isTokenMinus());
         }
 
         public boolean isTokenPlus() {
@@ -140,10 +141,10 @@ public final class Sum extends ConjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeTokenLiteral("+");

@@ -1,7 +1,6 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ConjunctionRule;
-import org.fugalang.core.parser.ParseTree;
+import org.fugalang.core.parser.*;
 
 import java.util.List;
 
@@ -9,7 +8,9 @@ import java.util.List;
  * with_stmt: 'with' 'with_item' (',' 'with_item')* 'suite'
  */
 public final class WithStmt extends ConjunctionRule {
-    public static final String RULE_NAME = "with_stmt";
+
+    public static final ParserRule RULE =
+            new ParserRule("with_stmt", RuleType.Conjunction, true);
 
     private final boolean isTokenWith;
     private final WithItem withItem;
@@ -30,11 +31,10 @@ public final class WithStmt extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addRequired("isTokenWith", isTokenWith);
-        addRequired("withItem", withItem);
-        addRequired("withStmt3List", withStmt3List);
-        addRequired("suite", suite);
+        addRequired("isTokenWith", isTokenWith());
+        addRequired("withItem", withItem());
+        addRequired("withStmt3List", withStmt3List());
+        addRequired("suite", suite());
     }
 
     public boolean isTokenWith() {
@@ -54,10 +54,10 @@ public final class WithStmt extends ConjunctionRule {
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = parseTree.consumeTokenLiteral("with");
@@ -81,7 +81,9 @@ public final class WithStmt extends ConjunctionRule {
      * ',' 'with_item'
      */
     public static final class WithStmt3 extends ConjunctionRule {
-        public static final String RULE_NAME = "with_stmt:3";
+
+        public static final ParserRule RULE =
+                new ParserRule("with_stmt:3", RuleType.Conjunction, false);
 
         private final boolean isTokenComma;
         private final WithItem withItem;
@@ -96,9 +98,8 @@ public final class WithStmt extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("isTokenComma", isTokenComma);
-            addRequired("withItem", withItem);
+            addRequired("isTokenComma", isTokenComma());
+            addRequired("withItem", withItem());
         }
 
         public boolean isTokenComma() {
@@ -110,10 +111,10 @@ public final class WithStmt extends ConjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeTokenLiteral(",");

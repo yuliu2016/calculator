@@ -1,11 +1,14 @@
 package org.fugalang.core.grammar.pgen;
 
-import org.fugalang.core.parser.ParseTree;
-import org.fugalang.core.parser.ConjunctionRule;
+import org.fugalang.core.parser.*;
 
-// single_rule: 'TOK' ':' 'or_rule' 'NEWLINE'
+/**
+ * single_rule: 'TOK' ':' 'or_rule' 'NEWLINE'
+ */
 public final class SingleRule extends ConjunctionRule {
-    public static final String RULE_NAME = "single_rule";
+
+    public static final ParserRule RULE =
+            new ParserRule("single_rule", RuleType.Conjunction, true);
 
     private final String token;
     private final boolean isTokenColon;
@@ -26,11 +29,10 @@ public final class SingleRule extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addRequired("token", token);
-        addRequired("isTokenColon", isTokenColon);
-        addRequired("orRule", orRule);
-        addRequired("isTokenNewline", isTokenNewline);
+        addRequired("token", token());
+        addRequired("isTokenColon", isTokenColon());
+        addRequired("orRule", orRule());
+        addRequired("isTokenNewline", isTokenNewline());
     }
 
     public String token() {
@@ -50,10 +52,10 @@ public final class SingleRule extends ConjunctionRule {
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = parseTree.consumeTokenType("TOK");

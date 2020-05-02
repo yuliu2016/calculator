@@ -1,7 +1,6 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ConjunctionRule;
-import org.fugalang.core.parser.ParseTree;
+import org.fugalang.core.parser.*;
 
 import java.util.List;
 
@@ -9,7 +8,9 @@ import java.util.List;
  * exprlist_star: 'expr_or_star' (',' 'expr_or_star')* [',']
  */
 public final class ExprlistStar extends ConjunctionRule {
-    public static final String RULE_NAME = "exprlist_star";
+
+    public static final ParserRule RULE =
+            new ParserRule("exprlist_star", RuleType.Conjunction, true);
 
     private final ExprOrStar exprOrStar;
     private final List<ExprlistStar2> exprlistStar2List;
@@ -27,10 +28,9 @@ public final class ExprlistStar extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addRequired("exprOrStar", exprOrStar);
-        addRequired("exprlistStar2List", exprlistStar2List);
-        addRequired("isTokenComma", isTokenComma);
+        addRequired("exprOrStar", exprOrStar());
+        addRequired("exprlistStar2List", exprlistStar2List());
+        addRequired("isTokenComma", isTokenComma());
     }
 
     public ExprOrStar exprOrStar() {
@@ -46,10 +46,10 @@ public final class ExprlistStar extends ConjunctionRule {
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = ExprOrStar.parse(parseTree, level + 1);
@@ -72,7 +72,9 @@ public final class ExprlistStar extends ConjunctionRule {
      * ',' 'expr_or_star'
      */
     public static final class ExprlistStar2 extends ConjunctionRule {
-        public static final String RULE_NAME = "exprlist_star:2";
+
+        public static final ParserRule RULE =
+                new ParserRule("exprlist_star:2", RuleType.Conjunction, false);
 
         private final boolean isTokenComma;
         private final ExprOrStar exprOrStar;
@@ -87,9 +89,8 @@ public final class ExprlistStar extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("isTokenComma", isTokenComma);
-            addRequired("exprOrStar", exprOrStar);
+            addRequired("isTokenComma", isTokenComma());
+            addRequired("exprOrStar", exprOrStar());
         }
 
         public boolean isTokenComma() {
@@ -101,10 +102,10 @@ public final class ExprlistStar extends ConjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeTokenLiteral(",");

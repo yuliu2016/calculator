@@ -2,6 +2,7 @@ package org.fugalang.core.grammar.classbuilder;
 
 import org.fugalang.core.grammar.gen.ParserStringUtil;
 import org.fugalang.core.grammar.util.FirstAndMore;
+import org.fugalang.core.parser.RuleType;
 
 import java.util.*;
 
@@ -28,7 +29,7 @@ public class ClassBuilder {
     }
 
     private void resolvePrelude() {
-        addImport("org.fugalang.core.parser.ParseTree");
+        addImport("org.fugalang.core.parser.*");
     }
 
     public String getClassName() {
@@ -129,12 +130,17 @@ public class ClassBuilder {
             throw new IllegalStateException("No Rule Type");
         }
 
-        sb.append(" {\n");
+        sb.append(" {\n\n");
 
         // rule name constant
-        sb.append("    public static final String RULE_NAME = \"")
+        sb.append("    public static final ParserRule RULE =\n")
+                .append("            new ParserRule(\"")
                 .append(printName)
-                .append("\";\n\n");
+                .append("\", RuleType.")
+                .append(ruleType.name())
+                .append(", ")
+                .append(isStaticInnerClass ? "false": "true")
+                .append(");\n\n");
 
         for (ClassField field : fields) {
             sb.append("    ");
@@ -147,7 +153,7 @@ public class ClassBuilder {
         for (ClassField field : fields) {
             sb.append("\n");
             sb.append(field.asGetter());
-            if (ruleType == RuleType.Disjunction) {
+            if (ruleType == RuleType.Disjunction || field.isOptionalSingle()) {
                 sb.append(field.asNullCheck());
             }
         }
@@ -189,12 +195,6 @@ public class ClassBuilder {
         sb.append("    }\n\n");
         sb.append("    @Override\n    protected void buildRule() {\n");
 
-        if (isStaticInnerClass) {
-            sb.append("        setImpliedName(RULE_NAME);\n");
-        } else {
-            sb.append("        setExplicitName(RULE_NAME);\n");
-        }
-
         for (ClassField field : fields) {
             sb.append("        ");
             sb.append(field.asRuleStmt(ruleType));
@@ -208,8 +208,8 @@ public class ClassBuilder {
         sb.append("    public static boolean parse(ParseTree parseTree, int level) {\n");
 
         var mb = new StringBuilder();
-        mb.append("if (!ParseTree.recursionGuard(level, RULE_NAME)) {\n    return false;\n}\n");
-        mb.append("var marker = parseTree.enter(level, RULE_NAME);\n");
+        mb.append("if (!ParserUtil.recursionGuard(level, RULE)) {\n    return false;\n}\n");
+        mb.append("var marker = parseTree.enter(level, RULE);\n");
         mb.append("boolean result;\n\n");
 
         var first = true;
@@ -251,10 +251,6 @@ public class ClassBuilder {
             fieldNameCounter.put(fieldName, 0);
             fields.add(classField);
         }
-
-        if (classField.isOptionalSingle()) {
-            addImport("java.util.Optional");
-        }
     }
 
     /**
@@ -272,13 +268,6 @@ public class ClassBuilder {
     }
 
     public void setRuleType(RuleType ruleType) {
-        // remove extra imports if already set
-        if (this.ruleType != null) {
-            for (RuleType value : RuleType.values()) {
-                classImports.remove(value.getSuperClass());
-            }
-        }
-        classImports.add(ruleType.getSuperClass());
         this.ruleType = ruleType;
     }
 }

@@ -1,8 +1,6 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ConjunctionRule;
-import org.fugalang.core.parser.DisjunctionRule;
-import org.fugalang.core.parser.ParseTree;
+import org.fugalang.core.parser.*;
 
 import java.util.List;
 
@@ -10,7 +8,9 @@ import java.util.List;
  * shift_expr: 'sum' (('<<' | '>>') 'sum')*
  */
 public final class ShiftExpr extends ConjunctionRule {
-    public static final String RULE_NAME = "shift_expr";
+
+    public static final ParserRule RULE =
+            new ParserRule("shift_expr", RuleType.Conjunction, true);
 
     private final Sum sum;
     private final List<ShiftExpr2> shiftExpr2List;
@@ -25,9 +25,8 @@ public final class ShiftExpr extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addRequired("sum", sum);
-        addRequired("shiftExpr2List", shiftExpr2List);
+        addRequired("sum", sum());
+        addRequired("shiftExpr2List", shiftExpr2List());
     }
 
     public Sum sum() {
@@ -39,10 +38,10 @@ public final class ShiftExpr extends ConjunctionRule {
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = Sum.parse(parseTree, level + 1);
@@ -64,7 +63,9 @@ public final class ShiftExpr extends ConjunctionRule {
      * ('<<' | '>>') 'sum'
      */
     public static final class ShiftExpr2 extends ConjunctionRule {
-        public static final String RULE_NAME = "shift_expr:2";
+
+        public static final ParserRule RULE =
+                new ParserRule("shift_expr:2", RuleType.Conjunction, false);
 
         private final ShiftExpr21 shiftExpr21;
         private final Sum sum;
@@ -79,9 +80,8 @@ public final class ShiftExpr extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("shiftExpr21", shiftExpr21);
-            addRequired("sum", sum);
+            addRequired("shiftExpr21", shiftExpr21());
+            addRequired("sum", sum());
         }
 
         public ShiftExpr21 shiftExpr21() {
@@ -93,10 +93,10 @@ public final class ShiftExpr extends ConjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = ShiftExpr21.parse(parseTree, level + 1);
@@ -111,7 +111,9 @@ public final class ShiftExpr extends ConjunctionRule {
      * '<<' | '>>'
      */
     public static final class ShiftExpr21 extends DisjunctionRule {
-        public static final String RULE_NAME = "shift_expr:2:1";
+
+        public static final ParserRule RULE =
+                new ParserRule("shift_expr:2:1", RuleType.Disjunction, false);
 
         private final boolean isTokenLshift;
         private final boolean isTokenRshift;
@@ -126,9 +128,8 @@ public final class ShiftExpr extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addChoice("isTokenLshift", isTokenLshift);
-            addChoice("isTokenRshift", isTokenRshift);
+            addChoice("isTokenLshift", isTokenLshift());
+            addChoice("isTokenRshift", isTokenRshift());
         }
 
         public boolean isTokenLshift() {
@@ -140,10 +141,10 @@ public final class ShiftExpr extends ConjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeTokenLiteral("<<");

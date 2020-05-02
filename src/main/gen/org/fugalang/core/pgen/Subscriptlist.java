@@ -1,7 +1,6 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ConjunctionRule;
-import org.fugalang.core.parser.ParseTree;
+import org.fugalang.core.parser.*;
 
 import java.util.List;
 
@@ -9,7 +8,9 @@ import java.util.List;
  * subscriptlist: 'subscript' (',' 'subscript')* [',']
  */
 public final class Subscriptlist extends ConjunctionRule {
-    public static final String RULE_NAME = "subscriptlist";
+
+    public static final ParserRule RULE =
+            new ParserRule("subscriptlist", RuleType.Conjunction, true);
 
     private final Subscript subscript;
     private final List<Subscriptlist2> subscriptlist2List;
@@ -27,10 +28,9 @@ public final class Subscriptlist extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addRequired("subscript", subscript);
-        addRequired("subscriptlist2List", subscriptlist2List);
-        addRequired("isTokenComma", isTokenComma);
+        addRequired("subscript", subscript());
+        addRequired("subscriptlist2List", subscriptlist2List());
+        addRequired("isTokenComma", isTokenComma());
     }
 
     public Subscript subscript() {
@@ -46,10 +46,10 @@ public final class Subscriptlist extends ConjunctionRule {
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = Subscript.parse(parseTree, level + 1);
@@ -72,7 +72,9 @@ public final class Subscriptlist extends ConjunctionRule {
      * ',' 'subscript'
      */
     public static final class Subscriptlist2 extends ConjunctionRule {
-        public static final String RULE_NAME = "subscriptlist:2";
+
+        public static final ParserRule RULE =
+                new ParserRule("subscriptlist:2", RuleType.Conjunction, false);
 
         private final boolean isTokenComma;
         private final Subscript subscript;
@@ -87,9 +89,8 @@ public final class Subscriptlist extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("isTokenComma", isTokenComma);
-            addRequired("subscript", subscript);
+            addRequired("isTokenComma", isTokenComma());
+            addRequired("subscript", subscript());
         }
 
         public boolean isTokenComma() {
@@ -101,10 +102,10 @@ public final class Subscriptlist extends ConjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeTokenLiteral(",");

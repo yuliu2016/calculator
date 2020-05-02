@@ -1,16 +1,14 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ConjunctionRule;
-import org.fugalang.core.parser.DisjunctionRule;
-import org.fugalang.core.parser.ParseTree;
-
-import java.util.Optional;
+import org.fugalang.core.parser.*;
 
 /**
  * trailer: '(' ['arglist'] ')' | '[' 'subscriptlist' ']' | '.' 'NAME' | 'block_suite'
  */
 public final class Trailer extends DisjunctionRule {
-    public static final String RULE_NAME = "trailer";
+
+    public static final ParserRule RULE =
+            new ParserRule("trailer", RuleType.Disjunction, true);
 
     private final Trailer1 trailer1;
     private final Trailer2 trailer2;
@@ -31,11 +29,10 @@ public final class Trailer extends DisjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addChoice("trailer1", trailer1);
-        addChoice("trailer2", trailer2);
-        addChoice("trailer3", trailer3);
-        addChoice("blockSuite", blockSuite);
+        addChoice("trailer1", trailer1());
+        addChoice("trailer2", trailer2());
+        addChoice("trailer3", trailer3());
+        addChoice("blockSuite", blockSuite());
     }
 
     public Trailer1 trailer1() {
@@ -71,10 +68,10 @@ public final class Trailer extends DisjunctionRule {
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = Trailer1.parse(parseTree, level + 1);
@@ -90,7 +87,9 @@ public final class Trailer extends DisjunctionRule {
      * '(' ['arglist'] ')'
      */
     public static final class Trailer1 extends ConjunctionRule {
-        public static final String RULE_NAME = "trailer:1";
+
+        public static final ParserRule RULE =
+                new ParserRule("trailer:1", RuleType.Conjunction, false);
 
         private final boolean isTokenLpar;
         private final Arglist arglist;
@@ -108,18 +107,21 @@ public final class Trailer extends DisjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("isTokenLpar", isTokenLpar);
-            addOptional("arglist", arglist);
-            addRequired("isTokenRpar", isTokenRpar);
+            addRequired("isTokenLpar", isTokenLpar());
+            addOptional("arglist", arglist());
+            addRequired("isTokenRpar", isTokenRpar());
         }
 
         public boolean isTokenLpar() {
             return isTokenLpar;
         }
 
-        public Optional<Arglist> arglist() {
-            return Optional.ofNullable(arglist);
+        public Arglist arglist() {
+            return arglist;
+        }
+
+        public boolean hasArglist() {
+            return arglist() != null;
         }
 
         public boolean isTokenRpar() {
@@ -127,10 +129,10 @@ public final class Trailer extends DisjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeTokenLiteral("(");
@@ -146,7 +148,9 @@ public final class Trailer extends DisjunctionRule {
      * '[' 'subscriptlist' ']'
      */
     public static final class Trailer2 extends ConjunctionRule {
-        public static final String RULE_NAME = "trailer:2";
+
+        public static final ParserRule RULE =
+                new ParserRule("trailer:2", RuleType.Conjunction, false);
 
         private final boolean isTokenLsqb;
         private final Subscriptlist subscriptlist;
@@ -164,10 +168,9 @@ public final class Trailer extends DisjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("isTokenLsqb", isTokenLsqb);
-            addRequired("subscriptlist", subscriptlist);
-            addRequired("isTokenRsqb", isTokenRsqb);
+            addRequired("isTokenLsqb", isTokenLsqb());
+            addRequired("subscriptlist", subscriptlist());
+            addRequired("isTokenRsqb", isTokenRsqb());
         }
 
         public boolean isTokenLsqb() {
@@ -183,10 +186,10 @@ public final class Trailer extends DisjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeTokenLiteral("[");
@@ -202,7 +205,9 @@ public final class Trailer extends DisjunctionRule {
      * '.' 'NAME'
      */
     public static final class Trailer3 extends ConjunctionRule {
-        public static final String RULE_NAME = "trailer:3";
+
+        public static final ParserRule RULE =
+                new ParserRule("trailer:3", RuleType.Conjunction, false);
 
         private final boolean isTokenDot;
         private final String name;
@@ -217,9 +222,8 @@ public final class Trailer extends DisjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("isTokenDot", isTokenDot);
-            addRequired("name", name);
+            addRequired("isTokenDot", isTokenDot());
+            addRequired("name", name());
         }
 
         public boolean isTokenDot() {
@@ -231,10 +235,10 @@ public final class Trailer extends DisjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeTokenLiteral(".");

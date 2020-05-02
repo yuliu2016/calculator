@@ -1,13 +1,14 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.DisjunctionRule;
-import org.fugalang.core.parser.ParseTree;
+import org.fugalang.core.parser.*;
 
 /**
  * small_stmt: 'expr_stmt' | 'del_stmt' | 'pass_stmt' | 'flow_stmt' | 'import_stmt' | 'assert_stmt'
  */
 public final class SmallStmt extends DisjunctionRule {
-    public static final String RULE_NAME = "small_stmt";
+
+    public static final ParserRule RULE =
+            new ParserRule("small_stmt", RuleType.Disjunction, true);
 
     private final ExprStmt exprStmt;
     private final DelStmt delStmt;
@@ -34,13 +35,12 @@ public final class SmallStmt extends DisjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addChoice("exprStmt", exprStmt);
-        addChoice("delStmt", delStmt);
-        addChoice("passStmt", passStmt);
-        addChoice("flowStmt", flowStmt);
-        addChoice("importStmt", importStmt);
-        addChoice("assertStmt", assertStmt);
+        addChoice("exprStmt", exprStmt());
+        addChoice("delStmt", delStmt());
+        addChoice("passStmt", passStmt());
+        addChoice("flowStmt", flowStmt());
+        addChoice("importStmt", importStmt());
+        addChoice("assertStmt", assertStmt());
     }
 
     public ExprStmt exprStmt() {
@@ -92,10 +92,10 @@ public final class SmallStmt extends DisjunctionRule {
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = ExprStmt.parse(parseTree, level + 1);

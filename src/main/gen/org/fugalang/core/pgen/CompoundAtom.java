@@ -1,16 +1,14 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ConjunctionRule;
-import org.fugalang.core.parser.DisjunctionRule;
-import org.fugalang.core.parser.ParseTree;
-
-import java.util.Optional;
+import org.fugalang.core.parser.*;
 
 /**
  * compound_atom: '(' ['exprlist_comp'] ')' | '[' ['exprlist_comp_sub'] ']' | '{' ['dictorsetmaker'] '}'
  */
 public final class CompoundAtom extends DisjunctionRule {
-    public static final String RULE_NAME = "compound_atom";
+
+    public static final ParserRule RULE =
+            new ParserRule("compound_atom", RuleType.Disjunction, true);
 
     private final CompoundAtom1 compoundAtom1;
     private final CompoundAtom2 compoundAtom2;
@@ -28,10 +26,9 @@ public final class CompoundAtom extends DisjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addChoice("compoundAtom1", compoundAtom1);
-        addChoice("compoundAtom2", compoundAtom2);
-        addChoice("compoundAtom3", compoundAtom3);
+        addChoice("compoundAtom1", compoundAtom1());
+        addChoice("compoundAtom2", compoundAtom2());
+        addChoice("compoundAtom3", compoundAtom3());
     }
 
     public CompoundAtom1 compoundAtom1() {
@@ -59,10 +56,10 @@ public final class CompoundAtom extends DisjunctionRule {
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = CompoundAtom1.parse(parseTree, level + 1);
@@ -77,7 +74,9 @@ public final class CompoundAtom extends DisjunctionRule {
      * '(' ['exprlist_comp'] ')'
      */
     public static final class CompoundAtom1 extends ConjunctionRule {
-        public static final String RULE_NAME = "compound_atom:1";
+
+        public static final ParserRule RULE =
+                new ParserRule("compound_atom:1", RuleType.Conjunction, false);
 
         private final boolean isTokenLpar;
         private final ExprlistComp exprlistComp;
@@ -95,18 +94,21 @@ public final class CompoundAtom extends DisjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("isTokenLpar", isTokenLpar);
-            addOptional("exprlistComp", exprlistComp);
-            addRequired("isTokenRpar", isTokenRpar);
+            addRequired("isTokenLpar", isTokenLpar());
+            addOptional("exprlistComp", exprlistComp());
+            addRequired("isTokenRpar", isTokenRpar());
         }
 
         public boolean isTokenLpar() {
             return isTokenLpar;
         }
 
-        public Optional<ExprlistComp> exprlistComp() {
-            return Optional.ofNullable(exprlistComp);
+        public ExprlistComp exprlistComp() {
+            return exprlistComp;
+        }
+
+        public boolean hasExprlistComp() {
+            return exprlistComp() != null;
         }
 
         public boolean isTokenRpar() {
@@ -114,10 +116,10 @@ public final class CompoundAtom extends DisjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeTokenLiteral("(");
@@ -133,7 +135,9 @@ public final class CompoundAtom extends DisjunctionRule {
      * '[' ['exprlist_comp_sub'] ']'
      */
     public static final class CompoundAtom2 extends ConjunctionRule {
-        public static final String RULE_NAME = "compound_atom:2";
+
+        public static final ParserRule RULE =
+                new ParserRule("compound_atom:2", RuleType.Conjunction, false);
 
         private final boolean isTokenLsqb;
         private final ExprlistCompSub exprlistCompSub;
@@ -151,18 +155,21 @@ public final class CompoundAtom extends DisjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("isTokenLsqb", isTokenLsqb);
-            addOptional("exprlistCompSub", exprlistCompSub);
-            addRequired("isTokenRsqb", isTokenRsqb);
+            addRequired("isTokenLsqb", isTokenLsqb());
+            addOptional("exprlistCompSub", exprlistCompSub());
+            addRequired("isTokenRsqb", isTokenRsqb());
         }
 
         public boolean isTokenLsqb() {
             return isTokenLsqb;
         }
 
-        public Optional<ExprlistCompSub> exprlistCompSub() {
-            return Optional.ofNullable(exprlistCompSub);
+        public ExprlistCompSub exprlistCompSub() {
+            return exprlistCompSub;
+        }
+
+        public boolean hasExprlistCompSub() {
+            return exprlistCompSub() != null;
         }
 
         public boolean isTokenRsqb() {
@@ -170,10 +177,10 @@ public final class CompoundAtom extends DisjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeTokenLiteral("[");
@@ -189,7 +196,9 @@ public final class CompoundAtom extends DisjunctionRule {
      * '{' ['dictorsetmaker'] '}'
      */
     public static final class CompoundAtom3 extends ConjunctionRule {
-        public static final String RULE_NAME = "compound_atom:3";
+
+        public static final ParserRule RULE =
+                new ParserRule("compound_atom:3", RuleType.Conjunction, false);
 
         private final boolean isTokenLbrace;
         private final Dictorsetmaker dictorsetmaker;
@@ -207,18 +216,21 @@ public final class CompoundAtom extends DisjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("isTokenLbrace", isTokenLbrace);
-            addOptional("dictorsetmaker", dictorsetmaker);
-            addRequired("isTokenRbrace", isTokenRbrace);
+            addRequired("isTokenLbrace", isTokenLbrace());
+            addOptional("dictorsetmaker", dictorsetmaker());
+            addRequired("isTokenRbrace", isTokenRbrace());
         }
 
         public boolean isTokenLbrace() {
             return isTokenLbrace;
         }
 
-        public Optional<Dictorsetmaker> dictorsetmaker() {
-            return Optional.ofNullable(dictorsetmaker);
+        public Dictorsetmaker dictorsetmaker() {
+            return dictorsetmaker;
+        }
+
+        public boolean hasDictorsetmaker() {
+            return dictorsetmaker() != null;
         }
 
         public boolean isTokenRbrace() {
@@ -226,10 +238,10 @@ public final class CompoundAtom extends DisjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeTokenLiteral("{");

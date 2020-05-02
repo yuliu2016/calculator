@@ -1,13 +1,14 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ConjunctionRule;
-import org.fugalang.core.parser.ParseTree;
+import org.fugalang.core.parser.*;
 
 /**
  * vfpdef: 'NAME'
  */
 public final class Vfpdef extends ConjunctionRule {
-    public static final String RULE_NAME = "vfpdef";
+
+    public static final ParserRule RULE =
+            new ParserRule("vfpdef", RuleType.Conjunction, true);
 
     private final String name;
 
@@ -19,8 +20,7 @@ public final class Vfpdef extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addRequired("name", name);
+        addRequired("name", name());
     }
 
     public String name() {
@@ -28,10 +28,10 @@ public final class Vfpdef extends ConjunctionRule {
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = parseTree.consumeTokenType("NAME");

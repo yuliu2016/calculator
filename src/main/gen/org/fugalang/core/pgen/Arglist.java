@@ -1,7 +1,6 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ConjunctionRule;
-import org.fugalang.core.parser.ParseTree;
+import org.fugalang.core.parser.*;
 
 import java.util.List;
 
@@ -9,7 +8,9 @@ import java.util.List;
  * arglist: 'argument' (',' 'argument')* [',']
  */
 public final class Arglist extends ConjunctionRule {
-    public static final String RULE_NAME = "arglist";
+
+    public static final ParserRule RULE =
+            new ParserRule("arglist", RuleType.Conjunction, true);
 
     private final Argument argument;
     private final List<Arglist2> arglist2List;
@@ -27,10 +28,9 @@ public final class Arglist extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addRequired("argument", argument);
-        addRequired("arglist2List", arglist2List);
-        addRequired("isTokenComma", isTokenComma);
+        addRequired("argument", argument());
+        addRequired("arglist2List", arglist2List());
+        addRequired("isTokenComma", isTokenComma());
     }
 
     public Argument argument() {
@@ -46,10 +46,10 @@ public final class Arglist extends ConjunctionRule {
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = Argument.parse(parseTree, level + 1);
@@ -72,7 +72,9 @@ public final class Arglist extends ConjunctionRule {
      * ',' 'argument'
      */
     public static final class Arglist2 extends ConjunctionRule {
-        public static final String RULE_NAME = "arglist:2";
+
+        public static final ParserRule RULE =
+                new ParserRule("arglist:2", RuleType.Conjunction, false);
 
         private final boolean isTokenComma;
         private final Argument argument;
@@ -87,9 +89,8 @@ public final class Arglist extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("isTokenComma", isTokenComma);
-            addRequired("argument", argument);
+            addRequired("isTokenComma", isTokenComma());
+            addRequired("argument", argument());
         }
 
         public boolean isTokenComma() {
@@ -101,10 +102,10 @@ public final class Arglist extends ConjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeTokenLiteral(",");

@@ -1,12 +1,16 @@
 package org.fugalang.core.grammar.pgen;
 
-import org.fugalang.core.parser.ParseTree;
-import org.fugalang.core.parser.ConjunctionRule;
+import org.fugalang.core.parser.*;
+
 import java.util.List;
 
-// and_rule: 'repeat_rule' ('repeat_rule')*
+/**
+ * and_rule: 'repeat_rule' ('repeat_rule')*
+ */
 public final class AndRule extends ConjunctionRule {
-    public static final String RULE_NAME = "and_rule";
+
+    public static final ParserRule RULE =
+            new ParserRule("and_rule", RuleType.Conjunction, true);
 
     private final RepeatRule repeatRule;
     private final List<AndRule2> andRule2List;
@@ -21,9 +25,8 @@ public final class AndRule extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addRequired("repeatRule", repeatRule);
-        addRequired("andRule2List", andRule2List);
+        addRequired("repeatRule", repeatRule());
+        addRequired("andRule2List", andRule2List());
     }
 
     public RepeatRule repeatRule() {
@@ -35,16 +38,18 @@ public final class AndRule extends ConjunctionRule {
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = RepeatRule.parse(parseTree, level + 1);
         parseTree.enterCollection();
         while (true) {
-            if (!AndRule2.parse(parseTree, level + 1)) {
+            var pos = parseTree.position();
+            if (!AndRule2.parse(parseTree, level + 1) ||
+                    parseTree.guardLoopExit(pos)) {
                 break;
             }
         }
@@ -54,9 +59,13 @@ public final class AndRule extends ConjunctionRule {
         return result;
     }
 
-    // 'repeat_rule'
+    /**
+     * 'repeat_rule'
+     */
     public static final class AndRule2 extends ConjunctionRule {
-        public static final String RULE_NAME = "and_rule:2";
+
+        public static final ParserRule RULE =
+                new ParserRule("and_rule:2", RuleType.Conjunction, false);
 
         private final RepeatRule repeatRule;
 
@@ -68,8 +77,7 @@ public final class AndRule extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("repeatRule", repeatRule);
+            addRequired("repeatRule", repeatRule());
         }
 
         public RepeatRule repeatRule() {
@@ -77,10 +85,10 @@ public final class AndRule extends ConjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = RepeatRule.parse(parseTree, level + 1);

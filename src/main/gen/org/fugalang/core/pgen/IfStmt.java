@@ -1,16 +1,16 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ConjunctionRule;
-import org.fugalang.core.parser.ParseTree;
+import org.fugalang.core.parser.*;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * if_stmt: 'if' 'namedexpr_expr' 'suite' ('elif' 'namedexpr_expr' 'suite')* ['else' 'suite']
  */
 public final class IfStmt extends ConjunctionRule {
-    public static final String RULE_NAME = "if_stmt";
+
+    public static final ParserRule RULE =
+            new ParserRule("if_stmt", RuleType.Conjunction, true);
 
     private final boolean isTokenIf;
     private final NamedexprExpr namedexprExpr;
@@ -34,12 +34,11 @@ public final class IfStmt extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addRequired("isTokenIf", isTokenIf);
-        addRequired("namedexprExpr", namedexprExpr);
-        addRequired("suite", suite);
-        addRequired("ifStmt4List", ifStmt4List);
-        addOptional("ifStmt5", ifStmt5);
+        addRequired("isTokenIf", isTokenIf());
+        addRequired("namedexprExpr", namedexprExpr());
+        addRequired("suite", suite());
+        addRequired("ifStmt4List", ifStmt4List());
+        addOptional("ifStmt5", ifStmt5());
     }
 
     public boolean isTokenIf() {
@@ -58,15 +57,19 @@ public final class IfStmt extends ConjunctionRule {
         return ifStmt4List;
     }
 
-    public Optional<IfStmt5> ifStmt5() {
-        return Optional.ofNullable(ifStmt5);
+    public IfStmt5 ifStmt5() {
+        return ifStmt5;
+    }
+
+    public boolean hasIfStmt5() {
+        return ifStmt5() != null;
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = parseTree.consumeTokenLiteral("if");
@@ -91,7 +94,9 @@ public final class IfStmt extends ConjunctionRule {
      * 'elif' 'namedexpr_expr' 'suite'
      */
     public static final class IfStmt4 extends ConjunctionRule {
-        public static final String RULE_NAME = "if_stmt:4";
+
+        public static final ParserRule RULE =
+                new ParserRule("if_stmt:4", RuleType.Conjunction, false);
 
         private final boolean isTokenElif;
         private final NamedexprExpr namedexprExpr;
@@ -109,10 +114,9 @@ public final class IfStmt extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("isTokenElif", isTokenElif);
-            addRequired("namedexprExpr", namedexprExpr);
-            addRequired("suite", suite);
+            addRequired("isTokenElif", isTokenElif());
+            addRequired("namedexprExpr", namedexprExpr());
+            addRequired("suite", suite());
         }
 
         public boolean isTokenElif() {
@@ -128,10 +132,10 @@ public final class IfStmt extends ConjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeTokenLiteral("elif");
@@ -147,7 +151,9 @@ public final class IfStmt extends ConjunctionRule {
      * 'else' 'suite'
      */
     public static final class IfStmt5 extends ConjunctionRule {
-        public static final String RULE_NAME = "if_stmt:5";
+
+        public static final ParserRule RULE =
+                new ParserRule("if_stmt:5", RuleType.Conjunction, false);
 
         private final boolean isTokenElse;
         private final Suite suite;
@@ -162,9 +168,8 @@ public final class IfStmt extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("isTokenElse", isTokenElse);
-            addRequired("suite", suite);
+            addRequired("isTokenElse", isTokenElse());
+            addRequired("suite", suite());
         }
 
         public boolean isTokenElse() {
@@ -176,10 +181,10 @@ public final class IfStmt extends ConjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeTokenLiteral("else");

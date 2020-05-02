@@ -1,7 +1,6 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ConjunctionRule;
-import org.fugalang.core.parser.ParseTree;
+import org.fugalang.core.parser.*;
 
 import java.util.List;
 
@@ -9,7 +8,9 @@ import java.util.List;
  * eval_input: 'exprlist' 'NEWLINE'* 'ENDMARKER'
  */
 public final class EvalInput extends ConjunctionRule {
-    public static final String RULE_NAME = "eval_input";
+
+    public static final ParserRule RULE =
+            new ParserRule("eval_input", RuleType.Conjunction, true);
 
     private final Exprlist exprlist;
     private final List<Object> newlineList;
@@ -27,10 +28,9 @@ public final class EvalInput extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addRequired("exprlist", exprlist);
-        addRequired("newlineList", newlineList);
-        addRequired("endmarker", endmarker);
+        addRequired("exprlist", exprlist());
+        addRequired("newlineList", newlineList());
+        addRequired("endmarker", endmarker());
     }
 
     public Exprlist exprlist() {
@@ -46,10 +46,10 @@ public final class EvalInput extends ConjunctionRule {
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = Exprlist.parse(parseTree, level + 1);

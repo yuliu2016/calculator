@@ -1,7 +1,6 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ConjunctionRule;
-import org.fugalang.core.parser.ParseTree;
+import org.fugalang.core.parser.*;
 
 import java.util.List;
 
@@ -9,7 +8,9 @@ import java.util.List;
  * pipe_expr: 'atom_expr' ('->' 'atom_expr')*
  */
 public final class PipeExpr extends ConjunctionRule {
-    public static final String RULE_NAME = "pipe_expr";
+
+    public static final ParserRule RULE =
+            new ParserRule("pipe_expr", RuleType.Conjunction, true);
 
     private final AtomExpr atomExpr;
     private final List<PipeExpr2> pipeExpr2List;
@@ -24,9 +25,8 @@ public final class PipeExpr extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addRequired("atomExpr", atomExpr);
-        addRequired("pipeExpr2List", pipeExpr2List);
+        addRequired("atomExpr", atomExpr());
+        addRequired("pipeExpr2List", pipeExpr2List());
     }
 
     public AtomExpr atomExpr() {
@@ -38,10 +38,10 @@ public final class PipeExpr extends ConjunctionRule {
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = AtomExpr.parse(parseTree, level + 1);
@@ -63,7 +63,9 @@ public final class PipeExpr extends ConjunctionRule {
      * '->' 'atom_expr'
      */
     public static final class PipeExpr2 extends ConjunctionRule {
-        public static final String RULE_NAME = "pipe_expr:2";
+
+        public static final ParserRule RULE =
+                new ParserRule("pipe_expr:2", RuleType.Conjunction, false);
 
         private final boolean isTokenPipe;
         private final AtomExpr atomExpr;
@@ -78,9 +80,8 @@ public final class PipeExpr extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("isTokenPipe", isTokenPipe);
-            addRequired("atomExpr", atomExpr);
+            addRequired("isTokenPipe", isTokenPipe());
+            addRequired("atomExpr", atomExpr());
         }
 
         public boolean isTokenPipe() {
@@ -92,10 +93,10 @@ public final class PipeExpr extends ConjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeTokenLiteral("->");

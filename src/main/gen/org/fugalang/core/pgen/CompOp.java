@@ -1,14 +1,14 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ConjunctionRule;
-import org.fugalang.core.parser.DisjunctionRule;
-import org.fugalang.core.parser.ParseTree;
+import org.fugalang.core.parser.*;
 
 /**
  * comp_op: '<' | '>' | '==' | '>=' | '<=' | '!=' | 'in' | 'not' 'in' | 'is' | 'is' 'not'
  */
 public final class CompOp extends DisjunctionRule {
-    public static final String RULE_NAME = "comp_op";
+
+    public static final ParserRule RULE =
+            new ParserRule("comp_op", RuleType.Disjunction, true);
 
     private final boolean isTokenLess;
     private final boolean isTokenGreater;
@@ -47,17 +47,16 @@ public final class CompOp extends DisjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addChoice("isTokenLess", isTokenLess);
-        addChoice("isTokenGreater", isTokenGreater);
-        addChoice("isTokenEqual", isTokenEqual);
-        addChoice("isTokenMoreEqual", isTokenMoreEqual);
-        addChoice("isTokenLessEqual", isTokenLessEqual);
-        addChoice("isTokenNequal", isTokenNequal);
-        addChoice("isTokenIn", isTokenIn);
-        addChoice("compOp8", compOp8);
-        addChoice("isTokenIs", isTokenIs);
-        addChoice("compOp10", compOp10);
+        addChoice("isTokenLess", isTokenLess());
+        addChoice("isTokenGreater", isTokenGreater());
+        addChoice("isTokenEqual", isTokenEqual());
+        addChoice("isTokenMoreEqual", isTokenMoreEqual());
+        addChoice("isTokenLessEqual", isTokenLessEqual());
+        addChoice("isTokenNequal", isTokenNequal());
+        addChoice("isTokenIn", isTokenIn());
+        addChoice("compOp8", compOp8());
+        addChoice("isTokenIs", isTokenIs());
+        addChoice("compOp10", compOp10());
     }
 
     public boolean isTokenLess() {
@@ -109,10 +108,10 @@ public final class CompOp extends DisjunctionRule {
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = parseTree.consumeTokenLiteral("<");
@@ -134,7 +133,9 @@ public final class CompOp extends DisjunctionRule {
      * 'not' 'in'
      */
     public static final class CompOp8 extends ConjunctionRule {
-        public static final String RULE_NAME = "comp_op:8";
+
+        public static final ParserRule RULE =
+                new ParserRule("comp_op:8", RuleType.Conjunction, false);
 
         private final boolean isTokenNot;
         private final boolean isTokenIn;
@@ -149,9 +150,8 @@ public final class CompOp extends DisjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("isTokenNot", isTokenNot);
-            addRequired("isTokenIn", isTokenIn);
+            addRequired("isTokenNot", isTokenNot());
+            addRequired("isTokenIn", isTokenIn());
         }
 
         public boolean isTokenNot() {
@@ -163,10 +163,10 @@ public final class CompOp extends DisjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeTokenLiteral("not");
@@ -181,7 +181,9 @@ public final class CompOp extends DisjunctionRule {
      * 'is' 'not'
      */
     public static final class CompOp10 extends ConjunctionRule {
-        public static final String RULE_NAME = "comp_op:10";
+
+        public static final ParserRule RULE =
+                new ParserRule("comp_op:10", RuleType.Conjunction, false);
 
         private final boolean isTokenIs;
         private final boolean isTokenNot;
@@ -196,9 +198,8 @@ public final class CompOp extends DisjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("isTokenIs", isTokenIs);
-            addRequired("isTokenNot", isTokenNot);
+            addRequired("isTokenIs", isTokenIs());
+            addRequired("isTokenNot", isTokenNot());
         }
 
         public boolean isTokenIs() {
@@ -210,10 +211,10 @@ public final class CompOp extends DisjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeTokenLiteral("is");

@@ -1,8 +1,6 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ConjunctionRule;
-import org.fugalang.core.parser.DisjunctionRule;
-import org.fugalang.core.parser.ParseTree;
+import org.fugalang.core.parser.*;
 
 import java.util.List;
 
@@ -10,7 +8,9 @@ import java.util.List;
  * targets: ('bitwise_or' | 'star_expr') (',' ('bitwise_or' | 'star_expr'))* [',']
  */
 public final class Targets extends ConjunctionRule {
-    public static final String RULE_NAME = "targets";
+
+    public static final ParserRule RULE =
+            new ParserRule("targets", RuleType.Conjunction, true);
 
     private final Targets1 targets1;
     private final List<Targets2> targets2List;
@@ -28,10 +28,9 @@ public final class Targets extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addRequired("targets1", targets1);
-        addRequired("targets2List", targets2List);
-        addRequired("isTokenComma", isTokenComma);
+        addRequired("targets1", targets1());
+        addRequired("targets2List", targets2List());
+        addRequired("isTokenComma", isTokenComma());
     }
 
     public Targets1 targets1() {
@@ -47,10 +46,10 @@ public final class Targets extends ConjunctionRule {
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = Targets1.parse(parseTree, level + 1);
@@ -73,7 +72,9 @@ public final class Targets extends ConjunctionRule {
      * 'bitwise_or' | 'star_expr'
      */
     public static final class Targets1 extends DisjunctionRule {
-        public static final String RULE_NAME = "targets:1";
+
+        public static final ParserRule RULE =
+                new ParserRule("targets:1", RuleType.Disjunction, false);
 
         private final BitwiseOr bitwiseOr;
         private final StarExpr starExpr;
@@ -88,9 +89,8 @@ public final class Targets extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addChoice("bitwiseOr", bitwiseOr);
-            addChoice("starExpr", starExpr);
+            addChoice("bitwiseOr", bitwiseOr());
+            addChoice("starExpr", starExpr());
         }
 
         public BitwiseOr bitwiseOr() {
@@ -110,10 +110,10 @@ public final class Targets extends ConjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = BitwiseOr.parse(parseTree, level + 1);
@@ -128,7 +128,9 @@ public final class Targets extends ConjunctionRule {
      * ',' ('bitwise_or' | 'star_expr')
      */
     public static final class Targets2 extends ConjunctionRule {
-        public static final String RULE_NAME = "targets:2";
+
+        public static final ParserRule RULE =
+                new ParserRule("targets:2", RuleType.Conjunction, false);
 
         private final boolean isTokenComma;
         private final Targets22 targets22;
@@ -143,9 +145,8 @@ public final class Targets extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("isTokenComma", isTokenComma);
-            addRequired("targets22", targets22);
+            addRequired("isTokenComma", isTokenComma());
+            addRequired("targets22", targets22());
         }
 
         public boolean isTokenComma() {
@@ -157,10 +158,10 @@ public final class Targets extends ConjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeTokenLiteral(",");
@@ -175,7 +176,9 @@ public final class Targets extends ConjunctionRule {
      * 'bitwise_or' | 'star_expr'
      */
     public static final class Targets22 extends DisjunctionRule {
-        public static final String RULE_NAME = "targets:2:2";
+
+        public static final ParserRule RULE =
+                new ParserRule("targets:2:2", RuleType.Disjunction, false);
 
         private final BitwiseOr bitwiseOr;
         private final StarExpr starExpr;
@@ -190,9 +193,8 @@ public final class Targets extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addChoice("bitwiseOr", bitwiseOr);
-            addChoice("starExpr", starExpr);
+            addChoice("bitwiseOr", bitwiseOr());
+            addChoice("starExpr", starExpr());
         }
 
         public BitwiseOr bitwiseOr() {
@@ -212,10 +214,10 @@ public final class Targets extends ConjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = BitwiseOr.parse(parseTree, level + 1);

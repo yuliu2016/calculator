@@ -1,14 +1,14 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ConjunctionRule;
-import org.fugalang.core.parser.DisjunctionRule;
-import org.fugalang.core.parser.ParseTree;
+import org.fugalang.core.parser.*;
 
 /**
  * suite: ':' 'simple_stmt' | 'block_suite'
  */
 public final class Suite extends DisjunctionRule {
-    public static final String RULE_NAME = "suite";
+
+    public static final ParserRule RULE =
+            new ParserRule("suite", RuleType.Disjunction, true);
 
     private final Suite1 suite1;
     private final BlockSuite blockSuite;
@@ -23,9 +23,8 @@ public final class Suite extends DisjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addChoice("suite1", suite1);
-        addChoice("blockSuite", blockSuite);
+        addChoice("suite1", suite1());
+        addChoice("blockSuite", blockSuite());
     }
 
     public Suite1 suite1() {
@@ -45,10 +44,10 @@ public final class Suite extends DisjunctionRule {
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = Suite1.parse(parseTree, level + 1);
@@ -62,7 +61,9 @@ public final class Suite extends DisjunctionRule {
      * ':' 'simple_stmt'
      */
     public static final class Suite1 extends ConjunctionRule {
-        public static final String RULE_NAME = "suite:1";
+
+        public static final ParserRule RULE =
+                new ParserRule("suite:1", RuleType.Conjunction, false);
 
         private final boolean isTokenColon;
         private final SimpleStmt simpleStmt;
@@ -77,9 +78,8 @@ public final class Suite extends DisjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("isTokenColon", isTokenColon);
-            addRequired("simpleStmt", simpleStmt);
+            addRequired("isTokenColon", isTokenColon());
+            addRequired("simpleStmt", simpleStmt());
         }
 
         public boolean isTokenColon() {
@@ -91,10 +91,10 @@ public final class Suite extends DisjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeTokenLiteral(":");

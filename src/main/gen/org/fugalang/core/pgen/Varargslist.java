@@ -1,16 +1,16 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ConjunctionRule;
-import org.fugalang.core.parser.ParseTree;
+import org.fugalang.core.parser.*;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * varargslist: 'vfpdef' ['=' 'expr'] (',' 'vfpdef' ['=' 'expr'])*
  */
 public final class Varargslist extends ConjunctionRule {
-    public static final String RULE_NAME = "varargslist";
+
+    public static final ParserRule RULE =
+            new ParserRule("varargslist", RuleType.Conjunction, true);
 
     private final Vfpdef vfpdef;
     private final Varargslist2 varargslist2;
@@ -28,18 +28,21 @@ public final class Varargslist extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addRequired("vfpdef", vfpdef);
-        addOptional("varargslist2", varargslist2);
-        addRequired("varargslist3List", varargslist3List);
+        addRequired("vfpdef", vfpdef());
+        addOptional("varargslist2", varargslist2());
+        addRequired("varargslist3List", varargslist3List());
     }
 
     public Vfpdef vfpdef() {
         return vfpdef;
     }
 
-    public Optional<Varargslist2> varargslist2() {
-        return Optional.ofNullable(varargslist2);
+    public Varargslist2 varargslist2() {
+        return varargslist2;
+    }
+
+    public boolean hasVarargslist2() {
+        return varargslist2() != null;
     }
 
     public List<Varargslist3> varargslist3List() {
@@ -47,10 +50,10 @@ public final class Varargslist extends ConjunctionRule {
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = Vfpdef.parse(parseTree, level + 1);
@@ -73,7 +76,9 @@ public final class Varargslist extends ConjunctionRule {
      * '=' 'expr'
      */
     public static final class Varargslist2 extends ConjunctionRule {
-        public static final String RULE_NAME = "varargslist:2";
+
+        public static final ParserRule RULE =
+                new ParserRule("varargslist:2", RuleType.Conjunction, false);
 
         private final boolean isTokenAssign;
         private final Expr expr;
@@ -88,9 +93,8 @@ public final class Varargslist extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("isTokenAssign", isTokenAssign);
-            addRequired("expr", expr);
+            addRequired("isTokenAssign", isTokenAssign());
+            addRequired("expr", expr());
         }
 
         public boolean isTokenAssign() {
@@ -102,10 +106,10 @@ public final class Varargslist extends ConjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeTokenLiteral("=");
@@ -120,7 +124,9 @@ public final class Varargslist extends ConjunctionRule {
      * ',' 'vfpdef' ['=' 'expr']
      */
     public static final class Varargslist3 extends ConjunctionRule {
-        public static final String RULE_NAME = "varargslist:3";
+
+        public static final ParserRule RULE =
+                new ParserRule("varargslist:3", RuleType.Conjunction, false);
 
         private final boolean isTokenComma;
         private final Vfpdef vfpdef;
@@ -138,10 +144,9 @@ public final class Varargslist extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("isTokenComma", isTokenComma);
-            addRequired("vfpdef", vfpdef);
-            addOptional("varargslist33", varargslist33);
+            addRequired("isTokenComma", isTokenComma());
+            addRequired("vfpdef", vfpdef());
+            addOptional("varargslist33", varargslist33());
         }
 
         public boolean isTokenComma() {
@@ -152,15 +157,19 @@ public final class Varargslist extends ConjunctionRule {
             return vfpdef;
         }
 
-        public Optional<Varargslist33> varargslist33() {
-            return Optional.ofNullable(varargslist33);
+        public Varargslist33 varargslist33() {
+            return varargslist33;
+        }
+
+        public boolean hasVarargslist33() {
+            return varargslist33() != null;
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeTokenLiteral(",");
@@ -176,7 +185,9 @@ public final class Varargslist extends ConjunctionRule {
      * '=' 'expr'
      */
     public static final class Varargslist33 extends ConjunctionRule {
-        public static final String RULE_NAME = "varargslist:3:3";
+
+        public static final ParserRule RULE =
+                new ParserRule("varargslist:3:3", RuleType.Conjunction, false);
 
         private final boolean isTokenAssign;
         private final Expr expr;
@@ -191,9 +202,8 @@ public final class Varargslist extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("isTokenAssign", isTokenAssign);
-            addRequired("expr", expr);
+            addRequired("isTokenAssign", isTokenAssign());
+            addRequired("expr", expr());
         }
 
         public boolean isTokenAssign() {
@@ -205,10 +215,10 @@ public final class Varargslist extends ConjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeTokenLiteral("=");

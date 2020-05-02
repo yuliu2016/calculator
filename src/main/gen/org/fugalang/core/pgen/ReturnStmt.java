@@ -1,15 +1,14 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ConjunctionRule;
-import org.fugalang.core.parser.ParseTree;
-
-import java.util.Optional;
+import org.fugalang.core.parser.*;
 
 /**
  * return_stmt: 'return' ['exprlist_star']
  */
 public final class ReturnStmt extends ConjunctionRule {
-    public static final String RULE_NAME = "return_stmt";
+
+    public static final ParserRule RULE =
+            new ParserRule("return_stmt", RuleType.Conjunction, true);
 
     private final boolean isTokenReturn;
     private final ExprlistStar exprlistStar;
@@ -24,24 +23,27 @@ public final class ReturnStmt extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addRequired("isTokenReturn", isTokenReturn);
-        addOptional("exprlistStar", exprlistStar);
+        addRequired("isTokenReturn", isTokenReturn());
+        addOptional("exprlistStar", exprlistStar());
     }
 
     public boolean isTokenReturn() {
         return isTokenReturn;
     }
 
-    public Optional<ExprlistStar> exprlistStar() {
-        return Optional.ofNullable(exprlistStar);
+    public ExprlistStar exprlistStar() {
+        return exprlistStar;
+    }
+
+    public boolean hasExprlistStar() {
+        return exprlistStar() != null;
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = parseTree.consumeTokenLiteral("return");

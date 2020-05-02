@@ -1,15 +1,14 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ConjunctionRule;
-import org.fugalang.core.parser.ParseTree;
-
-import java.util.Optional;
+import org.fugalang.core.parser.*;
 
 /**
  * with_item: 'expr' ['as' 'NAME']
  */
 public final class WithItem extends ConjunctionRule {
-    public static final String RULE_NAME = "with_item";
+
+    public static final ParserRule RULE =
+            new ParserRule("with_item", RuleType.Conjunction, true);
 
     private final Expr expr;
     private final WithItem2 withItem2;
@@ -24,24 +23,27 @@ public final class WithItem extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addRequired("expr", expr);
-        addOptional("withItem2", withItem2);
+        addRequired("expr", expr());
+        addOptional("withItem2", withItem2());
     }
 
     public Expr expr() {
         return expr;
     }
 
-    public Optional<WithItem2> withItem2() {
-        return Optional.ofNullable(withItem2);
+    public WithItem2 withItem2() {
+        return withItem2;
+    }
+
+    public boolean hasWithItem2() {
+        return withItem2() != null;
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = Expr.parse(parseTree, level + 1);
@@ -55,7 +57,9 @@ public final class WithItem extends ConjunctionRule {
      * 'as' 'NAME'
      */
     public static final class WithItem2 extends ConjunctionRule {
-        public static final String RULE_NAME = "with_item:2";
+
+        public static final ParserRule RULE =
+                new ParserRule("with_item:2", RuleType.Conjunction, false);
 
         private final boolean isTokenAs;
         private final String name;
@@ -70,9 +74,8 @@ public final class WithItem extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("isTokenAs", isTokenAs);
-            addRequired("name", name);
+            addRequired("isTokenAs", isTokenAs());
+            addRequired("name", name());
         }
 
         public boolean isTokenAs() {
@@ -84,10 +87,10 @@ public final class WithItem extends ConjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeTokenLiteral("as");

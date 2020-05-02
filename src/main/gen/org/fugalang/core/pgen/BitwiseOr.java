@@ -1,7 +1,6 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ConjunctionRule;
-import org.fugalang.core.parser.ParseTree;
+import org.fugalang.core.parser.*;
 
 import java.util.List;
 
@@ -9,7 +8,9 @@ import java.util.List;
  * bitwise_or: 'bitwise_xor' ('|' 'bitwise_xor')*
  */
 public final class BitwiseOr extends ConjunctionRule {
-    public static final String RULE_NAME = "bitwise_or";
+
+    public static final ParserRule RULE =
+            new ParserRule("bitwise_or", RuleType.Conjunction, true);
 
     private final BitwiseXor bitwiseXor;
     private final List<BitwiseOr2> bitwiseOr2List;
@@ -24,9 +25,8 @@ public final class BitwiseOr extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addRequired("bitwiseXor", bitwiseXor);
-        addRequired("bitwiseOr2List", bitwiseOr2List);
+        addRequired("bitwiseXor", bitwiseXor());
+        addRequired("bitwiseOr2List", bitwiseOr2List());
     }
 
     public BitwiseXor bitwiseXor() {
@@ -38,10 +38,10 @@ public final class BitwiseOr extends ConjunctionRule {
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = BitwiseXor.parse(parseTree, level + 1);
@@ -63,7 +63,9 @@ public final class BitwiseOr extends ConjunctionRule {
      * '|' 'bitwise_xor'
      */
     public static final class BitwiseOr2 extends ConjunctionRule {
-        public static final String RULE_NAME = "bitwise_or:2";
+
+        public static final ParserRule RULE =
+                new ParserRule("bitwise_or:2", RuleType.Conjunction, false);
 
         private final boolean isTokenBitOr;
         private final BitwiseXor bitwiseXor;
@@ -78,9 +80,8 @@ public final class BitwiseOr extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("isTokenBitOr", isTokenBitOr);
-            addRequired("bitwiseXor", bitwiseXor);
+            addRequired("isTokenBitOr", isTokenBitOr());
+            addRequired("bitwiseXor", bitwiseXor());
         }
 
         public boolean isTokenBitOr() {
@@ -92,10 +93,10 @@ public final class BitwiseOr extends ConjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeTokenLiteral("|");

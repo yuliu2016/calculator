@@ -1,13 +1,14 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.DisjunctionRule;
-import org.fugalang.core.parser.ParseTree;
+import org.fugalang.core.parser.*;
 
 /**
  * comp_iter: 'comp_for' | 'comp_if'
  */
 public final class CompIter extends DisjunctionRule {
-    public static final String RULE_NAME = "comp_iter";
+
+    public static final ParserRule RULE =
+            new ParserRule("comp_iter", RuleType.Disjunction, true);
 
     private final CompFor compFor;
     private final CompIf compIf;
@@ -22,9 +23,8 @@ public final class CompIter extends DisjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addChoice("compFor", compFor);
-        addChoice("compIf", compIf);
+        addChoice("compFor", compFor());
+        addChoice("compIf", compIf());
     }
 
     public CompFor compFor() {
@@ -44,10 +44,10 @@ public final class CompIter extends DisjunctionRule {
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = CompFor.parse(parseTree, level + 1);

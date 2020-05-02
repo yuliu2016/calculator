@@ -1,15 +1,14 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ConjunctionRule;
-import org.fugalang.core.parser.ParseTree;
-
-import java.util.Optional;
+import org.fugalang.core.parser.*;
 
 /**
  * comp_for: 'for' 'targets' 'in' 'disjunction' ['comp_iter']
  */
 public final class CompFor extends ConjunctionRule {
-    public static final String RULE_NAME = "comp_for";
+
+    public static final ParserRule RULE =
+            new ParserRule("comp_for", RuleType.Conjunction, true);
 
     private final boolean isTokenFor;
     private final Targets targets;
@@ -33,12 +32,11 @@ public final class CompFor extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addRequired("isTokenFor", isTokenFor);
-        addRequired("targets", targets);
-        addRequired("isTokenIn", isTokenIn);
-        addRequired("disjunction", disjunction);
-        addOptional("compIter", compIter);
+        addRequired("isTokenFor", isTokenFor());
+        addRequired("targets", targets());
+        addRequired("isTokenIn", isTokenIn());
+        addRequired("disjunction", disjunction());
+        addOptional("compIter", compIter());
     }
 
     public boolean isTokenFor() {
@@ -57,15 +55,19 @@ public final class CompFor extends ConjunctionRule {
         return disjunction;
     }
 
-    public Optional<CompIter> compIter() {
-        return Optional.ofNullable(compIter);
+    public CompIter compIter() {
+        return compIter;
+    }
+
+    public boolean hasCompIter() {
+        return compIter() != null;
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = parseTree.consumeTokenLiteral("for");

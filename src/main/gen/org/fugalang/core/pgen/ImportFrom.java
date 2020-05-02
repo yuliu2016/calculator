@@ -1,8 +1,6 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ConjunctionRule;
-import org.fugalang.core.parser.DisjunctionRule;
-import org.fugalang.core.parser.ParseTree;
+import org.fugalang.core.parser.*;
 
 import java.util.List;
 
@@ -10,7 +8,9 @@ import java.util.List;
  * import_from: 'from' ('.'* 'dotted_name' | '.'+) 'import' ('*' | '(' 'import_as_names' ')' | 'import_as_names')
  */
 public final class ImportFrom extends ConjunctionRule {
-    public static final String RULE_NAME = "import_from";
+
+    public static final ParserRule RULE =
+            new ParserRule("import_from", RuleType.Conjunction, true);
 
     private final boolean isTokenFrom;
     private final ImportFrom2 importFrom2;
@@ -31,11 +31,10 @@ public final class ImportFrom extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addRequired("isTokenFrom", isTokenFrom);
-        addRequired("importFrom2", importFrom2);
-        addRequired("isTokenImport", isTokenImport);
-        addRequired("importFrom4", importFrom4);
+        addRequired("isTokenFrom", isTokenFrom());
+        addRequired("importFrom2", importFrom2());
+        addRequired("isTokenImport", isTokenImport());
+        addRequired("importFrom4", importFrom4());
     }
 
     public boolean isTokenFrom() {
@@ -55,10 +54,10 @@ public final class ImportFrom extends ConjunctionRule {
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = parseTree.consumeTokenLiteral("from");
@@ -74,7 +73,9 @@ public final class ImportFrom extends ConjunctionRule {
      * '.'* 'dotted_name' | '.'+
      */
     public static final class ImportFrom2 extends DisjunctionRule {
-        public static final String RULE_NAME = "import_from:2";
+
+        public static final ParserRule RULE =
+                new ParserRule("import_from:2", RuleType.Disjunction, false);
 
         private final ImportFrom21 importFrom21;
         private final List<Boolean> isTokenDotList;
@@ -89,9 +90,8 @@ public final class ImportFrom extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addChoice("importFrom21", importFrom21);
-            addChoice("isTokenDotList", isTokenDotList);
+            addChoice("importFrom21", importFrom21());
+            addChoice("isTokenDotList", isTokenDotList());
         }
 
         public ImportFrom21 importFrom21() {
@@ -107,10 +107,10 @@ public final class ImportFrom extends ConjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = ImportFrom21.parse(parseTree, level + 1);
@@ -134,7 +134,9 @@ public final class ImportFrom extends ConjunctionRule {
      * '.'* 'dotted_name'
      */
     public static final class ImportFrom21 extends ConjunctionRule {
-        public static final String RULE_NAME = "import_from:2:1";
+
+        public static final ParserRule RULE =
+                new ParserRule("import_from:2:1", RuleType.Conjunction, false);
 
         private final List<Boolean> isTokenDotList;
         private final DottedName dottedName;
@@ -149,9 +151,8 @@ public final class ImportFrom extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("isTokenDotList", isTokenDotList);
-            addRequired("dottedName", dottedName);
+            addRequired("isTokenDotList", isTokenDotList());
+            addRequired("dottedName", dottedName());
         }
 
         public List<Boolean> isTokenDotList() {
@@ -163,10 +164,10 @@ public final class ImportFrom extends ConjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             parseTree.enterCollection();
@@ -189,7 +190,9 @@ public final class ImportFrom extends ConjunctionRule {
      * '*' | '(' 'import_as_names' ')' | 'import_as_names'
      */
     public static final class ImportFrom4 extends DisjunctionRule {
-        public static final String RULE_NAME = "import_from:4";
+
+        public static final ParserRule RULE =
+                new ParserRule("import_from:4", RuleType.Disjunction, false);
 
         private final boolean isTokenTimes;
         private final ImportFrom42 importFrom42;
@@ -207,10 +210,9 @@ public final class ImportFrom extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addChoice("isTokenTimes", isTokenTimes);
-            addChoice("importFrom42", importFrom42);
-            addChoice("importAsNames", importAsNames);
+            addChoice("isTokenTimes", isTokenTimes());
+            addChoice("importFrom42", importFrom42());
+            addChoice("importAsNames", importAsNames());
         }
 
         public boolean isTokenTimes() {
@@ -234,10 +236,10 @@ public final class ImportFrom extends ConjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeTokenLiteral("*");
@@ -253,7 +255,9 @@ public final class ImportFrom extends ConjunctionRule {
      * '(' 'import_as_names' ')'
      */
     public static final class ImportFrom42 extends ConjunctionRule {
-        public static final String RULE_NAME = "import_from:4:2";
+
+        public static final ParserRule RULE =
+                new ParserRule("import_from:4:2", RuleType.Conjunction, false);
 
         private final boolean isTokenLpar;
         private final ImportAsNames importAsNames;
@@ -271,10 +275,9 @@ public final class ImportFrom extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("isTokenLpar", isTokenLpar);
-            addRequired("importAsNames", importAsNames);
-            addRequired("isTokenRpar", isTokenRpar);
+            addRequired("isTokenLpar", isTokenLpar());
+            addRequired("importAsNames", importAsNames());
+            addRequired("isTokenRpar", isTokenRpar());
         }
 
         public boolean isTokenLpar() {
@@ -290,10 +293,10 @@ public final class ImportFrom extends ConjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeTokenLiteral("(");

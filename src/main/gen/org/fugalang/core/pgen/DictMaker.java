@@ -1,8 +1,6 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ConjunctionRule;
-import org.fugalang.core.parser.DisjunctionRule;
-import org.fugalang.core.parser.ParseTree;
+import org.fugalang.core.parser.*;
 
 import java.util.List;
 
@@ -10,7 +8,9 @@ import java.util.List;
  * dict_maker: 'dict_item' ('comp_for' | (',' 'dict_item')* [','])
  */
 public final class DictMaker extends ConjunctionRule {
-    public static final String RULE_NAME = "dict_maker";
+
+    public static final ParserRule RULE =
+            new ParserRule("dict_maker", RuleType.Conjunction, true);
 
     private final DictItem dictItem;
     private final DictMaker2 dictMaker2;
@@ -25,9 +25,8 @@ public final class DictMaker extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addRequired("dictItem", dictItem);
-        addRequired("dictMaker2", dictMaker2);
+        addRequired("dictItem", dictItem());
+        addRequired("dictMaker2", dictMaker2());
     }
 
     public DictItem dictItem() {
@@ -39,10 +38,10 @@ public final class DictMaker extends ConjunctionRule {
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = DictItem.parse(parseTree, level + 1);
@@ -56,7 +55,9 @@ public final class DictMaker extends ConjunctionRule {
      * 'comp_for' | (',' 'dict_item')* [',']
      */
     public static final class DictMaker2 extends DisjunctionRule {
-        public static final String RULE_NAME = "dict_maker:2";
+
+        public static final ParserRule RULE =
+                new ParserRule("dict_maker:2", RuleType.Disjunction, false);
 
         private final CompFor compFor;
         private final DictMaker22 dictMaker22;
@@ -71,9 +72,8 @@ public final class DictMaker extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addChoice("compFor", compFor);
-            addChoice("dictMaker22", dictMaker22);
+            addChoice("compFor", compFor());
+            addChoice("dictMaker22", dictMaker22());
         }
 
         public CompFor compFor() {
@@ -93,10 +93,10 @@ public final class DictMaker extends ConjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = CompFor.parse(parseTree, level + 1);
@@ -111,7 +111,9 @@ public final class DictMaker extends ConjunctionRule {
      * (',' 'dict_item')* [',']
      */
     public static final class DictMaker22 extends ConjunctionRule {
-        public static final String RULE_NAME = "dict_maker:2:2";
+
+        public static final ParserRule RULE =
+                new ParserRule("dict_maker:2:2", RuleType.Conjunction, false);
 
         private final List<DictMaker221> dictMaker221List;
         private final boolean isTokenComma;
@@ -126,9 +128,8 @@ public final class DictMaker extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("dictMaker221List", dictMaker221List);
-            addRequired("isTokenComma", isTokenComma);
+            addRequired("dictMaker221List", dictMaker221List());
+            addRequired("isTokenComma", isTokenComma());
         }
 
         public List<DictMaker221> dictMaker221List() {
@@ -140,10 +141,10 @@ public final class DictMaker extends ConjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             parseTree.enterCollection();
@@ -166,7 +167,9 @@ public final class DictMaker extends ConjunctionRule {
      * ',' 'dict_item'
      */
     public static final class DictMaker221 extends ConjunctionRule {
-        public static final String RULE_NAME = "dict_maker:2:2:1";
+
+        public static final ParserRule RULE =
+                new ParserRule("dict_maker:2:2:1", RuleType.Conjunction, false);
 
         private final boolean isTokenComma;
         private final DictItem dictItem;
@@ -181,9 +184,8 @@ public final class DictMaker extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("isTokenComma", isTokenComma);
-            addRequired("dictItem", dictItem);
+            addRequired("isTokenComma", isTokenComma());
+            addRequired("dictItem", dictItem());
         }
 
         public boolean isTokenComma() {
@@ -195,10 +197,10 @@ public final class DictMaker extends ConjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeTokenLiteral(",");

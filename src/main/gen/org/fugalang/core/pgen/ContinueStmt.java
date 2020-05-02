@@ -1,13 +1,14 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ConjunctionRule;
-import org.fugalang.core.parser.ParseTree;
+import org.fugalang.core.parser.*;
 
 /**
  * continue_stmt: 'continue'
  */
 public final class ContinueStmt extends ConjunctionRule {
-    public static final String RULE_NAME = "continue_stmt";
+
+    public static final ParserRule RULE =
+            new ParserRule("continue_stmt", RuleType.Conjunction, true);
 
     private final boolean isTokenContinue;
 
@@ -19,8 +20,7 @@ public final class ContinueStmt extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addRequired("isTokenContinue", isTokenContinue);
+        addRequired("isTokenContinue", isTokenContinue());
     }
 
     public boolean isTokenContinue() {
@@ -28,10 +28,10 @@ public final class ContinueStmt extends ConjunctionRule {
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = parseTree.consumeTokenLiteral("continue");

@@ -1,7 +1,6 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ConjunctionRule;
-import org.fugalang.core.parser.ParseTree;
+import org.fugalang.core.parser.*;
 
 import java.util.List;
 
@@ -9,7 +8,9 @@ import java.util.List;
  * dotted_as_names: 'dotted_as_name' (',' 'dotted_as_name')* [',']
  */
 public final class DottedAsNames extends ConjunctionRule {
-    public static final String RULE_NAME = "dotted_as_names";
+
+    public static final ParserRule RULE =
+            new ParserRule("dotted_as_names", RuleType.Conjunction, true);
 
     private final DottedAsName dottedAsName;
     private final List<DottedAsNames2> dottedAsNames2List;
@@ -27,10 +28,9 @@ public final class DottedAsNames extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addRequired("dottedAsName", dottedAsName);
-        addRequired("dottedAsNames2List", dottedAsNames2List);
-        addRequired("isTokenComma", isTokenComma);
+        addRequired("dottedAsName", dottedAsName());
+        addRequired("dottedAsNames2List", dottedAsNames2List());
+        addRequired("isTokenComma", isTokenComma());
     }
 
     public DottedAsName dottedAsName() {
@@ -46,10 +46,10 @@ public final class DottedAsNames extends ConjunctionRule {
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = DottedAsName.parse(parseTree, level + 1);
@@ -72,7 +72,9 @@ public final class DottedAsNames extends ConjunctionRule {
      * ',' 'dotted_as_name'
      */
     public static final class DottedAsNames2 extends ConjunctionRule {
-        public static final String RULE_NAME = "dotted_as_names:2";
+
+        public static final ParserRule RULE =
+                new ParserRule("dotted_as_names:2", RuleType.Conjunction, false);
 
         private final boolean isTokenComma;
         private final DottedAsName dottedAsName;
@@ -87,9 +89,8 @@ public final class DottedAsNames extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("isTokenComma", isTokenComma);
-            addRequired("dottedAsName", dottedAsName);
+            addRequired("isTokenComma", isTokenComma());
+            addRequired("dottedAsName", dottedAsName());
         }
 
         public boolean isTokenComma() {
@@ -101,10 +102,10 @@ public final class DottedAsNames extends ConjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeTokenLiteral(",");

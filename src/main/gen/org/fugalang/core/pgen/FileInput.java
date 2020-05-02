@@ -1,8 +1,6 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ConjunctionRule;
-import org.fugalang.core.parser.DisjunctionRule;
-import org.fugalang.core.parser.ParseTree;
+import org.fugalang.core.parser.*;
 
 import java.util.List;
 
@@ -10,7 +8,9 @@ import java.util.List;
  * file_input: ('NEWLINE' | 'stmt')* 'ENDMARKER'
  */
 public final class FileInput extends ConjunctionRule {
-    public static final String RULE_NAME = "file_input";
+
+    public static final ParserRule RULE =
+            new ParserRule("file_input", RuleType.Conjunction, true);
 
     private final List<FileInput1> fileInput1List;
     private final Object endmarker;
@@ -25,9 +25,8 @@ public final class FileInput extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addRequired("fileInput1List", fileInput1List);
-        addRequired("endmarker", endmarker);
+        addRequired("fileInput1List", fileInput1List());
+        addRequired("endmarker", endmarker());
     }
 
     public List<FileInput1> fileInput1List() {
@@ -39,10 +38,10 @@ public final class FileInput extends ConjunctionRule {
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         parseTree.enterCollection();
@@ -64,7 +63,9 @@ public final class FileInput extends ConjunctionRule {
      * 'NEWLINE' | 'stmt'
      */
     public static final class FileInput1 extends DisjunctionRule {
-        public static final String RULE_NAME = "file_input:1";
+
+        public static final ParserRule RULE =
+                new ParserRule("file_input:1", RuleType.Disjunction, false);
 
         private final Object newline;
         private final Stmt stmt;
@@ -79,9 +80,8 @@ public final class FileInput extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addChoice("newline", newline);
-            addChoice("stmt", stmt);
+            addChoice("newline", newline());
+            addChoice("stmt", stmt());
         }
 
         public Object newline() {
@@ -101,10 +101,10 @@ public final class FileInput extends ConjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeTokenType("NEWLINE");

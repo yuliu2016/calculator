@@ -1,15 +1,14 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ConjunctionRule;
-import org.fugalang.core.parser.ParseTree;
-
-import java.util.Optional;
+import org.fugalang.core.parser.*;
 
 /**
  * power: 'pipe_expr' ['**' 'factor']
  */
 public final class Power extends ConjunctionRule {
-    public static final String RULE_NAME = "power";
+
+    public static final ParserRule RULE =
+            new ParserRule("power", RuleType.Conjunction, true);
 
     private final PipeExpr pipeExpr;
     private final Power2 power2;
@@ -24,24 +23,27 @@ public final class Power extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addRequired("pipeExpr", pipeExpr);
-        addOptional("power2", power2);
+        addRequired("pipeExpr", pipeExpr());
+        addOptional("power2", power2());
     }
 
     public PipeExpr pipeExpr() {
         return pipeExpr;
     }
 
-    public Optional<Power2> power2() {
-        return Optional.ofNullable(power2);
+    public Power2 power2() {
+        return power2;
+    }
+
+    public boolean hasPower2() {
+        return power2() != null;
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = PipeExpr.parse(parseTree, level + 1);
@@ -55,7 +57,9 @@ public final class Power extends ConjunctionRule {
      * '**' 'factor'
      */
     public static final class Power2 extends ConjunctionRule {
-        public static final String RULE_NAME = "power:2";
+
+        public static final ParserRule RULE =
+                new ParserRule("power:2", RuleType.Conjunction, false);
 
         private final boolean isTokenPower;
         private final Factor factor;
@@ -70,9 +74,8 @@ public final class Power extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("isTokenPower", isTokenPower);
-            addRequired("factor", factor);
+            addRequired("isTokenPower", isTokenPower());
+            addRequired("factor", factor());
         }
 
         public boolean isTokenPower() {
@@ -84,10 +87,10 @@ public final class Power extends ConjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeTokenLiteral("**");

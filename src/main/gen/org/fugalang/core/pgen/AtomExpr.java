@@ -1,7 +1,6 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ConjunctionRule;
-import org.fugalang.core.parser.ParseTree;
+import org.fugalang.core.parser.*;
 
 import java.util.List;
 
@@ -9,7 +8,9 @@ import java.util.List;
  * atom_expr: ['await'] 'atom' 'trailer'*
  */
 public final class AtomExpr extends ConjunctionRule {
-    public static final String RULE_NAME = "atom_expr";
+
+    public static final ParserRule RULE =
+            new ParserRule("atom_expr", RuleType.Conjunction, true);
 
     private final boolean isTokenAwait;
     private final Atom atom;
@@ -27,10 +28,9 @@ public final class AtomExpr extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addRequired("isTokenAwait", isTokenAwait);
-        addRequired("atom", atom);
-        addRequired("trailerList", trailerList);
+        addRequired("isTokenAwait", isTokenAwait());
+        addRequired("atom", atom());
+        addRequired("trailerList", trailerList());
     }
 
     public boolean isTokenAwait() {
@@ -46,10 +46,10 @@ public final class AtomExpr extends ConjunctionRule {
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = parseTree.consumeTokenLiteral("await");

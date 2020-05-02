@@ -1,33 +1,28 @@
 package org.fugalang.core.grammar.pgen;
 
-import org.fugalang.core.parser.ParseTree;
-import org.fugalang.core.parser.ConjunctionRule;
+import org.fugalang.core.parser.*;
+
 import java.util.List;
 
-// rules: 'single_rule'+
+/**
+ * rules: 'single_rule'+
+ */
 public final class Rules extends ConjunctionRule {
-    public static final String RULE_NAME = "rules";
 
-    private final SingleRule singleRule;
+    public static final ParserRule RULE =
+            new ParserRule("rules", RuleType.Conjunction, true);
+
     private final List<SingleRule> singleRuleList;
 
     public Rules(
-            SingleRule singleRule,
             List<SingleRule> singleRuleList
     ) {
-        this.singleRule = singleRule;
         this.singleRuleList = singleRuleList;
     }
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addRequired("singleRule", singleRule);
-        addRequired("singleRuleList", singleRuleList);
-    }
-
-    public SingleRule singleRule() {
-        return singleRule;
+        addRequired("singleRuleList", singleRuleList());
     }
 
     public List<SingleRule> singleRuleList() {
@@ -35,16 +30,18 @@ public final class Rules extends ConjunctionRule {
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
-        result = SingleRule.parse(parseTree, level + 1);
         parseTree.enterCollection();
+        result = SingleRule.parse(parseTree, level + 1);
         while (true) {
-            if (!SingleRule.parse(parseTree, level + 1)) {
+            var pos = parseTree.position();
+            if (!SingleRule.parse(parseTree, level + 1) ||
+                    parseTree.guardLoopExit(pos)) {
                 break;
             }
         }

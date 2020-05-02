@@ -14,12 +14,12 @@ public abstract class ConjunctionRule implements TreeStringElem {
 
     protected abstract void buildRule();
 
-    protected void setExplicitName(String ruleName) {
-        computedRule.setRuleName(ruleName, true);
+    protected void setExplicitName(ParserRule ruleName) {
+        computedRule.setRuleName(ruleName.getRuleName(), true);
     }
 
-    protected void setImpliedName(String ruleName) {
-        computedRule.setRuleName(ruleName, false);
+    protected void setImpliedName(ParserRule ruleName) {
+        computedRule.setRuleName(ruleName.getRuleName(), false);
     }
 
     protected void addRequired(String name, boolean value) {

@@ -1,13 +1,14 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.DisjunctionRule;
-import org.fugalang.core.parser.ParseTree;
+import org.fugalang.core.parser.*;
 
 /**
  * flow_stmt: 'break_stmt' | 'continue_stmt' | 'return_stmt' | 'raise_stmt'
  */
 public final class FlowStmt extends DisjunctionRule {
-    public static final String RULE_NAME = "flow_stmt";
+
+    public static final ParserRule RULE =
+            new ParserRule("flow_stmt", RuleType.Disjunction, true);
 
     private final BreakStmt breakStmt;
     private final ContinueStmt continueStmt;
@@ -28,11 +29,10 @@ public final class FlowStmt extends DisjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addChoice("breakStmt", breakStmt);
-        addChoice("continueStmt", continueStmt);
-        addChoice("returnStmt", returnStmt);
-        addChoice("raiseStmt", raiseStmt);
+        addChoice("breakStmt", breakStmt());
+        addChoice("continueStmt", continueStmt());
+        addChoice("returnStmt", returnStmt());
+        addChoice("raiseStmt", raiseStmt());
     }
 
     public BreakStmt breakStmt() {
@@ -68,10 +68,10 @@ public final class FlowStmt extends DisjunctionRule {
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = BreakStmt.parse(parseTree, level + 1);

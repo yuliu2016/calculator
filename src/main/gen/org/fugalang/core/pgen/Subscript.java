@@ -1,16 +1,14 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ConjunctionRule;
-import org.fugalang.core.parser.DisjunctionRule;
-import org.fugalang.core.parser.ParseTree;
-
-import java.util.Optional;
+import org.fugalang.core.parser.*;
 
 /**
  * subscript: 'expr' | ['expr'] ':' ['expr'] ['sliceop']
  */
 public final class Subscript extends DisjunctionRule {
-    public static final String RULE_NAME = "subscript";
+
+    public static final ParserRule RULE =
+            new ParserRule("subscript", RuleType.Disjunction, true);
 
     private final Expr expr;
     private final Subscript2 subscript2;
@@ -25,9 +23,8 @@ public final class Subscript extends DisjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addChoice("expr", expr);
-        addChoice("subscript2", subscript2);
+        addChoice("expr", expr());
+        addChoice("subscript2", subscript2());
     }
 
     public Expr expr() {
@@ -47,10 +44,10 @@ public final class Subscript extends DisjunctionRule {
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = Expr.parse(parseTree, level + 1);
@@ -64,7 +61,9 @@ public final class Subscript extends DisjunctionRule {
      * ['expr'] ':' ['expr'] ['sliceop']
      */
     public static final class Subscript2 extends ConjunctionRule {
-        public static final String RULE_NAME = "subscript:2";
+
+        public static final ParserRule RULE =
+                new ParserRule("subscript:2", RuleType.Conjunction, false);
 
         private final Expr expr;
         private final boolean isTokenColon;
@@ -85,34 +84,45 @@ public final class Subscript extends DisjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addOptional("expr", expr);
-            addRequired("isTokenColon", isTokenColon);
-            addOptional("expr1", expr1);
-            addOptional("sliceop", sliceop);
+            addOptional("expr", expr());
+            addRequired("isTokenColon", isTokenColon());
+            addOptional("expr1", expr1());
+            addOptional("sliceop", sliceop());
         }
 
-        public Optional<Expr> expr() {
-            return Optional.ofNullable(expr);
+        public Expr expr() {
+            return expr;
+        }
+
+        public boolean hasExpr() {
+            return expr() != null;
         }
 
         public boolean isTokenColon() {
             return isTokenColon;
         }
 
-        public Optional<Expr> expr1() {
-            return Optional.ofNullable(expr1);
+        public Expr expr1() {
+            return expr1;
         }
 
-        public Optional<Sliceop> sliceop() {
-            return Optional.ofNullable(sliceop);
+        public boolean hasExpr1() {
+            return expr1() != null;
+        }
+
+        public Sliceop sliceop() {
+            return sliceop;
+        }
+
+        public boolean hasSliceop() {
+            return sliceop() != null;
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             Expr.parse(parseTree, level + 1);

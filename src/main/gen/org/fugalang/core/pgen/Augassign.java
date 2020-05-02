@@ -1,13 +1,14 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.DisjunctionRule;
-import org.fugalang.core.parser.ParseTree;
+import org.fugalang.core.parser.*;
 
 /**
  * augassign: '+=' | '-=' | '*=' | '@=' | '/=' | '%=' | '&=' | '|=' | '^=' | '<<=' | '>>=' | '**=' | '//='
  */
 public final class Augassign extends DisjunctionRule {
-    public static final String RULE_NAME = "augassign";
+
+    public static final ParserRule RULE =
+            new ParserRule("augassign", RuleType.Disjunction, true);
 
     private final boolean isTokenPlusAssign;
     private final boolean isTokenMinusAssign;
@@ -55,20 +56,19 @@ public final class Augassign extends DisjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addChoice("isTokenPlusAssign", isTokenPlusAssign);
-        addChoice("isTokenMinusAssign", isTokenMinusAssign);
-        addChoice("isTokenTimesAssign", isTokenTimesAssign);
-        addChoice("isTokenMatrixTimesAssign", isTokenMatrixTimesAssign);
-        addChoice("isTokenDivAssign", isTokenDivAssign);
-        addChoice("isTokenModulusAssign", isTokenModulusAssign);
-        addChoice("isTokenBitAndAssign", isTokenBitAndAssign);
-        addChoice("isTokenBitOrAssign", isTokenBitOrAssign);
-        addChoice("isTokenBitXorAssign", isTokenBitXorAssign);
-        addChoice("isTokenLshiftAssign", isTokenLshiftAssign);
-        addChoice("isTokenRshiftAssign", isTokenRshiftAssign);
-        addChoice("isTokenPowerAssign", isTokenPowerAssign);
-        addChoice("isTokenFloorDivAssign", isTokenFloorDivAssign);
+        addChoice("isTokenPlusAssign", isTokenPlusAssign());
+        addChoice("isTokenMinusAssign", isTokenMinusAssign());
+        addChoice("isTokenTimesAssign", isTokenTimesAssign());
+        addChoice("isTokenMatrixTimesAssign", isTokenMatrixTimesAssign());
+        addChoice("isTokenDivAssign", isTokenDivAssign());
+        addChoice("isTokenModulusAssign", isTokenModulusAssign());
+        addChoice("isTokenBitAndAssign", isTokenBitAndAssign());
+        addChoice("isTokenBitOrAssign", isTokenBitOrAssign());
+        addChoice("isTokenBitXorAssign", isTokenBitXorAssign());
+        addChoice("isTokenLshiftAssign", isTokenLshiftAssign());
+        addChoice("isTokenRshiftAssign", isTokenRshiftAssign());
+        addChoice("isTokenPowerAssign", isTokenPowerAssign());
+        addChoice("isTokenFloorDivAssign", isTokenFloorDivAssign());
     }
 
     public boolean isTokenPlusAssign() {
@@ -124,10 +124,10 @@ public final class Augassign extends DisjunctionRule {
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = parseTree.consumeTokenLiteral("+=");

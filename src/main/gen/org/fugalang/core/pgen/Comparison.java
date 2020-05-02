@@ -1,7 +1,6 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ConjunctionRule;
-import org.fugalang.core.parser.ParseTree;
+import org.fugalang.core.parser.*;
 
 import java.util.List;
 
@@ -9,7 +8,9 @@ import java.util.List;
  * comparison: 'bitwise_or' ('comp_op' 'bitwise_or')*
  */
 public final class Comparison extends ConjunctionRule {
-    public static final String RULE_NAME = "comparison";
+
+    public static final ParserRule RULE =
+            new ParserRule("comparison", RuleType.Conjunction, true);
 
     private final BitwiseOr bitwiseOr;
     private final List<Comparison2> comparison2List;
@@ -24,9 +25,8 @@ public final class Comparison extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addRequired("bitwiseOr", bitwiseOr);
-        addRequired("comparison2List", comparison2List);
+        addRequired("bitwiseOr", bitwiseOr());
+        addRequired("comparison2List", comparison2List());
     }
 
     public BitwiseOr bitwiseOr() {
@@ -38,10 +38,10 @@ public final class Comparison extends ConjunctionRule {
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = BitwiseOr.parse(parseTree, level + 1);
@@ -63,7 +63,9 @@ public final class Comparison extends ConjunctionRule {
      * 'comp_op' 'bitwise_or'
      */
     public static final class Comparison2 extends ConjunctionRule {
-        public static final String RULE_NAME = "comparison:2";
+
+        public static final ParserRule RULE =
+                new ParserRule("comparison:2", RuleType.Conjunction, false);
 
         private final CompOp compOp;
         private final BitwiseOr bitwiseOr;
@@ -78,9 +80,8 @@ public final class Comparison extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("compOp", compOp);
-            addRequired("bitwiseOr", bitwiseOr);
+            addRequired("compOp", compOp());
+            addRequired("bitwiseOr", bitwiseOr());
         }
 
         public CompOp compOp() {
@@ -92,10 +93,10 @@ public final class Comparison extends ConjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = CompOp.parse(parseTree, level + 1);

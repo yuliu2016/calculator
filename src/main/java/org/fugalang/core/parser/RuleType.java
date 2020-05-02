@@ -1,4 +1,4 @@
-package org.fugalang.core.grammar.classbuilder;
+package org.fugalang.core.parser;
 
 public enum RuleType {
     Disjunction("org.fugalang.core.parser.DisjunctionRule"),

@@ -1,17 +1,16 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ConjunctionRule;
-import org.fugalang.core.parser.DisjunctionRule;
-import org.fugalang.core.parser.ParseTree;
+import org.fugalang.core.parser.*;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * expr_stmt: 'exprlist_star' ['augassign' 'exprlist' | ('=' 'exprlist_star')*]
  */
 public final class ExprStmt extends ConjunctionRule {
-    public static final String RULE_NAME = "expr_stmt";
+
+    public static final ParserRule RULE =
+            new ParserRule("expr_stmt", RuleType.Conjunction, true);
 
     private final ExprlistStar exprlistStar;
     private final ExprStmt2 exprStmt2;
@@ -26,24 +25,27 @@ public final class ExprStmt extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addRequired("exprlistStar", exprlistStar);
-        addOptional("exprStmt2", exprStmt2);
+        addRequired("exprlistStar", exprlistStar());
+        addOptional("exprStmt2", exprStmt2());
     }
 
     public ExprlistStar exprlistStar() {
         return exprlistStar;
     }
 
-    public Optional<ExprStmt2> exprStmt2() {
-        return Optional.ofNullable(exprStmt2);
+    public ExprStmt2 exprStmt2() {
+        return exprStmt2;
+    }
+
+    public boolean hasExprStmt2() {
+        return exprStmt2() != null;
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = ExprlistStar.parse(parseTree, level + 1);
@@ -57,7 +59,9 @@ public final class ExprStmt extends ConjunctionRule {
      * 'augassign' 'exprlist' | ('=' 'exprlist_star')*
      */
     public static final class ExprStmt2 extends DisjunctionRule {
-        public static final String RULE_NAME = "expr_stmt:2";
+
+        public static final ParserRule RULE =
+                new ParserRule("expr_stmt:2", RuleType.Disjunction, false);
 
         private final ExprStmt21 exprStmt21;
         private final List<ExprStmt22> exprStmt22List;
@@ -72,9 +76,8 @@ public final class ExprStmt extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addChoice("exprStmt21", exprStmt21);
-            addChoice("exprStmt22List", exprStmt22List);
+            addChoice("exprStmt21", exprStmt21());
+            addChoice("exprStmt22List", exprStmt22List());
         }
 
         public ExprStmt21 exprStmt21() {
@@ -90,10 +93,10 @@ public final class ExprStmt extends ConjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = ExprStmt21.parse(parseTree, level + 1);
@@ -116,7 +119,9 @@ public final class ExprStmt extends ConjunctionRule {
      * 'augassign' 'exprlist'
      */
     public static final class ExprStmt21 extends ConjunctionRule {
-        public static final String RULE_NAME = "expr_stmt:2:1";
+
+        public static final ParserRule RULE =
+                new ParserRule("expr_stmt:2:1", RuleType.Conjunction, false);
 
         private final Augassign augassign;
         private final Exprlist exprlist;
@@ -131,9 +136,8 @@ public final class ExprStmt extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("augassign", augassign);
-            addRequired("exprlist", exprlist);
+            addRequired("augassign", augassign());
+            addRequired("exprlist", exprlist());
         }
 
         public Augassign augassign() {
@@ -145,10 +149,10 @@ public final class ExprStmt extends ConjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = Augassign.parse(parseTree, level + 1);
@@ -163,7 +167,9 @@ public final class ExprStmt extends ConjunctionRule {
      * '=' 'exprlist_star'
      */
     public static final class ExprStmt22 extends ConjunctionRule {
-        public static final String RULE_NAME = "expr_stmt:2:2";
+
+        public static final ParserRule RULE =
+                new ParserRule("expr_stmt:2:2", RuleType.Conjunction, false);
 
         private final boolean isTokenAssign;
         private final ExprlistStar exprlistStar;
@@ -178,9 +184,8 @@ public final class ExprStmt extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("isTokenAssign", isTokenAssign);
-            addRequired("exprlistStar", exprlistStar);
+            addRequired("isTokenAssign", isTokenAssign());
+            addRequired("exprlistStar", exprlistStar());
         }
 
         public boolean isTokenAssign() {
@@ -192,10 +197,10 @@ public final class ExprStmt extends ConjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeTokenLiteral("=");

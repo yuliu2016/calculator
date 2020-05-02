@@ -1,14 +1,14 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ConjunctionRule;
-import org.fugalang.core.parser.DisjunctionRule;
-import org.fugalang.core.parser.ParseTree;
+import org.fugalang.core.parser.*;
 
 /**
  * inversion: 'not' 'inversion' | 'comparison'
  */
 public final class Inversion extends DisjunctionRule {
-    public static final String RULE_NAME = "inversion";
+
+    public static final ParserRule RULE =
+            new ParserRule("inversion", RuleType.Disjunction, true);
 
     private final Inversion1 inversion1;
     private final Comparison comparison;
@@ -23,9 +23,8 @@ public final class Inversion extends DisjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addChoice("inversion1", inversion1);
-        addChoice("comparison", comparison);
+        addChoice("inversion1", inversion1());
+        addChoice("comparison", comparison());
     }
 
     public Inversion1 inversion1() {
@@ -45,10 +44,10 @@ public final class Inversion extends DisjunctionRule {
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = Inversion1.parse(parseTree, level + 1);
@@ -62,7 +61,9 @@ public final class Inversion extends DisjunctionRule {
      * 'not' 'inversion'
      */
     public static final class Inversion1 extends ConjunctionRule {
-        public static final String RULE_NAME = "inversion:1";
+
+        public static final ParserRule RULE =
+                new ParserRule("inversion:1", RuleType.Conjunction, false);
 
         private final boolean isTokenNot;
         private final Inversion inversion;
@@ -77,9 +78,8 @@ public final class Inversion extends DisjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("isTokenNot", isTokenNot);
-            addRequired("inversion", inversion);
+            addRequired("isTokenNot", isTokenNot());
+            addRequired("inversion", inversion());
         }
 
         public boolean isTokenNot() {
@@ -91,10 +91,10 @@ public final class Inversion extends DisjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeTokenLiteral("not");

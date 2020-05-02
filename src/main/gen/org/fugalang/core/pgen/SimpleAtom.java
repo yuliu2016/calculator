@@ -1,13 +1,14 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.DisjunctionRule;
-import org.fugalang.core.parser.ParseTree;
+import org.fugalang.core.parser.*;
 
 /**
  * simple_atom: 'NAME' | 'NUMBER' | 'STRING' | 'None' | 'True' | 'False'
  */
 public final class SimpleAtom extends DisjunctionRule {
-    public static final String RULE_NAME = "simple_atom";
+
+    public static final ParserRule RULE =
+            new ParserRule("simple_atom", RuleType.Disjunction, true);
 
     private final String name;
     private final Object number;
@@ -34,13 +35,12 @@ public final class SimpleAtom extends DisjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addChoice("name", name);
-        addChoice("number", number);
-        addChoice("string", string);
-        addChoice("isTokenNone", isTokenNone);
-        addChoice("isTokenTrue", isTokenTrue);
-        addChoice("isTokenFalse", isTokenFalse);
+        addChoice("name", name());
+        addChoice("number", number());
+        addChoice("string", string());
+        addChoice("isTokenNone", isTokenNone());
+        addChoice("isTokenTrue", isTokenTrue());
+        addChoice("isTokenFalse", isTokenFalse());
     }
 
     public String name() {
@@ -80,10 +80,10 @@ public final class SimpleAtom extends DisjunctionRule {
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = parseTree.consumeTokenType("NAME");

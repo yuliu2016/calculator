@@ -1,13 +1,14 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ConjunctionRule;
-import org.fugalang.core.parser.ParseTree;
+import org.fugalang.core.parser.*;
 
 /**
  * del_stmt: 'del' 'targets'
  */
 public final class DelStmt extends ConjunctionRule {
-    public static final String RULE_NAME = "del_stmt";
+
+    public static final ParserRule RULE =
+            new ParserRule("del_stmt", RuleType.Conjunction, true);
 
     private final boolean isTokenDel;
     private final Targets targets;
@@ -22,9 +23,8 @@ public final class DelStmt extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addRequired("isTokenDel", isTokenDel);
-        addRequired("targets", targets);
+        addRequired("isTokenDel", isTokenDel());
+        addRequired("targets", targets());
     }
 
     public boolean isTokenDel() {
@@ -36,10 +36,10 @@ public final class DelStmt extends ConjunctionRule {
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = parseTree.consumeTokenLiteral("del");

@@ -1,13 +1,14 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.DisjunctionRule;
-import org.fugalang.core.parser.ParseTree;
+import org.fugalang.core.parser.*;
 
 /**
  * atom: 'compound_atom' | 'simple_atom'
  */
 public final class Atom extends DisjunctionRule {
-    public static final String RULE_NAME = "atom";
+
+    public static final ParserRule RULE =
+            new ParserRule("atom", RuleType.Disjunction, true);
 
     private final CompoundAtom compoundAtom;
     private final SimpleAtom simpleAtom;
@@ -22,9 +23,8 @@ public final class Atom extends DisjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addChoice("compoundAtom", compoundAtom);
-        addChoice("simpleAtom", simpleAtom);
+        addChoice("compoundAtom", compoundAtom());
+        addChoice("simpleAtom", simpleAtom());
     }
 
     public CompoundAtom compoundAtom() {
@@ -44,10 +44,10 @@ public final class Atom extends DisjunctionRule {
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = CompoundAtom.parse(parseTree, level + 1);

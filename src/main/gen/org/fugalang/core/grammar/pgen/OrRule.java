@@ -1,12 +1,16 @@
 package org.fugalang.core.grammar.pgen;
 
-import org.fugalang.core.parser.ParseTree;
-import org.fugalang.core.parser.ConjunctionRule;
+import org.fugalang.core.parser.*;
+
 import java.util.List;
 
-// or_rule: 'and_rule' ('|' 'and_rule')*
+/**
+ * or_rule: 'and_rule' ('|' 'and_rule')*
+ */
 public final class OrRule extends ConjunctionRule {
-    public static final String RULE_NAME = "or_rule";
+
+    public static final ParserRule RULE =
+            new ParserRule("or_rule", RuleType.Conjunction, true);
 
     private final AndRule andRule;
     private final List<OrRule2> orRule2List;
@@ -21,9 +25,8 @@ public final class OrRule extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addRequired("andRule", andRule);
-        addRequired("orRule2List", orRule2List);
+        addRequired("andRule", andRule());
+        addRequired("orRule2List", orRule2List());
     }
 
     public AndRule andRule() {
@@ -35,16 +38,18 @@ public final class OrRule extends ConjunctionRule {
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = AndRule.parse(parseTree, level + 1);
         parseTree.enterCollection();
         while (true) {
-            if (!OrRule2.parse(parseTree, level + 1)) {
+            var pos = parseTree.position();
+            if (!OrRule2.parse(parseTree, level + 1) ||
+                    parseTree.guardLoopExit(pos)) {
                 break;
             }
         }
@@ -54,9 +59,13 @@ public final class OrRule extends ConjunctionRule {
         return result;
     }
 
-    // '|' 'and_rule'
+    /**
+     * '|' 'and_rule'
+     */
     public static final class OrRule2 extends ConjunctionRule {
-        public static final String RULE_NAME = "or_rule:2";
+
+        public static final ParserRule RULE =
+                new ParserRule("or_rule:2", RuleType.Conjunction, false);
 
         private final boolean isTokenOr;
         private final AndRule andRule;
@@ -71,9 +80,8 @@ public final class OrRule extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("isTokenOr", isTokenOr);
-            addRequired("andRule", andRule);
+            addRequired("isTokenOr", isTokenOr());
+            addRequired("andRule", andRule());
         }
 
         public boolean isTokenOr() {
@@ -85,10 +93,10 @@ public final class OrRule extends ConjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeTokenLiteral("|");

@@ -1,8 +1,6 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ConjunctionRule;
-import org.fugalang.core.parser.DisjunctionRule;
-import org.fugalang.core.parser.ParseTree;
+import org.fugalang.core.parser.*;
 
 import java.util.List;
 
@@ -10,7 +8,9 @@ import java.util.List;
  * set_maker: 'expr_or_star' ('comp_for' | (',' 'expr_or_star')* [','])
  */
 public final class SetMaker extends ConjunctionRule {
-    public static final String RULE_NAME = "set_maker";
+
+    public static final ParserRule RULE =
+            new ParserRule("set_maker", RuleType.Conjunction, true);
 
     private final ExprOrStar exprOrStar;
     private final SetMaker2 setMaker2;
@@ -25,9 +25,8 @@ public final class SetMaker extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addRequired("exprOrStar", exprOrStar);
-        addRequired("setMaker2", setMaker2);
+        addRequired("exprOrStar", exprOrStar());
+        addRequired("setMaker2", setMaker2());
     }
 
     public ExprOrStar exprOrStar() {
@@ -39,10 +38,10 @@ public final class SetMaker extends ConjunctionRule {
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = ExprOrStar.parse(parseTree, level + 1);
@@ -56,7 +55,9 @@ public final class SetMaker extends ConjunctionRule {
      * 'comp_for' | (',' 'expr_or_star')* [',']
      */
     public static final class SetMaker2 extends DisjunctionRule {
-        public static final String RULE_NAME = "set_maker:2";
+
+        public static final ParserRule RULE =
+                new ParserRule("set_maker:2", RuleType.Disjunction, false);
 
         private final CompFor compFor;
         private final SetMaker22 setMaker22;
@@ -71,9 +72,8 @@ public final class SetMaker extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addChoice("compFor", compFor);
-            addChoice("setMaker22", setMaker22);
+            addChoice("compFor", compFor());
+            addChoice("setMaker22", setMaker22());
         }
 
         public CompFor compFor() {
@@ -93,10 +93,10 @@ public final class SetMaker extends ConjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = CompFor.parse(parseTree, level + 1);
@@ -111,7 +111,9 @@ public final class SetMaker extends ConjunctionRule {
      * (',' 'expr_or_star')* [',']
      */
     public static final class SetMaker22 extends ConjunctionRule {
-        public static final String RULE_NAME = "set_maker:2:2";
+
+        public static final ParserRule RULE =
+                new ParserRule("set_maker:2:2", RuleType.Conjunction, false);
 
         private final List<SetMaker221> setMaker221List;
         private final boolean isTokenComma;
@@ -126,9 +128,8 @@ public final class SetMaker extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("setMaker221List", setMaker221List);
-            addRequired("isTokenComma", isTokenComma);
+            addRequired("setMaker221List", setMaker221List());
+            addRequired("isTokenComma", isTokenComma());
         }
 
         public List<SetMaker221> setMaker221List() {
@@ -140,10 +141,10 @@ public final class SetMaker extends ConjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             parseTree.enterCollection();
@@ -166,7 +167,9 @@ public final class SetMaker extends ConjunctionRule {
      * ',' 'expr_or_star'
      */
     public static final class SetMaker221 extends ConjunctionRule {
-        public static final String RULE_NAME = "set_maker:2:2:1";
+
+        public static final ParserRule RULE =
+                new ParserRule("set_maker:2:2:1", RuleType.Conjunction, false);
 
         private final boolean isTokenComma;
         private final ExprOrStar exprOrStar;
@@ -181,9 +184,8 @@ public final class SetMaker extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("isTokenComma", isTokenComma);
-            addRequired("exprOrStar", exprOrStar);
+            addRequired("isTokenComma", isTokenComma());
+            addRequired("exprOrStar", exprOrStar());
         }
 
         public boolean isTokenComma() {
@@ -195,10 +197,10 @@ public final class SetMaker extends ConjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeTokenLiteral(",");

@@ -1,14 +1,14 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ConjunctionRule;
-import org.fugalang.core.parser.DisjunctionRule;
-import org.fugalang.core.parser.ParseTree;
+import org.fugalang.core.parser.*;
 
 /**
  * expr: 'if' 'disjunction' '?' 'disjunction' 'else' 'expr' | 'disjunction' | 'funcdef'
  */
 public final class Expr extends DisjunctionRule {
-    public static final String RULE_NAME = "expr";
+
+    public static final ParserRule RULE =
+            new ParserRule("expr", RuleType.Disjunction, true);
 
     private final Expr1 expr1;
     private final Disjunction disjunction;
@@ -26,10 +26,9 @@ public final class Expr extends DisjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addChoice("expr1", expr1);
-        addChoice("disjunction", disjunction);
-        addChoice("funcdef", funcdef);
+        addChoice("expr1", expr1());
+        addChoice("disjunction", disjunction());
+        addChoice("funcdef", funcdef());
     }
 
     public Expr1 expr1() {
@@ -57,10 +56,10 @@ public final class Expr extends DisjunctionRule {
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = Expr1.parse(parseTree, level + 1);
@@ -75,7 +74,9 @@ public final class Expr extends DisjunctionRule {
      * 'if' 'disjunction' '?' 'disjunction' 'else' 'expr'
      */
     public static final class Expr1 extends ConjunctionRule {
-        public static final String RULE_NAME = "expr:1";
+
+        public static final ParserRule RULE =
+                new ParserRule("expr:1", RuleType.Conjunction, false);
 
         private final boolean isTokenIf;
         private final Disjunction disjunction;
@@ -102,13 +103,12 @@ public final class Expr extends DisjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("isTokenIf", isTokenIf);
-            addRequired("disjunction", disjunction);
-            addRequired("isTokenTernery", isTokenTernery);
-            addRequired("disjunction1", disjunction1);
-            addRequired("isTokenElse", isTokenElse);
-            addRequired("expr", expr);
+            addRequired("isTokenIf", isTokenIf());
+            addRequired("disjunction", disjunction());
+            addRequired("isTokenTernery", isTokenTernery());
+            addRequired("disjunction1", disjunction1());
+            addRequired("isTokenElse", isTokenElse());
+            addRequired("expr", expr());
         }
 
         public boolean isTokenIf() {
@@ -136,10 +136,10 @@ public final class Expr extends DisjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeTokenLiteral("if");

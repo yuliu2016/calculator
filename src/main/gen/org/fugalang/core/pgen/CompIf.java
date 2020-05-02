@@ -1,15 +1,14 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ConjunctionRule;
-import org.fugalang.core.parser.ParseTree;
-
-import java.util.Optional;
+import org.fugalang.core.parser.*;
 
 /**
  * comp_if: 'if' 'expr' ['comp_iter']
  */
 public final class CompIf extends ConjunctionRule {
-    public static final String RULE_NAME = "comp_if";
+
+    public static final ParserRule RULE =
+            new ParserRule("comp_if", RuleType.Conjunction, true);
 
     private final boolean isTokenIf;
     private final Expr expr;
@@ -27,10 +26,9 @@ public final class CompIf extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addRequired("isTokenIf", isTokenIf);
-        addRequired("expr", expr);
-        addOptional("compIter", compIter);
+        addRequired("isTokenIf", isTokenIf());
+        addRequired("expr", expr());
+        addOptional("compIter", compIter());
     }
 
     public boolean isTokenIf() {
@@ -41,15 +39,19 @@ public final class CompIf extends ConjunctionRule {
         return expr;
     }
 
-    public Optional<CompIter> compIter() {
-        return Optional.ofNullable(compIter);
+    public CompIter compIter() {
+        return compIter;
+    }
+
+    public boolean hasCompIter() {
+        return compIter() != null;
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = parseTree.consumeTokenLiteral("if");

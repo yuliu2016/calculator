@@ -1,7 +1,6 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ConjunctionRule;
-import org.fugalang.core.parser.ParseTree;
+import org.fugalang.core.parser.*;
 
 import java.util.List;
 
@@ -9,7 +8,9 @@ import java.util.List;
  * disjunction: 'conjunction' ('or' 'conjunction')*
  */
 public final class Disjunction extends ConjunctionRule {
-    public static final String RULE_NAME = "disjunction";
+
+    public static final ParserRule RULE =
+            new ParserRule("disjunction", RuleType.Conjunction, true);
 
     private final Conjunction conjunction;
     private final List<Disjunction2> disjunction2List;
@@ -24,9 +25,8 @@ public final class Disjunction extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addRequired("conjunction", conjunction);
-        addRequired("disjunction2List", disjunction2List);
+        addRequired("conjunction", conjunction());
+        addRequired("disjunction2List", disjunction2List());
     }
 
     public Conjunction conjunction() {
@@ -38,10 +38,10 @@ public final class Disjunction extends ConjunctionRule {
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = Conjunction.parse(parseTree, level + 1);
@@ -63,7 +63,9 @@ public final class Disjunction extends ConjunctionRule {
      * 'or' 'conjunction'
      */
     public static final class Disjunction2 extends ConjunctionRule {
-        public static final String RULE_NAME = "disjunction:2";
+
+        public static final ParserRule RULE =
+                new ParserRule("disjunction:2", RuleType.Conjunction, false);
 
         private final boolean isTokenOr;
         private final Conjunction conjunction;
@@ -78,9 +80,8 @@ public final class Disjunction extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("isTokenOr", isTokenOr);
-            addRequired("conjunction", conjunction);
+            addRequired("isTokenOr", isTokenOr());
+            addRequired("conjunction", conjunction());
         }
 
         public boolean isTokenOr() {
@@ -92,10 +93,10 @@ public final class Disjunction extends ConjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeTokenLiteral("or");

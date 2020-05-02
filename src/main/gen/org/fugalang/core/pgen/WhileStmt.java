@@ -1,15 +1,14 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ConjunctionRule;
-import org.fugalang.core.parser.ParseTree;
-
-import java.util.Optional;
+import org.fugalang.core.parser.*;
 
 /**
  * while_stmt: 'while' 'namedexpr_expr' 'suite' ['else' 'suite']
  */
 public final class WhileStmt extends ConjunctionRule {
-    public static final String RULE_NAME = "while_stmt";
+
+    public static final ParserRule RULE =
+            new ParserRule("while_stmt", RuleType.Conjunction, true);
 
     private final boolean isTokenWhile;
     private final NamedexprExpr namedexprExpr;
@@ -30,11 +29,10 @@ public final class WhileStmt extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addRequired("isTokenWhile", isTokenWhile);
-        addRequired("namedexprExpr", namedexprExpr);
-        addRequired("suite", suite);
-        addOptional("whileStmt4", whileStmt4);
+        addRequired("isTokenWhile", isTokenWhile());
+        addRequired("namedexprExpr", namedexprExpr());
+        addRequired("suite", suite());
+        addOptional("whileStmt4", whileStmt4());
     }
 
     public boolean isTokenWhile() {
@@ -49,15 +47,19 @@ public final class WhileStmt extends ConjunctionRule {
         return suite;
     }
 
-    public Optional<WhileStmt4> whileStmt4() {
-        return Optional.ofNullable(whileStmt4);
+    public WhileStmt4 whileStmt4() {
+        return whileStmt4;
+    }
+
+    public boolean hasWhileStmt4() {
+        return whileStmt4() != null;
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = parseTree.consumeTokenLiteral("while");
@@ -73,7 +75,9 @@ public final class WhileStmt extends ConjunctionRule {
      * 'else' 'suite'
      */
     public static final class WhileStmt4 extends ConjunctionRule {
-        public static final String RULE_NAME = "while_stmt:4";
+
+        public static final ParserRule RULE =
+                new ParserRule("while_stmt:4", RuleType.Conjunction, false);
 
         private final boolean isTokenElse;
         private final Suite suite;
@@ -88,9 +92,8 @@ public final class WhileStmt extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("isTokenElse", isTokenElse);
-            addRequired("suite", suite);
+            addRequired("isTokenElse", isTokenElse());
+            addRequired("suite", suite());
         }
 
         public boolean isTokenElse() {
@@ -102,10 +105,10 @@ public final class WhileStmt extends ConjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeTokenLiteral("else");

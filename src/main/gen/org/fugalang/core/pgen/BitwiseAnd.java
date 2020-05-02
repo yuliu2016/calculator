@@ -1,7 +1,6 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ConjunctionRule;
-import org.fugalang.core.parser.ParseTree;
+import org.fugalang.core.parser.*;
 
 import java.util.List;
 
@@ -9,7 +8,9 @@ import java.util.List;
  * bitwise_and: 'shift_expr' ('&' 'shift_expr')*
  */
 public final class BitwiseAnd extends ConjunctionRule {
-    public static final String RULE_NAME = "bitwise_and";
+
+    public static final ParserRule RULE =
+            new ParserRule("bitwise_and", RuleType.Conjunction, true);
 
     private final ShiftExpr shiftExpr;
     private final List<BitwiseAnd2> bitwiseAnd2List;
@@ -24,9 +25,8 @@ public final class BitwiseAnd extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addRequired("shiftExpr", shiftExpr);
-        addRequired("bitwiseAnd2List", bitwiseAnd2List);
+        addRequired("shiftExpr", shiftExpr());
+        addRequired("bitwiseAnd2List", bitwiseAnd2List());
     }
 
     public ShiftExpr shiftExpr() {
@@ -38,10 +38,10 @@ public final class BitwiseAnd extends ConjunctionRule {
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = ShiftExpr.parse(parseTree, level + 1);
@@ -63,7 +63,9 @@ public final class BitwiseAnd extends ConjunctionRule {
      * '&' 'shift_expr'
      */
     public static final class BitwiseAnd2 extends ConjunctionRule {
-        public static final String RULE_NAME = "bitwise_and:2";
+
+        public static final ParserRule RULE =
+                new ParserRule("bitwise_and:2", RuleType.Conjunction, false);
 
         private final boolean isTokenBitAnd;
         private final ShiftExpr shiftExpr;
@@ -78,9 +80,8 @@ public final class BitwiseAnd extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("isTokenBitAnd", isTokenBitAnd);
-            addRequired("shiftExpr", shiftExpr);
+            addRequired("isTokenBitAnd", isTokenBitAnd());
+            addRequired("shiftExpr", shiftExpr());
         }
 
         public boolean isTokenBitAnd() {
@@ -92,10 +93,10 @@ public final class BitwiseAnd extends ConjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeTokenLiteral("&");

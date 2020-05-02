@@ -1,15 +1,14 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ConjunctionRule;
-import org.fugalang.core.parser.ParseTree;
-
-import java.util.Optional;
+import org.fugalang.core.parser.*;
 
 /**
  * import_as_name: 'NAME' ['as' 'NAME']
  */
 public final class ImportAsName extends ConjunctionRule {
-    public static final String RULE_NAME = "import_as_name";
+
+    public static final ParserRule RULE =
+            new ParserRule("import_as_name", RuleType.Conjunction, true);
 
     private final String name;
     private final ImportAsName2 importAsName2;
@@ -24,24 +23,27 @@ public final class ImportAsName extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addRequired("name", name);
-        addOptional("importAsName2", importAsName2);
+        addRequired("name", name());
+        addOptional("importAsName2", importAsName2());
     }
 
     public String name() {
         return name;
     }
 
-    public Optional<ImportAsName2> importAsName2() {
-        return Optional.ofNullable(importAsName2);
+    public ImportAsName2 importAsName2() {
+        return importAsName2;
+    }
+
+    public boolean hasImportAsName2() {
+        return importAsName2() != null;
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = parseTree.consumeTokenType("NAME");
@@ -55,7 +57,9 @@ public final class ImportAsName extends ConjunctionRule {
      * 'as' 'NAME'
      */
     public static final class ImportAsName2 extends ConjunctionRule {
-        public static final String RULE_NAME = "import_as_name:2";
+
+        public static final ParserRule RULE =
+                new ParserRule("import_as_name:2", RuleType.Conjunction, false);
 
         private final boolean isTokenAs;
         private final String name;
@@ -70,9 +74,8 @@ public final class ImportAsName extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("isTokenAs", isTokenAs);
-            addRequired("name", name);
+            addRequired("isTokenAs", isTokenAs());
+            addRequired("name", name());
         }
 
         public boolean isTokenAs() {
@@ -84,10 +87,10 @@ public final class ImportAsName extends ConjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeTokenLiteral("as");

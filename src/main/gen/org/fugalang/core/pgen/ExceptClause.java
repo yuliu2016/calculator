@@ -1,15 +1,14 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ConjunctionRule;
-import org.fugalang.core.parser.ParseTree;
-
-import java.util.Optional;
+import org.fugalang.core.parser.*;
 
 /**
  * except_clause: 'except' ['expr' ['as' 'NAME']]
  */
 public final class ExceptClause extends ConjunctionRule {
-    public static final String RULE_NAME = "except_clause";
+
+    public static final ParserRule RULE =
+            new ParserRule("except_clause", RuleType.Conjunction, true);
 
     private final boolean isTokenExcept;
     private final ExceptClause2 exceptClause2;
@@ -24,24 +23,27 @@ public final class ExceptClause extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addRequired("isTokenExcept", isTokenExcept);
-        addOptional("exceptClause2", exceptClause2);
+        addRequired("isTokenExcept", isTokenExcept());
+        addOptional("exceptClause2", exceptClause2());
     }
 
     public boolean isTokenExcept() {
         return isTokenExcept;
     }
 
-    public Optional<ExceptClause2> exceptClause2() {
-        return Optional.ofNullable(exceptClause2);
+    public ExceptClause2 exceptClause2() {
+        return exceptClause2;
+    }
+
+    public boolean hasExceptClause2() {
+        return exceptClause2() != null;
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = parseTree.consumeTokenLiteral("except");
@@ -55,7 +57,9 @@ public final class ExceptClause extends ConjunctionRule {
      * 'expr' ['as' 'NAME']
      */
     public static final class ExceptClause2 extends ConjunctionRule {
-        public static final String RULE_NAME = "except_clause:2";
+
+        public static final ParserRule RULE =
+                new ParserRule("except_clause:2", RuleType.Conjunction, false);
 
         private final Expr expr;
         private final ExceptClause22 exceptClause22;
@@ -70,24 +74,27 @@ public final class ExceptClause extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("expr", expr);
-            addOptional("exceptClause22", exceptClause22);
+            addRequired("expr", expr());
+            addOptional("exceptClause22", exceptClause22());
         }
 
         public Expr expr() {
             return expr;
         }
 
-        public Optional<ExceptClause22> exceptClause22() {
-            return Optional.ofNullable(exceptClause22);
+        public ExceptClause22 exceptClause22() {
+            return exceptClause22;
+        }
+
+        public boolean hasExceptClause22() {
+            return exceptClause22() != null;
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = Expr.parse(parseTree, level + 1);
@@ -102,7 +109,9 @@ public final class ExceptClause extends ConjunctionRule {
      * 'as' 'NAME'
      */
     public static final class ExceptClause22 extends ConjunctionRule {
-        public static final String RULE_NAME = "except_clause:2:2";
+
+        public static final ParserRule RULE =
+                new ParserRule("except_clause:2:2", RuleType.Conjunction, false);
 
         private final boolean isTokenAs;
         private final String name;
@@ -117,9 +126,8 @@ public final class ExceptClause extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("isTokenAs", isTokenAs);
-            addRequired("name", name);
+            addRequired("isTokenAs", isTokenAs());
+            addRequired("name", name());
         }
 
         public boolean isTokenAs() {
@@ -131,10 +139,10 @@ public final class ExceptClause extends ConjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeTokenLiteral("as");

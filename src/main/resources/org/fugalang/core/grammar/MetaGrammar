@@ -1,6 +1,6 @@
 # Meta Grammar
 
-rules:       single_rule*
+rules:       single_rule+
 single_rule: TOK ':' or_rule NEWLINE
 or_rule:     and_rule ('|' and_rule)*
 and_rule:    repeat_rule (repeat_rule)*

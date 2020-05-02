@@ -1,13 +1,14 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.DisjunctionRule;
-import org.fugalang.core.parser.ParseTree;
+import org.fugalang.core.parser.*;
 
 /**
  * compound_stmt: 'if_stmt' | 'while_stmt' | 'for_stmt' | 'try_stmt' | 'with_stmt'
  */
 public final class CompoundStmt extends DisjunctionRule {
-    public static final String RULE_NAME = "compound_stmt";
+
+    public static final ParserRule RULE =
+            new ParserRule("compound_stmt", RuleType.Disjunction, true);
 
     private final IfStmt ifStmt;
     private final WhileStmt whileStmt;
@@ -31,12 +32,11 @@ public final class CompoundStmt extends DisjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addChoice("ifStmt", ifStmt);
-        addChoice("whileStmt", whileStmt);
-        addChoice("forStmt", forStmt);
-        addChoice("tryStmt", tryStmt);
-        addChoice("withStmt", withStmt);
+        addChoice("ifStmt", ifStmt());
+        addChoice("whileStmt", whileStmt());
+        addChoice("forStmt", forStmt());
+        addChoice("tryStmt", tryStmt());
+        addChoice("withStmt", withStmt());
     }
 
     public IfStmt ifStmt() {
@@ -80,10 +80,10 @@ public final class CompoundStmt extends DisjunctionRule {
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = IfStmt.parse(parseTree, level + 1);

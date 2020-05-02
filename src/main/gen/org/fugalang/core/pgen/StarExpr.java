@@ -1,13 +1,14 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ConjunctionRule;
-import org.fugalang.core.parser.ParseTree;
+import org.fugalang.core.parser.*;
 
 /**
  * star_expr: '*' 'bitwise_or'
  */
 public final class StarExpr extends ConjunctionRule {
-    public static final String RULE_NAME = "star_expr";
+
+    public static final ParserRule RULE =
+            new ParserRule("star_expr", RuleType.Conjunction, true);
 
     private final boolean isTokenTimes;
     private final BitwiseOr bitwiseOr;
@@ -22,9 +23,8 @@ public final class StarExpr extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addRequired("isTokenTimes", isTokenTimes);
-        addRequired("bitwiseOr", bitwiseOr);
+        addRequired("isTokenTimes", isTokenTimes());
+        addRequired("bitwiseOr", bitwiseOr());
     }
 
     public boolean isTokenTimes() {
@@ -36,10 +36,10 @@ public final class StarExpr extends ConjunctionRule {
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = parseTree.consumeTokenLiteral("*");

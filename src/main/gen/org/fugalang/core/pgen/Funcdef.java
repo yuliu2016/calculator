@@ -1,16 +1,14 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ConjunctionRule;
-import org.fugalang.core.parser.DisjunctionRule;
-import org.fugalang.core.parser.ParseTree;
-
-import java.util.Optional;
+import org.fugalang.core.parser.*;
 
 /**
  * funcdef: ['async'] 'def' ['varargslist'] (':' 'expr' | 'block_suite')
  */
 public final class Funcdef extends ConjunctionRule {
-    public static final String RULE_NAME = "funcdef";
+
+    public static final ParserRule RULE =
+            new ParserRule("funcdef", RuleType.Conjunction, true);
 
     private final boolean isTokenAsync;
     private final boolean isTokenDef;
@@ -31,11 +29,10 @@ public final class Funcdef extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addRequired("isTokenAsync", isTokenAsync);
-        addRequired("isTokenDef", isTokenDef);
-        addOptional("varargslist", varargslist);
-        addRequired("funcdef4", funcdef4);
+        addRequired("isTokenAsync", isTokenAsync());
+        addRequired("isTokenDef", isTokenDef());
+        addOptional("varargslist", varargslist());
+        addRequired("funcdef4", funcdef4());
     }
 
     public boolean isTokenAsync() {
@@ -46,8 +43,12 @@ public final class Funcdef extends ConjunctionRule {
         return isTokenDef;
     }
 
-    public Optional<Varargslist> varargslist() {
-        return Optional.ofNullable(varargslist);
+    public Varargslist varargslist() {
+        return varargslist;
+    }
+
+    public boolean hasVarargslist() {
+        return varargslist() != null;
     }
 
     public Funcdef4 funcdef4() {
@@ -55,10 +56,10 @@ public final class Funcdef extends ConjunctionRule {
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = parseTree.consumeTokenLiteral("async");
@@ -74,7 +75,9 @@ public final class Funcdef extends ConjunctionRule {
      * ':' 'expr' | 'block_suite'
      */
     public static final class Funcdef4 extends DisjunctionRule {
-        public static final String RULE_NAME = "funcdef:4";
+
+        public static final ParserRule RULE =
+                new ParserRule("funcdef:4", RuleType.Disjunction, false);
 
         private final Funcdef41 funcdef41;
         private final BlockSuite blockSuite;
@@ -89,9 +92,8 @@ public final class Funcdef extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addChoice("funcdef41", funcdef41);
-            addChoice("blockSuite", blockSuite);
+            addChoice("funcdef41", funcdef41());
+            addChoice("blockSuite", blockSuite());
         }
 
         public Funcdef41 funcdef41() {
@@ -111,10 +113,10 @@ public final class Funcdef extends ConjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = Funcdef41.parse(parseTree, level + 1);
@@ -129,7 +131,9 @@ public final class Funcdef extends ConjunctionRule {
      * ':' 'expr'
      */
     public static final class Funcdef41 extends ConjunctionRule {
-        public static final String RULE_NAME = "funcdef:4:1";
+
+        public static final ParserRule RULE =
+                new ParserRule("funcdef:4:1", RuleType.Conjunction, false);
 
         private final boolean isTokenColon;
         private final Expr expr;
@@ -144,9 +148,8 @@ public final class Funcdef extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("isTokenColon", isTokenColon);
-            addRequired("expr", expr);
+            addRequired("isTokenColon", isTokenColon());
+            addRequired("expr", expr());
         }
 
         public boolean isTokenColon() {
@@ -158,10 +161,10 @@ public final class Funcdef extends ConjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeTokenLiteral(":");

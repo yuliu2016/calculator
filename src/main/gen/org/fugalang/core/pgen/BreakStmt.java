@@ -1,13 +1,14 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ConjunctionRule;
-import org.fugalang.core.parser.ParseTree;
+import org.fugalang.core.parser.*;
 
 /**
  * break_stmt: 'break'
  */
 public final class BreakStmt extends ConjunctionRule {
-    public static final String RULE_NAME = "break_stmt";
+
+    public static final ParserRule RULE =
+            new ParserRule("break_stmt", RuleType.Conjunction, true);
 
     private final boolean isTokenBreak;
 
@@ -19,8 +20,7 @@ public final class BreakStmt extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addRequired("isTokenBreak", isTokenBreak);
+        addRequired("isTokenBreak", isTokenBreak());
     }
 
     public boolean isTokenBreak() {
@@ -28,10 +28,10 @@ public final class BreakStmt extends ConjunctionRule {
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = parseTree.consumeTokenLiteral("break");

@@ -1,7 +1,6 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.ConjunctionRule;
-import org.fugalang.core.parser.ParseTree;
+import org.fugalang.core.parser.*;
 
 import java.util.List;
 
@@ -9,7 +8,9 @@ import java.util.List;
  * simple_stmt: 'small_stmt' (';' 'small_stmt')* [';']
  */
 public final class SimpleStmt extends ConjunctionRule {
-    public static final String RULE_NAME = "simple_stmt";
+
+    public static final ParserRule RULE =
+            new ParserRule("simple_stmt", RuleType.Conjunction, true);
 
     private final SmallStmt smallStmt;
     private final List<SimpleStmt2> simpleStmt2List;
@@ -27,10 +28,9 @@ public final class SimpleStmt extends ConjunctionRule {
 
     @Override
     protected void buildRule() {
-        setExplicitName(RULE_NAME);
-        addRequired("smallStmt", smallStmt);
-        addRequired("simpleStmt2List", simpleStmt2List);
-        addRequired("isTokenSemicolon", isTokenSemicolon);
+        addRequired("smallStmt", smallStmt());
+        addRequired("simpleStmt2List", simpleStmt2List());
+        addRequired("isTokenSemicolon", isTokenSemicolon());
     }
 
     public SmallStmt smallStmt() {
@@ -46,10 +46,10 @@ public final class SimpleStmt extends ConjunctionRule {
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
         }
-        var marker = parseTree.enter(level, RULE_NAME);
+        var marker = parseTree.enter(level, RULE);
         boolean result;
 
         result = SmallStmt.parse(parseTree, level + 1);
@@ -72,7 +72,9 @@ public final class SimpleStmt extends ConjunctionRule {
      * ';' 'small_stmt'
      */
     public static final class SimpleStmt2 extends ConjunctionRule {
-        public static final String RULE_NAME = "simple_stmt:2";
+
+        public static final ParserRule RULE =
+                new ParserRule("simple_stmt:2", RuleType.Conjunction, false);
 
         private final boolean isTokenSemicolon;
         private final SmallStmt smallStmt;
@@ -87,9 +89,8 @@ public final class SimpleStmt extends ConjunctionRule {
 
         @Override
         protected void buildRule() {
-            setImpliedName(RULE_NAME);
-            addRequired("isTokenSemicolon", isTokenSemicolon);
-            addRequired("smallStmt", smallStmt);
+            addRequired("isTokenSemicolon", isTokenSemicolon());
+            addRequired("smallStmt", smallStmt());
         }
 
         public boolean isTokenSemicolon() {
@@ -101,10 +102,10 @@ public final class SimpleStmt extends ConjunctionRule {
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParseTree.recursionGuard(level, RULE_NAME)) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
-            var marker = parseTree.enter(level, RULE_NAME);
+            var marker = parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeTokenLiteral(";");

@@ -2,6 +2,7 @@ package org.fugalang.core.grammar.classbuilder;
 
 
 import org.fugalang.core.grammar.gen.ParserStringUtil;
+import org.fugalang.core.parser.RuleType;
 
 public class ClassField {
     private final ClassName className;
@@ -56,21 +57,11 @@ public class ClassField {
         StringBuilder sb = new StringBuilder();
         sb.append("    public ");
 
-        if (isOptionalSingle()) {
-            sb.append(className.wrapIn("Optional").asType());
-        } else {
-            sb.append(className.asType());
-        }
+        sb.append(className.asType());
 
         sb.append(" ").append(fieldName).append("() {\n        return ");
 
-        if (isOptionalSingle()) {
-            sb.append("Optional.ofNullable(")
-                    .append(fieldName)
-                    .append(")");
-        } else {
-            sb.append(fieldName);
-        }
+        sb.append(fieldName);
 
         sb.append(";\n    }\n");
 
@@ -78,7 +69,7 @@ public class ClassField {
     }
 
     public String asNullCheck() {
-        if (isOptionalSingle() || className.isNotNull()) {
+        if (className.isNotNull()) {
             return "";
         }
         return "\n    public boolean has" +
@@ -91,13 +82,13 @@ public class ClassField {
     public String asRuleStmt(RuleType ruleType) {
         switch (ruleType) {
             case Disjunction -> {
-                return "addChoice(\"" + fieldName + "\", " + fieldName + ");";
+                return "addChoice(\"" + fieldName + "\", " + fieldName + "());";
             }
             case Conjunction -> {
                 if (isOptionalSingle()) {
-                    return "addOptional(\"" + fieldName + "\", " + fieldName + ");";
+                    return "addOptional(\"" + fieldName + "\", " + fieldName + "());";
                 } else {
-                    return "addRequired(\"" + fieldName + "\", " + fieldName + ");";
+                    return "addRequired(\"" + fieldName + "\", " + fieldName + "());";
                 }
             }
             default -> throw new IllegalArgumentException("ClassField does not support RuleType" + ruleType);
