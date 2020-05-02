@@ -1,6 +1,5 @@
 package org.fugalang.core.pprint;
 
-import org.fugalang.core.token.Operator;
 import org.fugalang.core.token.Token;
 
 import java.util.List;
@@ -48,11 +47,12 @@ public class TokenPPrint {
                 continue;
             }
 
-            var value_formatted = switch (type) {
-                case STRING -> ConsoleColor.wrap(ConsoleColor.GREEN, "\"" + value.toString() + "\"");
-                case OPERATOR -> " " + ((Operator) value).getCode();
-                default -> " " + value.toString();
-            };
+            String value_formatted;
+            if (type == STRING) {
+                value_formatted = ConsoleColor.wrap(ConsoleColor.GREEN, "\"" + value + "\"");
+            } else {
+                value_formatted = " " + value;
+            }
 
             if (type == KEYWORD) {
                 value_formatted = ConsoleColor.wrap(ConsoleColor.BRIGHT_BLUE, value_formatted);

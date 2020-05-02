@@ -7,10 +7,10 @@ import java.util.List;
 public class ArithmeticExpr {
     Term first_term;
 
-    List<Operator> ops;
+    List<String> ops;
     List<Term> terms;
 
-    public ArithmeticExpr(Term first_term, List<Operator> ops, List<Term> terms) {
+    public ArithmeticExpr(Term first_term, List<String> ops, List<Term> terms) {
         this.first_term = first_term;
         this.ops = ops;
         this.terms = terms;
@@ -25,7 +25,7 @@ public class ArithmeticExpr {
         return first_term;
     }
 
-    public List<Operator> getOps() {
+    public List<String> getOps() {
         return ops;
     }
 
@@ -42,7 +42,7 @@ public class ArithmeticExpr {
         sb.append(first_term);
         for (int i = 0; i < ops.size(); i++) {
             sb.append(" ");
-            sb.append(ops.get(i).getCode());
+            sb.append(ops.get(i));
             sb.append(" ");
             sb.append(terms.get(i));
         }

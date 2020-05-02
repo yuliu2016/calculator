@@ -31,17 +31,17 @@ public final class SimpleAtom extends NodeWrapper {
     public String name() {
         var element = getItem(0);
         if (!element.isPresent()) return null;
-        return (String) element.asObject();
+        return element.asString();
     }
 
     public boolean hasName() {
         return name() != null;
     }
 
-    public Object number() {
+    public String number() {
         var element = getItem(1);
         if (!element.isPresent()) return null;
-        return element.asObject();
+        return element.asString();
     }
 
     public boolean hasNumber() {
@@ -51,7 +51,7 @@ public final class SimpleAtom extends NodeWrapper {
     public String string() {
         var element = getItem(2);
         if (!element.isPresent()) return null;
-        return (String) element.asObject();
+        return element.asString();
     }
 
     public boolean hasString() {

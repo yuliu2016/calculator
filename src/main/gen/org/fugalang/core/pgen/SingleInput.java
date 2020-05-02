@@ -25,10 +25,10 @@ public final class SingleInput extends NodeWrapper {
         addChoice("singleInput3", singleInput3());
     }
 
-    public Object newline() {
+    public String newline() {
         var element = getItem(0);
         if (!element.isPresent()) return null;
-        return element.asObject();
+        return element.asString();
     }
 
     public boolean hasNewline() {
@@ -98,10 +98,10 @@ public final class SingleInput extends NodeWrapper {
             return CompoundStmt.of(element);
         }
 
-        public Object newline() {
+        public String newline() {
             var element = getItem(1);
             if (!element.isPresent()) return null;
-            return element.asObject();
+            return element.asString();
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

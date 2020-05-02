@@ -16,25 +16,16 @@ public class Tokenizer {
     }
 
     /**
-     * tokenize all spacing as either NEWLINE or SPACE
+     * tokenize all spacing as NEWLINE
      * and ignore all the comments
      */
     private boolean tokenizeSpace() {
 
         var in_comment = CharTest.isSingleComment(visitor.p1);
 
-        // Use an int instead of boolean because it needs a
-        // counter to keep track of nested multi-line comments
-
-        // no need to check if p2 is null -- it just returns False
-        var multi_comment_level = CharTest.isOpenMultiComment(visitor.p2) ? 1 : 0;
-
-        if (!(in_comment || multi_comment_level > 0 || CharTest.isSpace(visitor.p1))) {
+        if (!(in_comment || CharTest.isSpace(visitor.p1))) {
             return false;
         }
-
-        // invariant condition:
-        // in_comment and in_multi_line_comment are mutually exclusive
 
         // make sure that newline is added if it's the first char
 
@@ -44,27 +35,14 @@ public class Tokenizer {
         // the space character visitor
         var sv = visitor.copyAndAdvance(1);
 
-        if (multi_comment_level > 0) {
-            // because the parsing needs to start an extra char later
-            // for a multi-line comment
-            sv.i++;
-        }
-
         while (sv.hasRemaining()) {
             sv.updateAllPeeks();
 
             // check that it's still in a commenting state, or
             // the next character is a comment
             if (!(in_comment ||
-                    multi_comment_level > 0 ||
                     CharTest.isSpace(sv.p1) ||
-                    CharTest.isSingleComment(sv.p1) ||
-                    CharTest.isOpenMultiComment(sv.p2)))
-                break;
-
-            // Fix: doc string with spaces before it will trigger multi-line
-            // comments instead of a doc str
-            if (CharTest.isOpenDocStr(sv.p3) && multi_comment_level == 0)
+                    CharTest.isSingleComment(sv.p1)))
                 break;
 
             if (CharTest.isCRLF(sv.p2)) {
@@ -79,31 +57,15 @@ public class Tokenizer {
             } else if (CharTest.isNewline(sv.p1)) {
                 in_comment = false;
                 newline = true;
-            } else if (CharTest.isSingleComment(sv.p1) && multi_comment_level == 0) {
-                // ^ Fix (condition 2): only allow single-line comments
-                // when not inside another multi-line comment
+            } else if (CharTest.isSingleComment(sv.p1)) {
                 in_comment = true;
-            } else if (CharTest.isOpenMultiComment(sv.p2)) {
-                multi_comment_level++;
-                // since peek2 is not null, this does not break indexing
-                sv.i++;
-            } else if (CharTest.isCloseMultiComment(sv.p2)) {
-                multi_comment_level--;
-                // since peek2 is not null, this does not break indexing
-                sv.i++;
-            } // else it's a comment character
+            }  // else it's a comment character
 
             sv.i++;
         }
 
-        // This is the case when in_multi_line_comment is not 0
-        // when the while loop has iterated through the entire piece of code
-        if (multi_comment_level > 0) {
-            throw new SyntaxError("Multi-line comment not closed; Unexpected EOF");
-        }
-
         if (newline) {
-            sequence.add(NEWLINE, Token.NoneValue);
+            sequence.add(NEWLINE, "\n");
         }
 
         // this line must be after add_token for line no to be correct
@@ -129,13 +91,7 @@ public class Tokenizer {
         // Since some literals and all keywords have the same rules as symbols
         // just add them here
 
-        if (CharTest.isNone(symbol)) {
-            sequence.add(NONE, Token.NoneValue);
-        } else if (CharTest.isTrue(symbol)) {
-            sequence.add(BOOLEAN, Boolean.TRUE);
-        } else if (CharTest.isFalse(symbol)) {
-            sequence.add(BOOLEAN, Boolean.FALSE);
-        } else if (Keyword.ALL_KEYWORDS.contains(symbol)) {
+        if (Keyword.ALL_KEYWORDS.contains(symbol)) {
             sequence.add(KEYWORD, symbol);
         } else {
             sequence.add(NAME, symbol);
@@ -152,7 +108,7 @@ public class Tokenizer {
      */
     private boolean tokenizeTripleOperator() {
         if (visitor.p3 != null && Operator.TRIPLE_OPERATOR_MAP.containsKey(visitor.p3)) {
-            sequence.add(OPERATOR, Operator.TRIPLE_OPERATOR_MAP.get(visitor.p3));
+            sequence.add(OPERATOR, visitor.p3);
             visitor.i += 3;
             return true;
         }
@@ -164,7 +120,7 @@ public class Tokenizer {
      */
     private boolean tokenizeDoubleOperator() {
         if (visitor.p2 != null && Operator.DOUBLE_OPERATOR_MAP.containsKey(visitor.p2)) {
-            sequence.add(OPERATOR, Operator.DOUBLE_OPERATOR_MAP.get(visitor.p2));
+            sequence.add(OPERATOR, visitor.p2);
             visitor.i += 2;
             return true;
         }
@@ -178,7 +134,7 @@ public class Tokenizer {
         // Fix: wrap the p1 char into a string in order to look it up on the map
         var ch = String.valueOf(visitor.p1);
         if (Operator.SINGLE_OPERATOR_MAP.containsKey(ch)) {
-            sequence.add(OPERATOR, Operator.SINGLE_OPERATOR_MAP.get(ch));
+            sequence.add(OPERATOR, String.valueOf(visitor.p1));
             visitor.i++;
             return true;
         }
@@ -229,11 +185,10 @@ public class Tokenizer {
     /**
      * Add a integer to the sequence, to be parsed from a string
      *
-     * @param s     the integer
-     * @param radix the radix
+     * @param s the integer
      */
-    private void addInteger(String s, int radix) {
-        sequence.add(NUMBER, Integer.parseInt(s, radix));
+    private void addInteger(String s) {
+        sequence.add(NUMBER, s);
     }
 
     /**
@@ -262,7 +217,7 @@ public class Tokenizer {
             throw new SyntaxError("Error parsing hex: EOF after leading literal");
         }
 
-        addInteger(sb.toString(), 16);
+        addInteger(sb.toString());
 
         visitor.i = j;
         return true;
@@ -294,7 +249,7 @@ public class Tokenizer {
             throw new SyntaxError("Error parsing bin: EOF after leading literal");
         }
 
-        addInteger(sb.toString(), 2);
+        addInteger(sb.toString());
 
         visitor.i = j;
         return true;
@@ -326,7 +281,7 @@ public class Tokenizer {
             throw new SyntaxError("Error parsing oct: EOF after leading literal");
         }
 
-        addInteger(sb.toString(), 8);
+        addInteger(sb.toString());
 
         visitor.i = j;
         return true;
@@ -397,16 +352,14 @@ public class Tokenizer {
         // Fix: change the order to complex, then float, since
         // a complex literal may also be a float
 
-        if (is_complex) {
-            sequence.add(NUMBER, Double.parseDouble(s));
-        } else if (is_float) {
-            sequence.add(NUMBER, Double.parseDouble(s));
+        if (is_float || is_complex) {
+            sequence.add(NUMBER, s);
         } else {
             // Fix: the special case of 0 should not throw a syntax error
             if (leading_zero && s.length() > 1) {
                 throw new SyntaxError("Integer with leading zero");
             } else {
-                addInteger(s, 10);
+                addInteger(s);
             }
         }
 

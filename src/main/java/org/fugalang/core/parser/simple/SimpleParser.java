@@ -20,11 +20,11 @@ public class SimpleParser {
         if (first == null) {
             return null;
         }
-        List<Operator> operators = new ArrayList<>();
+        List<String> operators = new ArrayList<>();
         List<Term> terms = new ArrayList<>();
         while (true) {
             visitor.markLookahead();
-            var op = parseOperator(visitor, Operator.PLUS, Operator.MINUS);
+            var op = parseOperator(visitor, Operator.PLUS.getCode(), Operator.MINUS.getCode());
             var term = parseTerm(visitor);
             if (op == null) {
                 // no more items that matches this rule
@@ -48,11 +48,11 @@ public class SimpleParser {
         if (first == null) {
             return null;
         }
-        List<Operator> operators = new ArrayList<>();
+        List<String> operators = new ArrayList<>();
         List<Atom> atoms = new ArrayList<>();
         while (true) {
             visitor.markLookahead();
-            var op = parseOperator(visitor, Operator.TIMES, Operator.DIV);
+            var op = parseOperator(visitor, Operator.TIMES.getCode(), Operator.DIV.getCode());
             var term = parseAtom(visitor);
             if (op == null) {
                 // no more items that matches this rule
@@ -71,13 +71,13 @@ public class SimpleParser {
         return new Term(first, operators, atoms);
     }
 
-    public static Operator parseOperator(TokenVisitor visitor, Operator... operators) {
+    public static String parseOperator(TokenVisitor visitor, String... operators) {
         var token = visitor.getAndAdd();
         if (token == null) {
             return null;
         }
         for (var operator : operators) {
-            if (token.type == TokenType.OPERATOR && token.value == operator) {
+            if (token.type == TokenType.OPERATOR && token.value.equals(operator)) {
                 return operator;
             }
         }
@@ -94,11 +94,11 @@ public class SimpleParser {
             return new Atom(token.value);
         }
 
-        if (token.value == Operator.LPAR) {
+        if (token.value.equals(Operator.LPAR.getCode())) {
             visitor.markLookahead();
 
             var arithmeticExpr = parseArithmeticExpr(visitor);
-            var r_par = parseOperator(visitor, Operator.RPAR);
+            var r_par = parseOperator(visitor, Operator.RPAR.getCode());
 
             if (arithmeticExpr == null || r_par == null) {
                 visitor.abortLookahead();

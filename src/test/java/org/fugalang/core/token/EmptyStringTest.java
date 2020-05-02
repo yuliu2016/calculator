@@ -23,12 +23,6 @@ public class EmptyStringTest {
     }
 
     @Test
-    public void testMultiLineComment() {
-        var result = new Tokenizer("/* comment */").tokenizeAll();
-        Assertions.assertEquals(0, result.size());
-    }
-
-    @Test
     public void testMultiSingleLineComment() {
         var result = new Tokenizer("#x\n#y").tokenizeAll();
         Assertions.assertEquals(0, result.size());

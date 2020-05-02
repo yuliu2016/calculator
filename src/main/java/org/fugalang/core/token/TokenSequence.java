@@ -89,7 +89,7 @@ public class TokenSequence {
     /**
      * Add a token to the sequence with line and column
      */
-    public void add(TokenType token_type, Object token_value) {
+    public void add(TokenType token_type, String token_value) {
 
         // i must be increased from the last call to this function
         // otherwise breaks contract

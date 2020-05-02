@@ -11,7 +11,7 @@ public class TokenAssertions {
         Assertions.assertEquals(expectedType, actualType, () -> "Token at #" + i);
     }
 
-    public static void assertValue(List<Token> tokens, int i, Object expectedValue) {
+    public static void assertValue(List<Token> tokens, int i, String expectedValue) {
         var actualValue = tokens.get(i).value;
         Assertions.assertEquals(expectedValue, actualValue, () -> "Token at #" + i);
     }

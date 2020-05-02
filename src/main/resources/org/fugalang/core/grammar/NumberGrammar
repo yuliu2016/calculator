@@ -1,0 +1,17 @@
+# Grammar for numbers
+
+number: hex_number | oct_number | bin_number | dec_number
+
+hex_number: '0x' ('_' | hex_digit)* hex_digit
+oct_number: '0o' ('_' | oct_digit)* oct_digit
+bin_number: '0b' ('_' | bin_digit)* bin_digit
+
+hex_digit: dec_digit | 'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'A' | 'B' | 'C' | 'D' | 'E' | 'F'
+dec_digit: oct_digit | '8' | '9'
+oct_digit: bin_digit | '2' | '3' | '4' | '5' | '6' | '7'
+bin_digit: '0' | '1'
+
+dec_small: dec_digit | dec_digit ('_' | dec_digit)* dec_digit
+dec_big: '.' dec_small | dec_small ['.' [dec_small]]
+exponent: ('e' | 'E') ['-'] dec_digit+
+dec_number: dec_big [exponent] ['j']

@@ -136,7 +136,7 @@ public final class ExceptClause extends NodeWrapper {
         public String name() {
             var element = getItem(1);
             if (!element.isPresent()) return null;
-            return (String) element.asObject();
+            return element.asString();
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

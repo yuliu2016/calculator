@@ -7,19 +7,19 @@ import org.fugalang.core.token.Visitor;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.fugalang.core.grammar.token.MgTokenType.*;
+import static org.fugalang.core.grammar.token.MetaTokenType.*;
 
-public class MgTokenizer {
-    public final List<MgToken> tokens = new ArrayList<>();
+public class MetaLexer {
+    public final List<MetaToken> tokens = new ArrayList<>();
 
     private final Visitor visitor;
 
-    public MgTokenizer(String code) {
+    public MetaLexer(String code) {
         visitor = new Visitor(code);
     }
 
-    private void addToken(MgTokenType type, String s) {
-        tokens.add(new MgToken(type, s));
+    private void addToken(MetaTokenType type, String s) {
+        tokens.add(new MetaToken(type, s));
     }
 
     /**
@@ -165,7 +165,7 @@ public class MgTokenizer {
         return true;
     }
 
-    public List<MgToken> tokenize() {
+    public List<MetaToken> tokenize() {
         visitor.resetState();
 
         while (visitor.hasRemaining()) {
@@ -174,6 +174,7 @@ public class MgTokenizer {
                     tokenizeString() ||
                     tokenizeSymbolOrWord() ||
                     tokenizeOperators())) {
+                System.out.println(visitor.code.substring(0, visitor.i));
                 throw new MetaGrammarError("Unknown Syntax");
             }
         }

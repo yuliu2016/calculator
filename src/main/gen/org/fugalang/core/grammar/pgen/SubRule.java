@@ -48,7 +48,7 @@ public final class SubRule extends NodeWrapper {
     public String token() {
         var element = getItem(2);
         if (!element.isPresent()) return null;
-        return (String) element.asObject();
+        return element.asString();
     }
 
     public boolean hasToken() {

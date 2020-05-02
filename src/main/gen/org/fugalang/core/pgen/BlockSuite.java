@@ -148,10 +148,10 @@ public final class BlockSuite extends NodeWrapper {
             return element.asBoolean();
         }
 
-        public Object newline() {
+        public String newline() {
             var element = getItem(1);
             if (!element.isPresent()) return null;
-            return element.asObject();
+            return element.asString();
         }
 
         public List<Stmt> stmtList() {

@@ -28,30 +28,6 @@ public class CharTest {
         return ch == '#';
     }
 
-    public static boolean isOpenMultiComment(String ch) {
-        return "/*".equals(ch);
-    }
-
-    public static boolean isOpenDocStr(String ch) {
-        return "/**".equals(ch);
-    }
-
-    public static boolean isCloseMultiComment(String ch) {
-        return "*/".equals(ch);
-    }
-
-    public static boolean isNone(String ch) {
-        return "None".equals(ch);
-    }
-
-    public static boolean isFalse(String ch) {
-        return "False".equals(ch);
-    }
-
-    public static boolean isTrue(String ch) {
-        return "True".equals(ch);
-    }
-
     public static boolean isStringQuote(char ch) {
         return ch == '\"';
     }

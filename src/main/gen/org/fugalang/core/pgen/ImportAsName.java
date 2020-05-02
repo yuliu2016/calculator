@@ -27,7 +27,7 @@ public final class ImportAsName extends NodeWrapper {
     public String name() {
         var element = getItem(0);
         if (!element.isPresent()) return null;
-        return (String) element.asObject();
+        return element.asString();
     }
 
     public ImportAsName2 importAsName2() {
@@ -84,7 +84,7 @@ public final class ImportAsName extends NodeWrapper {
         public String name() {
             var element = getItem(1);
             if (!element.isPresent()) return null;
-            return (String) element.asObject();
+            return element.asString();
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

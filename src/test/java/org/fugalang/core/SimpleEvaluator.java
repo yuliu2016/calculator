@@ -28,7 +28,7 @@ public class SimpleEvaluator {
         Stack<Integer> values = new Stack<>();
 
         // Stack for Operators: 'ops' 
-        Stack<Operator> ops = new Stack<>();
+        Stack<String> ops = new Stack<>();
 
         for (Token token : tokens) {
             // Current token is a whitespace, skip it
@@ -37,35 +37,35 @@ public class SimpleEvaluator {
             }
 
             if (token.type == TokenType.NUMBER) {
-                values.push((Integer) token.value);
+                values.push(Integer.valueOf(token.value));
             }
 
             // Current token is an opening brace, push it to 'ops'
-            else if (token.value == Operator.LPAR)
-                ops.push((Operator) token.value);
+            else if (token.value.equals(Operator.LPAR.getCode()))
+                ops.push(token.value);
 
                 // Closing brace encountered, solve entire brace
-            else if (token.value == Operator.RPAR) {
-                while (ops.peek() != Operator.LPAR) {
+            else if (token.value.equals(Operator.RPAR.getCode())) {
+                while (!ops.peek().equals(Operator.LPAR.getCode())) {
                     values.push(applyOp(ops.pop(), values.pop(), values.pop()));
                 }
                 ops.pop();
             }
 
             // Current token is an operator.
-            else if (token.value == Operator.PLUS ||
-                    token.value == Operator.MINUS ||
-                    token.value == Operator.TIMES ||
-                    token.value == Operator.DIV) {
+            else if (token.value.equals(Operator.PLUS.getCode()) ||
+                    token.value.equals(Operator.MINUS.getCode()) ||
+                    token.value.equals(Operator.TIMES.getCode()) ||
+                    token.value.equals(Operator.DIV.getCode())) {
                 // While top of 'ops' has same or greater precedence to current
                 // token, which is an operator. Apply operator on top of 'ops'
                 // to top two elements in values stack
-                while (!ops.empty() && hasPrecedence((Operator) token.value, ops.peek())) {
+                while (!ops.empty() && hasPrecedence(token.value, ops.peek())) {
                     values.push(applyOp(ops.pop(), values.pop(), values.pop()));
                 }
 
                 // Push current token to 'ops'.
-                ops.push((Operator) token.value);
+                ops.push(token.value);
             }
         }
 
@@ -80,11 +80,12 @@ public class SimpleEvaluator {
 
     // Returns true if 'op2' has higher or same precedence as 'op1', 
     // otherwise returns false. 
-    public static boolean hasPrecedence(Operator op1, Operator op2) {
-        if (op2 == Operator.LPAR || op2 == Operator.RPAR)
+    public static boolean hasPrecedence(String op1, String op2) {
+        if (op2.equals(Operator.LPAR.getCode()) || op2.equals(Operator.RPAR.getCode()))
             return false;
         //noinspection RedundantIfStatement
-        if ((op1 == Operator.TIMES || op1 == Operator.DIV) && (op2 == Operator.PLUS || op2 == Operator.MINUS))
+        if ((op1.equals(Operator.TIMES.getCode()) || op1.equals(Operator.DIV.getCode())) &&
+                (op2.equals(Operator.PLUS.getCode()) || op2.equals(Operator.MINUS.getCode())))
             return false;
         else
             return true;
@@ -92,15 +93,15 @@ public class SimpleEvaluator {
 
     // A utility method to apply an operator 'op' on operands 'a'  
     // and 'b'. Return the result. 
-    public static int applyOp(Operator op, int b, int a) {
+    public static int applyOp(String op, int b, int a) {
         switch (op) {
-            case PLUS:
+            case "+":
                 return a + b;
-            case MINUS:
+            case "-":
                 return a - b;
-            case TIMES:
+            case "*":
                 return a * b;
-            case DIV:
+            case "/":
                 if (b == 0)
                     throw new
                             UnsupportedOperationException("Cannot divide by zero");

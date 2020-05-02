@@ -1,6 +1,6 @@
 package org.fugalang.core.grammar.token;
 
-public enum  MgTokenType {
+public enum MetaTokenType {
     NEWLINE,
     TOK,
     COL,

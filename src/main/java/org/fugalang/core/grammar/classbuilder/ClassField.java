@@ -66,15 +66,11 @@ public class ClassField {
 
             case TokenType -> {
                 if (isSingular()) {
-                    var cast = className.asType().equals("Object") ? "" :
-                            "(" + className.asType() + ") ";
                     yield "        var element = getItem(" + index + ");\n" +
                             "        if (!element.isPresent()) return null;\n" +
-                            "        return " + cast + "element.asObject();\n";
+                            "        return element.asString();\n";
                 }
-                var cast = className.getRealClassName().equals("Object") ? "" :
-                        "(" + className.getRealClassName() + ") ";
-                yield listTemplate(index, cast + "node.asObject()");
+                yield listTemplate(index, "node.asString()");
             }
             case TokenLiteral -> {
                 if (isSingular()) {

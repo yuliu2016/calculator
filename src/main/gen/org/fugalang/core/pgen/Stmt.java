@@ -30,10 +30,10 @@ public final class Stmt extends NodeWrapper {
         return Stmt1.of(element);
     }
 
-    public Object newline() {
+    public String newline() {
         var element = getItem(1);
         if (!element.isPresent()) return null;
-        return element.asObject();
+        return element.asString();
     }
 
     public static boolean parse(ParseTree parseTree, int level) {

@@ -7,10 +7,10 @@ import java.util.List;
 public class Term {
     Atom first_atom;
 
-    List<Operator> ops;
+    List<String> ops;
     List<Atom> atoms;
 
-    public Term(Atom first_atom, List<Operator> ops, List<Atom> atoms) {
+    public Term(Atom first_atom, List<String> ops, List<Atom> atoms) {
         this.first_atom = first_atom;
         this.ops = ops;
         this.atoms = atoms;
@@ -21,7 +21,7 @@ public class Term {
         assert ops.size() == atoms.size();
     }
 
-    public List<Operator> getOps() {
+    public List<String> getOps() {
         return ops;
     }
 
@@ -43,7 +43,7 @@ public class Term {
 
         for (int i = 0; i < ops.size(); i++) {
             sb.append(" ");
-            sb.append(ops.get(i).getCode());
+            sb.append(ops.get(i));
             sb.append(" ");
             sb.append(atoms.get(i));
         }

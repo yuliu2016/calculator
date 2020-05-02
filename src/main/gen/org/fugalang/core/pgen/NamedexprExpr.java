@@ -27,7 +27,7 @@ public final class NamedexprExpr extends NodeWrapper {
     public String name() {
         var element = getItem(0);
         if (!element.isPresent()) return null;
-        return (String) element.asObject();
+        return element.asString();
     }
 
     public NamedexprExpr2 namedexprExpr2() {

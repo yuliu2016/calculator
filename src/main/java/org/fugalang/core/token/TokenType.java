@@ -11,9 +11,7 @@ public enum TokenType {
     NAME,
     OPERATOR,
     NUMBER,
-    STRING,
-    BOOLEAN,
-    NONE;
+    STRING;
 
     public static final List<TokenType> DELIMITERS =
             List.of(NEWLINE);

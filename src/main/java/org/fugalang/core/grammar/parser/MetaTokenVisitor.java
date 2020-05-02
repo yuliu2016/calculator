@@ -1,23 +1,23 @@
 package org.fugalang.core.grammar.parser;
 
-import org.fugalang.core.grammar.token.MgToken;
+import org.fugalang.core.grammar.token.MetaToken;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
 
-public class MgTokenVisitor {
-    private final List<MgToken> tokens;
+public class MetaTokenVisitor {
+    private final List<MetaToken> tokens;
     private int i;
 
     private final Deque<Integer> lookahead = new ArrayDeque<>();
 
-    public MgTokenVisitor(List<MgToken> tokens) {
+    public MetaTokenVisitor(List<MetaToken> tokens) {
         this.tokens = tokens;
         this.i = 0;
     }
 
-    public MgToken getAndAdd() {
+    public MetaToken getAndAdd() {
         if (i == tokens.size()) {
             return null;
         }

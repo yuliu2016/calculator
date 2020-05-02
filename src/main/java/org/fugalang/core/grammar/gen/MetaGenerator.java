@@ -1,7 +1,7 @@
 package org.fugalang.core.grammar.gen;
 
-import org.fugalang.core.grammar.parser.MgParser;
-import org.fugalang.core.grammar.token.MgTokenizer;
+import org.fugalang.core.grammar.parser.MetaParser;
+import org.fugalang.core.grammar.token.MetaLexer;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -14,9 +14,9 @@ public class MetaGenerator {
         var res = MetaGenerator.class.getResource("/org/fugalang/core/grammar/MetaGrammar");
         try {
             var data = Files.readString(Paths.get(res.toURI()));
-            var tokens = new MgTokenizer(data).tokenize();
+            var tokens = new MetaLexer(data).tokenize();
 
-            var cst = MgParser.parseRules(tokens);
+            var cst = MetaParser.parseRules(tokens);
 
             var path = Paths.get(
                     System.getProperty("user.dir"),

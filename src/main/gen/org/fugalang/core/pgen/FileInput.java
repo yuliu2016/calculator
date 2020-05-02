@@ -44,10 +44,10 @@ public final class FileInput extends NodeWrapper {
         return fileInput1List;
     }
 
-    public Object endmarker() {
+    public String endmarker() {
         var element = getItem(1);
         if (!element.isPresent()) return null;
-        return element.asObject();
+        return element.asString();
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -94,10 +94,10 @@ public final class FileInput extends NodeWrapper {
             addChoice("stmt", stmt());
         }
 
-        public Object newline() {
+        public String newline() {
             var element = getItem(0);
             if (!element.isPresent()) return null;
-            return element.asObject();
+            return element.asString();
         }
 
         public boolean hasNewline() {

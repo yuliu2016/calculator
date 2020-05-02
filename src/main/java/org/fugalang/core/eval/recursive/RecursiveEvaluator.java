@@ -28,9 +28,9 @@ public class RecursiveEvaluator {
             var term = expr.getTerms().get(i);
             var value = evaluate0(term);
 
-            if (op == Operator.PLUS) {
+            if (op.equals(Operator.PLUS.getCode())) {
                 sum += value;
-            } else if (op == Operator.MINUS) {
+            } else if (op.equals(Operator.MINUS.getCode())) {
                 sum -= value;
             } else {
                 throw new IllegalStateException("Illegal op: " + op);
@@ -48,9 +48,9 @@ public class RecursiveEvaluator {
             var atom = term.getAtoms().get(i);
             var value = evaluate0(atom);
 
-            if (op == Operator.TIMES) {
+            if (op.equals(Operator.TIMES.getCode())) {
                 product *= value;
-            } else if (op == Operator.DIV) {
+            } else if (op.equals(Operator.DIV.getCode())) {
                 product /= value;
             } else {
                 throw new IllegalStateException("Illegal Op: " + op);
@@ -62,8 +62,8 @@ public class RecursiveEvaluator {
 
     private static int evaluate0(Atom atom) {
         var val = atom.getVal();
-        if (val instanceof Integer) {
-            return (int) val;
+        if (val instanceof String) {
+            return Integer.parseInt((String) val);
         } else if (val instanceof ArithmeticExpr) {
             return evaluate0((ArithmeticExpr) val);
         }

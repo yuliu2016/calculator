@@ -26,7 +26,7 @@ public final class Vfpdef extends NodeWrapper {
     public String name() {
         var element = getItem(0);
         if (!element.isPresent()) return null;
-        return (String) element.asObject();
+        return element.asString();
     }
 
     public static boolean parse(ParseTree parseTree, int level) {

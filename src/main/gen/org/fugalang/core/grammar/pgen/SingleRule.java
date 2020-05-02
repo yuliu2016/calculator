@@ -29,7 +29,7 @@ public final class SingleRule extends NodeWrapper {
     public String token() {
         var element = getItem(0);
         if (!element.isPresent()) return null;
-        return (String) element.asObject();
+        return element.asString();
     }
 
     public boolean isTokenColon() {

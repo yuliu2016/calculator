@@ -12,7 +12,7 @@ public class NumberParserTest {
         var result = new Tokenizer("123").tokenizeAll();
 
         assertType(result, 0, TokenType.NUMBER);
-        assertValue(result, 0, 123);
+        assertValue(result, 0, "123");
     }
 
 
@@ -21,7 +21,7 @@ public class NumberParserTest {
         var result = new Tokenizer("12_3").tokenizeAll();
 
         assertType(result, 0, TokenType.NUMBER);
-        assertValue(result, 0, 123);
+        assertValue(result, 0, "123");
     }
 
 
@@ -30,7 +30,7 @@ public class NumberParserTest {
         var result = new Tokenizer("1.23").tokenizeAll();
 
         assertType(result, 0, TokenType.NUMBER);
-        assertValue(result, 0, 1.23);
+        assertValue(result, 0, "1.23");
     }
 
     @Test
@@ -38,7 +38,7 @@ public class NumberParserTest {
         var result = new Tokenizer("1.23j").tokenizeAll();
 
         assertType(result, 0, TokenType.NUMBER);
-        assertValue(result, 0, 1.23);
+        assertValue(result, 0, "1.23");
     }
 
     @Test
@@ -46,7 +46,7 @@ public class NumberParserTest {
         var result = new Tokenizer("123j").tokenizeAll();
 
         assertType(result, 0, TokenType.NUMBER);
-        assertValue(result, 0, 123.0);
+        assertValue(result, 0, "123");
     }
 
 //    @Test
@@ -54,7 +54,7 @@ public class NumberParserTest {
         var result = new Tokenizer("1E5").tokenizeAll();
 
         assertType(result, 0, TokenType.NUMBER);
-        assertValue(result, 0, 1E5);
+        assertValue(result, 0, "1E5");
     }
 
 
@@ -63,6 +63,6 @@ public class NumberParserTest {
         var result = new Tokenizer("1.23E-5").tokenizeAll();
 
         assertType(result, 0, TokenType.NUMBER);
-        assertValue(result, 0, 1.23E-5);
+        assertValue(result, 0, "1E5");
     }
 }

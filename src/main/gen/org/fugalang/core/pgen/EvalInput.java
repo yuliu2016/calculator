@@ -22,7 +22,7 @@ public final class EvalInput extends NodeWrapper {
         super(RULE, node);
     }
 
-    private List<Object> newlineList;
+    private List<String> newlineList;
 
     @Override
     protected void buildRule() {
@@ -37,24 +37,24 @@ public final class EvalInput extends NodeWrapper {
         return Exprlist.of(element);
     }
 
-    public List<Object> newlineList() {
+    public List<String> newlineList() {
         if (newlineList != null) {
             return newlineList;
         }
-        List<Object> result = null;
+        List<String> result = null;
         var element = getItem(1);
         for (var node : element.asCollection()) {
             if (result == null) result = new ArrayList<>();
-            result.add(node.asObject());
+            result.add(node.asString());
         }
         newlineList = result == null ? Collections.emptyList() : result;
         return newlineList;
     }
 
-    public Object endmarker() {
+    public String endmarker() {
         var element = getItem(2);
         if (!element.isPresent()) return null;
-        return element.asObject();
+        return element.asString();
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
