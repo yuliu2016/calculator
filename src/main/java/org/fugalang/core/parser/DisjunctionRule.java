@@ -4,6 +4,7 @@ import org.fugalang.core.pprint.ParseTreePPrint;
 import org.fugalang.core.pprint.TreeStringBuilder;
 import org.fugalang.core.pprint.TreeStringElem;
 
+@Deprecated(forRemoval = true)
 public abstract class DisjunctionRule implements TreeStringElem {
 
     private ComputedRule computedRule = null;

@@ -1,6 +1,7 @@
 package org.fugalang.core.token;
 
 import org.fugalang.core.parser.ElementType;
+import org.fugalang.core.parser.ParserElement;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.List;
  * Keep track of a list of tokens
  */
 public class TokenSequence {
-    public final List<Token> tokens = new ArrayList<>();
+    public final List<ParserElement> tokens = new ArrayList<>();
     public final Visitor visitor;
 
     // used to lookup newline characters from the last i value

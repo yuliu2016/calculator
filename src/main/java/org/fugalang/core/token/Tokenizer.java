@@ -1,6 +1,7 @@
 package org.fugalang.core.token;
 
 import org.fugalang.core.grammar.SyntaxError;
+import org.fugalang.core.parser.ParserElement;
 
 import java.util.List;
 
@@ -404,7 +405,7 @@ public class Tokenizer {
         }
     }
 
-    public List<Token> tokenizeAll() {
+    public List<ParserElement> tokenizeAll() {
         sequence.resetState();
 
         while (visitor.hasRemaining()) {

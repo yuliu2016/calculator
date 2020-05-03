@@ -9,7 +9,6 @@ public abstract class NodeWrapper implements TreeStringElem {
     private final ParserRule rule;
     private final ParseTreeNode node;
     private NodeDelegate delegate;
-    private boolean didBuildRule;
 
     public NodeWrapper(ParserRule rule, ParseTreeNode node) {
         this.rule = rule;
@@ -22,7 +21,7 @@ public abstract class NodeWrapper implements TreeStringElem {
         if (delegate == null) {
             delegate = new WrapperDelegate(rule);
             buildRule();
-            didBuildRule = true;
+            delegate.didBuildRule();
         }
         return delegate;
     }
@@ -30,9 +29,6 @@ public abstract class NodeWrapper implements TreeStringElem {
     private NodeDelegate getDelegate() {
         if (delegate == null) {
             throw new IllegalStateException("Delegate not initialized");
-        }
-        if (didBuildRule) {
-            throw new IllegalStateException("Node has already been built");
         }
         return delegate;
     }
@@ -67,7 +63,7 @@ public abstract class NodeWrapper implements TreeStringElem {
 
     @Override
     public String toString() {
-        return getOrCreateDelegate().asString();
+        return getOrCreateDelegate().simpleString();
     }
 
     @Override

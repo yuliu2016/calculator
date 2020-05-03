@@ -13,7 +13,9 @@ public interface NodeDelegate {
 
     void addOptional(Object value);
 
-    String asString();
+    String simpleString();
 
     void buildString(TreeStringBuilder builder);
+
+    void didBuildRule();
 }

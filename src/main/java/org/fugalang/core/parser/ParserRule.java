@@ -47,8 +47,6 @@ public class ParserRule {
 
     @Override
     public String toString() {
-        return "ParserRule{" +
-                "ruleName='" + ruleName + '\'' +
-                '}';
+        return ruleName;
     }
 }

@@ -10,9 +10,9 @@ package org.fugalang.core;
 */
 
 import org.fugalang.core.grammar.SyntaxError;
+import org.fugalang.core.parser.ParserElement;
 import org.fugalang.core.pprint.ConsoleColor;
 import org.fugalang.core.token.Operator;
-import org.fugalang.core.token.Token;
 import org.fugalang.core.token.TokenType;
 import org.fugalang.core.token.Tokenizer;
 
@@ -22,7 +22,7 @@ import java.util.Stack;
 
 // https://www.geeksforgeeks.org/expression-evaluation/
 public class SimpleEvaluator {
-    public static int evaluate(List<Token> tokens) {
+    public static int evaluate(List<ParserElement> tokens) {
 
         // Stack for numbers: 'values'
         Stack<Integer> values = new Stack<>();
@@ -30,7 +30,7 @@ public class SimpleEvaluator {
         // Stack for Operators: 'ops' 
         Stack<String> ops = new Stack<>();
 
-        for (Token token : tokens) {
+        for (ParserElement token : tokens) {
             // Current token is a whitespace, skip it
             if (token.getType() == TokenType.NEWLINE) {
                 continue;

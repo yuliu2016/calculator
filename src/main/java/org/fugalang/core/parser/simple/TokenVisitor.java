@@ -1,23 +1,23 @@
 package org.fugalang.core.parser.simple;
 
-import org.fugalang.core.token.Token;
+import org.fugalang.core.parser.ParserElement;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
 
 public class TokenVisitor {
-    private final List<Token> tokens;
+    private final List<ParserElement> tokens;
     private int i;
 
     private final Deque<Integer> lookahead = new ArrayDeque<>();
 
-    public TokenVisitor(List<Token> tokens) {
+    public TokenVisitor(List<ParserElement> tokens) {
         this.tokens = tokens;
         this.i = 0;
     }
 
-    public Token getAndAdd() {
+    public ParserElement getAndAdd() {
         if (i == tokens.size()) {
             return null;
         }

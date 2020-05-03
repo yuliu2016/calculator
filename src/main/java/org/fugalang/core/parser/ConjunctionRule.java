@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Deprecated(forRemoval = true)
 public abstract class ConjunctionRule implements TreeStringElem {
 
     private ComputedRule computedRule = null;
