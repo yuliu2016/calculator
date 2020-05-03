@@ -1,6 +1,7 @@
 package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.*;
+import org.fugalang.core.token.TokenType;
 
 /**
  * vfpdef: 'NAME'
@@ -20,12 +21,12 @@ public final class Vfpdef extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired("name", name());
+        addRequired(name());
     }
 
     public String name() {
         var element = getItem(0);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(TokenType.NAME);
         return element.asString();
     }
 
@@ -36,7 +37,7 @@ public final class Vfpdef extends NodeWrapper {
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
-        result = parseTree.consumeTokenType("NAME");
+        result = parseTree.consumeToken(TokenType.NAME);
 
         parseTree.exit(level, marker, result);
         return result;

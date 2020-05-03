@@ -26,13 +26,13 @@ public final class Sum extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired("term", term());
-        addRequired("sum2List", sum2List());
+        addRequired(term());
+        addRequired(sum2List());
     }
 
     public Term term() {
         var element = getItem(0);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(Term.RULE);
         return Term.of(element);
     }
 
@@ -90,19 +90,19 @@ public final class Sum extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("sum21", sum21());
-            addRequired("term", term());
+            addRequired(sum21());
+            addRequired(term());
         }
 
         public Sum21 sum21() {
             var element = getItem(0);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(Sum21.RULE);
             return Sum21.of(element);
         }
 
         public Term term() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(Term.RULE);
             return Term.of(element);
         }
 
@@ -139,8 +139,8 @@ public final class Sum extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addChoice("isTokenPlus", isTokenPlus());
-            addChoice("isTokenMinus", isTokenMinus());
+            addChoice(isTokenPlus());
+            addChoice(isTokenMinus());
         }
 
         public boolean isTokenPlus() {
@@ -160,8 +160,8 @@ public final class Sum extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeTokenLiteral("+");
-            result = result || parseTree.consumeTokenLiteral("-");
+            result = parseTree.consumeToken("+");
+            result = result || parseTree.consumeToken("-");
 
             parseTree.exit(level, marker, result);
             return result;

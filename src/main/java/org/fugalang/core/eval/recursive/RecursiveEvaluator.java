@@ -102,7 +102,7 @@ public class RecursiveEvaluator {
                 System.out.print(ConsoleColor.END);
             } catch (Exception e) {
                 System.out.print(ConsoleColor.RED);
-                e.printStackTrace(System.out);
+                System.out.println("Syntax Error: Not Implemented");
                 System.out.print(ConsoleColor.END);
             }
             System.out.print(">>> ");

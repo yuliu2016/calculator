@@ -20,14 +20,16 @@ public final class CompoundAtom extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addChoice("compoundAtom1", compoundAtom1());
-        addChoice("compoundAtom2", compoundAtom2());
-        addChoice("compoundAtom3", compoundAtom3());
+        addChoice(compoundAtom1());
+        addChoice(compoundAtom2());
+        addChoice(compoundAtom3());
     }
 
     public CompoundAtom1 compoundAtom1() {
         var element = getItem(0);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(CompoundAtom1.RULE)) {
+            return null;
+        }
         return CompoundAtom1.of(element);
     }
 
@@ -37,7 +39,9 @@ public final class CompoundAtom extends NodeWrapper {
 
     public CompoundAtom2 compoundAtom2() {
         var element = getItem(1);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(CompoundAtom2.RULE)) {
+            return null;
+        }
         return CompoundAtom2.of(element);
     }
 
@@ -47,7 +51,9 @@ public final class CompoundAtom extends NodeWrapper {
 
     public CompoundAtom3 compoundAtom3() {
         var element = getItem(2);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(CompoundAtom3.RULE)) {
+            return null;
+        }
         return CompoundAtom3.of(element);
     }
 
@@ -88,19 +94,22 @@ public final class CompoundAtom extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("isTokenLpar", isTokenLpar());
-            addOptional("exprlistComp", exprlistComp());
-            addRequired("isTokenRpar", isTokenRpar());
+            addRequired(isTokenLpar());
+            addOptional(exprlistComp());
+            addRequired(isTokenRpar());
         }
 
         public boolean isTokenLpar() {
             var element = getItem(0);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
         public ExprlistComp exprlistComp() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            if (!element.isPresent(ExprlistComp.RULE)) {
+                return null;
+            }
             return ExprlistComp.of(element);
         }
 
@@ -110,6 +119,7 @@ public final class CompoundAtom extends NodeWrapper {
 
         public boolean isTokenRpar() {
             var element = getItem(2);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
@@ -120,9 +130,9 @@ public final class CompoundAtom extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeTokenLiteral("(");
+            result = parseTree.consumeToken("(");
             ExprlistComp.parse(parseTree, level + 1);
-            result = result && parseTree.consumeTokenLiteral(")");
+            result = result && parseTree.consumeToken(")");
 
             parseTree.exit(level, marker, result);
             return result;
@@ -147,19 +157,22 @@ public final class CompoundAtom extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("isTokenLsqb", isTokenLsqb());
-            addOptional("exprlistCompSub", exprlistCompSub());
-            addRequired("isTokenRsqb", isTokenRsqb());
+            addRequired(isTokenLsqb());
+            addOptional(exprlistCompSub());
+            addRequired(isTokenRsqb());
         }
 
         public boolean isTokenLsqb() {
             var element = getItem(0);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
         public ExprlistCompSub exprlistCompSub() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            if (!element.isPresent(ExprlistCompSub.RULE)) {
+                return null;
+            }
             return ExprlistCompSub.of(element);
         }
 
@@ -169,6 +182,7 @@ public final class CompoundAtom extends NodeWrapper {
 
         public boolean isTokenRsqb() {
             var element = getItem(2);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
@@ -179,9 +193,9 @@ public final class CompoundAtom extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeTokenLiteral("[");
+            result = parseTree.consumeToken("[");
             ExprlistCompSub.parse(parseTree, level + 1);
-            result = result && parseTree.consumeTokenLiteral("]");
+            result = result && parseTree.consumeToken("]");
 
             parseTree.exit(level, marker, result);
             return result;
@@ -206,19 +220,22 @@ public final class CompoundAtom extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("isTokenLbrace", isTokenLbrace());
-            addOptional("dictorsetmaker", dictorsetmaker());
-            addRequired("isTokenRbrace", isTokenRbrace());
+            addRequired(isTokenLbrace());
+            addOptional(dictorsetmaker());
+            addRequired(isTokenRbrace());
         }
 
         public boolean isTokenLbrace() {
             var element = getItem(0);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
         public Dictorsetmaker dictorsetmaker() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            if (!element.isPresent(Dictorsetmaker.RULE)) {
+                return null;
+            }
             return Dictorsetmaker.of(element);
         }
 
@@ -228,6 +245,7 @@ public final class CompoundAtom extends NodeWrapper {
 
         public boolean isTokenRbrace() {
             var element = getItem(2);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
@@ -238,9 +256,9 @@ public final class CompoundAtom extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeTokenLiteral("{");
+            result = parseTree.consumeToken("{");
             Dictorsetmaker.parse(parseTree, level + 1);
-            result = result && parseTree.consumeTokenLiteral("}");
+            result = result && parseTree.consumeToken("}");
 
             parseTree.exit(level, marker, result);
             return result;

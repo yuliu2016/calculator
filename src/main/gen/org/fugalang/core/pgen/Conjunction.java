@@ -26,13 +26,13 @@ public final class Conjunction extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired("inversion", inversion());
-        addRequired("conjunction2List", conjunction2List());
+        addRequired(inversion());
+        addRequired(conjunction2List());
     }
 
     public Inversion inversion() {
         var element = getItem(0);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(Inversion.RULE);
         return Inversion.of(element);
     }
 
@@ -90,18 +90,19 @@ public final class Conjunction extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("isTokenAnd", isTokenAnd());
-            addRequired("inversion", inversion());
+            addRequired(isTokenAnd());
+            addRequired(inversion());
         }
 
         public boolean isTokenAnd() {
             var element = getItem(0);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
         public Inversion inversion() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(Inversion.RULE);
             return Inversion.of(element);
         }
 
@@ -112,7 +113,7 @@ public final class Conjunction extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeTokenLiteral("and");
+            result = parseTree.consumeToken("and");
             result = result && Inversion.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);

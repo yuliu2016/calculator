@@ -20,19 +20,21 @@ public final class RepeatRule extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired("subRule", subRule());
-        addOptional("repeatRule2", repeatRule2());
+        addRequired(subRule());
+        addOptional(repeatRule2());
     }
 
     public SubRule subRule() {
         var element = getItem(0);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(SubRule.RULE);
         return SubRule.of(element);
     }
 
     public RepeatRule2 repeatRule2() {
         var element = getItem(1);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(RepeatRule2.RULE)) {
+            return null;
+        }
         return RepeatRule2.of(element);
     }
 
@@ -72,8 +74,8 @@ public final class RepeatRule extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addChoice("isTokenStar", isTokenStar());
-            addChoice("isTokenPlus", isTokenPlus());
+            addChoice(isTokenStar());
+            addChoice(isTokenPlus());
         }
 
         public boolean isTokenStar() {
@@ -93,8 +95,8 @@ public final class RepeatRule extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeTokenLiteral("*");
-            result = result || parseTree.consumeTokenLiteral("+");
+            result = parseTree.consumeToken("*");
+            result = result || parseTree.consumeToken("+");
 
             parseTree.exit(level, marker, result);
             return result;

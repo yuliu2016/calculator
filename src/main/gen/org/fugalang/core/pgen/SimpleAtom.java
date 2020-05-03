@@ -1,6 +1,7 @@
 package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.*;
+import org.fugalang.core.token.TokenType;
 
 /**
  * simple_atom: 'NAME' | 'NUMBER' | 'STRING' | 'None' | 'True' | 'False'
@@ -20,17 +21,19 @@ public final class SimpleAtom extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addChoice("name", name());
-        addChoice("number", number());
-        addChoice("string", string());
-        addChoice("isTokenNone", isTokenNone());
-        addChoice("isTokenTrue", isTokenTrue());
-        addChoice("isTokenFalse", isTokenFalse());
+        addChoice(name());
+        addChoice(number());
+        addChoice(string());
+        addChoice(isTokenNone());
+        addChoice(isTokenTrue());
+        addChoice(isTokenFalse());
     }
 
     public String name() {
         var element = getItem(0);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(TokenType.NAME)) {
+            return null;
+        }
         return element.asString();
     }
 
@@ -40,7 +43,9 @@ public final class SimpleAtom extends NodeWrapper {
 
     public String number() {
         var element = getItem(1);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(TokenType.NUMBER)) {
+            return null;
+        }
         return element.asString();
     }
 
@@ -50,7 +55,9 @@ public final class SimpleAtom extends NodeWrapper {
 
     public String string() {
         var element = getItem(2);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(TokenType.STRING)) {
+            return null;
+        }
         return element.asString();
     }
 
@@ -80,12 +87,12 @@ public final class SimpleAtom extends NodeWrapper {
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
-        result = parseTree.consumeTokenType("NAME");
-        result = result || parseTree.consumeTokenType("NUMBER");
-        result = result || parseTree.consumeTokenType("STRING");
-        result = result || parseTree.consumeTokenLiteral("None");
-        result = result || parseTree.consumeTokenLiteral("True");
-        result = result || parseTree.consumeTokenLiteral("False");
+        result = parseTree.consumeToken(TokenType.NAME);
+        result = result || parseTree.consumeToken(TokenType.NUMBER);
+        result = result || parseTree.consumeToken(TokenType.STRING);
+        result = result || parseTree.consumeToken("None");
+        result = result || parseTree.consumeToken("True");
+        result = result || parseTree.consumeToken("False");
 
         parseTree.exit(level, marker, result);
         return result;

@@ -246,7 +246,7 @@ public class Tokenizer {
             var ch = visitor.code.charAt(j);
             if (!CharTest.isUnderscore(ch) && !CharTest.isAnyBin(ch)) {
                 if (CharTest.isNumeric(ch)) {
-                    throw new SyntaxError("Invalid digit '" + ch +"' in binary literal");
+                    throw new SyntaxError("Invalid digit '" + ch + "' in binary literal");
                 }
                 break;
             }
@@ -280,7 +280,7 @@ public class Tokenizer {
             var ch = visitor.code.charAt(j);
             if (!CharTest.isUnderscore(ch) && !CharTest.isAnyOct(ch)) {
                 if (CharTest.isNumeric(ch)) {
-                    throw new SyntaxError("Invalid digit '" + ch +"' in octal literal");
+                    throw new SyntaxError("Invalid digit '" + ch + "' in octal literal");
                 }
                 break;
             }
@@ -350,7 +350,7 @@ public class Tokenizer {
                 .isExponentDelimiter(visitor.code.charAt(j))) {
             j++;
             if (j < visitor.size && CharTest
-                    .isExponentSignDelimiter(visitor.code.charAt(j))) j++;
+                    .isExponentSign(visitor.code.charAt(j))) j++;
 
             j = tokenizeDecimalSequence(j);
         }
@@ -360,7 +360,7 @@ public class Tokenizer {
 
         var s = visitor.code.substring(visitor.i, j);
 
-        if (!is_floating_point && s.startsWith("0") && s.length() > 1) {
+        if (!is_floating_point && s.replace("0", "").isEmpty()) {
             throw new SyntaxError("Integer with leading zero; use 0o for octal numbers");
         }
         addNumber(s);

@@ -20,13 +20,15 @@ public final class Factor extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addChoice("factor1", factor1());
-        addChoice("power", power());
+        addChoice(factor1());
+        addChoice(power());
     }
 
     public Factor1 factor1() {
         var element = getItem(0);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(Factor1.RULE)) {
+            return null;
+        }
         return Factor1.of(element);
     }
 
@@ -36,7 +38,9 @@ public final class Factor extends NodeWrapper {
 
     public Power power() {
         var element = getItem(1);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(Power.RULE)) {
+            return null;
+        }
         return Power.of(element);
     }
 
@@ -76,19 +80,19 @@ public final class Factor extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("factor11", factor11());
-            addRequired("factor", factor());
+            addRequired(factor11());
+            addRequired(factor());
         }
 
         public Factor11 factor11() {
             var element = getItem(0);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(Factor11.RULE);
             return Factor11.of(element);
         }
 
         public Factor factor() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(Factor.RULE);
             return Factor.of(element);
         }
 
@@ -125,9 +129,9 @@ public final class Factor extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addChoice("isTokenPlus", isTokenPlus());
-            addChoice("isTokenMinus", isTokenMinus());
-            addChoice("isTokenBitNot", isTokenBitNot());
+            addChoice(isTokenPlus());
+            addChoice(isTokenMinus());
+            addChoice(isTokenBitNot());
         }
 
         public boolean isTokenPlus() {
@@ -152,9 +156,9 @@ public final class Factor extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeTokenLiteral("+");
-            result = result || parseTree.consumeTokenLiteral("-");
-            result = result || parseTree.consumeTokenLiteral("~");
+            result = parseTree.consumeToken("+");
+            result = result || parseTree.consumeToken("-");
+            result = result || parseTree.consumeToken("~");
 
             parseTree.exit(level, marker, result);
             return result;

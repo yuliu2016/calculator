@@ -33,6 +33,9 @@ public class ParserGenerator {
     private final TokenConverter converter;
     private final Map<String, String> classNameMap = new LinkedHashMap<>();
     private final ClassSet classSet;
+    private final String tokenTypeClass;
+    private final String tokenTypeClassShort;
+
 
     private static final boolean REQUIRED = false;
     private static final boolean OPTIONAL = true;
@@ -41,7 +44,8 @@ public class ParserGenerator {
             Rules rules,
             TokenConverter converter,
             Path path,
-            String packageName
+            String packageName,
+            String tokenTypeClass
     ) {
         ruleMap = new LinkedHashMap<>();
         for (var rule : rules.rules) {
@@ -50,6 +54,11 @@ public class ParserGenerator {
         this.converter = converter;
 
         classSet = new ClassSet(path, packageName);
+
+        this.tokenTypeClass = tokenTypeClass;
+
+        var split = tokenTypeClass.split("\\.");
+        tokenTypeClassShort = split[split.length - 1];
     }
 
     @SuppressWarnings("unused")
@@ -261,7 +270,9 @@ public class ParserGenerator {
                 addRepeatField(className, cb, fieldName, repeatType, REQUIRED, resultSource);
             } else {
                 var fieldName = convertedValue.getFieldName();
-                var resultSource = ResultSource.ofTokenType(convertedValue.getSourceLiteral());
+                cb.addImport(tokenTypeClass);
+                var resultSource = ResultSource.ofTokenType(tokenTypeClassShort +
+                        "." + convertedValue.getSourceLiteral());
 
                 addRepeatField(className, cb, fieldName, repeatType, isOptional, resultSource);
             }

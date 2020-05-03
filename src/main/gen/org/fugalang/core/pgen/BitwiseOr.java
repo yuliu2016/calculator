@@ -26,13 +26,13 @@ public final class BitwiseOr extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired("bitwiseXor", bitwiseXor());
-        addRequired("bitwiseOr2List", bitwiseOr2List());
+        addRequired(bitwiseXor());
+        addRequired(bitwiseOr2List());
     }
 
     public BitwiseXor bitwiseXor() {
         var element = getItem(0);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(BitwiseXor.RULE);
         return BitwiseXor.of(element);
     }
 
@@ -90,18 +90,19 @@ public final class BitwiseOr extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("isTokenBitOr", isTokenBitOr());
-            addRequired("bitwiseXor", bitwiseXor());
+            addRequired(isTokenBitOr());
+            addRequired(bitwiseXor());
         }
 
         public boolean isTokenBitOr() {
             var element = getItem(0);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
         public BitwiseXor bitwiseXor() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(BitwiseXor.RULE);
             return BitwiseXor.of(element);
         }
 
@@ -112,7 +113,7 @@ public final class BitwiseOr extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeTokenLiteral("|");
+            result = parseTree.consumeToken("|");
             result = result && BitwiseXor.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);

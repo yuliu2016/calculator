@@ -20,11 +20,12 @@ public final class PassStmt extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired("isTokenPass", isTokenPass());
+        addRequired(isTokenPass());
     }
 
     public boolean isTokenPass() {
         var element = getItem(0);
+        element.failIfAbsent();
         return element.asBoolean();
     }
 
@@ -35,7 +36,7 @@ public final class PassStmt extends NodeWrapper {
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
-        result = parseTree.consumeTokenLiteral("pass");
+        result = parseTree.consumeToken("pass");
 
         parseTree.exit(level, marker, result);
         return result;

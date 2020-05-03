@@ -26,14 +26,14 @@ public final class ExprlistStar extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired("exprOrStar", exprOrStar());
-        addRequired("exprlistStar2List", exprlistStar2List());
-        addRequired("isTokenComma", isTokenComma());
+        addRequired(exprOrStar());
+        addRequired(exprlistStar2List());
+        addRequired(isTokenComma());
     }
 
     public ExprOrStar exprOrStar() {
         var element = getItem(0);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(ExprOrStar.RULE);
         return ExprOrStar.of(element);
     }
 
@@ -53,6 +53,7 @@ public final class ExprlistStar extends NodeWrapper {
 
     public boolean isTokenComma() {
         var element = getItem(2);
+        element.failIfAbsent();
         return element.asBoolean();
     }
 
@@ -73,7 +74,7 @@ public final class ExprlistStar extends NodeWrapper {
             }
         }
         parseTree.exitCollection();
-        result = result && parseTree.consumeTokenLiteral(",");
+        result = result && parseTree.consumeToken(",");
 
         parseTree.exit(level, marker, result);
         return result;
@@ -97,18 +98,19 @@ public final class ExprlistStar extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("isTokenComma", isTokenComma());
-            addRequired("exprOrStar", exprOrStar());
+            addRequired(isTokenComma());
+            addRequired(exprOrStar());
         }
 
         public boolean isTokenComma() {
             var element = getItem(0);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
         public ExprOrStar exprOrStar() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(ExprOrStar.RULE);
             return ExprOrStar.of(element);
         }
 
@@ -119,7 +121,7 @@ public final class ExprlistStar extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeTokenLiteral(",");
+            result = parseTree.consumeToken(",");
             result = result && ExprOrStar.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);

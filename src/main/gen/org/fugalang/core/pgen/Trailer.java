@@ -1,6 +1,7 @@
 package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.*;
+import org.fugalang.core.token.TokenType;
 
 /**
  * trailer: '(' ['arglist'] ')' | '[' 'subscriptlist' ']' | '.' 'NAME' | 'block_suite'
@@ -20,15 +21,17 @@ public final class Trailer extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addChoice("trailer1", trailer1());
-        addChoice("trailer2", trailer2());
-        addChoice("trailer3", trailer3());
-        addChoice("blockSuite", blockSuite());
+        addChoice(trailer1());
+        addChoice(trailer2());
+        addChoice(trailer3());
+        addChoice(blockSuite());
     }
 
     public Trailer1 trailer1() {
         var element = getItem(0);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(Trailer1.RULE)) {
+            return null;
+        }
         return Trailer1.of(element);
     }
 
@@ -38,7 +41,9 @@ public final class Trailer extends NodeWrapper {
 
     public Trailer2 trailer2() {
         var element = getItem(1);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(Trailer2.RULE)) {
+            return null;
+        }
         return Trailer2.of(element);
     }
 
@@ -48,7 +53,9 @@ public final class Trailer extends NodeWrapper {
 
     public Trailer3 trailer3() {
         var element = getItem(2);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(Trailer3.RULE)) {
+            return null;
+        }
         return Trailer3.of(element);
     }
 
@@ -58,7 +65,9 @@ public final class Trailer extends NodeWrapper {
 
     public BlockSuite blockSuite() {
         var element = getItem(3);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(BlockSuite.RULE)) {
+            return null;
+        }
         return BlockSuite.of(element);
     }
 
@@ -100,19 +109,22 @@ public final class Trailer extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("isTokenLpar", isTokenLpar());
-            addOptional("arglist", arglist());
-            addRequired("isTokenRpar", isTokenRpar());
+            addRequired(isTokenLpar());
+            addOptional(arglist());
+            addRequired(isTokenRpar());
         }
 
         public boolean isTokenLpar() {
             var element = getItem(0);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
         public Arglist arglist() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            if (!element.isPresent(Arglist.RULE)) {
+                return null;
+            }
             return Arglist.of(element);
         }
 
@@ -122,6 +134,7 @@ public final class Trailer extends NodeWrapper {
 
         public boolean isTokenRpar() {
             var element = getItem(2);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
@@ -132,9 +145,9 @@ public final class Trailer extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeTokenLiteral("(");
+            result = parseTree.consumeToken("(");
             Arglist.parse(parseTree, level + 1);
-            result = result && parseTree.consumeTokenLiteral(")");
+            result = result && parseTree.consumeToken(")");
 
             parseTree.exit(level, marker, result);
             return result;
@@ -159,24 +172,26 @@ public final class Trailer extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("isTokenLsqb", isTokenLsqb());
-            addRequired("subscriptlist", subscriptlist());
-            addRequired("isTokenRsqb", isTokenRsqb());
+            addRequired(isTokenLsqb());
+            addRequired(subscriptlist());
+            addRequired(isTokenRsqb());
         }
 
         public boolean isTokenLsqb() {
             var element = getItem(0);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
         public Subscriptlist subscriptlist() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(Subscriptlist.RULE);
             return Subscriptlist.of(element);
         }
 
         public boolean isTokenRsqb() {
             var element = getItem(2);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
@@ -187,9 +202,9 @@ public final class Trailer extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeTokenLiteral("[");
+            result = parseTree.consumeToken("[");
             result = result && Subscriptlist.parse(parseTree, level + 1);
-            result = result && parseTree.consumeTokenLiteral("]");
+            result = result && parseTree.consumeToken("]");
 
             parseTree.exit(level, marker, result);
             return result;
@@ -214,18 +229,19 @@ public final class Trailer extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("isTokenDot", isTokenDot());
-            addRequired("name", name());
+            addRequired(isTokenDot());
+            addRequired(name());
         }
 
         public boolean isTokenDot() {
             var element = getItem(0);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
         public String name() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(TokenType.NAME);
             return element.asString();
         }
 
@@ -236,8 +252,8 @@ public final class Trailer extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeTokenLiteral(".");
-            result = result && parseTree.consumeTokenType("NAME");
+            result = parseTree.consumeToken(".");
+            result = result && parseTree.consumeToken(TokenType.NAME);
 
             parseTree.exit(level, marker, result);
             return result;

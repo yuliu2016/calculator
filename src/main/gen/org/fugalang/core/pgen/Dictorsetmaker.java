@@ -20,13 +20,15 @@ public final class Dictorsetmaker extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addChoice("dictMaker", dictMaker());
-        addChoice("setMaker", setMaker());
+        addChoice(dictMaker());
+        addChoice(setMaker());
     }
 
     public DictMaker dictMaker() {
         var element = getItem(0);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(DictMaker.RULE)) {
+            return null;
+        }
         return DictMaker.of(element);
     }
 
@@ -36,7 +38,9 @@ public final class Dictorsetmaker extends NodeWrapper {
 
     public SetMaker setMaker() {
         var element = getItem(1);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(SetMaker.RULE)) {
+            return null;
+        }
         return SetMaker.of(element);
     }
 

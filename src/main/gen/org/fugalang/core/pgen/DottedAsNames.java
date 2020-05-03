@@ -26,14 +26,14 @@ public final class DottedAsNames extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired("dottedAsName", dottedAsName());
-        addRequired("dottedAsNames2List", dottedAsNames2List());
-        addRequired("isTokenComma", isTokenComma());
+        addRequired(dottedAsName());
+        addRequired(dottedAsNames2List());
+        addRequired(isTokenComma());
     }
 
     public DottedAsName dottedAsName() {
         var element = getItem(0);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(DottedAsName.RULE);
         return DottedAsName.of(element);
     }
 
@@ -53,6 +53,7 @@ public final class DottedAsNames extends NodeWrapper {
 
     public boolean isTokenComma() {
         var element = getItem(2);
+        element.failIfAbsent();
         return element.asBoolean();
     }
 
@@ -73,7 +74,7 @@ public final class DottedAsNames extends NodeWrapper {
             }
         }
         parseTree.exitCollection();
-        result = result && parseTree.consumeTokenLiteral(",");
+        result = result && parseTree.consumeToken(",");
 
         parseTree.exit(level, marker, result);
         return result;
@@ -97,18 +98,19 @@ public final class DottedAsNames extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("isTokenComma", isTokenComma());
-            addRequired("dottedAsName", dottedAsName());
+            addRequired(isTokenComma());
+            addRequired(dottedAsName());
         }
 
         public boolean isTokenComma() {
             var element = getItem(0);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
         public DottedAsName dottedAsName() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(DottedAsName.RULE);
             return DottedAsName.of(element);
         }
 
@@ -119,7 +121,7 @@ public final class DottedAsNames extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeTokenLiteral(",");
+            result = parseTree.consumeToken(",");
             result = result && DottedAsName.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);

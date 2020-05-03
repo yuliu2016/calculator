@@ -20,13 +20,15 @@ public final class Subscript extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addChoice("expr", expr());
-        addChoice("subscript2", subscript2());
+        addChoice(expr());
+        addChoice(subscript2());
     }
 
     public Expr expr() {
         var element = getItem(0);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(Expr.RULE)) {
+            return null;
+        }
         return Expr.of(element);
     }
 
@@ -36,7 +38,9 @@ public final class Subscript extends NodeWrapper {
 
     public Subscript2 subscript2() {
         var element = getItem(1);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(Subscript2.RULE)) {
+            return null;
+        }
         return Subscript2.of(element);
     }
 
@@ -76,15 +80,17 @@ public final class Subscript extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addOptional("expr", expr());
-            addRequired("isTokenColon", isTokenColon());
-            addOptional("expr1", expr1());
-            addOptional("sliceop", sliceop());
+            addOptional(expr());
+            addRequired(isTokenColon());
+            addOptional(expr1());
+            addOptional(sliceop());
         }
 
         public Expr expr() {
             var element = getItem(0);
-            if (!element.isPresent()) return null;
+            if (!element.isPresent(Expr.RULE)) {
+                return null;
+            }
             return Expr.of(element);
         }
 
@@ -94,12 +100,15 @@ public final class Subscript extends NodeWrapper {
 
         public boolean isTokenColon() {
             var element = getItem(1);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
         public Expr expr1() {
             var element = getItem(2);
-            if (!element.isPresent()) return null;
+            if (!element.isPresent(Expr.RULE)) {
+                return null;
+            }
             return Expr.of(element);
         }
 
@@ -109,7 +118,9 @@ public final class Subscript extends NodeWrapper {
 
         public Sliceop sliceop() {
             var element = getItem(3);
-            if (!element.isPresent()) return null;
+            if (!element.isPresent(Sliceop.RULE)) {
+                return null;
+            }
             return Sliceop.of(element);
         }
 
@@ -125,7 +136,7 @@ public final class Subscript extends NodeWrapper {
             boolean result;
 
             Expr.parse(parseTree, level + 1);
-            result = parseTree.consumeTokenLiteral(":");
+            result = parseTree.consumeToken(":");
             Expr.parse(parseTree, level + 1);
             Sliceop.parse(parseTree, level + 1);
 

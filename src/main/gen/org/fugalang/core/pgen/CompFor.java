@@ -20,38 +20,42 @@ public final class CompFor extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired("isTokenFor", isTokenFor());
-        addRequired("targets", targets());
-        addRequired("isTokenIn", isTokenIn());
-        addRequired("disjunction", disjunction());
-        addOptional("compIter", compIter());
+        addRequired(isTokenFor());
+        addRequired(targets());
+        addRequired(isTokenIn());
+        addRequired(disjunction());
+        addOptional(compIter());
     }
 
     public boolean isTokenFor() {
         var element = getItem(0);
+        element.failIfAbsent();
         return element.asBoolean();
     }
 
     public Targets targets() {
         var element = getItem(1);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(Targets.RULE);
         return Targets.of(element);
     }
 
     public boolean isTokenIn() {
         var element = getItem(2);
+        element.failIfAbsent();
         return element.asBoolean();
     }
 
     public Disjunction disjunction() {
         var element = getItem(3);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(Disjunction.RULE);
         return Disjunction.of(element);
     }
 
     public CompIter compIter() {
         var element = getItem(4);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(CompIter.RULE)) {
+            return null;
+        }
         return CompIter.of(element);
     }
 
@@ -66,9 +70,9 @@ public final class CompFor extends NodeWrapper {
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
-        result = parseTree.consumeTokenLiteral("for");
+        result = parseTree.consumeToken("for");
         result = result && Targets.parse(parseTree, level + 1);
-        result = result && parseTree.consumeTokenLiteral("in");
+        result = result && parseTree.consumeToken("in");
         result = result && Disjunction.parse(parseTree, level + 1);
         CompIter.parse(parseTree, level + 1);
 

@@ -20,15 +20,17 @@ public final class FlowStmt extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addChoice("breakStmt", breakStmt());
-        addChoice("continueStmt", continueStmt());
-        addChoice("returnStmt", returnStmt());
-        addChoice("raiseStmt", raiseStmt());
+        addChoice(breakStmt());
+        addChoice(continueStmt());
+        addChoice(returnStmt());
+        addChoice(raiseStmt());
     }
 
     public BreakStmt breakStmt() {
         var element = getItem(0);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(BreakStmt.RULE)) {
+            return null;
+        }
         return BreakStmt.of(element);
     }
 
@@ -38,7 +40,9 @@ public final class FlowStmt extends NodeWrapper {
 
     public ContinueStmt continueStmt() {
         var element = getItem(1);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(ContinueStmt.RULE)) {
+            return null;
+        }
         return ContinueStmt.of(element);
     }
 
@@ -48,7 +52,9 @@ public final class FlowStmt extends NodeWrapper {
 
     public ReturnStmt returnStmt() {
         var element = getItem(2);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(ReturnStmt.RULE)) {
+            return null;
+        }
         return ReturnStmt.of(element);
     }
 
@@ -58,7 +64,9 @@ public final class FlowStmt extends NodeWrapper {
 
     public RaiseStmt raiseStmt() {
         var element = getItem(3);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(RaiseStmt.RULE)) {
+            return null;
+        }
         return RaiseStmt.of(element);
     }
 

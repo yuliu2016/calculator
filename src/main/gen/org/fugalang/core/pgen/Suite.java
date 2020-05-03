@@ -20,13 +20,15 @@ public final class Suite extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addChoice("suite1", suite1());
-        addChoice("blockSuite", blockSuite());
+        addChoice(suite1());
+        addChoice(blockSuite());
     }
 
     public Suite1 suite1() {
         var element = getItem(0);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(Suite1.RULE)) {
+            return null;
+        }
         return Suite1.of(element);
     }
 
@@ -36,7 +38,9 @@ public final class Suite extends NodeWrapper {
 
     public BlockSuite blockSuite() {
         var element = getItem(1);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(BlockSuite.RULE)) {
+            return null;
+        }
         return BlockSuite.of(element);
     }
 
@@ -76,18 +80,19 @@ public final class Suite extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("isTokenColon", isTokenColon());
-            addRequired("simpleStmt", simpleStmt());
+            addRequired(isTokenColon());
+            addRequired(simpleStmt());
         }
 
         public boolean isTokenColon() {
             var element = getItem(0);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
         public SimpleStmt simpleStmt() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(SimpleStmt.RULE);
             return SimpleStmt.of(element);
         }
 
@@ -98,7 +103,7 @@ public final class Suite extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeTokenLiteral(":");
+            result = parseTree.consumeToken(":");
             result = result && SimpleStmt.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);

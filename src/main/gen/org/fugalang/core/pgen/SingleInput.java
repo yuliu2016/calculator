@@ -1,6 +1,7 @@
 package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.*;
+import org.fugalang.core.token.TokenType;
 
 /**
  * single_input: 'NEWLINE' | 'simple_stmt' | 'compound_stmt' 'NEWLINE'
@@ -20,14 +21,16 @@ public final class SingleInput extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addChoice("newline", newline());
-        addChoice("simpleStmt", simpleStmt());
-        addChoice("singleInput3", singleInput3());
+        addChoice(newline());
+        addChoice(simpleStmt());
+        addChoice(singleInput3());
     }
 
     public String newline() {
         var element = getItem(0);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(TokenType.NEWLINE)) {
+            return null;
+        }
         return element.asString();
     }
 
@@ -37,7 +40,9 @@ public final class SingleInput extends NodeWrapper {
 
     public SimpleStmt simpleStmt() {
         var element = getItem(1);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(SimpleStmt.RULE)) {
+            return null;
+        }
         return SimpleStmt.of(element);
     }
 
@@ -47,7 +52,9 @@ public final class SingleInput extends NodeWrapper {
 
     public SingleInput3 singleInput3() {
         var element = getItem(2);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(SingleInput3.RULE)) {
+            return null;
+        }
         return SingleInput3.of(element);
     }
 
@@ -62,7 +69,7 @@ public final class SingleInput extends NodeWrapper {
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
-        result = parseTree.consumeTokenType("NEWLINE");
+        result = parseTree.consumeToken(TokenType.NEWLINE);
         result = result || SimpleStmt.parse(parseTree, level + 1);
         result = result || SingleInput3.parse(parseTree, level + 1);
 
@@ -88,19 +95,19 @@ public final class SingleInput extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("compoundStmt", compoundStmt());
-            addRequired("newline", newline());
+            addRequired(compoundStmt());
+            addRequired(newline());
         }
 
         public CompoundStmt compoundStmt() {
             var element = getItem(0);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(CompoundStmt.RULE);
             return CompoundStmt.of(element);
         }
 
         public String newline() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(TokenType.NEWLINE);
             return element.asString();
         }
 
@@ -112,7 +119,7 @@ public final class SingleInput extends NodeWrapper {
             boolean result;
 
             result = CompoundStmt.parse(parseTree, level + 1);
-            result = result && parseTree.consumeTokenType("NEWLINE");
+            result = result && parseTree.consumeToken(TokenType.NEWLINE);
 
             parseTree.exit(level, marker, result);
             return result;

@@ -26,13 +26,13 @@ public final class Disjunction extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired("conjunction", conjunction());
-        addRequired("disjunction2List", disjunction2List());
+        addRequired(conjunction());
+        addRequired(disjunction2List());
     }
 
     public Conjunction conjunction() {
         var element = getItem(0);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(Conjunction.RULE);
         return Conjunction.of(element);
     }
 
@@ -90,18 +90,19 @@ public final class Disjunction extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("isTokenOr", isTokenOr());
-            addRequired("conjunction", conjunction());
+            addRequired(isTokenOr());
+            addRequired(conjunction());
         }
 
         public boolean isTokenOr() {
             var element = getItem(0);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
         public Conjunction conjunction() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(Conjunction.RULE);
             return Conjunction.of(element);
         }
 
@@ -112,7 +113,7 @@ public final class Disjunction extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeTokenLiteral("or");
+            result = parseTree.consumeToken("or");
             result = result && Conjunction.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);

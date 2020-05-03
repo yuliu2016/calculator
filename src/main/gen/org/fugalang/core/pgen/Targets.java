@@ -26,14 +26,14 @@ public final class Targets extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired("targets1", targets1());
-        addRequired("targets2List", targets2List());
-        addRequired("isTokenComma", isTokenComma());
+        addRequired(targets1());
+        addRequired(targets2List());
+        addRequired(isTokenComma());
     }
 
     public Targets1 targets1() {
         var element = getItem(0);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(Targets1.RULE);
         return Targets1.of(element);
     }
 
@@ -53,6 +53,7 @@ public final class Targets extends NodeWrapper {
 
     public boolean isTokenComma() {
         var element = getItem(2);
+        element.failIfAbsent();
         return element.asBoolean();
     }
 
@@ -73,7 +74,7 @@ public final class Targets extends NodeWrapper {
             }
         }
         parseTree.exitCollection();
-        result = result && parseTree.consumeTokenLiteral(",");
+        result = result && parseTree.consumeToken(",");
 
         parseTree.exit(level, marker, result);
         return result;
@@ -97,13 +98,15 @@ public final class Targets extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addChoice("bitwiseOr", bitwiseOr());
-            addChoice("starExpr", starExpr());
+            addChoice(bitwiseOr());
+            addChoice(starExpr());
         }
 
         public BitwiseOr bitwiseOr() {
             var element = getItem(0);
-            if (!element.isPresent()) return null;
+            if (!element.isPresent(BitwiseOr.RULE)) {
+                return null;
+            }
             return BitwiseOr.of(element);
         }
 
@@ -113,7 +116,9 @@ public final class Targets extends NodeWrapper {
 
         public StarExpr starExpr() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            if (!element.isPresent(StarExpr.RULE)) {
+                return null;
+            }
             return StarExpr.of(element);
         }
 
@@ -154,18 +159,19 @@ public final class Targets extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("isTokenComma", isTokenComma());
-            addRequired("targets22", targets22());
+            addRequired(isTokenComma());
+            addRequired(targets22());
         }
 
         public boolean isTokenComma() {
             var element = getItem(0);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
         public Targets22 targets22() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(Targets22.RULE);
             return Targets22.of(element);
         }
 
@@ -176,7 +182,7 @@ public final class Targets extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeTokenLiteral(",");
+            result = parseTree.consumeToken(",");
             result = result && Targets22.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);
@@ -202,13 +208,15 @@ public final class Targets extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addChoice("bitwiseOr", bitwiseOr());
-            addChoice("starExpr", starExpr());
+            addChoice(bitwiseOr());
+            addChoice(starExpr());
         }
 
         public BitwiseOr bitwiseOr() {
             var element = getItem(0);
-            if (!element.isPresent()) return null;
+            if (!element.isPresent(BitwiseOr.RULE)) {
+                return null;
+            }
             return BitwiseOr.of(element);
         }
 
@@ -218,7 +226,9 @@ public final class Targets extends NodeWrapper {
 
         public StarExpr starExpr() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            if (!element.isPresent(StarExpr.RULE)) {
+                return null;
+            }
             return StarExpr.of(element);
         }
 

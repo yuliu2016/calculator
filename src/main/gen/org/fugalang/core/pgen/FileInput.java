@@ -1,6 +1,7 @@
 package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.*;
+import org.fugalang.core.token.TokenType;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,8 +27,8 @@ public final class FileInput extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired("fileInput1List", fileInput1List());
-        addRequired("endmarker", endmarker());
+        addRequired(fileInput1List());
+        addRequired(endmarker());
     }
 
     public List<FileInput1> fileInput1List() {
@@ -46,7 +47,7 @@ public final class FileInput extends NodeWrapper {
 
     public String endmarker() {
         var element = getItem(1);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(TokenType.ENDMARKER);
         return element.asString();
     }
 
@@ -66,7 +67,7 @@ public final class FileInput extends NodeWrapper {
             }
         }
         parseTree.exitCollection();
-        result = parseTree.consumeTokenType("ENDMARKER");
+        result = parseTree.consumeToken(TokenType.ENDMARKER);
 
         parseTree.exit(level, marker, result);
         return result;
@@ -90,13 +91,15 @@ public final class FileInput extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addChoice("newline", newline());
-            addChoice("stmt", stmt());
+            addChoice(newline());
+            addChoice(stmt());
         }
 
         public String newline() {
             var element = getItem(0);
-            if (!element.isPresent()) return null;
+            if (!element.isPresent(TokenType.NEWLINE)) {
+                return null;
+            }
             return element.asString();
         }
 
@@ -106,7 +109,9 @@ public final class FileInput extends NodeWrapper {
 
         public Stmt stmt() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            if (!element.isPresent(Stmt.RULE)) {
+                return null;
+            }
             return Stmt.of(element);
         }
 
@@ -121,7 +126,7 @@ public final class FileInput extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeTokenType("NEWLINE");
+            result = parseTree.consumeToken(TokenType.NEWLINE);
             result = result || Stmt.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);

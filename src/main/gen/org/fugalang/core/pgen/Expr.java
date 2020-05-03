@@ -20,14 +20,16 @@ public final class Expr extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addChoice("expr1", expr1());
-        addChoice("disjunction", disjunction());
-        addChoice("funcdef", funcdef());
+        addChoice(expr1());
+        addChoice(disjunction());
+        addChoice(funcdef());
     }
 
     public Expr1 expr1() {
         var element = getItem(0);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(Expr1.RULE)) {
+            return null;
+        }
         return Expr1.of(element);
     }
 
@@ -37,7 +39,9 @@ public final class Expr extends NodeWrapper {
 
     public Disjunction disjunction() {
         var element = getItem(1);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(Disjunction.RULE)) {
+            return null;
+        }
         return Disjunction.of(element);
     }
 
@@ -47,7 +51,9 @@ public final class Expr extends NodeWrapper {
 
     public Funcdef funcdef() {
         var element = getItem(2);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(Funcdef.RULE)) {
+            return null;
+        }
         return Funcdef.of(element);
     }
 
@@ -88,44 +94,47 @@ public final class Expr extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("isTokenIf", isTokenIf());
-            addRequired("disjunction", disjunction());
-            addRequired("isTokenTernery", isTokenTernery());
-            addRequired("disjunction1", disjunction1());
-            addRequired("isTokenElse", isTokenElse());
-            addRequired("expr", expr());
+            addRequired(isTokenIf());
+            addRequired(disjunction());
+            addRequired(isTokenTernery());
+            addRequired(disjunction1());
+            addRequired(isTokenElse());
+            addRequired(expr());
         }
 
         public boolean isTokenIf() {
             var element = getItem(0);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
         public Disjunction disjunction() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(Disjunction.RULE);
             return Disjunction.of(element);
         }
 
         public boolean isTokenTernery() {
             var element = getItem(2);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
         public Disjunction disjunction1() {
             var element = getItem(3);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(Disjunction.RULE);
             return Disjunction.of(element);
         }
 
         public boolean isTokenElse() {
             var element = getItem(4);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
         public Expr expr() {
             var element = getItem(5);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(Expr.RULE);
             return Expr.of(element);
         }
 
@@ -136,11 +145,11 @@ public final class Expr extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeTokenLiteral("if");
+            result = parseTree.consumeToken("if");
             result = result && Disjunction.parse(parseTree, level + 1);
-            result = result && parseTree.consumeTokenLiteral("?");
+            result = result && parseTree.consumeToken("?");
             result = result && Disjunction.parse(parseTree, level + 1);
-            result = result && parseTree.consumeTokenLiteral("else");
+            result = result && parseTree.consumeToken("else");
             result = result && Expr.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);

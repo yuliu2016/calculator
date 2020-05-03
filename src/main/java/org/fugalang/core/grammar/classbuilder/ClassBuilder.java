@@ -178,7 +178,7 @@ public class ClassBuilder {
         for (int i = 0; i < fields.size(); i++) {
             ClassField field = fields.get(i);
             sb.append("\n");
-            sb.append(field.asGetter(i));
+            sb.append(field.asGetter(ruleType, i));
             if (ruleType == RuleType.Disjunction || field.isOptionalSingle()) {
                 sb.append(field.asNullCheck());
             }

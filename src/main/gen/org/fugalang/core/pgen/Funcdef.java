@@ -20,25 +20,29 @@ public final class Funcdef extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired("isTokenAsync", isTokenAsync());
-        addRequired("isTokenDef", isTokenDef());
-        addOptional("varargslist", varargslist());
-        addRequired("funcdef4", funcdef4());
+        addRequired(isTokenAsync());
+        addRequired(isTokenDef());
+        addOptional(varargslist());
+        addRequired(funcdef4());
     }
 
     public boolean isTokenAsync() {
         var element = getItem(0);
+        element.failIfAbsent();
         return element.asBoolean();
     }
 
     public boolean isTokenDef() {
         var element = getItem(1);
+        element.failIfAbsent();
         return element.asBoolean();
     }
 
     public Varargslist varargslist() {
         var element = getItem(2);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(Varargslist.RULE)) {
+            return null;
+        }
         return Varargslist.of(element);
     }
 
@@ -48,7 +52,7 @@ public final class Funcdef extends NodeWrapper {
 
     public Funcdef4 funcdef4() {
         var element = getItem(3);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(Funcdef4.RULE);
         return Funcdef4.of(element);
     }
 
@@ -59,8 +63,8 @@ public final class Funcdef extends NodeWrapper {
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
-        result = parseTree.consumeTokenLiteral("async");
-        result = result && parseTree.consumeTokenLiteral("def");
+        result = parseTree.consumeToken("async");
+        result = result && parseTree.consumeToken("def");
         Varargslist.parse(parseTree, level + 1);
         result = result && Funcdef4.parse(parseTree, level + 1);
 
@@ -86,13 +90,15 @@ public final class Funcdef extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addChoice("funcdef41", funcdef41());
-            addChoice("blockSuite", blockSuite());
+            addChoice(funcdef41());
+            addChoice(blockSuite());
         }
 
         public Funcdef41 funcdef41() {
             var element = getItem(0);
-            if (!element.isPresent()) return null;
+            if (!element.isPresent(Funcdef41.RULE)) {
+                return null;
+            }
             return Funcdef41.of(element);
         }
 
@@ -102,7 +108,9 @@ public final class Funcdef extends NodeWrapper {
 
         public BlockSuite blockSuite() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            if (!element.isPresent(BlockSuite.RULE)) {
+                return null;
+            }
             return BlockSuite.of(element);
         }
 
@@ -143,18 +151,19 @@ public final class Funcdef extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("isTokenColon", isTokenColon());
-            addRequired("expr", expr());
+            addRequired(isTokenColon());
+            addRequired(expr());
         }
 
         public boolean isTokenColon() {
             var element = getItem(0);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
         public Expr expr() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(Expr.RULE);
             return Expr.of(element);
         }
 
@@ -165,7 +174,7 @@ public final class Funcdef extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeTokenLiteral(":");
+            result = parseTree.consumeToken(":");
             result = result && Expr.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);

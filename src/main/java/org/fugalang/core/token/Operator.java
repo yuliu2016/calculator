@@ -119,12 +119,12 @@ public enum Operator {
             RBRACE,
             LSQB,
             RSQB,
-            LESS,   // typing and more-than comparison
-            GREATER,  // typing and more-than comparison
+            LESS,
+            GREATER,
 
             PLUS,
             MINUS,
-            TIMES,           // times and def(*args)
+            TIMES,
             DIV,
             MODULUS,
             MATRIX_TIMES,
@@ -148,7 +148,7 @@ public enum Operator {
             ASGN_EXPR,
 
             FLOOR_DIV,
-            POWER,         // exponents and def(**kw args)/ {**k, **v} etc
+            POWER,
 
             PLUS_ASSIGN,
             MINUS_ASSIGN,

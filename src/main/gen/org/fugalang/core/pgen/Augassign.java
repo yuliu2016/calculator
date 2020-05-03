@@ -20,19 +20,19 @@ public final class Augassign extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addChoice("isTokenPlusAssign", isTokenPlusAssign());
-        addChoice("isTokenMinusAssign", isTokenMinusAssign());
-        addChoice("isTokenTimesAssign", isTokenTimesAssign());
-        addChoice("isTokenMatrixTimesAssign", isTokenMatrixTimesAssign());
-        addChoice("isTokenDivAssign", isTokenDivAssign());
-        addChoice("isTokenModulusAssign", isTokenModulusAssign());
-        addChoice("isTokenBitAndAssign", isTokenBitAndAssign());
-        addChoice("isTokenBitOrAssign", isTokenBitOrAssign());
-        addChoice("isTokenBitXorAssign", isTokenBitXorAssign());
-        addChoice("isTokenLshiftAssign", isTokenLshiftAssign());
-        addChoice("isTokenRshiftAssign", isTokenRshiftAssign());
-        addChoice("isTokenPowerAssign", isTokenPowerAssign());
-        addChoice("isTokenFloorDivAssign", isTokenFloorDivAssign());
+        addChoice(isTokenPlusAssign());
+        addChoice(isTokenMinusAssign());
+        addChoice(isTokenTimesAssign());
+        addChoice(isTokenMatrixTimesAssign());
+        addChoice(isTokenDivAssign());
+        addChoice(isTokenModulusAssign());
+        addChoice(isTokenBitAndAssign());
+        addChoice(isTokenBitOrAssign());
+        addChoice(isTokenBitXorAssign());
+        addChoice(isTokenLshiftAssign());
+        addChoice(isTokenRshiftAssign());
+        addChoice(isTokenPowerAssign());
+        addChoice(isTokenFloorDivAssign());
     }
 
     public boolean isTokenPlusAssign() {
@@ -107,19 +107,19 @@ public final class Augassign extends NodeWrapper {
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
-        result = parseTree.consumeTokenLiteral("+=");
-        result = result || parseTree.consumeTokenLiteral("-=");
-        result = result || parseTree.consumeTokenLiteral("*=");
-        result = result || parseTree.consumeTokenLiteral("@=");
-        result = result || parseTree.consumeTokenLiteral("/=");
-        result = result || parseTree.consumeTokenLiteral("%=");
-        result = result || parseTree.consumeTokenLiteral("&=");
-        result = result || parseTree.consumeTokenLiteral("|=");
-        result = result || parseTree.consumeTokenLiteral("^=");
-        result = result || parseTree.consumeTokenLiteral("<<=");
-        result = result || parseTree.consumeTokenLiteral(">>=");
-        result = result || parseTree.consumeTokenLiteral("**=");
-        result = result || parseTree.consumeTokenLiteral("//=");
+        result = parseTree.consumeToken("+=");
+        result = result || parseTree.consumeToken("-=");
+        result = result || parseTree.consumeToken("*=");
+        result = result || parseTree.consumeToken("@=");
+        result = result || parseTree.consumeToken("/=");
+        result = result || parseTree.consumeToken("%=");
+        result = result || parseTree.consumeToken("&=");
+        result = result || parseTree.consumeToken("|=");
+        result = result || parseTree.consumeToken("^=");
+        result = result || parseTree.consumeToken("<<=");
+        result = result || parseTree.consumeToken(">>=");
+        result = result || parseTree.consumeToken("**=");
+        result = result || parseTree.consumeToken("//=");
 
         parseTree.exit(level, marker, result);
         return result;

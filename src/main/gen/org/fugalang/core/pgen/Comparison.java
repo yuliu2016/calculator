@@ -26,13 +26,13 @@ public final class Comparison extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired("bitwiseOr", bitwiseOr());
-        addRequired("comparison2List", comparison2List());
+        addRequired(bitwiseOr());
+        addRequired(comparison2List());
     }
 
     public BitwiseOr bitwiseOr() {
         var element = getItem(0);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(BitwiseOr.RULE);
         return BitwiseOr.of(element);
     }
 
@@ -90,19 +90,19 @@ public final class Comparison extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("compOp", compOp());
-            addRequired("bitwiseOr", bitwiseOr());
+            addRequired(compOp());
+            addRequired(bitwiseOr());
         }
 
         public CompOp compOp() {
             var element = getItem(0);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(CompOp.RULE);
             return CompOp.of(element);
         }
 
         public BitwiseOr bitwiseOr() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(BitwiseOr.RULE);
             return BitwiseOr.of(element);
         }
 

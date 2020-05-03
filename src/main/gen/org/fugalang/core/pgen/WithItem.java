@@ -1,6 +1,7 @@
 package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.*;
+import org.fugalang.core.token.TokenType;
 
 /**
  * with_item: 'expr' ['as' 'NAME']
@@ -20,19 +21,21 @@ public final class WithItem extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired("expr", expr());
-        addOptional("withItem2", withItem2());
+        addRequired(expr());
+        addOptional(withItem2());
     }
 
     public Expr expr() {
         var element = getItem(0);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(Expr.RULE);
         return Expr.of(element);
     }
 
     public WithItem2 withItem2() {
         var element = getItem(1);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(WithItem2.RULE)) {
+            return null;
+        }
         return WithItem2.of(element);
     }
 
@@ -72,18 +75,19 @@ public final class WithItem extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("isTokenAs", isTokenAs());
-            addRequired("name", name());
+            addRequired(isTokenAs());
+            addRequired(name());
         }
 
         public boolean isTokenAs() {
             var element = getItem(0);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
         public String name() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(TokenType.NAME);
             return element.asString();
         }
 
@@ -94,8 +98,8 @@ public final class WithItem extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeTokenLiteral("as");
-            result = result && parseTree.consumeTokenType("NAME");
+            result = parseTree.consumeToken("as");
+            result = result && parseTree.consumeToken(TokenType.NAME);
 
             parseTree.exit(level, marker, result);
             return result;

@@ -1,11 +1,12 @@
 package org.fugalang.core.token;
 
+import org.fugalang.core.parser.ElementType;
 import org.junit.jupiter.api.Assertions;
 
 import java.util.List;
 
 public class TokenAssertions {
-    public static void assertType(List<Token> tokens, int i, TokenType expectedType) {
+    public static void assertType(List<Token> tokens, int i, ElementType expectedType) {
         var actualType = tokens.get(i).type;
 
         Assertions.assertEquals(expectedType, actualType, () -> "Token at #" + i);

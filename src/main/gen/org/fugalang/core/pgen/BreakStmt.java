@@ -20,11 +20,12 @@ public final class BreakStmt extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired("isTokenBreak", isTokenBreak());
+        addRequired(isTokenBreak());
     }
 
     public boolean isTokenBreak() {
         var element = getItem(0);
+        element.failIfAbsent();
         return element.asBoolean();
     }
 
@@ -35,7 +36,7 @@ public final class BreakStmt extends NodeWrapper {
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
-        result = parseTree.consumeTokenLiteral("break");
+        result = parseTree.consumeToken("break");
 
         parseTree.exit(level, marker, result);
         return result;

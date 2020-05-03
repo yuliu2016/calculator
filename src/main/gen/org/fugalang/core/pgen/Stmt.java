@@ -1,6 +1,7 @@
 package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.*;
+import org.fugalang.core.token.TokenType;
 
 /**
  * stmt: ('simple_stmt' | 'compound_stmt') 'NEWLINE'
@@ -20,19 +21,19 @@ public final class Stmt extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired("stmt1", stmt1());
-        addRequired("newline", newline());
+        addRequired(stmt1());
+        addRequired(newline());
     }
 
     public Stmt1 stmt1() {
         var element = getItem(0);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(Stmt1.RULE);
         return Stmt1.of(element);
     }
 
     public String newline() {
         var element = getItem(1);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(TokenType.NEWLINE);
         return element.asString();
     }
 
@@ -44,7 +45,7 @@ public final class Stmt extends NodeWrapper {
         boolean result;
 
         result = Stmt1.parse(parseTree, level + 1);
-        result = result && parseTree.consumeTokenType("NEWLINE");
+        result = result && parseTree.consumeToken(TokenType.NEWLINE);
 
         parseTree.exit(level, marker, result);
         return result;
@@ -68,13 +69,15 @@ public final class Stmt extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addChoice("simpleStmt", simpleStmt());
-            addChoice("compoundStmt", compoundStmt());
+            addChoice(simpleStmt());
+            addChoice(compoundStmt());
         }
 
         public SimpleStmt simpleStmt() {
             var element = getItem(0);
-            if (!element.isPresent()) return null;
+            if (!element.isPresent(SimpleStmt.RULE)) {
+                return null;
+            }
             return SimpleStmt.of(element);
         }
 
@@ -84,7 +87,9 @@ public final class Stmt extends NodeWrapper {
 
         public CompoundStmt compoundStmt() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            if (!element.isPresent(CompoundStmt.RULE)) {
+                return null;
+            }
             return CompoundStmt.of(element);
         }
 

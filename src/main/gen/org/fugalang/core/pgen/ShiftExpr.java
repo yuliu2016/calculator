@@ -26,13 +26,13 @@ public final class ShiftExpr extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired("sum", sum());
-        addRequired("shiftExpr2List", shiftExpr2List());
+        addRequired(sum());
+        addRequired(shiftExpr2List());
     }
 
     public Sum sum() {
         var element = getItem(0);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(Sum.RULE);
         return Sum.of(element);
     }
 
@@ -90,19 +90,19 @@ public final class ShiftExpr extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("shiftExpr21", shiftExpr21());
-            addRequired("sum", sum());
+            addRequired(shiftExpr21());
+            addRequired(sum());
         }
 
         public ShiftExpr21 shiftExpr21() {
             var element = getItem(0);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(ShiftExpr21.RULE);
             return ShiftExpr21.of(element);
         }
 
         public Sum sum() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(Sum.RULE);
             return Sum.of(element);
         }
 
@@ -139,8 +139,8 @@ public final class ShiftExpr extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addChoice("isTokenLshift", isTokenLshift());
-            addChoice("isTokenRshift", isTokenRshift());
+            addChoice(isTokenLshift());
+            addChoice(isTokenRshift());
         }
 
         public boolean isTokenLshift() {
@@ -160,8 +160,8 @@ public final class ShiftExpr extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeTokenLiteral("<<");
-            result = result || parseTree.consumeTokenLiteral(">>");
+            result = parseTree.consumeToken("<<");
+            result = result || parseTree.consumeToken(">>");
 
             parseTree.exit(level, marker, result);
             return result;

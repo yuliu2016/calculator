@@ -26,13 +26,13 @@ public final class Term extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired("factor", factor());
-        addRequired("term2List", term2List());
+        addRequired(factor());
+        addRequired(term2List());
     }
 
     public Factor factor() {
         var element = getItem(0);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(Factor.RULE);
         return Factor.of(element);
     }
 
@@ -90,19 +90,19 @@ public final class Term extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("term21", term21());
-            addRequired("factor", factor());
+            addRequired(term21());
+            addRequired(factor());
         }
 
         public Term21 term21() {
             var element = getItem(0);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(Term21.RULE);
             return Term21.of(element);
         }
 
         public Factor factor() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(Factor.RULE);
             return Factor.of(element);
         }
 
@@ -139,11 +139,11 @@ public final class Term extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addChoice("isTokenTimes", isTokenTimes());
-            addChoice("isTokenMatrixTimes", isTokenMatrixTimes());
-            addChoice("isTokenDiv", isTokenDiv());
-            addChoice("isTokenModulus", isTokenModulus());
-            addChoice("isTokenFloorDiv", isTokenFloorDiv());
+            addChoice(isTokenTimes());
+            addChoice(isTokenMatrixTimes());
+            addChoice(isTokenDiv());
+            addChoice(isTokenModulus());
+            addChoice(isTokenFloorDiv());
         }
 
         public boolean isTokenTimes() {
@@ -178,11 +178,11 @@ public final class Term extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeTokenLiteral("*");
-            result = result || parseTree.consumeTokenLiteral("@");
-            result = result || parseTree.consumeTokenLiteral("/");
-            result = result || parseTree.consumeTokenLiteral("%");
-            result = result || parseTree.consumeTokenLiteral("//");
+            result = parseTree.consumeToken("*");
+            result = result || parseTree.consumeToken("@");
+            result = result || parseTree.consumeToken("/");
+            result = result || parseTree.consumeToken("%");
+            result = result || parseTree.consumeToken("//");
 
             parseTree.exit(level, marker, result);
             return result;

@@ -20,25 +20,28 @@ public final class CompIf extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired("isTokenIf", isTokenIf());
-        addRequired("expr", expr());
-        addOptional("compIter", compIter());
+        addRequired(isTokenIf());
+        addRequired(expr());
+        addOptional(compIter());
     }
 
     public boolean isTokenIf() {
         var element = getItem(0);
+        element.failIfAbsent();
         return element.asBoolean();
     }
 
     public Expr expr() {
         var element = getItem(1);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(Expr.RULE);
         return Expr.of(element);
     }
 
     public CompIter compIter() {
         var element = getItem(2);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(CompIter.RULE)) {
+            return null;
+        }
         return CompIter.of(element);
     }
 
@@ -53,7 +56,7 @@ public final class CompIf extends NodeWrapper {
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
-        result = parseTree.consumeTokenLiteral("if");
+        result = parseTree.consumeToken("if");
         result = result && Expr.parse(parseTree, level + 1);
         CompIter.parse(parseTree, level + 1);
 

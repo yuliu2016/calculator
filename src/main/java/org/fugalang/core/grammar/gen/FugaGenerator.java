@@ -27,7 +27,8 @@ public class FugaGenerator {
             );
 
             var gen = new ParserGenerator(cst, FugaGenerator::checkToken,
-                    path, "org.fugalang.core.pgen");
+                    path, "org.fugalang.core.pgen",
+                    "org.fugalang.core.token.TokenType");
             gen.generate(true);
 
         } catch (IOException | URISyntaxException e) {

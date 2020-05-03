@@ -20,13 +20,15 @@ public final class ImportStmt extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addChoice("importName", importName());
-        addChoice("importFrom", importFrom());
+        addChoice(importName());
+        addChoice(importFrom());
     }
 
     public ImportName importName() {
         var element = getItem(0);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(ImportName.RULE)) {
+            return null;
+        }
         return ImportName.of(element);
     }
 
@@ -36,7 +38,9 @@ public final class ImportStmt extends NodeWrapper {
 
     public ImportFrom importFrom() {
         var element = getItem(1);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(ImportFrom.RULE)) {
+            return null;
+        }
         return ImportFrom.of(element);
     }
 

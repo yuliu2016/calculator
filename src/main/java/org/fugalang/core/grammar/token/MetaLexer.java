@@ -1,6 +1,7 @@
 package org.fugalang.core.grammar.token;
 
 import org.fugalang.core.grammar.MetaGrammarError;
+import org.fugalang.core.parser.ElementType;
 import org.fugalang.core.token.CharTest;
 import org.fugalang.core.token.Visitor;
 
@@ -18,7 +19,7 @@ public class MetaLexer {
         visitor = new Visitor(code);
     }
 
-    private void addToken(MetaTokenType type, String s) {
+    private void addToken(ElementType type, String s) {
         tokens.add(new MetaToken(type, s));
     }
 

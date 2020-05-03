@@ -20,13 +20,15 @@ public final class ExprOrStar extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addChoice("expr", expr());
-        addChoice("starExpr", starExpr());
+        addChoice(expr());
+        addChoice(starExpr());
     }
 
     public Expr expr() {
         var element = getItem(0);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(Expr.RULE)) {
+            return null;
+        }
         return Expr.of(element);
     }
 
@@ -36,7 +38,9 @@ public final class ExprOrStar extends NodeWrapper {
 
     public StarExpr starExpr() {
         var element = getItem(1);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(StarExpr.RULE)) {
+            return null;
+        }
         return StarExpr.of(element);
     }
 

@@ -24,19 +24,21 @@ public final class ExprStmt extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired("exprlistStar", exprlistStar());
-        addOptional("exprStmt2", exprStmt2());
+        addRequired(exprlistStar());
+        addOptional(exprStmt2());
     }
 
     public ExprlistStar exprlistStar() {
         var element = getItem(0);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(ExprlistStar.RULE);
         return ExprlistStar.of(element);
     }
 
     public ExprStmt2 exprStmt2() {
         var element = getItem(1);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(ExprStmt2.RULE)) {
+            return null;
+        }
         return ExprStmt2.of(element);
     }
 
@@ -78,13 +80,15 @@ public final class ExprStmt extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addChoice("exprStmt21", exprStmt21());
-            addChoice("exprStmt22List", exprStmt22List());
+            addChoice(exprStmt21());
+            addChoice(exprStmt22List());
         }
 
         public ExprStmt21 exprStmt21() {
             var element = getItem(0);
-            if (!element.isPresent()) return null;
+            if (!element.isPresent(ExprStmt21.RULE)) {
+                return null;
+            }
             return ExprStmt21.of(element);
         }
 
@@ -147,19 +151,19 @@ public final class ExprStmt extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("augassign", augassign());
-            addRequired("exprlist", exprlist());
+            addRequired(augassign());
+            addRequired(exprlist());
         }
 
         public Augassign augassign() {
             var element = getItem(0);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(Augassign.RULE);
             return Augassign.of(element);
         }
 
         public Exprlist exprlist() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(Exprlist.RULE);
             return Exprlist.of(element);
         }
 
@@ -196,18 +200,19 @@ public final class ExprStmt extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("isTokenAssign", isTokenAssign());
-            addRequired("exprlistStar", exprlistStar());
+            addRequired(isTokenAssign());
+            addRequired(exprlistStar());
         }
 
         public boolean isTokenAssign() {
             var element = getItem(0);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
         public ExprlistStar exprlistStar() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(ExprlistStar.RULE);
             return ExprlistStar.of(element);
         }
 
@@ -218,7 +223,7 @@ public final class ExprStmt extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeTokenLiteral("=");
+            result = parseTree.consumeToken("=");
             result = result && ExprlistStar.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);

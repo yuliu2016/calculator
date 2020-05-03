@@ -20,18 +20,19 @@ public final class StarExpr extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired("isTokenTimes", isTokenTimes());
-        addRequired("bitwiseOr", bitwiseOr());
+        addRequired(isTokenTimes());
+        addRequired(bitwiseOr());
     }
 
     public boolean isTokenTimes() {
         var element = getItem(0);
+        element.failIfAbsent();
         return element.asBoolean();
     }
 
     public BitwiseOr bitwiseOr() {
         var element = getItem(1);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(BitwiseOr.RULE);
         return BitwiseOr.of(element);
     }
 
@@ -42,7 +43,7 @@ public final class StarExpr extends NodeWrapper {
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
-        result = parseTree.consumeTokenLiteral("*");
+        result = parseTree.consumeToken("*");
         result = result && BitwiseOr.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);

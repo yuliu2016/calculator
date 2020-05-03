@@ -20,17 +20,19 @@ public final class SmallStmt extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addChoice("exprStmt", exprStmt());
-        addChoice("delStmt", delStmt());
-        addChoice("passStmt", passStmt());
-        addChoice("flowStmt", flowStmt());
-        addChoice("importStmt", importStmt());
-        addChoice("assertStmt", assertStmt());
+        addChoice(exprStmt());
+        addChoice(delStmt());
+        addChoice(passStmt());
+        addChoice(flowStmt());
+        addChoice(importStmt());
+        addChoice(assertStmt());
     }
 
     public ExprStmt exprStmt() {
         var element = getItem(0);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(ExprStmt.RULE)) {
+            return null;
+        }
         return ExprStmt.of(element);
     }
 
@@ -40,7 +42,9 @@ public final class SmallStmt extends NodeWrapper {
 
     public DelStmt delStmt() {
         var element = getItem(1);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(DelStmt.RULE)) {
+            return null;
+        }
         return DelStmt.of(element);
     }
 
@@ -50,7 +54,9 @@ public final class SmallStmt extends NodeWrapper {
 
     public PassStmt passStmt() {
         var element = getItem(2);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(PassStmt.RULE)) {
+            return null;
+        }
         return PassStmt.of(element);
     }
 
@@ -60,7 +66,9 @@ public final class SmallStmt extends NodeWrapper {
 
     public FlowStmt flowStmt() {
         var element = getItem(3);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(FlowStmt.RULE)) {
+            return null;
+        }
         return FlowStmt.of(element);
     }
 
@@ -70,7 +78,9 @@ public final class SmallStmt extends NodeWrapper {
 
     public ImportStmt importStmt() {
         var element = getItem(4);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(ImportStmt.RULE)) {
+            return null;
+        }
         return ImportStmt.of(element);
     }
 
@@ -80,7 +90,9 @@ public final class SmallStmt extends NodeWrapper {
 
     public AssertStmt assertStmt() {
         var element = getItem(5);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(AssertStmt.RULE)) {
+            return null;
+        }
         return AssertStmt.of(element);
     }
 

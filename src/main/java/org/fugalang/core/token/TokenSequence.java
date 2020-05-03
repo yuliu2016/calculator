@@ -1,5 +1,7 @@
 package org.fugalang.core.token;
 
+import org.fugalang.core.parser.ElementType;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,7 +55,7 @@ public class TokenSequence {
      * @param n the number of characters to skip backwards
      *          when attempting to pop the newline token
      */
-    public void popDelimiter(TokenType typeToPop, int n) {
+    public void popDelimiter(ElementType typeToPop, int n) {
         // Fix: empty token sequence causes n < 1
         if (tokens.isEmpty()) {
             return;
@@ -89,7 +91,7 @@ public class TokenSequence {
     /**
      * Add a token to the sequence with line and column
      */
-    public void add(TokenType token_type, String token_value) {
+    public void add(ElementType token_type, String token_value) {
 
         // i must be increased from the last call to this function
         // otherwise breaks contract

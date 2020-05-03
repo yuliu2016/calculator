@@ -26,20 +26,21 @@ public final class WithStmt extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired("isTokenWith", isTokenWith());
-        addRequired("withItem", withItem());
-        addRequired("withStmt3List", withStmt3List());
-        addRequired("suite", suite());
+        addRequired(isTokenWith());
+        addRequired(withItem());
+        addRequired(withStmt3List());
+        addRequired(suite());
     }
 
     public boolean isTokenWith() {
         var element = getItem(0);
+        element.failIfAbsent();
         return element.asBoolean();
     }
 
     public WithItem withItem() {
         var element = getItem(1);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(WithItem.RULE);
         return WithItem.of(element);
     }
 
@@ -59,7 +60,7 @@ public final class WithStmt extends NodeWrapper {
 
     public Suite suite() {
         var element = getItem(3);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(Suite.RULE);
         return Suite.of(element);
     }
 
@@ -70,7 +71,7 @@ public final class WithStmt extends NodeWrapper {
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
-        result = parseTree.consumeTokenLiteral("with");
+        result = parseTree.consumeToken("with");
         result = result && WithItem.parse(parseTree, level + 1);
         parseTree.enterCollection();
         while (true) {
@@ -105,18 +106,19 @@ public final class WithStmt extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("isTokenComma", isTokenComma());
-            addRequired("withItem", withItem());
+            addRequired(isTokenComma());
+            addRequired(withItem());
         }
 
         public boolean isTokenComma() {
             var element = getItem(0);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
         public WithItem withItem() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(WithItem.RULE);
             return WithItem.of(element);
         }
 
@@ -127,7 +129,7 @@ public final class WithStmt extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeTokenLiteral(",");
+            result = parseTree.consumeToken(",");
             result = result && WithItem.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);

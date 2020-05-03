@@ -1,6 +1,7 @@
 package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.*;
+import org.fugalang.core.token.TokenType;
 
 /**
  * namedexpr_expr: 'NAME' [':=' 'expr']
@@ -20,19 +21,21 @@ public final class NamedexprExpr extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired("name", name());
-        addOptional("namedexprExpr2", namedexprExpr2());
+        addRequired(name());
+        addOptional(namedexprExpr2());
     }
 
     public String name() {
         var element = getItem(0);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(TokenType.NAME);
         return element.asString();
     }
 
     public NamedexprExpr2 namedexprExpr2() {
         var element = getItem(1);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(NamedexprExpr2.RULE)) {
+            return null;
+        }
         return NamedexprExpr2.of(element);
     }
 
@@ -47,7 +50,7 @@ public final class NamedexprExpr extends NodeWrapper {
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
-        result = parseTree.consumeTokenType("NAME");
+        result = parseTree.consumeToken(TokenType.NAME);
         NamedexprExpr2.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);
@@ -72,18 +75,19 @@ public final class NamedexprExpr extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("isTokenAsgnExpr", isTokenAsgnExpr());
-            addRequired("expr", expr());
+            addRequired(isTokenAsgnExpr());
+            addRequired(expr());
         }
 
         public boolean isTokenAsgnExpr() {
             var element = getItem(0);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
         public Expr expr() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(Expr.RULE);
             return Expr.of(element);
         }
 
@@ -94,7 +98,7 @@ public final class NamedexprExpr extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeTokenLiteral(":=");
+            result = parseTree.consumeToken(":=");
             result = result && Expr.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);

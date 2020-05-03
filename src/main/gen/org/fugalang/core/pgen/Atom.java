@@ -20,13 +20,15 @@ public final class Atom extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addChoice("compoundAtom", compoundAtom());
-        addChoice("simpleAtom", simpleAtom());
+        addChoice(compoundAtom());
+        addChoice(simpleAtom());
     }
 
     public CompoundAtom compoundAtom() {
         var element = getItem(0);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(CompoundAtom.RULE)) {
+            return null;
+        }
         return CompoundAtom.of(element);
     }
 
@@ -36,7 +38,9 @@ public final class Atom extends NodeWrapper {
 
     public SimpleAtom simpleAtom() {
         var element = getItem(1);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(SimpleAtom.RULE)) {
+            return null;
+        }
         return SimpleAtom.of(element);
     }
 

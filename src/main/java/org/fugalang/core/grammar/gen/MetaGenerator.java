@@ -24,7 +24,8 @@ public class MetaGenerator {
             );
 
             var gen = new ParserGenerator(cst, MetaGenerator::checkToken,
-                    path, "org.fugalang.core.grammar.pgen");
+                    path, "org.fugalang.core.grammar.pgen",
+                    "org.fugalang.core.grammar.token.MetaTokenType");
             gen.generate(true);
 
         } catch (IOException | URISyntaxException e) {
@@ -34,7 +35,7 @@ public class MetaGenerator {
 
     private static Optional<ConvertedValue> checkToken(String s) {
         return switch (s) {
-            case "NEWLINE" -> of("boolean", "newline", "NEWLINE");
+            case "NEWLINE" -> of("boolean", "newline", "\\n");
             case "TOK" -> of("String", "token", "TOK");
             case ":" -> of("boolean", "colon", ":");
             case "(" -> of("boolean", "lpar", "(");

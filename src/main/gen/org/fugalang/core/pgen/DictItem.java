@@ -20,13 +20,15 @@ public final class DictItem extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addChoice("dictItem1", dictItem1());
-        addChoice("dictItem2", dictItem2());
+        addChoice(dictItem1());
+        addChoice(dictItem2());
     }
 
     public DictItem1 dictItem1() {
         var element = getItem(0);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(DictItem1.RULE)) {
+            return null;
+        }
         return DictItem1.of(element);
     }
 
@@ -36,7 +38,9 @@ public final class DictItem extends NodeWrapper {
 
     public DictItem2 dictItem2() {
         var element = getItem(1);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(DictItem2.RULE)) {
+            return null;
+        }
         return DictItem2.of(element);
     }
 
@@ -76,25 +80,26 @@ public final class DictItem extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("expr", expr());
-            addRequired("isTokenColon", isTokenColon());
-            addRequired("expr1", expr1());
+            addRequired(expr());
+            addRequired(isTokenColon());
+            addRequired(expr1());
         }
 
         public Expr expr() {
             var element = getItem(0);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(Expr.RULE);
             return Expr.of(element);
         }
 
         public boolean isTokenColon() {
             var element = getItem(1);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
         public Expr expr1() {
             var element = getItem(2);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(Expr.RULE);
             return Expr.of(element);
         }
 
@@ -106,7 +111,7 @@ public final class DictItem extends NodeWrapper {
             boolean result;
 
             result = Expr.parse(parseTree, level + 1);
-            result = result && parseTree.consumeTokenLiteral(":");
+            result = result && parseTree.consumeToken(":");
             result = result && Expr.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);
@@ -132,18 +137,19 @@ public final class DictItem extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("isTokenPower", isTokenPower());
-            addRequired("bitwiseOr", bitwiseOr());
+            addRequired(isTokenPower());
+            addRequired(bitwiseOr());
         }
 
         public boolean isTokenPower() {
             var element = getItem(0);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
         public BitwiseOr bitwiseOr() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(BitwiseOr.RULE);
             return BitwiseOr.of(element);
         }
 
@@ -154,7 +160,7 @@ public final class DictItem extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeTokenLiteral("**");
+            result = parseTree.consumeToken("**");
             result = result && BitwiseOr.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);

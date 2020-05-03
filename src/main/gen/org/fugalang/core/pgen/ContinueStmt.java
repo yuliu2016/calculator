@@ -20,11 +20,12 @@ public final class ContinueStmt extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired("isTokenContinue", isTokenContinue());
+        addRequired(isTokenContinue());
     }
 
     public boolean isTokenContinue() {
         var element = getItem(0);
+        element.failIfAbsent();
         return element.asBoolean();
     }
 
@@ -35,7 +36,7 @@ public final class ContinueStmt extends NodeWrapper {
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
-        result = parseTree.consumeTokenLiteral("continue");
+        result = parseTree.consumeToken("continue");
 
         parseTree.exit(level, marker, result);
         return result;

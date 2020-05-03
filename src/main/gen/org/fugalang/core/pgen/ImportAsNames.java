@@ -26,14 +26,14 @@ public final class ImportAsNames extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired("importAsName", importAsName());
-        addRequired("importAsNames2List", importAsNames2List());
-        addRequired("isTokenComma", isTokenComma());
+        addRequired(importAsName());
+        addRequired(importAsNames2List());
+        addRequired(isTokenComma());
     }
 
     public ImportAsName importAsName() {
         var element = getItem(0);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(ImportAsName.RULE);
         return ImportAsName.of(element);
     }
 
@@ -53,6 +53,7 @@ public final class ImportAsNames extends NodeWrapper {
 
     public boolean isTokenComma() {
         var element = getItem(2);
+        element.failIfAbsent();
         return element.asBoolean();
     }
 
@@ -73,7 +74,7 @@ public final class ImportAsNames extends NodeWrapper {
             }
         }
         parseTree.exitCollection();
-        result = result && parseTree.consumeTokenLiteral(",");
+        result = result && parseTree.consumeToken(",");
 
         parseTree.exit(level, marker, result);
         return result;
@@ -97,18 +98,19 @@ public final class ImportAsNames extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("isTokenComma", isTokenComma());
-            addRequired("importAsName", importAsName());
+            addRequired(isTokenComma());
+            addRequired(importAsName());
         }
 
         public boolean isTokenComma() {
             var element = getItem(0);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
         public ImportAsName importAsName() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(ImportAsName.RULE);
             return ImportAsName.of(element);
         }
 
@@ -119,7 +121,7 @@ public final class ImportAsNames extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeTokenLiteral(",");
+            result = parseTree.consumeToken(",");
             result = result && ImportAsName.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);

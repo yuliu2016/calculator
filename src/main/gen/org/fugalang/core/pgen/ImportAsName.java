@@ -1,6 +1,7 @@
 package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.*;
+import org.fugalang.core.token.TokenType;
 
 /**
  * import_as_name: 'NAME' ['as' 'NAME']
@@ -20,19 +21,21 @@ public final class ImportAsName extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired("name", name());
-        addOptional("importAsName2", importAsName2());
+        addRequired(name());
+        addOptional(importAsName2());
     }
 
     public String name() {
         var element = getItem(0);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(TokenType.NAME);
         return element.asString();
     }
 
     public ImportAsName2 importAsName2() {
         var element = getItem(1);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(ImportAsName2.RULE)) {
+            return null;
+        }
         return ImportAsName2.of(element);
     }
 
@@ -47,7 +50,7 @@ public final class ImportAsName extends NodeWrapper {
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
-        result = parseTree.consumeTokenType("NAME");
+        result = parseTree.consumeToken(TokenType.NAME);
         ImportAsName2.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);
@@ -72,18 +75,19 @@ public final class ImportAsName extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("isTokenAs", isTokenAs());
-            addRequired("name", name());
+            addRequired(isTokenAs());
+            addRequired(name());
         }
 
         public boolean isTokenAs() {
             var element = getItem(0);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
         public String name() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(TokenType.NAME);
             return element.asString();
         }
 
@@ -94,8 +98,8 @@ public final class ImportAsName extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeTokenLiteral("as");
-            result = result && parseTree.consumeTokenType("NAME");
+            result = parseTree.consumeToken("as");
+            result = result && parseTree.consumeToken(TokenType.NAME);
 
             parseTree.exit(level, marker, result);
             return result;

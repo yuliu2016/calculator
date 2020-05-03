@@ -20,18 +20,19 @@ public final class DelStmt extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired("isTokenDel", isTokenDel());
-        addRequired("targets", targets());
+        addRequired(isTokenDel());
+        addRequired(targets());
     }
 
     public boolean isTokenDel() {
         var element = getItem(0);
+        element.failIfAbsent();
         return element.asBoolean();
     }
 
     public Targets targets() {
         var element = getItem(1);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(Targets.RULE);
         return Targets.of(element);
     }
 
@@ -42,7 +43,7 @@ public final class DelStmt extends NodeWrapper {
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
-        result = parseTree.consumeTokenLiteral("del");
+        result = parseTree.consumeToken("del");
         result = result && Targets.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);

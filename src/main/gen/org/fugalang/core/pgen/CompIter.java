@@ -20,13 +20,15 @@ public final class CompIter extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addChoice("compFor", compFor());
-        addChoice("compIf", compIf());
+        addChoice(compFor());
+        addChoice(compIf());
     }
 
     public CompFor compFor() {
         var element = getItem(0);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(CompFor.RULE)) {
+            return null;
+        }
         return CompFor.of(element);
     }
 
@@ -36,7 +38,9 @@ public final class CompIter extends NodeWrapper {
 
     public CompIf compIf() {
         var element = getItem(1);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(CompIf.RULE)) {
+            return null;
+        }
         return CompIf.of(element);
     }
 

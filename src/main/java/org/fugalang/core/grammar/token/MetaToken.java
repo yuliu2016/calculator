@@ -1,12 +1,14 @@
 package org.fugalang.core.grammar.token;
 
+import org.fugalang.core.parser.ElementType;
+
 import java.util.Objects;
 
 public class MetaToken {
-    public final MetaTokenType type;
+    public final ElementType type;
     public final String value;
 
-    public MetaToken(MetaTokenType type, String value) {
+    public MetaToken(ElementType type, String value) {
         this.type = type;
         this.value = value;
     }
@@ -28,10 +30,10 @@ public class MetaToken {
     @Override
     public String toString() {
         if (type == MetaTokenType.NEWLINE) {
-            return type.name() + "\n";
+            return type.getName() + "\n";
         }
         if (value == null) {
-            return type.name() + " ";
+            return type.getName() + " ";
         }
         return "'" + value + "' ";
     }

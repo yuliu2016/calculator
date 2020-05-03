@@ -20,19 +20,21 @@ public final class Power extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired("pipeExpr", pipeExpr());
-        addOptional("power2", power2());
+        addRequired(pipeExpr());
+        addOptional(power2());
     }
 
     public PipeExpr pipeExpr() {
         var element = getItem(0);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(PipeExpr.RULE);
         return PipeExpr.of(element);
     }
 
     public Power2 power2() {
         var element = getItem(1);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(Power2.RULE)) {
+            return null;
+        }
         return Power2.of(element);
     }
 
@@ -72,18 +74,19 @@ public final class Power extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("isTokenPower", isTokenPower());
-            addRequired("factor", factor());
+            addRequired(isTokenPower());
+            addRequired(factor());
         }
 
         public boolean isTokenPower() {
             var element = getItem(0);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
         public Factor factor() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(Factor.RULE);
             return Factor.of(element);
         }
 
@@ -94,7 +97,7 @@ public final class Power extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeTokenLiteral("**");
+            result = parseTree.consumeToken("**");
             result = result && Factor.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);

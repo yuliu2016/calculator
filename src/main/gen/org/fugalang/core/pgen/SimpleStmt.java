@@ -26,14 +26,14 @@ public final class SimpleStmt extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired("smallStmt", smallStmt());
-        addRequired("simpleStmt2List", simpleStmt2List());
-        addRequired("isTokenSemicolon", isTokenSemicolon());
+        addRequired(smallStmt());
+        addRequired(simpleStmt2List());
+        addRequired(isTokenSemicolon());
     }
 
     public SmallStmt smallStmt() {
         var element = getItem(0);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(SmallStmt.RULE);
         return SmallStmt.of(element);
     }
 
@@ -53,6 +53,7 @@ public final class SimpleStmt extends NodeWrapper {
 
     public boolean isTokenSemicolon() {
         var element = getItem(2);
+        element.failIfAbsent();
         return element.asBoolean();
     }
 
@@ -73,7 +74,7 @@ public final class SimpleStmt extends NodeWrapper {
             }
         }
         parseTree.exitCollection();
-        result = result && parseTree.consumeTokenLiteral(";");
+        result = result && parseTree.consumeToken(";");
 
         parseTree.exit(level, marker, result);
         return result;
@@ -97,18 +98,19 @@ public final class SimpleStmt extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("isTokenSemicolon", isTokenSemicolon());
-            addRequired("smallStmt", smallStmt());
+            addRequired(isTokenSemicolon());
+            addRequired(smallStmt());
         }
 
         public boolean isTokenSemicolon() {
             var element = getItem(0);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
         public SmallStmt smallStmt() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(SmallStmt.RULE);
             return SmallStmt.of(element);
         }
 
@@ -119,7 +121,7 @@ public final class SimpleStmt extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeTokenLiteral(";");
+            result = parseTree.consumeToken(";");
             result = result && SmallStmt.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);

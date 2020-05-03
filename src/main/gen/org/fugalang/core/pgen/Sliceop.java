@@ -20,18 +20,21 @@ public final class Sliceop extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired("isTokenColon", isTokenColon());
-        addOptional("expr", expr());
+        addRequired(isTokenColon());
+        addOptional(expr());
     }
 
     public boolean isTokenColon() {
         var element = getItem(0);
+        element.failIfAbsent();
         return element.asBoolean();
     }
 
     public Expr expr() {
         var element = getItem(1);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(Expr.RULE)) {
+            return null;
+        }
         return Expr.of(element);
     }
 
@@ -46,7 +49,7 @@ public final class Sliceop extends NodeWrapper {
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
-        result = parseTree.consumeTokenLiteral(":");
+        result = parseTree.consumeToken(":");
         Expr.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);

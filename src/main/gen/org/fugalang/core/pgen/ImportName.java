@@ -20,18 +20,19 @@ public final class ImportName extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired("isTokenImport", isTokenImport());
-        addRequired("dottedAsNames", dottedAsNames());
+        addRequired(isTokenImport());
+        addRequired(dottedAsNames());
     }
 
     public boolean isTokenImport() {
         var element = getItem(0);
+        element.failIfAbsent();
         return element.asBoolean();
     }
 
     public DottedAsNames dottedAsNames() {
         var element = getItem(1);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(DottedAsNames.RULE);
         return DottedAsNames.of(element);
     }
 
@@ -42,7 +43,7 @@ public final class ImportName extends NodeWrapper {
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
-        result = parseTree.consumeTokenLiteral("import");
+        result = parseTree.consumeToken("import");
         result = result && DottedAsNames.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);

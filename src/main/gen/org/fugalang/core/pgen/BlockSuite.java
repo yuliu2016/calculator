@@ -1,6 +1,7 @@
 package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.*;
+import org.fugalang.core.token.TokenType;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,13 +25,15 @@ public final class BlockSuite extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addChoice("blockSuite1", blockSuite1());
-        addChoice("blockSuite2", blockSuite2());
+        addChoice(blockSuite1());
+        addChoice(blockSuite2());
     }
 
     public BlockSuite1 blockSuite1() {
         var element = getItem(0);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(BlockSuite1.RULE)) {
+            return null;
+        }
         return BlockSuite1.of(element);
     }
 
@@ -40,7 +43,9 @@ public final class BlockSuite extends NodeWrapper {
 
     public BlockSuite2 blockSuite2() {
         var element = getItem(1);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(BlockSuite2.RULE)) {
+            return null;
+        }
         return BlockSuite2.of(element);
     }
 
@@ -80,24 +85,26 @@ public final class BlockSuite extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("isTokenLbrace", isTokenLbrace());
-            addRequired("simpleStmt", simpleStmt());
-            addRequired("isTokenRbrace", isTokenRbrace());
+            addRequired(isTokenLbrace());
+            addRequired(simpleStmt());
+            addRequired(isTokenRbrace());
         }
 
         public boolean isTokenLbrace() {
             var element = getItem(0);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
         public SimpleStmt simpleStmt() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(SimpleStmt.RULE);
             return SimpleStmt.of(element);
         }
 
         public boolean isTokenRbrace() {
             var element = getItem(2);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
@@ -108,9 +115,9 @@ public final class BlockSuite extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeTokenLiteral("{");
+            result = parseTree.consumeToken("{");
             result = result && SimpleStmt.parse(parseTree, level + 1);
-            result = result && parseTree.consumeTokenLiteral("}");
+            result = result && parseTree.consumeToken("}");
 
             parseTree.exit(level, marker, result);
             return result;
@@ -137,20 +144,21 @@ public final class BlockSuite extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("isTokenLbrace", isTokenLbrace());
-            addRequired("newline", newline());
-            addRequired("stmtList", stmtList());
-            addRequired("isTokenRbrace", isTokenRbrace());
+            addRequired(isTokenLbrace());
+            addRequired(newline());
+            addRequired(stmtList());
+            addRequired(isTokenRbrace());
         }
 
         public boolean isTokenLbrace() {
             var element = getItem(0);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
         public String newline() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(TokenType.NEWLINE);
             return element.asString();
         }
 
@@ -170,6 +178,7 @@ public final class BlockSuite extends NodeWrapper {
 
         public boolean isTokenRbrace() {
             var element = getItem(3);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
@@ -180,8 +189,8 @@ public final class BlockSuite extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeTokenLiteral("{");
-            result = result && parseTree.consumeTokenType("NEWLINE");
+            result = parseTree.consumeToken("{");
+            result = result && parseTree.consumeToken(TokenType.NEWLINE);
             parseTree.enterCollection();
             result = result && Stmt.parse(parseTree, level + 1);
             while (true) {
@@ -192,7 +201,7 @@ public final class BlockSuite extends NodeWrapper {
                 }
             }
             parseTree.exitCollection();
-            result = result && parseTree.consumeTokenLiteral("}");
+            result = result && parseTree.consumeToken("}");
 
             parseTree.exit(level, marker, result);
             return result;

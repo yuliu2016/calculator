@@ -24,19 +24,19 @@ public final class SetMaker extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired("exprOrStar", exprOrStar());
-        addRequired("setMaker2", setMaker2());
+        addRequired(exprOrStar());
+        addRequired(setMaker2());
     }
 
     public ExprOrStar exprOrStar() {
         var element = getItem(0);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(ExprOrStar.RULE);
         return ExprOrStar.of(element);
     }
 
     public SetMaker2 setMaker2() {
         var element = getItem(1);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(SetMaker2.RULE);
         return SetMaker2.of(element);
     }
 
@@ -72,13 +72,15 @@ public final class SetMaker extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addChoice("compFor", compFor());
-            addChoice("setMaker22", setMaker22());
+            addChoice(compFor());
+            addChoice(setMaker22());
         }
 
         public CompFor compFor() {
             var element = getItem(0);
-            if (!element.isPresent()) return null;
+            if (!element.isPresent(CompFor.RULE)) {
+                return null;
+            }
             return CompFor.of(element);
         }
 
@@ -88,7 +90,9 @@ public final class SetMaker extends NodeWrapper {
 
         public SetMaker22 setMaker22() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            if (!element.isPresent(SetMaker22.RULE)) {
+                return null;
+            }
             return SetMaker22.of(element);
         }
 
@@ -131,8 +135,8 @@ public final class SetMaker extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("setMaker221List", setMaker221List());
-            addRequired("isTokenComma", isTokenComma());
+            addRequired(setMaker221List());
+            addRequired(isTokenComma());
         }
 
         public List<SetMaker221> setMaker221List() {
@@ -151,6 +155,7 @@ public final class SetMaker extends NodeWrapper {
 
         public boolean isTokenComma() {
             var element = getItem(1);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
@@ -170,7 +175,7 @@ public final class SetMaker extends NodeWrapper {
                 }
             }
             parseTree.exitCollection();
-            result = parseTree.consumeTokenLiteral(",");
+            result = parseTree.consumeToken(",");
 
             parseTree.exit(level, marker, result);
             return result;
@@ -195,18 +200,19 @@ public final class SetMaker extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("isTokenComma", isTokenComma());
-            addRequired("exprOrStar", exprOrStar());
+            addRequired(isTokenComma());
+            addRequired(exprOrStar());
         }
 
         public boolean isTokenComma() {
             var element = getItem(0);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
         public ExprOrStar exprOrStar() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(ExprOrStar.RULE);
             return ExprOrStar.of(element);
         }
 
@@ -217,7 +223,7 @@ public final class SetMaker extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeTokenLiteral(",");
+            result = parseTree.consumeToken(",");
             result = result && ExprOrStar.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);

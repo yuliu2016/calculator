@@ -32,7 +32,7 @@ public class SimpleEvaluator {
 
         for (Token token : tokens) {
             // Current token is a whitespace, skip it
-            if (TokenType.DELIMITERS.contains(token.type)) {
+            if (token.type == TokenType.NEWLINE) {
                 continue;
             }
 

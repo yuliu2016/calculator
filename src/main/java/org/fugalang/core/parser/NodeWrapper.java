@@ -28,6 +28,22 @@ public abstract class NodeWrapper {
     protected void addOptional(String name, Object value) {
     }
 
+    protected void addChoice(Object choice) {
+    }
+
+    protected void addChoice(boolean value) {
+    }
+
+
+    protected void addRequired(boolean value) {
+    }
+
+    protected void addRequired(Object value) {
+    }
+
+    protected void addOptional(Object value) {
+    }
+
     public ParseTreeNode getItem(int index) {
         return node.getItem(index);
     }

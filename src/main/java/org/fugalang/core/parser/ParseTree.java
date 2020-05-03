@@ -2,26 +2,20 @@ package org.fugalang.core.parser;
 
 public interface ParseTree {
 
-    Marker enter(int level, ParserRule rule);
+    ParseTreeMarker enter(int level, ParserRule rule);
 
-    void exit(int level, Marker marker, boolean success);
-
-    void enterSection();
-
-    void exitSection();
+    void exit(int level, ParseTreeMarker marker, boolean success);
 
     void enterCollection();
 
     void exitCollection();
 
-    boolean consumeTokenType(String type);
+    boolean consumeToken(ElementType type);
 
-    boolean consumeTokenLiteral(String literal);
+    boolean consumeToken(String literal);
 
     int position();
 
     boolean guardLoopExit(int position);
 
-    interface Marker {
-    }
 }

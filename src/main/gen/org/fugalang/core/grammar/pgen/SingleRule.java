@@ -1,5 +1,6 @@
 package org.fugalang.core.grammar.pgen;
 
+import org.fugalang.core.grammar.token.MetaTokenType;
 import org.fugalang.core.parser.*;
 
 /**
@@ -20,31 +21,33 @@ public final class SingleRule extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired("token", token());
-        addRequired("isTokenColon", isTokenColon());
-        addRequired("orRule", orRule());
-        addRequired("isTokenNewline", isTokenNewline());
+        addRequired(token());
+        addRequired(isTokenColon());
+        addRequired(orRule());
+        addRequired(isTokenNewline());
     }
 
     public String token() {
         var element = getItem(0);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(MetaTokenType.TOK);
         return element.asString();
     }
 
     public boolean isTokenColon() {
         var element = getItem(1);
+        element.failIfAbsent();
         return element.asBoolean();
     }
 
     public OrRule orRule() {
         var element = getItem(2);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(OrRule.RULE);
         return OrRule.of(element);
     }
 
     public boolean isTokenNewline() {
         var element = getItem(3);
+        element.failIfAbsent();
         return element.asBoolean();
     }
 
@@ -55,10 +58,10 @@ public final class SingleRule extends NodeWrapper {
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
-        result = parseTree.consumeTokenType("TOK");
-        result = result && parseTree.consumeTokenLiteral(":");
+        result = parseTree.consumeToken(MetaTokenType.TOK);
+        result = result && parseTree.consumeToken(":");
         result = result && OrRule.parse(parseTree, level + 1);
-        result = result && parseTree.consumeTokenLiteral("NEWLINE");
+        result = result && parseTree.consumeToken("\n");
 
         parseTree.exit(level, marker, result);
         return result;

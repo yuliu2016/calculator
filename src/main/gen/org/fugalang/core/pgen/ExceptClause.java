@@ -1,6 +1,7 @@
 package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.*;
+import org.fugalang.core.token.TokenType;
 
 /**
  * except_clause: 'except' ['expr' ['as' 'NAME']]
@@ -20,18 +21,21 @@ public final class ExceptClause extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired("isTokenExcept", isTokenExcept());
-        addOptional("exceptClause2", exceptClause2());
+        addRequired(isTokenExcept());
+        addOptional(exceptClause2());
     }
 
     public boolean isTokenExcept() {
         var element = getItem(0);
+        element.failIfAbsent();
         return element.asBoolean();
     }
 
     public ExceptClause2 exceptClause2() {
         var element = getItem(1);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(ExceptClause2.RULE)) {
+            return null;
+        }
         return ExceptClause2.of(element);
     }
 
@@ -46,7 +50,7 @@ public final class ExceptClause extends NodeWrapper {
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
-        result = parseTree.consumeTokenLiteral("except");
+        result = parseTree.consumeToken("except");
         ExceptClause2.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);
@@ -71,19 +75,21 @@ public final class ExceptClause extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("expr", expr());
-            addOptional("exceptClause22", exceptClause22());
+            addRequired(expr());
+            addOptional(exceptClause22());
         }
 
         public Expr expr() {
             var element = getItem(0);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(Expr.RULE);
             return Expr.of(element);
         }
 
         public ExceptClause22 exceptClause22() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            if (!element.isPresent(ExceptClause22.RULE)) {
+                return null;
+            }
             return ExceptClause22.of(element);
         }
 
@@ -124,18 +130,19 @@ public final class ExceptClause extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("isTokenAs", isTokenAs());
-            addRequired("name", name());
+            addRequired(isTokenAs());
+            addRequired(name());
         }
 
         public boolean isTokenAs() {
             var element = getItem(0);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
         public String name() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(TokenType.NAME);
             return element.asString();
         }
 
@@ -146,8 +153,8 @@ public final class ExceptClause extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeTokenLiteral("as");
-            result = result && parseTree.consumeTokenType("NAME");
+            result = parseTree.consumeToken("as");
+            result = result && parseTree.consumeToken(TokenType.NAME);
 
             parseTree.exit(level, marker, result);
             return result;

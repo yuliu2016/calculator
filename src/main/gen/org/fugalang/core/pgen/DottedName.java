@@ -1,6 +1,7 @@
 package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.*;
+import org.fugalang.core.token.TokenType;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,13 +27,13 @@ public final class DottedName extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired("name", name());
-        addRequired("dottedName2List", dottedName2List());
+        addRequired(name());
+        addRequired(dottedName2List());
     }
 
     public String name() {
         var element = getItem(0);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(TokenType.NAME);
         return element.asString();
     }
 
@@ -57,7 +58,7 @@ public final class DottedName extends NodeWrapper {
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
-        result = parseTree.consumeTokenType("NAME");
+        result = parseTree.consumeToken(TokenType.NAME);
         parseTree.enterCollection();
         while (true) {
             var pos = parseTree.position();
@@ -90,18 +91,19 @@ public final class DottedName extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("isTokenDot", isTokenDot());
-            addRequired("name", name());
+            addRequired(isTokenDot());
+            addRequired(name());
         }
 
         public boolean isTokenDot() {
             var element = getItem(0);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
         public String name() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(TokenType.NAME);
             return element.asString();
         }
 
@@ -112,8 +114,8 @@ public final class DottedName extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeTokenLiteral(".");
-            result = result && parseTree.consumeTokenType("NAME");
+            result = parseTree.consumeToken(".");
+            result = result && parseTree.consumeToken(TokenType.NAME);
 
             parseTree.exit(level, marker, result);
             return result;

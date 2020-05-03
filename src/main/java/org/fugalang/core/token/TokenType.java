@@ -1,27 +1,31 @@
 package org.fugalang.core.token;
 
-import java.util.Arrays;
+import org.fugalang.core.parser.ElementType;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
-public enum TokenType {
-    ENDMARKER,
-    NEWLINE,
-    KEYWORD,
-    NAME,
-    OPERATOR,
-    NUMBER,
-    STRING;
+public class TokenType {
 
-    public static final List<TokenType> DELIMITERS =
-            List.of(NEWLINE);
+    public static final ElementType ENDMARKER = new ElementType("ENDMARKER");
+    public static final ElementType NEWLINE = new ElementType("NEWLINE");
+    public static final ElementType KEYWORD = new ElementType("KEYWORD");
+    public static final ElementType NAME = new ElementType("NAME");
+    public static final ElementType OPERATOR = new ElementType("OPERATOR");
+    public static final ElementType NUMBER = new ElementType("NUMBER");
+    public static final ElementType STRING = new ElementType("STRING");
 
-    public static final List<TokenType> NUMBER_LITERALS =
-            List.of(NUMBER);
-
-    public static final List<TokenType> SYMBOLS =
-            List.of(NAME);
+    public static final List<ElementType> ELEMENT_TYPES =
+            List.of(
+                    ENDMARKER,
+                    NEWLINE,
+                    KEYWORD,
+                    NAME,
+                    OPERATOR,
+                    NUMBER,
+                    STRING
+            );
 
     public static final List<String> NAMES =
-            Arrays.stream(values()).map(Enum::name).collect(Collectors.toList());
+            ELEMENT_TYPES.stream().map(ElementType::getName).collect(Collectors.toList());
 }

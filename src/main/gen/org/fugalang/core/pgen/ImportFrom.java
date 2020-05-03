@@ -24,31 +24,33 @@ public final class ImportFrom extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired("isTokenFrom", isTokenFrom());
-        addRequired("importFrom2", importFrom2());
-        addRequired("isTokenImport", isTokenImport());
-        addRequired("importFrom4", importFrom4());
+        addRequired(isTokenFrom());
+        addRequired(importFrom2());
+        addRequired(isTokenImport());
+        addRequired(importFrom4());
     }
 
     public boolean isTokenFrom() {
         var element = getItem(0);
+        element.failIfAbsent();
         return element.asBoolean();
     }
 
     public ImportFrom2 importFrom2() {
         var element = getItem(1);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(ImportFrom2.RULE);
         return ImportFrom2.of(element);
     }
 
     public boolean isTokenImport() {
         var element = getItem(2);
+        element.failIfAbsent();
         return element.asBoolean();
     }
 
     public ImportFrom4 importFrom4() {
         var element = getItem(3);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(ImportFrom4.RULE);
         return ImportFrom4.of(element);
     }
 
@@ -59,9 +61,9 @@ public final class ImportFrom extends NodeWrapper {
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
-        result = parseTree.consumeTokenLiteral("from");
+        result = parseTree.consumeToken("from");
         result = result && ImportFrom2.parse(parseTree, level + 1);
-        result = result && parseTree.consumeTokenLiteral("import");
+        result = result && parseTree.consumeToken("import");
         result = result && ImportFrom4.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);
@@ -88,13 +90,15 @@ public final class ImportFrom extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addChoice("importFrom21", importFrom21());
-            addChoice("isTokenDotList", isTokenDotList());
+            addChoice(importFrom21());
+            addChoice(isTokenDotList());
         }
 
         public ImportFrom21 importFrom21() {
             var element = getItem(0);
-            if (!element.isPresent()) return null;
+            if (!element.isPresent(ImportFrom21.RULE)) {
+                return null;
+            }
             return ImportFrom21.of(element);
         }
 
@@ -125,10 +129,10 @@ public final class ImportFrom extends NodeWrapper {
 
             result = ImportFrom21.parse(parseTree, level + 1);
             parseTree.enterCollection();
-            result = result || parseTree.consumeTokenLiteral(".");
+            result = result || parseTree.consumeToken(".");
             while (true) {
                 var pos = parseTree.position();
-                if (!parseTree.consumeTokenLiteral(".") ||
+                if (!parseTree.consumeToken(".") ||
                         parseTree.guardLoopExit(pos)) {
                     break;
                 }
@@ -160,8 +164,8 @@ public final class ImportFrom extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("isTokenDotList", isTokenDotList());
-            addRequired("dottedName", dottedName());
+            addRequired(isTokenDotList());
+            addRequired(dottedName());
         }
 
         public List<Boolean> isTokenDotList() {
@@ -180,7 +184,7 @@ public final class ImportFrom extends NodeWrapper {
 
         public DottedName dottedName() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(DottedName.RULE);
             return DottedName.of(element);
         }
 
@@ -194,7 +198,7 @@ public final class ImportFrom extends NodeWrapper {
             parseTree.enterCollection();
             while (true) {
                 var pos = parseTree.position();
-                if (!parseTree.consumeTokenLiteral(".") ||
+                if (!parseTree.consumeToken(".") ||
                         parseTree.guardLoopExit(pos)) {
                     break;
                 }
@@ -225,9 +229,9 @@ public final class ImportFrom extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addChoice("isTokenTimes", isTokenTimes());
-            addChoice("importFrom42", importFrom42());
-            addChoice("importAsNames", importAsNames());
+            addChoice(isTokenTimes());
+            addChoice(importFrom42());
+            addChoice(importAsNames());
         }
 
         public boolean isTokenTimes() {
@@ -237,7 +241,9 @@ public final class ImportFrom extends NodeWrapper {
 
         public ImportFrom42 importFrom42() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            if (!element.isPresent(ImportFrom42.RULE)) {
+                return null;
+            }
             return ImportFrom42.of(element);
         }
 
@@ -247,7 +253,9 @@ public final class ImportFrom extends NodeWrapper {
 
         public ImportAsNames importAsNames() {
             var element = getItem(2);
-            if (!element.isPresent()) return null;
+            if (!element.isPresent(ImportAsNames.RULE)) {
+                return null;
+            }
             return ImportAsNames.of(element);
         }
 
@@ -262,7 +270,7 @@ public final class ImportFrom extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeTokenLiteral("*");
+            result = parseTree.consumeToken("*");
             result = result || ImportFrom42.parse(parseTree, level + 1);
             result = result || ImportAsNames.parse(parseTree, level + 1);
 
@@ -289,24 +297,26 @@ public final class ImportFrom extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("isTokenLpar", isTokenLpar());
-            addRequired("importAsNames", importAsNames());
-            addRequired("isTokenRpar", isTokenRpar());
+            addRequired(isTokenLpar());
+            addRequired(importAsNames());
+            addRequired(isTokenRpar());
         }
 
         public boolean isTokenLpar() {
             var element = getItem(0);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
         public ImportAsNames importAsNames() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(ImportAsNames.RULE);
             return ImportAsNames.of(element);
         }
 
         public boolean isTokenRpar() {
             var element = getItem(2);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
@@ -317,9 +327,9 @@ public final class ImportFrom extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeTokenLiteral("(");
+            result = parseTree.consumeToken("(");
             result = result && ImportAsNames.parse(parseTree, level + 1);
-            result = result && parseTree.consumeTokenLiteral(")");
+            result = result && parseTree.consumeToken(")");
 
             parseTree.exit(level, marker, result);
             return result;

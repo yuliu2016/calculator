@@ -20,18 +20,21 @@ public final class RaiseStmt extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired("isTokenRaise", isTokenRaise());
-        addOptional("raiseStmt2", raiseStmt2());
+        addRequired(isTokenRaise());
+        addOptional(raiseStmt2());
     }
 
     public boolean isTokenRaise() {
         var element = getItem(0);
+        element.failIfAbsent();
         return element.asBoolean();
     }
 
     public RaiseStmt2 raiseStmt2() {
         var element = getItem(1);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(RaiseStmt2.RULE)) {
+            return null;
+        }
         return RaiseStmt2.of(element);
     }
 
@@ -46,7 +49,7 @@ public final class RaiseStmt extends NodeWrapper {
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
-        result = parseTree.consumeTokenLiteral("raise");
+        result = parseTree.consumeToken("raise");
         RaiseStmt2.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);
@@ -71,19 +74,21 @@ public final class RaiseStmt extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("expr", expr());
-            addOptional("raiseStmt22", raiseStmt22());
+            addRequired(expr());
+            addOptional(raiseStmt22());
         }
 
         public Expr expr() {
             var element = getItem(0);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(Expr.RULE);
             return Expr.of(element);
         }
 
         public RaiseStmt22 raiseStmt22() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            if (!element.isPresent(RaiseStmt22.RULE)) {
+                return null;
+            }
             return RaiseStmt22.of(element);
         }
 
@@ -124,18 +129,19 @@ public final class RaiseStmt extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("isTokenFrom", isTokenFrom());
-            addRequired("expr", expr());
+            addRequired(isTokenFrom());
+            addRequired(expr());
         }
 
         public boolean isTokenFrom() {
             var element = getItem(0);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
         public Expr expr() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(Expr.RULE);
             return Expr.of(element);
         }
 
@@ -146,7 +152,7 @@ public final class RaiseStmt extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeTokenLiteral("from");
+            result = parseTree.consumeToken("from");
             result = result && Expr.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);

@@ -26,13 +26,13 @@ public final class AndRule extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired("repeatRule", repeatRule());
-        addRequired("andRule2List", andRule2List());
+        addRequired(repeatRule());
+        addRequired(andRule2List());
     }
 
     public RepeatRule repeatRule() {
         var element = getItem(0);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(RepeatRule.RULE);
         return RepeatRule.of(element);
     }
 
@@ -90,12 +90,12 @@ public final class AndRule extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("repeatRule", repeatRule());
+            addRequired(repeatRule());
         }
 
         public RepeatRule repeatRule() {
             var element = getItem(0);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(RepeatRule.RULE);
             return RepeatRule.of(element);
         }
 

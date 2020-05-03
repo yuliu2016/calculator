@@ -26,13 +26,13 @@ public final class PipeExpr extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired("atomExpr", atomExpr());
-        addRequired("pipeExpr2List", pipeExpr2List());
+        addRequired(atomExpr());
+        addRequired(pipeExpr2List());
     }
 
     public AtomExpr atomExpr() {
         var element = getItem(0);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(AtomExpr.RULE);
         return AtomExpr.of(element);
     }
 
@@ -90,18 +90,19 @@ public final class PipeExpr extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("isTokenPipe", isTokenPipe());
-            addRequired("atomExpr", atomExpr());
+            addRequired(isTokenPipe());
+            addRequired(atomExpr());
         }
 
         public boolean isTokenPipe() {
             var element = getItem(0);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
         public AtomExpr atomExpr() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(AtomExpr.RULE);
             return AtomExpr.of(element);
         }
 
@@ -112,7 +113,7 @@ public final class PipeExpr extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeTokenLiteral("->");
+            result = parseTree.consumeToken("->");
             result = result && AtomExpr.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);

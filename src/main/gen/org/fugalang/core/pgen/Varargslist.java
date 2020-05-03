@@ -26,20 +26,22 @@ public final class Varargslist extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired("vfpdef", vfpdef());
-        addOptional("varargslist2", varargslist2());
-        addRequired("varargslist3List", varargslist3List());
+        addRequired(vfpdef());
+        addOptional(varargslist2());
+        addRequired(varargslist3List());
     }
 
     public Vfpdef vfpdef() {
         var element = getItem(0);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(Vfpdef.RULE);
         return Vfpdef.of(element);
     }
 
     public Varargslist2 varargslist2() {
         var element = getItem(1);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(Varargslist2.RULE)) {
+            return null;
+        }
         return Varargslist2.of(element);
     }
 
@@ -102,18 +104,19 @@ public final class Varargslist extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("isTokenAssign", isTokenAssign());
-            addRequired("expr", expr());
+            addRequired(isTokenAssign());
+            addRequired(expr());
         }
 
         public boolean isTokenAssign() {
             var element = getItem(0);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
         public Expr expr() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(Expr.RULE);
             return Expr.of(element);
         }
 
@@ -124,7 +127,7 @@ public final class Varargslist extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeTokenLiteral("=");
+            result = parseTree.consumeToken("=");
             result = result && Expr.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);
@@ -150,25 +153,28 @@ public final class Varargslist extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("isTokenComma", isTokenComma());
-            addRequired("vfpdef", vfpdef());
-            addOptional("varargslist33", varargslist33());
+            addRequired(isTokenComma());
+            addRequired(vfpdef());
+            addOptional(varargslist33());
         }
 
         public boolean isTokenComma() {
             var element = getItem(0);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
         public Vfpdef vfpdef() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(Vfpdef.RULE);
             return Vfpdef.of(element);
         }
 
         public Varargslist33 varargslist33() {
             var element = getItem(2);
-            if (!element.isPresent()) return null;
+            if (!element.isPresent(Varargslist33.RULE)) {
+                return null;
+            }
             return Varargslist33.of(element);
         }
 
@@ -183,7 +189,7 @@ public final class Varargslist extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeTokenLiteral(",");
+            result = parseTree.consumeToken(",");
             result = result && Vfpdef.parse(parseTree, level + 1);
             Varargslist33.parse(parseTree, level + 1);
 
@@ -210,18 +216,19 @@ public final class Varargslist extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("isTokenAssign", isTokenAssign());
-            addRequired("expr", expr());
+            addRequired(isTokenAssign());
+            addRequired(expr());
         }
 
         public boolean isTokenAssign() {
             var element = getItem(0);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
         public Expr expr() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(Expr.RULE);
             return Expr.of(element);
         }
 
@@ -232,7 +239,7 @@ public final class Varargslist extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeTokenLiteral("=");
+            result = parseTree.consumeToken("=");
             result = result && Expr.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);

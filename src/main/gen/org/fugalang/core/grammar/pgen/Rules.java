@@ -26,7 +26,7 @@ public final class Rules extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired("singleRuleList", singleRuleList());
+        addRequired(singleRuleList());
     }
 
     public List<SingleRule> singleRuleList() {

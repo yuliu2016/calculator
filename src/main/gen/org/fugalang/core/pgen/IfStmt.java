@@ -26,27 +26,28 @@ public final class IfStmt extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired("isTokenIf", isTokenIf());
-        addRequired("namedexprExpr", namedexprExpr());
-        addRequired("suite", suite());
-        addRequired("ifStmt4List", ifStmt4List());
-        addOptional("ifStmt5", ifStmt5());
+        addRequired(isTokenIf());
+        addRequired(namedexprExpr());
+        addRequired(suite());
+        addRequired(ifStmt4List());
+        addOptional(ifStmt5());
     }
 
     public boolean isTokenIf() {
         var element = getItem(0);
+        element.failIfAbsent();
         return element.asBoolean();
     }
 
     public NamedexprExpr namedexprExpr() {
         var element = getItem(1);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(NamedexprExpr.RULE);
         return NamedexprExpr.of(element);
     }
 
     public Suite suite() {
         var element = getItem(2);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(Suite.RULE);
         return Suite.of(element);
     }
 
@@ -66,7 +67,9 @@ public final class IfStmt extends NodeWrapper {
 
     public IfStmt5 ifStmt5() {
         var element = getItem(4);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(IfStmt5.RULE)) {
+            return null;
+        }
         return IfStmt5.of(element);
     }
 
@@ -81,7 +84,7 @@ public final class IfStmt extends NodeWrapper {
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
-        result = parseTree.consumeTokenLiteral("if");
+        result = parseTree.consumeToken("if");
         result = result && NamedexprExpr.parse(parseTree, level + 1);
         result = result && Suite.parse(parseTree, level + 1);
         parseTree.enterCollection();
@@ -117,25 +120,26 @@ public final class IfStmt extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("isTokenElif", isTokenElif());
-            addRequired("namedexprExpr", namedexprExpr());
-            addRequired("suite", suite());
+            addRequired(isTokenElif());
+            addRequired(namedexprExpr());
+            addRequired(suite());
         }
 
         public boolean isTokenElif() {
             var element = getItem(0);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
         public NamedexprExpr namedexprExpr() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(NamedexprExpr.RULE);
             return NamedexprExpr.of(element);
         }
 
         public Suite suite() {
             var element = getItem(2);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(Suite.RULE);
             return Suite.of(element);
         }
 
@@ -146,7 +150,7 @@ public final class IfStmt extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeTokenLiteral("elif");
+            result = parseTree.consumeToken("elif");
             result = result && NamedexprExpr.parse(parseTree, level + 1);
             result = result && Suite.parse(parseTree, level + 1);
 
@@ -173,18 +177,19 @@ public final class IfStmt extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("isTokenElse", isTokenElse());
-            addRequired("suite", suite());
+            addRequired(isTokenElse());
+            addRequired(suite());
         }
 
         public boolean isTokenElse() {
             var element = getItem(0);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
         public Suite suite() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(Suite.RULE);
             return Suite.of(element);
         }
 
@@ -195,7 +200,7 @@ public final class IfStmt extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeTokenLiteral("else");
+            result = parseTree.consumeToken("else");
             result = result && Suite.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);

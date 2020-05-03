@@ -47,32 +47,51 @@ public class ClassField {
         return "    private " + className.asType() + " " + fieldName + ";\n";
     }
 
-    public String asGetter(int index) {
+    public String asGetter(RuleType ruleType, int index) {
         return "    public " + className.asType() + " " + fieldName + "() {\n" +
-                asGetterBody(index) +
+                asGetterBody(ruleType, index) +
                 "    }\n";
     }
 
-    private String asGetterBody(int index) {
+    private String asGetterBody(RuleType ruleType, int index) {
         return switch (resultSource.getSourceType()) {
             case Class -> {
+                if (ruleType == RuleType.Conjunction && fieldType == FieldType.Required) {
+                    yield "        var element = getItem(" + index + ");\n" +
+                            "        element.failIfAbsent(" + className.asType() + ".RULE);\n" +
+                            "        return " + className.asType() + ".of(element);\n";
+                }
                 if (isSingular()) {
                     yield "        var element = getItem(" + index + ");\n" +
-                            "        if (!element.isPresent()) return null;\n" +
+                            "        if (!element.isPresent(" + className.asType() + ".RULE)) {\n" +
+                            "            return null;\n" +
+                            "        }\n" +
                             "        return " + className.asType() + ".of(element);\n";
                 }
                 yield listTemplate(index, className.getRealClassName() + ".of(node)");
             }
 
             case TokenType -> {
+                if (ruleType == RuleType.Conjunction && fieldType == FieldType.Required) {
+                    yield "        var element = getItem(" + index + ");\n" +
+                            "        element.failIfAbsent("  + resultSource.getValue() + ");\n" +
+                            "        return element.asString();\n";
+                }
                 if (isSingular()) {
                     yield "        var element = getItem(" + index + ");\n" +
-                            "        if (!element.isPresent()) return null;\n" +
+                            "        if (!element.isPresent(" + resultSource.getValue() + ")) {\n" +
+                            "            return null;\n" +
+                            "        }\n" +
                             "        return element.asString();\n";
                 }
                 yield listTemplate(index, "node.asString()");
             }
             case TokenLiteral -> {
+                if (ruleType == RuleType.Conjunction && fieldType == FieldType.Required) {
+                    yield "        var element = getItem(" + index + ");\n" +
+                            "        element.failIfAbsent();\n" +
+                            "        return element.asBoolean();\n";
+                }
                 if (isSingular()) {
                     yield "        var element = getItem(" + index + ");\n" +
                             "        return element.asBoolean();\n";
@@ -110,13 +129,13 @@ public class ClassField {
     public String asRuleStmt(RuleType ruleType) {
         switch (ruleType) {
             case Disjunction -> {
-                return "addChoice(\"" + fieldName + "\", " + fieldName + "());";
+                return "addChoice(" + fieldName + "());";
             }
             case Conjunction -> {
                 if (isOptionalSingle()) {
-                    return "addOptional(\"" + fieldName + "\", " + fieldName + "());";
+                    return "addOptional(" + fieldName + "());";
                 } else {
-                    return "addRequired(\"" + fieldName + "\", " + fieldName + "());";
+                    return "addRequired(" + fieldName + "());";
                 }
             }
             default -> throw new IllegalArgumentException("ClassField does not support RuleType" + ruleType);
@@ -158,8 +177,8 @@ public class ClassField {
     private String getResultExpr() {
         return switch (resultSource.getSourceType()) {
             case Class -> resultSource.getValue() + ".parse(parseTree, level + 1)";
-            case TokenType -> "parseTree.consumeTokenType(\"" + resultSource.getValue() + "\")";
-            case TokenLiteral -> "parseTree.consumeTokenLiteral(\"" + resultSource.getValue() + "\")";
+            case TokenType -> "parseTree.consumeToken(" + resultSource.getValue() + ")";
+            case TokenLiteral -> "parseTree.consumeToken(\"" + resultSource.getValue() + "\")";
         };
     }
 }

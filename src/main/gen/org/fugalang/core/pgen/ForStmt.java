@@ -20,45 +20,49 @@ public final class ForStmt extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired("isTokenFor", isTokenFor());
-        addRequired("targets", targets());
-        addRequired("isTokenIn", isTokenIn());
-        addRequired("exprlist", exprlist());
-        addRequired("suite", suite());
-        addOptional("forStmt6", forStmt6());
+        addRequired(isTokenFor());
+        addRequired(targets());
+        addRequired(isTokenIn());
+        addRequired(exprlist());
+        addRequired(suite());
+        addOptional(forStmt6());
     }
 
     public boolean isTokenFor() {
         var element = getItem(0);
+        element.failIfAbsent();
         return element.asBoolean();
     }
 
     public Targets targets() {
         var element = getItem(1);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(Targets.RULE);
         return Targets.of(element);
     }
 
     public boolean isTokenIn() {
         var element = getItem(2);
+        element.failIfAbsent();
         return element.asBoolean();
     }
 
     public Exprlist exprlist() {
         var element = getItem(3);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(Exprlist.RULE);
         return Exprlist.of(element);
     }
 
     public Suite suite() {
         var element = getItem(4);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(Suite.RULE);
         return Suite.of(element);
     }
 
     public ForStmt6 forStmt6() {
         var element = getItem(5);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(ForStmt6.RULE)) {
+            return null;
+        }
         return ForStmt6.of(element);
     }
 
@@ -73,9 +77,9 @@ public final class ForStmt extends NodeWrapper {
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
-        result = parseTree.consumeTokenLiteral("for");
+        result = parseTree.consumeToken("for");
         result = result && Targets.parse(parseTree, level + 1);
-        result = result && parseTree.consumeTokenLiteral("in");
+        result = result && parseTree.consumeToken("in");
         result = result && Exprlist.parse(parseTree, level + 1);
         result = result && Suite.parse(parseTree, level + 1);
         ForStmt6.parse(parseTree, level + 1);
@@ -102,18 +106,19 @@ public final class ForStmt extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("isTokenElse", isTokenElse());
-            addRequired("suite", suite());
+            addRequired(isTokenElse());
+            addRequired(suite());
         }
 
         public boolean isTokenElse() {
             var element = getItem(0);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
         public Suite suite() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(Suite.RULE);
             return Suite.of(element);
         }
 
@@ -124,7 +129,7 @@ public final class ForStmt extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeTokenLiteral("else");
+            result = parseTree.consumeToken("else");
             result = result && Suite.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);

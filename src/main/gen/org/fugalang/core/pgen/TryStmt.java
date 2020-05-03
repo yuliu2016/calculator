@@ -24,25 +24,26 @@ public final class TryStmt extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired("isTokenTry", isTokenTry());
-        addRequired("suite", suite());
-        addRequired("tryStmt3", tryStmt3());
+        addRequired(isTokenTry());
+        addRequired(suite());
+        addRequired(tryStmt3());
     }
 
     public boolean isTokenTry() {
         var element = getItem(0);
+        element.failIfAbsent();
         return element.asBoolean();
     }
 
     public Suite suite() {
         var element = getItem(1);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(Suite.RULE);
         return Suite.of(element);
     }
 
     public TryStmt3 tryStmt3() {
         var element = getItem(2);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(TryStmt3.RULE);
         return TryStmt3.of(element);
     }
 
@@ -53,7 +54,7 @@ public final class TryStmt extends NodeWrapper {
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
-        result = parseTree.consumeTokenLiteral("try");
+        result = parseTree.consumeToken("try");
         result = result && Suite.parse(parseTree, level + 1);
         result = result && TryStmt3.parse(parseTree, level + 1);
 
@@ -79,13 +80,15 @@ public final class TryStmt extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addChoice("tryStmt31", tryStmt31());
-            addChoice("tryStmt32", tryStmt32());
+            addChoice(tryStmt31());
+            addChoice(tryStmt32());
         }
 
         public TryStmt31 tryStmt31() {
             var element = getItem(0);
-            if (!element.isPresent()) return null;
+            if (!element.isPresent(TryStmt31.RULE)) {
+                return null;
+            }
             return TryStmt31.of(element);
         }
 
@@ -95,7 +98,9 @@ public final class TryStmt extends NodeWrapper {
 
         public TryStmt32 tryStmt32() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            if (!element.isPresent(TryStmt32.RULE)) {
+                return null;
+            }
             return TryStmt32.of(element);
         }
 
@@ -138,9 +143,9 @@ public final class TryStmt extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("tryStmt311List", tryStmt311List());
-            addOptional("tryStmt312", tryStmt312());
-            addOptional("tryStmt313", tryStmt313());
+            addRequired(tryStmt311List());
+            addOptional(tryStmt312());
+            addOptional(tryStmt313());
         }
 
         public List<TryStmt311> tryStmt311List() {
@@ -159,7 +164,9 @@ public final class TryStmt extends NodeWrapper {
 
         public TryStmt312 tryStmt312() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            if (!element.isPresent(TryStmt312.RULE)) {
+                return null;
+            }
             return TryStmt312.of(element);
         }
 
@@ -169,7 +176,9 @@ public final class TryStmt extends NodeWrapper {
 
         public TryStmt313 tryStmt313() {
             var element = getItem(2);
-            if (!element.isPresent()) return null;
+            if (!element.isPresent(TryStmt313.RULE)) {
+                return null;
+            }
             return TryStmt313.of(element);
         }
 
@@ -220,19 +229,19 @@ public final class TryStmt extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("exceptClause", exceptClause());
-            addRequired("suite", suite());
+            addRequired(exceptClause());
+            addRequired(suite());
         }
 
         public ExceptClause exceptClause() {
             var element = getItem(0);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(ExceptClause.RULE);
             return ExceptClause.of(element);
         }
 
         public Suite suite() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(Suite.RULE);
             return Suite.of(element);
         }
 
@@ -269,18 +278,19 @@ public final class TryStmt extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("isTokenElse", isTokenElse());
-            addRequired("suite", suite());
+            addRequired(isTokenElse());
+            addRequired(suite());
         }
 
         public boolean isTokenElse() {
             var element = getItem(0);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
         public Suite suite() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(Suite.RULE);
             return Suite.of(element);
         }
 
@@ -291,7 +301,7 @@ public final class TryStmt extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeTokenLiteral("else");
+            result = parseTree.consumeToken("else");
             result = result && Suite.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);
@@ -317,18 +327,19 @@ public final class TryStmt extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("isTokenFinally", isTokenFinally());
-            addRequired("suite", suite());
+            addRequired(isTokenFinally());
+            addRequired(suite());
         }
 
         public boolean isTokenFinally() {
             var element = getItem(0);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
         public Suite suite() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(Suite.RULE);
             return Suite.of(element);
         }
 
@@ -339,7 +350,7 @@ public final class TryStmt extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeTokenLiteral("finally");
+            result = parseTree.consumeToken("finally");
             result = result && Suite.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);
@@ -365,18 +376,19 @@ public final class TryStmt extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("isTokenFinally", isTokenFinally());
-            addRequired("suite", suite());
+            addRequired(isTokenFinally());
+            addRequired(suite());
         }
 
         public boolean isTokenFinally() {
             var element = getItem(0);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
         public Suite suite() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(Suite.RULE);
             return Suite.of(element);
         }
 
@@ -387,7 +399,7 @@ public final class TryStmt extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeTokenLiteral("finally");
+            result = parseTree.consumeToken("finally");
             result = result && Suite.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);

@@ -3,6 +3,7 @@ package org.fugalang.core.grammar.parser;
 import org.fugalang.core.grammar.psi.*;
 import org.fugalang.core.grammar.token.MetaToken;
 import org.fugalang.core.grammar.token.MetaTokenType;
+import org.fugalang.core.parser.ElementType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -132,7 +133,7 @@ public class MetaParser {
         return tok.value;
     }
 
-    public static boolean parseTokenType(MetaTokenVisitor visitor, MetaTokenType type) {
+    public static boolean parseTokenType(MetaTokenVisitor visitor, ElementType type) {
         var tok = visitor.getAndAdd();
         var result = tok != null && tok.type == type;
         if (!result) {

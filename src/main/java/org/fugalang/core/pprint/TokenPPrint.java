@@ -1,6 +1,7 @@
 package org.fugalang.core.pprint;
 
 import org.fugalang.core.token.Token;
+import org.fugalang.core.token.TokenType;
 
 import java.util.List;
 
@@ -38,9 +39,9 @@ public class TokenPPrint {
             var col = formatRightWithZeroes(String.valueOf(token.column), 2);
             sb.append(ConsoleColor.WHITE).append(":").append(col).append(ConsoleColor.END).append("  ");
 
-            var type_padded = formatLeftWithSpaces(type.name(), 9);
+            var type_padded = formatLeftWithSpaces(type.getName(), 9);
 
-            if (DELIMITERS.contains(type)) {
+            if (type == NEWLINE) {
                 // type is a delimiter; fade out the token
                 sb.append(ConsoleColor.wrap(ConsoleColor.WHITE, type_padded));
                 sb.append("\n");
@@ -56,9 +57,9 @@ public class TokenPPrint {
 
             if (type == KEYWORD) {
                 value_formatted = ConsoleColor.wrap(ConsoleColor.BRIGHT_BLUE, value_formatted);
-            } else if (SYMBOLS.contains(type)) {
+            } else if (type == NAME) {
                 value_formatted = ConsoleColor.wrap(ConsoleColor.MAGENTA, value_formatted);
-            } else if (NUMBER_LITERALS.contains(type)) {
+            } else if (type == NUMBER) {
                 value_formatted = ConsoleColor.wrap(ConsoleColor.BLUE, value_formatted);
             }
 

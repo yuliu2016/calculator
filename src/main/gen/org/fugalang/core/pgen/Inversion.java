@@ -20,13 +20,15 @@ public final class Inversion extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addChoice("inversion1", inversion1());
-        addChoice("comparison", comparison());
+        addChoice(inversion1());
+        addChoice(comparison());
     }
 
     public Inversion1 inversion1() {
         var element = getItem(0);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(Inversion1.RULE)) {
+            return null;
+        }
         return Inversion1.of(element);
     }
 
@@ -36,7 +38,9 @@ public final class Inversion extends NodeWrapper {
 
     public Comparison comparison() {
         var element = getItem(1);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(Comparison.RULE)) {
+            return null;
+        }
         return Comparison.of(element);
     }
 
@@ -76,18 +80,19 @@ public final class Inversion extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("isTokenNot", isTokenNot());
-            addRequired("inversion", inversion());
+            addRequired(isTokenNot());
+            addRequired(inversion());
         }
 
         public boolean isTokenNot() {
             var element = getItem(0);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
         public Inversion inversion() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(Inversion.RULE);
             return Inversion.of(element);
         }
 
@@ -98,7 +103,7 @@ public final class Inversion extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeTokenLiteral("not");
+            result = parseTree.consumeToken("not");
             result = result && Inversion.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);

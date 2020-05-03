@@ -20,16 +20,16 @@ public final class CompOp extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addChoice("isTokenLess", isTokenLess());
-        addChoice("isTokenGreater", isTokenGreater());
-        addChoice("isTokenEqual", isTokenEqual());
-        addChoice("isTokenMoreEqual", isTokenMoreEqual());
-        addChoice("isTokenLessEqual", isTokenLessEqual());
-        addChoice("isTokenNequal", isTokenNequal());
-        addChoice("isTokenIn", isTokenIn());
-        addChoice("compOp8", compOp8());
-        addChoice("isTokenIs", isTokenIs());
-        addChoice("compOp10", compOp10());
+        addChoice(isTokenLess());
+        addChoice(isTokenGreater());
+        addChoice(isTokenEqual());
+        addChoice(isTokenMoreEqual());
+        addChoice(isTokenLessEqual());
+        addChoice(isTokenNequal());
+        addChoice(isTokenIn());
+        addChoice(compOp8());
+        addChoice(isTokenIs());
+        addChoice(compOp10());
     }
 
     public boolean isTokenLess() {
@@ -69,7 +69,9 @@ public final class CompOp extends NodeWrapper {
 
     public CompOp8 compOp8() {
         var element = getItem(7);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(CompOp8.RULE)) {
+            return null;
+        }
         return CompOp8.of(element);
     }
 
@@ -84,7 +86,9 @@ public final class CompOp extends NodeWrapper {
 
     public CompOp10 compOp10() {
         var element = getItem(9);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(CompOp10.RULE)) {
+            return null;
+        }
         return CompOp10.of(element);
     }
 
@@ -99,15 +103,15 @@ public final class CompOp extends NodeWrapper {
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
-        result = parseTree.consumeTokenLiteral("<");
-        result = result || parseTree.consumeTokenLiteral(">");
-        result = result || parseTree.consumeTokenLiteral("==");
-        result = result || parseTree.consumeTokenLiteral(">=");
-        result = result || parseTree.consumeTokenLiteral("<=");
-        result = result || parseTree.consumeTokenLiteral("!=");
-        result = result || parseTree.consumeTokenLiteral("in");
+        result = parseTree.consumeToken("<");
+        result = result || parseTree.consumeToken(">");
+        result = result || parseTree.consumeToken("==");
+        result = result || parseTree.consumeToken(">=");
+        result = result || parseTree.consumeToken("<=");
+        result = result || parseTree.consumeToken("!=");
+        result = result || parseTree.consumeToken("in");
         result = result || CompOp8.parse(parseTree, level + 1);
-        result = result || parseTree.consumeTokenLiteral("is");
+        result = result || parseTree.consumeToken("is");
         result = result || CompOp10.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);
@@ -132,17 +136,19 @@ public final class CompOp extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("isTokenNot", isTokenNot());
-            addRequired("isTokenIn", isTokenIn());
+            addRequired(isTokenNot());
+            addRequired(isTokenIn());
         }
 
         public boolean isTokenNot() {
             var element = getItem(0);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
         public boolean isTokenIn() {
             var element = getItem(1);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
@@ -153,8 +159,8 @@ public final class CompOp extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeTokenLiteral("not");
-            result = result && parseTree.consumeTokenLiteral("in");
+            result = parseTree.consumeToken("not");
+            result = result && parseTree.consumeToken("in");
 
             parseTree.exit(level, marker, result);
             return result;
@@ -179,17 +185,19 @@ public final class CompOp extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("isTokenIs", isTokenIs());
-            addRequired("isTokenNot", isTokenNot());
+            addRequired(isTokenIs());
+            addRequired(isTokenNot());
         }
 
         public boolean isTokenIs() {
             var element = getItem(0);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
         public boolean isTokenNot() {
             var element = getItem(1);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
@@ -200,8 +208,8 @@ public final class CompOp extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeTokenLiteral("is");
-            result = result && parseTree.consumeTokenLiteral("not");
+            result = parseTree.consumeToken("is");
+            result = result && parseTree.consumeToken("not");
 
             parseTree.exit(level, marker, result);
             return result;

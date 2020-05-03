@@ -20,25 +20,28 @@ public final class AssertStmt extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired("isTokenAssert", isTokenAssert());
-        addRequired("expr", expr());
-        addOptional("assertStmt3", assertStmt3());
+        addRequired(isTokenAssert());
+        addRequired(expr());
+        addOptional(assertStmt3());
     }
 
     public boolean isTokenAssert() {
         var element = getItem(0);
+        element.failIfAbsent();
         return element.asBoolean();
     }
 
     public Expr expr() {
         var element = getItem(1);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(Expr.RULE);
         return Expr.of(element);
     }
 
     public AssertStmt3 assertStmt3() {
         var element = getItem(2);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(AssertStmt3.RULE)) {
+            return null;
+        }
         return AssertStmt3.of(element);
     }
 
@@ -53,7 +56,7 @@ public final class AssertStmt extends NodeWrapper {
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
-        result = parseTree.consumeTokenLiteral("assert");
+        result = parseTree.consumeToken("assert");
         result = result && Expr.parse(parseTree, level + 1);
         AssertStmt3.parse(parseTree, level + 1);
 
@@ -79,18 +82,19 @@ public final class AssertStmt extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("isTokenComma", isTokenComma());
-            addRequired("expr", expr());
+            addRequired(isTokenComma());
+            addRequired(expr());
         }
 
         public boolean isTokenComma() {
             var element = getItem(0);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
         public Expr expr() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(Expr.RULE);
             return Expr.of(element);
         }
 
@@ -101,7 +105,7 @@ public final class AssertStmt extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeTokenLiteral(",");
+            result = parseTree.consumeToken(",");
             result = result && Expr.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);

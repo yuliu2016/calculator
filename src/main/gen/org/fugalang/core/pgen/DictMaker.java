@@ -24,19 +24,19 @@ public final class DictMaker extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired("dictItem", dictItem());
-        addRequired("dictMaker2", dictMaker2());
+        addRequired(dictItem());
+        addRequired(dictMaker2());
     }
 
     public DictItem dictItem() {
         var element = getItem(0);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(DictItem.RULE);
         return DictItem.of(element);
     }
 
     public DictMaker2 dictMaker2() {
         var element = getItem(1);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(DictMaker2.RULE);
         return DictMaker2.of(element);
     }
 
@@ -72,13 +72,15 @@ public final class DictMaker extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addChoice("compFor", compFor());
-            addChoice("dictMaker22", dictMaker22());
+            addChoice(compFor());
+            addChoice(dictMaker22());
         }
 
         public CompFor compFor() {
             var element = getItem(0);
-            if (!element.isPresent()) return null;
+            if (!element.isPresent(CompFor.RULE)) {
+                return null;
+            }
             return CompFor.of(element);
         }
 
@@ -88,7 +90,9 @@ public final class DictMaker extends NodeWrapper {
 
         public DictMaker22 dictMaker22() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            if (!element.isPresent(DictMaker22.RULE)) {
+                return null;
+            }
             return DictMaker22.of(element);
         }
 
@@ -131,8 +135,8 @@ public final class DictMaker extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("dictMaker221List", dictMaker221List());
-            addRequired("isTokenComma", isTokenComma());
+            addRequired(dictMaker221List());
+            addRequired(isTokenComma());
         }
 
         public List<DictMaker221> dictMaker221List() {
@@ -151,6 +155,7 @@ public final class DictMaker extends NodeWrapper {
 
         public boolean isTokenComma() {
             var element = getItem(1);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
@@ -170,7 +175,7 @@ public final class DictMaker extends NodeWrapper {
                 }
             }
             parseTree.exitCollection();
-            result = parseTree.consumeTokenLiteral(",");
+            result = parseTree.consumeToken(",");
 
             parseTree.exit(level, marker, result);
             return result;
@@ -195,18 +200,19 @@ public final class DictMaker extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("isTokenComma", isTokenComma());
-            addRequired("dictItem", dictItem());
+            addRequired(isTokenComma());
+            addRequired(dictItem());
         }
 
         public boolean isTokenComma() {
             var element = getItem(0);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
         public DictItem dictItem() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(DictItem.RULE);
             return DictItem.of(element);
         }
 
@@ -217,7 +223,7 @@ public final class DictMaker extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeTokenLiteral(",");
+            result = parseTree.consumeToken(",");
             result = result && DictItem.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);

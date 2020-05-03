@@ -1,6 +1,7 @@
 package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.*;
+import org.fugalang.core.token.TokenType;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,14 +27,14 @@ public final class EvalInput extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired("exprlist", exprlist());
-        addRequired("newlineList", newlineList());
-        addRequired("endmarker", endmarker());
+        addRequired(exprlist());
+        addRequired(newlineList());
+        addRequired(endmarker());
     }
 
     public Exprlist exprlist() {
         var element = getItem(0);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(Exprlist.RULE);
         return Exprlist.of(element);
     }
 
@@ -53,7 +54,7 @@ public final class EvalInput extends NodeWrapper {
 
     public String endmarker() {
         var element = getItem(2);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(TokenType.ENDMARKER);
         return element.asString();
     }
 
@@ -68,13 +69,13 @@ public final class EvalInput extends NodeWrapper {
         parseTree.enterCollection();
         while (true) {
             var pos = parseTree.position();
-            if (!parseTree.consumeTokenType("NEWLINE") ||
+            if (!parseTree.consumeToken(TokenType.NEWLINE) ||
                     parseTree.guardLoopExit(pos)) {
                 break;
             }
         }
         parseTree.exitCollection();
-        result = result && parseTree.consumeTokenType("ENDMARKER");
+        result = result && parseTree.consumeToken(TokenType.ENDMARKER);
 
         parseTree.exit(level, marker, result);
         return result;

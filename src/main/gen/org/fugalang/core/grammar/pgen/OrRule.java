@@ -26,13 +26,13 @@ public final class OrRule extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired("andRule", andRule());
-        addRequired("orRule2List", orRule2List());
+        addRequired(andRule());
+        addRequired(orRule2List());
     }
 
     public AndRule andRule() {
         var element = getItem(0);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(AndRule.RULE);
         return AndRule.of(element);
     }
 
@@ -90,18 +90,19 @@ public final class OrRule extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("isTokenOr", isTokenOr());
-            addRequired("andRule", andRule());
+            addRequired(isTokenOr());
+            addRequired(andRule());
         }
 
         public boolean isTokenOr() {
             var element = getItem(0);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
         public AndRule andRule() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(AndRule.RULE);
             return AndRule.of(element);
         }
 
@@ -112,7 +113,7 @@ public final class OrRule extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeTokenLiteral("|");
+            result = parseTree.consumeToken("|");
             result = result && AndRule.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);

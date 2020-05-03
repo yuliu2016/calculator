@@ -20,16 +20,18 @@ public final class CompoundStmt extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addChoice("ifStmt", ifStmt());
-        addChoice("whileStmt", whileStmt());
-        addChoice("forStmt", forStmt());
-        addChoice("tryStmt", tryStmt());
-        addChoice("withStmt", withStmt());
+        addChoice(ifStmt());
+        addChoice(whileStmt());
+        addChoice(forStmt());
+        addChoice(tryStmt());
+        addChoice(withStmt());
     }
 
     public IfStmt ifStmt() {
         var element = getItem(0);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(IfStmt.RULE)) {
+            return null;
+        }
         return IfStmt.of(element);
     }
 
@@ -39,7 +41,9 @@ public final class CompoundStmt extends NodeWrapper {
 
     public WhileStmt whileStmt() {
         var element = getItem(1);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(WhileStmt.RULE)) {
+            return null;
+        }
         return WhileStmt.of(element);
     }
 
@@ -49,7 +53,9 @@ public final class CompoundStmt extends NodeWrapper {
 
     public ForStmt forStmt() {
         var element = getItem(2);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(ForStmt.RULE)) {
+            return null;
+        }
         return ForStmt.of(element);
     }
 
@@ -59,7 +65,9 @@ public final class CompoundStmt extends NodeWrapper {
 
     public TryStmt tryStmt() {
         var element = getItem(3);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(TryStmt.RULE)) {
+            return null;
+        }
         return TryStmt.of(element);
     }
 
@@ -69,7 +77,9 @@ public final class CompoundStmt extends NodeWrapper {
 
     public WithStmt withStmt() {
         var element = getItem(4);
-        if (!element.isPresent()) return null;
+        if (!element.isPresent(WithStmt.RULE)) {
+            return null;
+        }
         return WithStmt.of(element);
     }
 

@@ -24,19 +24,19 @@ public final class ExprlistComp extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired("exprOrStar", exprOrStar());
-        addRequired("exprlistComp2", exprlistComp2());
+        addRequired(exprOrStar());
+        addRequired(exprlistComp2());
     }
 
     public ExprOrStar exprOrStar() {
         var element = getItem(0);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(ExprOrStar.RULE);
         return ExprOrStar.of(element);
     }
 
     public ExprlistComp2 exprlistComp2() {
         var element = getItem(1);
-        if (!element.isPresent()) return null;
+        element.failIfAbsent(ExprlistComp2.RULE);
         return ExprlistComp2.of(element);
     }
 
@@ -72,13 +72,15 @@ public final class ExprlistComp extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addChoice("compFor", compFor());
-            addChoice("exprlistComp22", exprlistComp22());
+            addChoice(compFor());
+            addChoice(exprlistComp22());
         }
 
         public CompFor compFor() {
             var element = getItem(0);
-            if (!element.isPresent()) return null;
+            if (!element.isPresent(CompFor.RULE)) {
+                return null;
+            }
             return CompFor.of(element);
         }
 
@@ -88,7 +90,9 @@ public final class ExprlistComp extends NodeWrapper {
 
         public ExprlistComp22 exprlistComp22() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            if (!element.isPresent(ExprlistComp22.RULE)) {
+                return null;
+            }
             return ExprlistComp22.of(element);
         }
 
@@ -131,8 +135,8 @@ public final class ExprlistComp extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("exprlistComp221List", exprlistComp221List());
-            addRequired("isTokenComma", isTokenComma());
+            addRequired(exprlistComp221List());
+            addRequired(isTokenComma());
         }
 
         public List<ExprlistComp221> exprlistComp221List() {
@@ -151,6 +155,7 @@ public final class ExprlistComp extends NodeWrapper {
 
         public boolean isTokenComma() {
             var element = getItem(1);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
@@ -170,7 +175,7 @@ public final class ExprlistComp extends NodeWrapper {
                 }
             }
             parseTree.exitCollection();
-            result = parseTree.consumeTokenLiteral(",");
+            result = parseTree.consumeToken(",");
 
             parseTree.exit(level, marker, result);
             return result;
@@ -195,18 +200,19 @@ public final class ExprlistComp extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired("isTokenComma", isTokenComma());
-            addRequired("exprOrStar", exprOrStar());
+            addRequired(isTokenComma());
+            addRequired(exprOrStar());
         }
 
         public boolean isTokenComma() {
             var element = getItem(0);
+            element.failIfAbsent();
             return element.asBoolean();
         }
 
         public ExprOrStar exprOrStar() {
             var element = getItem(1);
-            if (!element.isPresent()) return null;
+            element.failIfAbsent(ExprOrStar.RULE);
             return ExprOrStar.of(element);
         }
 
@@ -217,7 +223,7 @@ public final class ExprlistComp extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeTokenLiteral(",");
+            result = parseTree.consumeToken(",");
             result = result && ExprOrStar.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);
