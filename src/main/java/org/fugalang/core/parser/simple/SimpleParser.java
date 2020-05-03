@@ -77,7 +77,7 @@ public class SimpleParser {
             return null;
         }
         for (var operator : operators) {
-            if (token.type == TokenType.OPERATOR && token.value.equals(operator)) {
+            if (token.getType() == TokenType.OPERATOR && token.getValue().equals(operator)) {
                 return operator;
             }
         }
@@ -90,11 +90,11 @@ public class SimpleParser {
             return null;
         }
 
-        if (token.type == TokenType.NUMBER) {
-            return new Atom(token.value);
+        if (token.getType() == TokenType.NUMBER) {
+            return new Atom(token.getValue());
         }
 
-        if (token.value.equals(Operator.LPAR.getCode())) {
+        if (token.getValue().equals(Operator.LPAR.getCode())) {
             visitor.markLookahead();
 
             var arithmeticExpr = parseArithmeticExpr(visitor);

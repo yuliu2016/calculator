@@ -32,20 +32,20 @@ public class SimpleEvaluator {
 
         for (Token token : tokens) {
             // Current token is a whitespace, skip it
-            if (token.type == TokenType.NEWLINE) {
+            if (token.getType() == TokenType.NEWLINE) {
                 continue;
             }
 
-            if (token.type == TokenType.NUMBER) {
-                values.push(Integer.valueOf(token.value));
+            if (token.getType() == TokenType.NUMBER) {
+                values.push(Integer.valueOf(token.getValue()));
             }
 
             // Current token is an opening brace, push it to 'ops'
-            else if (token.value.equals(Operator.LPAR.getCode()))
-                ops.push(token.value);
+            else if (token.valueEquals(Operator.LPAR.getCode()))
+                ops.push(token.getValue());
 
                 // Closing brace encountered, solve entire brace
-            else if (token.value.equals(Operator.RPAR.getCode())) {
+            else if (token.valueEquals(Operator.RPAR.getCode())) {
                 while (!ops.peek().equals(Operator.LPAR.getCode())) {
                     values.push(applyOp(ops.pop(), values.pop(), values.pop()));
                 }
@@ -53,19 +53,19 @@ public class SimpleEvaluator {
             }
 
             // Current token is an operator.
-            else if (token.value.equals(Operator.PLUS.getCode()) ||
-                    token.value.equals(Operator.MINUS.getCode()) ||
-                    token.value.equals(Operator.TIMES.getCode()) ||
-                    token.value.equals(Operator.DIV.getCode())) {
+            else if (token.valueEquals(Operator.PLUS.getCode()) ||
+                    token.valueEquals(Operator.MINUS.getCode()) ||
+                    token.valueEquals(Operator.TIMES.getCode()) ||
+                    token.valueEquals(Operator.DIV.getCode())) {
                 // While top of 'ops' has same or greater precedence to current
                 // token, which is an operator. Apply operator on top of 'ops'
                 // to top two elements in values stack
-                while (!ops.empty() && hasPrecedence(token.value, ops.peek())) {
+                while (!ops.empty() && hasPrecedence(token.getValue(), ops.peek())) {
                     values.push(applyOp(ops.pop(), values.pop(), values.pop()));
                 }
 
                 // Push current token to 'ops'.
-                ops.push(token.value);
+                ops.push(token.getValue());
             }
         }
 

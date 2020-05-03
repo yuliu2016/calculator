@@ -1,7 +1,6 @@
 package org.fugalang.core.pprint;
 
-import org.fugalang.core.token.Token;
-import org.fugalang.core.token.TokenType;
+import org.fugalang.core.parser.ParserElement;
 
 import java.util.List;
 
@@ -10,7 +9,7 @@ import static org.fugalang.core.pprint.ConsoleUtil.formatRightWithZeroes;
 import static org.fugalang.core.token.TokenType.*;
 
 public class TokenPPrint {
-    public static String format(List<Token> tokens) {
+    public static String format(List<? extends ParserElement> tokens) {
         var sb = new StringBuilder();
         var last_line = -1;
 
@@ -19,9 +18,9 @@ public class TokenPPrint {
         }
 
         for (var token : tokens) {
-            var line = token.line;
-            var type = token.type;
-            var value = token.value;
+            var line = token.getLineStart();
+            var type = token.getType();
+            var value = token.getValue();
 
             if (line != last_line) {
                 // show the line number in bold
@@ -36,7 +35,7 @@ public class TokenPPrint {
             last_line = line;
 
             // Fix: Add column indicators
-            var col = formatRightWithZeroes(String.valueOf(token.column), 2);
+            var col = formatRightWithZeroes(String.valueOf(token.getColumnStart()), 2);
             sb.append(ConsoleColor.WHITE).append(":").append(col).append(ConsoleColor.END).append("  ");
 
             var type_padded = formatLeftWithSpaces(type.getName(), 9);

@@ -19,7 +19,7 @@ public class ClassBuilderTest {
         var gen = new ParserGenerator(cst, tok -> tok.equals("elem") ?
                 Optional.of(new ConvertedValue("String", "elem", "elem")) :
                 Optional.empty(),
-                Path.of(""), "test");
+                Path.of(""), "test", "");
 
         Assertions.assertThrows(IllegalStateException.class, () -> gen.generate(false));
     }

@@ -1,7 +1,5 @@
 package org.fugalang.core.parser;
 
-import org.fugalang.core.token.TokenType;
-
 public interface ParseTreeNode {
     ParseTreeNode getItem(int index);
 

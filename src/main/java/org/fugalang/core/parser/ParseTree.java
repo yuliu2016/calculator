@@ -17,5 +17,4 @@ public interface ParseTree {
     int position();
 
     boolean guardLoopExit(int position);
-
 }

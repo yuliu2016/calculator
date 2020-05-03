@@ -1,9 +1,15 @@
 package org.fugalang.core.parser;
 
-public abstract class NodeWrapper {
+import org.fugalang.core.pprint.ParseTreePPrint;
+import org.fugalang.core.pprint.TreeStringBuilder;
+import org.fugalang.core.pprint.TreeStringElem;
+
+public abstract class NodeWrapper implements TreeStringElem {
 
     private final ParserRule rule;
     private final ParseTreeNode node;
+    private NodeDelegate delegate;
+    private boolean didBuildRule;
 
     public NodeWrapper(ParserRule rule, ParseTreeNode node) {
         this.rule = rule;
@@ -12,36 +18,47 @@ public abstract class NodeWrapper {
 
     protected abstract void buildRule();
 
-    protected void addChoice(String name, Object choice) {
+    private NodeDelegate getOrCreateDelegate() {
+        if (delegate == null) {
+            delegate = new WrapperDelegate(rule);
+            buildRule();
+            didBuildRule = true;
+        }
+        return delegate;
     }
 
-    protected void addChoice(String name, boolean value) {
+    private NodeDelegate getDelegate() {
+        if (delegate == null) {
+            throw new IllegalStateException("Delegate not initialized");
+        }
+        if (didBuildRule) {
+            throw new IllegalStateException("Node has already been built");
+        }
+        return delegate;
     }
 
-
-    protected void addRequired(String name, boolean value) {
-    }
-
-    protected void addRequired(String name, Object value) {
-    }
-
-    protected void addOptional(String name, Object value) {
+    public ParserRule getRule() {
+        return rule;
     }
 
     protected void addChoice(Object choice) {
+        getDelegate().addChoice(choice);
     }
 
     protected void addChoice(boolean value) {
+        getDelegate().addChoice(value);
     }
 
-
     protected void addRequired(boolean value) {
+        getDelegate().addRequired(value);
     }
 
     protected void addRequired(Object value) {
+        getDelegate().addRequired(value);
     }
 
     protected void addOptional(Object value) {
+        getDelegate().addOptional(value);
     }
 
     public ParseTreeNode getItem(int index) {
@@ -50,9 +67,15 @@ public abstract class NodeWrapper {
 
     @Override
     public String toString() {
-        return "NodeWrapper{" +
-                "rule=" + rule +
-                ", node=" + node +
-                '}';
+        return getOrCreateDelegate().asString();
+    }
+
+    @Override
+    public void buildString(TreeStringBuilder builder) {
+        getOrCreateDelegate().buildString(builder);
+    }
+
+    public String prettyFormat(int indent) {
+        return ParseTreePPrint.format(this, indent);
     }
 }

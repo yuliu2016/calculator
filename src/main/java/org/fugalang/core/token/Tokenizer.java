@@ -4,6 +4,7 @@ import org.fugalang.core.grammar.SyntaxError;
 
 import java.util.List;
 
+import static org.fugalang.core.token.CharTest.*;
 import static org.fugalang.core.token.TokenType.*;
 
 public class Tokenizer {
@@ -21,16 +22,16 @@ public class Tokenizer {
      */
     private boolean tokenizeSpace() {
 
-        var in_comment = CharTest.isSingleComment(visitor.p1);
+        var in_comment = isSingleComment(visitor.p1);
 
-        if (!(in_comment || CharTest.isSpace(visitor.p1))) {
+        if (!(in_comment || isSpace(visitor.p1))) {
             return false;
         }
 
         // make sure that newline is added if it's the first char
 
         // Fix: add CRLF for the first line
-        var newline = CharTest.isNewline(visitor.p1) || CharTest.isCRLF(visitor.p2);
+        var newline = isNewline(visitor.p1) || isCRLF(visitor.p2);
 
         // the space character visitor
         var sv = visitor.copyAndAdvance(1);
@@ -41,11 +42,11 @@ public class Tokenizer {
             // check that it's still in a commenting state, or
             // the next character is a comment
             if (!(in_comment ||
-                    CharTest.isSpace(sv.p1) ||
-                    CharTest.isSingleComment(sv.p1)))
+                    isSpace(sv.p1) ||
+                    isSingleComment(sv.p1)))
                 break;
 
-            if (CharTest.isCRLF(sv.p2)) {
+            if (isCRLF(sv.p2)) {
                 in_comment = false;
                 newline = true;
 
@@ -54,10 +55,10 @@ public class Tokenizer {
                 // Fix: increase only one index because there is another one
                 // at the end of this loop.
                 sv.i++;
-            } else if (CharTest.isNewline(sv.p1)) {
+            } else if (isNewline(sv.p1)) {
                 in_comment = false;
                 newline = true;
-            } else if (CharTest.isSingleComment(sv.p1)) {
+            } else if (isSingleComment(sv.p1)) {
                 in_comment = true;
             }  // else it's a comment character
 
@@ -75,14 +76,14 @@ public class Tokenizer {
     }
 
     private boolean tokenizeSymbolOrWord() {
-        if (!CharTest.isSymbol(visitor.p1)) {
+        if (!isSymbol(visitor.p1)) {
             return false;
         }
 
         // check for symbols
         var j = visitor.i + 1;
 
-        while (j < visitor.size && CharTest.isSymbol(visitor.code.charAt(j))) {
+        while (j < visitor.size && isSymbol(visitor.code.charAt(j))) {
             j++;
         }
 
@@ -145,7 +146,7 @@ public class Tokenizer {
      * Tokenize all normal strings
      */
     private boolean tokenizeString() {
-        if (!CharTest.isStringQuote(visitor.p1)) {
+        if (!isStringQuote(visitor.p1)) {
             return false;
         }
 
@@ -170,10 +171,10 @@ public class Tokenizer {
 
             // Fix: Only allow normal strings to span a single line
             if ((j < visitor.size - 1 &&
-                    CharTest.isCRLF(visitor.code.substring(j, j + 2)))) {
+                    isCRLF(visitor.code.substring(j, j + 2)))) {
                 break;
             }
-            if (CharTest.isNewline(ch)) {
+            if (isNewline(ch)) {
                 break;
             }
 
@@ -213,7 +214,7 @@ public class Tokenizer {
 
         while (j < visitor.size) {
             var ch = visitor.code.charAt(j);
-            if (!CharTest.isUnderscore(ch) && !CharTest.isAnyHex(ch)) {
+            if (!isUnderscore(ch) && !isAnyHex(ch)) {
                 break;
             }
             j++;
@@ -224,8 +225,8 @@ public class Tokenizer {
             throw new SyntaxError("Error parsing hex: EOF after leading literal");
         }
 
-        if (CharTest.isUnderscore(visitor.code.charAt(visitor.i + 2)) ||
-                CharTest.isUnderscore(visitor.code.charAt(j - 1))) {
+        if (isUnderscore(visitor.code.charAt(visitor.i + 2)) ||
+                isUnderscore(visitor.code.charAt(j - 1))) {
             throw new SyntaxError("Invalid hex literal");
         }
 
@@ -244,8 +245,8 @@ public class Tokenizer {
 
         while (j < visitor.size) {
             var ch = visitor.code.charAt(j);
-            if (!CharTest.isUnderscore(ch) && !CharTest.isAnyBin(ch)) {
-                if (CharTest.isNumeric(ch)) {
+            if (!isUnderscore(ch) && !isAnyBin(ch)) {
+                if (isNumeric(ch)) {
                     throw new SyntaxError("Invalid digit '" + ch + "' in binary literal");
                 }
                 break;
@@ -258,8 +259,8 @@ public class Tokenizer {
             throw new SyntaxError("Error parsing bin: EOF after leading literal");
         }
 
-        if (CharTest.isUnderscore(visitor.code.charAt(visitor.i + 2)) ||
-                CharTest.isUnderscore(visitor.code.charAt(j - 1))) {
+        if (isUnderscore(visitor.code.charAt(visitor.i + 2)) ||
+                isUnderscore(visitor.code.charAt(j - 1))) {
             throw new SyntaxError("Invalid bin literal");
         }
 
@@ -278,8 +279,8 @@ public class Tokenizer {
 
         while (j < visitor.size) {
             var ch = visitor.code.charAt(j);
-            if (!CharTest.isUnderscore(ch) && !CharTest.isAnyOct(ch)) {
-                if (CharTest.isNumeric(ch)) {
+            if (!isUnderscore(ch) && !isAnyOct(ch)) {
+                if (isNumeric(ch)) {
                     throw new SyntaxError("Invalid digit '" + ch + "' in octal literal");
                 }
                 break;
@@ -292,8 +293,8 @@ public class Tokenizer {
             throw new SyntaxError("Error parsing oct: EOF after leading literal");
         }
 
-        if (CharTest.isUnderscore(visitor.code.charAt(visitor.i + 2)) ||
-                CharTest.isUnderscore(visitor.code.charAt(j - 1))) {
+        if (isUnderscore(visitor.code.charAt(visitor.i + 2)) ||
+                isUnderscore(visitor.code.charAt(j - 1))) {
             throw new SyntaxError("Invalid oct literal");
         }
 
@@ -307,13 +308,13 @@ public class Tokenizer {
         int j = i;
         while (j < visitor.size) {
             var ch = visitor.code.charAt(j);
-            if (!CharTest.isUnderscore(ch) && !CharTest.isNumeric(ch)) {
+            if (!isUnderscore(ch) && !isNumeric(ch)) {
                 break;
             }
             j++;
         }
-        if (j == i || CharTest.isUnderscore(visitor.code.charAt(i)) ||
-                CharTest.isUnderscore(visitor.code.charAt(j - 1))) {
+        if (j == i || isUnderscore(visitor.code.charAt(i)) ||
+                isUnderscore(visitor.code.charAt(j - 1))) {
             throw new SyntaxError("Invalid decimal literal");
         }
         return j;
@@ -327,36 +328,32 @@ public class Tokenizer {
      */
     private boolean tokenizeDecimalNumber() {
 
-        var is_floating_point = CharTest.isFloatingPoint(visitor.p1);
+        var is_floating_point = isFloatingPoint(visitor.p1);
         var j = visitor.i;
 
         if (is_floating_point) {
             j++;
             j = tokenizeDecimalSequence(j);
         } else {
-            if (!CharTest.isNumeric(visitor.p1)) {
+            if (!isNumeric(visitor.p1)) {
                 return false;
             }
             j = tokenizeDecimalSequence(j);
-            if (j < visitor.size && CharTest
-                    .isFloatingPoint(visitor.code.charAt(j))) {
+            if (j < visitor.size && isFloatingPoint(visitor.code.charAt(j))) {
                 is_floating_point = true;
                 j++;
                 j = tokenizeDecimalSequence(j);
             }
         }
 
-        if (j < visitor.size && CharTest
-                .isExponentDelimiter(visitor.code.charAt(j))) {
+        if (j < visitor.size && isExponentDelimiter(visitor.code.charAt(j))) {
             j++;
-            if (j < visitor.size && CharTest
-                    .isExponentSign(visitor.code.charAt(j))) j++;
+            if (j < visitor.size && isExponentSign(visitor.code.charAt(j))) j++;
 
             j = tokenizeDecimalSequence(j);
         }
 
-        if (j < visitor.size && CharTest.
-                isComplexDelimiter(visitor.code.charAt(j))) j++;
+        if (j < visitor.size && isComplexDelimiter(visitor.code.charAt(j))) j++;
 
         var s = visitor.code.substring(visitor.i, j);
 
@@ -396,11 +393,11 @@ public class Tokenizer {
     private boolean tokenizeNumber() {
 
         // delegate to other methods if literal is in another base
-        if (CharTest.isHexLead(visitor.p2)) {
+        if (isHexLead(visitor.p2)) {
             return tokenizeHex();
-        } else if (CharTest.isBinLead(visitor.p2)) {
+        } else if (isBinLead(visitor.p2)) {
             return tokenizeBin();
-        } else if (CharTest.isOctLead(visitor.p2)) {
+        } else if (isOctLead(visitor.p2)) {
             return tokenizeOct();
         } else {
             return tokenizeDecimalNumber();

@@ -70,7 +70,7 @@ public abstract class DisjunctionRule implements TreeStringElem {
 
     @Override
     public final boolean equals(Object obj) {
-        if (obj instanceof ConjunctionRule) {
+        if (obj instanceof DisjunctionRule) {
             validate();
             return computedRule.fastEquals(obj);
         }
