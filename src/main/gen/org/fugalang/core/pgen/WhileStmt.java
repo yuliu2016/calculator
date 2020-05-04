@@ -66,7 +66,7 @@ public final class WhileStmt extends NodeWrapper {
         result = parseTree.consumeToken("while");
         result = result && NamedexprExpr.parse(parseTree, level + 1);
         result = result && Suite.parse(parseTree, level + 1);
-        WhileStmt4.parse(parseTree, level + 1);
+        if (result) WhileStmt4.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);
         return result;

@@ -50,7 +50,7 @@ public final class ReturnStmt extends NodeWrapper {
         boolean result;
 
         result = parseTree.consumeToken("return");
-        ExprlistStar.parse(parseTree, level + 1);
+        if (result) ExprlistStar.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);
         return result;

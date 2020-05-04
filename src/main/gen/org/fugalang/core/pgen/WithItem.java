@@ -51,7 +51,7 @@ public final class WithItem extends NodeWrapper {
         boolean result;
 
         result = Expr.parse(parseTree, level + 1);
-        WithItem2.parse(parseTree, level + 1);
+        if (result) WithItem2.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);
         return result;

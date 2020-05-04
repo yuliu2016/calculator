@@ -59,7 +59,7 @@ public final class ShiftExpr extends NodeWrapper {
 
         result = Sum.parse(parseTree, level + 1);
         parseTree.enterCollection();
-        while (true) {
+        if (result) while (true) {
             var pos = parseTree.position();
             if (!ShiftExpr2.parse(parseTree, level + 1) ||
                     parseTree.guardLoopExit(pos)) {

@@ -59,7 +59,7 @@ public final class BitwiseAnd extends NodeWrapper {
 
         result = ShiftExpr.parse(parseTree, level + 1);
         parseTree.enterCollection();
-        while (true) {
+        if (result) while (true) {
             var pos = parseTree.position();
             if (!BitwiseAnd2.parse(parseTree, level + 1) ||
                     parseTree.guardLoopExit(pos)) {

@@ -66,7 +66,7 @@ public final class DottedAsNames extends NodeWrapper {
 
         result = DottedAsName.parse(parseTree, level + 1);
         parseTree.enterCollection();
-        while (true) {
+        if (result) while (true) {
             var pos = parseTree.position();
             if (!DottedAsNames2.parse(parseTree, level + 1) ||
                     parseTree.guardLoopExit(pos)) {

@@ -54,7 +54,7 @@ public final class ExprStmt extends NodeWrapper {
         boolean result;
 
         result = ExprlistStar.parse(parseTree, level + 1);
-        ExprStmt2.parse(parseTree, level + 1);
+        if (result) ExprStmt2.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);
         return result;
@@ -119,7 +119,7 @@ public final class ExprStmt extends NodeWrapper {
 
             result = ExprStmt21.parse(parseTree, level + 1);
             parseTree.enterCollection();
-            while (true) {
+            if (result) while (true) {
                 var pos = parseTree.position();
                 if (!ExprStmt22.parse(parseTree, level + 1) ||
                         parseTree.guardLoopExit(pos)) {

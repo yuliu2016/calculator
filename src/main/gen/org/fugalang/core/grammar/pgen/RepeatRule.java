@@ -50,7 +50,7 @@ public final class RepeatRule extends NodeWrapper {
         boolean result;
 
         result = SubRule.parse(parseTree, level + 1);
-        RepeatRule2.parse(parseTree, level + 1);
+        if (result) RepeatRule2.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);
         return result;

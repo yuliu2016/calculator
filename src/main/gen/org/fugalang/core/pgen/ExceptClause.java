@@ -51,7 +51,7 @@ public final class ExceptClause extends NodeWrapper {
         boolean result;
 
         result = parseTree.consumeToken("except");
-        ExceptClause2.parse(parseTree, level + 1);
+        if (result) ExceptClause2.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);
         return result;
@@ -105,7 +105,7 @@ public final class ExceptClause extends NodeWrapper {
             boolean result;
 
             result = Expr.parse(parseTree, level + 1);
-            ExceptClause22.parse(parseTree, level + 1);
+            if (result) ExceptClause22.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);
             return result;

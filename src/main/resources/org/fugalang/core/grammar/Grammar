@@ -79,7 +79,7 @@ pipe_expr: atom_expr ('->' atom_expr)*
 
 # Atoms
 
-atom_expr: ["await"] atom trailer*
+atom_expr: atom # fixme ["await"] atom trailer*
 atom: compound_atom | simple_atom
 compound_atom: '(' [exprlist_comp] ')' | '[' [exprlist_comp_sub] ']' | '{' [dictorsetmaker] '}'
 simple_atom: NAME | NUMBER | STRING | 'None' | 'True' | 'False'
@@ -105,5 +105,5 @@ arglist: argument (',' argument)*  [',']
 argument: NAME [comp_for] | NAME ':=' expr | NAME '=' expr | '**' expr | '*' expr
 
 comp_iter: comp_for | comp_if
-comp_for: 'for' targets 'in' disjunction [comp_iter]
+comp_for: 'for' targets 'in' disjunction # fixme [comp_iter]
 comp_if: 'if' expr [comp_iter]

@@ -67,7 +67,7 @@ public final class EvalInput extends NodeWrapper {
 
         result = Exprlist.parse(parseTree, level + 1);
         parseTree.enterCollection();
-        while (true) {
+        if (result) while (true) {
             var pos = parseTree.position();
             if (!parseTree.consumeToken(TokenType.NEWLINE) ||
                     parseTree.guardLoopExit(pos)) {

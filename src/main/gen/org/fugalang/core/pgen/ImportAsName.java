@@ -51,7 +51,7 @@ public final class ImportAsName extends NodeWrapper {
         boolean result;
 
         result = parseTree.consumeToken(TokenType.NAME);
-        ImportAsName2.parse(parseTree, level + 1);
+        if (result) ImportAsName2.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);
         return result;

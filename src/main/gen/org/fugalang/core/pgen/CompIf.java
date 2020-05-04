@@ -58,7 +58,7 @@ public final class CompIf extends NodeWrapper {
 
         result = parseTree.consumeToken("if");
         result = result && Expr.parse(parseTree, level + 1);
-        CompIter.parse(parseTree, level + 1);
+        if (result) CompIter.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);
         return result;

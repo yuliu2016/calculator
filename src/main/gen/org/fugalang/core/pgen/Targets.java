@@ -66,7 +66,7 @@ public final class Targets extends NodeWrapper {
 
         result = Targets1.parse(parseTree, level + 1);
         parseTree.enterCollection();
-        while (true) {
+        if (result) while (true) {
             var pos = parseTree.position();
             if (!Targets2.parse(parseTree, level + 1) ||
                     parseTree.guardLoopExit(pos)) {

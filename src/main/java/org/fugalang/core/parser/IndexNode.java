@@ -2,7 +2,10 @@ package org.fugalang.core.parser;
 
 import java.util.List;
 
-public class IndexNode implements ParseTreeNode {
+class IndexNode implements ParseTreeNode {
+
+    static final ParseTreeNode NULL = new IndexNode(null, false,
+            false, null, null);
 
     private final List<ParseTreeNode> children;
 
@@ -25,6 +28,10 @@ public class IndexNode implements ParseTreeNode {
 
     @Override
     public ParseTreeNode getItem(int index) {
+        // Fixes the OR problem
+        if (index >= children.size()) {
+            return NULL; // fixme
+        }
         return children.get(index);
     }
 
@@ -35,7 +42,7 @@ public class IndexNode implements ParseTreeNode {
 
     @Override
     public boolean isPresent(ElementType type) {
-        return isPresent && element.getType() == type;
+        return isPresent && (element == null || element.getType() == type);
     }
 
     @Override
@@ -81,5 +88,16 @@ public class IndexNode implements ParseTreeNode {
             throw new ParserException("Cannot be a rule and a string");
         }
         return element.getValue();
+    }
+
+    @Override
+    public String toString() {
+        return "IndexNode{" +
+                "rule=" + rule +
+                ", isPresent=" + isPresent +
+                ", isCollection=" + isCollection +
+                ", element=" + element +
+                ", children=" + children +
+                '}';
     }
 }

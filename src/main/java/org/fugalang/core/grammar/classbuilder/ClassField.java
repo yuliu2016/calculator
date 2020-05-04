@@ -40,7 +40,7 @@ public class ClassField {
         return new ClassField(className, newFieldName, fieldType, resultSource);
     }
 
-    public String asFieldDeclaration(int index) {
+    public String asFieldDeclaration() {
         if (isSingular()) {
             return "";
         }
@@ -154,15 +154,18 @@ public class ClassField {
 
         return switch (fieldType) {
             case Required -> getRequiredStmt(resultExpr, ruleType, isFirst);
-            case Optional -> resultExpr + ";\n";
-            case OptionalList -> getLoopStmt("", resultExpr);
-            case RequiredList -> getLoopStmt(getRequiredStmt(resultExpr, ruleType, isFirst), resultExpr);
+            case Optional -> getOptionalStmt(resultExpr, isFirst);
+            case OptionalList -> getLoopStmt("", resultExpr, isFirst);
+            case RequiredList -> getLoopStmt(
+                    getRequiredStmt(resultExpr, ruleType, isFirst),
+                    resultExpr, isFirst);
         };
     }
 
-    private String getLoopStmt(String requiredStmt, String resultExpr) {
+    private String getLoopStmt(String requiredStmt, String resultExpr, boolean isFirst) {
+        var condition = isFirst ? "" : "if (result) ";
         return "parseTree.enterCollection();\n" + requiredStmt +
-                "while (true) {\n" +
+                condition + "while (true) {\n" +
                 "    var pos = parseTree.position();\n" +
                 "    if (!" + resultExpr + " ||\n" +
                 "            parseTree.guardLoopExit(pos)) {\n" +
@@ -170,6 +173,11 @@ public class ClassField {
                 "    }\n" +
                 "}\n" +
                 "parseTree.exitCollection();\n";
+    }
+
+    private String getOptionalStmt(String resultExpr, boolean isFirst) {
+        var condition = isFirst ? "" : "if (result) ";
+        return condition + resultExpr + ";\n";
     }
 
     private String getRequiredStmt(String resultExpr, RuleType ruleType, boolean isFirst) {

@@ -74,7 +74,7 @@ public final class WithStmt extends NodeWrapper {
         result = parseTree.consumeToken("with");
         result = result && WithItem.parse(parseTree, level + 1);
         parseTree.enterCollection();
-        while (true) {
+        if (result) while (true) {
             var pos = parseTree.position();
             if (!WithStmt3.parse(parseTree, level + 1) ||
                     parseTree.guardLoopExit(pos)) {

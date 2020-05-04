@@ -88,7 +88,7 @@ public final class IfStmt extends NodeWrapper {
         result = result && NamedexprExpr.parse(parseTree, level + 1);
         result = result && Suite.parse(parseTree, level + 1);
         parseTree.enterCollection();
-        while (true) {
+        if (result) while (true) {
             var pos = parseTree.position();
             if (!IfStmt4.parse(parseTree, level + 1) ||
                     parseTree.guardLoopExit(pos)) {
@@ -96,7 +96,7 @@ public final class IfStmt extends NodeWrapper {
             }
         }
         parseTree.exitCollection();
-        IfStmt5.parse(parseTree, level + 1);
+        if (result) IfStmt5.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);
         return result;

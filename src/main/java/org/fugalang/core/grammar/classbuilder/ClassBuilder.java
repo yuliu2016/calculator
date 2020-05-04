@@ -154,9 +154,8 @@ public class ClassBuilder {
                 "    }\n\n");
 
         var empty = true;
-        for (int i = 0; i < fields.size(); i++) {
-            ClassField field = fields.get(i);
-            var declaration = field.asFieldDeclaration(i);
+        for (ClassField field : fields) {
+            var declaration = field.asFieldDeclaration();
             if (!declaration.isEmpty()) {
                 empty = false;
                 sb.append(declaration);

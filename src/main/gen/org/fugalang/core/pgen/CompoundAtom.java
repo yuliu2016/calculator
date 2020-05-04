@@ -131,7 +131,7 @@ public final class CompoundAtom extends NodeWrapper {
             boolean result;
 
             result = parseTree.consumeToken("(");
-            ExprlistComp.parse(parseTree, level + 1);
+            if (result) ExprlistComp.parse(parseTree, level + 1);
             result = result && parseTree.consumeToken(")");
 
             parseTree.exit(level, marker, result);
@@ -194,7 +194,7 @@ public final class CompoundAtom extends NodeWrapper {
             boolean result;
 
             result = parseTree.consumeToken("[");
-            ExprlistCompSub.parse(parseTree, level + 1);
+            if (result) ExprlistCompSub.parse(parseTree, level + 1);
             result = result && parseTree.consumeToken("]");
 
             parseTree.exit(level, marker, result);
@@ -257,7 +257,7 @@ public final class CompoundAtom extends NodeWrapper {
             boolean result;
 
             result = parseTree.consumeToken("{");
-            Dictorsetmaker.parse(parseTree, level + 1);
+            if (result) Dictorsetmaker.parse(parseTree, level + 1);
             result = result && parseTree.consumeToken("}");
 
             parseTree.exit(level, marker, result);

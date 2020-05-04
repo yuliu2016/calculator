@@ -66,7 +66,7 @@ public final class Subscriptlist extends NodeWrapper {
 
         result = Subscript.parse(parseTree, level + 1);
         parseTree.enterCollection();
-        while (true) {
+        if (result) while (true) {
             var pos = parseTree.position();
             if (!Subscriptlist2.parse(parseTree, level + 1) ||
                     parseTree.guardLoopExit(pos)) {

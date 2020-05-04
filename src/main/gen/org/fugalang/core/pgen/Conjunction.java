@@ -59,7 +59,7 @@ public final class Conjunction extends NodeWrapper {
 
         result = Inversion.parse(parseTree, level + 1);
         parseTree.enterCollection();
-        while (true) {
+        if (result) while (true) {
             var pos = parseTree.position();
             if (!Conjunction2.parse(parseTree, level + 1) ||
                     parseTree.guardLoopExit(pos)) {

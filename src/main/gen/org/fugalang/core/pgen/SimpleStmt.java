@@ -66,7 +66,7 @@ public final class SimpleStmt extends NodeWrapper {
 
         result = SmallStmt.parse(parseTree, level + 1);
         parseTree.enterCollection();
-        while (true) {
+        if (result) while (true) {
             var pos = parseTree.position();
             if (!SimpleStmt2.parse(parseTree, level + 1) ||
                     parseTree.guardLoopExit(pos)) {

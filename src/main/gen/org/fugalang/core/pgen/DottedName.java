@@ -60,7 +60,7 @@ public final class DottedName extends NodeWrapper {
 
         result = parseTree.consumeToken(TokenType.NAME);
         parseTree.enterCollection();
-        while (true) {
+        if (result) while (true) {
             var pos = parseTree.position();
             if (!DottedName2.parse(parseTree, level + 1) ||
                     parseTree.guardLoopExit(pos)) {

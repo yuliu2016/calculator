@@ -203,8 +203,8 @@ public final class TryStmt extends NodeWrapper {
                 }
             }
             parseTree.exitCollection();
-            TryStmt312.parse(parseTree, level + 1);
-            TryStmt313.parse(parseTree, level + 1);
+            if (result) TryStmt312.parse(parseTree, level + 1);
+            if (result) TryStmt313.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);
             return result;

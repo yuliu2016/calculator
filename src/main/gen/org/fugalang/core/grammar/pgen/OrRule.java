@@ -59,7 +59,7 @@ public final class OrRule extends NodeWrapper {
 
         result = AndRule.parse(parseTree, level + 1);
         parseTree.enterCollection();
-        while (true) {
+        if (result) while (true) {
             var pos = parseTree.position();
             if (!OrRule2.parse(parseTree, level + 1) ||
                     parseTree.guardLoopExit(pos)) {

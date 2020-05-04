@@ -59,7 +59,7 @@ public final class AndRule extends NodeWrapper {
 
         result = RepeatRule.parse(parseTree, level + 1);
         parseTree.enterCollection();
-        while (true) {
+        if (result) while (true) {
             var pos = parseTree.position();
             if (!AndRule2.parse(parseTree, level + 1) ||
                     parseTree.guardLoopExit(pos)) {

@@ -59,7 +59,7 @@ public final class Sum extends NodeWrapper {
 
         result = Term.parse(parseTree, level + 1);
         parseTree.enterCollection();
-        while (true) {
+        if (result) while (true) {
             var pos = parseTree.position();
             if (!Sum2.parse(parseTree, level + 1) ||
                     parseTree.guardLoopExit(pos)) {

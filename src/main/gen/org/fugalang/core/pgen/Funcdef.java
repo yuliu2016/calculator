@@ -65,7 +65,7 @@ public final class Funcdef extends NodeWrapper {
 
         result = parseTree.consumeToken("async");
         result = result && parseTree.consumeToken("def");
-        Varargslist.parse(parseTree, level + 1);
+        if (result) Varargslist.parse(parseTree, level + 1);
         result = result && Funcdef4.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);

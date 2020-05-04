@@ -146,7 +146,7 @@ public final class Trailer extends NodeWrapper {
             boolean result;
 
             result = parseTree.consumeToken("(");
-            Arglist.parse(parseTree, level + 1);
+            if (result) Arglist.parse(parseTree, level + 1);
             result = result && parseTree.consumeToken(")");
 
             parseTree.exit(level, marker, result);

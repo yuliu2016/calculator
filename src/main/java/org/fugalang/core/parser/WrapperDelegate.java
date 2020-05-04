@@ -30,7 +30,7 @@ class WrapperDelegate implements NodeDelegate {
     @Override
     public void addChoice(Object choice) {
         if (didBuildRule) {
-            throw new IllegalStateException("Node has already been built");
+            computeRuleFail("Node has already been built");
         }
         if (rule.getRuleType() == RuleType.Conjunction) {
             computeRuleFail("Cannot call addChoice with a conjunction rule");
@@ -51,7 +51,7 @@ class WrapperDelegate implements NodeDelegate {
     @Override
     public void addChoice(boolean value, String literal) {
         if (didBuildRule) {
-            throw new IllegalStateException("Node has already been built");
+            computeRuleFail("Node has already been built");
         }
         if (rule.getRuleType() == RuleType.Conjunction) {
             computeRuleFail("Cannot call addChoice with a conjunction rule");
@@ -60,7 +60,7 @@ class WrapperDelegate implements NodeDelegate {
         if (value) {
             if (chosenIndex > 0) {
                 computeRuleFail("The value at index " + index + " must be mutually exclusive" +
-                        "  with the value at index" + chosenIndex + " for rule " + rule);
+                        " with the value at index " + chosenIndex + " for rule " + rule);
             }
             chosenIndex = index;
             chosenComponent = "'" + literal + "'";
@@ -170,7 +170,8 @@ class WrapperDelegate implements NodeDelegate {
     }
 
     private static void computeRuleFail(String msg) {
-        throw new IllegalArgumentException(msg);
+        System.out.println(msg);
+//        throw new IllegalArgumentException(msg);
     }
 
     @Override

@@ -59,7 +59,7 @@ public final class Disjunction extends NodeWrapper {
 
         result = Conjunction.parse(parseTree, level + 1);
         parseTree.enterCollection();
-        while (true) {
+        if (result) while (true) {
             var pos = parseTree.position();
             if (!Disjunction2.parse(parseTree, level + 1) ||
                     parseTree.guardLoopExit(pos)) {

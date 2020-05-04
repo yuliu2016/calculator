@@ -66,7 +66,7 @@ public final class Arglist extends NodeWrapper {
 
         result = Argument.parse(parseTree, level + 1);
         parseTree.enterCollection();
-        while (true) {
+        if (result) while (true) {
             var pos = parseTree.position();
             if (!Arglist2.parse(parseTree, level + 1) ||
                     parseTree.guardLoopExit(pos)) {

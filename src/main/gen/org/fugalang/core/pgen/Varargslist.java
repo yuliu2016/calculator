@@ -71,9 +71,9 @@ public final class Varargslist extends NodeWrapper {
         boolean result;
 
         result = Vfpdef.parse(parseTree, level + 1);
-        Varargslist2.parse(parseTree, level + 1);
+        if (result) Varargslist2.parse(parseTree, level + 1);
         parseTree.enterCollection();
-        while (true) {
+        if (result) while (true) {
             var pos = parseTree.position();
             if (!Varargslist3.parse(parseTree, level + 1) ||
                     parseTree.guardLoopExit(pos)) {
@@ -191,7 +191,7 @@ public final class Varargslist extends NodeWrapper {
 
             result = parseTree.consumeToken(",");
             result = result && Vfpdef.parse(parseTree, level + 1);
-            Varargslist33.parse(parseTree, level + 1);
+            if (result) Varargslist33.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);
             return result;

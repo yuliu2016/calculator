@@ -59,7 +59,7 @@ public final class Comparison extends NodeWrapper {
 
         result = BitwiseOr.parse(parseTree, level + 1);
         parseTree.enterCollection();
-        while (true) {
+        if (result) while (true) {
             var pos = parseTree.position();
             if (!Comparison2.parse(parseTree, level + 1) ||
                     parseTree.guardLoopExit(pos)) {

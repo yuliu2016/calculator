@@ -66,7 +66,7 @@ public final class ExprlistStar extends NodeWrapper {
 
         result = ExprOrStar.parse(parseTree, level + 1);
         parseTree.enterCollection();
-        while (true) {
+        if (result) while (true) {
             var pos = parseTree.position();
             if (!ExprlistStar2.parse(parseTree, level + 1) ||
                     parseTree.guardLoopExit(pos)) {

@@ -59,7 +59,7 @@ public final class BitwiseXor extends NodeWrapper {
 
         result = BitwiseAnd.parse(parseTree, level + 1);
         parseTree.enterCollection();
-        while (true) {
+        if (result) while (true) {
             var pos = parseTree.position();
             if (!BitwiseXor2.parse(parseTree, level + 1) ||
                     parseTree.guardLoopExit(pos)) {

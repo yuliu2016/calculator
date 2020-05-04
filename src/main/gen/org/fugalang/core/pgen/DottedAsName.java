@@ -51,7 +51,7 @@ public final class DottedAsName extends NodeWrapper {
         boolean result;
 
         result = DottedName.parse(parseTree, level + 1);
-        DottedAsName2.parse(parseTree, level + 1);
+        if (result) DottedAsName2.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);
         return result;

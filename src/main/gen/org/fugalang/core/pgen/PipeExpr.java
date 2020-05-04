@@ -59,7 +59,7 @@ public final class PipeExpr extends NodeWrapper {
 
         result = AtomExpr.parse(parseTree, level + 1);
         parseTree.enterCollection();
-        while (true) {
+        if (result) while (true) {
             var pos = parseTree.position();
             if (!PipeExpr2.parse(parseTree, level + 1) ||
                     parseTree.guardLoopExit(pos)) {

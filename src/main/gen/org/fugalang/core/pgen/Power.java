@@ -50,7 +50,7 @@ public final class Power extends NodeWrapper {
         boolean result;
 
         result = PipeExpr.parse(parseTree, level + 1);
-        Power2.parse(parseTree, level + 1);
+        if (result) Power2.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);
         return result;

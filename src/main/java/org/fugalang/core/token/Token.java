@@ -25,7 +25,7 @@ public class Token implements ParserElement {
     @Override
     public String toString() {
         return "Token{" +
-                "type=" + type +
+                "type=" + type.getName() +
                 ", value='" + value + '\'' +
                 '}';
     }

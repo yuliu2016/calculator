@@ -59,7 +59,7 @@ public final class Term extends NodeWrapper {
 
         result = Factor.parse(parseTree, level + 1);
         parseTree.enterCollection();
-        while (true) {
+        if (result) while (true) {
             var pos = parseTree.position();
             if (!Term2.parse(parseTree, level + 1) ||
                     parseTree.guardLoopExit(pos)) {

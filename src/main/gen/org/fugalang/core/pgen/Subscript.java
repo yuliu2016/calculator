@@ -137,8 +137,8 @@ public final class Subscript extends NodeWrapper {
 
             Expr.parse(parseTree, level + 1);
             result = parseTree.consumeToken(":");
-            Expr.parse(parseTree, level + 1);
-            Sliceop.parse(parseTree, level + 1);
+            if (result) Expr.parse(parseTree, level + 1);
+            if (result) Sliceop.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);
             return result;

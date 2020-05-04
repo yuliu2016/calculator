@@ -66,7 +66,7 @@ public final class Exprlist extends NodeWrapper {
 
         result = Expr.parse(parseTree, level + 1);
         parseTree.enterCollection();
-        while (true) {
+        if (result) while (true) {
             var pos = parseTree.position();
             if (!Exprlist2.parse(parseTree, level + 1) ||
                     parseTree.guardLoopExit(pos)) {

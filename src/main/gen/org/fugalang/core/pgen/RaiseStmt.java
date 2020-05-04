@@ -50,7 +50,7 @@ public final class RaiseStmt extends NodeWrapper {
         boolean result;
 
         result = parseTree.consumeToken("raise");
-        RaiseStmt2.parse(parseTree, level + 1);
+        if (result) RaiseStmt2.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);
         return result;
@@ -104,7 +104,7 @@ public final class RaiseStmt extends NodeWrapper {
             boolean result;
 
             result = Expr.parse(parseTree, level + 1);
-            RaiseStmt22.parse(parseTree, level + 1);
+            if (result) RaiseStmt22.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);
             return result;

@@ -82,7 +82,7 @@ public final class ForStmt extends NodeWrapper {
         result = result && parseTree.consumeToken("in");
         result = result && Exprlist.parse(parseTree, level + 1);
         result = result && Suite.parse(parseTree, level + 1);
-        ForStmt6.parse(parseTree, level + 1);
+        if (result) ForStmt6.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);
         return result;

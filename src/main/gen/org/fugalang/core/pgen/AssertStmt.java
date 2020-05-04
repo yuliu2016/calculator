@@ -58,7 +58,7 @@ public final class AssertStmt extends NodeWrapper {
 
         result = parseTree.consumeToken("assert");
         result = result && Expr.parse(parseTree, level + 1);
-        AssertStmt3.parse(parseTree, level + 1);
+        if (result) AssertStmt3.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);
         return result;

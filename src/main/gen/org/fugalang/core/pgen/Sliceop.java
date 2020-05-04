@@ -50,7 +50,7 @@ public final class Sliceop extends NodeWrapper {
         boolean result;
 
         result = parseTree.consumeToken(":");
-        Expr.parse(parseTree, level + 1);
+        if (result) Expr.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);
         return result;

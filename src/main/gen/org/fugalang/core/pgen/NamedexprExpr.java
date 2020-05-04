@@ -51,7 +51,7 @@ public final class NamedexprExpr extends NodeWrapper {
         boolean result;
 
         result = parseTree.consumeToken(TokenType.NAME);
-        NamedexprExpr2.parse(parseTree, level + 1);
+        if (result) NamedexprExpr2.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);
         return result;

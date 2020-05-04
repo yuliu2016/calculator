@@ -153,7 +153,7 @@ public final class Argument extends NodeWrapper {
             boolean result;
 
             result = parseTree.consumeToken(TokenType.NAME);
-            CompFor.parse(parseTree, level + 1);
+            if (result) CompFor.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);
             return result;
