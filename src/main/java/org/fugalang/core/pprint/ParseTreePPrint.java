@@ -4,32 +4,43 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ParseTreePPrint implements TreeStringBuilder {
-    String name;
-    List<String> elems = new ArrayList<>();
-    int indent;
-    int curr_indent;
-    boolean recur = false;
+    private final List<String> elems = new ArrayList<>();
+    private final int indent;
+    private final int curr_indent;
+
+    private String name;
+    private boolean atLeastOneComp = false;
+    private String openBracket = "(";
+    private String closeBracket = ")";
+    private String delimiter = "";
+    private boolean isComplex = false;
 
     public ParseTreePPrint(TreeStringElem elem, int indent, int curr_indent) {
-        this.name = elem.getClass().getSimpleName();
+        this.name = null;
         this.indent = indent;
         this.curr_indent = indent < 0 ? 0 : curr_indent + indent;
         elem.buildString(this);
     }
 
     public String asString() {
-        if (indent < 0 || !recur) {
+        if (indent < 0 || !isComplex) {
             var maybeName = name == null ? "" : name + " ";
-            return "(" + maybeName + String.join(" ", elems) + ")";
+            return openBracket + maybeName +
+                    String.join(delimiter + " ", elems) + closeBracket;
         }
-        var maybeName = name == null ? "" : name ;
+        var maybeName = name == null ? "" : name;
         var sb = new StringBuilder();
         var idt = " ".repeat(curr_indent);
-        sb.append("(").append(maybeName).append('\n');
-        for (var elem : elems) {
-            sb.append(idt).append(elem).append("\n");
+        sb.append(openBracket).append(maybeName).append('\n');
+        for (int i = 0; i < elems.size(); i++) {
+            String elem = elems.get(i);
+            sb.append(idt).append(elem);
+            if (i < elems.size() - 1) {
+                sb.append(delimiter);
+            }
+            sb.append("\n");
         }
-        sb.append(" ".repeat(curr_indent - indent)).append(")");
+        sb.append(" ".repeat(curr_indent - indent)).append(closeBracket);
         return sb.toString();
     }
 
@@ -40,15 +51,41 @@ public class ParseTreePPrint implements TreeStringBuilder {
     }
 
     @Override
+    public TreeStringBuilder setOpenBracket(String openBracket) {
+        this.openBracket = openBracket;
+        return this;
+    }
+
+    @Override
+    public TreeStringBuilder setCloseBracket(String closeBracket) {
+        this.closeBracket = closeBracket;
+        return this;
+    }
+
+    @Override
+    public TreeStringBuilder setDelimiter(String delimiter) {
+        this.delimiter = delimiter;
+        return this;
+    }
+
+    @Override
     public TreeStringBuilder addString(String token) {
         elems.add("'" + token + "'");
         return this;
     }
 
     @Override
+    public TreeStringBuilder addUnquoted(String token) {
+        elems.add(token);
+        return this;
+    }
+
+    @Override
     public TreeStringBuilder addElem(TreeStringElem elem) {
-        recur = true;
-        elems.add(new ParseTreePPrint(elem, indent, curr_indent).asString());
+        var comp = new ParseTreePPrint(elem, indent, curr_indent);
+        elems.add(comp.asString());
+        isComplex = comp.isComplex || atLeastOneComp;
+        atLeastOneComp = true;
         return this;
     }
 

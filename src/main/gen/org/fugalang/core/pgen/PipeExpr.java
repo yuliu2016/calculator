@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * pipe_expr: 'atom_expr' ('->' 'atom_expr')*
+ * pipe_expr: 'factor' ('->' 'factor')*
  */
 public final class PipeExpr extends NodeWrapper {
 
@@ -26,14 +26,14 @@ public final class PipeExpr extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired(atomExpr());
+        addRequired(factor());
         addRequired(pipeExpr2List());
     }
 
-    public AtomExpr atomExpr() {
+    public Factor factor() {
         var element = getItem(0);
-        element.failIfAbsent(AtomExpr.RULE);
-        return AtomExpr.of(element);
+        element.failIfAbsent(Factor.RULE);
+        return Factor.of(element);
     }
 
     public List<PipeExpr2> pipeExpr2List() {
@@ -57,7 +57,7 @@ public final class PipeExpr extends NodeWrapper {
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
-        result = AtomExpr.parse(parseTree, level + 1);
+        result = Factor.parse(parseTree, level + 1);
         parseTree.enterCollection();
         if (result) while (true) {
             var pos = parseTree.position();
@@ -73,7 +73,7 @@ public final class PipeExpr extends NodeWrapper {
     }
 
     /**
-     * '->' 'atom_expr'
+     * '->' 'factor'
      */
     public static final class PipeExpr2 extends NodeWrapper {
 
@@ -91,7 +91,7 @@ public final class PipeExpr extends NodeWrapper {
         @Override
         protected void buildRule() {
             addRequired(isTokenPipe(), "->");
-            addRequired(atomExpr());
+            addRequired(factor());
         }
 
         public boolean isTokenPipe() {
@@ -100,10 +100,10 @@ public final class PipeExpr extends NodeWrapper {
             return element.asBoolean();
         }
 
-        public AtomExpr atomExpr() {
+        public Factor factor() {
             var element = getItem(1);
-            element.failIfAbsent(AtomExpr.RULE);
-            return AtomExpr.of(element);
+            element.failIfAbsent(Factor.RULE);
+            return Factor.of(element);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -114,7 +114,7 @@ public final class PipeExpr extends NodeWrapper {
             boolean result;
 
             result = parseTree.consumeToken("->");
-            result = result && AtomExpr.parse(parseTree, level + 1);
+            result = result && Factor.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);
             return result;

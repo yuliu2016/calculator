@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * set_maker: 'expr_or_star' ('comp_for' | (',' 'expr_or_star')* [','])
+ * set_maker: 'expr_or_star' ['comp_for' | (',' 'expr_or_star')+ [',']]
  */
 public final class SetMaker extends NodeWrapper {
 
@@ -25,7 +25,7 @@ public final class SetMaker extends NodeWrapper {
     @Override
     protected void buildRule() {
         addRequired(exprOrStar());
-        addRequired(setMaker2());
+        addOptional(setMaker2());
     }
 
     public ExprOrStar exprOrStar() {
@@ -36,8 +36,14 @@ public final class SetMaker extends NodeWrapper {
 
     public SetMaker2 setMaker2() {
         var element = getItem(1);
-        element.failIfAbsent(SetMaker2.RULE);
+        if (!element.isPresent(SetMaker2.RULE)) {
+            return null;
+        }
         return SetMaker2.of(element);
+    }
+
+    public boolean hasSetMaker2() {
+        return setMaker2() != null;
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -48,14 +54,14 @@ public final class SetMaker extends NodeWrapper {
         boolean result;
 
         result = ExprOrStar.parse(parseTree, level + 1);
-        result = result && SetMaker2.parse(parseTree, level + 1);
+        if (result) SetMaker2.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);
         return result;
     }
 
     /**
-     * 'comp_for' | (',' 'expr_or_star')* [',']
+     * 'comp_for' | (',' 'expr_or_star')+ [',']
      */
     public static final class SetMaker2 extends NodeWrapper {
 
@@ -116,7 +122,7 @@ public final class SetMaker extends NodeWrapper {
     }
 
     /**
-     * (',' 'expr_or_star')* [',']
+     * (',' 'expr_or_star')+ [',']
      */
     public static final class SetMaker22 extends NodeWrapper {
 
@@ -136,7 +142,7 @@ public final class SetMaker extends NodeWrapper {
         @Override
         protected void buildRule() {
             addRequired(setMaker221List());
-            addRequired(isTokenComma(), ",");
+            addOptional(isTokenComma(), ",");
         }
 
         public List<SetMaker221> setMaker221List() {
@@ -155,7 +161,6 @@ public final class SetMaker extends NodeWrapper {
 
         public boolean isTokenComma() {
             var element = getItem(1);
-            element.failIfAbsent();
             return element.asBoolean();
         }
 
@@ -167,6 +172,7 @@ public final class SetMaker extends NodeWrapper {
             boolean result;
 
             parseTree.enterCollection();
+            result = SetMaker221.parse(parseTree, level + 1);
             while (true) {
                 var pos = parseTree.position();
                 if (!SetMaker221.parse(parseTree, level + 1) ||
@@ -175,7 +181,7 @@ public final class SetMaker extends NodeWrapper {
                 }
             }
             parseTree.exitCollection();
-            result = parseTree.consumeToken(",");
+            if (result) parseTree.consumeToken(",");
 
             parseTree.exit(level, marker, result);
             return result;

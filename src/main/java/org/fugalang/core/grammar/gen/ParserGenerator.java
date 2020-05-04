@@ -267,7 +267,7 @@ public class ParserGenerator {
                         .prefixCap("isToken", convertedValue.getFieldName());
                 var resultSource = ResultSource.ofTokenLiteral(convertedValue.getSourceLiteral());
 
-                addRepeatField(className, cb, fieldName, repeatType, REQUIRED, resultSource);
+                addRepeatField(className, cb, fieldName, repeatType, isOptional, resultSource);
             } else {
                 var fieldName = convertedValue.getFieldName();
                 cb.addImport(tokenTypeClass);

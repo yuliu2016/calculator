@@ -3,7 +3,7 @@ package org.fugalang.core.pgen;
 import org.fugalang.core.parser.*;
 
 /**
- * atom_expr: 'atom'
+ * atom_expr: ['await'] 'atom'
  */
 public final class AtomExpr extends NodeWrapper {
 
@@ -20,11 +20,17 @@ public final class AtomExpr extends NodeWrapper {
 
     @Override
     protected void buildRule() {
+        addOptional(isTokenAwait(), "await");
         addRequired(atom());
     }
 
-    public Atom atom() {
+    public boolean isTokenAwait() {
         var element = getItem(0);
+        return element.asBoolean();
+    }
+
+    public Atom atom() {
+        var element = getItem(1);
         element.failIfAbsent(Atom.RULE);
         return Atom.of(element);
     }
@@ -36,6 +42,7 @@ public final class AtomExpr extends NodeWrapper {
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
+        parseTree.consumeToken("await");
         result = Atom.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);

@@ -108,4 +108,7 @@ square = def x => x * x
 
 [1,2,3].a -> [2,3].b
 
-# precedence is higher than power, but lower than subscripts and trailer
+2 + 5 -> square()
+-5 -> square()
+
+# precedence is lower than power and factor, but higher than addition and multiplication

@@ -3,7 +3,7 @@ package org.fugalang.core.pgen;
 import org.fugalang.core.parser.*;
 
 /**
- * power: 'pipe_expr' ['**' 'factor']
+ * power: 'atom_expr' ['**' 'factor']
  */
 public final class Power extends NodeWrapper {
 
@@ -20,14 +20,14 @@ public final class Power extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired(pipeExpr());
+        addRequired(atomExpr());
         addOptional(power2());
     }
 
-    public PipeExpr pipeExpr() {
+    public AtomExpr atomExpr() {
         var element = getItem(0);
-        element.failIfAbsent(PipeExpr.RULE);
-        return PipeExpr.of(element);
+        element.failIfAbsent(AtomExpr.RULE);
+        return AtomExpr.of(element);
     }
 
     public Power2 power2() {
@@ -49,7 +49,7 @@ public final class Power extends NodeWrapper {
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
-        result = PipeExpr.parse(parseTree, level + 1);
+        result = AtomExpr.parse(parseTree, level + 1);
         if (result) Power2.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);

@@ -29,10 +29,15 @@ class IndexNode implements ParseTreeNode {
     @Override
     public ParseTreeNode getItem(int index) {
         // Fixes the OR problem
-        if (index >= children.size()) {
+        if (children == null || index >= children.size()) {
             return NULL; // fixme
         }
         return children.get(index);
+    }
+
+    @Override
+    public boolean isPresent() {
+        return isPresent;
     }
 
     @Override
@@ -92,12 +97,11 @@ class IndexNode implements ParseTreeNode {
 
     @Override
     public String toString() {
-        return "IndexNode{" +
-                "rule=" + rule +
-                ", isPresent=" + isPresent +
-                ", isCollection=" + isCollection +
-                ", element=" + element +
-                ", children=" + children +
+        return "N{" +
+                (rule == null ? "" : "R=" + rule + ", ") +
+                "P=" + isPresent +
+                (element == null ? "" : ", E=" + element) +
+                (children == null ? "" : ", C=" + children) +
                 '}';
     }
 }

@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * dict_maker: 'dict_item' ('comp_for' | (',' 'dict_item')* [','])
+ * dict_maker: 'dict_item' ['comp_for' | (',' 'dict_item')+ [',']]
  */
 public final class DictMaker extends NodeWrapper {
 
@@ -25,7 +25,7 @@ public final class DictMaker extends NodeWrapper {
     @Override
     protected void buildRule() {
         addRequired(dictItem());
-        addRequired(dictMaker2());
+        addOptional(dictMaker2());
     }
 
     public DictItem dictItem() {
@@ -36,8 +36,14 @@ public final class DictMaker extends NodeWrapper {
 
     public DictMaker2 dictMaker2() {
         var element = getItem(1);
-        element.failIfAbsent(DictMaker2.RULE);
+        if (!element.isPresent(DictMaker2.RULE)) {
+            return null;
+        }
         return DictMaker2.of(element);
+    }
+
+    public boolean hasDictMaker2() {
+        return dictMaker2() != null;
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -48,14 +54,14 @@ public final class DictMaker extends NodeWrapper {
         boolean result;
 
         result = DictItem.parse(parseTree, level + 1);
-        result = result && DictMaker2.parse(parseTree, level + 1);
+        if (result) DictMaker2.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);
         return result;
     }
 
     /**
-     * 'comp_for' | (',' 'dict_item')* [',']
+     * 'comp_for' | (',' 'dict_item')+ [',']
      */
     public static final class DictMaker2 extends NodeWrapper {
 
@@ -116,7 +122,7 @@ public final class DictMaker extends NodeWrapper {
     }
 
     /**
-     * (',' 'dict_item')* [',']
+     * (',' 'dict_item')+ [',']
      */
     public static final class DictMaker22 extends NodeWrapper {
 
@@ -136,7 +142,7 @@ public final class DictMaker extends NodeWrapper {
         @Override
         protected void buildRule() {
             addRequired(dictMaker221List());
-            addRequired(isTokenComma(), ",");
+            addOptional(isTokenComma(), ",");
         }
 
         public List<DictMaker221> dictMaker221List() {
@@ -155,7 +161,6 @@ public final class DictMaker extends NodeWrapper {
 
         public boolean isTokenComma() {
             var element = getItem(1);
-            element.failIfAbsent();
             return element.asBoolean();
         }
 
@@ -167,6 +172,7 @@ public final class DictMaker extends NodeWrapper {
             boolean result;
 
             parseTree.enterCollection();
+            result = DictMaker221.parse(parseTree, level + 1);
             while (true) {
                 var pos = parseTree.position();
                 if (!DictMaker221.parse(parseTree, level + 1) ||
@@ -175,7 +181,7 @@ public final class DictMaker extends NodeWrapper {
                 }
             }
             parseTree.exitCollection();
-            result = parseTree.consumeToken(",");
+            if (result) parseTree.consumeToken(",");
 
             parseTree.exit(level, marker, result);
             return result;

@@ -72,19 +72,19 @@ bitwise_xor: bitwise_and ('^' bitwise_and)*
 bitwise_and: shift_expr ('&' shift_expr)*
 shift_expr: sum (('<<'|'>>') sum)*
 sum: term (('+'|'-') term)*
-term: factor (('*'|'@'|'/'|'%'|'//') factor)*
+term: pipe_expr (('*'|'@'|'/'|'%'|'//') pipe_expr)*
+pipe_expr: factor ('->' factor)*
 factor: ('+'|'-'|'~') factor | power
-power: pipe_expr ['**' factor]
-pipe_expr: atom_expr ('->' atom_expr)*
+power: atom_expr ['**' factor]
 
 # Atoms
 
-atom_expr: atom # fixme ["await"] atom trailer*
+atom_expr: ['await'] atom # fixme atom trailer*
 atom: compound_atom | simple_atom
 compound_atom: '(' [exprlist_comp] ')' | '[' [exprlist_comp_sub] ']' | '{' [dictorsetmaker] '}'
 simple_atom: NAME | NUMBER | STRING | 'None' | 'True' | 'False'
 
-exprlist_comp: expr_or_star ( comp_for | (',' expr_or_star)* [','])
+exprlist_comp: expr_or_star [comp_for | (',' expr_or_star)+ [',']]
 exprlist_comp_sub: exprlist_comp | subscript
 
 trailer: '(' [arglist] ')' | '[' subscriptlist ']' | '.' NAME | block_suite
@@ -98,8 +98,8 @@ exprlist: expr (',' expr)* [',']
 dictorsetmaker: dict_maker | set_maker
 
 dict_item: expr ':' expr | '**' bitwise_or
-dict_maker: dict_item (comp_for | (',' dict_item)* [','])
-set_maker: expr_or_star (comp_for | (',' expr_or_star)* [','])
+dict_maker: dict_item [comp_for | (',' dict_item)+ [',']]
+set_maker: expr_or_star [comp_for | (',' expr_or_star)+ [',']]
 
 arglist: argument (',' argument)*  [',']
 argument: NAME [comp_for] | NAME ':=' expr | NAME '=' expr | '**' expr | '*' expr

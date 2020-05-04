@@ -11,6 +11,8 @@ public interface NodeDelegate {
 
     void addRequired(Object value);
 
+    void addOptional(boolean value, String literal);
+
     void addOptional(Object value);
 
     String simpleString();

@@ -140,7 +140,7 @@ public class ClassField {
             }
             case Conjunction -> {
                 if (isOptionalSingle()) {
-                    return "addOptional(" + fieldName + "());";
+                    return "addOptional(" + callParams + ");";
                 } else {
                     return "addRequired(" + callParams + ");";
                 }

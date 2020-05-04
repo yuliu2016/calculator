@@ -1,7 +1,7 @@
 package org.fugalang.core.parser;
 
 import org.fugalang.core.grammar.SyntaxError;
-import org.fugalang.core.pgen.Atom;
+import org.fugalang.core.pgen.PipeExpr;
 import org.fugalang.core.pprint.ConsoleColor;
 import org.fugalang.core.pprint.TokenPPrint;
 import org.fugalang.core.token.Tokenizer;
@@ -19,7 +19,7 @@ class ParseTreeImpl implements ParseTree {
     ParseTreeFrame currentFrame;
     ParseTreeNode resultNode;
 
-    public <T extends NodeWrapper> T parse(
+    public <T> T parse(
             List<ParserElement> tokens,
             BiFunction<ParseTree, Integer, Boolean> start,
             Function<ParseTreeNode, T> converter
@@ -40,7 +40,7 @@ class ParseTreeImpl implements ParseTree {
     @Override
     public ParseTreeMarker enter(int level, ParserRule rule) {
         currentFrame = new ParseTreeFrame(currentFrame, position, level, rule);
-        System.out.println("Entering Frame: " + rule + " at level " + level);
+        System.out.println("  ".repeat(level) + "Entering Frame: " + rule + " at level " + level);
         return currentFrame;
     }
 
@@ -56,15 +56,21 @@ class ParseTreeImpl implements ParseTree {
         var childFrame = currentFrame;
         currentFrame = childFrame.getParentFrame();
 
+        var idt = "  ".repeat(childFrame.getLevel());
+
         if (success) {
-            System.out.println("Success in frame: " + childFrame.getRule() + " at level " + childFrame.getLevel());
+            System.out.println(idt +
+                    "Success in frame: " + childFrame.getRule() + " at level " +
+                    childFrame.getLevel() + " and position " + position);
             addNode(ofRule(childFrame));
         } else {
-            System.out.println("Failure in frame: " + childFrame.getRule() + " at level " + childFrame.getLevel());
+            System.out.println(idt +
+                    "Failure in frame: " + childFrame.getRule() + " at level " + childFrame.getLevel());
             addNode(ofFailedRule(childFrame));
             // rollback to the start
             if (currentFrame != null) {
-                position = currentFrame.position();
+                System.out.println(idt + "Rollback from " + position + " to " + childFrame.position());
+                position = childFrame.position();
             } else {
                 position = 0;
             }
@@ -87,7 +93,11 @@ class ParseTreeImpl implements ParseTree {
             return;
         }
         if (currentFrame.collection != null) {
-            currentFrame.collection.add(node);
+            // as opposed to a rule, collections should not
+            // contain a failed rule/node
+            if (node.isPresent()) {
+                currentFrame.collection.add(node);
+            }
         } else {
             currentFrame.getNodes().add(node);
         }
@@ -125,13 +135,16 @@ class ParseTreeImpl implements ParseTree {
             return false;
         }
         var token = tokens.get(position);
-        System.out.println("type: " + token.getValue());
         if (token.getType() == type) {
+            System.out.println("  ".repeat(currentFrame.getLevel()) +
+                    "Success in type " + type + ": " + token.getValue());
             addNode(ofElement(token));
             position++;
             return true;
         }
 
+        System.out.println("  ".repeat(currentFrame.getLevel()) +
+                "Failure in type " + type + ": " + token.getValue());
         addNode(IndexNode.NULL);
         return false;
     }
@@ -142,12 +155,16 @@ class ParseTreeImpl implements ParseTree {
             return false;
         }
         var token = tokens.get(position);
-        System.out.println("literal: " + token.getValue());
         if (token.getValue().equals(literal)) {
+            System.out.println("  ".repeat(currentFrame.getLevel()) +
+                    "Success in literal " + literal + ": " + token.getValue());
             addNode(ofElement(token));
             position++;
             return true;
         }
+
+        System.out.println("  ".repeat(currentFrame.getLevel()) +
+                "Failure in literal " + literal + ": " + token.getValue());
         addNode(IndexNode.NULL);
         return false;
     }
@@ -183,10 +200,10 @@ class ParseTreeImpl implements ParseTree {
 
                 System.out.print(TokenPPrint.format(result));
 
-                var cst = parser.parse(result, Atom::parse, Atom::of);
+                var cst = parser.parse(result, PipeExpr::parse, PipeExpr::of);
 
                 System.out.print(ConsoleColor.MAGENTA);
-                System.out.print(cst);
+                System.out.print(cst == null ? "null" : cst.prettyFormat(2));
                 System.out.println(ConsoleColor.END);
             } catch (SyntaxError e) {
                 System.out.print(ConsoleColor.RED);

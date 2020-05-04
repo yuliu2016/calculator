@@ -20,7 +20,7 @@ public final class Funcdef extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired(isTokenAsync(), "async");
+        addOptional(isTokenAsync(), "async");
         addRequired(isTokenDef(), "def");
         addOptional(varargslist());
         addRequired(funcdef4());
@@ -28,7 +28,6 @@ public final class Funcdef extends NodeWrapper {
 
     public boolean isTokenAsync() {
         var element = getItem(0);
-        element.failIfAbsent();
         return element.asBoolean();
     }
 
@@ -63,8 +62,8 @@ public final class Funcdef extends NodeWrapper {
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
-        result = parseTree.consumeToken("async");
-        result = result && parseTree.consumeToken("def");
+        parseTree.consumeToken("async");
+        result = parseTree.consumeToken("def");
         if (result) Varargslist.parse(parseTree, level + 1);
         result = result && Funcdef4.parse(parseTree, level + 1);
 

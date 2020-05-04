@@ -28,7 +28,7 @@ public final class DottedAsNames extends NodeWrapper {
     protected void buildRule() {
         addRequired(dottedAsName());
         addRequired(dottedAsNames2List());
-        addRequired(isTokenComma(), ",");
+        addOptional(isTokenComma(), ",");
     }
 
     public DottedAsName dottedAsName() {
@@ -53,7 +53,6 @@ public final class DottedAsNames extends NodeWrapper {
 
     public boolean isTokenComma() {
         var element = getItem(2);
-        element.failIfAbsent();
         return element.asBoolean();
     }
 
@@ -74,7 +73,7 @@ public final class DottedAsNames extends NodeWrapper {
             }
         }
         parseTree.exitCollection();
-        result = result && parseTree.consumeToken(",");
+        if (result) parseTree.consumeToken(",");
 
         parseTree.exit(level, marker, result);
         return result;

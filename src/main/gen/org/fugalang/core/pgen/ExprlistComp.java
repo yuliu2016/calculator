@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * exprlist_comp: 'expr_or_star' ('comp_for' | (',' 'expr_or_star')* [','])
+ * exprlist_comp: 'expr_or_star' ['comp_for' | (',' 'expr_or_star')+ [',']]
  */
 public final class ExprlistComp extends NodeWrapper {
 
@@ -25,7 +25,7 @@ public final class ExprlistComp extends NodeWrapper {
     @Override
     protected void buildRule() {
         addRequired(exprOrStar());
-        addRequired(exprlistComp2());
+        addOptional(exprlistComp2());
     }
 
     public ExprOrStar exprOrStar() {
@@ -36,8 +36,14 @@ public final class ExprlistComp extends NodeWrapper {
 
     public ExprlistComp2 exprlistComp2() {
         var element = getItem(1);
-        element.failIfAbsent(ExprlistComp2.RULE);
+        if (!element.isPresent(ExprlistComp2.RULE)) {
+            return null;
+        }
         return ExprlistComp2.of(element);
+    }
+
+    public boolean hasExprlistComp2() {
+        return exprlistComp2() != null;
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -48,14 +54,14 @@ public final class ExprlistComp extends NodeWrapper {
         boolean result;
 
         result = ExprOrStar.parse(parseTree, level + 1);
-        result = result && ExprlistComp2.parse(parseTree, level + 1);
+        if (result) ExprlistComp2.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);
         return result;
     }
 
     /**
-     * 'comp_for' | (',' 'expr_or_star')* [',']
+     * 'comp_for' | (',' 'expr_or_star')+ [',']
      */
     public static final class ExprlistComp2 extends NodeWrapper {
 
@@ -116,7 +122,7 @@ public final class ExprlistComp extends NodeWrapper {
     }
 
     /**
-     * (',' 'expr_or_star')* [',']
+     * (',' 'expr_or_star')+ [',']
      */
     public static final class ExprlistComp22 extends NodeWrapper {
 
@@ -136,7 +142,7 @@ public final class ExprlistComp extends NodeWrapper {
         @Override
         protected void buildRule() {
             addRequired(exprlistComp221List());
-            addRequired(isTokenComma(), ",");
+            addOptional(isTokenComma(), ",");
         }
 
         public List<ExprlistComp221> exprlistComp221List() {
@@ -155,7 +161,6 @@ public final class ExprlistComp extends NodeWrapper {
 
         public boolean isTokenComma() {
             var element = getItem(1);
-            element.failIfAbsent();
             return element.asBoolean();
         }
 
@@ -167,6 +172,7 @@ public final class ExprlistComp extends NodeWrapper {
             boolean result;
 
             parseTree.enterCollection();
+            result = ExprlistComp221.parse(parseTree, level + 1);
             while (true) {
                 var pos = parseTree.position();
                 if (!ExprlistComp221.parse(parseTree, level + 1) ||
@@ -175,7 +181,7 @@ public final class ExprlistComp extends NodeWrapper {
                 }
             }
             parseTree.exitCollection();
-            result = parseTree.consumeToken(",");
+            if (result) parseTree.consumeToken(",");
 
             parseTree.exit(level, marker, result);
             return result;

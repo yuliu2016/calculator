@@ -1,11 +1,11 @@
 package org.fugalang.core.parser;
 
+import org.fugalang.core.pprint.ListStringElem;
 import org.fugalang.core.pprint.TreeStringBuilder;
 import org.fugalang.core.pprint.TreeStringElem;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 class WrapperDelegate implements NodeDelegate {
     private final ParserRule rule;
@@ -63,7 +63,7 @@ class WrapperDelegate implements NodeDelegate {
                         " with the value at index " + chosenIndex + " for rule " + rule);
             }
             chosenIndex = index;
-            chosenComponent = "'" + literal + "'";
+            chosenComponent = literal;
         }
 
         index++;
@@ -72,7 +72,7 @@ class WrapperDelegate implements NodeDelegate {
     @Override
     public void addRequired(boolean value, String literal) {
         if (didBuildRule) {
-            throw new IllegalStateException("Node has already been built");
+            computeRuleFail("Node has already been built");
         }
         if (rule.getRuleType() == RuleType.Disjunction) {
             computeRuleFail("Cannot call addRequired with a disjunction rule");
@@ -83,16 +83,16 @@ class WrapperDelegate implements NodeDelegate {
                     rule + ", but it is false");
         }
 
-        components.add("'" + literal + "'");
+        components.add(literal);
         index++;
     }
 
     @Override
     public void addRequired(Object value) {
         if (didBuildRule) {
-            throw new IllegalStateException("Node has already been built");
+            computeRuleFail("Node has already been built");
         }
-        if (rule.getRuleType() == RuleType.Conjunction) {
+        if (rule.getRuleType() == RuleType.Disjunction) {
             computeRuleFail("Cannot call addRequired with a disjunction rule");
         }
 
@@ -108,13 +108,28 @@ class WrapperDelegate implements NodeDelegate {
     @Override
     public void addOptional(Object value) {
         if (didBuildRule) {
-            throw new IllegalStateException("Node has already been built");
+            computeRuleFail("Node has already been built");
         }
-        if (rule.getRuleType() == RuleType.Conjunction) {
+        if (rule.getRuleType() == RuleType.Disjunction) {
             computeRuleFail("Cannot call addOptional with a disjunction rule");
         }
 
         components.add(value);
+
+        index++;
+    }
+
+    @Override
+    public void addOptional(boolean value, String literal) {
+        if (didBuildRule) {
+            computeRuleFail("Node has already been built");
+        }
+        if (rule.getRuleType() == RuleType.Disjunction) {
+            computeRuleFail("Cannot call addOptional with a disjunction rule");
+        }
+
+        components.add(value ? literal : null);
+
         index++;
     }
 
@@ -131,8 +146,22 @@ class WrapperDelegate implements NodeDelegate {
             }
             case Conjunction -> {
                 var maybeName = rule.isExplicit() ? rule.getRuleName() + " " : "";
-                str = components.stream().map(Object::toString)
-                        .collect(Collectors.joining(" ", "(" + maybeName, ")"));
+                var sb = new StringBuilder();
+                sb.append("(");
+                sb.append(maybeName);
+                for (int i = 0; i < components.size(); i++) {
+                    Object component = components.get(i);
+                    if (component == null) {
+                        sb.append("null");
+                    } else {
+                        sb.append(component.toString());
+                    }
+                    if (i != components.size() - 1) {
+                        sb.append(" ");
+                    }
+                }
+                sb.append(")");
+                str = sb.toString();
             }
         }
         return str;
@@ -143,23 +172,25 @@ class WrapperDelegate implements NodeDelegate {
         switch (rule.getRuleType()) {
 
             case Disjunction -> {
-                if (rule.isExplicit()) {
-                    builder.setName(rule.getRuleName() + "#" + chosenIndex);
-                }
+                builder.setName(rule.getRuleName() + "#" + chosenIndex);
 
                 if (chosenComponent instanceof TreeStringElem) {
                     builder.addElem((TreeStringElem) chosenComponent);
+                } else if (chosenComponent instanceof List) {
+                    builder.addElem(new ListStringElem((List<?>) chosenComponent));
                 } else {
                     builder.addString(chosenComponent.toString());
                 }
             }
             case Conjunction -> {
-                if (rule.isExplicit()) {
-                    builder.setName(rule.getRuleName());
-                }
+                builder.setName(rule.getRuleName());
 
                 for (Object component : components) {
-                    if (component instanceof TreeStringElem) {
+                    if (component == null) {
+                        builder.addUnquoted("()");
+                    } else if (component instanceof List) {
+                        builder.addElem(new ListStringElem((List<?>) component));
+                    } else if (component instanceof TreeStringElem) {
                         builder.addElem((TreeStringElem) component);
                     } else {
                         builder.addString(component.toString());

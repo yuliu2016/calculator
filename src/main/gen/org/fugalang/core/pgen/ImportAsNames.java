@@ -28,7 +28,7 @@ public final class ImportAsNames extends NodeWrapper {
     protected void buildRule() {
         addRequired(importAsName());
         addRequired(importAsNames2List());
-        addRequired(isTokenComma(), ",");
+        addOptional(isTokenComma(), ",");
     }
 
     public ImportAsName importAsName() {
@@ -53,7 +53,6 @@ public final class ImportAsNames extends NodeWrapper {
 
     public boolean isTokenComma() {
         var element = getItem(2);
-        element.failIfAbsent();
         return element.asBoolean();
     }
 
@@ -74,7 +73,7 @@ public final class ImportAsNames extends NodeWrapper {
             }
         }
         parseTree.exitCollection();
-        result = result && parseTree.consumeToken(",");
+        if (result) parseTree.consumeToken(",");
 
         parseTree.exit(level, marker, result);
         return result;

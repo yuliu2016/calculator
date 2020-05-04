@@ -58,6 +58,10 @@ public abstract class NodeWrapper implements TreeStringElem {
         getDelegate().addOptional(value);
     }
 
+    protected void addOptional(boolean value, String literal) {
+        getDelegate().addOptional(value, literal);
+    }
+
     public ParseTreeNode getItem(int index) {
         return node.getItem(index);
     }

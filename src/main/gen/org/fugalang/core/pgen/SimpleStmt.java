@@ -28,7 +28,7 @@ public final class SimpleStmt extends NodeWrapper {
     protected void buildRule() {
         addRequired(smallStmt());
         addRequired(simpleStmt2List());
-        addRequired(isTokenSemicolon(), ";");
+        addOptional(isTokenSemicolon(), ";");
     }
 
     public SmallStmt smallStmt() {
@@ -53,7 +53,6 @@ public final class SimpleStmt extends NodeWrapper {
 
     public boolean isTokenSemicolon() {
         var element = getItem(2);
-        element.failIfAbsent();
         return element.asBoolean();
     }
 
@@ -74,7 +73,7 @@ public final class SimpleStmt extends NodeWrapper {
             }
         }
         parseTree.exitCollection();
-        result = result && parseTree.consumeToken(";");
+        if (result) parseTree.consumeToken(";");
 
         parseTree.exit(level, marker, result);
         return result;
