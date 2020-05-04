@@ -24,7 +24,7 @@ public final class TryStmt extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired(isTokenTry());
+        addRequired(isTokenTry(), "try");
         addRequired(suite());
         addRequired(tryStmt3());
     }
@@ -278,7 +278,7 @@ public final class TryStmt extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenElse());
+            addRequired(isTokenElse(), "else");
             addRequired(suite());
         }
 
@@ -327,7 +327,7 @@ public final class TryStmt extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenFinally());
+            addRequired(isTokenFinally(), "finally");
             addRequired(suite());
         }
 
@@ -376,7 +376,7 @@ public final class TryStmt extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenFinally());
+            addRequired(isTokenFinally(), "finally");
             addRequired(suite());
         }
 

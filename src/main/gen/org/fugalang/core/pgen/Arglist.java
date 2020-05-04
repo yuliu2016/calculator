@@ -28,7 +28,7 @@ public final class Arglist extends NodeWrapper {
     protected void buildRule() {
         addRequired(argument());
         addRequired(arglist2List());
-        addRequired(isTokenComma());
+        addRequired(isTokenComma(), ",");
     }
 
     public Argument argument() {
@@ -98,7 +98,7 @@ public final class Arglist extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenComma());
+            addRequired(isTokenComma(), ",");
             addRequired(argument());
         }
 

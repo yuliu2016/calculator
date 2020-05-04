@@ -81,7 +81,7 @@ public final class DictItem extends NodeWrapper {
         @Override
         protected void buildRule() {
             addRequired(expr());
-            addRequired(isTokenColon());
+            addRequired(isTokenColon(), ":");
             addRequired(expr1());
         }
 
@@ -137,7 +137,7 @@ public final class DictItem extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenPower());
+            addRequired(isTokenPower(), "**");
             addRequired(bitwiseOr());
         }
 

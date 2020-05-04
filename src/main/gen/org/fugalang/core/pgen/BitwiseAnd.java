@@ -90,7 +90,7 @@ public final class BitwiseAnd extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenBitAnd());
+            addRequired(isTokenBitAnd(), "&");
             addRequired(shiftExpr());
         }
 

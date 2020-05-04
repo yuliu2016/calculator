@@ -20,9 +20,9 @@ public final class ForStmt extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired(isTokenFor());
+        addRequired(isTokenFor(), "for");
         addRequired(targets());
-        addRequired(isTokenIn());
+        addRequired(isTokenIn(), "in");
         addRequired(exprlist());
         addRequired(suite());
         addOptional(forStmt6());
@@ -106,7 +106,7 @@ public final class ForStmt extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenElse());
+            addRequired(isTokenElse(), "else");
             addRequired(suite());
         }
 

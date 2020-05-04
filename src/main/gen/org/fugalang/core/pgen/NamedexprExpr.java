@@ -75,7 +75,7 @@ public final class NamedexprExpr extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenAsgnExpr());
+            addRequired(isTokenAsgnExpr(), ":=");
             addRequired(expr());
         }
 

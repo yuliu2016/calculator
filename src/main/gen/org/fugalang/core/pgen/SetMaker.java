@@ -136,7 +136,7 @@ public final class SetMaker extends NodeWrapper {
         @Override
         protected void buildRule() {
             addRequired(setMaker221List());
-            addRequired(isTokenComma());
+            addRequired(isTokenComma(), ",");
         }
 
         public List<SetMaker221> setMaker221List() {
@@ -200,7 +200,7 @@ public final class SetMaker extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenComma());
+            addRequired(isTokenComma(), ",");
             addRequired(exprOrStar());
         }
 

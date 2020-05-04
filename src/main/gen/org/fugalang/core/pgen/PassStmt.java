@@ -20,7 +20,7 @@ public final class PassStmt extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired(isTokenPass());
+        addRequired(isTokenPass(), "pass");
     }
 
     public boolean isTokenPass() {

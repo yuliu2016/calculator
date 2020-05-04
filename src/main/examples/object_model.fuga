@@ -78,3 +78,31 @@ Person = dataclass {
     age: int,
 
 }
+
+# for expressions
+[1:1000] -> map(def x: x, x ** 2) -> for x, squared if x != 10 {
+    print("The square of " + x + " is " + y)
+}
+
+a = {"Apple": [12, 4, 7], "Orange": [5, 9, 8], "Banana": [4, 9, -3]}
+
+# Python
+{k: [n for n in v if n % 2 == 1] for k, v in a.items() if k.endswith("e")}
+# Result: {"Apple": [7], "Orange": [5, 9]}
+
+# Fuga
+a -> items
+    -> for k, v if k.endswith("e")
+    -> map(def k, v: k, v -> for n if n % 2 == 1 -> list)
+    -> dict
+
+[[1], [2]] -> j * 5 for j in k for k -> list
+a -> j * 4 for j -> list
+
+c = {1: 2, 3: 4}
+
+c = [1:5] -> {x: x + 1 for x}
+
+[1:5] -> for(print) -> list
+
+for n in [1:5]: print(n)

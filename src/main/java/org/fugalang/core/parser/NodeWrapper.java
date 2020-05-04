@@ -41,12 +41,13 @@ public abstract class NodeWrapper implements TreeStringElem {
         getDelegate().addChoice(choice);
     }
 
-    protected void addChoice(boolean value) {
-        getDelegate().addChoice(value);
+
+    protected void addChoice(boolean value, String literal) {
+        getDelegate().addChoice(value, literal);
     }
 
-    protected void addRequired(boolean value) {
-        getDelegate().addRequired(value);
+    protected void addRequired(boolean value, String literal) {
+        getDelegate().addRequired(value, literal);
     }
 
     protected void addRequired(Object value) {

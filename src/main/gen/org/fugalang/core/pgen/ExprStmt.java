@@ -200,7 +200,7 @@ public final class ExprStmt extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenAssign());
+            addRequired(isTokenAssign(), "=");
             addRequired(exprlistStar());
         }
 

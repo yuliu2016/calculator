@@ -24,9 +24,9 @@ public final class SimpleAtom extends NodeWrapper {
         addChoice(name());
         addChoice(number());
         addChoice(string());
-        addChoice(isTokenNone());
-        addChoice(isTokenTrue());
-        addChoice(isTokenFalse());
+        addChoice(isTokenNone(), "None");
+        addChoice(isTokenTrue(), "True");
+        addChoice(isTokenFalse(), "False");
     }
 
     public String name() {

@@ -85,9 +85,9 @@ public final class BlockSuite extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenLbrace());
+            addRequired(isTokenLbrace(), "{");
             addRequired(simpleStmt());
-            addRequired(isTokenRbrace());
+            addRequired(isTokenRbrace(), "}");
         }
 
         public boolean isTokenLbrace() {
@@ -144,10 +144,10 @@ public final class BlockSuite extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenLbrace());
+            addRequired(isTokenLbrace(), "{");
             addRequired(newline());
             addRequired(stmtList());
-            addRequired(isTokenRbrace());
+            addRequired(isTokenRbrace(), "}");
         }
 
         public boolean isTokenLbrace() {

@@ -109,9 +109,9 @@ public final class Trailer extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenLpar());
+            addRequired(isTokenLpar(), "(");
             addOptional(arglist());
-            addRequired(isTokenRpar());
+            addRequired(isTokenRpar(), ")");
         }
 
         public boolean isTokenLpar() {
@@ -172,9 +172,9 @@ public final class Trailer extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenLsqb());
+            addRequired(isTokenLsqb(), "[");
             addRequired(subscriptlist());
-            addRequired(isTokenRsqb());
+            addRequired(isTokenRsqb(), "]");
         }
 
         public boolean isTokenLsqb() {
@@ -229,7 +229,7 @@ public final class Trailer extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenDot());
+            addRequired(isTokenDot(), ".");
             addRequired(name());
         }
 

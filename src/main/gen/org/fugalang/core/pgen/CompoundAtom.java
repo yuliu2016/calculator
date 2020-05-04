@@ -94,9 +94,9 @@ public final class CompoundAtom extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenLpar());
+            addRequired(isTokenLpar(), "(");
             addOptional(exprlistComp());
-            addRequired(isTokenRpar());
+            addRequired(isTokenRpar(), ")");
         }
 
         public boolean isTokenLpar() {
@@ -157,9 +157,9 @@ public final class CompoundAtom extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenLsqb());
+            addRequired(isTokenLsqb(), "[");
             addOptional(exprlistCompSub());
-            addRequired(isTokenRsqb());
+            addRequired(isTokenRsqb(), "]");
         }
 
         public boolean isTokenLsqb() {
@@ -220,9 +220,9 @@ public final class CompoundAtom extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenLbrace());
+            addRequired(isTokenLbrace(), "{");
             addOptional(dictorsetmaker());
-            addRequired(isTokenRbrace());
+            addRequired(isTokenRbrace(), "}");
         }
 
         public boolean isTokenLbrace() {

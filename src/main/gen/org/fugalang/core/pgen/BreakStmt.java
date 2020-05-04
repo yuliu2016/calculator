@@ -20,7 +20,7 @@ public final class BreakStmt extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired(isTokenBreak());
+        addRequired(isTokenBreak(), "break");
     }
 
     public boolean isTokenBreak() {

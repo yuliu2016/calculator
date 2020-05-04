@@ -20,7 +20,7 @@ public final class StarExpr extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired(isTokenTimes());
+        addRequired(isTokenTimes(), "*");
         addRequired(bitwiseOr());
     }
 

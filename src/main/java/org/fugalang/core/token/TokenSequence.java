@@ -1,5 +1,6 @@
 package org.fugalang.core.token;
 
+import org.fugalang.core.grammar.SyntaxError;
 import org.fugalang.core.parser.ElementType;
 import org.fugalang.core.parser.ParserElement;
 
@@ -53,8 +54,8 @@ public class TokenSequence {
      * Pop a delimiter newline when the opcode can be simplified
      *
      * @param typeToPop the type of token to look for
-     * @param n the number of characters to skip backwards
-     *          when attempting to pop the newline token
+     * @param n         the number of characters to skip backwards
+     *                  when attempting to pop the newline token
      */
     public void popDelimiter(ElementType typeToPop, int n) {
         // Fix: empty token sequence causes n < 1
@@ -63,7 +64,7 @@ public class TokenSequence {
         }
 
         if (n < 1) {
-            throw new TokenException("Cannot pop " + typeToPop
+            throw new SyntaxError("Cannot pop " + typeToPop
                     + " past the end of the string!");
         }
 
@@ -97,8 +98,14 @@ public class TokenSequence {
         // i must be increased from the last call to this function
         // otherwise breaks contract
         if (visitor.i == last_token_index) {
-            throw new TokenException("Cannot add token: Index stayed the same");
+            throw new SyntaxError("Cannot add token: Index stayed the same");
         }
+
+        var line_start = line_number;
+        var col_start = column;
+
+        var line_offset = 0;
+        var col_offset = 0;
 
         // iterate through the section of the string that
         // has been added to the token to search for newlines
@@ -111,24 +118,27 @@ public class TokenSequence {
                 line_number++;
 
                 if (i == visitor.i) {
-                    // Fix: exit early to ensure that newlines are on the right line
-                    var token = new Token(line_number - 1, column + 1, token_type, token_value);
-                    tokens.add(token);
-                    last_token_index = visitor.i;
-                    column = 0;
-
-                    return;
+                    line_offset = -1;
+                    col_offset = 1;
                 }
-
                 column = 0;
             } else {
                 column++;
             }
         }
 
-        last_token_index = visitor.i;
-        var token = new Token(line_number, column, token_type, token_value);
 
+        var token = new Token(
+                token_type,
+                token_value,
+                last_token_index,
+                line_start,
+                line_number + line_offset,
+                col_start,
+                column + col_offset
+        );
         tokens.add(token);
+
+        last_token_index = visitor.i;
     }
 }

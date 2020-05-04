@@ -20,7 +20,7 @@ public final class WhileStmt extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired(isTokenWhile());
+        addRequired(isTokenWhile(), "while");
         addRequired(namedexprExpr());
         addRequired(suite());
         addOptional(whileStmt4());
@@ -90,7 +90,7 @@ public final class WhileStmt extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenElse());
+            addRequired(isTokenElse(), "else");
             addRequired(suite());
         }
 

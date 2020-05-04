@@ -20,9 +20,9 @@ public final class CompFor extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired(isTokenFor());
+        addRequired(isTokenFor(), "for");
         addRequired(targets());
-        addRequired(isTokenIn());
+        addRequired(isTokenIn(), "in");
         addRequired(disjunction());
         addOptional(compIter());
     }

@@ -179,7 +179,7 @@ public final class Argument extends NodeWrapper {
         @Override
         protected void buildRule() {
             addRequired(name());
-            addRequired(isTokenAsgnExpr());
+            addRequired(isTokenAsgnExpr(), ":=");
             addRequired(expr());
         }
 
@@ -236,7 +236,7 @@ public final class Argument extends NodeWrapper {
         @Override
         protected void buildRule() {
             addRequired(name());
-            addRequired(isTokenAssign());
+            addRequired(isTokenAssign(), "=");
             addRequired(expr());
         }
 
@@ -292,7 +292,7 @@ public final class Argument extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenPower());
+            addRequired(isTokenPower(), "**");
             addRequired(expr());
         }
 
@@ -341,7 +341,7 @@ public final class Argument extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenTimes());
+            addRequired(isTokenTimes(), "*");
             addRequired(expr());
         }
 

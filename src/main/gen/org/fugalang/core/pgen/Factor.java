@@ -129,9 +129,9 @@ public final class Factor extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addChoice(isTokenPlus());
-            addChoice(isTokenMinus());
-            addChoice(isTokenBitNot());
+            addChoice(isTokenPlus(), "+");
+            addChoice(isTokenMinus(), "-");
+            addChoice(isTokenBitNot(), "~");
         }
 
         public boolean isTokenPlus() {

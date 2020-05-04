@@ -21,7 +21,7 @@ public final class ExceptClause extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired(isTokenExcept());
+        addRequired(isTokenExcept(), "except");
         addOptional(exceptClause2());
     }
 
@@ -130,7 +130,7 @@ public final class ExceptClause extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenAs());
+            addRequired(isTokenAs(), "as");
             addRequired(name());
         }
 

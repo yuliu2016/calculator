@@ -80,7 +80,7 @@ public final class Suite extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenColon());
+            addRequired(isTokenColon(), ":");
             addRequired(simpleStmt());
         }
 

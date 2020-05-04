@@ -81,7 +81,7 @@ public final class Subscript extends NodeWrapper {
         @Override
         protected void buildRule() {
             addOptional(expr());
-            addRequired(isTokenColon());
+            addRequired(isTokenColon(), ":");
             addOptional(expr1());
             addOptional(sliceop());
         }

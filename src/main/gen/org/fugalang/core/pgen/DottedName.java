@@ -91,7 +91,7 @@ public final class DottedName extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenDot());
+            addRequired(isTokenDot(), ".");
             addRequired(name());
         }
 

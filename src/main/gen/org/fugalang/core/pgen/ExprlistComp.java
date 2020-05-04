@@ -136,7 +136,7 @@ public final class ExprlistComp extends NodeWrapper {
         @Override
         protected void buildRule() {
             addRequired(exprlistComp221List());
-            addRequired(isTokenComma());
+            addRequired(isTokenComma(), ",");
         }
 
         public List<ExprlistComp221> exprlistComp221List() {
@@ -200,7 +200,7 @@ public final class ExprlistComp extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenComma());
+            addRequired(isTokenComma(), ",");
             addRequired(exprOrStar());
         }
 

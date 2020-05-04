@@ -20,7 +20,7 @@ public final class ContinueStmt extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired(isTokenContinue());
+        addRequired(isTokenContinue(), "continue");
     }
 
     public boolean isTokenContinue() {

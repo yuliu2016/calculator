@@ -74,7 +74,7 @@ public final class Power extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenPower());
+            addRequired(isTokenPower(), "**");
             addRequired(factor());
         }
 

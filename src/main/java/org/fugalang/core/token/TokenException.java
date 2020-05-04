@@ -1,6 +1,6 @@
 package org.fugalang.core.token;
 
-@SuppressWarnings("unused")
+@Deprecated(forRemoval = true)
 public class TokenException extends RuntimeException {
 
     public TokenException() {

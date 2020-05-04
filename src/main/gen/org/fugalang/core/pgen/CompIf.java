@@ -20,7 +20,7 @@ public final class CompIf extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired(isTokenIf());
+        addRequired(isTokenIf(), "if");
         addRequired(expr());
         addOptional(compIter());
     }

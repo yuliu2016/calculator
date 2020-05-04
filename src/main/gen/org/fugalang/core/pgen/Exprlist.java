@@ -28,7 +28,7 @@ public final class Exprlist extends NodeWrapper {
     protected void buildRule() {
         addRequired(expr());
         addRequired(exprlist2List());
-        addRequired(isTokenComma());
+        addRequired(isTokenComma(), ",");
     }
 
     public Expr expr() {
@@ -98,7 +98,7 @@ public final class Exprlist extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenComma());
+            addRequired(isTokenComma(), ",");
             addRequired(expr());
         }
 

@@ -104,7 +104,7 @@ public final class Varargslist extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenAssign());
+            addRequired(isTokenAssign(), "=");
             addRequired(expr());
         }
 
@@ -153,7 +153,7 @@ public final class Varargslist extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenComma());
+            addRequired(isTokenComma(), ",");
             addRequired(vfpdef());
             addOptional(varargslist33());
         }
@@ -216,7 +216,7 @@ public final class Varargslist extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenAssign());
+            addRequired(isTokenAssign(), "=");
             addRequired(expr());
         }
 

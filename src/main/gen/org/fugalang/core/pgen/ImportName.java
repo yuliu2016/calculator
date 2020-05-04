@@ -20,7 +20,7 @@ public final class ImportName extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired(isTokenImport());
+        addRequired(isTokenImport(), "import");
         addRequired(dottedAsNames());
     }
 

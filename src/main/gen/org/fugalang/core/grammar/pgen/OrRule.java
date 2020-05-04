@@ -90,7 +90,7 @@ public final class OrRule extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenOr());
+            addRequired(isTokenOr(), "|");
             addRequired(andRule());
         }
 

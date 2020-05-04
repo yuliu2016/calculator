@@ -74,8 +74,8 @@ public final class RepeatRule extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addChoice(isTokenStar());
-            addChoice(isTokenPlus());
+            addChoice(isTokenStar(), "*");
+            addChoice(isTokenPlus(), "+");
         }
 
         public boolean isTokenStar() {

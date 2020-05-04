@@ -136,7 +136,7 @@ public final class DictMaker extends NodeWrapper {
         @Override
         protected void buildRule() {
             addRequired(dictMaker221List());
-            addRequired(isTokenComma());
+            addRequired(isTokenComma(), ",");
         }
 
         public List<DictMaker221> dictMaker221List() {
@@ -200,7 +200,7 @@ public final class DictMaker extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenComma());
+            addRequired(isTokenComma(), ",");
             addRequired(dictItem());
         }
 

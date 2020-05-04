@@ -20,8 +20,8 @@ public final class Funcdef extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired(isTokenAsync());
-        addRequired(isTokenDef());
+        addRequired(isTokenAsync(), "async");
+        addRequired(isTokenDef(), "def");
         addOptional(varargslist());
         addRequired(funcdef4());
     }
@@ -151,7 +151,7 @@ public final class Funcdef extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenColon());
+            addRequired(isTokenColon(), ":");
             addRequired(expr());
         }
 

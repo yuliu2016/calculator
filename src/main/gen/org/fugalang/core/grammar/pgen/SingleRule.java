@@ -22,9 +22,9 @@ public final class SingleRule extends NodeWrapper {
     @Override
     protected void buildRule() {
         addRequired(token());
-        addRequired(isTokenColon());
+        addRequired(isTokenColon(), ":");
         addRequired(orRule());
-        addRequired(isTokenNewline());
+        addRequired(isTokenNewline(), "\n");
     }
 
     public String token() {

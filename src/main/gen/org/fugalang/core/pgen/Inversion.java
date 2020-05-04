@@ -80,7 +80,7 @@ public final class Inversion extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenNot());
+            addRequired(isTokenNot(), "not");
             addRequired(inversion());
         }
 

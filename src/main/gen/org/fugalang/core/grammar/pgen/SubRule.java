@@ -95,9 +95,9 @@ public final class SubRule extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenLpar());
+            addRequired(isTokenLpar(), "(");
             addRequired(orRule());
-            addRequired(isTokenRpar());
+            addRequired(isTokenRpar(), ")");
         }
 
         public boolean isTokenLpar() {
@@ -152,9 +152,9 @@ public final class SubRule extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenLsqb());
+            addRequired(isTokenLsqb(), "[");
             addRequired(orRule());
-            addRequired(isTokenRsqb());
+            addRequired(isTokenRsqb(), "]");
         }
 
         public boolean isTokenLsqb() {

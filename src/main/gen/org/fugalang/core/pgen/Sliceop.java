@@ -20,7 +20,7 @@ public final class Sliceop extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired(isTokenColon());
+        addRequired(isTokenColon(), ":");
         addOptional(expr());
     }
 

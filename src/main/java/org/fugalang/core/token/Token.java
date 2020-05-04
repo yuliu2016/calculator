@@ -4,25 +4,29 @@ import org.fugalang.core.parser.ElementType;
 import org.fugalang.core.parser.ParserElement;
 
 public class Token implements ParserElement {
-    private final int line;
-    private final int column;
     private final ElementType type;
     private final String value;
+    private final int index;
+    private final int lineStart;
+    private final int lineEnd;
+    private final int columnStart;
+    private final int columnEnd;
 
-    public Token(int line, int column, ElementType type, String value) {
-        this.line = line;
-        this.column = column;
+    public Token(ElementType type, String value, int index, int lineStart, int lineEnd, int columnStart, int columnEnd) {
         this.type = type;
         this.value = value;
+        this.index = index;
+        this.lineStart = lineStart;
+        this.lineEnd = lineEnd;
+        this.columnStart = columnStart;
+        this.columnEnd = columnEnd;
     }
 
     @Override
     public String toString() {
         return "Token{" +
-                "line=" + line +
-                ", column=" + column +
-                ", type=" + getType() +
-                ", value=" + getValue() +
+                "type=" + type +
+                ", value='" + value + '\'' +
                 '}';
     }
 
@@ -33,27 +37,27 @@ public class Token implements ParserElement {
 
     @Override
     public int getIndex() {
-        throw new UnsupportedOperationException();
+        return index;
     }
 
     @Override
     public int getLineStart() {
-        return line;
+        return lineStart;
     }
 
     @Override
     public int getLineEnd() {
-        return column;
+        return lineEnd;
     }
 
     @Override
     public int getColumnStart() {
-        return 0;
+        return columnStart;
     }
 
     @Override
     public int getColumnEnd() {
-        return 0;
+        return columnEnd;
     }
 
     @Override

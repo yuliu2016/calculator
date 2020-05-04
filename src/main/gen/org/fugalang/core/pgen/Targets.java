@@ -28,7 +28,7 @@ public final class Targets extends NodeWrapper {
     protected void buildRule() {
         addRequired(targets1());
         addRequired(targets2List());
-        addRequired(isTokenComma());
+        addRequired(isTokenComma(), ",");
     }
 
     public Targets1 targets1() {
@@ -159,7 +159,7 @@ public final class Targets extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenComma());
+            addRequired(isTokenComma(), ",");
             addRequired(targets22());
         }
 

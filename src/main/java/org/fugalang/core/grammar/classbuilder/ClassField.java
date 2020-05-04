@@ -54,7 +54,7 @@ public class ClassField {
     }
 
     private String asGetterBody(RuleType ruleType, int index) {
-        return switch (resultSource.getSourceType()) {
+        return switch (resultSource.getType()) {
             case Class -> {
                 if (ruleType == RuleType.Conjunction && fieldType == FieldType.Required) {
                     yield "        var element = getItem(" + index + ");\n" +
@@ -74,7 +74,7 @@ public class ClassField {
             case TokenType -> {
                 if (ruleType == RuleType.Conjunction && fieldType == FieldType.Required) {
                     yield "        var element = getItem(" + index + ");\n" +
-                            "        element.failIfAbsent("  + resultSource.getValue() + ");\n" +
+                            "        element.failIfAbsent(" + resultSource.getValue() + ");\n" +
                             "        return element.asString();\n";
                 }
                 if (isSingular()) {
@@ -127,15 +127,22 @@ public class ClassField {
     }
 
     public String asRuleStmt(RuleType ruleType) {
+        String callParams;
+        if (resultSource.getType() == SourceType.TokenLiteral && isSingular()) {
+            callParams = fieldName + "(), \"" + resultSource.getValue() + "\"";
+        } else {
+            callParams = fieldName + "()";
+        }
+
         switch (ruleType) {
             case Disjunction -> {
-                return "addChoice(" + fieldName + "());";
+                return "addChoice(" + callParams + ");";
             }
             case Conjunction -> {
                 if (isOptionalSingle()) {
                     return "addOptional(" + fieldName + "());";
                 } else {
-                    return "addRequired(" + fieldName + "());";
+                    return "addRequired(" + callParams + ");";
                 }
             }
             default -> throw new IllegalArgumentException("ClassField does not support RuleType" + ruleType);
@@ -175,7 +182,7 @@ public class ClassField {
     }
 
     private String getResultExpr() {
-        return switch (resultSource.getSourceType()) {
+        return switch (resultSource.getType()) {
             case Class -> resultSource.getValue() + ".parse(parseTree, level + 1)";
             case TokenType -> "parseTree.consumeToken(" + resultSource.getValue() + ")";
             case TokenLiteral -> "parseTree.consumeToken(\"" + resultSource.getValue() + "\")";

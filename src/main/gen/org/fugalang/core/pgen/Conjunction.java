@@ -90,7 +90,7 @@ public final class Conjunction extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenAnd());
+            addRequired(isTokenAnd(), "and");
             addRequired(inversion());
         }
 

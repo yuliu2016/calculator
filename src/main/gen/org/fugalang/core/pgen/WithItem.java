@@ -75,7 +75,7 @@ public final class WithItem extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenAs());
+            addRequired(isTokenAs(), "as");
             addRequired(name());
         }
 

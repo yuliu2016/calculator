@@ -139,8 +139,8 @@ public final class Sum extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addChoice(isTokenPlus());
-            addChoice(isTokenMinus());
+            addChoice(isTokenPlus(), "+");
+            addChoice(isTokenMinus(), "-");
         }
 
         public boolean isTokenPlus() {

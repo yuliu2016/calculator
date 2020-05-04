@@ -26,7 +26,7 @@ public final class WithStmt extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired(isTokenWith());
+        addRequired(isTokenWith(), "with");
         addRequired(withItem());
         addRequired(withStmt3List());
         addRequired(suite());
@@ -106,7 +106,7 @@ public final class WithStmt extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenComma());
+            addRequired(isTokenComma(), ",");
             addRequired(withItem());
         }
 

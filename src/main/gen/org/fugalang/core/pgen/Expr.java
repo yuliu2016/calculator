@@ -94,11 +94,11 @@ public final class Expr extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenIf());
+            addRequired(isTokenIf(), "if");
             addRequired(disjunction());
-            addRequired(isTokenTernery());
+            addRequired(isTokenTernery(), "?");
             addRequired(disjunction1());
-            addRequired(isTokenElse());
+            addRequired(isTokenElse(), "else");
             addRequired(expr());
         }
 

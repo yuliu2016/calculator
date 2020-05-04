@@ -90,7 +90,7 @@ public final class Disjunction extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenOr());
+            addRequired(isTokenOr(), "or");
             addRequired(conjunction());
         }
 

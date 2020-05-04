@@ -20,7 +20,7 @@ public final class RaiseStmt extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired(isTokenRaise());
+        addRequired(isTokenRaise(), "raise");
         addOptional(raiseStmt2());
     }
 
@@ -129,7 +129,7 @@ public final class RaiseStmt extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenFrom());
+            addRequired(isTokenFrom(), "from");
             addRequired(expr());
         }
 

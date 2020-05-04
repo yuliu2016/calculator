@@ -28,7 +28,7 @@ public final class ImportAsNames extends NodeWrapper {
     protected void buildRule() {
         addRequired(importAsName());
         addRequired(importAsNames2List());
-        addRequired(isTokenComma());
+        addRequired(isTokenComma(), ",");
     }
 
     public ImportAsName importAsName() {
@@ -98,7 +98,7 @@ public final class ImportAsNames extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenComma());
+            addRequired(isTokenComma(), ",");
             addRequired(importAsName());
         }
 

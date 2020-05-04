@@ -29,18 +29,13 @@ public class IndexNode implements ParseTreeNode {
     }
 
     @Override
-    public boolean isPresent() {
-        return isPresent;
-    }
-
-    @Override
     public boolean isPresent(ParserRule rule) {
-        return false;
+        return isPresent && this.rule == rule;
     }
 
     @Override
     public boolean isPresent(ElementType type) {
-        return false;
+        return isPresent && element.getType() == type;
     }
 
     @Override
@@ -74,11 +69,17 @@ public class IndexNode implements ParseTreeNode {
 
     @Override
     public boolean asBoolean() {
+        if (rule != null) {
+            throw new ParserException("Cannot be a rule and a boolean");
+        }
         return isPresent;
     }
 
     @Override
     public String asString() {
+        if (rule != null) {
+            throw new ParserException("Cannot be a rule and a string");
+        }
         return element.getValue();
     }
 }

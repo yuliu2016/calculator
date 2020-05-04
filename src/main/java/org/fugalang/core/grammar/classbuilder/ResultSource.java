@@ -2,11 +2,6 @@ package org.fugalang.core.grammar.classbuilder;
 
 
 public class ResultSource {
-    public enum SourceType {
-        Class,
-        TokenType,
-        TokenLiteral
-    }
 
     private final SourceType sourceType;
     private final String value;
@@ -16,7 +11,7 @@ public class ResultSource {
         this.value = value;
     }
 
-    public SourceType getSourceType() {
+    public SourceType getType() {
         return sourceType;
     }
 

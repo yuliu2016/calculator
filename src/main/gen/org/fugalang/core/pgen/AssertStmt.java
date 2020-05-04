@@ -20,7 +20,7 @@ public final class AssertStmt extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired(isTokenAssert());
+        addRequired(isTokenAssert(), "assert");
         addRequired(expr());
         addOptional(assertStmt3());
     }
@@ -82,7 +82,7 @@ public final class AssertStmt extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenComma());
+            addRequired(isTokenComma(), ",");
             addRequired(expr());
         }
 

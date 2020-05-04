@@ -49,7 +49,7 @@ class WrapperDelegate implements NodeDelegate {
     }
 
     @Override
-    public void addChoice(boolean value) {
+    public void addChoice(boolean value, String literal) {
         if (didBuildRule) {
             throw new IllegalStateException("Node has already been built");
         }
@@ -63,14 +63,14 @@ class WrapperDelegate implements NodeDelegate {
                         "  with the value at index" + chosenIndex + " for rule " + rule);
             }
             chosenIndex = index;
-            chosenComponent = null;
+            chosenComponent = "'" + literal + "'";
         }
 
         index++;
     }
 
     @Override
-    public void addRequired(boolean value) {
+    public void addRequired(boolean value, String literal) {
         if (didBuildRule) {
             throw new IllegalStateException("Node has already been built");
         }
@@ -83,7 +83,7 @@ class WrapperDelegate implements NodeDelegate {
                     rule + ", but it is false");
         }
 
-        components.add(true);
+        components.add("'" + literal + "'");
         index++;
     }
 

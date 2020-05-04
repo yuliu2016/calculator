@@ -28,7 +28,7 @@ public final class DottedAsNames extends NodeWrapper {
     protected void buildRule() {
         addRequired(dottedAsName());
         addRequired(dottedAsNames2List());
-        addRequired(isTokenComma());
+        addRequired(isTokenComma(), ",");
     }
 
     public DottedAsName dottedAsName() {
@@ -98,7 +98,7 @@ public final class DottedAsNames extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenComma());
+            addRequired(isTokenComma(), ",");
             addRequired(dottedAsName());
         }
 

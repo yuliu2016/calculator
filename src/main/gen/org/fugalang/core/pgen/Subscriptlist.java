@@ -28,7 +28,7 @@ public final class Subscriptlist extends NodeWrapper {
     protected void buildRule() {
         addRequired(subscript());
         addRequired(subscriptlist2List());
-        addRequired(isTokenComma());
+        addRequired(isTokenComma(), ",");
     }
 
     public Subscript subscript() {
@@ -98,7 +98,7 @@ public final class Subscriptlist extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenComma());
+            addRequired(isTokenComma(), ",");
             addRequired(subscript());
         }
 

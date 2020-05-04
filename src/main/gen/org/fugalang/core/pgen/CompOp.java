@@ -20,15 +20,15 @@ public final class CompOp extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addChoice(isTokenLess());
-        addChoice(isTokenGreater());
-        addChoice(isTokenEqual());
-        addChoice(isTokenMoreEqual());
-        addChoice(isTokenLessEqual());
-        addChoice(isTokenNequal());
-        addChoice(isTokenIn());
+        addChoice(isTokenLess(), "<");
+        addChoice(isTokenGreater(), ">");
+        addChoice(isTokenEqual(), "==");
+        addChoice(isTokenMoreEqual(), ">=");
+        addChoice(isTokenLessEqual(), "<=");
+        addChoice(isTokenNequal(), "!=");
+        addChoice(isTokenIn(), "in");
         addChoice(compOp8());
-        addChoice(isTokenIs());
+        addChoice(isTokenIs(), "is");
         addChoice(compOp10());
     }
 
@@ -136,8 +136,8 @@ public final class CompOp extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenNot());
-            addRequired(isTokenIn());
+            addRequired(isTokenNot(), "not");
+            addRequired(isTokenIn(), "in");
         }
 
         public boolean isTokenNot() {
@@ -185,8 +185,8 @@ public final class CompOp extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenIs());
-            addRequired(isTokenNot());
+            addRequired(isTokenIs(), "is");
+            addRequired(isTokenNot(), "not");
         }
 
         public boolean isTokenIs() {

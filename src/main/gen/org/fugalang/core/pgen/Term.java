@@ -139,11 +139,11 @@ public final class Term extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addChoice(isTokenTimes());
-            addChoice(isTokenMatrixTimes());
-            addChoice(isTokenDiv());
-            addChoice(isTokenModulus());
-            addChoice(isTokenFloorDiv());
+            addChoice(isTokenTimes(), "*");
+            addChoice(isTokenMatrixTimes(), "@");
+            addChoice(isTokenDiv(), "/");
+            addChoice(isTokenModulus(), "%");
+            addChoice(isTokenFloorDiv(), "//");
         }
 
         public boolean isTokenTimes() {

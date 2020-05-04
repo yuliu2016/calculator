@@ -26,7 +26,7 @@ public final class AtomExpr extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired(isTokenAwait());
+        addRequired(isTokenAwait(), "await");
         addRequired(atom());
         addRequired(trailerList());
     }

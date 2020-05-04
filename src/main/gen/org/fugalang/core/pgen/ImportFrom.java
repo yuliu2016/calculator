@@ -24,9 +24,9 @@ public final class ImportFrom extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired(isTokenFrom());
+        addRequired(isTokenFrom(), "from");
         addRequired(importFrom2());
-        addRequired(isTokenImport());
+        addRequired(isTokenImport(), "import");
         addRequired(importFrom4());
     }
 
@@ -229,7 +229,7 @@ public final class ImportFrom extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addChoice(isTokenTimes());
+            addChoice(isTokenTimes(), "*");
             addChoice(importFrom42());
             addChoice(importAsNames());
         }
@@ -297,9 +297,9 @@ public final class ImportFrom extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenLpar());
+            addRequired(isTokenLpar(), "(");
             addRequired(importAsNames());
-            addRequired(isTokenRpar());
+            addRequired(isTokenRpar(), ")");
         }
 
         public boolean isTokenLpar() {

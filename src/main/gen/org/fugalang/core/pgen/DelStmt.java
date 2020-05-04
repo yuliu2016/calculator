@@ -20,7 +20,7 @@ public final class DelStmt extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired(isTokenDel());
+        addRequired(isTokenDel(), "del");
         addRequired(targets());
     }
 

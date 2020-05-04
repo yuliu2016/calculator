@@ -26,7 +26,7 @@ public final class IfStmt extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired(isTokenIf());
+        addRequired(isTokenIf(), "if");
         addRequired(namedexprExpr());
         addRequired(suite());
         addRequired(ifStmt4List());
@@ -120,7 +120,7 @@ public final class IfStmt extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenElif());
+            addRequired(isTokenElif(), "elif");
             addRequired(namedexprExpr());
             addRequired(suite());
         }
@@ -177,7 +177,7 @@ public final class IfStmt extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenElse());
+            addRequired(isTokenElse(), "else");
             addRequired(suite());
         }
 

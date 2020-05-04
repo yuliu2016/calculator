@@ -28,7 +28,7 @@ public final class SimpleStmt extends NodeWrapper {
     protected void buildRule() {
         addRequired(smallStmt());
         addRequired(simpleStmt2List());
-        addRequired(isTokenSemicolon());
+        addRequired(isTokenSemicolon(), ";");
     }
 
     public SmallStmt smallStmt() {
@@ -98,7 +98,7 @@ public final class SimpleStmt extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenSemicolon());
+            addRequired(isTokenSemicolon(), ";");
             addRequired(smallStmt());
         }
 

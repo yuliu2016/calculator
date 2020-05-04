@@ -90,7 +90,7 @@ public final class BitwiseOr extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenBitOr());
+            addRequired(isTokenBitOr(), "|");
             addRequired(bitwiseXor());
         }
 

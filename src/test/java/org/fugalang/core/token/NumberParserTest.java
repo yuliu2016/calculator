@@ -38,7 +38,7 @@ public class NumberParserTest {
         var result = new Tokenizer("1.23j").tokenizeAll();
 
         assertType(result, 0, TokenType.NUMBER);
-        assertValue(result, 0, "1.23");
+        assertValue(result, 0, "1.23j");
     }
 
     @Test
@@ -46,7 +46,7 @@ public class NumberParserTest {
         var result = new Tokenizer("123j").tokenizeAll();
 
         assertType(result, 0, TokenType.NUMBER);
-        assertValue(result, 0, "123");
+        assertValue(result, 0, "123j");
     }
 
 //    @Test

@@ -139,8 +139,8 @@ public final class ShiftExpr extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addChoice(isTokenLshift());
-            addChoice(isTokenRshift());
+            addChoice(isTokenLshift(), "<<");
+            addChoice(isTokenRshift(), ">>");
         }
 
         public boolean isTokenLshift() {

@@ -90,7 +90,7 @@ public final class PipeExpr extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenPipe());
+            addRequired(isTokenPipe(), "->");
             addRequired(atomExpr());
         }
 
