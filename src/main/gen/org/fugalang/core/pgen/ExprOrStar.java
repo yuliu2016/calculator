@@ -33,7 +33,8 @@ public final class ExprOrStar extends NodeWrapper {
     }
 
     public boolean hasExpr() {
-        return expr() != null;
+        var element = getItem(0);
+        return element.isPresent(Expr.RULE);
     }
 
     public StarExpr starExpr() {
@@ -45,7 +46,8 @@ public final class ExprOrStar extends NodeWrapper {
     }
 
     public boolean hasStarExpr() {
-        return starExpr() != null;
+        var element = getItem(1);
+        return element.isPresent(StarExpr.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {

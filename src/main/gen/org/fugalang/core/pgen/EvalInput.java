@@ -45,7 +45,9 @@ public final class EvalInput extends NodeWrapper {
         List<String> result = null;
         var element = getItem(1);
         for (var node : element.asCollection()) {
-            if (result == null) result = new ArrayList<>();
+            if (result == null) {
+                result = new ArrayList<>();
+            }
             result.add(node.asString());
         }
         newlineList = result == null ? Collections.emptyList() : result;

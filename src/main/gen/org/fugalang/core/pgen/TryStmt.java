@@ -93,7 +93,8 @@ public final class TryStmt extends NodeWrapper {
         }
 
         public boolean hasTryStmt31() {
-            return tryStmt31() != null;
+            var element = getItem(0);
+            return element.isPresent(TryStmt31.RULE);
         }
 
         public TryStmt32 tryStmt32() {
@@ -105,7 +106,8 @@ public final class TryStmt extends NodeWrapper {
         }
 
         public boolean hasTryStmt32() {
-            return tryStmt32() != null;
+            var element = getItem(1);
+            return element.isPresent(TryStmt32.RULE);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -155,7 +157,9 @@ public final class TryStmt extends NodeWrapper {
             List<TryStmt311> result = null;
             var element = getItem(0);
             for (var node : element.asCollection()) {
-                if (result == null) result = new ArrayList<>();
+                if (result == null) {
+                    result = new ArrayList<>();
+                }
                 result.add(TryStmt311.of(node));
             }
             tryStmt311List = result == null ? Collections.emptyList() : result;
@@ -171,7 +175,8 @@ public final class TryStmt extends NodeWrapper {
         }
 
         public boolean hasTryStmt312() {
-            return tryStmt312() != null;
+            var element = getItem(1);
+            return element.isPresent(TryStmt312.RULE);
         }
 
         public TryStmt313 tryStmt313() {
@@ -183,7 +188,8 @@ public final class TryStmt extends NodeWrapper {
         }
 
         public boolean hasTryStmt313() {
-            return tryStmt313() != null;
+            var element = getItem(2);
+            return element.isPresent(TryStmt313.RULE);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

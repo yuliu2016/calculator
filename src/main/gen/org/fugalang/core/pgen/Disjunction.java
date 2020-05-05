@@ -43,7 +43,9 @@ public final class Disjunction extends NodeWrapper {
         List<Disjunction2> result = null;
         var element = getItem(1);
         for (var node : element.asCollection()) {
-            if (result == null) result = new ArrayList<>();
+            if (result == null) {
+                result = new ArrayList<>();
+            }
             result.add(Disjunction2.of(node));
         }
         disjunction2List = result == null ? Collections.emptyList() : result;

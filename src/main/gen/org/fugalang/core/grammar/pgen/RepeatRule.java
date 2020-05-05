@@ -39,7 +39,8 @@ public final class RepeatRule extends NodeWrapper {
     }
 
     public boolean hasRepeatRule2() {
-        return repeatRule2() != null;
+        var element = getItem(1);
+        return element.isPresent(RepeatRule2.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {

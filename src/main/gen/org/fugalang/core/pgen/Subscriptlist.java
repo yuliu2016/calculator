@@ -44,7 +44,9 @@ public final class Subscriptlist extends NodeWrapper {
         List<Subscriptlist2> result = null;
         var element = getItem(1);
         for (var node : element.asCollection()) {
-            if (result == null) result = new ArrayList<>();
+            if (result == null) {
+                result = new ArrayList<>();
+            }
             result.add(Subscriptlist2.of(node));
         }
         subscriptlist2List = result == null ? Collections.emptyList() : result;

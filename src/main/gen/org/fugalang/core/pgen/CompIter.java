@@ -33,7 +33,8 @@ public final class CompIter extends NodeWrapper {
     }
 
     public boolean hasCompFor() {
-        return compFor() != null;
+        var element = getItem(0);
+        return element.isPresent(CompFor.RULE);
     }
 
     public CompIf compIf() {
@@ -45,7 +46,8 @@ public final class CompIter extends NodeWrapper {
     }
 
     public boolean hasCompIf() {
-        return compIf() != null;
+        var element = getItem(1);
+        return element.isPresent(CompIf.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {

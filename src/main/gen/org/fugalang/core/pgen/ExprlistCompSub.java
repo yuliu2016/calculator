@@ -33,7 +33,8 @@ public final class ExprlistCompSub extends NodeWrapper {
     }
 
     public boolean hasExprlistComp() {
-        return exprlistComp() != null;
+        var element = getItem(0);
+        return element.isPresent(ExprlistComp.RULE);
     }
 
     public Subscript subscript() {
@@ -45,7 +46,8 @@ public final class ExprlistCompSub extends NodeWrapper {
     }
 
     public boolean hasSubscript() {
-        return subscript() != null;
+        var element = getItem(1);
+        return element.isPresent(Subscript.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {

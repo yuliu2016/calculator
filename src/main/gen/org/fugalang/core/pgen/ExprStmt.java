@@ -43,7 +43,8 @@ public final class ExprStmt extends NodeWrapper {
     }
 
     public boolean hasExprStmt2() {
-        return exprStmt2() != null;
+        var element = getItem(1);
+        return element.isPresent(ExprStmt2.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -91,7 +92,9 @@ public final class ExprStmt extends NodeWrapper {
             List<ExprStmt21> result = null;
             var element = getItem(0);
             for (var node : element.asCollection()) {
-                if (result == null) result = new ArrayList<>();
+                if (result == null) {
+                    result = new ArrayList<>();
+                }
                 result.add(ExprStmt21.of(node));
             }
             exprStmt21List = result == null ? Collections.emptyList() : result;
@@ -107,7 +110,8 @@ public final class ExprStmt extends NodeWrapper {
         }
 
         public boolean hasExprStmt22() {
-            return exprStmt22() != null;
+            var element = getItem(1);
+            return element.isPresent(ExprStmt22.RULE);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

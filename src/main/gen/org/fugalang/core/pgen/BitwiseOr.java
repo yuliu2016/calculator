@@ -43,7 +43,9 @@ public final class BitwiseOr extends NodeWrapper {
         List<BitwiseOr2> result = null;
         var element = getItem(1);
         for (var node : element.asCollection()) {
-            if (result == null) result = new ArrayList<>();
+            if (result == null) {
+                result = new ArrayList<>();
+            }
             result.add(BitwiseOr2.of(node));
         }
         bitwiseOr2List = result == null ? Collections.emptyList() : result;

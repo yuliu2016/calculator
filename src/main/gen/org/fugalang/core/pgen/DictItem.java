@@ -33,7 +33,8 @@ public final class DictItem extends NodeWrapper {
     }
 
     public boolean hasDictItem1() {
-        return dictItem1() != null;
+        var element = getItem(0);
+        return element.isPresent(DictItem1.RULE);
     }
 
     public DictItem2 dictItem2() {
@@ -45,7 +46,8 @@ public final class DictItem extends NodeWrapper {
     }
 
     public boolean hasDictItem2() {
-        return dictItem2() != null;
+        var element = getItem(1);
+        return element.isPresent(DictItem2.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {

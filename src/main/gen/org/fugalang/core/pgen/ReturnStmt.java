@@ -39,7 +39,8 @@ public final class ReturnStmt extends NodeWrapper {
     }
 
     public boolean hasExprlistStar() {
-        return exprlistStar() != null;
+        var element = getItem(1);
+        return element.isPresent(ExprlistStar.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {

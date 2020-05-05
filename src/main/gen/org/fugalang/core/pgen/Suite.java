@@ -33,7 +33,8 @@ public final class Suite extends NodeWrapper {
     }
 
     public boolean hasSuite1() {
-        return suite1() != null;
+        var element = getItem(0);
+        return element.isPresent(Suite1.RULE);
     }
 
     public BlockSuite blockSuite() {
@@ -45,7 +46,8 @@ public final class Suite extends NodeWrapper {
     }
 
     public boolean hasBlockSuite() {
-        return blockSuite() != null;
+        var element = getItem(1);
+        return element.isPresent(BlockSuite.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {

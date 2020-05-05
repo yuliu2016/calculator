@@ -46,7 +46,8 @@ public final class Funcdef extends NodeWrapper {
     }
 
     public boolean hasVarargslist() {
-        return varargslist() != null;
+        var element = getItem(2);
+        return element.isPresent(Varargslist.RULE);
     }
 
     public Funcdef4 funcdef4() {
@@ -102,7 +103,8 @@ public final class Funcdef extends NodeWrapper {
         }
 
         public boolean hasFuncdef41() {
-            return funcdef41() != null;
+            var element = getItem(0);
+            return element.isPresent(Funcdef41.RULE);
         }
 
         public BlockSuite blockSuite() {
@@ -114,7 +116,8 @@ public final class Funcdef extends NodeWrapper {
         }
 
         public boolean hasBlockSuite() {
-            return blockSuite() != null;
+            var element = getItem(1);
+            return element.isPresent(BlockSuite.RULE);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

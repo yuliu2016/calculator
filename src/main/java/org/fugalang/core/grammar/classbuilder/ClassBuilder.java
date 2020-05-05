@@ -178,9 +178,7 @@ public class ClassBuilder {
             ClassField field = fields.get(i);
             sb.append("\n");
             sb.append(field.asGetter(ruleType, i));
-            if (ruleType == RuleType.Disjunction || field.isOptionalSingle()) {
-                sb.append(field.asNullCheck());
-            }
+            sb.append(field.asAbsentCheck(ruleType, i));
         }
 
         generateParsingFunc(sb);

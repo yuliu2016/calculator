@@ -36,7 +36,9 @@ public final class Rules extends NodeWrapper {
         List<SingleRule> result = null;
         var element = getItem(0);
         for (var node : element.asCollection()) {
-            if (result == null) result = new ArrayList<>();
+            if (result == null) {
+                result = new ArrayList<>();
+            }
             result.add(SingleRule.of(node));
         }
         singleRuleList = result == null ? Collections.emptyList() : result;
@@ -51,8 +53,9 @@ public final class Rules extends NodeWrapper {
         boolean result;
 
         parseTree.enterCollection();
-        result = SingleRule.parse(parseTree, level + 1);
-        while (true) {
+        var firstItem = SingleRule.parse(parseTree, level + 1);
+        result = firstItem;
+        if (firstItem) while (true) {
             var pos = parseTree.position();
             if (!SingleRule.parse(parseTree, level + 1) ||
                     parseTree.guardLoopExit(pos)) {

@@ -33,7 +33,8 @@ public final class Subscript extends NodeWrapper {
     }
 
     public boolean hasExpr() {
-        return expr() != null;
+        var element = getItem(0);
+        return element.isPresent(Expr.RULE);
     }
 
     public Subscript2 subscript2() {
@@ -45,7 +46,8 @@ public final class Subscript extends NodeWrapper {
     }
 
     public boolean hasSubscript2() {
-        return subscript2() != null;
+        var element = getItem(1);
+        return element.isPresent(Subscript2.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -95,7 +97,8 @@ public final class Subscript extends NodeWrapper {
         }
 
         public boolean hasExpr() {
-            return expr() != null;
+            var element = getItem(0);
+            return element.isPresent(Expr.RULE);
         }
 
         public boolean isTokenColon() {
@@ -113,7 +116,8 @@ public final class Subscript extends NodeWrapper {
         }
 
         public boolean hasExpr1() {
-            return expr1() != null;
+            var element = getItem(2);
+            return element.isPresent(Expr.RULE);
         }
 
         public Sliceop sliceop() {
@@ -125,7 +129,8 @@ public final class Subscript extends NodeWrapper {
         }
 
         public boolean hasSliceop() {
-            return sliceop() != null;
+            var element = getItem(3);
+            return element.isPresent(Sliceop.RULE);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

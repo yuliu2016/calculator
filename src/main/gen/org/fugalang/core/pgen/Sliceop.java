@@ -39,7 +39,8 @@ public final class Sliceop extends NodeWrapper {
     }
 
     public boolean hasExpr() {
-        return expr() != null;
+        var element = getItem(1);
+        return element.isPresent(Expr.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {

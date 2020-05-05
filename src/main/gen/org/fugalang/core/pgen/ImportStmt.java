@@ -33,7 +33,8 @@ public final class ImportStmt extends NodeWrapper {
     }
 
     public boolean hasImportName() {
-        return importName() != null;
+        var element = getItem(0);
+        return element.isPresent(ImportName.RULE);
     }
 
     public ImportFrom importFrom() {
@@ -45,7 +46,8 @@ public final class ImportStmt extends NodeWrapper {
     }
 
     public boolean hasImportFrom() {
-        return importFrom() != null;
+        var element = getItem(1);
+        return element.isPresent(ImportFrom.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {

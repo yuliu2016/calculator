@@ -39,7 +39,8 @@ public final class RaiseStmt extends NodeWrapper {
     }
 
     public boolean hasRaiseStmt2() {
-        return raiseStmt2() != null;
+        var element = getItem(1);
+        return element.isPresent(RaiseStmt2.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -93,7 +94,8 @@ public final class RaiseStmt extends NodeWrapper {
         }
 
         public boolean hasRaiseStmt22() {
-            return raiseStmt22() != null;
+            var element = getItem(1);
+            return element.isPresent(RaiseStmt22.RULE);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

@@ -38,7 +38,9 @@ public final class FileInput extends NodeWrapper {
         List<FileInput1> result = null;
         var element = getItem(0);
         for (var node : element.asCollection()) {
-            if (result == null) result = new ArrayList<>();
+            if (result == null) {
+                result = new ArrayList<>();
+            }
             result.add(FileInput1.of(node));
         }
         fileInput1List = result == null ? Collections.emptyList() : result;
@@ -104,7 +106,8 @@ public final class FileInput extends NodeWrapper {
         }
 
         public boolean hasNewline() {
-            return newline() != null;
+            var element = getItem(0);
+            return element.isPresent(TokenType.NEWLINE);
         }
 
         public Stmt stmt() {
@@ -116,7 +119,8 @@ public final class FileInput extends NodeWrapper {
         }
 
         public boolean hasStmt() {
-            return stmt() != null;
+            var element = getItem(1);
+            return element.isPresent(Stmt.RULE);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

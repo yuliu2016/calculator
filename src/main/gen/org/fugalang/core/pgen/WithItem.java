@@ -40,7 +40,8 @@ public final class WithItem extends NodeWrapper {
     }
 
     public boolean hasWithItem2() {
-        return withItem2() != null;
+        var element = getItem(1);
+        return element.isPresent(WithItem2.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {

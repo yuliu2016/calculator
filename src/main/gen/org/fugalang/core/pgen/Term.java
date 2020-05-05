@@ -43,7 +43,9 @@ public final class Term extends NodeWrapper {
         List<Term2> result = null;
         var element = getItem(1);
         for (var node : element.asCollection()) {
-            if (result == null) result = new ArrayList<>();
+            if (result == null) {
+                result = new ArrayList<>();
+            }
             result.add(Term2.of(node));
         }
         term2List = result == null ? Collections.emptyList() : result;

@@ -44,7 +44,9 @@ public final class Arglist extends NodeWrapper {
         List<Arglist2> result = null;
         var element = getItem(1);
         for (var node : element.asCollection()) {
-            if (result == null) result = new ArrayList<>();
+            if (result == null) {
+                result = new ArrayList<>();
+            }
             result.add(Arglist2.of(node));
         }
         arglist2List = result == null ? Collections.emptyList() : result;

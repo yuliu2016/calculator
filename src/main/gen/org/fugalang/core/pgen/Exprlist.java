@@ -44,7 +44,9 @@ public final class Exprlist extends NodeWrapper {
         List<Exprlist2> result = null;
         var element = getItem(1);
         for (var node : element.asCollection()) {
-            if (result == null) result = new ArrayList<>();
+            if (result == null) {
+                result = new ArrayList<>();
+            }
             result.add(Exprlist2.of(node));
         }
         exprlist2List = result == null ? Collections.emptyList() : result;

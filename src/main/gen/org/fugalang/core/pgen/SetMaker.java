@@ -43,7 +43,8 @@ public final class SetMaker extends NodeWrapper {
     }
 
     public boolean hasSetMaker2() {
-        return setMaker2() != null;
+        var element = getItem(1);
+        return element.isPresent(SetMaker2.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -91,7 +92,8 @@ public final class SetMaker extends NodeWrapper {
         }
 
         public boolean hasCompFor() {
-            return compFor() != null;
+            var element = getItem(0);
+            return element.isPresent(CompFor.RULE);
         }
 
         public SetMaker22 setMaker22() {
@@ -103,7 +105,8 @@ public final class SetMaker extends NodeWrapper {
         }
 
         public boolean hasSetMaker22() {
-            return setMaker22() != null;
+            var element = getItem(1);
+            return element.isPresent(SetMaker22.RULE);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -152,7 +155,9 @@ public final class SetMaker extends NodeWrapper {
             List<SetMaker221> result = null;
             var element = getItem(0);
             for (var node : element.asCollection()) {
-                if (result == null) result = new ArrayList<>();
+                if (result == null) {
+                    result = new ArrayList<>();
+                }
                 result.add(SetMaker221.of(node));
             }
             setMaker221List = result == null ? Collections.emptyList() : result;

@@ -34,7 +34,8 @@ public final class Expr extends NodeWrapper {
     }
 
     public boolean hasExpr1() {
-        return expr1() != null;
+        var element = getItem(0);
+        return element.isPresent(Expr1.RULE);
     }
 
     public Funcdef funcdef() {
@@ -46,7 +47,8 @@ public final class Expr extends NodeWrapper {
     }
 
     public boolean hasFuncdef() {
-        return funcdef() != null;
+        var element = getItem(1);
+        return element.isPresent(Funcdef.RULE);
     }
 
     public Disjunction disjunction() {
@@ -58,7 +60,8 @@ public final class Expr extends NodeWrapper {
     }
 
     public boolean hasDisjunction() {
-        return disjunction() != null;
+        var element = getItem(2);
+        return element.isPresent(Disjunction.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {

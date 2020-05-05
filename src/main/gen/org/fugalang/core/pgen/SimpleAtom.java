@@ -38,7 +38,8 @@ public final class SimpleAtom extends NodeWrapper {
     }
 
     public boolean hasName() {
-        return name() != null;
+        var element = getItem(0);
+        return element.isPresent(TokenType.NAME);
     }
 
     public String number() {
@@ -50,7 +51,8 @@ public final class SimpleAtom extends NodeWrapper {
     }
 
     public boolean hasNumber() {
-        return number() != null;
+        var element = getItem(1);
+        return element.isPresent(TokenType.NUMBER);
     }
 
     public String string() {
@@ -62,7 +64,8 @@ public final class SimpleAtom extends NodeWrapper {
     }
 
     public boolean hasString() {
-        return string() != null;
+        var element = getItem(2);
+        return element.isPresent(TokenType.STRING);
     }
 
     public boolean isTokenNone() {

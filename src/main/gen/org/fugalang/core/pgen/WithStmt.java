@@ -51,7 +51,9 @@ public final class WithStmt extends NodeWrapper {
         List<WithStmt3> result = null;
         var element = getItem(2);
         for (var node : element.asCollection()) {
-            if (result == null) result = new ArrayList<>();
+            if (result == null) {
+                result = new ArrayList<>();
+            }
             result.add(WithStmt3.of(node));
         }
         withStmt3List = result == null ? Collections.emptyList() : result;

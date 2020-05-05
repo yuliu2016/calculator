@@ -43,7 +43,9 @@ public final class Conjunction extends NodeWrapper {
         List<Conjunction2> result = null;
         var element = getItem(1);
         for (var node : element.asCollection()) {
-            if (result == null) result = new ArrayList<>();
+            if (result == null) {
+                result = new ArrayList<>();
+            }
             result.add(Conjunction2.of(node));
         }
         conjunction2List = result == null ? Collections.emptyList() : result;

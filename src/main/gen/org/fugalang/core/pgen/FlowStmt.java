@@ -35,7 +35,8 @@ public final class FlowStmt extends NodeWrapper {
     }
 
     public boolean hasBreakStmt() {
-        return breakStmt() != null;
+        var element = getItem(0);
+        return element.isPresent(BreakStmt.RULE);
     }
 
     public ContinueStmt continueStmt() {
@@ -47,7 +48,8 @@ public final class FlowStmt extends NodeWrapper {
     }
 
     public boolean hasContinueStmt() {
-        return continueStmt() != null;
+        var element = getItem(1);
+        return element.isPresent(ContinueStmt.RULE);
     }
 
     public ReturnStmt returnStmt() {
@@ -59,7 +61,8 @@ public final class FlowStmt extends NodeWrapper {
     }
 
     public boolean hasReturnStmt() {
-        return returnStmt() != null;
+        var element = getItem(2);
+        return element.isPresent(ReturnStmt.RULE);
     }
 
     public RaiseStmt raiseStmt() {
@@ -71,7 +74,8 @@ public final class FlowStmt extends NodeWrapper {
     }
 
     public boolean hasRaiseStmt() {
-        return raiseStmt() != null;
+        var element = getItem(3);
+        return element.isPresent(RaiseStmt.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {

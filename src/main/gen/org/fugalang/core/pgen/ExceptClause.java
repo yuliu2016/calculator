@@ -40,7 +40,8 @@ public final class ExceptClause extends NodeWrapper {
     }
 
     public boolean hasExceptClause2() {
-        return exceptClause2() != null;
+        var element = getItem(1);
+        return element.isPresent(ExceptClause2.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -94,7 +95,8 @@ public final class ExceptClause extends NodeWrapper {
         }
 
         public boolean hasExceptClause22() {
-            return exceptClause22() != null;
+            var element = getItem(1);
+            return element.isPresent(ExceptClause22.RULE);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

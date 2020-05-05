@@ -39,7 +39,8 @@ public final class Power extends NodeWrapper {
     }
 
     public boolean hasPower2() {
-        return power2() != null;
+        var element = getItem(1);
+        return element.isPresent(Power2.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {

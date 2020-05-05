@@ -37,7 +37,8 @@ public final class Argument extends NodeWrapper {
     }
 
     public boolean hasArgument1() {
-        return argument1() != null;
+        var element = getItem(0);
+        return element.isPresent(Argument1.RULE);
     }
 
     public Argument2 argument2() {
@@ -49,7 +50,8 @@ public final class Argument extends NodeWrapper {
     }
 
     public boolean hasArgument2() {
-        return argument2() != null;
+        var element = getItem(1);
+        return element.isPresent(Argument2.RULE);
     }
 
     public Argument3 argument3() {
@@ -61,7 +63,8 @@ public final class Argument extends NodeWrapper {
     }
 
     public boolean hasArgument3() {
-        return argument3() != null;
+        var element = getItem(2);
+        return element.isPresent(Argument3.RULE);
     }
 
     public Argument4 argument4() {
@@ -73,7 +76,8 @@ public final class Argument extends NodeWrapper {
     }
 
     public boolean hasArgument4() {
-        return argument4() != null;
+        var element = getItem(3);
+        return element.isPresent(Argument4.RULE);
     }
 
     public Argument5 argument5() {
@@ -85,7 +89,8 @@ public final class Argument extends NodeWrapper {
     }
 
     public boolean hasArgument5() {
-        return argument5() != null;
+        var element = getItem(4);
+        return element.isPresent(Argument5.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -142,7 +147,8 @@ public final class Argument extends NodeWrapper {
         }
 
         public boolean hasCompFor() {
-            return compFor() != null;
+            var element = getItem(1);
+            return element.isPresent(CompFor.RULE);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

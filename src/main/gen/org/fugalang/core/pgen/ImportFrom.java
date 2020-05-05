@@ -103,7 +103,8 @@ public final class ImportFrom extends NodeWrapper {
         }
 
         public boolean hasImportFrom21() {
-            return importFrom21() != null;
+            var element = getItem(0);
+            return element.isPresent(ImportFrom21.RULE);
         }
 
         public List<Boolean> isTokenDotList() {
@@ -113,7 +114,9 @@ public final class ImportFrom extends NodeWrapper {
             List<Boolean> result = null;
             var element = getItem(1);
             for (var node : element.asCollection()) {
-                if (result == null) result = new ArrayList<>();
+                if (result == null) {
+                    result = new ArrayList<>();
+                }
                 result.add(node.asBoolean());
             }
             isTokenDotList = result == null ? Collections.emptyList() : result;
@@ -176,7 +179,9 @@ public final class ImportFrom extends NodeWrapper {
             List<Boolean> result = null;
             var element = getItem(0);
             for (var node : element.asCollection()) {
-                if (result == null) result = new ArrayList<>();
+                if (result == null) {
+                    result = new ArrayList<>();
+                }
                 result.add(node.asBoolean());
             }
             isTokenDotList = result == null ? Collections.emptyList() : result;
@@ -249,7 +254,8 @@ public final class ImportFrom extends NodeWrapper {
         }
 
         public boolean hasImportFrom42() {
-            return importFrom42() != null;
+            var element = getItem(1);
+            return element.isPresent(ImportFrom42.RULE);
         }
 
         public ImportAsNames importAsNames() {
@@ -261,7 +267,8 @@ public final class ImportFrom extends NodeWrapper {
         }
 
         public boolean hasImportAsNames() {
-            return importAsNames() != null;
+            var element = getItem(2);
+            return element.isPresent(ImportAsNames.RULE);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

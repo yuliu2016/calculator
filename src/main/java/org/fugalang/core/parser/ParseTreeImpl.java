@@ -29,7 +29,17 @@ class ParseTreeImpl implements ParseTree {
         position = 0;
 
         var result = start.apply(this, 0);
-        return result ? converter.apply(resultNode) : null;
+
+        if (!result || position < tokens.size()) {
+
+            var pos = position < tokens.size() - 1 ? position + 1 : position;
+
+            var tok = tokens.get(pos);
+            throw new SyntaxError("Invalid syntax at token " + pos + ": line " +
+                    tok.getLineStart() + " and columns from " +
+                    tok.getColumnStart() + " to " + tok.getColumnEnd());
+        }
+        return converter.apply(resultNode);
     }
 
     @Override

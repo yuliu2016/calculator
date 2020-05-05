@@ -33,7 +33,8 @@ public final class Dictorsetmaker extends NodeWrapper {
     }
 
     public boolean hasDictMaker() {
-        return dictMaker() != null;
+        var element = getItem(0);
+        return element.isPresent(DictMaker.RULE);
     }
 
     public SetMaker setMaker() {
@@ -45,7 +46,8 @@ public final class Dictorsetmaker extends NodeWrapper {
     }
 
     public boolean hasSetMaker() {
-        return setMaker() != null;
+        var element = getItem(1);
+        return element.isPresent(SetMaker.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {

@@ -35,7 +35,8 @@ public final class SubRule extends NodeWrapper {
     }
 
     public boolean hasSubRule1() {
-        return subRule1() != null;
+        var element = getItem(0);
+        return element.isPresent(SubRule1.RULE);
     }
 
     public SubRule2 subRule2() {
@@ -47,7 +48,8 @@ public final class SubRule extends NodeWrapper {
     }
 
     public boolean hasSubRule2() {
-        return subRule2() != null;
+        var element = getItem(1);
+        return element.isPresent(SubRule2.RULE);
     }
 
     public String token() {
@@ -59,7 +61,8 @@ public final class SubRule extends NodeWrapper {
     }
 
     public boolean hasToken() {
-        return token() != null;
+        var element = getItem(2);
+        return element.isPresent(MetaTokenType.TOK);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {

@@ -36,7 +36,8 @@ public final class CompoundStmt extends NodeWrapper {
     }
 
     public boolean hasIfStmt() {
-        return ifStmt() != null;
+        var element = getItem(0);
+        return element.isPresent(IfStmt.RULE);
     }
 
     public WhileStmt whileStmt() {
@@ -48,7 +49,8 @@ public final class CompoundStmt extends NodeWrapper {
     }
 
     public boolean hasWhileStmt() {
-        return whileStmt() != null;
+        var element = getItem(1);
+        return element.isPresent(WhileStmt.RULE);
     }
 
     public ForStmt forStmt() {
@@ -60,7 +62,8 @@ public final class CompoundStmt extends NodeWrapper {
     }
 
     public boolean hasForStmt() {
-        return forStmt() != null;
+        var element = getItem(2);
+        return element.isPresent(ForStmt.RULE);
     }
 
     public TryStmt tryStmt() {
@@ -72,7 +75,8 @@ public final class CompoundStmt extends NodeWrapper {
     }
 
     public boolean hasTryStmt() {
-        return tryStmt() != null;
+        var element = getItem(3);
+        return element.isPresent(TryStmt.RULE);
     }
 
     public WithStmt withStmt() {
@@ -84,7 +88,8 @@ public final class CompoundStmt extends NodeWrapper {
     }
 
     public boolean hasWithStmt() {
-        return withStmt() != null;
+        var element = getItem(4);
+        return element.isPresent(WithStmt.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {

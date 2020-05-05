@@ -43,7 +43,9 @@ public final class PipeExpr extends NodeWrapper {
         List<PipeExpr2> result = null;
         var element = getItem(1);
         for (var node : element.asCollection()) {
-            if (result == null) result = new ArrayList<>();
+            if (result == null) {
+                result = new ArrayList<>();
+            }
             result.add(PipeExpr2.of(node));
         }
         pipeExpr2List = result == null ? Collections.emptyList() : result;

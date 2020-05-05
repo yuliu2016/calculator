@@ -40,7 +40,8 @@ public final class ImportAsName extends NodeWrapper {
     }
 
     public boolean hasImportAsName2() {
-        return importAsName2() != null;
+        var element = getItem(1);
+        return element.isPresent(ImportAsName2.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {

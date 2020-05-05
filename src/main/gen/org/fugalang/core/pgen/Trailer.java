@@ -36,7 +36,8 @@ public final class Trailer extends NodeWrapper {
     }
 
     public boolean hasTrailer1() {
-        return trailer1() != null;
+        var element = getItem(0);
+        return element.isPresent(Trailer1.RULE);
     }
 
     public Trailer2 trailer2() {
@@ -48,7 +49,8 @@ public final class Trailer extends NodeWrapper {
     }
 
     public boolean hasTrailer2() {
-        return trailer2() != null;
+        var element = getItem(1);
+        return element.isPresent(Trailer2.RULE);
     }
 
     public Trailer3 trailer3() {
@@ -60,7 +62,8 @@ public final class Trailer extends NodeWrapper {
     }
 
     public boolean hasTrailer3() {
-        return trailer3() != null;
+        var element = getItem(2);
+        return element.isPresent(Trailer3.RULE);
     }
 
     public BlockSuite blockSuite() {
@@ -72,7 +75,8 @@ public final class Trailer extends NodeWrapper {
     }
 
     public boolean hasBlockSuite() {
-        return blockSuite() != null;
+        var element = getItem(3);
+        return element.isPresent(BlockSuite.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -129,7 +133,8 @@ public final class Trailer extends NodeWrapper {
         }
 
         public boolean hasArglist() {
-            return arglist() != null;
+            var element = getItem(1);
+            return element.isPresent(Arglist.RULE);
         }
 
         public boolean isTokenRpar() {

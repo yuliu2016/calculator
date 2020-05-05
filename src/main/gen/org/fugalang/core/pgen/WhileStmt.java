@@ -53,7 +53,8 @@ public final class WhileStmt extends NodeWrapper {
     }
 
     public boolean hasWhileStmt4() {
-        return whileStmt4() != null;
+        var element = getItem(3);
+        return element.isPresent(WhileStmt4.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {

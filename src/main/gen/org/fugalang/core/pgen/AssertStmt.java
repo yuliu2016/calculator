@@ -46,7 +46,8 @@ public final class AssertStmt extends NodeWrapper {
     }
 
     public boolean hasAssertStmt3() {
-        return assertStmt3() != null;
+        var element = getItem(2);
+        return element.isPresent(AssertStmt3.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {

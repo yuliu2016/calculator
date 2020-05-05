@@ -58,7 +58,9 @@ public final class IfStmt extends NodeWrapper {
         List<IfStmt4> result = null;
         var element = getItem(3);
         for (var node : element.asCollection()) {
-            if (result == null) result = new ArrayList<>();
+            if (result == null) {
+                result = new ArrayList<>();
+            }
             result.add(IfStmt4.of(node));
         }
         ifStmt4List = result == null ? Collections.emptyList() : result;
@@ -74,7 +76,8 @@ public final class IfStmt extends NodeWrapper {
     }
 
     public boolean hasIfStmt5() {
-        return ifStmt5() != null;
+        var element = getItem(4);
+        return element.isPresent(IfStmt5.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {

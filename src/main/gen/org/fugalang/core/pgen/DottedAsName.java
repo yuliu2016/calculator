@@ -40,7 +40,8 @@ public final class DottedAsName extends NodeWrapper {
     }
 
     public boolean hasDottedAsName2() {
-        return dottedAsName2() != null;
+        var element = getItem(1);
+        return element.isPresent(DottedAsName2.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {

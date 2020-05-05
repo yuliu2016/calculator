@@ -37,7 +37,8 @@ public final class SmallStmt extends NodeWrapper {
     }
 
     public boolean hasExprStmt() {
-        return exprStmt() != null;
+        var element = getItem(0);
+        return element.isPresent(ExprStmt.RULE);
     }
 
     public DelStmt delStmt() {
@@ -49,7 +50,8 @@ public final class SmallStmt extends NodeWrapper {
     }
 
     public boolean hasDelStmt() {
-        return delStmt() != null;
+        var element = getItem(1);
+        return element.isPresent(DelStmt.RULE);
     }
 
     public PassStmt passStmt() {
@@ -61,7 +63,8 @@ public final class SmallStmt extends NodeWrapper {
     }
 
     public boolean hasPassStmt() {
-        return passStmt() != null;
+        var element = getItem(2);
+        return element.isPresent(PassStmt.RULE);
     }
 
     public FlowStmt flowStmt() {
@@ -73,7 +76,8 @@ public final class SmallStmt extends NodeWrapper {
     }
 
     public boolean hasFlowStmt() {
-        return flowStmt() != null;
+        var element = getItem(3);
+        return element.isPresent(FlowStmt.RULE);
     }
 
     public ImportStmt importStmt() {
@@ -85,7 +89,8 @@ public final class SmallStmt extends NodeWrapper {
     }
 
     public boolean hasImportStmt() {
-        return importStmt() != null;
+        var element = getItem(4);
+        return element.isPresent(ImportStmt.RULE);
     }
 
     public AssertStmt assertStmt() {
@@ -97,7 +102,8 @@ public final class SmallStmt extends NodeWrapper {
     }
 
     public boolean hasAssertStmt() {
-        return assertStmt() != null;
+        var element = getItem(5);
+        return element.isPresent(AssertStmt.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {

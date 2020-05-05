@@ -40,7 +40,8 @@ public final class NamedexprExpr extends NodeWrapper {
     }
 
     public boolean hasNamedexprExpr2() {
-        return namedexprExpr2() != null;
+        var element = getItem(1);
+        return element.isPresent(NamedexprExpr2.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {

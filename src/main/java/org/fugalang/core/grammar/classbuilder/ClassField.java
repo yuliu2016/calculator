@@ -108,22 +108,50 @@ public class ClassField {
                 "        " + className.asType() + " result = null;\n" +
                 "        var element = getItem(" + index + ");\n" +
                 "        for (var node : element.asCollection()) {\n" +
-                "            if (result == null) result = new ArrayList<>();\n" +
+                "            if (result == null) {\n" +
+                "                result = new ArrayList<>();\n" +
+                "            }\n" +
                 "            result.add(" + covertExpr + ");\n" +
                 "        }\n" +
                 "        " + fieldName + " = result == null ? Collections.emptyList() : result;\n" +
                 "        return " + fieldName + ";\n";
     }
 
-    public String asNullCheck() {
-        if (className.isNotNull()) {
+    public String asAbsentCheck(RuleType ruleType, int index) {
+        var body = absentCheckBody(ruleType, index);
+        if (body == null) {
             return "";
         }
         return "\n    public boolean has" +
                 ParserStringUtil.capitalizeFirstCharOnly(fieldName) +
-                "() {\n" +
-                "        return " + fieldName + "() != null;\n" +
-                "    }\n";
+                "() {\n" + body + "    }\n";
+    }
+
+    private String absentCheckBody(RuleType ruleType, int index) {
+        return switch (resultSource.getType()) {
+            case Class -> {
+                if (ruleType == RuleType.Conjunction && fieldType == FieldType.Required) {
+                    yield null;
+                }
+                if (isSingular()) {
+                    yield "        var element = getItem(" + index + ");\n" +
+                            "        return element.isPresent(" + className.asType() + ".RULE);\n";
+                }
+                yield null;
+            }
+
+            case TokenType -> {
+                if (ruleType == RuleType.Conjunction && fieldType == FieldType.Required) {
+                    yield null;
+                }
+                if (isSingular()) {
+                    yield "        var element = getItem(" + index + ");\n" +
+                            "        return element.isPresent(" + resultSource.getValue() + ");\n";
+                }
+                yield null;
+            }
+            case TokenLiteral -> null;
+        };
     }
 
     public String asRuleStmt(RuleType ruleType) {

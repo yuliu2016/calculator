@@ -76,7 +76,8 @@ public final class CompOp extends NodeWrapper {
     }
 
     public boolean hasCompOp8() {
-        return compOp8() != null;
+        var element = getItem(7);
+        return element.isPresent(CompOp8.RULE);
     }
 
     public boolean isTokenIs() {
@@ -93,7 +94,8 @@ public final class CompOp extends NodeWrapper {
     }
 
     public boolean hasCompOp10() {
-        return compOp10() != null;
+        var element = getItem(9);
+        return element.isPresent(CompOp10.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {

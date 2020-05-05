@@ -44,7 +44,9 @@ public final class Targets extends NodeWrapper {
         List<Targets2> result = null;
         var element = getItem(1);
         for (var node : element.asCollection()) {
-            if (result == null) result = new ArrayList<>();
+            if (result == null) {
+                result = new ArrayList<>();
+            }
             result.add(Targets2.of(node));
         }
         targets2List = result == null ? Collections.emptyList() : result;
@@ -110,7 +112,8 @@ public final class Targets extends NodeWrapper {
         }
 
         public boolean hasBitwiseOr() {
-            return bitwiseOr() != null;
+            var element = getItem(0);
+            return element.isPresent(BitwiseOr.RULE);
         }
 
         public StarExpr starExpr() {
@@ -122,7 +125,8 @@ public final class Targets extends NodeWrapper {
         }
 
         public boolean hasStarExpr() {
-            return starExpr() != null;
+            var element = getItem(1);
+            return element.isPresent(StarExpr.RULE);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -220,7 +224,8 @@ public final class Targets extends NodeWrapper {
         }
 
         public boolean hasBitwiseOr() {
-            return bitwiseOr() != null;
+            var element = getItem(0);
+            return element.isPresent(BitwiseOr.RULE);
         }
 
         public StarExpr starExpr() {
@@ -232,7 +237,8 @@ public final class Targets extends NodeWrapper {
         }
 
         public boolean hasStarExpr() {
-            return starExpr() != null;
+            var element = getItem(1);
+            return element.isPresent(StarExpr.RULE);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

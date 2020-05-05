@@ -33,7 +33,8 @@ public final class Inversion extends NodeWrapper {
     }
 
     public boolean hasInversion1() {
-        return inversion1() != null;
+        var element = getItem(0);
+        return element.isPresent(Inversion1.RULE);
     }
 
     public Comparison comparison() {
@@ -45,7 +46,8 @@ public final class Inversion extends NodeWrapper {
     }
 
     public boolean hasComparison() {
-        return comparison() != null;
+        var element = getItem(1);
+        return element.isPresent(Comparison.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {

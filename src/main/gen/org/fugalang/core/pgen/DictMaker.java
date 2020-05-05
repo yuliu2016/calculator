@@ -43,7 +43,8 @@ public final class DictMaker extends NodeWrapper {
     }
 
     public boolean hasDictMaker2() {
-        return dictMaker2() != null;
+        var element = getItem(1);
+        return element.isPresent(DictMaker2.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -91,7 +92,8 @@ public final class DictMaker extends NodeWrapper {
         }
 
         public boolean hasCompFor() {
-            return compFor() != null;
+            var element = getItem(0);
+            return element.isPresent(CompFor.RULE);
         }
 
         public DictMaker22 dictMaker22() {
@@ -103,7 +105,8 @@ public final class DictMaker extends NodeWrapper {
         }
 
         public boolean hasDictMaker22() {
-            return dictMaker22() != null;
+            var element = getItem(1);
+            return element.isPresent(DictMaker22.RULE);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -152,7 +155,9 @@ public final class DictMaker extends NodeWrapper {
             List<DictMaker221> result = null;
             var element = getItem(0);
             for (var node : element.asCollection()) {
-                if (result == null) result = new ArrayList<>();
+                if (result == null) {
+                    result = new ArrayList<>();
+                }
                 result.add(DictMaker221.of(node));
             }
             dictMaker221List = result == null ? Collections.emptyList() : result;

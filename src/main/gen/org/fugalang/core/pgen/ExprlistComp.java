@@ -43,7 +43,8 @@ public final class ExprlistComp extends NodeWrapper {
     }
 
     public boolean hasExprlistComp2() {
-        return exprlistComp2() != null;
+        var element = getItem(1);
+        return element.isPresent(ExprlistComp2.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -91,7 +92,8 @@ public final class ExprlistComp extends NodeWrapper {
         }
 
         public boolean hasCompFor() {
-            return compFor() != null;
+            var element = getItem(0);
+            return element.isPresent(CompFor.RULE);
         }
 
         public ExprlistComp22 exprlistComp22() {
@@ -103,7 +105,8 @@ public final class ExprlistComp extends NodeWrapper {
         }
 
         public boolean hasExprlistComp22() {
-            return exprlistComp22() != null;
+            var element = getItem(1);
+            return element.isPresent(ExprlistComp22.RULE);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -152,7 +155,9 @@ public final class ExprlistComp extends NodeWrapper {
             List<ExprlistComp221> result = null;
             var element = getItem(0);
             for (var node : element.asCollection()) {
-                if (result == null) result = new ArrayList<>();
+                if (result == null) {
+                    result = new ArrayList<>();
+                }
                 result.add(ExprlistComp221.of(node));
             }
             exprlistComp221List = result == null ? Collections.emptyList() : result;

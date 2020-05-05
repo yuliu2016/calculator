@@ -33,7 +33,8 @@ public final class Atom extends NodeWrapper {
     }
 
     public boolean hasCompoundAtom() {
-        return compoundAtom() != null;
+        var element = getItem(0);
+        return element.isPresent(CompoundAtom.RULE);
     }
 
     public SimpleAtom simpleAtom() {
@@ -45,7 +46,8 @@ public final class Atom extends NodeWrapper {
     }
 
     public boolean hasSimpleAtom() {
-        return simpleAtom() != null;
+        var element = getItem(1);
+        return element.isPresent(SimpleAtom.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {

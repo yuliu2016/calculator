@@ -82,7 +82,8 @@ public final class Stmt extends NodeWrapper {
         }
 
         public boolean hasSimpleStmt() {
-            return simpleStmt() != null;
+            var element = getItem(0);
+            return element.isPresent(SimpleStmt.RULE);
         }
 
         public CompoundStmt compoundStmt() {
@@ -94,7 +95,8 @@ public final class Stmt extends NodeWrapper {
         }
 
         public boolean hasCompoundStmt() {
-            return compoundStmt() != null;
+            var element = getItem(1);
+            return element.isPresent(CompoundStmt.RULE);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

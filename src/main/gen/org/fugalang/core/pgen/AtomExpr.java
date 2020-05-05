@@ -49,7 +49,9 @@ public final class AtomExpr extends NodeWrapper {
         List<Trailer> result = null;
         var element = getItem(2);
         for (var node : element.asCollection()) {
-            if (result == null) result = new ArrayList<>();
+            if (result == null) {
+                result = new ArrayList<>();
+            }
             result.add(Trailer.of(node));
         }
         trailerList = result == null ? Collections.emptyList() : result;

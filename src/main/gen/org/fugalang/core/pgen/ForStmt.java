@@ -67,7 +67,8 @@ public final class ForStmt extends NodeWrapper {
     }
 
     public boolean hasForStmt6() {
-        return forStmt6() != null;
+        var element = getItem(5);
+        return element.isPresent(ForStmt6.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {

@@ -46,7 +46,8 @@ public final class CompIf extends NodeWrapper {
     }
 
     public boolean hasCompIter() {
-        return compIter() != null;
+        var element = getItem(2);
+        return element.isPresent(CompIter.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {

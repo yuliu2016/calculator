@@ -38,7 +38,8 @@ public final class BlockSuite extends NodeWrapper {
     }
 
     public boolean hasBlockSuite1() {
-        return blockSuite1() != null;
+        var element = getItem(0);
+        return element.isPresent(BlockSuite1.RULE);
     }
 
     public BlockSuite2 blockSuite2() {
@@ -50,7 +51,8 @@ public final class BlockSuite extends NodeWrapper {
     }
 
     public boolean hasBlockSuite2() {
-        return blockSuite2() != null;
+        var element = getItem(1);
+        return element.isPresent(BlockSuite2.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -169,7 +171,9 @@ public final class BlockSuite extends NodeWrapper {
             List<Stmt> result = null;
             var element = getItem(2);
             for (var node : element.asCollection()) {
-                if (result == null) result = new ArrayList<>();
+                if (result == null) {
+                    result = new ArrayList<>();
+                }
                 result.add(Stmt.of(node));
             }
             stmtList = result == null ? Collections.emptyList() : result;

@@ -33,7 +33,8 @@ public final class Factor extends NodeWrapper {
     }
 
     public boolean hasFactor1() {
-        return factor1() != null;
+        var element = getItem(0);
+        return element.isPresent(Factor1.RULE);
     }
 
     public Power power() {
@@ -45,7 +46,8 @@ public final class Factor extends NodeWrapper {
     }
 
     public boolean hasPower() {
-        return power() != null;
+        var element = getItem(1);
+        return element.isPresent(Power.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {

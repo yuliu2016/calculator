@@ -34,7 +34,8 @@ public final class CompoundAtom extends NodeWrapper {
     }
 
     public boolean hasCompoundAtom1() {
-        return compoundAtom1() != null;
+        var element = getItem(0);
+        return element.isPresent(CompoundAtom1.RULE);
     }
 
     public CompoundAtom2 compoundAtom2() {
@@ -46,7 +47,8 @@ public final class CompoundAtom extends NodeWrapper {
     }
 
     public boolean hasCompoundAtom2() {
-        return compoundAtom2() != null;
+        var element = getItem(1);
+        return element.isPresent(CompoundAtom2.RULE);
     }
 
     public CompoundAtom3 compoundAtom3() {
@@ -58,7 +60,8 @@ public final class CompoundAtom extends NodeWrapper {
     }
 
     public boolean hasCompoundAtom3() {
-        return compoundAtom3() != null;
+        var element = getItem(2);
+        return element.isPresent(CompoundAtom3.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -114,7 +117,8 @@ public final class CompoundAtom extends NodeWrapper {
         }
 
         public boolean hasExprlistComp() {
-            return exprlistComp() != null;
+            var element = getItem(1);
+            return element.isPresent(ExprlistComp.RULE);
         }
 
         public boolean isTokenRpar() {
@@ -177,7 +181,8 @@ public final class CompoundAtom extends NodeWrapper {
         }
 
         public boolean hasExprlistCompSub() {
-            return exprlistCompSub() != null;
+            var element = getItem(1);
+            return element.isPresent(ExprlistCompSub.RULE);
         }
 
         public boolean isTokenRsqb() {
@@ -240,7 +245,8 @@ public final class CompoundAtom extends NodeWrapper {
         }
 
         public boolean hasDictorsetmaker() {
-            return dictorsetmaker() != null;
+            var element = getItem(1);
+            return element.isPresent(Dictorsetmaker.RULE);
         }
 
         public boolean isTokenRbrace() {

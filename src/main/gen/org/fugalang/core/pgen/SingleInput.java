@@ -35,7 +35,8 @@ public final class SingleInput extends NodeWrapper {
     }
 
     public boolean hasNewline() {
-        return newline() != null;
+        var element = getItem(0);
+        return element.isPresent(TokenType.NEWLINE);
     }
 
     public SimpleStmt simpleStmt() {
@@ -47,7 +48,8 @@ public final class SingleInput extends NodeWrapper {
     }
 
     public boolean hasSimpleStmt() {
-        return simpleStmt() != null;
+        var element = getItem(1);
+        return element.isPresent(SimpleStmt.RULE);
     }
 
     public SingleInput3 singleInput3() {
@@ -59,7 +61,8 @@ public final class SingleInput extends NodeWrapper {
     }
 
     public boolean hasSingleInput3() {
-        return singleInput3() != null;
+        var element = getItem(2);
+        return element.isPresent(SingleInput3.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
