@@ -18,9 +18,13 @@ public class ListStringElem implements TreeStringElem {
 
         for (Object component : components) {
             if (component == null) {
-                builder.addUnquoted("()");
-            } else if (component instanceof List) {
-                builder.addElem(new ListStringElem((List<?>) component));
+                continue;
+            }
+            if (component instanceof List) {
+                var list = (List<?>) component;
+                if (!list.isEmpty()) {
+                    builder.addElem(new ListStringElem((List<?>) component));
+                }
             } else if (component instanceof TreeStringElem) {
                 builder.addElem((TreeStringElem) component);
             } else {

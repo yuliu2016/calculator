@@ -3,7 +3,7 @@ package org.fugalang.core.pgen;
 import org.fugalang.core.parser.*;
 
 /**
- * expr: 'if' 'disjunction' '?' 'disjunction' 'else' 'expr' | 'disjunction' | 'funcdef'
+ * expr: 'if' 'disjunction' '?' 'disjunction' 'else' 'expr' | 'funcdef' | 'disjunction'
  */
 public final class Expr extends NodeWrapper {
 
@@ -21,8 +21,8 @@ public final class Expr extends NodeWrapper {
     @Override
     protected void buildRule() {
         addChoice(expr1());
-        addChoice(disjunction());
         addChoice(funcdef());
+        addChoice(disjunction());
     }
 
     public Expr1 expr1() {
@@ -37,20 +37,8 @@ public final class Expr extends NodeWrapper {
         return expr1() != null;
     }
 
-    public Disjunction disjunction() {
-        var element = getItem(1);
-        if (!element.isPresent(Disjunction.RULE)) {
-            return null;
-        }
-        return Disjunction.of(element);
-    }
-
-    public boolean hasDisjunction() {
-        return disjunction() != null;
-    }
-
     public Funcdef funcdef() {
-        var element = getItem(2);
+        var element = getItem(1);
         if (!element.isPresent(Funcdef.RULE)) {
             return null;
         }
@@ -61,6 +49,18 @@ public final class Expr extends NodeWrapper {
         return funcdef() != null;
     }
 
+    public Disjunction disjunction() {
+        var element = getItem(2);
+        if (!element.isPresent(Disjunction.RULE)) {
+            return null;
+        }
+        return Disjunction.of(element);
+    }
+
+    public boolean hasDisjunction() {
+        return disjunction() != null;
+    }
+
     public static boolean parse(ParseTree parseTree, int level) {
         if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
@@ -69,8 +69,8 @@ public final class Expr extends NodeWrapper {
         boolean result;
 
         result = Expr1.parse(parseTree, level + 1);
-        result = result || Disjunction.parse(parseTree, level + 1);
         result = result || Funcdef.parse(parseTree, level + 1);
+        result = result || Disjunction.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);
         return result;

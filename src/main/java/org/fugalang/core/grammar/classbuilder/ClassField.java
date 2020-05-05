@@ -155,15 +155,29 @@ public class ClassField {
         return switch (fieldType) {
             case Required -> getRequiredStmt(resultExpr, ruleType, isFirst);
             case Optional -> getOptionalStmt(resultExpr, isFirst);
-            case OptionalList -> getLoopStmt("", resultExpr, isFirst);
-            case RequiredList -> getLoopStmt(
-                    getRequiredStmt(resultExpr, ruleType, isFirst),
-                    resultExpr, isFirst);
+            case OptionalList -> getLoopStmt(resultExpr, isFirst, ruleType, true);
+            case RequiredList -> getLoopStmt(resultExpr, isFirst, ruleType, false);
         };
     }
 
-    private String getLoopStmt(String requiredStmt, String resultExpr, boolean isFirst) {
-        var condition = isFirst ? "" : "if (result) ";
+    private String getLoopStmt(
+            String resultExpr,
+            boolean isFirst,
+            RuleType ruleType,
+            boolean isOptionalList
+    ) {
+        // limitation - only one var declaration
+
+        // a* vs a+
+
+        var requiredStmt = isOptionalList ? "" : "var firstItem = " + resultExpr + ";\n" +
+                getRequiredStmt("firstItem", ruleType, isFirst);
+
+        var condition = isOptionalList ? (isFirst ? "" : switch (ruleType) {
+            case Disjunction -> "if (!result) ";
+            case Conjunction -> "if (result) ";
+        }) : "if (firstItem) ";
+
         return "parseTree.enterCollection();\n" + requiredStmt +
                 condition + "while (true) {\n" +
                 "    var pos = parseTree.position();\n" +

@@ -172,8 +172,9 @@ public final class SetMaker extends NodeWrapper {
             boolean result;
 
             parseTree.enterCollection();
-            result = SetMaker221.parse(parseTree, level + 1);
-            while (true) {
+            var firstItem = SetMaker221.parse(parseTree, level + 1);
+            result = firstItem;
+            if (firstItem) while (true) {
                 var pos = parseTree.position();
                 if (!SetMaker221.parse(parseTree, level + 1) ||
                         parseTree.guardLoopExit(pos)) {

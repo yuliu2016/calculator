@@ -194,8 +194,9 @@ public final class TryStmt extends NodeWrapper {
             boolean result;
 
             parseTree.enterCollection();
-            result = TryStmt311.parse(parseTree, level + 1);
-            while (true) {
+            var firstItem = TryStmt311.parse(parseTree, level + 1);
+            result = firstItem;
+            if (firstItem) while (true) {
                 var pos = parseTree.position();
                 if (!TryStmt311.parse(parseTree, level + 1) ||
                         parseTree.guardLoopExit(pos)) {

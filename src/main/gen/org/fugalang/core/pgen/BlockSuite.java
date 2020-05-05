@@ -192,8 +192,9 @@ public final class BlockSuite extends NodeWrapper {
             result = parseTree.consumeToken("{");
             result = result && parseTree.consumeToken(TokenType.NEWLINE);
             parseTree.enterCollection();
-            result = result && Stmt.parse(parseTree, level + 1);
-            if (result) while (true) {
+            var firstItem = Stmt.parse(parseTree, level + 1);
+            result = result && firstItem;
+            if (firstItem) while (true) {
                 var pos = parseTree.position();
                 if (!Stmt.parse(parseTree, level + 1) ||
                         parseTree.guardLoopExit(pos)) {

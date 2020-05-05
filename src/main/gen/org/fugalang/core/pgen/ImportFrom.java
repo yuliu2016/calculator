@@ -129,8 +129,9 @@ public final class ImportFrom extends NodeWrapper {
 
             result = ImportFrom21.parse(parseTree, level + 1);
             parseTree.enterCollection();
-            result = result || parseTree.consumeToken(".");
-            if (result) while (true) {
+            var firstItem = parseTree.consumeToken(".");
+            result = result || firstItem;
+            if (firstItem) while (true) {
                 var pos = parseTree.position();
                 if (!parseTree.consumeToken(".") ||
                         parseTree.guardLoopExit(pos)) {

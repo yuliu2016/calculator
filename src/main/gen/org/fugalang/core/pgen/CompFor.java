@@ -3,7 +3,7 @@ package org.fugalang.core.pgen;
 import org.fugalang.core.parser.*;
 
 /**
- * comp_for: 'for' 'targets' 'in' 'disjunction'
+ * comp_for: 'for' 'targets' 'in' 'disjunction' ['comp_iter']
  */
 public final class CompFor extends NodeWrapper {
 
@@ -24,6 +24,7 @@ public final class CompFor extends NodeWrapper {
         addRequired(targets());
         addRequired(isTokenIn(), "in");
         addRequired(disjunction());
+        addOptional(compIter());
     }
 
     public boolean isTokenFor() {
@@ -50,6 +51,18 @@ public final class CompFor extends NodeWrapper {
         return Disjunction.of(element);
     }
 
+    public CompIter compIter() {
+        var element = getItem(4);
+        if (!element.isPresent(CompIter.RULE)) {
+            return null;
+        }
+        return CompIter.of(element);
+    }
+
+    public boolean hasCompIter() {
+        return compIter() != null;
+    }
+
     public static boolean parse(ParseTree parseTree, int level) {
         if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
@@ -61,6 +74,7 @@ public final class CompFor extends NodeWrapper {
         result = result && Targets.parse(parseTree, level + 1);
         result = result && parseTree.consumeToken("in");
         result = result && Disjunction.parse(parseTree, level + 1);
+        if (result) CompIter.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);
         return result;

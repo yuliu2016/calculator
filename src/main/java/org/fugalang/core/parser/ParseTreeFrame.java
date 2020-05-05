@@ -44,13 +44,6 @@ public class ParseTreeFrame implements ParseTreeMarker {
 
     @Override
     public String toString() {
-        return "ParseTreeFrame{" +
-                "parentFrame=" + parentFrame +
-                ", position=" + position +
-                ", level=" + level +
-                ", rule=" + rule +
-                ", nodes=" + nodes +
-                ", collection=" + collection +
-                '}';
+        return "ParseTreeFrame";
     }
 }

@@ -172,8 +172,9 @@ public final class DictMaker extends NodeWrapper {
             boolean result;
 
             parseTree.enterCollection();
-            result = DictMaker221.parse(parseTree, level + 1);
-            while (true) {
+            var firstItem = DictMaker221.parse(parseTree, level + 1);
+            result = firstItem;
+            if (firstItem) while (true) {
                 var pos = parseTree.position();
                 if (!DictMaker221.parse(parseTree, level + 1) ||
                         parseTree.guardLoopExit(pos)) {

@@ -323,28 +323,23 @@ public class Tokenizer {
 
     /**
      * dec_small: dec_digit | dec_digit ('_' | dec_digit)* dec_digit
-     * dec_big: '.' dec_small | dec_small ['.' [dec_small]]
+     * dec_big: dec_small ['.' [dec_small]]
      * exponent: ('e' | 'E') ['+' | '-'] dec_small
      * dec_number: dec_big [exponent] ['j']
      */
     private boolean tokenizeDecimalNumber() {
 
-        var is_floating_point = isFloatingPoint(visitor.p1);
+        var is_floating_point = false;
         var j = visitor.i;
 
-        if (is_floating_point) {
+        if (!isNumeric(visitor.p1)) {
+            return false;
+        }
+        j = tokenizeDecimalSequence(j);
+        if (j < visitor.size && isFloatingPoint(visitor.code.charAt(j))) {
+            is_floating_point = true;
             j++;
             j = tokenizeDecimalSequence(j);
-        } else {
-            if (!isNumeric(visitor.p1)) {
-                return false;
-            }
-            j = tokenizeDecimalSequence(j);
-            if (j < visitor.size && isFloatingPoint(visitor.code.charAt(j))) {
-                is_floating_point = true;
-                j++;
-                j = tokenizeDecimalSequence(j);
-            }
         }
 
         if (j < visitor.size && isExponentDelimiter(visitor.code.charAt(j))) {
@@ -358,7 +353,7 @@ public class Tokenizer {
 
         var s = visitor.code.substring(visitor.i, j);
 
-        if (!is_floating_point && s.replace("0", "").isEmpty()) {
+        if (!is_floating_point && s.startsWith("0") && !s.replace("0", "").isEmpty()) {
             throw new SyntaxError("Integer with leading zero; use 0o for octal numbers");
         }
         addNumber(s);
@@ -387,7 +382,7 @@ public class Tokenizer {
      * bin_digit: '0' | '1'
      * <p>
      * dec_small: dec_digit | dec_digit ('_' | dec_digit)* dec_digit
-     * dec_big: '.' dec_small | dec_small ['.' [dec_small]]
+     * dec_big: dec_small ['.' [dec_small]]
      * exponent: ('e' | 'E') ['-'] dec_digit+
      * dec_number: dec_big [exponent] ['j']
      */

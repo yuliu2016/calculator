@@ -30,7 +30,7 @@ class IndexNode implements ParseTreeNode {
     public ParseTreeNode getItem(int index) {
         // Fixes the OR problem
         if (children == null || index >= children.size()) {
-            return NULL; // fixme
+            return NULL;
         }
         return children.get(index);
     }
@@ -53,28 +53,33 @@ class IndexNode implements ParseTreeNode {
     @Override
     public void failIfAbsent() {
         if (!isPresent) {
-            throw new ParserException();
+            throw new ParserException("This node does not contain a value");
         }
     }
 
     @Override
     public void failIfAbsent(ParserRule rule) {
-        if (!isPresent || this.rule != rule) {
-            throw new ParserException();
+        failIfAbsent();
+        if (this.rule != rule) {
+            throw new ParserException("Expecting rule " + rule +
+                    ", but the rule of this node is " + this.rule);
         }
     }
 
     @Override
     public void failIfAbsent(ElementType type) {
-        if (!isPresent || element.getType() != type) {
-            throw new ParserException();
+        failIfAbsent();
+        if (element.getType() != type) {
+            throw new ParserException("Expecting type " + type +
+                    ", but the type of this node is " + element.getType());
         }
     }
 
     @Override
     public Iterable<ParseTreeNode> asCollection() {
-        if (!isPresent || !isCollection) {
-            throw new ParserException();
+        failIfAbsent();
+        if (!isCollection) {
+            throw new ParserException("This node is not a collection");
         }
         return children;
     }
