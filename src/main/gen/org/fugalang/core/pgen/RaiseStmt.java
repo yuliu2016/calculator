@@ -21,7 +21,7 @@ public final class RaiseStmt extends NodeWrapper {
     @Override
     protected void buildRule() {
         addRequired(isTokenRaise(), "raise");
-        addOptional(raiseStmt2());
+        addOptional(raiseStmt2OrNull());
     }
 
     public boolean isTokenRaise() {
@@ -82,7 +82,7 @@ public final class RaiseStmt extends NodeWrapper {
         @Override
         protected void buildRule() {
             addRequired(expr());
-            addOptional(raiseStmt22());
+            addOptional(raiseStmt22OrNull());
         }
 
         public Expr expr() {

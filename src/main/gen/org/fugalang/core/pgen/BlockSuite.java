@@ -25,8 +25,8 @@ public final class BlockSuite extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addChoice(blockSuite1());
-        addChoice(blockSuite2());
+        addChoice(blockSuite1OrNull());
+        addChoice(blockSuite2OrNull());
     }
 
     public BlockSuite1 blockSuite1() {

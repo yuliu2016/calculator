@@ -25,7 +25,7 @@ public final class ExprStmt extends NodeWrapper {
     @Override
     protected void buildRule() {
         addRequired(exprlistStar());
-        addOptional(exprStmt2());
+        addOptional(exprStmt2OrNull());
     }
 
     public ExprlistStar exprlistStar() {
@@ -88,7 +88,7 @@ public final class ExprStmt extends NodeWrapper {
         @Override
         protected void buildRule() {
             addChoice(exprStmt21List());
-            addChoice(exprStmt22());
+            addChoice(exprStmt22OrNull());
         }
 
         public List<ExprStmt21> exprStmt21List() {

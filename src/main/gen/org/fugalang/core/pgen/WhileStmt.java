@@ -3,7 +3,7 @@ package org.fugalang.core.pgen;
 import org.fugalang.core.parser.*;
 
 /**
- * while_stmt: 'while' 'namedexpr_expr' 'suite' ['else' 'suite']
+ * while_stmt: 'while' 'namedexpr_expr' 'suite' ['else_suite']
  */
 public final class WhileStmt extends NodeWrapper {
 
@@ -23,7 +23,7 @@ public final class WhileStmt extends NodeWrapper {
         addRequired(isTokenWhile(), "while");
         addRequired(namedexprExpr());
         addRequired(suite());
-        addOptional(whileStmt4());
+        addOptional(elseSuiteOrNull());
     }
 
     public boolean isTokenWhile() {
@@ -44,23 +44,23 @@ public final class WhileStmt extends NodeWrapper {
         return Suite.of(element);
     }
 
-    public WhileStmt4 whileStmt4() {
+    public ElseSuite elseSuite() {
         var element = getItem(3);
-        element.failIfAbsent(WhileStmt4.RULE);
-        return WhileStmt4.of(element);
+        element.failIfAbsent(ElseSuite.RULE);
+        return ElseSuite.of(element);
     }
 
-    public WhileStmt4 whileStmt4OrNull() {
+    public ElseSuite elseSuiteOrNull() {
         var element = getItem(3);
-        if (!element.isPresent(WhileStmt4.RULE)) {
+        if (!element.isPresent(ElseSuite.RULE)) {
             return null;
         }
-        return WhileStmt4.of(element);
+        return ElseSuite.of(element);
     }
 
-    public boolean hasWhileStmt4() {
+    public boolean hasElseSuite() {
         var element = getItem(3);
-        return element.isPresent(WhileStmt4.RULE);
+        return element.isPresent(ElseSuite.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -73,58 +73,9 @@ public final class WhileStmt extends NodeWrapper {
         result = parseTree.consumeToken("while");
         result = result && NamedexprExpr.parse(parseTree, level + 1);
         result = result && Suite.parse(parseTree, level + 1);
-        if (result) WhileStmt4.parse(parseTree, level + 1);
+        if (result) ElseSuite.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);
         return result;
-    }
-
-    /**
-     * 'else' 'suite'
-     */
-    public static final class WhileStmt4 extends NodeWrapper {
-
-        public static final ParserRule RULE =
-                new ParserRule("while_stmt:4", RuleType.Conjunction, false);
-
-        public static WhileStmt4 of(ParseTreeNode node) {
-            return new WhileStmt4(node);
-        }
-
-        private WhileStmt4(ParseTreeNode node) {
-            super(RULE, node);
-        }
-
-        @Override
-        protected void buildRule() {
-            addRequired(isTokenElse(), "else");
-            addRequired(suite());
-        }
-
-        public boolean isTokenElse() {
-            var element = getItem(0);
-            element.failIfAbsent();
-            return element.asBoolean();
-        }
-
-        public Suite suite() {
-            var element = getItem(1);
-            element.failIfAbsent(Suite.RULE);
-            return Suite.of(element);
-        }
-
-        public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
-            var marker = parseTree.enter(level, RULE);
-            boolean result;
-
-            result = parseTree.consumeToken("else");
-            result = result && Suite.parse(parseTree, level + 1);
-
-            parseTree.exit(level, marker, result);
-            return result;
-        }
     }
 }

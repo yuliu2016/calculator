@@ -69,8 +69,8 @@ public final class Stmt extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addChoice(simpleStmt());
-            addChoice(compoundStmt());
+            addChoice(simpleStmtOrNull());
+            addChoice(compoundStmtOrNull());
         }
 
         public SimpleStmt simpleStmt() {

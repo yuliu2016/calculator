@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * import_as_names: 'import_as_name' (',' 'import_as_name')* [',']
+ * import_as_names: 'import_as_name' (',' 'import_as_name')*
  */
 public final class ImportAsNames extends NodeWrapper {
 
@@ -28,7 +28,6 @@ public final class ImportAsNames extends NodeWrapper {
     protected void buildRule() {
         addRequired(importAsName());
         addRequired(importAsNames2List());
-        addOptional(isTokenComma(), ",");
     }
 
     public ImportAsName importAsName() {
@@ -53,11 +52,6 @@ public final class ImportAsNames extends NodeWrapper {
         return importAsNames2List;
     }
 
-    public boolean isTokenComma() {
-        var element = getItem(2);
-        return element.asBoolean();
-    }
-
     public static boolean parse(ParseTree parseTree, int level) {
         if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
@@ -75,7 +69,6 @@ public final class ImportAsNames extends NodeWrapper {
             }
         }
         parseTree.exitCollection();
-        if (result) parseTree.consumeToken(",");
 
         parseTree.exit(level, marker, result);
         return result;

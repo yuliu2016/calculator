@@ -22,7 +22,7 @@ public final class AssertStmt extends NodeWrapper {
     protected void buildRule() {
         addRequired(isTokenAssert(), "assert");
         addRequired(expr());
-        addOptional(assertStmt3());
+        addOptional(assertStmt3OrNull());
     }
 
     public boolean isTokenAssert() {

@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * if_stmt: 'if' 'namedexpr_expr' 'suite' ('elif' 'namedexpr_expr' 'suite')* ['else' 'suite']
+ * if_stmt: 'if' 'namedexpr_expr' 'suite' ('elif' 'namedexpr_expr' 'suite')* ['else_suite']
  */
 public final class IfStmt extends NodeWrapper {
 
@@ -30,7 +30,7 @@ public final class IfStmt extends NodeWrapper {
         addRequired(namedexprExpr());
         addRequired(suite());
         addRequired(ifStmt4List());
-        addOptional(ifStmt5());
+        addOptional(elseSuiteOrNull());
     }
 
     public boolean isTokenIf() {
@@ -67,23 +67,23 @@ public final class IfStmt extends NodeWrapper {
         return ifStmt4List;
     }
 
-    public IfStmt5 ifStmt5() {
+    public ElseSuite elseSuite() {
         var element = getItem(4);
-        element.failIfAbsent(IfStmt5.RULE);
-        return IfStmt5.of(element);
+        element.failIfAbsent(ElseSuite.RULE);
+        return ElseSuite.of(element);
     }
 
-    public IfStmt5 ifStmt5OrNull() {
+    public ElseSuite elseSuiteOrNull() {
         var element = getItem(4);
-        if (!element.isPresent(IfStmt5.RULE)) {
+        if (!element.isPresent(ElseSuite.RULE)) {
             return null;
         }
-        return IfStmt5.of(element);
+        return ElseSuite.of(element);
     }
 
-    public boolean hasIfStmt5() {
+    public boolean hasElseSuite() {
         var element = getItem(4);
-        return element.isPresent(IfStmt5.RULE);
+        return element.isPresent(ElseSuite.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -105,7 +105,7 @@ public final class IfStmt extends NodeWrapper {
             }
         }
         parseTree.exitCollection();
-        if (result) IfStmt5.parse(parseTree, level + 1);
+        if (result) ElseSuite.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);
         return result;
@@ -161,55 +161,6 @@ public final class IfStmt extends NodeWrapper {
 
             result = parseTree.consumeToken("elif");
             result = result && NamedexprExpr.parse(parseTree, level + 1);
-            result = result && Suite.parse(parseTree, level + 1);
-
-            parseTree.exit(level, marker, result);
-            return result;
-        }
-    }
-
-    /**
-     * 'else' 'suite'
-     */
-    public static final class IfStmt5 extends NodeWrapper {
-
-        public static final ParserRule RULE =
-                new ParserRule("if_stmt:5", RuleType.Conjunction, false);
-
-        public static IfStmt5 of(ParseTreeNode node) {
-            return new IfStmt5(node);
-        }
-
-        private IfStmt5(ParseTreeNode node) {
-            super(RULE, node);
-        }
-
-        @Override
-        protected void buildRule() {
-            addRequired(isTokenElse(), "else");
-            addRequired(suite());
-        }
-
-        public boolean isTokenElse() {
-            var element = getItem(0);
-            element.failIfAbsent();
-            return element.asBoolean();
-        }
-
-        public Suite suite() {
-            var element = getItem(1);
-            element.failIfAbsent(Suite.RULE);
-            return Suite.of(element);
-        }
-
-        public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
-            var marker = parseTree.enter(level, RULE);
-            boolean result;
-
-            result = parseTree.consumeToken("else");
             result = result && Suite.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);

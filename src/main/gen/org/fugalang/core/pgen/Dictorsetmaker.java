@@ -20,8 +20,8 @@ public final class Dictorsetmaker extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addChoice(dictMaker());
-        addChoice(setMaker());
+        addChoice(dictMakerOrNull());
+        addChoice(setMakerOrNull());
     }
 
     public DictMaker dictMaker() {

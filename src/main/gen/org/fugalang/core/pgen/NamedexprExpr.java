@@ -22,7 +22,7 @@ public final class NamedexprExpr extends NodeWrapper {
     @Override
     protected void buildRule() {
         addRequired(name());
-        addOptional(namedexprExpr2());
+        addOptional(namedexprExpr2OrNull());
     }
 
     public String name() {

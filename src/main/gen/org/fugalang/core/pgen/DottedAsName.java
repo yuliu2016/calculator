@@ -22,7 +22,7 @@ public final class DottedAsName extends NodeWrapper {
     @Override
     protected void buildRule() {
         addRequired(dottedName());
-        addOptional(dottedAsName2());
+        addOptional(dottedAsName2OrNull());
     }
 
     public DottedName dottedName() {

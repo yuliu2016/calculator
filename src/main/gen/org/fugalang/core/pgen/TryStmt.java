@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * try_stmt: 'try' 'suite' (('except_clause' 'suite')+ ['else' 'suite'] ['finally' 'suite'] | 'finally' 'suite')
+ * try_stmt: 'try' 'suite' (('except_clause' 'suite')+ ['else_suite'] ['finally_suite'] | 'finally_suite')
  */
 public final class TryStmt extends NodeWrapper {
 
@@ -63,7 +63,7 @@ public final class TryStmt extends NodeWrapper {
     }
 
     /**
-     * ('except_clause' 'suite')+ ['else' 'suite'] ['finally' 'suite'] | 'finally' 'suite'
+     * ('except_clause' 'suite')+ ['else_suite'] ['finally_suite'] | 'finally_suite'
      */
     public static final class TryStmt3 extends NodeWrapper {
 
@@ -80,8 +80,8 @@ public final class TryStmt extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addChoice(tryStmt31());
-            addChoice(tryStmt32());
+            addChoice(tryStmt31OrNull());
+            addChoice(finallySuiteOrNull());
         }
 
         public TryStmt31 tryStmt31() {
@@ -103,23 +103,23 @@ public final class TryStmt extends NodeWrapper {
             return element.isPresent(TryStmt31.RULE);
         }
 
-        public TryStmt32 tryStmt32() {
+        public FinallySuite finallySuite() {
             var element = getItem(1);
-            element.failIfAbsent(TryStmt32.RULE);
-            return TryStmt32.of(element);
+            element.failIfAbsent(FinallySuite.RULE);
+            return FinallySuite.of(element);
         }
 
-        public TryStmt32 tryStmt32OrNull() {
+        public FinallySuite finallySuiteOrNull() {
             var element = getItem(1);
-            if (!element.isPresent(TryStmt32.RULE)) {
+            if (!element.isPresent(FinallySuite.RULE)) {
                 return null;
             }
-            return TryStmt32.of(element);
+            return FinallySuite.of(element);
         }
 
-        public boolean hasTryStmt32() {
+        public boolean hasFinallySuite() {
             var element = getItem(1);
-            return element.isPresent(TryStmt32.RULE);
+            return element.isPresent(FinallySuite.RULE);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -130,7 +130,7 @@ public final class TryStmt extends NodeWrapper {
             boolean result;
 
             result = TryStmt31.parse(parseTree, level + 1);
-            result = result || TryStmt32.parse(parseTree, level + 1);
+            result = result || FinallySuite.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);
             return result;
@@ -138,7 +138,7 @@ public final class TryStmt extends NodeWrapper {
     }
 
     /**
-     * ('except_clause' 'suite')+ ['else' 'suite'] ['finally' 'suite']
+     * ('except_clause' 'suite')+ ['else_suite'] ['finally_suite']
      */
     public static final class TryStmt31 extends NodeWrapper {
 
@@ -158,8 +158,8 @@ public final class TryStmt extends NodeWrapper {
         @Override
         protected void buildRule() {
             addRequired(tryStmt311List());
-            addOptional(tryStmt312());
-            addOptional(tryStmt313());
+            addOptional(elseSuiteOrNull());
+            addOptional(finallySuiteOrNull());
         }
 
         public List<TryStmt311> tryStmt311List() {
@@ -178,42 +178,42 @@ public final class TryStmt extends NodeWrapper {
             return tryStmt311List;
         }
 
-        public TryStmt312 tryStmt312() {
+        public ElseSuite elseSuite() {
             var element = getItem(1);
-            element.failIfAbsent(TryStmt312.RULE);
-            return TryStmt312.of(element);
+            element.failIfAbsent(ElseSuite.RULE);
+            return ElseSuite.of(element);
         }
 
-        public TryStmt312 tryStmt312OrNull() {
+        public ElseSuite elseSuiteOrNull() {
             var element = getItem(1);
-            if (!element.isPresent(TryStmt312.RULE)) {
+            if (!element.isPresent(ElseSuite.RULE)) {
                 return null;
             }
-            return TryStmt312.of(element);
+            return ElseSuite.of(element);
         }
 
-        public boolean hasTryStmt312() {
+        public boolean hasElseSuite() {
             var element = getItem(1);
-            return element.isPresent(TryStmt312.RULE);
+            return element.isPresent(ElseSuite.RULE);
         }
 
-        public TryStmt313 tryStmt313() {
+        public FinallySuite finallySuite() {
             var element = getItem(2);
-            element.failIfAbsent(TryStmt313.RULE);
-            return TryStmt313.of(element);
+            element.failIfAbsent(FinallySuite.RULE);
+            return FinallySuite.of(element);
         }
 
-        public TryStmt313 tryStmt313OrNull() {
+        public FinallySuite finallySuiteOrNull() {
             var element = getItem(2);
-            if (!element.isPresent(TryStmt313.RULE)) {
+            if (!element.isPresent(FinallySuite.RULE)) {
                 return null;
             }
-            return TryStmt313.of(element);
+            return FinallySuite.of(element);
         }
 
-        public boolean hasTryStmt313() {
+        public boolean hasFinallySuite() {
             var element = getItem(2);
-            return element.isPresent(TryStmt313.RULE);
+            return element.isPresent(FinallySuite.RULE);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -234,8 +234,8 @@ public final class TryStmt extends NodeWrapper {
                 }
             }
             parseTree.exitCollection();
-            if (result) TryStmt312.parse(parseTree, level + 1);
-            if (result) TryStmt313.parse(parseTree, level + 1);
+            if (result) ElseSuite.parse(parseTree, level + 1);
+            if (result) FinallySuite.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);
             return result;
@@ -284,153 +284,6 @@ public final class TryStmt extends NodeWrapper {
             boolean result;
 
             result = ExceptClause.parse(parseTree, level + 1);
-            result = result && Suite.parse(parseTree, level + 1);
-
-            parseTree.exit(level, marker, result);
-            return result;
-        }
-    }
-
-    /**
-     * 'else' 'suite'
-     */
-    public static final class TryStmt312 extends NodeWrapper {
-
-        public static final ParserRule RULE =
-                new ParserRule("try_stmt:3:1:2", RuleType.Conjunction, false);
-
-        public static TryStmt312 of(ParseTreeNode node) {
-            return new TryStmt312(node);
-        }
-
-        private TryStmt312(ParseTreeNode node) {
-            super(RULE, node);
-        }
-
-        @Override
-        protected void buildRule() {
-            addRequired(isTokenElse(), "else");
-            addRequired(suite());
-        }
-
-        public boolean isTokenElse() {
-            var element = getItem(0);
-            element.failIfAbsent();
-            return element.asBoolean();
-        }
-
-        public Suite suite() {
-            var element = getItem(1);
-            element.failIfAbsent(Suite.RULE);
-            return Suite.of(element);
-        }
-
-        public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
-            var marker = parseTree.enter(level, RULE);
-            boolean result;
-
-            result = parseTree.consumeToken("else");
-            result = result && Suite.parse(parseTree, level + 1);
-
-            parseTree.exit(level, marker, result);
-            return result;
-        }
-    }
-
-    /**
-     * 'finally' 'suite'
-     */
-    public static final class TryStmt313 extends NodeWrapper {
-
-        public static final ParserRule RULE =
-                new ParserRule("try_stmt:3:1:3", RuleType.Conjunction, false);
-
-        public static TryStmt313 of(ParseTreeNode node) {
-            return new TryStmt313(node);
-        }
-
-        private TryStmt313(ParseTreeNode node) {
-            super(RULE, node);
-        }
-
-        @Override
-        protected void buildRule() {
-            addRequired(isTokenFinally(), "finally");
-            addRequired(suite());
-        }
-
-        public boolean isTokenFinally() {
-            var element = getItem(0);
-            element.failIfAbsent();
-            return element.asBoolean();
-        }
-
-        public Suite suite() {
-            var element = getItem(1);
-            element.failIfAbsent(Suite.RULE);
-            return Suite.of(element);
-        }
-
-        public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
-            var marker = parseTree.enter(level, RULE);
-            boolean result;
-
-            result = parseTree.consumeToken("finally");
-            result = result && Suite.parse(parseTree, level + 1);
-
-            parseTree.exit(level, marker, result);
-            return result;
-        }
-    }
-
-    /**
-     * 'finally' 'suite'
-     */
-    public static final class TryStmt32 extends NodeWrapper {
-
-        public static final ParserRule RULE =
-                new ParserRule("try_stmt:3:2", RuleType.Conjunction, false);
-
-        public static TryStmt32 of(ParseTreeNode node) {
-            return new TryStmt32(node);
-        }
-
-        private TryStmt32(ParseTreeNode node) {
-            super(RULE, node);
-        }
-
-        @Override
-        protected void buildRule() {
-            addRequired(isTokenFinally(), "finally");
-            addRequired(suite());
-        }
-
-        public boolean isTokenFinally() {
-            var element = getItem(0);
-            element.failIfAbsent();
-            return element.asBoolean();
-        }
-
-        public Suite suite() {
-            var element = getItem(1);
-            element.failIfAbsent(Suite.RULE);
-            return Suite.of(element);
-        }
-
-        public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
-            var marker = parseTree.enter(level, RULE);
-            boolean result;
-
-            result = parseTree.consumeToken("finally");
             result = result && Suite.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);

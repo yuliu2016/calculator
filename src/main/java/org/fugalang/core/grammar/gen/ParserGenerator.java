@@ -180,9 +180,6 @@ public class ParserGenerator {
                             RepeatType.Once, REQUIRED, ResultSource.ofClass(newClassName));
 
                     addAndRule(newClassName, component_cb, andRule, REQUIRED);
-
-                    // protect against not initializing result
-                    component_cb.guardMatchEmptyString();
                 }
             }
         }
@@ -336,9 +333,6 @@ public class ParserGenerator {
                     repeatType, isOptional, ResultSource.ofClass(className));
 
             addOrRule(className, component_cb, rule);
-
-            // protect against not initializing result
-            component_cb.guardMatchEmptyString();
         }
     }
 }

@@ -20,8 +20,8 @@ public final class Suite extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addChoice(suite1());
-        addChoice(blockSuite());
+        addChoice(suite1OrNull());
+        addChoice(blockSuiteOrNull());
     }
 
     public Suite1 suite1() {

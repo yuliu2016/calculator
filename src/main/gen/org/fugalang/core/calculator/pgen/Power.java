@@ -21,7 +21,7 @@ public final class Power extends NodeWrapper {
     @Override
     protected void buildRule() {
         addRequired(atom());
-        addOptional(power2());
+        addOptional(power2OrNull());
     }
 
     public Atom atom() {

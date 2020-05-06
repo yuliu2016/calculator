@@ -20,8 +20,8 @@ public final class Atom extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addChoice(compoundAtom());
-        addChoice(simpleAtom());
+        addChoice(compoundAtomOrNull());
+        addChoice(simpleAtomOrNull());
     }
 
     public CompoundAtom compoundAtom() {

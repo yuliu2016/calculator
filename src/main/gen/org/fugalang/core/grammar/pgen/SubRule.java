@@ -21,9 +21,9 @@ public final class SubRule extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addChoice(subRule1());
-        addChoice(subRule2());
-        addChoice(token());
+        addChoice(subRule1OrNull());
+        addChoice(subRule2OrNull());
+        addChoice(tokenOrNull());
     }
 
     public SubRule1 subRule1() {

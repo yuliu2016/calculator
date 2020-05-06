@@ -21,9 +21,9 @@ public final class SimpleAtom extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addChoice(name());
-        addChoice(number());
-        addChoice(string());
+        addChoice(nameOrNull());
+        addChoice(numberOrNull());
+        addChoice(stringOrNull());
         addChoice(isTokenNone(), "None");
         addChoice(isTokenTrue(), "True");
         addChoice(isTokenFalse(), "False");

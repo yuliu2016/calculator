@@ -21,8 +21,8 @@ public final class Atom extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addChoice(atom1());
-        addChoice(number());
+        addChoice(atom1OrNull());
+        addChoice(numberOrNull());
     }
 
     public Atom1 atom1() {

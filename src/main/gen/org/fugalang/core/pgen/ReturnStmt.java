@@ -21,7 +21,7 @@ public final class ReturnStmt extends NodeWrapper {
     @Override
     protected void buildRule() {
         addRequired(isTokenReturn(), "return");
-        addOptional(exprlistStar());
+        addOptional(exprlistStarOrNull());
     }
 
     public boolean isTokenReturn() {

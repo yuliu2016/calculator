@@ -20,8 +20,8 @@ public final class Factor extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addChoice(factor1());
-        addChoice(power());
+        addChoice(factor1OrNull());
+        addChoice(powerOrNull());
     }
 
     public Factor1 factor1() {

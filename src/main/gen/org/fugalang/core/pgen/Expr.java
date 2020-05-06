@@ -20,9 +20,9 @@ public final class Expr extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addChoice(expr1());
-        addChoice(funcdef());
-        addChoice(disjunction());
+        addChoice(expr1OrNull());
+        addChoice(funcdefOrNull());
+        addChoice(disjunctionOrNull());
     }
 
     public Expr1 expr1() {

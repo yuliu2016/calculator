@@ -27,7 +27,7 @@ public final class Varargslist extends NodeWrapper {
     @Override
     protected void buildRule() {
         addRequired(vfpdef());
-        addOptional(varargslist2());
+        addOptional(varargslist2OrNull());
         addRequired(varargslist3List());
     }
 
@@ -164,7 +164,7 @@ public final class Varargslist extends NodeWrapper {
         protected void buildRule() {
             addRequired(isTokenComma(), ",");
             addRequired(vfpdef());
-            addOptional(varargslist33());
+            addOptional(varargslist33OrNull());
         }
 
         public boolean isTokenComma() {

@@ -4,7 +4,7 @@ import org.fugalang.core.parser.*;
 import org.fugalang.core.token.TokenType;
 
 /**
- * trailer: '(' ['arglist'] ')' | '[' 'subscriptlist' ']' | '.' 'NAME' | 'block_suite'
+ * trailer: '(' ['arglist'] ')' | '[' 'subscript' ']' | '.' 'NAME' | 'block_suite'
  */
 public final class Trailer extends NodeWrapper {
 
@@ -21,10 +21,10 @@ public final class Trailer extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addChoice(trailer1());
-        addChoice(trailer2());
-        addChoice(trailer3());
-        addChoice(blockSuite());
+        addChoice(trailer1OrNull());
+        addChoice(trailer2OrNull());
+        addChoice(trailer3OrNull());
+        addChoice(blockSuiteOrNull());
     }
 
     public Trailer1 trailer1() {
@@ -138,7 +138,7 @@ public final class Trailer extends NodeWrapper {
         @Override
         protected void buildRule() {
             addRequired(isTokenLpar(), "(");
-            addOptional(arglist());
+            addOptional(arglistOrNull());
             addRequired(isTokenRpar(), ")");
         }
 
@@ -190,7 +190,7 @@ public final class Trailer extends NodeWrapper {
     }
 
     /**
-     * '[' 'subscriptlist' ']'
+     * '[' 'subscript' ']'
      */
     public static final class Trailer2 extends NodeWrapper {
 
@@ -208,7 +208,7 @@ public final class Trailer extends NodeWrapper {
         @Override
         protected void buildRule() {
             addRequired(isTokenLsqb(), "[");
-            addRequired(subscriptlist());
+            addRequired(subscript());
             addRequired(isTokenRsqb(), "]");
         }
 
@@ -218,10 +218,10 @@ public final class Trailer extends NodeWrapper {
             return element.asBoolean();
         }
 
-        public Subscriptlist subscriptlist() {
+        public Subscript subscript() {
             var element = getItem(1);
-            element.failIfAbsent(Subscriptlist.RULE);
-            return Subscriptlist.of(element);
+            element.failIfAbsent(Subscript.RULE);
+            return Subscript.of(element);
         }
 
         public boolean isTokenRsqb() {
@@ -238,7 +238,7 @@ public final class Trailer extends NodeWrapper {
             boolean result;
 
             result = parseTree.consumeToken("[");
-            result = result && Subscriptlist.parse(parseTree, level + 1);
+            result = result && Subscript.parse(parseTree, level + 1);
             result = result && parseTree.consumeToken("]");
 
             parseTree.exit(level, marker, result);

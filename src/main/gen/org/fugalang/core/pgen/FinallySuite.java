@@ -3,37 +3,37 @@ package org.fugalang.core.pgen;
 import org.fugalang.core.parser.*;
 
 /**
- * del_stmt: 'del' 'targetlist'
+ * finally_suite: 'finally' 'suite'
  */
-public final class DelStmt extends NodeWrapper {
+public final class FinallySuite extends NodeWrapper {
 
     public static final ParserRule RULE =
-            new ParserRule("del_stmt", RuleType.Conjunction, true);
+            new ParserRule("finally_suite", RuleType.Conjunction, true);
 
-    public static DelStmt of(ParseTreeNode node) {
-        return new DelStmt(node);
+    public static FinallySuite of(ParseTreeNode node) {
+        return new FinallySuite(node);
     }
 
-    private DelStmt(ParseTreeNode node) {
+    private FinallySuite(ParseTreeNode node) {
         super(RULE, node);
     }
 
     @Override
     protected void buildRule() {
-        addRequired(isTokenDel(), "del");
-        addRequired(targetlist());
+        addRequired(isTokenFinally(), "finally");
+        addRequired(suite());
     }
 
-    public boolean isTokenDel() {
+    public boolean isTokenFinally() {
         var element = getItem(0);
         element.failIfAbsent();
         return element.asBoolean();
     }
 
-    public Targetlist targetlist() {
+    public Suite suite() {
         var element = getItem(1);
-        element.failIfAbsent(Targetlist.RULE);
-        return Targetlist.of(element);
+        element.failIfAbsent(Suite.RULE);
+        return Suite.of(element);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -43,8 +43,8 @@ public final class DelStmt extends NodeWrapper {
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
-        result = parseTree.consumeToken("del");
-        result = result && Targetlist.parse(parseTree, level + 1);
+        result = parseTree.consumeToken("finally");
+        result = result && Suite.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);
         return result;

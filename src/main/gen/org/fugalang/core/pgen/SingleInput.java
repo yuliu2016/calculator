@@ -21,9 +21,9 @@ public final class SingleInput extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addChoice(newline());
-        addChoice(simpleStmt());
-        addChoice(singleInput3());
+        addChoice(newlineOrNull());
+        addChoice(simpleStmtOrNull());
+        addChoice(singleInput3OrNull());
     }
 
     public String newline() {

@@ -93,8 +93,8 @@ public final class FileInput extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addChoice(newline());
-            addChoice(stmt());
+            addChoice(newlineOrNull());
+            addChoice(stmtOrNull());
         }
 
         public String newline() {

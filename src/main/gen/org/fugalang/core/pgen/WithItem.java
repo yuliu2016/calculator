@@ -22,7 +22,7 @@ public final class WithItem extends NodeWrapper {
     @Override
     protected void buildRule() {
         addRequired(expr());
-        addOptional(withItem2());
+        addOptional(withItem2OrNull());
     }
 
     public Expr expr() {

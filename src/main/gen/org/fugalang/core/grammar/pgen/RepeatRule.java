@@ -21,7 +21,7 @@ public final class RepeatRule extends NodeWrapper {
     @Override
     protected void buildRule() {
         addRequired(subRule());
-        addOptional(repeatRule2());
+        addOptional(repeatRule2OrNull());
     }
 
     public SubRule subRule() {

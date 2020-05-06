@@ -27,9 +27,9 @@ public final class CompOp extends NodeWrapper {
         addChoice(isTokenLessEqual(), "<=");
         addChoice(isTokenNequal(), "!=");
         addChoice(isTokenIn(), "in");
-        addChoice(compOp8());
+        addChoice(compOp8OrNull());
         addChoice(isTokenIs(), "is");
-        addChoice(compOp10());
+        addChoice(compOp10OrNull());
     }
 
     public boolean isTokenLess() {

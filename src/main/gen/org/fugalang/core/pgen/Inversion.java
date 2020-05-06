@@ -20,8 +20,8 @@ public final class Inversion extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addChoice(inversion1());
-        addChoice(comparison());
+        addChoice(inversion1OrNull());
+        addChoice(comparisonOrNull());
     }
 
     public Inversion1 inversion1() {

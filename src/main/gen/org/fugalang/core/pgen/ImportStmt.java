@@ -20,8 +20,8 @@ public final class ImportStmt extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addChoice(importName());
-        addChoice(importFrom());
+        addChoice(importNameOrNull());
+        addChoice(importFromOrNull());
     }
 
     public ImportName importName() {

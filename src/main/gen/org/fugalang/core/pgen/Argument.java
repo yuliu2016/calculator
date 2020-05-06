@@ -4,7 +4,7 @@ import org.fugalang.core.parser.*;
 import org.fugalang.core.token.TokenType;
 
 /**
- * argument: 'NAME' ['comp_for'] | 'NAME' ':=' 'expr' | 'NAME' '=' 'expr' | '**' 'expr' | '*' 'expr'
+ * argument: 'NAME' | 'NAME' ':=' 'expr' | 'NAME' '=' 'expr' | '**' 'expr' | '*' 'expr'
  */
 public final class Argument extends NodeWrapper {
 
@@ -21,30 +21,30 @@ public final class Argument extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addChoice(argument1());
-        addChoice(argument2());
-        addChoice(argument3());
-        addChoice(argument4());
-        addChoice(argument5());
+        addChoice(nameOrNull());
+        addChoice(argument2OrNull());
+        addChoice(argument3OrNull());
+        addChoice(argument4OrNull());
+        addChoice(argument5OrNull());
     }
 
-    public Argument1 argument1() {
+    public String name() {
         var element = getItem(0);
-        element.failIfAbsent(Argument1.RULE);
-        return Argument1.of(element);
+        element.failIfAbsent(TokenType.NAME);
+        return element.asString();
     }
 
-    public Argument1 argument1OrNull() {
+    public String nameOrNull() {
         var element = getItem(0);
-        if (!element.isPresent(Argument1.RULE)) {
+        if (!element.isPresent(TokenType.NAME)) {
             return null;
         }
-        return Argument1.of(element);
+        return element.asString();
     }
 
-    public boolean hasArgument1() {
+    public boolean hasName() {
         var element = getItem(0);
-        return element.isPresent(Argument1.RULE);
+        return element.isPresent(TokenType.NAME);
     }
 
     public Argument2 argument2() {
@@ -130,7 +130,7 @@ public final class Argument extends NodeWrapper {
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
-        result = Argument1.parse(parseTree, level + 1);
+        result = parseTree.consumeToken(TokenType.NAME);
         result = result || Argument2.parse(parseTree, level + 1);
         result = result || Argument3.parse(parseTree, level + 1);
         result = result || Argument4.parse(parseTree, level + 1);
@@ -138,68 +138,6 @@ public final class Argument extends NodeWrapper {
 
         parseTree.exit(level, marker, result);
         return result;
-    }
-
-    /**
-     * 'NAME' ['comp_for']
-     */
-    public static final class Argument1 extends NodeWrapper {
-
-        public static final ParserRule RULE =
-                new ParserRule("argument:1", RuleType.Conjunction, false);
-
-        public static Argument1 of(ParseTreeNode node) {
-            return new Argument1(node);
-        }
-
-        private Argument1(ParseTreeNode node) {
-            super(RULE, node);
-        }
-
-        @Override
-        protected void buildRule() {
-            addRequired(name());
-            addOptional(compFor());
-        }
-
-        public String name() {
-            var element = getItem(0);
-            element.failIfAbsent(TokenType.NAME);
-            return element.asString();
-        }
-
-        public CompFor compFor() {
-            var element = getItem(1);
-            element.failIfAbsent(CompFor.RULE);
-            return CompFor.of(element);
-        }
-
-        public CompFor compForOrNull() {
-            var element = getItem(1);
-            if (!element.isPresent(CompFor.RULE)) {
-                return null;
-            }
-            return CompFor.of(element);
-        }
-
-        public boolean hasCompFor() {
-            var element = getItem(1);
-            return element.isPresent(CompFor.RULE);
-        }
-
-        public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
-            var marker = parseTree.enter(level, RULE);
-            boolean result;
-
-            result = parseTree.consumeToken(TokenType.NAME);
-            if (result) CompFor.parse(parseTree, level + 1);
-
-            parseTree.exit(level, marker, result);
-            return result;
-        }
     }
 
     /**

@@ -20,12 +20,12 @@ public final class SmallStmt extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addChoice(exprStmt());
-        addChoice(delStmt());
-        addChoice(passStmt());
-        addChoice(flowStmt());
-        addChoice(importStmt());
-        addChoice(assertStmt());
+        addChoice(exprStmtOrNull());
+        addChoice(delStmtOrNull());
+        addChoice(passStmtOrNull());
+        addChoice(flowStmtOrNull());
+        addChoice(importStmtOrNull());
+        addChoice(assertStmtOrNull());
     }
 
     public ExprStmt exprStmt() {

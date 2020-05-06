@@ -2,13 +2,17 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.*;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 /**
- * subscript: 'expr' | ['expr'] ':' ['expr'] ['sliceop']
+ * subscript: 'slice' (',' 'slice')* [',']
  */
 public final class Subscript extends NodeWrapper {
 
     public static final ParserRule RULE =
-            new ParserRule("subscript", RuleType.Disjunction, true);
+            new ParserRule("subscript", RuleType.Conjunction, true);
 
     public static Subscript of(ParseTreeNode node) {
         return new Subscript(node);
@@ -18,48 +22,40 @@ public final class Subscript extends NodeWrapper {
         super(RULE, node);
     }
 
+    private List<Subscript2> subscript2List;
+
     @Override
     protected void buildRule() {
-        addChoice(expr());
-        addChoice(subscript2());
+        addRequired(slice());
+        addRequired(subscript2List());
+        addOptional(isTokenComma(), ",");
     }
 
-    public Expr expr() {
+    public Slice slice() {
         var element = getItem(0);
-        element.failIfAbsent(Expr.RULE);
-        return Expr.of(element);
+        element.failIfAbsent(Slice.RULE);
+        return Slice.of(element);
     }
 
-    public Expr exprOrNull() {
-        var element = getItem(0);
-        if (!element.isPresent(Expr.RULE)) {
-            return null;
+    public List<Subscript2> subscript2List() {
+        if (subscript2List != null) {
+            return subscript2List;
         }
-        return Expr.of(element);
-    }
-
-    public boolean hasExpr() {
-        var element = getItem(0);
-        return element.isPresent(Expr.RULE);
-    }
-
-    public Subscript2 subscript2() {
+        List<Subscript2> result = null;
         var element = getItem(1);
-        element.failIfAbsent(Subscript2.RULE);
-        return Subscript2.of(element);
-    }
-
-    public Subscript2 subscript2OrNull() {
-        var element = getItem(1);
-        if (!element.isPresent(Subscript2.RULE)) {
-            return null;
+        for (var node : element.asCollection()) {
+            if (result == null) {
+                result = new ArrayList<>();
+            }
+            result.add(Subscript2.of(node));
         }
-        return Subscript2.of(element);
+        subscript2List = result == null ? Collections.emptyList() : result;
+        return subscript2List;
     }
 
-    public boolean hasSubscript2() {
-        var element = getItem(1);
-        return element.isPresent(Subscript2.RULE);
+    public boolean isTokenComma() {
+        var element = getItem(2);
+        return element.asBoolean();
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -69,15 +65,24 @@ public final class Subscript extends NodeWrapper {
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
-        result = Expr.parse(parseTree, level + 1);
-        result = result || Subscript2.parse(parseTree, level + 1);
+        result = Slice.parse(parseTree, level + 1);
+        parseTree.enterCollection();
+        if (result) while (true) {
+            var pos = parseTree.position();
+            if (!Subscript2.parse(parseTree, level + 1) ||
+                    parseTree.guardLoopExit(pos)) {
+                break;
+            }
+        }
+        parseTree.exitCollection();
+        if (result) parseTree.consumeToken(",");
 
         parseTree.exit(level, marker, result);
         return result;
     }
 
     /**
-     * ['expr'] ':' ['expr'] ['sliceop']
+     * ',' 'slice'
      */
     public static final class Subscript2 extends NodeWrapper {
 
@@ -94,73 +99,20 @@ public final class Subscript extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addOptional(expr());
-            addRequired(isTokenColon(), ":");
-            addOptional(expr1());
-            addOptional(sliceop());
+            addRequired(isTokenComma(), ",");
+            addRequired(slice());
         }
 
-        public Expr expr() {
+        public boolean isTokenComma() {
             var element = getItem(0);
-            element.failIfAbsent(Expr.RULE);
-            return Expr.of(element);
-        }
-
-        public Expr exprOrNull() {
-            var element = getItem(0);
-            if (!element.isPresent(Expr.RULE)) {
-                return null;
-            }
-            return Expr.of(element);
-        }
-
-        public boolean hasExpr() {
-            var element = getItem(0);
-            return element.isPresent(Expr.RULE);
-        }
-
-        public boolean isTokenColon() {
-            var element = getItem(1);
             element.failIfAbsent();
             return element.asBoolean();
         }
 
-        public Expr expr1() {
-            var element = getItem(2);
-            element.failIfAbsent(Expr.RULE);
-            return Expr.of(element);
-        }
-
-        public Expr expr1OrNull() {
-            var element = getItem(2);
-            if (!element.isPresent(Expr.RULE)) {
-                return null;
-            }
-            return Expr.of(element);
-        }
-
-        public boolean hasExpr1() {
-            var element = getItem(2);
-            return element.isPresent(Expr.RULE);
-        }
-
-        public Sliceop sliceop() {
-            var element = getItem(3);
-            element.failIfAbsent(Sliceop.RULE);
-            return Sliceop.of(element);
-        }
-
-        public Sliceop sliceopOrNull() {
-            var element = getItem(3);
-            if (!element.isPresent(Sliceop.RULE)) {
-                return null;
-            }
-            return Sliceop.of(element);
-        }
-
-        public boolean hasSliceop() {
-            var element = getItem(3);
-            return element.isPresent(Sliceop.RULE);
+        public Slice slice() {
+            var element = getItem(1);
+            element.failIfAbsent(Slice.RULE);
+            return Slice.of(element);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -170,10 +122,8 @@ public final class Subscript extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            Expr.parse(parseTree, level + 1);
-            result = parseTree.consumeToken(":");
-            if (result) Expr.parse(parseTree, level + 1);
-            if (result) Sliceop.parse(parseTree, level + 1);
+            result = parseTree.consumeToken(",");
+            result = result && Slice.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);
             return result;

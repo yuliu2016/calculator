@@ -20,11 +20,11 @@ public final class CompoundStmt extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addChoice(ifStmt());
-        addChoice(whileStmt());
-        addChoice(forStmt());
-        addChoice(tryStmt());
-        addChoice(withStmt());
+        addChoice(ifStmtOrNull());
+        addChoice(whileStmtOrNull());
+        addChoice(forStmtOrNull());
+        addChoice(tryStmtOrNull());
+        addChoice(withStmtOrNull());
     }
 
     public IfStmt ifStmt() {

@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * dotted_as_names: 'dotted_as_name' (',' 'dotted_as_name')* [',']
+ * dotted_as_names: 'dotted_as_name' (',' 'dotted_as_name')*
  */
 public final class DottedAsNames extends NodeWrapper {
 
@@ -28,7 +28,6 @@ public final class DottedAsNames extends NodeWrapper {
     protected void buildRule() {
         addRequired(dottedAsName());
         addRequired(dottedAsNames2List());
-        addOptional(isTokenComma(), ",");
     }
 
     public DottedAsName dottedAsName() {
@@ -53,11 +52,6 @@ public final class DottedAsNames extends NodeWrapper {
         return dottedAsNames2List;
     }
 
-    public boolean isTokenComma() {
-        var element = getItem(2);
-        return element.asBoolean();
-    }
-
     public static boolean parse(ParseTree parseTree, int level) {
         if (!ParserUtil.recursionGuard(level, RULE)) {
             return false;
@@ -75,7 +69,6 @@ public final class DottedAsNames extends NodeWrapper {
             }
         }
         parseTree.exitCollection();
-        if (result) parseTree.consumeToken(",");
 
         parseTree.exit(level, marker, result);
         return result;

@@ -20,10 +20,10 @@ public final class FlowStmt extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addChoice(breakStmt());
-        addChoice(continueStmt());
-        addChoice(returnStmt());
-        addChoice(raiseStmt());
+        addChoice(breakStmtOrNull());
+        addChoice(continueStmtOrNull());
+        addChoice(returnStmtOrNull());
+        addChoice(raiseStmtOrNull());
     }
 
     public BreakStmt breakStmt() {

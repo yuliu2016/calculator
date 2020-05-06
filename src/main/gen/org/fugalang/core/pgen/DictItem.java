@@ -20,8 +20,8 @@ public final class DictItem extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addChoice(dictItem1());
-        addChoice(dictItem2());
+        addChoice(dictItem1OrNull());
+        addChoice(dictItem2OrNull());
     }
 
     public DictItem1 dictItem1() {

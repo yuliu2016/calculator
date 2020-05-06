@@ -7,50 +7,50 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * subscriptlist: 'subscript' (',' 'subscript')* [',']
+ * targetlist: 'target' (',' 'target')* [',']
  */
-public final class Subscriptlist extends NodeWrapper {
+public final class Targetlist extends NodeWrapper {
 
     public static final ParserRule RULE =
-            new ParserRule("subscriptlist", RuleType.Conjunction, true);
+            new ParserRule("targetlist", RuleType.Conjunction, true);
 
-    public static Subscriptlist of(ParseTreeNode node) {
-        return new Subscriptlist(node);
+    public static Targetlist of(ParseTreeNode node) {
+        return new Targetlist(node);
     }
 
-    private Subscriptlist(ParseTreeNode node) {
+    private Targetlist(ParseTreeNode node) {
         super(RULE, node);
     }
 
-    private List<Subscriptlist2> subscriptlist2List;
+    private List<Targetlist2> targetlist2List;
 
     @Override
     protected void buildRule() {
-        addRequired(subscript());
-        addRequired(subscriptlist2List());
+        addRequired(target());
+        addRequired(targetlist2List());
         addOptional(isTokenComma(), ",");
     }
 
-    public Subscript subscript() {
+    public Target target() {
         var element = getItem(0);
-        element.failIfAbsent(Subscript.RULE);
-        return Subscript.of(element);
+        element.failIfAbsent(Target.RULE);
+        return Target.of(element);
     }
 
-    public List<Subscriptlist2> subscriptlist2List() {
-        if (subscriptlist2List != null) {
-            return subscriptlist2List;
+    public List<Targetlist2> targetlist2List() {
+        if (targetlist2List != null) {
+            return targetlist2List;
         }
-        List<Subscriptlist2> result = null;
+        List<Targetlist2> result = null;
         var element = getItem(1);
         for (var node : element.asCollection()) {
             if (result == null) {
                 result = new ArrayList<>();
             }
-            result.add(Subscriptlist2.of(node));
+            result.add(Targetlist2.of(node));
         }
-        subscriptlist2List = result == null ? Collections.emptyList() : result;
-        return subscriptlist2List;
+        targetlist2List = result == null ? Collections.emptyList() : result;
+        return targetlist2List;
     }
 
     public boolean isTokenComma() {
@@ -65,11 +65,11 @@ public final class Subscriptlist extends NodeWrapper {
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
-        result = Subscript.parse(parseTree, level + 1);
+        result = Target.parse(parseTree, level + 1);
         parseTree.enterCollection();
         if (result) while (true) {
             var pos = parseTree.position();
-            if (!Subscriptlist2.parse(parseTree, level + 1) ||
+            if (!Targetlist2.parse(parseTree, level + 1) ||
                     parseTree.guardLoopExit(pos)) {
                 break;
             }
@@ -82,25 +82,25 @@ public final class Subscriptlist extends NodeWrapper {
     }
 
     /**
-     * ',' 'subscript'
+     * ',' 'target'
      */
-    public static final class Subscriptlist2 extends NodeWrapper {
+    public static final class Targetlist2 extends NodeWrapper {
 
         public static final ParserRule RULE =
-                new ParserRule("subscriptlist:2", RuleType.Conjunction, false);
+                new ParserRule("targetlist:2", RuleType.Conjunction, false);
 
-        public static Subscriptlist2 of(ParseTreeNode node) {
-            return new Subscriptlist2(node);
+        public static Targetlist2 of(ParseTreeNode node) {
+            return new Targetlist2(node);
         }
 
-        private Subscriptlist2(ParseTreeNode node) {
+        private Targetlist2(ParseTreeNode node) {
             super(RULE, node);
         }
 
         @Override
         protected void buildRule() {
             addRequired(isTokenComma(), ",");
-            addRequired(subscript());
+            addRequired(target());
         }
 
         public boolean isTokenComma() {
@@ -109,10 +109,10 @@ public final class Subscriptlist extends NodeWrapper {
             return element.asBoolean();
         }
 
-        public Subscript subscript() {
+        public Target target() {
             var element = getItem(1);
-            element.failIfAbsent(Subscript.RULE);
-            return Subscript.of(element);
+            element.failIfAbsent(Target.RULE);
+            return Target.of(element);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -123,7 +123,7 @@ public final class Subscriptlist extends NodeWrapper {
             boolean result;
 
             result = parseTree.consumeToken(",");
-            result = result && Subscript.parse(parseTree, level + 1);
+            result = result && Target.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);
             return result;

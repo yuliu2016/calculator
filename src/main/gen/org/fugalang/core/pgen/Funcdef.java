@@ -22,7 +22,7 @@ public final class Funcdef extends NodeWrapper {
     protected void buildRule() {
         addOptional(isTokenAsync(), "async");
         addRequired(isTokenDef(), "def");
-        addOptional(varargslist());
+        addOptional(varargslistOrNull());
         addRequired(funcdef4());
     }
 
@@ -96,8 +96,8 @@ public final class Funcdef extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addChoice(funcdef41());
-            addChoice(blockSuite());
+            addChoice(funcdef41OrNull());
+            addChoice(blockSuiteOrNull());
         }
 
         public Funcdef41 funcdef41() {

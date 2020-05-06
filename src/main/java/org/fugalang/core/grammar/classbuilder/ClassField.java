@@ -21,10 +21,6 @@ public class ClassField {
         return fieldName;
     }
 
-    public boolean isOptionalSingle() {
-        return fieldType == FieldType.Optional;
-    }
-
     public boolean isRequired() {
         return fieldType == FieldType.Required || fieldType == FieldType.RequiredList;
     }
@@ -183,19 +179,33 @@ public class ClassField {
     }
 
     public String asRuleStmt(RuleType ruleType) {
-        String callParams;
-        if (resultSource.getType() == SourceType.TokenLiteral && isSingular()) {
-            callParams = fieldName + "(), \"" + resultSource.getValue() + "\"";
-        } else {
-            callParams = fieldName + "()";
-        }
+        String callParams = switch (resultSource.getType()) {
+            case Class, TokenType -> {
+                String postfix;
+                if (ruleType == RuleType.Conjunction && fieldType == FieldType.Required) {
+                    postfix = "()";
+                } else if (isSingular()) {
+                    postfix = "OrNull()";
+                } else {
+                    postfix = "()";
+                }
+                yield fieldName + postfix;
+            }
+            case TokenLiteral -> {
+                if (isSingular()) {
+                    yield fieldName + "(), \"" + resultSource.getValue() + "\"";
+                } else {
+                    yield fieldName + "()";
+                }
+            }
+        };
 
         switch (ruleType) {
             case Disjunction -> {
                 return "addChoice(" + callParams + ");";
             }
             case Conjunction -> {
-                if (isOptionalSingle()) {
+                if (fieldType == FieldType.Optional) {
                     return "addOptional(" + callParams + ");";
                 } else {
                     return "addRequired(" + callParams + ");";

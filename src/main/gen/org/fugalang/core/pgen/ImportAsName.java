@@ -22,7 +22,7 @@ public final class ImportAsName extends NodeWrapper {
     @Override
     protected void buildRule() {
         addRequired(name());
-        addOptional(importAsName2());
+        addOptional(importAsName2OrNull());
     }
 
     public String name() {

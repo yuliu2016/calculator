@@ -22,7 +22,7 @@ public final class ExceptClause extends NodeWrapper {
     @Override
     protected void buildRule() {
         addRequired(isTokenExcept(), "except");
-        addOptional(exceptClause2());
+        addOptional(exceptClause2OrNull());
     }
 
     public boolean isTokenExcept() {
@@ -83,7 +83,7 @@ public final class ExceptClause extends NodeWrapper {
         @Override
         protected void buildRule() {
             addRequired(expr());
-            addOptional(exceptClause22());
+            addOptional(exceptClause22OrNull());
         }
 
         public Expr expr() {

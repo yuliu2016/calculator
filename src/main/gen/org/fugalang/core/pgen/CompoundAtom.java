@@ -3,7 +3,7 @@ package org.fugalang.core.pgen;
 import org.fugalang.core.parser.*;
 
 /**
- * compound_atom: '(' ['exprlist_comp'] ')' | '[' ['exprlist_comp_sub'] ']' | '{' ['dictorsetmaker'] '}'
+ * compound_atom: '(' ['exprlist_comp'] ')' | '[' ['exprlist_comp'] ']' | '{' ['dictorsetmaker'] '}'
  */
 public final class CompoundAtom extends NodeWrapper {
 
@@ -20,9 +20,9 @@ public final class CompoundAtom extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addChoice(compoundAtom1());
-        addChoice(compoundAtom2());
-        addChoice(compoundAtom3());
+        addChoice(compoundAtom1OrNull());
+        addChoice(compoundAtom2OrNull());
+        addChoice(compoundAtom3OrNull());
     }
 
     public CompoundAtom1 compoundAtom1() {
@@ -116,7 +116,7 @@ public final class CompoundAtom extends NodeWrapper {
         @Override
         protected void buildRule() {
             addRequired(isTokenLpar(), "(");
-            addOptional(exprlistComp());
+            addOptional(exprlistCompOrNull());
             addRequired(isTokenRpar(), ")");
         }
 
@@ -168,7 +168,7 @@ public final class CompoundAtom extends NodeWrapper {
     }
 
     /**
-     * '[' ['exprlist_comp_sub'] ']'
+     * '[' ['exprlist_comp'] ']'
      */
     public static final class CompoundAtom2 extends NodeWrapper {
 
@@ -186,7 +186,7 @@ public final class CompoundAtom extends NodeWrapper {
         @Override
         protected void buildRule() {
             addRequired(isTokenLsqb(), "[");
-            addOptional(exprlistCompSub());
+            addOptional(exprlistCompOrNull());
             addRequired(isTokenRsqb(), "]");
         }
 
@@ -196,23 +196,23 @@ public final class CompoundAtom extends NodeWrapper {
             return element.asBoolean();
         }
 
-        public ExprlistCompSub exprlistCompSub() {
+        public ExprlistComp exprlistComp() {
             var element = getItem(1);
-            element.failIfAbsent(ExprlistCompSub.RULE);
-            return ExprlistCompSub.of(element);
+            element.failIfAbsent(ExprlistComp.RULE);
+            return ExprlistComp.of(element);
         }
 
-        public ExprlistCompSub exprlistCompSubOrNull() {
+        public ExprlistComp exprlistCompOrNull() {
             var element = getItem(1);
-            if (!element.isPresent(ExprlistCompSub.RULE)) {
+            if (!element.isPresent(ExprlistComp.RULE)) {
                 return null;
             }
-            return ExprlistCompSub.of(element);
+            return ExprlistComp.of(element);
         }
 
-        public boolean hasExprlistCompSub() {
+        public boolean hasExprlistComp() {
             var element = getItem(1);
-            return element.isPresent(ExprlistCompSub.RULE);
+            return element.isPresent(ExprlistComp.RULE);
         }
 
         public boolean isTokenRsqb() {
@@ -229,7 +229,7 @@ public final class CompoundAtom extends NodeWrapper {
             boolean result;
 
             result = parseTree.consumeToken("[");
-            if (result) ExprlistCompSub.parse(parseTree, level + 1);
+            if (result) ExprlistComp.parse(parseTree, level + 1);
             result = result && parseTree.consumeToken("]");
 
             parseTree.exit(level, marker, result);
@@ -256,7 +256,7 @@ public final class CompoundAtom extends NodeWrapper {
         @Override
         protected void buildRule() {
             addRequired(isTokenLbrace(), "{");
-            addOptional(dictorsetmaker());
+            addOptional(dictorsetmakerOrNull());
             addRequired(isTokenRbrace(), "}");
         }
 
