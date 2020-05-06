@@ -32,6 +32,12 @@ public final class Power extends NodeWrapper {
 
     public Power2 power2() {
         var element = getItem(1);
+        element.failIfAbsent(Power2.RULE);
+        return Power2.of(element);
+    }
+
+    public Power2 power2OrNull() {
+        var element = getItem(1);
         if (!element.isPresent(Power2.RULE)) {
             return null;
         }

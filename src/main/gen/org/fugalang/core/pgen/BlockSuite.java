@@ -31,6 +31,12 @@ public final class BlockSuite extends NodeWrapper {
 
     public BlockSuite1 blockSuite1() {
         var element = getItem(0);
+        element.failIfAbsent(BlockSuite1.RULE);
+        return BlockSuite1.of(element);
+    }
+
+    public BlockSuite1 blockSuite1OrNull() {
+        var element = getItem(0);
         if (!element.isPresent(BlockSuite1.RULE)) {
             return null;
         }
@@ -43,6 +49,12 @@ public final class BlockSuite extends NodeWrapper {
     }
 
     public BlockSuite2 blockSuite2() {
+        var element = getItem(1);
+        element.failIfAbsent(BlockSuite2.RULE);
+        return BlockSuite2.of(element);
+    }
+
+    public BlockSuite2 blockSuite2OrNull() {
         var element = getItem(1);
         if (!element.isPresent(BlockSuite2.RULE)) {
             return null;

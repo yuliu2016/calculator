@@ -176,9 +176,17 @@ public class ClassBuilder {
 
         for (int i = 0; i < fields.size(); i++) {
             ClassField field = fields.get(i);
-            sb.append("\n");
             sb.append(field.asGetter(ruleType, i));
-            sb.append(field.asAbsentCheck(ruleType, i));
+
+            var getOrNull = field.asGetOrNull(ruleType, i);
+            if (getOrNull != null) {
+                sb.append(getOrNull);
+            }
+
+            var absentCheck = field.asAbsentCheck(ruleType, i);
+            if (absentCheck != null) {
+                sb.append(absentCheck);
+            }
         }
 
         generateParsingFunc(sb);

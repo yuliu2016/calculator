@@ -26,6 +26,12 @@ public final class Atom extends NodeWrapper {
 
     public CompoundAtom compoundAtom() {
         var element = getItem(0);
+        element.failIfAbsent(CompoundAtom.RULE);
+        return CompoundAtom.of(element);
+    }
+
+    public CompoundAtom compoundAtomOrNull() {
+        var element = getItem(0);
         if (!element.isPresent(CompoundAtom.RULE)) {
             return null;
         }
@@ -38,6 +44,12 @@ public final class Atom extends NodeWrapper {
     }
 
     public SimpleAtom simpleAtom() {
+        var element = getItem(1);
+        element.failIfAbsent(SimpleAtom.RULE);
+        return SimpleAtom.of(element);
+    }
+
+    public SimpleAtom simpleAtomOrNull() {
         var element = getItem(1);
         if (!element.isPresent(SimpleAtom.RULE)) {
             return null;

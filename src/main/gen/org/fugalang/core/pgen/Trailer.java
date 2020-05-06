@@ -29,6 +29,12 @@ public final class Trailer extends NodeWrapper {
 
     public Trailer1 trailer1() {
         var element = getItem(0);
+        element.failIfAbsent(Trailer1.RULE);
+        return Trailer1.of(element);
+    }
+
+    public Trailer1 trailer1OrNull() {
+        var element = getItem(0);
         if (!element.isPresent(Trailer1.RULE)) {
             return null;
         }
@@ -41,6 +47,12 @@ public final class Trailer extends NodeWrapper {
     }
 
     public Trailer2 trailer2() {
+        var element = getItem(1);
+        element.failIfAbsent(Trailer2.RULE);
+        return Trailer2.of(element);
+    }
+
+    public Trailer2 trailer2OrNull() {
         var element = getItem(1);
         if (!element.isPresent(Trailer2.RULE)) {
             return null;
@@ -55,6 +67,12 @@ public final class Trailer extends NodeWrapper {
 
     public Trailer3 trailer3() {
         var element = getItem(2);
+        element.failIfAbsent(Trailer3.RULE);
+        return Trailer3.of(element);
+    }
+
+    public Trailer3 trailer3OrNull() {
+        var element = getItem(2);
         if (!element.isPresent(Trailer3.RULE)) {
             return null;
         }
@@ -67,6 +85,12 @@ public final class Trailer extends NodeWrapper {
     }
 
     public BlockSuite blockSuite() {
+        var element = getItem(3);
+        element.failIfAbsent(BlockSuite.RULE);
+        return BlockSuite.of(element);
+    }
+
+    public BlockSuite blockSuiteOrNull() {
         var element = getItem(3);
         if (!element.isPresent(BlockSuite.RULE)) {
             return null;
@@ -125,6 +149,12 @@ public final class Trailer extends NodeWrapper {
         }
 
         public Arglist arglist() {
+            var element = getItem(1);
+            element.failIfAbsent(Arglist.RULE);
+            return Arglist.of(element);
+        }
+
+        public Arglist arglistOrNull() {
             var element = getItem(1);
             if (!element.isPresent(Arglist.RULE)) {
                 return null;

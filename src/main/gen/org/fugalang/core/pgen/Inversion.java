@@ -26,6 +26,12 @@ public final class Inversion extends NodeWrapper {
 
     public Inversion1 inversion1() {
         var element = getItem(0);
+        element.failIfAbsent(Inversion1.RULE);
+        return Inversion1.of(element);
+    }
+
+    public Inversion1 inversion1OrNull() {
+        var element = getItem(0);
         if (!element.isPresent(Inversion1.RULE)) {
             return null;
         }
@@ -38,6 +44,12 @@ public final class Inversion extends NodeWrapper {
     }
 
     public Comparison comparison() {
+        var element = getItem(1);
+        element.failIfAbsent(Comparison.RULE);
+        return Comparison.of(element);
+    }
+
+    public Comparison comparisonOrNull() {
         var element = getItem(1);
         if (!element.isPresent(Comparison.RULE)) {
             return null;

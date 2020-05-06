@@ -32,6 +32,12 @@ public final class RaiseStmt extends NodeWrapper {
 
     public RaiseStmt2 raiseStmt2() {
         var element = getItem(1);
+        element.failIfAbsent(RaiseStmt2.RULE);
+        return RaiseStmt2.of(element);
+    }
+
+    public RaiseStmt2 raiseStmt2OrNull() {
+        var element = getItem(1);
         if (!element.isPresent(RaiseStmt2.RULE)) {
             return null;
         }
@@ -86,6 +92,12 @@ public final class RaiseStmt extends NodeWrapper {
         }
 
         public RaiseStmt22 raiseStmt22() {
+            var element = getItem(1);
+            element.failIfAbsent(RaiseStmt22.RULE);
+            return RaiseStmt22.of(element);
+        }
+
+        public RaiseStmt22 raiseStmt22OrNull() {
             var element = getItem(1);
             if (!element.isPresent(RaiseStmt22.RULE)) {
                 return null;

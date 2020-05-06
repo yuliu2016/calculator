@@ -33,6 +33,12 @@ public final class ExceptClause extends NodeWrapper {
 
     public ExceptClause2 exceptClause2() {
         var element = getItem(1);
+        element.failIfAbsent(ExceptClause2.RULE);
+        return ExceptClause2.of(element);
+    }
+
+    public ExceptClause2 exceptClause2OrNull() {
+        var element = getItem(1);
         if (!element.isPresent(ExceptClause2.RULE)) {
             return null;
         }
@@ -87,6 +93,12 @@ public final class ExceptClause extends NodeWrapper {
         }
 
         public ExceptClause22 exceptClause22() {
+            var element = getItem(1);
+            element.failIfAbsent(ExceptClause22.RULE);
+            return ExceptClause22.of(element);
+        }
+
+        public ExceptClause22 exceptClause22OrNull() {
             var element = getItem(1);
             if (!element.isPresent(ExceptClause22.RULE)) {
                 return null;

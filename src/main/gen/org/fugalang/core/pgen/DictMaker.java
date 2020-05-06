@@ -36,6 +36,12 @@ public final class DictMaker extends NodeWrapper {
 
     public DictMaker2 dictMaker2() {
         var element = getItem(1);
+        element.failIfAbsent(DictMaker2.RULE);
+        return DictMaker2.of(element);
+    }
+
+    public DictMaker2 dictMaker2OrNull() {
+        var element = getItem(1);
         if (!element.isPresent(DictMaker2.RULE)) {
             return null;
         }
@@ -85,6 +91,12 @@ public final class DictMaker extends NodeWrapper {
 
         public CompFor compFor() {
             var element = getItem(0);
+            element.failIfAbsent(CompFor.RULE);
+            return CompFor.of(element);
+        }
+
+        public CompFor compForOrNull() {
+            var element = getItem(0);
             if (!element.isPresent(CompFor.RULE)) {
                 return null;
             }
@@ -97,6 +109,12 @@ public final class DictMaker extends NodeWrapper {
         }
 
         public DictMaker22 dictMaker22() {
+            var element = getItem(1);
+            element.failIfAbsent(DictMaker22.RULE);
+            return DictMaker22.of(element);
+        }
+
+        public DictMaker22 dictMaker22OrNull() {
             var element = getItem(1);
             if (!element.isPresent(DictMaker22.RULE)) {
                 return null;

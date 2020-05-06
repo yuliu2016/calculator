@@ -26,6 +26,12 @@ public final class Dictorsetmaker extends NodeWrapper {
 
     public DictMaker dictMaker() {
         var element = getItem(0);
+        element.failIfAbsent(DictMaker.RULE);
+        return DictMaker.of(element);
+    }
+
+    public DictMaker dictMakerOrNull() {
+        var element = getItem(0);
         if (!element.isPresent(DictMaker.RULE)) {
             return null;
         }
@@ -38,6 +44,12 @@ public final class Dictorsetmaker extends NodeWrapper {
     }
 
     public SetMaker setMaker() {
+        var element = getItem(1);
+        element.failIfAbsent(SetMaker.RULE);
+        return SetMaker.of(element);
+    }
+
+    public SetMaker setMakerOrNull() {
         var element = getItem(1);
         if (!element.isPresent(SetMaker.RULE)) {
             return null;

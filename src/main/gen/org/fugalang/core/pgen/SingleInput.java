@@ -28,6 +28,12 @@ public final class SingleInput extends NodeWrapper {
 
     public String newline() {
         var element = getItem(0);
+        element.failIfAbsent(TokenType.NEWLINE);
+        return element.asString();
+    }
+
+    public String newlineOrNull() {
+        var element = getItem(0);
         if (!element.isPresent(TokenType.NEWLINE)) {
             return null;
         }
@@ -41,6 +47,12 @@ public final class SingleInput extends NodeWrapper {
 
     public SimpleStmt simpleStmt() {
         var element = getItem(1);
+        element.failIfAbsent(SimpleStmt.RULE);
+        return SimpleStmt.of(element);
+    }
+
+    public SimpleStmt simpleStmtOrNull() {
+        var element = getItem(1);
         if (!element.isPresent(SimpleStmt.RULE)) {
             return null;
         }
@@ -53,6 +65,12 @@ public final class SingleInput extends NodeWrapper {
     }
 
     public SingleInput3 singleInput3() {
+        var element = getItem(2);
+        element.failIfAbsent(SingleInput3.RULE);
+        return SingleInput3.of(element);
+    }
+
+    public SingleInput3 singleInput3OrNull() {
         var element = getItem(2);
         if (!element.isPresent(SingleInput3.RULE)) {
             return null;

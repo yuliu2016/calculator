@@ -60,6 +60,12 @@ public final class ForStmt extends NodeWrapper {
 
     public ForStmt6 forStmt6() {
         var element = getItem(5);
+        element.failIfAbsent(ForStmt6.RULE);
+        return ForStmt6.of(element);
+    }
+
+    public ForStmt6 forStmt6OrNull() {
+        var element = getItem(5);
         if (!element.isPresent(ForStmt6.RULE)) {
             return null;
         }

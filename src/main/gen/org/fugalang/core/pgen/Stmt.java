@@ -75,6 +75,12 @@ public final class Stmt extends NodeWrapper {
 
         public SimpleStmt simpleStmt() {
             var element = getItem(0);
+            element.failIfAbsent(SimpleStmt.RULE);
+            return SimpleStmt.of(element);
+        }
+
+        public SimpleStmt simpleStmtOrNull() {
+            var element = getItem(0);
             if (!element.isPresent(SimpleStmt.RULE)) {
                 return null;
             }
@@ -87,6 +93,12 @@ public final class Stmt extends NodeWrapper {
         }
 
         public CompoundStmt compoundStmt() {
+            var element = getItem(1);
+            element.failIfAbsent(CompoundStmt.RULE);
+            return CompoundStmt.of(element);
+        }
+
+        public CompoundStmt compoundStmtOrNull() {
             var element = getItem(1);
             if (!element.isPresent(CompoundStmt.RULE)) {
                 return null;

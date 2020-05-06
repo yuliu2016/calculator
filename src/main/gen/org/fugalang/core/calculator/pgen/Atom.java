@@ -27,6 +27,12 @@ public final class Atom extends NodeWrapper {
 
     public Atom1 atom1() {
         var element = getItem(0);
+        element.failIfAbsent(Atom1.RULE);
+        return Atom1.of(element);
+    }
+
+    public Atom1 atom1OrNull() {
+        var element = getItem(0);
         if (!element.isPresent(Atom1.RULE)) {
             return null;
         }
@@ -39,6 +45,12 @@ public final class Atom extends NodeWrapper {
     }
 
     public String number() {
+        var element = getItem(1);
+        element.failIfAbsent(TokenType.NUMBER);
+        return element.asString();
+    }
+
+    public String numberOrNull() {
         var element = getItem(1);
         if (!element.isPresent(TokenType.NUMBER)) {
             return null;

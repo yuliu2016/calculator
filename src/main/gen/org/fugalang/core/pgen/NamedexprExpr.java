@@ -33,6 +33,12 @@ public final class NamedexprExpr extends NodeWrapper {
 
     public NamedexprExpr2 namedexprExpr2() {
         var element = getItem(1);
+        element.failIfAbsent(NamedexprExpr2.RULE);
+        return NamedexprExpr2.of(element);
+    }
+
+    public NamedexprExpr2 namedexprExpr2OrNull() {
+        var element = getItem(1);
         if (!element.isPresent(NamedexprExpr2.RULE)) {
             return null;
         }

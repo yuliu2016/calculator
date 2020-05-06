@@ -39,6 +39,12 @@ public final class CompIf extends NodeWrapper {
 
     public CompIter compIter() {
         var element = getItem(2);
+        element.failIfAbsent(CompIter.RULE);
+        return CompIter.of(element);
+    }
+
+    public CompIter compIterOrNull() {
+        var element = getItem(2);
         if (!element.isPresent(CompIter.RULE)) {
             return null;
         }

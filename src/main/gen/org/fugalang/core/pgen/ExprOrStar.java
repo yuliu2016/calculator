@@ -26,6 +26,12 @@ public final class ExprOrStar extends NodeWrapper {
 
     public Expr expr() {
         var element = getItem(0);
+        element.failIfAbsent(Expr.RULE);
+        return Expr.of(element);
+    }
+
+    public Expr exprOrNull() {
+        var element = getItem(0);
         if (!element.isPresent(Expr.RULE)) {
             return null;
         }
@@ -38,6 +44,12 @@ public final class ExprOrStar extends NodeWrapper {
     }
 
     public StarExpr starExpr() {
+        var element = getItem(1);
+        element.failIfAbsent(StarExpr.RULE);
+        return StarExpr.of(element);
+    }
+
+    public StarExpr starExprOrNull() {
         var element = getItem(1);
         if (!element.isPresent(StarExpr.RULE)) {
             return null;

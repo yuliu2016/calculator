@@ -26,6 +26,12 @@ public final class Subscript extends NodeWrapper {
 
     public Expr expr() {
         var element = getItem(0);
+        element.failIfAbsent(Expr.RULE);
+        return Expr.of(element);
+    }
+
+    public Expr exprOrNull() {
+        var element = getItem(0);
         if (!element.isPresent(Expr.RULE)) {
             return null;
         }
@@ -38,6 +44,12 @@ public final class Subscript extends NodeWrapper {
     }
 
     public Subscript2 subscript2() {
+        var element = getItem(1);
+        element.failIfAbsent(Subscript2.RULE);
+        return Subscript2.of(element);
+    }
+
+    public Subscript2 subscript2OrNull() {
         var element = getItem(1);
         if (!element.isPresent(Subscript2.RULE)) {
             return null;
@@ -90,6 +102,12 @@ public final class Subscript extends NodeWrapper {
 
         public Expr expr() {
             var element = getItem(0);
+            element.failIfAbsent(Expr.RULE);
+            return Expr.of(element);
+        }
+
+        public Expr exprOrNull() {
+            var element = getItem(0);
             if (!element.isPresent(Expr.RULE)) {
                 return null;
             }
@@ -109,6 +127,12 @@ public final class Subscript extends NodeWrapper {
 
         public Expr expr1() {
             var element = getItem(2);
+            element.failIfAbsent(Expr.RULE);
+            return Expr.of(element);
+        }
+
+        public Expr expr1OrNull() {
+            var element = getItem(2);
             if (!element.isPresent(Expr.RULE)) {
                 return null;
             }
@@ -121,6 +145,12 @@ public final class Subscript extends NodeWrapper {
         }
 
         public Sliceop sliceop() {
+            var element = getItem(3);
+            element.failIfAbsent(Sliceop.RULE);
+            return Sliceop.of(element);
+        }
+
+        public Sliceop sliceopOrNull() {
             var element = getItem(3);
             if (!element.isPresent(Sliceop.RULE)) {
                 return null;

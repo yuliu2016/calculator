@@ -46,6 +46,12 @@ public final class WhileStmt extends NodeWrapper {
 
     public WhileStmt4 whileStmt4() {
         var element = getItem(3);
+        element.failIfAbsent(WhileStmt4.RULE);
+        return WhileStmt4.of(element);
+    }
+
+    public WhileStmt4 whileStmt4OrNull() {
+        var element = getItem(3);
         if (!element.isPresent(WhileStmt4.RULE)) {
             return null;
         }

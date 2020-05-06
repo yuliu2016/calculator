@@ -26,6 +26,12 @@ public final class Suite extends NodeWrapper {
 
     public Suite1 suite1() {
         var element = getItem(0);
+        element.failIfAbsent(Suite1.RULE);
+        return Suite1.of(element);
+    }
+
+    public Suite1 suite1OrNull() {
+        var element = getItem(0);
         if (!element.isPresent(Suite1.RULE)) {
             return null;
         }
@@ -38,6 +44,12 @@ public final class Suite extends NodeWrapper {
     }
 
     public BlockSuite blockSuite() {
+        var element = getItem(1);
+        element.failIfAbsent(BlockSuite.RULE);
+        return BlockSuite.of(element);
+    }
+
+    public BlockSuite blockSuiteOrNull() {
         var element = getItem(1);
         if (!element.isPresent(BlockSuite.RULE)) {
             return null;

@@ -33,6 +33,12 @@ public final class WithItem extends NodeWrapper {
 
     public WithItem2 withItem2() {
         var element = getItem(1);
+        element.failIfAbsent(WithItem2.RULE);
+        return WithItem2.of(element);
+    }
+
+    public WithItem2 withItem2OrNull() {
+        var element = getItem(1);
         if (!element.isPresent(WithItem2.RULE)) {
             return null;
         }

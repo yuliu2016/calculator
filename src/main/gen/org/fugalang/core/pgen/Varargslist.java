@@ -39,6 +39,12 @@ public final class Varargslist extends NodeWrapper {
 
     public Varargslist2 varargslist2() {
         var element = getItem(1);
+        element.failIfAbsent(Varargslist2.RULE);
+        return Varargslist2.of(element);
+    }
+
+    public Varargslist2 varargslist2OrNull() {
+        var element = getItem(1);
         if (!element.isPresent(Varargslist2.RULE)) {
             return null;
         }
@@ -174,6 +180,12 @@ public final class Varargslist extends NodeWrapper {
         }
 
         public Varargslist33 varargslist33() {
+            var element = getItem(2);
+            element.failIfAbsent(Varargslist33.RULE);
+            return Varargslist33.of(element);
+        }
+
+        public Varargslist33 varargslist33OrNull() {
             var element = getItem(2);
             if (!element.isPresent(Varargslist33.RULE)) {
                 return null;

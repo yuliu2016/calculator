@@ -96,6 +96,12 @@ public final class ImportFrom extends NodeWrapper {
 
         public ImportFrom21 importFrom21() {
             var element = getItem(0);
+            element.failIfAbsent(ImportFrom21.RULE);
+            return ImportFrom21.of(element);
+        }
+
+        public ImportFrom21 importFrom21OrNull() {
+            var element = getItem(0);
             if (!element.isPresent(ImportFrom21.RULE)) {
                 return null;
             }
@@ -247,6 +253,12 @@ public final class ImportFrom extends NodeWrapper {
 
         public ImportFrom42 importFrom42() {
             var element = getItem(1);
+            element.failIfAbsent(ImportFrom42.RULE);
+            return ImportFrom42.of(element);
+        }
+
+        public ImportFrom42 importFrom42OrNull() {
+            var element = getItem(1);
             if (!element.isPresent(ImportFrom42.RULE)) {
                 return null;
             }
@@ -259,6 +271,12 @@ public final class ImportFrom extends NodeWrapper {
         }
 
         public ImportAsNames importAsNames() {
+            var element = getItem(2);
+            element.failIfAbsent(ImportAsNames.RULE);
+            return ImportAsNames.of(element);
+        }
+
+        public ImportAsNames importAsNamesOrNull() {
             var element = getItem(2);
             if (!element.isPresent(ImportAsNames.RULE)) {
                 return null;

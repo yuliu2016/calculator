@@ -33,6 +33,12 @@ public final class DottedAsName extends NodeWrapper {
 
     public DottedAsName2 dottedAsName2() {
         var element = getItem(1);
+        element.failIfAbsent(DottedAsName2.RULE);
+        return DottedAsName2.of(element);
+    }
+
+    public DottedAsName2 dottedAsName2OrNull() {
+        var element = getItem(1);
         if (!element.isPresent(DottedAsName2.RULE)) {
             return null;
         }

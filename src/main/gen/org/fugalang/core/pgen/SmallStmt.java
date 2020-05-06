@@ -30,6 +30,12 @@ public final class SmallStmt extends NodeWrapper {
 
     public ExprStmt exprStmt() {
         var element = getItem(0);
+        element.failIfAbsent(ExprStmt.RULE);
+        return ExprStmt.of(element);
+    }
+
+    public ExprStmt exprStmtOrNull() {
+        var element = getItem(0);
         if (!element.isPresent(ExprStmt.RULE)) {
             return null;
         }
@@ -42,6 +48,12 @@ public final class SmallStmt extends NodeWrapper {
     }
 
     public DelStmt delStmt() {
+        var element = getItem(1);
+        element.failIfAbsent(DelStmt.RULE);
+        return DelStmt.of(element);
+    }
+
+    public DelStmt delStmtOrNull() {
         var element = getItem(1);
         if (!element.isPresent(DelStmt.RULE)) {
             return null;
@@ -56,6 +68,12 @@ public final class SmallStmt extends NodeWrapper {
 
     public PassStmt passStmt() {
         var element = getItem(2);
+        element.failIfAbsent(PassStmt.RULE);
+        return PassStmt.of(element);
+    }
+
+    public PassStmt passStmtOrNull() {
+        var element = getItem(2);
         if (!element.isPresent(PassStmt.RULE)) {
             return null;
         }
@@ -68,6 +86,12 @@ public final class SmallStmt extends NodeWrapper {
     }
 
     public FlowStmt flowStmt() {
+        var element = getItem(3);
+        element.failIfAbsent(FlowStmt.RULE);
+        return FlowStmt.of(element);
+    }
+
+    public FlowStmt flowStmtOrNull() {
         var element = getItem(3);
         if (!element.isPresent(FlowStmt.RULE)) {
             return null;
@@ -82,6 +106,12 @@ public final class SmallStmt extends NodeWrapper {
 
     public ImportStmt importStmt() {
         var element = getItem(4);
+        element.failIfAbsent(ImportStmt.RULE);
+        return ImportStmt.of(element);
+    }
+
+    public ImportStmt importStmtOrNull() {
+        var element = getItem(4);
         if (!element.isPresent(ImportStmt.RULE)) {
             return null;
         }
@@ -94,6 +124,12 @@ public final class SmallStmt extends NodeWrapper {
     }
 
     public AssertStmt assertStmt() {
+        var element = getItem(5);
+        element.failIfAbsent(AssertStmt.RULE);
+        return AssertStmt.of(element);
+    }
+
+    public AssertStmt assertStmtOrNull() {
         var element = getItem(5);
         if (!element.isPresent(AssertStmt.RULE)) {
             return null;

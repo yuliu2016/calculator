@@ -105,6 +105,12 @@ public final class Targets extends NodeWrapper {
 
         public BitwiseOr bitwiseOr() {
             var element = getItem(0);
+            element.failIfAbsent(BitwiseOr.RULE);
+            return BitwiseOr.of(element);
+        }
+
+        public BitwiseOr bitwiseOrOrNull() {
+            var element = getItem(0);
             if (!element.isPresent(BitwiseOr.RULE)) {
                 return null;
             }
@@ -117,6 +123,12 @@ public final class Targets extends NodeWrapper {
         }
 
         public StarExpr starExpr() {
+            var element = getItem(1);
+            element.failIfAbsent(StarExpr.RULE);
+            return StarExpr.of(element);
+        }
+
+        public StarExpr starExprOrNull() {
             var element = getItem(1);
             if (!element.isPresent(StarExpr.RULE)) {
                 return null;
@@ -217,6 +229,12 @@ public final class Targets extends NodeWrapper {
 
         public BitwiseOr bitwiseOr() {
             var element = getItem(0);
+            element.failIfAbsent(BitwiseOr.RULE);
+            return BitwiseOr.of(element);
+        }
+
+        public BitwiseOr bitwiseOrOrNull() {
+            var element = getItem(0);
             if (!element.isPresent(BitwiseOr.RULE)) {
                 return null;
             }
@@ -229,6 +247,12 @@ public final class Targets extends NodeWrapper {
         }
 
         public StarExpr starExpr() {
+            var element = getItem(1);
+            element.failIfAbsent(StarExpr.RULE);
+            return StarExpr.of(element);
+        }
+
+        public StarExpr starExprOrNull() {
             var element = getItem(1);
             if (!element.isPresent(StarExpr.RULE)) {
                 return null;

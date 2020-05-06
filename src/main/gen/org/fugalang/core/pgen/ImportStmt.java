@@ -26,6 +26,12 @@ public final class ImportStmt extends NodeWrapper {
 
     public ImportName importName() {
         var element = getItem(0);
+        element.failIfAbsent(ImportName.RULE);
+        return ImportName.of(element);
+    }
+
+    public ImportName importNameOrNull() {
+        var element = getItem(0);
         if (!element.isPresent(ImportName.RULE)) {
             return null;
         }
@@ -38,6 +44,12 @@ public final class ImportStmt extends NodeWrapper {
     }
 
     public ImportFrom importFrom() {
+        var element = getItem(1);
+        element.failIfAbsent(ImportFrom.RULE);
+        return ImportFrom.of(element);
+    }
+
+    public ImportFrom importFromOrNull() {
         var element = getItem(1);
         if (!element.isPresent(ImportFrom.RULE)) {
             return null;

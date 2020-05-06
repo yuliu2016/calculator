@@ -33,6 +33,12 @@ public final class ImportAsName extends NodeWrapper {
 
     public ImportAsName2 importAsName2() {
         var element = getItem(1);
+        element.failIfAbsent(ImportAsName2.RULE);
+        return ImportAsName2.of(element);
+    }
+
+    public ImportAsName2 importAsName2OrNull() {
+        var element = getItem(1);
         if (!element.isPresent(ImportAsName2.RULE)) {
             return null;
         }

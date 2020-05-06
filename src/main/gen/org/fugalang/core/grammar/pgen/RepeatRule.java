@@ -32,6 +32,12 @@ public final class RepeatRule extends NodeWrapper {
 
     public RepeatRule2 repeatRule2() {
         var element = getItem(1);
+        element.failIfAbsent(RepeatRule2.RULE);
+        return RepeatRule2.of(element);
+    }
+
+    public RepeatRule2 repeatRule2OrNull() {
+        var element = getItem(1);
         if (!element.isPresent(RepeatRule2.RULE)) {
             return null;
         }

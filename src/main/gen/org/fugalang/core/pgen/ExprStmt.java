@@ -36,6 +36,12 @@ public final class ExprStmt extends NodeWrapper {
 
     public ExprStmt2 exprStmt2() {
         var element = getItem(1);
+        element.failIfAbsent(ExprStmt2.RULE);
+        return ExprStmt2.of(element);
+    }
+
+    public ExprStmt2 exprStmt2OrNull() {
+        var element = getItem(1);
         if (!element.isPresent(ExprStmt2.RULE)) {
             return null;
         }
@@ -102,6 +108,12 @@ public final class ExprStmt extends NodeWrapper {
         }
 
         public ExprStmt22 exprStmt22() {
+            var element = getItem(1);
+            element.failIfAbsent(ExprStmt22.RULE);
+            return ExprStmt22.of(element);
+        }
+
+        public ExprStmt22 exprStmt22OrNull() {
             var element = getItem(1);
             if (!element.isPresent(ExprStmt22.RULE)) {
                 return null;

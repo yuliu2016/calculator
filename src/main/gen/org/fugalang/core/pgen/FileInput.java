@@ -99,6 +99,12 @@ public final class FileInput extends NodeWrapper {
 
         public String newline() {
             var element = getItem(0);
+            element.failIfAbsent(TokenType.NEWLINE);
+            return element.asString();
+        }
+
+        public String newlineOrNull() {
+            var element = getItem(0);
             if (!element.isPresent(TokenType.NEWLINE)) {
                 return null;
             }
@@ -111,6 +117,12 @@ public final class FileInput extends NodeWrapper {
         }
 
         public Stmt stmt() {
+            var element = getItem(1);
+            element.failIfAbsent(Stmt.RULE);
+            return Stmt.of(element);
+        }
+
+        public Stmt stmtOrNull() {
             var element = getItem(1);
             if (!element.isPresent(Stmt.RULE)) {
                 return null;

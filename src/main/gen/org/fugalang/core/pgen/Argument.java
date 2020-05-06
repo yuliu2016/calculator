@@ -30,6 +30,12 @@ public final class Argument extends NodeWrapper {
 
     public Argument1 argument1() {
         var element = getItem(0);
+        element.failIfAbsent(Argument1.RULE);
+        return Argument1.of(element);
+    }
+
+    public Argument1 argument1OrNull() {
+        var element = getItem(0);
         if (!element.isPresent(Argument1.RULE)) {
             return null;
         }
@@ -42,6 +48,12 @@ public final class Argument extends NodeWrapper {
     }
 
     public Argument2 argument2() {
+        var element = getItem(1);
+        element.failIfAbsent(Argument2.RULE);
+        return Argument2.of(element);
+    }
+
+    public Argument2 argument2OrNull() {
         var element = getItem(1);
         if (!element.isPresent(Argument2.RULE)) {
             return null;
@@ -56,6 +68,12 @@ public final class Argument extends NodeWrapper {
 
     public Argument3 argument3() {
         var element = getItem(2);
+        element.failIfAbsent(Argument3.RULE);
+        return Argument3.of(element);
+    }
+
+    public Argument3 argument3OrNull() {
+        var element = getItem(2);
         if (!element.isPresent(Argument3.RULE)) {
             return null;
         }
@@ -69,6 +87,12 @@ public final class Argument extends NodeWrapper {
 
     public Argument4 argument4() {
         var element = getItem(3);
+        element.failIfAbsent(Argument4.RULE);
+        return Argument4.of(element);
+    }
+
+    public Argument4 argument4OrNull() {
+        var element = getItem(3);
         if (!element.isPresent(Argument4.RULE)) {
             return null;
         }
@@ -81,6 +105,12 @@ public final class Argument extends NodeWrapper {
     }
 
     public Argument5 argument5() {
+        var element = getItem(4);
+        element.failIfAbsent(Argument5.RULE);
+        return Argument5.of(element);
+    }
+
+    public Argument5 argument5OrNull() {
         var element = getItem(4);
         if (!element.isPresent(Argument5.RULE)) {
             return null;
@@ -139,6 +169,12 @@ public final class Argument extends NodeWrapper {
         }
 
         public CompFor compFor() {
+            var element = getItem(1);
+            element.failIfAbsent(CompFor.RULE);
+            return CompFor.of(element);
+        }
+
+        public CompFor compForOrNull() {
             var element = getItem(1);
             if (!element.isPresent(CompFor.RULE)) {
                 return null;

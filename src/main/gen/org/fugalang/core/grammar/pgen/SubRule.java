@@ -28,6 +28,12 @@ public final class SubRule extends NodeWrapper {
 
     public SubRule1 subRule1() {
         var element = getItem(0);
+        element.failIfAbsent(SubRule1.RULE);
+        return SubRule1.of(element);
+    }
+
+    public SubRule1 subRule1OrNull() {
+        var element = getItem(0);
         if (!element.isPresent(SubRule1.RULE)) {
             return null;
         }
@@ -41,6 +47,12 @@ public final class SubRule extends NodeWrapper {
 
     public SubRule2 subRule2() {
         var element = getItem(1);
+        element.failIfAbsent(SubRule2.RULE);
+        return SubRule2.of(element);
+    }
+
+    public SubRule2 subRule2OrNull() {
+        var element = getItem(1);
         if (!element.isPresent(SubRule2.RULE)) {
             return null;
         }
@@ -53,6 +65,12 @@ public final class SubRule extends NodeWrapper {
     }
 
     public String token() {
+        var element = getItem(2);
+        element.failIfAbsent(MetaTokenType.TOK);
+        return element.asString();
+    }
+
+    public String tokenOrNull() {
         var element = getItem(2);
         if (!element.isPresent(MetaTokenType.TOK)) {
             return null;

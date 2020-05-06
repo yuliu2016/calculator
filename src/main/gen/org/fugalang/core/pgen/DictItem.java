@@ -26,6 +26,12 @@ public final class DictItem extends NodeWrapper {
 
     public DictItem1 dictItem1() {
         var element = getItem(0);
+        element.failIfAbsent(DictItem1.RULE);
+        return DictItem1.of(element);
+    }
+
+    public DictItem1 dictItem1OrNull() {
+        var element = getItem(0);
         if (!element.isPresent(DictItem1.RULE)) {
             return null;
         }
@@ -38,6 +44,12 @@ public final class DictItem extends NodeWrapper {
     }
 
     public DictItem2 dictItem2() {
+        var element = getItem(1);
+        element.failIfAbsent(DictItem2.RULE);
+        return DictItem2.of(element);
+    }
+
+    public DictItem2 dictItem2OrNull() {
         var element = getItem(1);
         if (!element.isPresent(DictItem2.RULE)) {
             return null;

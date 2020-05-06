@@ -69,6 +69,12 @@ public final class CompOp extends NodeWrapper {
 
     public CompOp8 compOp8() {
         var element = getItem(7);
+        element.failIfAbsent(CompOp8.RULE);
+        return CompOp8.of(element);
+    }
+
+    public CompOp8 compOp8OrNull() {
+        var element = getItem(7);
         if (!element.isPresent(CompOp8.RULE)) {
             return null;
         }
@@ -86,6 +92,12 @@ public final class CompOp extends NodeWrapper {
     }
 
     public CompOp10 compOp10() {
+        var element = getItem(9);
+        element.failIfAbsent(CompOp10.RULE);
+        return CompOp10.of(element);
+    }
+
+    public CompOp10 compOp10OrNull() {
         var element = getItem(9);
         if (!element.isPresent(CompOp10.RULE)) {
             return null;

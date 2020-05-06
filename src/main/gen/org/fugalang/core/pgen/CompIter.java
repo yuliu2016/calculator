@@ -26,6 +26,12 @@ public final class CompIter extends NodeWrapper {
 
     public CompFor compFor() {
         var element = getItem(0);
+        element.failIfAbsent(CompFor.RULE);
+        return CompFor.of(element);
+    }
+
+    public CompFor compForOrNull() {
+        var element = getItem(0);
         if (!element.isPresent(CompFor.RULE)) {
             return null;
         }
@@ -38,6 +44,12 @@ public final class CompIter extends NodeWrapper {
     }
 
     public CompIf compIf() {
+        var element = getItem(1);
+        element.failIfAbsent(CompIf.RULE);
+        return CompIf.of(element);
+    }
+
+    public CompIf compIfOrNull() {
         var element = getItem(1);
         if (!element.isPresent(CompIf.RULE)) {
             return null;

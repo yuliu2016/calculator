@@ -53,6 +53,12 @@ public final class CompFor extends NodeWrapper {
 
     public CompIter compIter() {
         var element = getItem(4);
+        element.failIfAbsent(CompIter.RULE);
+        return CompIter.of(element);
+    }
+
+    public CompIter compIterOrNull() {
+        var element = getItem(4);
         if (!element.isPresent(CompIter.RULE)) {
             return null;
         }

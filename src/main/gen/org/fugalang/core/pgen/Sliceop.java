@@ -32,6 +32,12 @@ public final class Sliceop extends NodeWrapper {
 
     public Expr expr() {
         var element = getItem(1);
+        element.failIfAbsent(Expr.RULE);
+        return Expr.of(element);
+    }
+
+    public Expr exprOrNull() {
+        var element = getItem(1);
         if (!element.isPresent(Expr.RULE)) {
             return null;
         }

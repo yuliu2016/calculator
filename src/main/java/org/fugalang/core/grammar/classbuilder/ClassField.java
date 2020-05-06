@@ -48,7 +48,7 @@ public class ClassField {
     }
 
     public String asGetter(RuleType ruleType, int index) {
-        return "    public " + className.asType() + " " + fieldName + "() {\n" +
+        return "\n    public " + className.asType() + " " + fieldName + "() {\n" +
                 asGetterBody(ruleType, index) +
                 "    }\n";
     }
@@ -56,32 +56,18 @@ public class ClassField {
     private String asGetterBody(RuleType ruleType, int index) {
         return switch (resultSource.getType()) {
             case Class -> {
-                if (ruleType == RuleType.Conjunction && fieldType == FieldType.Required) {
-                    yield "        var element = getItem(" + index + ");\n" +
-                            "        element.failIfAbsent(" + className.asType() + ".RULE);\n" +
-                            "        return " + className.asType() + ".of(element);\n";
-                }
                 if (isSingular()) {
                     yield "        var element = getItem(" + index + ");\n" +
-                            "        if (!element.isPresent(" + className.asType() + ".RULE)) {\n" +
-                            "            return null;\n" +
-                            "        }\n" +
+                            "        element.failIfAbsent(" + className.asType() + ".RULE);\n" +
                             "        return " + className.asType() + ".of(element);\n";
                 }
                 yield listTemplate(index, className.getRealClassName() + ".of(node)");
             }
 
             case TokenType -> {
-                if (ruleType == RuleType.Conjunction && fieldType == FieldType.Required) {
-                    yield "        var element = getItem(" + index + ");\n" +
-                            "        element.failIfAbsent(" + resultSource.getValue() + ");\n" +
-                            "        return element.asString();\n";
-                }
                 if (isSingular()) {
                     yield "        var element = getItem(" + index + ");\n" +
-                            "        if (!element.isPresent(" + resultSource.getValue() + ")) {\n" +
-                            "            return null;\n" +
-                            "        }\n" +
+                            "        element.failIfAbsent(" + resultSource.getValue() + ");\n" +
                             "        return element.asString();\n";
                 }
                 yield listTemplate(index, "node.asString()");
@@ -117,10 +103,52 @@ public class ClassField {
                 "        return " + fieldName + ";\n";
     }
 
+    public String asGetOrNull(RuleType ruleType, int index) {
+        var body = getterOrNull(ruleType, index);
+        if (body == null) {
+            return null;
+        }
+        return "\n    public " + className.asType() + " " + fieldName +
+                "OrNull() {\n" + body + "    }\n";
+    }
+
+    private String getterOrNull(RuleType ruleType, int index) {
+        return switch (resultSource.getType()) {
+            case Class -> {
+                if (ruleType == RuleType.Conjunction && fieldType == FieldType.Required) {
+                    yield null;
+                }
+                if (isSingular()) {
+                    yield "        var element = getItem(" + index + ");\n" +
+                            "        if (!element.isPresent(" + className.asType() + ".RULE)) {\n" +
+                            "            return null;\n" +
+                            "        }\n" +
+                            "        return " + className.asType() + ".of(element);\n";
+                }
+                yield null;
+            }
+
+            case TokenType -> {
+                if (ruleType == RuleType.Conjunction && fieldType == FieldType.Required) {
+                    yield null;
+                }
+                if (isSingular()) {
+                    yield "        var element = getItem(" + index + ");\n" +
+                            "        if (!element.isPresent(" + resultSource.getValue() + ")) {\n" +
+                            "            return null;\n" +
+                            "        }\n" +
+                            "        return element.asString();\n";
+                }
+                yield null;
+            }
+            case TokenLiteral -> null;
+        };
+    }
+
     public String asAbsentCheck(RuleType ruleType, int index) {
         var body = absentCheckBody(ruleType, index);
         if (body == null) {
-            return "";
+            return null;
         }
         return "\n    public boolean has" +
                 ParserStringUtil.capitalizeFirstCharOnly(fieldName) +

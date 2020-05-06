@@ -39,6 +39,12 @@ public final class AssertStmt extends NodeWrapper {
 
     public AssertStmt3 assertStmt3() {
         var element = getItem(2);
+        element.failIfAbsent(AssertStmt3.RULE);
+        return AssertStmt3.of(element);
+    }
+
+    public AssertStmt3 assertStmt3OrNull() {
+        var element = getItem(2);
         if (!element.isPresent(AssertStmt3.RULE)) {
             return null;
         }

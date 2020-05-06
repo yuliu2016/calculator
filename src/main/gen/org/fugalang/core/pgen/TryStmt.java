@@ -86,6 +86,12 @@ public final class TryStmt extends NodeWrapper {
 
         public TryStmt31 tryStmt31() {
             var element = getItem(0);
+            element.failIfAbsent(TryStmt31.RULE);
+            return TryStmt31.of(element);
+        }
+
+        public TryStmt31 tryStmt31OrNull() {
+            var element = getItem(0);
             if (!element.isPresent(TryStmt31.RULE)) {
                 return null;
             }
@@ -98,6 +104,12 @@ public final class TryStmt extends NodeWrapper {
         }
 
         public TryStmt32 tryStmt32() {
+            var element = getItem(1);
+            element.failIfAbsent(TryStmt32.RULE);
+            return TryStmt32.of(element);
+        }
+
+        public TryStmt32 tryStmt32OrNull() {
             var element = getItem(1);
             if (!element.isPresent(TryStmt32.RULE)) {
                 return null;
@@ -168,6 +180,12 @@ public final class TryStmt extends NodeWrapper {
 
         public TryStmt312 tryStmt312() {
             var element = getItem(1);
+            element.failIfAbsent(TryStmt312.RULE);
+            return TryStmt312.of(element);
+        }
+
+        public TryStmt312 tryStmt312OrNull() {
+            var element = getItem(1);
             if (!element.isPresent(TryStmt312.RULE)) {
                 return null;
             }
@@ -180,6 +198,12 @@ public final class TryStmt extends NodeWrapper {
         }
 
         public TryStmt313 tryStmt313() {
+            var element = getItem(2);
+            element.failIfAbsent(TryStmt313.RULE);
+            return TryStmt313.of(element);
+        }
+
+        public TryStmt313 tryStmt313OrNull() {
             var element = getItem(2);
             if (!element.isPresent(TryStmt313.RULE)) {
                 return null;

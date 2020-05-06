@@ -69,6 +69,12 @@ public final class IfStmt extends NodeWrapper {
 
     public IfStmt5 ifStmt5() {
         var element = getItem(4);
+        element.failIfAbsent(IfStmt5.RULE);
+        return IfStmt5.of(element);
+    }
+
+    public IfStmt5 ifStmt5OrNull() {
+        var element = getItem(4);
         if (!element.isPresent(IfStmt5.RULE)) {
             return null;
         }

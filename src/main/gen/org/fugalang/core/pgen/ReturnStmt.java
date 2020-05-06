@@ -32,6 +32,12 @@ public final class ReturnStmt extends NodeWrapper {
 
     public ExprlistStar exprlistStar() {
         var element = getItem(1);
+        element.failIfAbsent(ExprlistStar.RULE);
+        return ExprlistStar.of(element);
+    }
+
+    public ExprlistStar exprlistStarOrNull() {
+        var element = getItem(1);
         if (!element.isPresent(ExprlistStar.RULE)) {
             return null;
         }

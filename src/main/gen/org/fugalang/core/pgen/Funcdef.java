@@ -39,6 +39,12 @@ public final class Funcdef extends NodeWrapper {
 
     public Varargslist varargslist() {
         var element = getItem(2);
+        element.failIfAbsent(Varargslist.RULE);
+        return Varargslist.of(element);
+    }
+
+    public Varargslist varargslistOrNull() {
+        var element = getItem(2);
         if (!element.isPresent(Varargslist.RULE)) {
             return null;
         }
@@ -96,6 +102,12 @@ public final class Funcdef extends NodeWrapper {
 
         public Funcdef41 funcdef41() {
             var element = getItem(0);
+            element.failIfAbsent(Funcdef41.RULE);
+            return Funcdef41.of(element);
+        }
+
+        public Funcdef41 funcdef41OrNull() {
+            var element = getItem(0);
             if (!element.isPresent(Funcdef41.RULE)) {
                 return null;
             }
@@ -108,6 +120,12 @@ public final class Funcdef extends NodeWrapper {
         }
 
         public BlockSuite blockSuite() {
+            var element = getItem(1);
+            element.failIfAbsent(BlockSuite.RULE);
+            return BlockSuite.of(element);
+        }
+
+        public BlockSuite blockSuiteOrNull() {
             var element = getItem(1);
             if (!element.isPresent(BlockSuite.RULE)) {
                 return null;

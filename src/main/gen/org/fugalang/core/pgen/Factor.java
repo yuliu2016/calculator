@@ -26,6 +26,12 @@ public final class Factor extends NodeWrapper {
 
     public Factor1 factor1() {
         var element = getItem(0);
+        element.failIfAbsent(Factor1.RULE);
+        return Factor1.of(element);
+    }
+
+    public Factor1 factor1OrNull() {
+        var element = getItem(0);
         if (!element.isPresent(Factor1.RULE)) {
             return null;
         }
@@ -38,6 +44,12 @@ public final class Factor extends NodeWrapper {
     }
 
     public Power power() {
+        var element = getItem(1);
+        element.failIfAbsent(Power.RULE);
+        return Power.of(element);
+    }
+
+    public Power powerOrNull() {
         var element = getItem(1);
         if (!element.isPresent(Power.RULE)) {
             return null;

@@ -27,6 +27,12 @@ public final class CompoundAtom extends NodeWrapper {
 
     public CompoundAtom1 compoundAtom1() {
         var element = getItem(0);
+        element.failIfAbsent(CompoundAtom1.RULE);
+        return CompoundAtom1.of(element);
+    }
+
+    public CompoundAtom1 compoundAtom1OrNull() {
+        var element = getItem(0);
         if (!element.isPresent(CompoundAtom1.RULE)) {
             return null;
         }
@@ -40,6 +46,12 @@ public final class CompoundAtom extends NodeWrapper {
 
     public CompoundAtom2 compoundAtom2() {
         var element = getItem(1);
+        element.failIfAbsent(CompoundAtom2.RULE);
+        return CompoundAtom2.of(element);
+    }
+
+    public CompoundAtom2 compoundAtom2OrNull() {
+        var element = getItem(1);
         if (!element.isPresent(CompoundAtom2.RULE)) {
             return null;
         }
@@ -52,6 +64,12 @@ public final class CompoundAtom extends NodeWrapper {
     }
 
     public CompoundAtom3 compoundAtom3() {
+        var element = getItem(2);
+        element.failIfAbsent(CompoundAtom3.RULE);
+        return CompoundAtom3.of(element);
+    }
+
+    public CompoundAtom3 compoundAtom3OrNull() {
         var element = getItem(2);
         if (!element.isPresent(CompoundAtom3.RULE)) {
             return null;
@@ -109,6 +127,12 @@ public final class CompoundAtom extends NodeWrapper {
         }
 
         public ExprlistComp exprlistComp() {
+            var element = getItem(1);
+            element.failIfAbsent(ExprlistComp.RULE);
+            return ExprlistComp.of(element);
+        }
+
+        public ExprlistComp exprlistCompOrNull() {
             var element = getItem(1);
             if (!element.isPresent(ExprlistComp.RULE)) {
                 return null;
@@ -174,6 +198,12 @@ public final class CompoundAtom extends NodeWrapper {
 
         public ExprlistCompSub exprlistCompSub() {
             var element = getItem(1);
+            element.failIfAbsent(ExprlistCompSub.RULE);
+            return ExprlistCompSub.of(element);
+        }
+
+        public ExprlistCompSub exprlistCompSubOrNull() {
+            var element = getItem(1);
             if (!element.isPresent(ExprlistCompSub.RULE)) {
                 return null;
             }
@@ -237,6 +267,12 @@ public final class CompoundAtom extends NodeWrapper {
         }
 
         public Dictorsetmaker dictorsetmaker() {
+            var element = getItem(1);
+            element.failIfAbsent(Dictorsetmaker.RULE);
+            return Dictorsetmaker.of(element);
+        }
+
+        public Dictorsetmaker dictorsetmakerOrNull() {
             var element = getItem(1);
             if (!element.isPresent(Dictorsetmaker.RULE)) {
                 return null;

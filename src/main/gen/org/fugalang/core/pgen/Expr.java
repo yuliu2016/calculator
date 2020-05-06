@@ -27,6 +27,12 @@ public final class Expr extends NodeWrapper {
 
     public Expr1 expr1() {
         var element = getItem(0);
+        element.failIfAbsent(Expr1.RULE);
+        return Expr1.of(element);
+    }
+
+    public Expr1 expr1OrNull() {
+        var element = getItem(0);
         if (!element.isPresent(Expr1.RULE)) {
             return null;
         }
@@ -40,6 +46,12 @@ public final class Expr extends NodeWrapper {
 
     public Funcdef funcdef() {
         var element = getItem(1);
+        element.failIfAbsent(Funcdef.RULE);
+        return Funcdef.of(element);
+    }
+
+    public Funcdef funcdefOrNull() {
+        var element = getItem(1);
         if (!element.isPresent(Funcdef.RULE)) {
             return null;
         }
@@ -52,6 +64,12 @@ public final class Expr extends NodeWrapper {
     }
 
     public Disjunction disjunction() {
+        var element = getItem(2);
+        element.failIfAbsent(Disjunction.RULE);
+        return Disjunction.of(element);
+    }
+
+    public Disjunction disjunctionOrNull() {
         var element = getItem(2);
         if (!element.isPresent(Disjunction.RULE)) {
             return null;

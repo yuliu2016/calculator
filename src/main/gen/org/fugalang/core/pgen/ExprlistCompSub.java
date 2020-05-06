@@ -26,6 +26,12 @@ public final class ExprlistCompSub extends NodeWrapper {
 
     public ExprlistComp exprlistComp() {
         var element = getItem(0);
+        element.failIfAbsent(ExprlistComp.RULE);
+        return ExprlistComp.of(element);
+    }
+
+    public ExprlistComp exprlistCompOrNull() {
+        var element = getItem(0);
         if (!element.isPresent(ExprlistComp.RULE)) {
             return null;
         }
@@ -38,6 +44,12 @@ public final class ExprlistCompSub extends NodeWrapper {
     }
 
     public Subscript subscript() {
+        var element = getItem(1);
+        element.failIfAbsent(Subscript.RULE);
+        return Subscript.of(element);
+    }
+
+    public Subscript subscriptOrNull() {
         var element = getItem(1);
         if (!element.isPresent(Subscript.RULE)) {
             return null;

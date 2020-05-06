@@ -28,6 +28,12 @@ public final class FlowStmt extends NodeWrapper {
 
     public BreakStmt breakStmt() {
         var element = getItem(0);
+        element.failIfAbsent(BreakStmt.RULE);
+        return BreakStmt.of(element);
+    }
+
+    public BreakStmt breakStmtOrNull() {
+        var element = getItem(0);
         if (!element.isPresent(BreakStmt.RULE)) {
             return null;
         }
@@ -40,6 +46,12 @@ public final class FlowStmt extends NodeWrapper {
     }
 
     public ContinueStmt continueStmt() {
+        var element = getItem(1);
+        element.failIfAbsent(ContinueStmt.RULE);
+        return ContinueStmt.of(element);
+    }
+
+    public ContinueStmt continueStmtOrNull() {
         var element = getItem(1);
         if (!element.isPresent(ContinueStmt.RULE)) {
             return null;
@@ -54,6 +66,12 @@ public final class FlowStmt extends NodeWrapper {
 
     public ReturnStmt returnStmt() {
         var element = getItem(2);
+        element.failIfAbsent(ReturnStmt.RULE);
+        return ReturnStmt.of(element);
+    }
+
+    public ReturnStmt returnStmtOrNull() {
+        var element = getItem(2);
         if (!element.isPresent(ReturnStmt.RULE)) {
             return null;
         }
@@ -66,6 +84,12 @@ public final class FlowStmt extends NodeWrapper {
     }
 
     public RaiseStmt raiseStmt() {
+        var element = getItem(3);
+        element.failIfAbsent(RaiseStmt.RULE);
+        return RaiseStmt.of(element);
+    }
+
+    public RaiseStmt raiseStmtOrNull() {
         var element = getItem(3);
         if (!element.isPresent(RaiseStmt.RULE)) {
             return null;

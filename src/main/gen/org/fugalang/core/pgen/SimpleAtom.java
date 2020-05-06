@@ -31,6 +31,12 @@ public final class SimpleAtom extends NodeWrapper {
 
     public String name() {
         var element = getItem(0);
+        element.failIfAbsent(TokenType.NAME);
+        return element.asString();
+    }
+
+    public String nameOrNull() {
+        var element = getItem(0);
         if (!element.isPresent(TokenType.NAME)) {
             return null;
         }
@@ -44,6 +50,12 @@ public final class SimpleAtom extends NodeWrapper {
 
     public String number() {
         var element = getItem(1);
+        element.failIfAbsent(TokenType.NUMBER);
+        return element.asString();
+    }
+
+    public String numberOrNull() {
+        var element = getItem(1);
         if (!element.isPresent(TokenType.NUMBER)) {
             return null;
         }
@@ -56,6 +68,12 @@ public final class SimpleAtom extends NodeWrapper {
     }
 
     public String string() {
+        var element = getItem(2);
+        element.failIfAbsent(TokenType.STRING);
+        return element.asString();
+    }
+
+    public String stringOrNull() {
         var element = getItem(2);
         if (!element.isPresent(TokenType.STRING)) {
             return null;

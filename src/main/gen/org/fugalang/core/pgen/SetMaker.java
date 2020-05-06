@@ -36,6 +36,12 @@ public final class SetMaker extends NodeWrapper {
 
     public SetMaker2 setMaker2() {
         var element = getItem(1);
+        element.failIfAbsent(SetMaker2.RULE);
+        return SetMaker2.of(element);
+    }
+
+    public SetMaker2 setMaker2OrNull() {
+        var element = getItem(1);
         if (!element.isPresent(SetMaker2.RULE)) {
             return null;
         }
@@ -85,6 +91,12 @@ public final class SetMaker extends NodeWrapper {
 
         public CompFor compFor() {
             var element = getItem(0);
+            element.failIfAbsent(CompFor.RULE);
+            return CompFor.of(element);
+        }
+
+        public CompFor compForOrNull() {
+            var element = getItem(0);
             if (!element.isPresent(CompFor.RULE)) {
                 return null;
             }
@@ -97,6 +109,12 @@ public final class SetMaker extends NodeWrapper {
         }
 
         public SetMaker22 setMaker22() {
+            var element = getItem(1);
+            element.failIfAbsent(SetMaker22.RULE);
+            return SetMaker22.of(element);
+        }
+
+        public SetMaker22 setMaker22OrNull() {
             var element = getItem(1);
             if (!element.isPresent(SetMaker22.RULE)) {
                 return null;
