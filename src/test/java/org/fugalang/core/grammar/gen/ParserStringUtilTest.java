@@ -1,5 +1,6 @@
 package org.fugalang.core.grammar.gen;
 
+import org.fugalang.core.grammar.util.ParserStringUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

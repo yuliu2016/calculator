@@ -2,6 +2,7 @@ package org.fugalang.core.grammar.gen;
 
 import org.fugalang.core.grammar.classbuilder.*;
 import org.fugalang.core.grammar.psi.*;
+import org.fugalang.core.grammar.util.ParserStringUtil;
 import org.fugalang.core.parser.RuleType;
 
 import java.nio.file.Path;

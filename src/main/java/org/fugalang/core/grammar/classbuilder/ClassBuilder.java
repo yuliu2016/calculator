@@ -1,6 +1,6 @@
 package org.fugalang.core.grammar.classbuilder;
 
-import org.fugalang.core.grammar.gen.ParserStringUtil;
+import org.fugalang.core.grammar.util.ParserStringUtil;
 import org.fugalang.core.grammar.util.FirstAndMore;
 import org.fugalang.core.parser.RuleType;
 

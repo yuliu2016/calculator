@@ -6,6 +6,7 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
 
+@Deprecated
 public class TokenVisitor {
     private final List<ParserElement> tokens;
     private int i;

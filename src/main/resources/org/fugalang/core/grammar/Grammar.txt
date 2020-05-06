@@ -1,3 +1,0 @@
-atom: '(' arithmetic_expr ')' | INTEGER
-term: atom (('*' | '/') atom)*
-arithmetic_expr: term (('+' | '-') term)*

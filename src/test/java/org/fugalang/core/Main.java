@@ -1,7 +1,6 @@
 package org.fugalang.core;
 
 import org.fugalang.core.grammar.SyntaxError;
-import org.fugalang.core.parser.simple.SimpleParser;
 import org.fugalang.core.pprint.ConsoleColor;
 import org.fugalang.core.pprint.TokenPPrint;
 import org.fugalang.core.token.Tokenizer;
@@ -21,11 +20,6 @@ public class Main {
             try {
                 var result = new Tokenizer(s.replace("\\n", "\n")).tokenizeAll();
                 System.out.print(TokenPPrint.format(result));
-                var cst = SimpleParser.parse(result);
-                System.out.print(ConsoleColor.BOLD);
-                System.out.print(ConsoleColor.MAGENTA);
-                System.out.print(cst);
-                System.out.println(ConsoleColor.END);
             } catch (SyntaxError e) {
                 System.out.print(ConsoleColor.RED);
                 System.out.println("Syntax Error: " + e.getMessage());

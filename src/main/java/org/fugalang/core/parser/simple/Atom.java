@@ -1,5 +1,7 @@
 package org.fugalang.core.parser.simple;
 
+@SuppressWarnings("DeprecatedIsStillUsed")
+@Deprecated
 public class Atom {
     Object val;
 

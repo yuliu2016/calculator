@@ -12,7 +12,7 @@ import java.util.Scanner;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-class ParseTreeImpl implements ParseTree {
+public class ParseTreeImpl implements ParseTree {
 
     private List<ParserElement> tokens;
     private int position;

@@ -2,6 +2,7 @@ package org.fugalang.core.grammar.gen;
 
 import org.fugalang.core.grammar.parser.MetaParser;
 import org.fugalang.core.grammar.token.MetaLexer;
+import org.fugalang.core.grammar.util.ParserStringUtil;
 import org.fugalang.core.token.Keyword;
 import org.fugalang.core.token.Operator;
 import org.fugalang.core.token.TokenType;
@@ -36,7 +37,7 @@ public class FugaGenerator {
         }
     }
 
-    private static Optional<ConvertedValue> checkToken(String s) {
+    public static Optional<ConvertedValue> checkToken(String s) {
 
         if (Keyword.ALL_KEYWORDS.contains(s)) {
             return Optional.of(new ConvertedValue("boolean", s, s));

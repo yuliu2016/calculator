@@ -1,9 +1,9 @@
 package org.fugalang.core.parser.simple;
 
-import org.fugalang.core.token.Operator;
-
 import java.util.List;
 
+@SuppressWarnings("DeprecatedIsStillUsed")
+@Deprecated
 public class Term {
     Atom first_atom;
 

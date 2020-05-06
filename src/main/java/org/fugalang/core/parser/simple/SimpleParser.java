@@ -9,6 +9,8 @@ import org.fugalang.core.token.Tokenizer;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("DeprecatedIsStillUsed")
+@Deprecated
 public class SimpleParser {
     public static Object parse(List<ParserElement> tokens) {
         // top down - has to be an arithmetic expr

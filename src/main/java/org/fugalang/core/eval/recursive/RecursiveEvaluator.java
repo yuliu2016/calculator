@@ -13,6 +13,7 @@ import org.fugalang.core.token.Tokenizer;
 import java.util.List;
 import java.util.Scanner;
 
+@Deprecated
 public class RecursiveEvaluator {
 
     private static double evaluate(List<ParserElement> tokens) {
