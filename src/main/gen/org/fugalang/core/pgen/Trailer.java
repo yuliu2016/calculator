@@ -4,7 +4,7 @@ import org.fugalang.core.parser.*;
 import org.fugalang.core.token.TokenType;
 
 /**
- * trailer: '(' ['arglist'] ')' | '[' 'subscript' ']' | '.' 'NAME' | 'block_suite'
+ * trailer: '.' 'NAME' | 'parameters' | 'subscript'
  */
 public final class Trailer extends NodeWrapper {
 
@@ -22,9 +22,8 @@ public final class Trailer extends NodeWrapper {
     @Override
     protected void buildRule() {
         addChoice(trailer1OrNull());
-        addChoice(trailer2OrNull());
-        addChoice(trailer3OrNull());
-        addChoice(blockSuiteOrNull());
+        addChoice(parametersOrNull());
+        addChoice(subscriptOrNull());
     }
 
     public Trailer1 trailer1() {
@@ -46,61 +45,42 @@ public final class Trailer extends NodeWrapper {
         return element.isPresent(Trailer1.RULE);
     }
 
-    public Trailer2 trailer2() {
+    public Parameters parameters() {
         var element = getItem(1);
-        element.failIfAbsent(Trailer2.RULE);
-        return Trailer2.of(element);
+        element.failIfAbsent(Parameters.RULE);
+        return Parameters.of(element);
     }
 
-    public Trailer2 trailer2OrNull() {
+    public Parameters parametersOrNull() {
         var element = getItem(1);
-        if (!element.isPresent(Trailer2.RULE)) {
+        if (!element.isPresent(Parameters.RULE)) {
             return null;
         }
-        return Trailer2.of(element);
+        return Parameters.of(element);
     }
 
-    public boolean hasTrailer2() {
+    public boolean hasParameters() {
         var element = getItem(1);
-        return element.isPresent(Trailer2.RULE);
+        return element.isPresent(Parameters.RULE);
     }
 
-    public Trailer3 trailer3() {
+    public Subscript subscript() {
         var element = getItem(2);
-        element.failIfAbsent(Trailer3.RULE);
-        return Trailer3.of(element);
+        element.failIfAbsent(Subscript.RULE);
+        return Subscript.of(element);
     }
 
-    public Trailer3 trailer3OrNull() {
+    public Subscript subscriptOrNull() {
         var element = getItem(2);
-        if (!element.isPresent(Trailer3.RULE)) {
+        if (!element.isPresent(Subscript.RULE)) {
             return null;
         }
-        return Trailer3.of(element);
+        return Subscript.of(element);
     }
 
-    public boolean hasTrailer3() {
+    public boolean hasSubscript() {
         var element = getItem(2);
-        return element.isPresent(Trailer3.RULE);
-    }
-
-    public BlockSuite blockSuite() {
-        var element = getItem(3);
-        element.failIfAbsent(BlockSuite.RULE);
-        return BlockSuite.of(element);
-    }
-
-    public BlockSuite blockSuiteOrNull() {
-        var element = getItem(3);
-        if (!element.isPresent(BlockSuite.RULE)) {
-            return null;
-        }
-        return BlockSuite.of(element);
-    }
-
-    public boolean hasBlockSuite() {
-        var element = getItem(3);
-        return element.isPresent(BlockSuite.RULE);
+        return element.isPresent(Subscript.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -111,16 +91,15 @@ public final class Trailer extends NodeWrapper {
         boolean result;
 
         result = Trailer1.parse(parseTree, level + 1);
-        result = result || Trailer2.parse(parseTree, level + 1);
-        result = result || Trailer3.parse(parseTree, level + 1);
-        result = result || BlockSuite.parse(parseTree, level + 1);
+        result = result || Parameters.parse(parseTree, level + 1);
+        result = result || Subscript.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);
         return result;
     }
 
     /**
-     * '(' ['arglist'] ')'
+     * '.' 'NAME'
      */
     public static final class Trailer1 extends NodeWrapper {
 
@@ -132,133 +111,6 @@ public final class Trailer extends NodeWrapper {
         }
 
         private Trailer1(ParseTreeNode node) {
-            super(RULE, node);
-        }
-
-        @Override
-        protected void buildRule() {
-            addRequired(isTokenLpar(), "(");
-            addOptional(arglistOrNull());
-            addRequired(isTokenRpar(), ")");
-        }
-
-        public boolean isTokenLpar() {
-            var element = getItem(0);
-            element.failIfAbsent();
-            return element.asBoolean();
-        }
-
-        public Arglist arglist() {
-            var element = getItem(1);
-            element.failIfAbsent(Arglist.RULE);
-            return Arglist.of(element);
-        }
-
-        public Arglist arglistOrNull() {
-            var element = getItem(1);
-            if (!element.isPresent(Arglist.RULE)) {
-                return null;
-            }
-            return Arglist.of(element);
-        }
-
-        public boolean hasArglist() {
-            var element = getItem(1);
-            return element.isPresent(Arglist.RULE);
-        }
-
-        public boolean isTokenRpar() {
-            var element = getItem(2);
-            element.failIfAbsent();
-            return element.asBoolean();
-        }
-
-        public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
-            var marker = parseTree.enter(level, RULE);
-            boolean result;
-
-            result = parseTree.consumeToken("(");
-            if (result) Arglist.parse(parseTree, level + 1);
-            result = result && parseTree.consumeToken(")");
-
-            parseTree.exit(level, marker, result);
-            return result;
-        }
-    }
-
-    /**
-     * '[' 'subscript' ']'
-     */
-    public static final class Trailer2 extends NodeWrapper {
-
-        public static final ParserRule RULE =
-                new ParserRule("trailer:2", RuleType.Conjunction, false);
-
-        public static Trailer2 of(ParseTreeNode node) {
-            return new Trailer2(node);
-        }
-
-        private Trailer2(ParseTreeNode node) {
-            super(RULE, node);
-        }
-
-        @Override
-        protected void buildRule() {
-            addRequired(isTokenLsqb(), "[");
-            addRequired(subscript());
-            addRequired(isTokenRsqb(), "]");
-        }
-
-        public boolean isTokenLsqb() {
-            var element = getItem(0);
-            element.failIfAbsent();
-            return element.asBoolean();
-        }
-
-        public Subscript subscript() {
-            var element = getItem(1);
-            element.failIfAbsent(Subscript.RULE);
-            return Subscript.of(element);
-        }
-
-        public boolean isTokenRsqb() {
-            var element = getItem(2);
-            element.failIfAbsent();
-            return element.asBoolean();
-        }
-
-        public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
-            var marker = parseTree.enter(level, RULE);
-            boolean result;
-
-            result = parseTree.consumeToken("[");
-            result = result && Subscript.parse(parseTree, level + 1);
-            result = result && parseTree.consumeToken("]");
-
-            parseTree.exit(level, marker, result);
-            return result;
-        }
-    }
-
-    /**
-     * '.' 'NAME'
-     */
-    public static final class Trailer3 extends NodeWrapper {
-
-        public static final ParserRule RULE =
-                new ParserRule("trailer:3", RuleType.Conjunction, false);
-
-        public static Trailer3 of(ParseTreeNode node) {
-            return new Trailer3(node);
-        }
-
-        private Trailer3(ParseTreeNode node) {
             super(RULE, node);
         }
 

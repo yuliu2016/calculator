@@ -1,53 +1,52 @@
 package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.*;
-import org.fugalang.core.token.TokenType;
 
 /**
- * namedexpr_expr: 'NAME' [':=' 'expr']
+ * default_arg: 'typed_arg' ['=' 'expr']
  */
-public final class NamedexprExpr extends NodeWrapper {
+public final class DefaultArg extends NodeWrapper {
 
     public static final ParserRule RULE =
-            new ParserRule("namedexpr_expr", RuleType.Conjunction, true);
+            new ParserRule("default_arg", RuleType.Conjunction, true);
 
-    public static NamedexprExpr of(ParseTreeNode node) {
-        return new NamedexprExpr(node);
+    public static DefaultArg of(ParseTreeNode node) {
+        return new DefaultArg(node);
     }
 
-    private NamedexprExpr(ParseTreeNode node) {
+    private DefaultArg(ParseTreeNode node) {
         super(RULE, node);
     }
 
     @Override
     protected void buildRule() {
-        addRequired(name());
-        addOptional(namedexprExpr2OrNull());
+        addRequired(typedArg());
+        addOptional(defaultArg2OrNull());
     }
 
-    public String name() {
+    public TypedArg typedArg() {
         var element = getItem(0);
-        element.failIfAbsent(TokenType.NAME);
-        return element.asString();
+        element.failIfAbsent(TypedArg.RULE);
+        return TypedArg.of(element);
     }
 
-    public NamedexprExpr2 namedexprExpr2() {
+    public DefaultArg2 defaultArg2() {
         var element = getItem(1);
-        element.failIfAbsent(NamedexprExpr2.RULE);
-        return NamedexprExpr2.of(element);
+        element.failIfAbsent(DefaultArg2.RULE);
+        return DefaultArg2.of(element);
     }
 
-    public NamedexprExpr2 namedexprExpr2OrNull() {
+    public DefaultArg2 defaultArg2OrNull() {
         var element = getItem(1);
-        if (!element.isPresent(NamedexprExpr2.RULE)) {
+        if (!element.isPresent(DefaultArg2.RULE)) {
             return null;
         }
-        return NamedexprExpr2.of(element);
+        return DefaultArg2.of(element);
     }
 
-    public boolean hasNamedexprExpr2() {
+    public boolean hasDefaultArg2() {
         var element = getItem(1);
-        return element.isPresent(NamedexprExpr2.RULE);
+        return element.isPresent(DefaultArg2.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -57,36 +56,36 @@ public final class NamedexprExpr extends NodeWrapper {
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
-        result = parseTree.consumeToken(TokenType.NAME);
-        if (result) NamedexprExpr2.parse(parseTree, level + 1);
+        result = TypedArg.parse(parseTree, level + 1);
+        if (result) DefaultArg2.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);
         return result;
     }
 
     /**
-     * ':=' 'expr'
+     * '=' 'expr'
      */
-    public static final class NamedexprExpr2 extends NodeWrapper {
+    public static final class DefaultArg2 extends NodeWrapper {
 
         public static final ParserRule RULE =
-                new ParserRule("namedexpr_expr:2", RuleType.Conjunction, false);
+                new ParserRule("default_arg:2", RuleType.Conjunction, false);
 
-        public static NamedexprExpr2 of(ParseTreeNode node) {
-            return new NamedexprExpr2(node);
+        public static DefaultArg2 of(ParseTreeNode node) {
+            return new DefaultArg2(node);
         }
 
-        private NamedexprExpr2(ParseTreeNode node) {
+        private DefaultArg2(ParseTreeNode node) {
             super(RULE, node);
         }
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenAsgnExpr(), ":=");
+            addRequired(isTokenAssign(), "=");
             addRequired(expr());
         }
 
-        public boolean isTokenAsgnExpr() {
+        public boolean isTokenAssign() {
             var element = getItem(0);
             element.failIfAbsent();
             return element.asBoolean();
@@ -105,7 +104,7 @@ public final class NamedexprExpr extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeToken(":=");
+            result = parseTree.consumeToken("=");
             result = result && Expr.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);

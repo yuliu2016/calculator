@@ -3,7 +3,7 @@ package org.fugalang.core.pgen;
 import org.fugalang.core.parser.*;
 
 /**
- * funcdef: ['async'] 'def' ['varargslist'] (':' 'expr' | 'block_suite')
+ * funcdef: 'def' ['simple_arg_list' | '(' ['typed_arg_list'] ')'] 'func_suite'
  */
 public final class Funcdef extends NodeWrapper {
 
@@ -20,46 +20,40 @@ public final class Funcdef extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addOptional(isTokenAsync(), "async");
         addRequired(isTokenDef(), "def");
-        addOptional(varargslistOrNull());
-        addRequired(funcdef4());
-    }
-
-    public boolean isTokenAsync() {
-        var element = getItem(0);
-        return element.asBoolean();
+        addOptional(funcdef2OrNull());
+        addRequired(funcSuite());
     }
 
     public boolean isTokenDef() {
-        var element = getItem(1);
+        var element = getItem(0);
         element.failIfAbsent();
         return element.asBoolean();
     }
 
-    public Varargslist varargslist() {
-        var element = getItem(2);
-        element.failIfAbsent(Varargslist.RULE);
-        return Varargslist.of(element);
+    public Funcdef2 funcdef2() {
+        var element = getItem(1);
+        element.failIfAbsent(Funcdef2.RULE);
+        return Funcdef2.of(element);
     }
 
-    public Varargslist varargslistOrNull() {
-        var element = getItem(2);
-        if (!element.isPresent(Varargslist.RULE)) {
+    public Funcdef2 funcdef2OrNull() {
+        var element = getItem(1);
+        if (!element.isPresent(Funcdef2.RULE)) {
             return null;
         }
-        return Varargslist.of(element);
+        return Funcdef2.of(element);
     }
 
-    public boolean hasVarargslist() {
+    public boolean hasFuncdef2() {
+        var element = getItem(1);
+        return element.isPresent(Funcdef2.RULE);
+    }
+
+    public FuncSuite funcSuite() {
         var element = getItem(2);
-        return element.isPresent(Varargslist.RULE);
-    }
-
-    public Funcdef4 funcdef4() {
-        var element = getItem(3);
-        element.failIfAbsent(Funcdef4.RULE);
-        return Funcdef4.of(element);
+        element.failIfAbsent(FuncSuite.RULE);
+        return FuncSuite.of(element);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -69,73 +63,72 @@ public final class Funcdef extends NodeWrapper {
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
-        parseTree.consumeToken("async");
         result = parseTree.consumeToken("def");
-        if (result) Varargslist.parse(parseTree, level + 1);
-        result = result && Funcdef4.parse(parseTree, level + 1);
+        if (result) Funcdef2.parse(parseTree, level + 1);
+        result = result && FuncSuite.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);
         return result;
     }
 
     /**
-     * ':' 'expr' | 'block_suite'
+     * 'simple_arg_list' | '(' ['typed_arg_list'] ')'
      */
-    public static final class Funcdef4 extends NodeWrapper {
+    public static final class Funcdef2 extends NodeWrapper {
 
         public static final ParserRule RULE =
-                new ParserRule("funcdef:4", RuleType.Disjunction, false);
+                new ParserRule("funcdef:2", RuleType.Disjunction, false);
 
-        public static Funcdef4 of(ParseTreeNode node) {
-            return new Funcdef4(node);
+        public static Funcdef2 of(ParseTreeNode node) {
+            return new Funcdef2(node);
         }
 
-        private Funcdef4(ParseTreeNode node) {
+        private Funcdef2(ParseTreeNode node) {
             super(RULE, node);
         }
 
         @Override
         protected void buildRule() {
-            addChoice(funcdef41OrNull());
-            addChoice(blockSuiteOrNull());
+            addChoice(simpleArgListOrNull());
+            addChoice(funcdef22OrNull());
         }
 
-        public Funcdef41 funcdef41() {
+        public SimpleArgList simpleArgList() {
             var element = getItem(0);
-            element.failIfAbsent(Funcdef41.RULE);
-            return Funcdef41.of(element);
+            element.failIfAbsent(SimpleArgList.RULE);
+            return SimpleArgList.of(element);
         }
 
-        public Funcdef41 funcdef41OrNull() {
+        public SimpleArgList simpleArgListOrNull() {
             var element = getItem(0);
-            if (!element.isPresent(Funcdef41.RULE)) {
+            if (!element.isPresent(SimpleArgList.RULE)) {
                 return null;
             }
-            return Funcdef41.of(element);
+            return SimpleArgList.of(element);
         }
 
-        public boolean hasFuncdef41() {
+        public boolean hasSimpleArgList() {
             var element = getItem(0);
-            return element.isPresent(Funcdef41.RULE);
+            return element.isPresent(SimpleArgList.RULE);
         }
 
-        public BlockSuite blockSuite() {
+        public Funcdef22 funcdef22() {
             var element = getItem(1);
-            element.failIfAbsent(BlockSuite.RULE);
-            return BlockSuite.of(element);
+            element.failIfAbsent(Funcdef22.RULE);
+            return Funcdef22.of(element);
         }
 
-        public BlockSuite blockSuiteOrNull() {
+        public Funcdef22 funcdef22OrNull() {
             var element = getItem(1);
-            if (!element.isPresent(BlockSuite.RULE)) {
+            if (!element.isPresent(Funcdef22.RULE)) {
                 return null;
             }
-            return BlockSuite.of(element);
+            return Funcdef22.of(element);
         }
 
-        public boolean hasBlockSuite() {
+        public boolean hasFuncdef22() {
             var element = getItem(1);
-            return element.isPresent(BlockSuite.RULE);
+            return element.isPresent(Funcdef22.RULE);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -145,8 +138,8 @@ public final class Funcdef extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = Funcdef41.parse(parseTree, level + 1);
-            result = result || BlockSuite.parse(parseTree, level + 1);
+            result = SimpleArgList.parse(parseTree, level + 1);
+            result = result || Funcdef22.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);
             return result;
@@ -154,37 +147,57 @@ public final class Funcdef extends NodeWrapper {
     }
 
     /**
-     * ':' 'expr'
+     * '(' ['typed_arg_list'] ')'
      */
-    public static final class Funcdef41 extends NodeWrapper {
+    public static final class Funcdef22 extends NodeWrapper {
 
         public static final ParserRule RULE =
-                new ParserRule("funcdef:4:1", RuleType.Conjunction, false);
+                new ParserRule("funcdef:2:2", RuleType.Conjunction, false);
 
-        public static Funcdef41 of(ParseTreeNode node) {
-            return new Funcdef41(node);
+        public static Funcdef22 of(ParseTreeNode node) {
+            return new Funcdef22(node);
         }
 
-        private Funcdef41(ParseTreeNode node) {
+        private Funcdef22(ParseTreeNode node) {
             super(RULE, node);
         }
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenColon(), ":");
-            addRequired(expr());
+            addRequired(isTokenLpar(), "(");
+            addOptional(typedArgListOrNull());
+            addRequired(isTokenRpar(), ")");
         }
 
-        public boolean isTokenColon() {
+        public boolean isTokenLpar() {
             var element = getItem(0);
             element.failIfAbsent();
             return element.asBoolean();
         }
 
-        public Expr expr() {
+        public TypedArgList typedArgList() {
             var element = getItem(1);
-            element.failIfAbsent(Expr.RULE);
-            return Expr.of(element);
+            element.failIfAbsent(TypedArgList.RULE);
+            return TypedArgList.of(element);
+        }
+
+        public TypedArgList typedArgListOrNull() {
+            var element = getItem(1);
+            if (!element.isPresent(TypedArgList.RULE)) {
+                return null;
+            }
+            return TypedArgList.of(element);
+        }
+
+        public boolean hasTypedArgList() {
+            var element = getItem(1);
+            return element.isPresent(TypedArgList.RULE);
+        }
+
+        public boolean isTokenRpar() {
+            var element = getItem(2);
+            element.failIfAbsent();
+            return element.asBoolean();
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -194,8 +207,9 @@ public final class Funcdef extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeToken(":");
-            result = result && Expr.parse(parseTree, level + 1);
+            result = parseTree.consumeToken("(");
+            if (result) TypedArgList.parse(parseTree, level + 1);
+            result = result && parseTree.consumeToken(")");
 
             parseTree.exit(level, marker, result);
             return result;

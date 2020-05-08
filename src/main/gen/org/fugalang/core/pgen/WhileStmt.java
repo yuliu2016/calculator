@@ -3,7 +3,7 @@ package org.fugalang.core.pgen;
 import org.fugalang.core.parser.*;
 
 /**
- * while_stmt: 'while' 'namedexpr_expr' 'suite' ['else_suite']
+ * while_stmt: 'while' 'named_expr' 'suite' ['else_suite']
  */
 public final class WhileStmt extends NodeWrapper {
 
@@ -21,7 +21,7 @@ public final class WhileStmt extends NodeWrapper {
     @Override
     protected void buildRule() {
         addRequired(isTokenWhile(), "while");
-        addRequired(namedexprExpr());
+        addRequired(namedExpr());
         addRequired(suite());
         addOptional(elseSuiteOrNull());
     }
@@ -32,10 +32,10 @@ public final class WhileStmt extends NodeWrapper {
         return element.asBoolean();
     }
 
-    public NamedexprExpr namedexprExpr() {
+    public NamedExpr namedExpr() {
         var element = getItem(1);
-        element.failIfAbsent(NamedexprExpr.RULE);
-        return NamedexprExpr.of(element);
+        element.failIfAbsent(NamedExpr.RULE);
+        return NamedExpr.of(element);
     }
 
     public Suite suite() {
@@ -71,7 +71,7 @@ public final class WhileStmt extends NodeWrapper {
         boolean result;
 
         result = parseTree.consumeToken("while");
-        result = result && NamedexprExpr.parse(parseTree, level + 1);
+        result = result && NamedExpr.parse(parseTree, level + 1);
         result = result && Suite.parse(parseTree, level + 1);
         if (result) ElseSuite.parse(parseTree, level + 1);
 

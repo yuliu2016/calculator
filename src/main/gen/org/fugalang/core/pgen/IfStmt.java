@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * if_stmt: 'if' 'namedexpr_expr' 'suite' ('elif' 'namedexpr_expr' 'suite')* ['else_suite']
+ * if_stmt: 'if' 'named_expr' 'suite' ('elif' 'named_expr' 'suite')* ['else_suite']
  */
 public final class IfStmt extends NodeWrapper {
 
@@ -27,7 +27,7 @@ public final class IfStmt extends NodeWrapper {
     @Override
     protected void buildRule() {
         addRequired(isTokenIf(), "if");
-        addRequired(namedexprExpr());
+        addRequired(namedExpr());
         addRequired(suite());
         addRequired(ifStmt4List());
         addOptional(elseSuiteOrNull());
@@ -39,10 +39,10 @@ public final class IfStmt extends NodeWrapper {
         return element.asBoolean();
     }
 
-    public NamedexprExpr namedexprExpr() {
+    public NamedExpr namedExpr() {
         var element = getItem(1);
-        element.failIfAbsent(NamedexprExpr.RULE);
-        return NamedexprExpr.of(element);
+        element.failIfAbsent(NamedExpr.RULE);
+        return NamedExpr.of(element);
     }
 
     public Suite suite() {
@@ -94,7 +94,7 @@ public final class IfStmt extends NodeWrapper {
         boolean result;
 
         result = parseTree.consumeToken("if");
-        result = result && NamedexprExpr.parse(parseTree, level + 1);
+        result = result && NamedExpr.parse(parseTree, level + 1);
         result = result && Suite.parse(parseTree, level + 1);
         parseTree.enterCollection();
         if (result) while (true) {
@@ -112,7 +112,7 @@ public final class IfStmt extends NodeWrapper {
     }
 
     /**
-     * 'elif' 'namedexpr_expr' 'suite'
+     * 'elif' 'named_expr' 'suite'
      */
     public static final class IfStmt4 extends NodeWrapper {
 
@@ -130,7 +130,7 @@ public final class IfStmt extends NodeWrapper {
         @Override
         protected void buildRule() {
             addRequired(isTokenElif(), "elif");
-            addRequired(namedexprExpr());
+            addRequired(namedExpr());
             addRequired(suite());
         }
 
@@ -140,10 +140,10 @@ public final class IfStmt extends NodeWrapper {
             return element.asBoolean();
         }
 
-        public NamedexprExpr namedexprExpr() {
+        public NamedExpr namedExpr() {
             var element = getItem(1);
-            element.failIfAbsent(NamedexprExpr.RULE);
-            return NamedexprExpr.of(element);
+            element.failIfAbsent(NamedExpr.RULE);
+            return NamedExpr.of(element);
         }
 
         public Suite suite() {
@@ -160,7 +160,7 @@ public final class IfStmt extends NodeWrapper {
             boolean result;
 
             result = parseTree.consumeToken("elif");
-            result = result && NamedexprExpr.parse(parseTree, level + 1);
+            result = result && NamedExpr.parse(parseTree, level + 1);
             result = result && Suite.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);

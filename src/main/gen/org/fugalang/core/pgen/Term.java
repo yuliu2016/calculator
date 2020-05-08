@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * term: 'pipe_expr' (('*' | '@' | '/' | '%' | '//') 'pipe_expr')*
+ * term: 'pipeline' (('*' | '@' | '/' | '%' | '//') 'pipeline')*
  */
 public final class Term extends NodeWrapper {
 
@@ -26,14 +26,14 @@ public final class Term extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addRequired(pipeExpr());
+        addRequired(pipeline());
         addRequired(term2List());
     }
 
-    public PipeExpr pipeExpr() {
+    public Pipeline pipeline() {
         var element = getItem(0);
-        element.failIfAbsent(PipeExpr.RULE);
-        return PipeExpr.of(element);
+        element.failIfAbsent(Pipeline.RULE);
+        return Pipeline.of(element);
     }
 
     public List<Term2> term2List() {
@@ -59,7 +59,7 @@ public final class Term extends NodeWrapper {
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
-        result = PipeExpr.parse(parseTree, level + 1);
+        result = Pipeline.parse(parseTree, level + 1);
         parseTree.enterCollection();
         if (result) while (true) {
             var pos = parseTree.position();
@@ -75,7 +75,7 @@ public final class Term extends NodeWrapper {
     }
 
     /**
-     * ('*' | '@' | '/' | '%' | '//') 'pipe_expr'
+     * ('*' | '@' | '/' | '%' | '//') 'pipeline'
      */
     public static final class Term2 extends NodeWrapper {
 
@@ -93,7 +93,7 @@ public final class Term extends NodeWrapper {
         @Override
         protected void buildRule() {
             addRequired(term21());
-            addRequired(pipeExpr());
+            addRequired(pipeline());
         }
 
         public Term21 term21() {
@@ -102,10 +102,10 @@ public final class Term extends NodeWrapper {
             return Term21.of(element);
         }
 
-        public PipeExpr pipeExpr() {
+        public Pipeline pipeline() {
             var element = getItem(1);
-            element.failIfAbsent(PipeExpr.RULE);
-            return PipeExpr.of(element);
+            element.failIfAbsent(Pipeline.RULE);
+            return Pipeline.of(element);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -116,7 +116,7 @@ public final class Term extends NodeWrapper {
             boolean result;
 
             result = Term21.parse(parseTree, level + 1);
-            result = result && PipeExpr.parse(parseTree, level + 1);
+            result = result && Pipeline.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);
             return result;
