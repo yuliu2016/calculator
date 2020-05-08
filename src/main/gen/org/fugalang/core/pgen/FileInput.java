@@ -60,6 +60,17 @@ public final class FileInput extends NodeWrapper {
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
+        parseFileInput1List(parseTree, level + 1);
+        result = parseTree.consumeToken(TokenType.ENDMARKER);
+
+        parseTree.exit(level, marker, result);
+        return result;
+    }
+
+    private static void parseFileInput1List(ParseTree parseTree, int level) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
+            return;
+        }
         parseTree.enterCollection();
         while (true) {
             var pos = parseTree.position();
@@ -69,10 +80,6 @@ public final class FileInput extends NodeWrapper {
             }
         }
         parseTree.exitCollection();
-        result = parseTree.consumeToken(TokenType.ENDMARKER);
-
-        parseTree.exit(level, marker, result);
-        return result;
     }
 
     /**

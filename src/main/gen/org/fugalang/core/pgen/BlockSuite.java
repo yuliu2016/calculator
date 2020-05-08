@@ -207,10 +207,20 @@ public final class BlockSuite extends NodeWrapper {
 
             result = parseTree.consumeToken("{");
             result = result && parseTree.consumeToken(TokenType.NEWLINE);
+            result = result && parseStmtList(parseTree, level + 1);
+            result = result && parseTree.consumeToken("}");
+
+            parseTree.exit(level, marker, result);
+            return result;
+        }
+
+        private static boolean parseStmtList(ParseTree parseTree, int level) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
+                return false;
+            }
             parseTree.enterCollection();
-            var firstItem = Stmt.parse(parseTree, level + 1);
-            result = result && firstItem;
-            if (firstItem) while (true) {
+            var result = Stmt.parse(parseTree, level + 1);
+            if (result) while (true) {
                 var pos = parseTree.position();
                 if (!Stmt.parse(parseTree, level + 1) ||
                         parseTree.guardLoopExit(pos)) {
@@ -218,9 +228,6 @@ public final class BlockSuite extends NodeWrapper {
                 }
             }
             parseTree.exitCollection();
-            result = result && parseTree.consumeToken("}");
-
-            parseTree.exit(level, marker, result);
             return result;
         }
     }

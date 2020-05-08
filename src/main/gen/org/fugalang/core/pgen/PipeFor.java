@@ -129,8 +129,20 @@ public final class PipeFor extends NodeWrapper {
         CompFor.parse(parseTree, level + 1);
         result = parseTree.consumeToken("for");
         result = result && Targetlist.parse(parseTree, level + 1);
+        if (result) parsePipeFor4List(parseTree, level + 1);
+        if (result) Parameters.parse(parseTree, level + 1);
+        if (result) BlockSuite.parse(parseTree, level + 1);
+
+        parseTree.exit(level, marker, result);
+        return result;
+    }
+
+    private static void parsePipeFor4List(ParseTree parseTree, int level) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
+            return;
+        }
         parseTree.enterCollection();
-        if (result) while (true) {
+        while (true) {
             var pos = parseTree.position();
             if (!PipeFor4.parse(parseTree, level + 1) ||
                     parseTree.guardLoopExit(pos)) {
@@ -138,11 +150,6 @@ public final class PipeFor extends NodeWrapper {
             }
         }
         parseTree.exitCollection();
-        if (result) Parameters.parse(parseTree, level + 1);
-        if (result) BlockSuite.parse(parseTree, level + 1);
-
-        parseTree.exit(level, marker, result);
-        return result;
     }
 
     /**

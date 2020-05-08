@@ -66,8 +66,19 @@ public final class Arglist extends NodeWrapper {
         boolean result;
 
         result = Argument.parse(parseTree, level + 1);
+        if (result) parseArglist2List(parseTree, level + 1);
+        if (result) parseTree.consumeToken(",");
+
+        parseTree.exit(level, marker, result);
+        return result;
+    }
+
+    private static void parseArglist2List(ParseTree parseTree, int level) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
+            return;
+        }
         parseTree.enterCollection();
-        if (result) while (true) {
+        while (true) {
             var pos = parseTree.position();
             if (!Arglist2.parse(parseTree, level + 1) ||
                     parseTree.guardLoopExit(pos)) {
@@ -75,10 +86,6 @@ public final class Arglist extends NodeWrapper {
             }
         }
         parseTree.exitCollection();
-        if (result) parseTree.consumeToken(",");
-
-        parseTree.exit(level, marker, result);
-        return result;
     }
 
     /**

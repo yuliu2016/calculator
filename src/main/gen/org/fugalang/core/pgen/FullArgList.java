@@ -80,8 +80,19 @@ public final class FullArgList extends NodeWrapper {
         boolean result;
 
         result = DefaultArg.parse(parseTree, level + 1);
+        if (result) parseFullArgList2List(parseTree, level + 1);
+        if (result) FullArgList3.parse(parseTree, level + 1);
+
+        parseTree.exit(level, marker, result);
+        return result;
+    }
+
+    private static void parseFullArgList2List(ParseTree parseTree, int level) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
+            return;
+        }
         parseTree.enterCollection();
-        if (result) while (true) {
+        while (true) {
             var pos = parseTree.position();
             if (!FullArgList2.parse(parseTree, level + 1) ||
                     parseTree.guardLoopExit(pos)) {
@@ -89,10 +100,6 @@ public final class FullArgList extends NodeWrapper {
             }
         }
         parseTree.exitCollection();
-        if (result) FullArgList3.parse(parseTree, level + 1);
-
-        parseTree.exit(level, marker, result);
-        return result;
     }
 
     /**

@@ -60,8 +60,18 @@ public final class Disjunction extends NodeWrapper {
         boolean result;
 
         result = Conjunction.parse(parseTree, level + 1);
+        if (result) parseDisjunction2List(parseTree, level + 1);
+
+        parseTree.exit(level, marker, result);
+        return result;
+    }
+
+    private static void parseDisjunction2List(ParseTree parseTree, int level) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
+            return;
+        }
         parseTree.enterCollection();
-        if (result) while (true) {
+        while (true) {
             var pos = parseTree.position();
             if (!Disjunction2.parse(parseTree, level + 1) ||
                     parseTree.guardLoopExit(pos)) {
@@ -69,9 +79,6 @@ public final class Disjunction extends NodeWrapper {
             }
         }
         parseTree.exitCollection();
-
-        parseTree.exit(level, marker, result);
-        return result;
     }
 
     /**

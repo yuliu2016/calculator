@@ -60,8 +60,18 @@ public final class Conjunction extends NodeWrapper {
         boolean result;
 
         result = Inversion.parse(parseTree, level + 1);
+        if (result) parseConjunction2List(parseTree, level + 1);
+
+        parseTree.exit(level, marker, result);
+        return result;
+    }
+
+    private static void parseConjunction2List(ParseTree parseTree, int level) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
+            return;
+        }
         parseTree.enterCollection();
-        if (result) while (true) {
+        while (true) {
             var pos = parseTree.position();
             if (!Conjunction2.parse(parseTree, level + 1) ||
                     parseTree.guardLoopExit(pos)) {
@@ -69,9 +79,6 @@ public final class Conjunction extends NodeWrapper {
             }
         }
         parseTree.exitCollection();
-
-        parseTree.exit(level, marker, result);
-        return result;
     }
 
     /**

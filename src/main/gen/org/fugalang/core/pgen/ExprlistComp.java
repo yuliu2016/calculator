@@ -66,8 +66,19 @@ public final class ExprlistComp extends NodeWrapper {
         boolean result;
 
         result = ExprOrStar.parse(parseTree, level + 1);
+        if (result) parseExprlistComp2List(parseTree, level + 1);
+        if (result) parseTree.consumeToken(",");
+
+        parseTree.exit(level, marker, result);
+        return result;
+    }
+
+    private static void parseExprlistComp2List(ParseTree parseTree, int level) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
+            return;
+        }
         parseTree.enterCollection();
-        if (result) while (true) {
+        while (true) {
             var pos = parseTree.position();
             if (!ExprlistComp2.parse(parseTree, level + 1) ||
                     parseTree.guardLoopExit(pos)) {
@@ -75,10 +86,6 @@ public final class ExprlistComp extends NodeWrapper {
             }
         }
         parseTree.exitCollection();
-        if (result) parseTree.consumeToken(",");
-
-        parseTree.exit(level, marker, result);
-        return result;
     }
 
     /**

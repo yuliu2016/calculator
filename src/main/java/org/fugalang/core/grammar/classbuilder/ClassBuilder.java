@@ -191,6 +191,13 @@ public class ClassBuilder {
 
         generateParsingFunc(sb);
 
+        for (ClassField field : fields) {
+            var loopParser = field.getLoopParser();
+            if (loopParser != null) {
+                sb.append(loopParser);
+            }
+        }
+
         if (isStaticInnerClass) {
             sb.append("}\n");
         }

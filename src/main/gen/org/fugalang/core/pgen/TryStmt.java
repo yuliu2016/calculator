@@ -223,10 +223,21 @@ public final class TryStmt extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
+            result = parseTryStmt311List(parseTree, level + 1);
+            if (result) ElseSuite.parse(parseTree, level + 1);
+            if (result) FinallySuite.parse(parseTree, level + 1);
+
+            parseTree.exit(level, marker, result);
+            return result;
+        }
+
+        private static boolean parseTryStmt311List(ParseTree parseTree, int level) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
+                return false;
+            }
             parseTree.enterCollection();
-            var firstItem = TryStmt311.parse(parseTree, level + 1);
-            result = firstItem;
-            if (firstItem) while (true) {
+            var result = TryStmt311.parse(parseTree, level + 1);
+            if (result) while (true) {
                 var pos = parseTree.position();
                 if (!TryStmt311.parse(parseTree, level + 1) ||
                         parseTree.guardLoopExit(pos)) {
@@ -234,10 +245,6 @@ public final class TryStmt extends NodeWrapper {
                 }
             }
             parseTree.exitCollection();
-            if (result) ElseSuite.parse(parseTree, level + 1);
-            if (result) FinallySuite.parse(parseTree, level + 1);
-
-            parseTree.exit(level, marker, result);
             return result;
         }
     }

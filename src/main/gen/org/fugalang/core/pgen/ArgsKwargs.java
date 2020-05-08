@@ -101,8 +101,19 @@ public final class ArgsKwargs extends NodeWrapper {
 
         result = parseTree.consumeToken("*");
         if (result) TypedArg.parse(parseTree, level + 1);
+        if (result) parseArgsKwargs3List(parseTree, level + 1);
+        if (result) ArgsKwargs4.parse(parseTree, level + 1);
+
+        parseTree.exit(level, marker, result);
+        return result;
+    }
+
+    private static void parseArgsKwargs3List(ParseTree parseTree, int level) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
+            return;
+        }
         parseTree.enterCollection();
-        if (result) while (true) {
+        while (true) {
             var pos = parseTree.position();
             if (!ArgsKwargs3.parse(parseTree, level + 1) ||
                     parseTree.guardLoopExit(pos)) {
@@ -110,10 +121,6 @@ public final class ArgsKwargs extends NodeWrapper {
             }
         }
         parseTree.exitCollection();
-        if (result) ArgsKwargs4.parse(parseTree, level + 1);
-
-        parseTree.exit(level, marker, result);
-        return result;
     }
 
     /**

@@ -60,8 +60,18 @@ public final class ShiftExpr extends NodeWrapper {
         boolean result;
 
         result = Sum.parse(parseTree, level + 1);
+        if (result) parseShiftExpr2List(parseTree, level + 1);
+
+        parseTree.exit(level, marker, result);
+        return result;
+    }
+
+    private static void parseShiftExpr2List(ParseTree parseTree, int level) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
+            return;
+        }
         parseTree.enterCollection();
-        if (result) while (true) {
+        while (true) {
             var pos = parseTree.position();
             if (!ShiftExpr2.parse(parseTree, level + 1) ||
                     parseTree.guardLoopExit(pos)) {
@@ -69,9 +79,6 @@ public final class ShiftExpr extends NodeWrapper {
             }
         }
         parseTree.exitCollection();
-
-        parseTree.exit(level, marker, result);
-        return result;
     }
 
     /**

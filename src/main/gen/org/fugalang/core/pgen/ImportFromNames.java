@@ -73,10 +73,19 @@ public final class ImportFromNames extends NodeWrapper {
         boolean result;
 
         result = ImportFromNames1.parse(parseTree, level + 1);
+        result = result || parseIsTokenDotList(parseTree, level + 1);
+
+        parseTree.exit(level, marker, result);
+        return result;
+    }
+
+    private static boolean parseIsTokenDotList(ParseTree parseTree, int level) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
+            return false;
+        }
         parseTree.enterCollection();
-        var firstItem = parseTree.consumeToken(".");
-        result = result || firstItem;
-        if (firstItem) while (true) {
+        var result = parseTree.consumeToken(".");
+        if (result) while (true) {
             var pos = parseTree.position();
             if (!parseTree.consumeToken(".") ||
                     parseTree.guardLoopExit(pos)) {
@@ -84,8 +93,6 @@ public final class ImportFromNames extends NodeWrapper {
             }
         }
         parseTree.exitCollection();
-
-        parseTree.exit(level, marker, result);
         return result;
     }
 
@@ -142,6 +149,17 @@ public final class ImportFromNames extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
+            parseIsTokenDotList(parseTree, level + 1);
+            result = DottedName.parse(parseTree, level + 1);
+
+            parseTree.exit(level, marker, result);
+            return result;
+        }
+
+        private static void parseIsTokenDotList(ParseTree parseTree, int level) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
+                return;
+            }
             parseTree.enterCollection();
             while (true) {
                 var pos = parseTree.position();
@@ -151,10 +169,6 @@ public final class ImportFromNames extends NodeWrapper {
                 }
             }
             parseTree.exitCollection();
-            result = DottedName.parse(parseTree, level + 1);
-
-            parseTree.exit(level, marker, result);
-            return result;
         }
     }
 }

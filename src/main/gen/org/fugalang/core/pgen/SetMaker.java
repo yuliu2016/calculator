@@ -66,8 +66,19 @@ public final class SetMaker extends NodeWrapper {
         boolean result;
 
         result = ExprOrStar.parse(parseTree, level + 1);
+        if (result) parseSetMaker2List(parseTree, level + 1);
+        if (result) parseTree.consumeToken(",");
+
+        parseTree.exit(level, marker, result);
+        return result;
+    }
+
+    private static void parseSetMaker2List(ParseTree parseTree, int level) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
+            return;
+        }
         parseTree.enterCollection();
-        if (result) while (true) {
+        while (true) {
             var pos = parseTree.position();
             if (!SetMaker2.parse(parseTree, level + 1) ||
                     parseTree.guardLoopExit(pos)) {
@@ -75,10 +86,6 @@ public final class SetMaker extends NodeWrapper {
             }
         }
         parseTree.exitCollection();
-        if (result) parseTree.consumeToken(",");
-
-        parseTree.exit(level, marker, result);
-        return result;
     }
 
     /**

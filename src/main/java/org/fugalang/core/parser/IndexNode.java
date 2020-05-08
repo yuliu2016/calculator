@@ -1,5 +1,6 @@
 package org.fugalang.core.parser;
 
+import java.util.Collections;
 import java.util.List;
 
 class IndexNode implements ParseTreeNode {
@@ -77,9 +78,8 @@ class IndexNode implements ParseTreeNode {
 
     @Override
     public Iterable<ParseTreeNode> asCollection() {
-        failIfAbsent();
-        if (!isCollection) {
-            throw new ParserException("This node is not a collection");
+        if (!isPresent || !isCollection) {
+            return Collections.emptyList();
         }
         return children;
     }

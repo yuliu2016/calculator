@@ -148,10 +148,20 @@ public final class ExprStmt extends NodeWrapper {
             boolean result;
 
             result = Annassign.parse(parseTree, level + 1);
+            result = result || parseExprStmt32List(parseTree, level + 1);
+            result = result || ExprStmt33.parse(parseTree, level + 1);
+
+            parseTree.exit(level, marker, result);
+            return result;
+        }
+
+        private static boolean parseExprStmt32List(ParseTree parseTree, int level) {
+            if (!ParserUtil.recursionGuard(level, RULE)) {
+                return false;
+            }
             parseTree.enterCollection();
-            var firstItem = ExprStmt32.parse(parseTree, level + 1);
-            result = result || firstItem;
-            if (firstItem) while (true) {
+            var result = ExprStmt32.parse(parseTree, level + 1);
+            if (result) while (true) {
                 var pos = parseTree.position();
                 if (!ExprStmt32.parse(parseTree, level + 1) ||
                         parseTree.guardLoopExit(pos)) {
@@ -159,9 +169,6 @@ public final class ExprStmt extends NodeWrapper {
                 }
             }
             parseTree.exitCollection();
-            result = result || ExprStmt33.parse(parseTree, level + 1);
-
-            parseTree.exit(level, marker, result);
             return result;
         }
     }

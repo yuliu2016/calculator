@@ -93,14 +93,15 @@ class = def(classdef, metaclass=ClassFactory) {
 
 mul = def(x,y) { return x * y }
 mul = def(x,y): return x * y
-mul = def x, y => x * y
-call(def x, y => x * y)
+mul = def x, y: x * y
+call(def x, y"" x * y)
 
 /*
 Pipe operator - precedence
 */
 
-square = def x => x * x
+square = def<int> (x:int) : x * x
+square = def<int> x: x * x
 
 3 + 2 -> square() # 7
 (3 + 2) -> square() # 25

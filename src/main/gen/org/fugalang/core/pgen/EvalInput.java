@@ -68,8 +68,19 @@ public final class EvalInput extends NodeWrapper {
         boolean result;
 
         result = Exprlist.parse(parseTree, level + 1);
+        if (result) parseNewlineList(parseTree, level + 1);
+        result = result && parseTree.consumeToken(TokenType.ENDMARKER);
+
+        parseTree.exit(level, marker, result);
+        return result;
+    }
+
+    private static void parseNewlineList(ParseTree parseTree, int level) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
+            return;
+        }
         parseTree.enterCollection();
-        if (result) while (true) {
+        while (true) {
             var pos = parseTree.position();
             if (!parseTree.consumeToken(TokenType.NEWLINE) ||
                     parseTree.guardLoopExit(pos)) {
@@ -77,9 +88,5 @@ public final class EvalInput extends NodeWrapper {
             }
         }
         parseTree.exitCollection();
-        result = result && parseTree.consumeToken(TokenType.ENDMARKER);
-
-        parseTree.exit(level, marker, result);
-        return result;
     }
 }

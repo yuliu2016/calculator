@@ -80,8 +80,19 @@ public final class AtomExpr extends NodeWrapper {
         boolean result;
 
         result = Atom.parse(parseTree, level + 1);
+        if (result) parseTrailerList(parseTree, level + 1);
+        if (result) BlockSuite.parse(parseTree, level + 1);
+
+        parseTree.exit(level, marker, result);
+        return result;
+    }
+
+    private static void parseTrailerList(ParseTree parseTree, int level) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
+            return;
+        }
         parseTree.enterCollection();
-        if (result) while (true) {
+        while (true) {
             var pos = parseTree.position();
             if (!Trailer.parse(parseTree, level + 1) ||
                     parseTree.guardLoopExit(pos)) {
@@ -89,9 +100,5 @@ public final class AtomExpr extends NodeWrapper {
             }
         }
         parseTree.exitCollection();
-        if (result) BlockSuite.parse(parseTree, level + 1);
-
-        parseTree.exit(level, marker, result);
-        return result;
     }
 }

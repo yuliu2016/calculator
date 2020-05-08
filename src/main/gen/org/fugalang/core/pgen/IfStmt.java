@@ -96,8 +96,19 @@ public final class IfStmt extends NodeWrapper {
         result = parseTree.consumeToken("if");
         result = result && NamedExpr.parse(parseTree, level + 1);
         result = result && Suite.parse(parseTree, level + 1);
+        if (result) parseIfStmt4List(parseTree, level + 1);
+        if (result) ElseSuite.parse(parseTree, level + 1);
+
+        parseTree.exit(level, marker, result);
+        return result;
+    }
+
+    private static void parseIfStmt4List(ParseTree parseTree, int level) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
+            return;
+        }
         parseTree.enterCollection();
-        if (result) while (true) {
+        while (true) {
             var pos = parseTree.position();
             if (!IfStmt4.parse(parseTree, level + 1) ||
                     parseTree.guardLoopExit(pos)) {
@@ -105,10 +116,6 @@ public final class IfStmt extends NodeWrapper {
             }
         }
         parseTree.exitCollection();
-        if (result) ElseSuite.parse(parseTree, level + 1);
-
-        parseTree.exit(level, marker, result);
-        return result;
     }
 
     /**

@@ -220,53 +220,32 @@ public class ClassField {
 
         return switch (fieldType) {
             case Required -> getRequiredStmt(resultExpr, ruleType, isFirst);
-            case Optional -> getOptionalStmt(resultExpr, isFirst);
-            case OptionalList -> getLoopStmt(resultExpr, isFirst, ruleType, true);
-            case RequiredList -> getLoopStmt(resultExpr, isFirst, ruleType, false);
+            case Optional -> getOptionalStmt(resultExpr, ruleType, isFirst);
+            case RequiredList -> getRequiredStmt(getLoopExpr(), ruleType, isFirst);
+            case OptionalList -> getOptionalStmt(getLoopExpr(), ruleType, isFirst);
         };
     }
 
-    private String getLoopStmt(
-            String resultExpr,
-            boolean isFirst,
-            RuleType ruleType,
-            boolean isOptionalList
-    ) {
-        // limitation - only one var declaration
-
-        // a* vs a+
-
-        var requiredStmt = isOptionalList ? "" : "var firstItem = " + resultExpr + ";\n" +
-                getRequiredStmt("firstItem", ruleType, isFirst);
-
-        var condition = isOptionalList ? (isFirst ? "" : switch (ruleType) {
-            case Disjunction -> "if (!result) ";
-            case Conjunction -> "if (result) ";
-        }) : "if (firstItem) ";
-
-        return "parseTree.enterCollection();\n" + requiredStmt +
-                condition + "while (true) {\n" +
-                "    var pos = parseTree.position();\n" +
-                "    if (!" + resultExpr + " ||\n" +
-                "            parseTree.guardLoopExit(pos)) {\n" +
-                "        break;\n" +
-                "    }\n" +
-                "}\n" +
-                "parseTree.exitCollection();\n";
+    private String getLoopExpr() {
+        var name = ParserStringUtil.capitalizeFirstCharOnly(fieldName);
+        return "parse" + name + "(parseTree, level + 1)";
     }
 
-    private String getOptionalStmt(String resultExpr, boolean isFirst) {
-        var condition = isFirst ? "" : "if (result) ";
+    private String getOptionalStmt(String resultExpr, RuleType ruleType, boolean isFirst) {
+        var condition = isFirst ? "" : switch (ruleType) {
+            case Conjunction -> "if (result) ";
+            case Disjunction -> "if (!result) ";
+        };
         return condition + resultExpr + ";\n";
     }
 
     private String getRequiredStmt(String resultExpr, RuleType ruleType, boolean isFirst) {
-        return isFirst ?
-                "result = " + resultExpr + ";\n" :
+        var condition = isFirst ? "result = " :
                 switch (ruleType) {
-                    case Conjunction -> "result = result && " + resultExpr + ";\n";
-                    case Disjunction -> "result = result || " + resultExpr + ";\n";
+                    case Conjunction -> "result = result && ";
+                    case Disjunction -> "result = result || ";
                 };
+        return condition + resultExpr + ";\n";
     }
 
     private String getResultExpr() {
@@ -275,5 +254,53 @@ public class ClassField {
             case TokenType -> "parseTree.consumeToken(" + resultSource.getValue() + ")";
             case TokenLiteral -> "parseTree.consumeToken(\"" + resultSource.getValue() + "\")";
         };
+    }
+
+    public String getLoopParser() {
+        if (isSingular()) {
+            return null;
+        }
+        return fieldType == FieldType.RequiredList ?
+                getRequiredLoopParser() : getOptionalLoopParser();
+    }
+
+    private String getRequiredLoopParser() {
+        var resultExpr = getResultExpr();
+        var name = ParserStringUtil.capitalizeFirstCharOnly(fieldName);
+        return "\n    private static boolean parse" + name + "(ParseTree parseTree, int level) {\n" +
+                "        if (!ParserUtil.recursionGuard(level, RULE)) {\n" +
+                "            return false;\n" +
+                "        }\n" +
+                "        parseTree.enterCollection();\n" +
+                "        var result = " + resultExpr + ";\n" +
+                "        if (result) while (true) {\n" +
+                "            var pos = parseTree.position();\n" +
+                "            if (!" + resultExpr + " ||\n" +
+                "                    parseTree.guardLoopExit(pos)) {\n" +
+                "                break;\n" +
+                "            }\n" +
+                "        }\n" +
+                "        parseTree.exitCollection();\n" +
+                "        return result;\n" +
+                "    }\n";
+    }
+
+    private String getOptionalLoopParser() {
+        var resultExpr = getResultExpr();
+        var name = ParserStringUtil.capitalizeFirstCharOnly(fieldName);
+        return "\n    private static void parse" + name + "(ParseTree parseTree, int level) {\n" +
+                "        if (!ParserUtil.recursionGuard(level, RULE)) {\n" +
+                "            return;\n" +
+                "        }\n" +
+                "        parseTree.enterCollection();\n" +
+                "        while (true) {\n" +
+                "            var pos = parseTree.position();\n" +
+                "            if (!" + resultExpr + " ||\n" +
+                "                    parseTree.guardLoopExit(pos)) {\n" +
+                "                break;\n" +
+                "            }\n" +
+                "        }\n" +
+                "        parseTree.exitCollection();\n" +
+                "    }\n";
     }
 }

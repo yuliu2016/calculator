@@ -68,7 +68,9 @@ typed_arg: NAME [':' expr]
 simple_arg_list: simple_arg (simple_arg)*
 simple_arg: NAME ['=' expr]
 
-funcdef: 'def' [simple_arg_list | '(' [typed_arg_list] ')'] func_suite
+func_type_hint: '<' expr '>'
+func_args: simple_arg_list | '(' [typed_arg_list] ')'
+funcdef: 'def' [func_type_hint] [func_args] func_suite
 
 # Expressions
 
