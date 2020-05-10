@@ -3,6 +3,7 @@ package org.fugalang.core.token;
 import org.fugalang.core.grammar.SyntaxError;
 import org.fugalang.core.parser.ParserElement;
 
+import java.util.Iterator;
 import java.util.List;
 
 import static org.fugalang.core.token.CharTest.*;
@@ -196,15 +197,6 @@ public class Tokenizer {
     }
 
     /**
-     * Add a number to the sequence, to be parsed from a string
-     *
-     * @param s the number
-     */
-    private void addNumber(String s) {
-        sequence.add(NUMBER, s);
-    }
-
-    /**
      * Tokenize a hexadecimal number
      * <p>
      * hex_number: '0x' ('_' | hex_digit)* hex_digit
@@ -231,7 +223,7 @@ public class Tokenizer {
             throw new SyntaxError("Invalid hex literal");
         }
 
-        addNumber(visitor.code.substring(visitor.i, j));
+        sequence.add(NUMBER, visitor.code.substring(visitor.i, j));
 
         visitor.i = j;
         return true;
@@ -265,7 +257,7 @@ public class Tokenizer {
             throw new SyntaxError("Invalid bin literal");
         }
 
-        addNumber(visitor.code.substring(visitor.i, j));
+        sequence.add(NUMBER, visitor.code.substring(visitor.i, j));
 
         visitor.i = j;
         return true;
@@ -299,7 +291,7 @@ public class Tokenizer {
             throw new SyntaxError("Invalid oct literal");
         }
 
-        addNumber(visitor.code.substring(visitor.i, j));
+        sequence.add(NUMBER, visitor.code.substring(visitor.i, j));
 
         visitor.i = j;
         return true;
@@ -356,7 +348,7 @@ public class Tokenizer {
         if (!is_floating_point && s.startsWith("0") && !s.replace("0", "").isEmpty()) {
             throw new SyntaxError("Integer with leading zero; use 0o for octal numbers");
         }
-        addNumber(s);
+        sequence.add(NUMBER, s);
 
         visitor.i = j;
         return true;
@@ -406,7 +398,6 @@ public class Tokenizer {
         while (visitor.hasRemaining()) {
             visitor.updateAllPeeks();
 
-            // Fix: brackets cosing at the wrong call
             if (!(tokenizeSpace() ||
                     tokenizeNumber() ||
                     tokenizeString() ||
@@ -418,7 +409,6 @@ public class Tokenizer {
                 throw new SyntaxError("Unknown Syntax");
             }
         }
-        sequence.trim();
 
         return sequence.tokens;
     }

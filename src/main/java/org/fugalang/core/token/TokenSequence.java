@@ -3,6 +3,7 @@ package org.fugalang.core.token;
 import org.fugalang.core.grammar.SyntaxError;
 import org.fugalang.core.parser.ElementType;
 import org.fugalang.core.parser.ParserElement;
+import org.fugalang.core.parser.context.TokenElement;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,56 +40,6 @@ public class TokenSequence {
         column = 0;
     }
 
-
-    /**
-     * Pop the newline when the opcode can be simplified
-     *
-     * @param n the number of characters to skip backwards
-     *          when attempting to pop the newline token
-     */
-    public void popNewline(int n) {
-        popDelimiter(TokenType.NEWLINE, n);
-    }
-
-    /**
-     * Pop a delimiter newline when the opcode can be simplified
-     *
-     * @param typeToPop the type of token to look for
-     * @param n         the number of characters to skip backwards
-     *                  when attempting to pop the newline token
-     */
-    public void popDelimiter(ElementType typeToPop, int n) {
-        // Fix: empty token sequence causes n < 1
-        if (tokens.isEmpty()) {
-            return;
-        }
-
-        if (n < 1) {
-            throw new SyntaxError("Cannot pop " + typeToPop
-                    + " past the end of the string!");
-        }
-
-        // Fix: trying to pop the space when there are no sufficient tokens
-        if (tokens.size() < n) {
-            return;
-        }
-
-        int index = tokens.size() - n;
-
-        if (tokens.get(index).getType() == typeToPop) {
-            tokens.remove(index);
-        }
-    }
-
-    /**
-     * Trim the spaces at the start and end of the sequence
-     */
-    public void trim() {
-        // end of sequence
-        popNewline(1);
-        // start of sequence
-        popNewline(tokens.size());
-    }
 
     /**
      * Add a token to the sequence with line and column
@@ -128,7 +79,7 @@ public class TokenSequence {
         }
 
 
-        var token = new Token(
+        var token = new TokenElement(
                 token_type,
                 token_value,
                 last_token_index,

@@ -1,4 +1,4 @@
-package org.fugalang.core.token;
+package org.fugalang.core.parser.context;
 
 @Deprecated(forRemoval = true)
 public class TokenException extends RuntimeException {

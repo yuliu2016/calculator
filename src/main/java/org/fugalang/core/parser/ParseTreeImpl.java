@@ -1,9 +1,10 @@
 package org.fugalang.core.parser;
 
 import org.fugalang.core.grammar.SyntaxError;
+import org.fugalang.core.parser.context.ParserContext;
+import org.fugalang.core.parser.context.SimpleContext;
 import org.fugalang.core.pgen.SingleInput;
 import org.fugalang.core.pprint.ConsoleColor;
-import org.fugalang.core.pprint.TokenPPrint;
 import org.fugalang.core.token.Tokenizer;
 
 import java.util.ArrayList;
@@ -14,30 +15,24 @@ import java.util.function.Function;
 
 public class ParseTreeImpl implements ParseTree {
 
-    private List<ParserElement> tokens;
+    private ParserContext context;
     private int position;
     ParseTreeFrame currentFrame;
     ParseTreeNode resultNode;
 
     public <T> T parse(
-            List<ParserElement> tokens,
+            ParserContext context,
             BiFunction<ParseTree, Integer, Boolean> start,
             Function<ParseTreeNode, T> converter
     ) {
-        this.tokens = tokens;
+        this.context = context;
         currentFrame = null; //new ParseTreeFrame(null, 0, 0, baseRule);
         position = 0;
 
         var result = start.apply(this, 0);
 
-        if (!result || position < tokens.size()) {
-
-            var pos = position < tokens.size() - 1 ? position + 1 : position;
-
-            var tok = tokens.get(pos);
-            throw new SyntaxError("Invalid syntax at token " + pos + ": line " +
-                    tok.getLineStart() + " and columns from " +
-                    tok.getColumnStart() + " to " + tok.getColumnEnd());
+        if (!result || !context.didFinish(position)) {
+            context.logError(context.getElem(position), "Invalid syntax");
         }
         return converter.apply(resultNode);
     }
@@ -45,9 +40,7 @@ public class ParseTreeImpl implements ParseTree {
     @Override
     public ParseTreeMarker enter(int level, ParserRule rule) {
         currentFrame = new ParseTreeFrame(currentFrame, position, level, rule);
-        if (DEBUG) {
-            System.out.println("  ".repeat(level) + "Entering Frame: " + rule + " at level " + level);
-        }
+        context.log(() -> "  ".repeat(level) + "Entering Frame: " + rule + " at level " + level);
         return currentFrame;
     }
 
@@ -63,26 +56,19 @@ public class ParseTreeImpl implements ParseTree {
         var childFrame = currentFrame;
         currentFrame = childFrame.getParentFrame();
 
-        var idt = DEBUG ? "  ".repeat(childFrame.getLevel()) : null;
-
         if (success) {
-            if (DEBUG) {
-                System.out.println(idt +
-                        "Success in frame: " + childFrame.getRule() + " at level " +
-                        childFrame.getLevel() + " and position " + position);
-            }
+            context.log(() -> "  ".repeat(childFrame.getLevel()) +
+                    "Success in frame: " + childFrame.getRule() + " at level " +
+                    childFrame.getLevel() + " and position " + position);
             addNode(ofRule(childFrame));
         } else {
-            if (DEBUG) {
-                System.out.println(idt +
-                        "Failure in frame: " + childFrame.getRule() + " at level " + childFrame.getLevel());
-            }
+            context.log(() -> "  ".repeat(childFrame.getLevel()) +
+                    "Failure in frame: " + childFrame.getRule() + " at level " + childFrame.getLevel());
+
             addNode(ofFailedRule(childFrame));
             // rollback to the start
             if (currentFrame != null) {
-                if (DEBUG) {
-                    System.out.println(idt + "Rollback from " + position + " to " + childFrame.position());
-                }
+
                 position = childFrame.position();
             } else {
                 position = 0;
@@ -144,47 +130,39 @@ public class ParseTreeImpl implements ParseTree {
 
     @Override
     public boolean consumeToken(ElementType type) {
-        if (position >= tokens.size()) {
+        if (context.didFinish(position)) {
             return false;
         }
-        var token = tokens.get(position);
+        var token = context.getElem(position);
         if (token.getType() == type) {
-            if (DEBUG) {
-                System.out.println("  ".repeat(currentFrame.getLevel()) +
-                        "Success in type " + type + ": " + token.getValue());
-            }
+            context.log(() -> "  ".repeat(currentFrame.getLevel()) +
+                    "Success in type " + type + ": " + token.getValue());
             addNode(ofElement(token));
             position++;
             return true;
         }
-        if (DEBUG) {
-            System.out.println("  ".repeat(currentFrame.getLevel()) +
-                    "Failure in type " + type + ": " + token.getValue());
-        }
+        context.log(() -> "  ".repeat(currentFrame.getLevel()) +
+                "Failure in type " + type + ": " + token.getValue());
         addNode(IndexNode.NULL);
         return false;
     }
 
     @Override
     public boolean consumeToken(String literal) {
-        if (position >= tokens.size()) {
+        if (context.didFinish(position)) {
             return false;
         }
-        var token = tokens.get(position);
+        var token = context.getElem(position);
         if (token.getValue().equals(literal)) {
-            if (DEBUG) {
-                System.out.println("  ".repeat(currentFrame.getLevel()) +
-                        "Success in literal " + literal + ": " + token.getValue());
-            }
+            context.log(() -> "  ".repeat(currentFrame.getLevel()) +
+                    "Success in literal " + literal + ": " + token.getValue());
 
             addNode(ofElement(token));
             position++;
             return true;
         }
-        if (DEBUG) {
-            System.out.println("  ".repeat(currentFrame.getLevel()) +
-                    "Failure in literal " + literal + ": " + token.getValue());
-        }
+        context.log(() -> "  ".repeat(currentFrame.getLevel()) +
+                "Failure in literal " + literal + ": " + token.getValue());
         addNode(IndexNode.NULL);
         return false;
     }
@@ -207,8 +185,6 @@ public class ParseTreeImpl implements ParseTree {
         return "ParseTree";
     }
 
-    private static final boolean DEBUG = true;
-
     public static void main(String[] args) {
         var parser = new ParseTreeImpl();
 
@@ -224,9 +200,9 @@ public class ParseTreeImpl implements ParseTree {
             try {
                 var result = new Tokenizer(s.replace("\\n", "\n")).tokenizeAll();
 
-                System.out.print(TokenPPrint.format(result));
+                var context = new SimpleContext(result, true);
 
-                var cst = parser.parse(result, SingleInput::parse, SingleInput::of);
+                var cst = parser.parse(context, SingleInput::parse, SingleInput::of);
                 System.out.print(cst == null ? "null" : cst.prettyFormat(2));
                 System.out.println();
             } catch (SyntaxError e) {

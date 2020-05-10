@@ -12,6 +12,10 @@ public class CharTest {
         return "\r\n".equals(ch);
     }
 
+    public static boolean isCRLF(char ch1, char ch2) {
+        return ch1 == '\r' && ch2 == '\n';
+    }
+
     public static boolean isSymbol(char ch) {
         return isLetterOrDigit(ch) || isUnderscore(ch);
     }

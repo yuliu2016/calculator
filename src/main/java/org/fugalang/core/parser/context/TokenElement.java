@@ -1,9 +1,9 @@
-package org.fugalang.core.token;
+package org.fugalang.core.parser.context;
 
 import org.fugalang.core.parser.ElementType;
 import org.fugalang.core.parser.ParserElement;
 
-public class Token implements ParserElement {
+public class TokenElement implements ParserElement {
     private final ElementType type;
     private final String value;
     private final int index;
@@ -12,7 +12,7 @@ public class Token implements ParserElement {
     private final int columnStart;
     private final int columnEnd;
 
-    public Token(ElementType type, String value, int index, int lineStart, int lineEnd, int columnStart, int columnEnd) {
+    public TokenElement(ElementType type, String value, int index, int lineStart, int lineEnd, int columnStart, int columnEnd) {
         this.type = type;
         this.value = value;
         this.index = index;

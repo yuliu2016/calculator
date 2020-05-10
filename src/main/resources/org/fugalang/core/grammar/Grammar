@@ -42,7 +42,8 @@ assert_stmt: 'assert' expr [',' expr]
 # Compound statements
 
 compound_stmt: if_stmt | while_stmt | for_stmt | try_stmt | with_stmt
-if_stmt: 'if' named_expr suite ('elif' named_expr suite)* [else_suite]
+if_stmt: 'if' named_expr suite elif_stmt* [else_suite]
+elif_stmt: 'elif' named_expr suite
 while_stmt: 'while' named_expr suite [else_suite]
 for_stmt: 'for' targetlist 'in' exprlist suite [else_suite]
 try_stmt: 'try' suite ((except_clause suite)+ [else_suite] [finally_suite] | finally_suite)

@@ -52,10 +52,19 @@ public final class Rules extends NodeWrapper {
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
+        result = parseSingleRuleList(parseTree, level + 1);
+
+        parseTree.exit(level, marker, result);
+        return result;
+    }
+
+    private static boolean parseSingleRuleList(ParseTree parseTree, int level) {
+        if (!ParserUtil.recursionGuard(level, RULE)) {
+            return false;
+        }
         parseTree.enterCollection();
-        var firstItem = SingleRule.parse(parseTree, level + 1);
-        result = firstItem;
-        if (firstItem) while (true) {
+        var result = SingleRule.parse(parseTree, level + 1);
+        if (result) while (true) {
             var pos = parseTree.position();
             if (!SingleRule.parse(parseTree, level + 1) ||
                     parseTree.guardLoopExit(pos)) {
@@ -63,8 +72,6 @@ public final class Rules extends NodeWrapper {
             }
         }
         parseTree.exitCollection();
-
-        parseTree.exit(level, marker, result);
         return result;
     }
 }

@@ -3,6 +3,7 @@ package org.fugalang.core.calculator;
 import org.fugalang.core.calculator.pgen.*;
 import org.fugalang.core.grammar.SyntaxError;
 import org.fugalang.core.parser.ParseTreeImpl;
+import org.fugalang.core.parser.context.SimpleContext;
 import org.fugalang.core.token.Tokenizer;
 
 import java.util.Scanner;
@@ -112,7 +113,8 @@ public class Calculator {
             }
             try {
                 var tokens = new Tokenizer(s).tokenizeAll();
-                var cst = parser.parse(tokens, Sum::parse, Sum::of);
+                var ctx = new SimpleContext(tokens, false);
+                var cst = parser.parse(ctx, Sum::parse, Sum::of);
                 var result = evaluate0(cst);
                 System.out.println(result);
             } catch (SyntaxError e) {
