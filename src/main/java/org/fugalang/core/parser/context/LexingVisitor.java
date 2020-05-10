@@ -16,8 +16,6 @@ public class LexingVisitor implements LexingContext {
 
     private final int length;
 
-    public final List<ParserElement> tokens;
-
     // used to lookup newline characters from the last i value
     // -1 because the first token might be from 0
     private int last_end_index = 0;
@@ -28,12 +26,11 @@ public class LexingVisitor implements LexingContext {
 
     public LexingVisitor(String code, int index, boolean hasTokenSequence) {
         length = code.length();
-        if (index < 0 || index >= length) {
+        if (index < 0) {
             throw new IndexOutOfBoundsException("Index out of bounds");
         }
         this.code = code;
         this.index = index;
-        tokens = hasTokenSequence ? new ArrayList<>() : null;
         line_to_index = hasTokenSequence ? new ArrayList<>(List.of(0)) : null;
     }
 
@@ -85,17 +82,20 @@ public class LexingVisitor implements LexingContext {
     }
 
     @Override
-    public void add(ElementType elementType, int beginIndex, int endIndex) {
-        if (tokens == null) {
-            return;
+    public ParserElement createElement(ElementType elementType, int beginIndex, int endIndex) {
+        if (line_to_index == null) {
+            return null;
         }
 
-        if (beginIndex < 0 || beginIndex >= endIndex || endIndex > length - 1) {
-            throw new IndexOutOfBoundsException();
+        if (beginIndex < 0 || beginIndex >= endIndex || endIndex > length) {
+            syntaxError("Out of bounds: " +
+                    "beginIndex=" + beginIndex + ", endIndex=" + endIndex);
         }
 
-        if (beginIndex <= last_end_index) {
-            syntaxError("Cannot add token: Index stayed the same");
+        // Fix: token being empty means that it would equal to last_end_index
+        if (beginIndex < last_end_index) {
+            syntaxError("Cannot add token: beginIndex=" +
+                    beginIndex + ", lastIndex=" + last_end_index);
         }
 
         // store 0-indexed numbers for lines and cols
@@ -128,9 +128,9 @@ public class LexingVisitor implements LexingContext {
                 col_start,
                 col_end
         );
-        tokens.add(token);
 
         last_end_index = endIndex;
+        return token;
     }
 
     @Override

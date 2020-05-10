@@ -1,6 +1,7 @@
 package org.fugalang.core.parser.context;
 
 import org.fugalang.core.parser.ElementType;
+import org.fugalang.core.parser.ParserElement;
 
 public interface LexingContext {
 
@@ -86,7 +87,7 @@ public interface LexingContext {
      * @param beginIndex  the starting index, inclusive as in substring
      * @param endIndex    the ending index, exclusive as in substring
      */
-    void add(ElementType elementType, int beginIndex, int endIndex);
+    ParserElement createElement(ElementType elementType, int beginIndex, int endIndex);
 
     /**
      * Returns the number of lines that has been processed so far
@@ -101,7 +102,7 @@ public interface LexingContext {
      * @param line the line to get
      * @return a substring representing the line, including newline characters
      * @throws IndexOutOfBoundsException if line is invalid or is more than
-     * th
+     *                                   th
      */
     String getLine(int line);
 

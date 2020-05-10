@@ -11,6 +11,7 @@ import java.util.List;
 /**
  * Keep track of a list of tokens
  */
+@Deprecated(forRemoval = true)
 public class TokenSequence {
     public final List<ParserElement> tokens = new ArrayList<>();
     public final Visitor visitor;

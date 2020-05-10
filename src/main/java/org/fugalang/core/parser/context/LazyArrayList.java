@@ -31,10 +31,15 @@ public class LazyArrayList<E> {
     }
 
     public boolean isFinished(int position) {
-        return position >= size() && !iterator.hasNext();
+        return position >= list.size() && !iterator.hasNext();
     }
 
-    public List<E> getList() {
+    public List<E> getInnerList() {
+        int i = list.size();
+        while (!isFinished(i)) {
+            get(i);
+            i++;
+        }
         return list;
     }
 }

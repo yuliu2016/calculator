@@ -19,9 +19,4 @@ public interface LexingProvider {
      * A null value in next() should not be permitted
      */
     Iterator<ParserElement> tokenize(LexingContext context);
-
-
-    default LazyArrayList<ParserElement> toList(LexingContext context) {
-        return new LazyArrayList<>(tokenize(context));
-    }
 }

@@ -6,25 +6,25 @@ import org.junit.jupiter.api.Test;
 public class EmptyStringTest {
     @Test
     public void testEmptyString() {
-        var result = new Tokenizer("").tokenizeAll();
+        var result = LexerTests.tokenize("");
         Assertions.assertEquals(0, result.size());
     }
 
     @Test
     public void testSingleCharComment() {
-        var result = new Tokenizer("#").tokenizeAll();
+        var result = LexerTests.tokenize("#");
         Assertions.assertEquals(0, result.size());
     }
 
     @Test
     public void testMultiCharComment() {
-        var result = new Tokenizer("#comment").tokenizeAll();
+        var result = LexerTests.tokenize("#comment");
         Assertions.assertEquals(0, result.size());
     }
 
     @Test
     public void testMultiSingleLineComment() {
-        var result = new Tokenizer("#x\n#y").tokenizeAll();
-        Assertions.assertEquals(0, result.size());
+        var result = LexerTests.tokenize("#x\n#y");
+        Assertions.assertEquals(1, result.size());
     }
 }

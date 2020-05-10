@@ -24,7 +24,7 @@ public class TokenPPrint {
 
             if (line != last_line) {
                 // show the line number in bold
-                var line_no = formatRightWithZeroes(String.valueOf(line), 3);
+                var line_no = formatRightWithZeroes(String.valueOf(line + 1), 3);
                 var wrapped_line = ConsoleColor.wrap(ConsoleColor.BOLD, "L" + line_no);
 
                 sb.append(wrapped_line);
@@ -35,7 +35,7 @@ public class TokenPPrint {
             last_line = line;
 
             // Fix: Add column indicators
-            var col = formatRightWithZeroes(String.valueOf(token.getColumnStart()), 2);
+            var col = formatRightWithZeroes(String.valueOf(token.getColumnStart() + 1), 2);
             sb.append(ConsoleColor.WHITE).append(":").append(col).append(ConsoleColor.END).append("  ");
 
             var type_padded = formatLeftWithSpaces(type.getName(), 9);
