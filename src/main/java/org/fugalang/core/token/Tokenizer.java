@@ -182,7 +182,8 @@ public class Tokenizer {
         }
 
         if (!closed) {
-            context.syntaxError("String not closed; Unexpected EOL");
+            context.syntaxError("String not closed; Unexpected EOL",
+                    j - context.index());
         }
 
         state.setToken(context.createElement(STRING, context.index() + 1, j));
@@ -213,12 +214,12 @@ public class Tokenizer {
 
         // Fix: EOF after leading literal
         if (j == context.index() + 2) {
-            context.syntaxError("Error parsing hex: EOF after leading literal");
+            context.syntaxError("Error parsing hex: Nothing after leading literal", 2);
         }
 
         if (isUnderscore(context.charAt(context.index() + 2)) ||
                 isUnderscore(context.charAt(j - 1))) {
-            context.syntaxError("Invalid hex literal");
+            context.syntaxError("Invalid hex literal", j - context.index());
         }
 
         state.setToken(context.createElement(NUMBER, context.index(), j));
@@ -238,7 +239,8 @@ public class Tokenizer {
             var ch = context.charAt(j);
             if (!isUnderscore(ch) && !isAnyBin(ch)) {
                 if (isNumeric(ch)) {
-                    context.syntaxError("Invalid digit '" + ch + "' in binary literal");
+                    context.syntaxError("Invalid digit '" + ch + "' in binary literal",
+                            j - context.index());
                 }
                 break;
             }
@@ -247,12 +249,12 @@ public class Tokenizer {
 
         // Fix: EOF after leading literal
         if (j == context.index() + 2) {
-            context.syntaxError("Error parsing bin: EOF after leading literal");
+            context.syntaxError("Error parsing bin: Nothing after leading literal", 2);
         }
 
         if (isUnderscore(context.charAt(context.index() + 2)) ||
                 isUnderscore(context.charAt(j - 1))) {
-            context.syntaxError("Invalid bin literal");
+            context.syntaxError("Invalid bin literal", j - context.index());
         }
 
         state.setToken(context.createElement(NUMBER, context.index(), j));
@@ -272,7 +274,8 @@ public class Tokenizer {
             var ch = context.charAt(j);
             if (!isUnderscore(ch) && !isAnyOct(ch)) {
                 if (isNumeric(ch)) {
-                    context.syntaxError("Invalid digit '" + ch + "' in octal literal");
+                    context.syntaxError("Invalid digit '" + ch + "' in octal literal",
+                            j - context.index());
                 }
                 break;
             }
@@ -281,12 +284,12 @@ public class Tokenizer {
 
         // Fix: EOF after leading literal
         if (j == context.index() + 2) {
-            context.syntaxError("Error parsing oct: EOF after leading literal");
+            context.syntaxError("Error parsing oct: Nothing after leading literal", 2);
         }
 
         if (isUnderscore(context.charAt(context.index() + 2)) ||
                 isUnderscore(context.charAt(j - 1))) {
-            context.syntaxError("Invalid oct literal");
+            context.syntaxError("Invalid oct literal", j - context.index());
         }
 
         state.setToken(context.createElement(NUMBER, context.index(), j));
@@ -306,7 +309,8 @@ public class Tokenizer {
         }
         if (j == i || isUnderscore(context.charAt(i)) ||
                 isUnderscore(context.charAt(j - 1))) {
-            context.syntaxError("Invalid decimal literal");
+            context.syntaxError("Invalid decimal literal",
+                    j - context.index());
         }
         return j;
     }
@@ -344,7 +348,7 @@ public class Tokenizer {
         var s = context.substring(context.index(), j);
 
         if (!is_floating_point && s.startsWith("0") && !s.replace("0", "").isEmpty()) {
-            context.syntaxError("Integer with leading zero; use 0o for octal numbers");
+            context.syntaxError("Integer with leading zero; use 0o for octal numbers", 0);
         }
 
         state.setToken(context.createElement(NUMBER, context.index(), j));
@@ -403,7 +407,7 @@ public class Tokenizer {
             result = result || tokenizeSingleOperator(c, s);
 
             if (!result) {
-                c.syntaxError("Unknown Syntax");
+                c.syntaxError("Unknown Syntax", 0);
             }
 
             if (s.getToken() != null) {

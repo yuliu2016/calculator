@@ -22,7 +22,7 @@ public class Main {
                 System.out.print(TokenPPrint.format(result));
             } catch (SyntaxError e) {
                 System.out.print(ConsoleColor.RED);
-                System.out.println("Syntax Error: " + e.getMessage());
+                System.out.println(e.getMessage());
                 System.out.print(ConsoleColor.END);
             } catch (Exception e) {
                 System.out.print(ConsoleColor.RED);

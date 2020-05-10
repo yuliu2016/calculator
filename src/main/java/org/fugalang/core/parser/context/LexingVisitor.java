@@ -77,8 +77,11 @@ public class LexingVisitor implements LexingContext {
     }
 
     @Override
-    public void syntaxError(String message) {
-        throw new SyntaxError(message);
+    public void syntaxError(String message, int offset) {
+        var lineno = line_to_index.size() - 1;
+        var line = getLine(line_to_index.size() - 1);
+        var col = index() - line_to_index.get(lineno);
+        throw new SyntaxError(ErrorFormatter.format(message, lineno, line, col + offset));
     }
 
     @Override
@@ -89,13 +92,13 @@ public class LexingVisitor implements LexingContext {
 
         if (beginIndex < 0 || beginIndex >= endIndex || endIndex > length) {
             syntaxError("Out of bounds: " +
-                    "beginIndex=" + beginIndex + ", endIndex=" + endIndex);
+                    "beginIndex=" + beginIndex + ", endIndex=" + endIndex, 0);
         }
 
         // Fix: token being empty means that it would equal to last_end_index
         if (beginIndex < last_end_index) {
             syntaxError("Cannot add token: beginIndex=" +
-                    beginIndex + ", lastIndex=" + last_end_index);
+                    beginIndex + ", lastIndex=" + last_end_index, 0);
         }
 
         // store 0-indexed numbers for lines and cols

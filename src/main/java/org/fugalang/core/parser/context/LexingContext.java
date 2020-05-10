@@ -77,8 +77,9 @@ public interface LexingContext {
      * Throws a syntax error at the current index
      *
      * @param message the error message
+     * @param offset the offset of the error relative to the index
      */
-    void syntaxError(String message);
+    void syntaxError(String message, int offset);
 
     /**
      * Add a token to the sequence with line and column

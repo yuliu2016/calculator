@@ -1,75 +1,94 @@
-'single_input' COL 'NEWLINE' OR 'simple_stmt' OR 'compound_stmt' 'NEWLINE' NEWLINE
-'file_input' COL LPAR 'NEWLINE' OR 'stmt' RPAR STAR 'ENDMARKER' NEWLINE
-'eval_input' COL 'exprlist' 'NEWLINE' STAR 'ENDMARKER' NEWLINE
-'stmt' COL LPAR 'simple_stmt' OR 'compound_stmt' RPAR 'NEWLINE' NEWLINE
-'simple_stmt' COL 'small_stmt' LPAR ';' 'small_stmt' RPAR STAR LSQB ';' RSQB NEWLINE
-'small_stmt' COL 'expr_stmt' OR 'del_stmt' OR 'pass_stmt' OR 'flow_stmt' OR 'import_stmt' OR 'assert_stmt' NEWLINE
-'exprlist_star' COL LPAR 'expr' OR 'star_expr' RPAR LPAR ',' LPAR 'expr' OR 'star_expr' RPAR RPAR STAR LSQB ',' RSQB NEWLINE
-'augassign' COL LPAR '+=' OR '-=' OR '*=' OR '@=' OR '/=' OR '%=' OR '&=' OR '|=' OR '^=' OR '<<=' OR '>>=' OR '**=' OR '//=' RPAR NEWLINE
-'expr_stmt' COL 'exprlist_star' LSQB 'augassign' 'exprlist' OR LPAR '=' 'exprlist_star' RPAR STAR RSQB NEWLINE
-'del_stmt' COL 'del' 'targets' NEWLINE
-'pass_stmt' COL 'pass' NEWLINE
-'flow_stmt' COL 'break_stmt' OR 'continue_stmt' OR 'return_stmt' OR 'raise_stmt' NEWLINE
-'break_stmt' COL 'break' NEWLINE
-'continue_stmt' COL 'continue' NEWLINE
-'return_stmt' COL 'return' LSQB 'exprlist_star' RSQB NEWLINE
-'raise_stmt' COL 'raise' LSQB 'expr' LSQB 'from' 'expr' RSQB RSQB NEWLINE
-'import_stmt' COL 'import_name' OR 'import_from' NEWLINE
-'import_name' COL 'import' 'dotted_as_names' NEWLINE
-'import_from' COL LPAR 'from' LPAR LPAR '.' RPAR STAR 'dotted_name' OR LPAR '.' RPAR PLUS RPAR 'import' LPAR '*' OR '(' 'import_as_names' ')' OR 'import_as_names' RPAR RPAR NEWLINE
-'import_as_name' COL 'NAME' LSQB 'as' 'NAME' RSQB NEWLINE
-'dotted_as_name' COL 'dotted_name' LSQB 'as' 'NAME' RSQB NEWLINE
-'import_as_names' COL 'import_as_name' LPAR ',' 'import_as_name' RPAR STAR LSQB ',' RSQB NEWLINE
-'dotted_as_names' COL 'dotted_as_name' LPAR ',' 'dotted_as_name' RPAR STAR LSQB ',' RSQB NEWLINE
-'dotted_name' COL 'NAME' LPAR '.' 'NAME' RPAR STAR NEWLINE
-'assert_stmt' COL 'assert' 'expr' LSQB ',' 'expr' RSQB NEWLINE
-'compound_stmt' COL 'if_stmt' OR 'while_stmt' OR 'for_stmt' OR 'try_stmt' OR 'with_stmt' NEWLINE
-'if_stmt' COL 'if' 'namedexpr_expr' 'suite' LPAR 'elif' 'namedexpr_expr' 'suite' RPAR STAR LSQB 'else' 'suite' RSQB NEWLINE
-'while_stmt' COL 'while' 'namedexpr_expr' 'suite' LSQB 'else' 'suite' RSQB NEWLINE
-'for_stmt' COL 'for' 'targets' 'in' 'exprlist' 'suite' LSQB 'else' 'suite' RSQB NEWLINE
-'try_stmt' COL LPAR 'try' 'suite' LPAR LPAR 'except_clause' 'suite' RPAR PLUS LSQB 'else' 'suite' RSQB LSQB 'finally' 'suite' RSQB OR 'finally' 'suite' RPAR RPAR NEWLINE
-'except_clause' COL 'except' LSQB 'expr' LSQB 'as' 'NAME' RSQB RSQB NEWLINE
-'with_stmt' COL 'with' 'with_item' LPAR ',' 'with_item' RPAR STAR 'suite' NEWLINE
-'with_item' COL 'expr' LSQB 'as' 'NAME' RSQB NEWLINE
-'block_suite' COL '{' 'simple_stmt' '}' OR '{' 'NEWLINE' 'stmt' PLUS '}' NEWLINE
-'suite' COL ':' 'simple_stmt' OR 'block_suite' NEWLINE
-'varargslist' COL 'vfpdef' LSQB '=' 'expr' RSQB LPAR ',' 'vfpdef' LSQB '=' 'expr' RSQB RPAR STAR NEWLINE
-'vfpdef' COL 'NAME' NEWLINE
-'funcdef' COL LSQB 'async' RSQB 'def' LSQB 'varargslist' RSQB LPAR ':' 'expr' OR 'block_suite' RPAR NEWLINE
-'namedexpr_expr' COL 'NAME' LSQB ':=' 'expr' RSQB NEWLINE
-'expr' COL 'if' 'disjunction' '?' 'disjunction' 'else' 'expr' OR 'disjunction' OR 'funcdef' NEWLINE
-'disjunction' COL 'conjunction' LPAR 'or' 'conjunction' RPAR STAR NEWLINE
-'conjunction' COL 'inversion' LPAR 'and' 'inversion' RPAR STAR NEWLINE
-'inversion' COL 'not' 'inversion' OR 'comparison' NEWLINE
-'comparison' COL 'bitwise_or' LPAR 'comp_op' 'bitwise_or' RPAR STAR NEWLINE
-'comp_op' COL '<' OR '>' OR '==' OR '>=' OR '<=' OR '!=' OR 'in' OR 'not' 'in' OR 'is' OR 'is' 'not' NEWLINE
-'star_expr' COL '*' 'bitwise_or' NEWLINE
-'bitwise_or' COL 'bitwise_xor' LPAR '|' 'bitwise_xor' RPAR STAR NEWLINE
-'bitwise_xor' COL 'bitwise_and' LPAR '^' 'bitwise_and' RPAR STAR NEWLINE
-'bitwise_and' COL 'shift_expr' LPAR '&' 'shift_expr' RPAR STAR NEWLINE
-'shift_expr' COL 'sum' LPAR LPAR '<<' OR '>>' RPAR 'sum' RPAR STAR NEWLINE
-'sum' COL 'term' LPAR LPAR '+' OR '-' RPAR 'term' RPAR STAR NEWLINE
-'term' COL 'factor' LPAR LPAR '*' OR '@' OR '/' OR '%' OR '//' RPAR 'factor' RPAR STAR NEWLINE
-'factor' COL LPAR '+' OR '-' OR '~' RPAR 'factor' OR 'power' NEWLINE
-'power' COL 'pipe_expr' LSQB '**' 'factor' RSQB NEWLINE
-'pipe_expr' COL 'atom_expr' LPAR '->' 'atom_expr' RPAR STAR NEWLINE
-'atom_expr' COL LSQB 'await' RSQB 'atom' 'trailer' STAR NEWLINE
-'atom' COL 'compound_atom' OR 'simple_atom' NEWLINE
-'compound_atom' COL '(' LSQB 'exprlist_comp' RSQB ')' OR '[' LSQB 'exprlist_comp_sub' RSQB ']' OR '{' LSQB 'dictorsetmaker' RSQB '}' NEWLINE
-'simple_atom' COL 'NAME' OR 'NUMBER' OR 'STRING' OR 'None' OR 'True' OR 'False' NEWLINE
-'exprlist_comp' COL LPAR 'namedexpr_expr' OR 'star_expr' RPAR LPAR 'comp_for' OR LPAR ',' LPAR 'namedexpr_expr' OR 'star_expr' RPAR RPAR STAR LSQB ',' RSQB RPAR NEWLINE
-'exprlist_comp_sub' COL 'exprlist_comp' OR 'subscript' NEWLINE
-'trailer' COL '(' LSQB 'arglist' RSQB ')' OR '[' 'subscriptlist' ']' OR '.' 'NAME' OR 'block_suite' NEWLINE
-'subscriptlist' COL 'subscript' LPAR ',' 'subscript' RPAR STAR LSQB ',' RSQB NEWLINE
-'subscript' COL 'expr' OR LSQB 'expr' RSQB ':' LSQB 'expr' RSQB LSQB 'sliceop' RSQB NEWLINE
-'sliceop' COL ':' LSQB 'expr' RSQB NEWLINE
-'targets' COL LPAR 'bitwise_or' OR 'star_expr' RPAR LPAR ',' LPAR 'bitwise_or' OR 'star_expr' RPAR RPAR STAR LSQB ',' RSQB NEWLINE
-'exprlist' COL 'expr' LPAR ',' 'expr' RPAR STAR LSQB ',' RSQB NEWLINE
-'dictorsetmaker' COL 'dict_maker' OR 'set_maker' NEWLINE
-'dict_maker' COL LPAR 'expr' ':' 'expr' OR '**' 'bitwise_or' RPAR LPAR 'comp_for' OR LPAR ',' LPAR 'expr' ':' 'expr' OR '**' 'bitwise_or' RPAR RPAR STAR LSQB ',' RSQB RPAR NEWLINE
-'set_maker' COL LPAR 'expr' OR 'star_expr' RPAR LPAR 'comp_for' OR LPAR ',' LPAR 'expr' OR 'star_expr' RPAR RPAR STAR LSQB ',' RSQB RPAR NEWLINE
-'arglist' COL 'argument' LPAR ',' 'argument' RPAR STAR LSQB ',' RSQB NEWLINE
-'argument' COL LPAR 'NAME' LSQB 'comp_for' RSQB OR 'NAME' ':=' 'expr' OR 'NAME' '=' 'expr' OR '**' 'expr' OR '*' 'expr' RPAR NEWLINE
-'comp_iter' COL 'comp_for' OR 'comp_if' NEWLINE
-'comp_for' COL 'for' 'targets' 'in' 'disjunction' LSQB 'comp_iter' RSQB NEWLINE
-'comp_if' COL 'if' 'expr' LSQB 'comp_iter' RSQB NEWLINE
+'single_input' : 'NEWLINE' | 'simple_stmt' | 'compound_stmt' 'NEWLINE' NEWLINE
+'file_input' : ( 'NEWLINE' | 'stmt' ) * 'ENDMARKER' NEWLINE
+'eval_input' : 'exprlist' 'NEWLINE' * 'ENDMARKER' NEWLINE
+'stmt' : ( 'simple_stmt' | 'compound_stmt' ) 'NEWLINE' NEWLINE
+'simple_stmt' : 'small_stmt' ( ';' 'small_stmt' ) * [ ';' ] NEWLINE
+'small_stmt' : 'expr_stmt' | 'del_stmt' | 'pass_stmt' | 'flow_stmt' | 'import_stmt' | 'assert_stmt' NEWLINE
+'expr_or_star' : 'star_expr' | 'expr' NEWLINE
+'star_expr' : '*' 'bitwise_or' NEWLINE
+'exprlist_star' : 'expr_or_star' ( ',' 'expr_or_star' ) * [ ',' ] NEWLINE
+'augassign' : '+=' | '-=' | '*=' | '@=' | '/=' | '%=' | '&=' | '|=' | '^=' | '<<=' | '>>=' | '**=' | '//=' NEWLINE
+'expr_stmt' : [ '/' ] 'exprlist_star' ( 'annassign' | ( '=' 'exprlist_star' ) + | 'augassign' 'exprlist' ) NEWLINE
+'annassign' : ':' 'expr' [ '=' 'exprlist_star' ] NEWLINE
+'del_stmt' : 'del' 'targetlist' NEWLINE
+'pass_stmt' : 'pass' NEWLINE
+'flow_stmt' : 'break_stmt' | 'continue_stmt' | 'return_stmt' | 'raise_stmt' NEWLINE
+'break_stmt' : 'break' NEWLINE
+'continue_stmt' : 'continue' NEWLINE
+'return_stmt' : 'return' [ 'exprlist_star' ] NEWLINE
+'raise_stmt' : 'raise' [ 'expr' [ 'from' 'expr' ] ] NEWLINE
+'import_stmt' : 'import_name' | 'import_from' NEWLINE
+'import_name' : 'import' 'dotted_as_names' NEWLINE
+'import_from' : 'from' 'import_from_names' 'import' ( '*' | '(' 'import_as_names' [ ',' ] ')' | 'import_as_names' ) NEWLINE
+'import_from_names' : '.' * 'dotted_name' | '.' + NEWLINE
+'import_as_name' : 'NAME' [ 'as' 'NAME' ] NEWLINE
+'dotted_as_name' : 'dotted_name' [ 'as' 'NAME' ] NEWLINE
+'import_as_names' : 'import_as_name' ( ',' 'import_as_name' ) * NEWLINE
+'dotted_as_names' : 'dotted_as_name' ( ',' 'dotted_as_name' ) * NEWLINE
+'dotted_name' : 'NAME' ( '.' 'NAME' ) * NEWLINE
+'assert_stmt' : 'assert' 'expr' [ ',' 'expr' ] NEWLINE
+'compound_stmt' : 'if_stmt' | 'while_stmt' | 'for_stmt' | 'try_stmt' | 'with_stmt' NEWLINE
+'if_stmt' : 'if' 'named_expr' 'suite' 'elif_stmt' * [ 'else_suite' ] NEWLINE
+'elif_stmt' : 'elif' 'named_expr' 'suite' NEWLINE
+'while_stmt' : 'while' 'named_expr' 'suite' [ 'else_suite' ] NEWLINE
+'for_stmt' : 'for' 'targetlist' 'in' 'exprlist' 'suite' [ 'else_suite' ] NEWLINE
+'try_stmt' : 'try' 'suite' ( ( 'except_clause' 'suite' ) + [ 'else_suite' ] [ 'finally_suite' ] | 'finally_suite' ) NEWLINE
+'except_clause' : 'except' [ 'expr' [ 'as' 'NAME' ] ] NEWLINE
+'with_stmt' : 'with' 'with_item' ( ',' 'with_item' ) * 'suite' NEWLINE
+'with_item' : 'expr' [ 'as' 'NAME' ] NEWLINE
+'block_suite' : '{' 'simple_stmt' '}' | '{' 'NEWLINE' 'stmt' + '}' NEWLINE
+'suite' : ':' 'simple_stmt' | 'block_suite' NEWLINE
+'else_suite' : 'else' 'suite' NEWLINE
+'finally_suite' : 'finally' 'suite' NEWLINE
+'func_suite' : ':' 'expr' | 'block_suite' NEWLINE
+'typed_arg_list' : 'kwargs' | 'args_kwargs' | 'full_arg_list' NEWLINE
+'full_arg_list' : 'default_arg' ( ',' 'default_arg' ) * [ ',' [ 'kwargs' | 'args_kwargs' ] ] NEWLINE
+'args_kwargs' : '*' [ 'typed_arg' ] ( ',' 'default_arg' ) * [ ',' [ 'kwargs' ] ] NEWLINE
+'kwargs' : '**' 'typed_arg' [ ',' ] NEWLINE
+'default_arg' : 'typed_arg' [ '=' 'expr' ] NEWLINE
+'typed_arg' : 'NAME' [ ':' 'expr' ] NEWLINE
+'simple_arg_list' : 'simple_arg' ( 'simple_arg' ) * NEWLINE
+'simple_arg' : 'NAME' [ '=' 'expr' ] NEWLINE
+'func_type_hint' : '<' 'expr' '>' NEWLINE
+'func_args' : 'simple_arg_list' | '(' [ 'typed_arg_list' ] ')' NEWLINE
+'funcdef' : 'def' [ 'func_type_hint' ] [ 'func_args' ] 'func_suite' NEWLINE
+'named_expr' : 'NAME' [ ':=' 'expr' ] NEWLINE
+'expr' : 'if' 'disjunction' '?' 'disjunction' 'else' 'expr' | 'funcdef' | 'disjunction' NEWLINE
+'disjunction' : 'conjunction' ( 'or' 'conjunction' ) * NEWLINE
+'conjunction' : 'inversion' ( 'and' 'inversion' ) * NEWLINE
+'inversion' : 'not' 'inversion' | 'comparison' NEWLINE
+'comparison' : 'bitwise_or' ( 'comp_op' 'bitwise_or' ) * NEWLINE
+'comp_op' : '<' | '>' | '==' | '>=' | '<=' | '!=' | 'in' | 'not' 'in' | 'is' | 'is' 'not' NEWLINE
+'bitwise_or' : 'bitwise_xor' ( '|' 'bitwise_xor' ) * NEWLINE
+'bitwise_xor' : 'bitwise_and' ( '^' 'bitwise_and' ) * NEWLINE
+'bitwise_and' : 'shift_expr' ( '&' 'shift_expr' ) * NEWLINE
+'shift_expr' : 'sum' ( ( '<<' | '>>' ) 'sum' ) * NEWLINE
+'sum' : 'term' ( ( '+' | '-' ) 'term' ) * NEWLINE
+'term' : 'pipeline' ( ( '*' | '@' | '/' | '%' | '//' ) 'pipeline' ) * NEWLINE
+'pipeline' : 'factor' ( '->' 'pipe_expr' ) * NEWLINE
+'pipe_expr' : 'pipe_for' | 'factor' NEWLINE
+'pipe_for' : [ 'comp_for' ] 'for' 'targetlist' ( 'if' 'expr' ) * [ 'parameters' ] [ 'block_suite' ] NEWLINE
+'comp_for' : 'for' 'targetlist' 'in' 'disjunction' [ 'comp_iter' ] NEWLINE
+'comp_if' : 'if' 'expr' [ 'comp_iter' ] NEWLINE
+'comp_iter' : 'comp_for' | 'comp_if' NEWLINE
+'factor' : ( '+' | '-' | '~' ) 'factor' | 'power' NEWLINE
+'power' : 'atom_expr' [ '**' 'factor' ] NEWLINE
+'atom_expr' : 'atom' 'trailer' * [ 'block_suite' ] NEWLINE
+'atom' : 'compound_atom' | 'simple_atom' NEWLINE
+'compound_atom' : '(' [ 'exprlist_comp' ] ')' | '[' [ 'exprlist_comp' ] ']' | '{' [ 'dictorsetmaker' ] '}' NEWLINE
+'simple_atom' : 'NAME' | 'NUMBER' | 'STRING' | 'None' | 'True' | 'False' NEWLINE
+'exprlist_comp' : 'expr_or_star' ( ',' 'expr_or_star' ) * [ ',' ] NEWLINE
+'trailer' : '.' 'NAME' | 'parameters' | 'subscript' NEWLINE
+'subscript' : '[' 'slicelist' ']' NEWLINE
+'slicelist' : 'slice' ( ',' 'slice' ) * [ ',' ] NEWLINE
+'slice' : 'expr' | [ 'expr' ] ':' [ 'expr' ] [ ':' [ 'expr' ] ] NEWLINE
+'parameters' : '(' [ 'arglist' ] ')' NEWLINE
+'target' : 'bitwise_or' | 'star_expr' NEWLINE
+'targetlist' : 'target' ( ',' 'target' ) * [ ',' ] NEWLINE
+'exprlist' : 'expr' ( ',' 'expr' ) * [ ',' ] NEWLINE
+'dictorsetmaker' : 'dict_maker' | 'set_maker' NEWLINE
+'dict_item' : 'expr' ':' 'expr' | '**' 'bitwise_or' NEWLINE
+'dict_maker' : 'dict_item' ( ',' 'dict_item' ) * [ ',' ] NEWLINE
+'set_maker' : 'expr_or_star' ( ',' 'expr_or_star' ) * [ ',' ] NEWLINE
+'arglist' : 'argument' ( ',' 'argument' ) * [ ',' ] NEWLINE
+'argument' : 'NAME' | 'NAME' ':=' 'expr' | 'NAME' '=' 'expr' | '**' 'expr' | '*' 'expr' NEWLINE
