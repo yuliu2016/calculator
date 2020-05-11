@@ -1,13 +1,16 @@
 package org.fugalang.core;
 
 import org.fugalang.core.grammar.SyntaxError;
+import org.fugalang.core.parser.SimpleParseTree;
+import org.fugalang.core.parser.context.LazyParserContext;
+import org.fugalang.core.parser.context.LexingVisitor;
+import org.fugalang.core.pgen.SingleInput;
 import org.fugalang.core.pprint.ConsoleColor;
-import org.fugalang.core.pprint.TokenPPrint;
-import org.fugalang.core.token.Tokenizer;
+import org.fugalang.core.token.SimpleLexer;
 
 import java.util.Scanner;
 
-public class Main {
+public class ParserRepl {
     public static void main(String[] args) {
         var scanner = new Scanner(System.in);
         String s;
@@ -18,8 +21,11 @@ public class Main {
                 continue;
             }
             try {
-                var result = new Tokenizer(s.replace("\\n", "\n")).tokenizeAll();
-                System.out.print(TokenPPrint.format(result));
+                var visitor = LexingVisitor.of(s);
+                var lexer = SimpleLexer.of(visitor);
+                var context = LazyParserContext.of(lexer, visitor, false);
+                var tree = SimpleParseTree.parse(context, SingleInput::parse, SingleInput::of);
+                System.out.println(tree.prettyFormat(2));
             } catch (SyntaxError e) {
                 System.out.print(ConsoleColor.RED);
                 System.out.println(e.getMessage());

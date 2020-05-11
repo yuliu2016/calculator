@@ -3,18 +3,18 @@ package org.fugalang.core.pgen;
 import org.fugalang.core.parser.*;
 
 /**
- * dictorsetmaker: 'dict_maker' | 'set_maker'
+ * dict_or_set: 'dict_maker' | 'set_maker'
  */
-public final class Dictorsetmaker extends NodeWrapper {
+public final class DictOrSet extends NodeWrapper {
 
     public static final ParserRule RULE =
-            new ParserRule("dictorsetmaker", RuleType.Disjunction, true);
+            new ParserRule("dict_or_set", RuleType.Disjunction, true);
 
-    public static Dictorsetmaker of(ParseTreeNode node) {
-        return new Dictorsetmaker(node);
+    public static DictOrSet of(ParseTreeNode node) {
+        return new DictOrSet(node);
     }
 
-    private Dictorsetmaker(ParseTreeNode node) {
+    private DictOrSet(ParseTreeNode node) {
         super(RULE, node);
     }
 

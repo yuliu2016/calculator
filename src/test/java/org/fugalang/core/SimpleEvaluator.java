@@ -12,6 +12,7 @@ package org.fugalang.core;
 import org.fugalang.core.grammar.SyntaxError;
 import org.fugalang.core.parser.ParserElement;
 import org.fugalang.core.pprint.ConsoleColor;
+import org.fugalang.core.token.LexerTests;
 import org.fugalang.core.token.Operator;
 import org.fugalang.core.token.TokenType;
 import org.fugalang.core.token.Tokenizer;
@@ -121,7 +122,7 @@ public class SimpleEvaluator {
                 continue;
             }
             try {
-                var tokens = new Tokenizer(s).tokenizeAll();
+                var tokens = LexerTests.tokenize(s);
                 var result = "" + evaluate(tokens);
                 System.out.println(ConsoleColor.wrap("\033[34;1m", result));
             } catch (SyntaxError e) {

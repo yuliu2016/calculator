@@ -3,7 +3,7 @@ package org.fugalang.core.pgen;
 import org.fugalang.core.parser.*;
 
 /**
- * small_stmt: 'expr_stmt' | 'del_stmt' | 'pass_stmt' | 'flow_stmt' | 'import_stmt' | 'assert_stmt'
+ * small_stmt: 'del_stmt' | 'pass_stmt' | 'flow_stmt' | 'import_stmt' | 'assert_stmt' | 'assignment'
  */
 public final class SmallStmt extends NodeWrapper {
 
@@ -20,41 +20,22 @@ public final class SmallStmt extends NodeWrapper {
 
     @Override
     protected void buildRule() {
-        addChoice(exprStmtOrNull());
         addChoice(delStmtOrNull());
         addChoice(passStmtOrNull());
         addChoice(flowStmtOrNull());
         addChoice(importStmtOrNull());
         addChoice(assertStmtOrNull());
-    }
-
-    public ExprStmt exprStmt() {
-        var element = getItem(0);
-        element.failIfAbsent(ExprStmt.RULE);
-        return ExprStmt.of(element);
-    }
-
-    public ExprStmt exprStmtOrNull() {
-        var element = getItem(0);
-        if (!element.isPresent(ExprStmt.RULE)) {
-            return null;
-        }
-        return ExprStmt.of(element);
-    }
-
-    public boolean hasExprStmt() {
-        var element = getItem(0);
-        return element.isPresent(ExprStmt.RULE);
+        addChoice(assignmentOrNull());
     }
 
     public DelStmt delStmt() {
-        var element = getItem(1);
+        var element = getItem(0);
         element.failIfAbsent(DelStmt.RULE);
         return DelStmt.of(element);
     }
 
     public DelStmt delStmtOrNull() {
-        var element = getItem(1);
+        var element = getItem(0);
         if (!element.isPresent(DelStmt.RULE)) {
             return null;
         }
@@ -62,18 +43,18 @@ public final class SmallStmt extends NodeWrapper {
     }
 
     public boolean hasDelStmt() {
-        var element = getItem(1);
+        var element = getItem(0);
         return element.isPresent(DelStmt.RULE);
     }
 
     public PassStmt passStmt() {
-        var element = getItem(2);
+        var element = getItem(1);
         element.failIfAbsent(PassStmt.RULE);
         return PassStmt.of(element);
     }
 
     public PassStmt passStmtOrNull() {
-        var element = getItem(2);
+        var element = getItem(1);
         if (!element.isPresent(PassStmt.RULE)) {
             return null;
         }
@@ -81,18 +62,18 @@ public final class SmallStmt extends NodeWrapper {
     }
 
     public boolean hasPassStmt() {
-        var element = getItem(2);
+        var element = getItem(1);
         return element.isPresent(PassStmt.RULE);
     }
 
     public FlowStmt flowStmt() {
-        var element = getItem(3);
+        var element = getItem(2);
         element.failIfAbsent(FlowStmt.RULE);
         return FlowStmt.of(element);
     }
 
     public FlowStmt flowStmtOrNull() {
-        var element = getItem(3);
+        var element = getItem(2);
         if (!element.isPresent(FlowStmt.RULE)) {
             return null;
         }
@@ -100,18 +81,18 @@ public final class SmallStmt extends NodeWrapper {
     }
 
     public boolean hasFlowStmt() {
-        var element = getItem(3);
+        var element = getItem(2);
         return element.isPresent(FlowStmt.RULE);
     }
 
     public ImportStmt importStmt() {
-        var element = getItem(4);
+        var element = getItem(3);
         element.failIfAbsent(ImportStmt.RULE);
         return ImportStmt.of(element);
     }
 
     public ImportStmt importStmtOrNull() {
-        var element = getItem(4);
+        var element = getItem(3);
         if (!element.isPresent(ImportStmt.RULE)) {
             return null;
         }
@@ -119,18 +100,18 @@ public final class SmallStmt extends NodeWrapper {
     }
 
     public boolean hasImportStmt() {
-        var element = getItem(4);
+        var element = getItem(3);
         return element.isPresent(ImportStmt.RULE);
     }
 
     public AssertStmt assertStmt() {
-        var element = getItem(5);
+        var element = getItem(4);
         element.failIfAbsent(AssertStmt.RULE);
         return AssertStmt.of(element);
     }
 
     public AssertStmt assertStmtOrNull() {
-        var element = getItem(5);
+        var element = getItem(4);
         if (!element.isPresent(AssertStmt.RULE)) {
             return null;
         }
@@ -138,8 +119,27 @@ public final class SmallStmt extends NodeWrapper {
     }
 
     public boolean hasAssertStmt() {
-        var element = getItem(5);
+        var element = getItem(4);
         return element.isPresent(AssertStmt.RULE);
+    }
+
+    public Assignment assignment() {
+        var element = getItem(5);
+        element.failIfAbsent(Assignment.RULE);
+        return Assignment.of(element);
+    }
+
+    public Assignment assignmentOrNull() {
+        var element = getItem(5);
+        if (!element.isPresent(Assignment.RULE)) {
+            return null;
+        }
+        return Assignment.of(element);
+    }
+
+    public boolean hasAssignment() {
+        var element = getItem(5);
+        return element.isPresent(Assignment.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -149,12 +149,12 @@ public final class SmallStmt extends NodeWrapper {
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
-        result = ExprStmt.parse(parseTree, level + 1);
-        result = result || DelStmt.parse(parseTree, level + 1);
+        result = DelStmt.parse(parseTree, level + 1);
         result = result || PassStmt.parse(parseTree, level + 1);
         result = result || FlowStmt.parse(parseTree, level + 1);
         result = result || ImportStmt.parse(parseTree, level + 1);
         result = result || AssertStmt.parse(parseTree, level + 1);
+        result = result || Assignment.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);
         return result;

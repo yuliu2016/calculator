@@ -35,10 +35,7 @@ public class LazyParserContext implements ParserContext {
         var lineno = tok.getLineStart();
         var line = lexingContext.getLine(lineno);
 
-        var msg = "Line " + lineno + ":\n    " + line + "\n" +
-                " ".repeat(tok.getColumnStart() + 4) +
-                "^".repeat(tok.getColumnEnd() - tok.getColumnStart()) +
-                "\nError: " + message;
+        var msg = ErrorFormatter.format(message, lineno, line, tok.getColumnStart(), tok.getColumnEnd());
 
         throw new SyntaxError(msg);
     }

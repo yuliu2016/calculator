@@ -3,7 +3,7 @@ package org.fugalang.core.pgen;
 import org.fugalang.core.parser.*;
 
 /**
- * compound_atom: '(' ['exprlist_comp'] ')' | '[' ['exprlist_comp'] ']' | '{' ['dictorsetmaker'] '}'
+ * compound_atom: '(' ['named_expr_list'] ')' | '[' ['named_expr_list'] ']' | '{' ['dict_or_set'] '}'
  */
 public final class CompoundAtom extends NodeWrapper {
 
@@ -98,7 +98,7 @@ public final class CompoundAtom extends NodeWrapper {
     }
 
     /**
-     * '(' ['exprlist_comp'] ')'
+     * '(' ['named_expr_list'] ')'
      */
     public static final class CompoundAtom1 extends NodeWrapper {
 
@@ -116,7 +116,7 @@ public final class CompoundAtom extends NodeWrapper {
         @Override
         protected void buildRule() {
             addRequired(isTokenLpar(), "(");
-            addOptional(exprlistCompOrNull());
+            addOptional(namedExprListOrNull());
             addRequired(isTokenRpar(), ")");
         }
 
@@ -126,23 +126,23 @@ public final class CompoundAtom extends NodeWrapper {
             return element.asBoolean();
         }
 
-        public ExprlistComp exprlistComp() {
+        public NamedExprList namedExprList() {
             var element = getItem(1);
-            element.failIfAbsent(ExprlistComp.RULE);
-            return ExprlistComp.of(element);
+            element.failIfAbsent(NamedExprList.RULE);
+            return NamedExprList.of(element);
         }
 
-        public ExprlistComp exprlistCompOrNull() {
+        public NamedExprList namedExprListOrNull() {
             var element = getItem(1);
-            if (!element.isPresent(ExprlistComp.RULE)) {
+            if (!element.isPresent(NamedExprList.RULE)) {
                 return null;
             }
-            return ExprlistComp.of(element);
+            return NamedExprList.of(element);
         }
 
-        public boolean hasExprlistComp() {
+        public boolean hasNamedExprList() {
             var element = getItem(1);
-            return element.isPresent(ExprlistComp.RULE);
+            return element.isPresent(NamedExprList.RULE);
         }
 
         public boolean isTokenRpar() {
@@ -159,7 +159,7 @@ public final class CompoundAtom extends NodeWrapper {
             boolean result;
 
             result = parseTree.consumeToken("(");
-            if (result) ExprlistComp.parse(parseTree, level + 1);
+            if (result) NamedExprList.parse(parseTree, level + 1);
             result = result && parseTree.consumeToken(")");
 
             parseTree.exit(level, marker, result);
@@ -168,7 +168,7 @@ public final class CompoundAtom extends NodeWrapper {
     }
 
     /**
-     * '[' ['exprlist_comp'] ']'
+     * '[' ['named_expr_list'] ']'
      */
     public static final class CompoundAtom2 extends NodeWrapper {
 
@@ -186,7 +186,7 @@ public final class CompoundAtom extends NodeWrapper {
         @Override
         protected void buildRule() {
             addRequired(isTokenLsqb(), "[");
-            addOptional(exprlistCompOrNull());
+            addOptional(namedExprListOrNull());
             addRequired(isTokenRsqb(), "]");
         }
 
@@ -196,23 +196,23 @@ public final class CompoundAtom extends NodeWrapper {
             return element.asBoolean();
         }
 
-        public ExprlistComp exprlistComp() {
+        public NamedExprList namedExprList() {
             var element = getItem(1);
-            element.failIfAbsent(ExprlistComp.RULE);
-            return ExprlistComp.of(element);
+            element.failIfAbsent(NamedExprList.RULE);
+            return NamedExprList.of(element);
         }
 
-        public ExprlistComp exprlistCompOrNull() {
+        public NamedExprList namedExprListOrNull() {
             var element = getItem(1);
-            if (!element.isPresent(ExprlistComp.RULE)) {
+            if (!element.isPresent(NamedExprList.RULE)) {
                 return null;
             }
-            return ExprlistComp.of(element);
+            return NamedExprList.of(element);
         }
 
-        public boolean hasExprlistComp() {
+        public boolean hasNamedExprList() {
             var element = getItem(1);
-            return element.isPresent(ExprlistComp.RULE);
+            return element.isPresent(NamedExprList.RULE);
         }
 
         public boolean isTokenRsqb() {
@@ -229,7 +229,7 @@ public final class CompoundAtom extends NodeWrapper {
             boolean result;
 
             result = parseTree.consumeToken("[");
-            if (result) ExprlistComp.parse(parseTree, level + 1);
+            if (result) NamedExprList.parse(parseTree, level + 1);
             result = result && parseTree.consumeToken("]");
 
             parseTree.exit(level, marker, result);
@@ -238,7 +238,7 @@ public final class CompoundAtom extends NodeWrapper {
     }
 
     /**
-     * '{' ['dictorsetmaker'] '}'
+     * '{' ['dict_or_set'] '}'
      */
     public static final class CompoundAtom3 extends NodeWrapper {
 
@@ -256,7 +256,7 @@ public final class CompoundAtom extends NodeWrapper {
         @Override
         protected void buildRule() {
             addRequired(isTokenLbrace(), "{");
-            addOptional(dictorsetmakerOrNull());
+            addOptional(dictOrSetOrNull());
             addRequired(isTokenRbrace(), "}");
         }
 
@@ -266,23 +266,23 @@ public final class CompoundAtom extends NodeWrapper {
             return element.asBoolean();
         }
 
-        public Dictorsetmaker dictorsetmaker() {
+        public DictOrSet dictOrSet() {
             var element = getItem(1);
-            element.failIfAbsent(Dictorsetmaker.RULE);
-            return Dictorsetmaker.of(element);
+            element.failIfAbsent(DictOrSet.RULE);
+            return DictOrSet.of(element);
         }
 
-        public Dictorsetmaker dictorsetmakerOrNull() {
+        public DictOrSet dictOrSetOrNull() {
             var element = getItem(1);
-            if (!element.isPresent(Dictorsetmaker.RULE)) {
+            if (!element.isPresent(DictOrSet.RULE)) {
                 return null;
             }
-            return Dictorsetmaker.of(element);
+            return DictOrSet.of(element);
         }
 
-        public boolean hasDictorsetmaker() {
+        public boolean hasDictOrSet() {
             var element = getItem(1);
-            return element.isPresent(Dictorsetmaker.RULE);
+            return element.isPresent(DictOrSet.RULE);
         }
 
         public boolean isTokenRbrace() {
@@ -299,7 +299,7 @@ public final class CompoundAtom extends NodeWrapper {
             boolean result;
 
             result = parseTree.consumeToken("{");
-            if (result) Dictorsetmaker.parse(parseTree, level + 1);
+            if (result) DictOrSet.parse(parseTree, level + 1);
             result = result && parseTree.consumeToken("}");
 
             parseTree.exit(level, marker, result);

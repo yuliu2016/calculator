@@ -153,14 +153,14 @@ public class SimpleParseTree implements ParseTree {
         var current_frame = frame_deque.peek();
 
         if (token.getType() == type) {
-            context.log(() -> "  ".repeat(current_frame.getLevel()) +
+            context.log(() -> "  ".repeat(current_frame.getLevel() + 1) +
                     "Success in type " + type + ": " + token.getValue());
             addNode(ofElement(token));
             pos++;
             return true;
         }
 
-        context.log(() -> "  ".repeat(current_frame.getLevel()) +
+        context.log(() -> "  ".repeat(current_frame.getLevel() + 1) +
                 "Failure in type " + type + ": " + token.getValue());
         addNode(IndexNode.NULL);
         return false;
@@ -179,7 +179,7 @@ public class SimpleParseTree implements ParseTree {
         var current_frame = frame_deque.peek();
 
         if (token.getValue().equals(literal)) {
-            context.log(() -> "  ".repeat(current_frame.getLevel()) +
+            context.log(() -> "  ".repeat(current_frame.getLevel() + 1) +
                     "Success in literal " + literal + ": " + token.getValue());
 
             addNode(ofElement(token));
@@ -187,7 +187,7 @@ public class SimpleParseTree implements ParseTree {
             return true;
         }
 
-        context.log(() -> "  ".repeat(current_frame.getLevel()) +
+        context.log(() -> "  ".repeat(current_frame.getLevel() + 1) +
                 "Failure in literal " + literal + ": " + token.getValue());
         addNode(IndexNode.NULL);
         return false;

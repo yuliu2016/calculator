@@ -7,18 +7,18 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * expr_stmt: ['/'] 'exprlist_star' ('annassign' | ('=' 'exprlist_star')+ | 'augassign' 'exprlist')
+ * assignment: ['/'] 'exprlist_star' ['annassign' | ('=' 'exprlist_star')+ | 'augassign' 'exprlist']
  */
-public final class ExprStmt extends NodeWrapper {
+public final class Assignment extends NodeWrapper {
 
     public static final ParserRule RULE =
-            new ParserRule("expr_stmt", RuleType.Conjunction, true);
+            new ParserRule("assignment", RuleType.Conjunction, true);
 
-    public static ExprStmt of(ParseTreeNode node) {
-        return new ExprStmt(node);
+    public static Assignment of(ParseTreeNode node) {
+        return new Assignment(node);
     }
 
-    private ExprStmt(ParseTreeNode node) {
+    private Assignment(ParseTreeNode node) {
         super(RULE, node);
     }
 
@@ -26,7 +26,7 @@ public final class ExprStmt extends NodeWrapper {
     protected void buildRule() {
         addOptional(isTokenDiv(), "/");
         addRequired(exprlistStar());
-        addRequired(exprStmt3());
+        addOptional(assignment3OrNull());
     }
 
     public boolean isTokenDiv() {
@@ -40,10 +40,23 @@ public final class ExprStmt extends NodeWrapper {
         return ExprlistStar.of(element);
     }
 
-    public ExprStmt3 exprStmt3() {
+    public Assignment3 assignment3() {
         var element = getItem(2);
-        element.failIfAbsent(ExprStmt3.RULE);
-        return ExprStmt3.of(element);
+        element.failIfAbsent(Assignment3.RULE);
+        return Assignment3.of(element);
+    }
+
+    public Assignment3 assignment3OrNull() {
+        var element = getItem(2);
+        if (!element.isPresent(Assignment3.RULE)) {
+            return null;
+        }
+        return Assignment3.of(element);
+    }
+
+    public boolean hasAssignment3() {
+        var element = getItem(2);
+        return element.isPresent(Assignment3.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -55,7 +68,7 @@ public final class ExprStmt extends NodeWrapper {
 
         parseTree.consumeToken("/");
         result = ExprlistStar.parse(parseTree, level + 1);
-        result = result && ExprStmt3.parse(parseTree, level + 1);
+        if (result) Assignment3.parse(parseTree, level + 1);
 
         parseTree.exit(level, marker, result);
         return result;
@@ -64,26 +77,26 @@ public final class ExprStmt extends NodeWrapper {
     /**
      * 'annassign' | ('=' 'exprlist_star')+ | 'augassign' 'exprlist'
      */
-    public static final class ExprStmt3 extends NodeWrapper {
+    public static final class Assignment3 extends NodeWrapper {
 
         public static final ParserRule RULE =
-                new ParserRule("expr_stmt:3", RuleType.Disjunction, false);
+                new ParserRule("assignment:3", RuleType.Disjunction, false);
 
-        public static ExprStmt3 of(ParseTreeNode node) {
-            return new ExprStmt3(node);
+        public static Assignment3 of(ParseTreeNode node) {
+            return new Assignment3(node);
         }
 
-        private ExprStmt3(ParseTreeNode node) {
+        private Assignment3(ParseTreeNode node) {
             super(RULE, node);
         }
 
-        private List<ExprStmt32> exprStmt32List;
+        private List<Assignment32> assignment32List;
 
         @Override
         protected void buildRule() {
             addChoice(annassignOrNull());
-            addChoice(exprStmt32List());
-            addChoice(exprStmt33OrNull());
+            addChoice(assignment32List());
+            addChoice(assignment33OrNull());
         }
 
         public Annassign annassign() {
@@ -105,39 +118,39 @@ public final class ExprStmt extends NodeWrapper {
             return element.isPresent(Annassign.RULE);
         }
 
-        public List<ExprStmt32> exprStmt32List() {
-            if (exprStmt32List != null) {
-                return exprStmt32List;
+        public List<Assignment32> assignment32List() {
+            if (assignment32List != null) {
+                return assignment32List;
             }
-            List<ExprStmt32> result = null;
+            List<Assignment32> result = null;
             var element = getItem(1);
             for (var node : element.asCollection()) {
                 if (result == null) {
                     result = new ArrayList<>();
                 }
-                result.add(ExprStmt32.of(node));
+                result.add(Assignment32.of(node));
             }
-            exprStmt32List = result == null ? Collections.emptyList() : result;
-            return exprStmt32List;
+            assignment32List = result == null ? Collections.emptyList() : result;
+            return assignment32List;
         }
 
-        public ExprStmt33 exprStmt33() {
+        public Assignment33 assignment33() {
             var element = getItem(2);
-            element.failIfAbsent(ExprStmt33.RULE);
-            return ExprStmt33.of(element);
+            element.failIfAbsent(Assignment33.RULE);
+            return Assignment33.of(element);
         }
 
-        public ExprStmt33 exprStmt33OrNull() {
+        public Assignment33 assignment33OrNull() {
             var element = getItem(2);
-            if (!element.isPresent(ExprStmt33.RULE)) {
+            if (!element.isPresent(Assignment33.RULE)) {
                 return null;
             }
-            return ExprStmt33.of(element);
+            return Assignment33.of(element);
         }
 
-        public boolean hasExprStmt33() {
+        public boolean hasAssignment33() {
             var element = getItem(2);
-            return element.isPresent(ExprStmt33.RULE);
+            return element.isPresent(Assignment33.RULE);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -148,22 +161,22 @@ public final class ExprStmt extends NodeWrapper {
             boolean result;
 
             result = Annassign.parse(parseTree, level + 1);
-            result = result || parseExprStmt32List(parseTree, level + 1);
-            result = result || ExprStmt33.parse(parseTree, level + 1);
+            result = result || parseAssignment32List(parseTree, level + 1);
+            result = result || Assignment33.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);
             return result;
         }
 
-        private static boolean parseExprStmt32List(ParseTree parseTree, int level) {
+        private static boolean parseAssignment32List(ParseTree parseTree, int level) {
             if (!ParserUtil.recursionGuard(level, RULE)) {
                 return false;
             }
             parseTree.enterCollection();
-            var result = ExprStmt32.parse(parseTree, level + 1);
+            var result = Assignment32.parse(parseTree, level + 1);
             if (result) while (true) {
                 var pos = parseTree.position();
-                if (!ExprStmt32.parse(parseTree, level + 1) ||
+                if (!Assignment32.parse(parseTree, level + 1) ||
                         parseTree.guardLoopExit(pos)) {
                     break;
                 }
@@ -176,16 +189,16 @@ public final class ExprStmt extends NodeWrapper {
     /**
      * '=' 'exprlist_star'
      */
-    public static final class ExprStmt32 extends NodeWrapper {
+    public static final class Assignment32 extends NodeWrapper {
 
         public static final ParserRule RULE =
-                new ParserRule("expr_stmt:3:2", RuleType.Conjunction, false);
+                new ParserRule("assignment:3:2", RuleType.Conjunction, false);
 
-        public static ExprStmt32 of(ParseTreeNode node) {
-            return new ExprStmt32(node);
+        public static Assignment32 of(ParseTreeNode node) {
+            return new Assignment32(node);
         }
 
-        private ExprStmt32(ParseTreeNode node) {
+        private Assignment32(ParseTreeNode node) {
             super(RULE, node);
         }
 
@@ -225,16 +238,16 @@ public final class ExprStmt extends NodeWrapper {
     /**
      * 'augassign' 'exprlist'
      */
-    public static final class ExprStmt33 extends NodeWrapper {
+    public static final class Assignment33 extends NodeWrapper {
 
         public static final ParserRule RULE =
-                new ParserRule("expr_stmt:3:3", RuleType.Conjunction, false);
+                new ParserRule("assignment:3:3", RuleType.Conjunction, false);
 
-        public static ExprStmt33 of(ParseTreeNode node) {
-            return new ExprStmt33(node);
+        public static Assignment33 of(ParseTreeNode node) {
+            return new Assignment33(node);
         }
 
-        private ExprStmt33(ParseTreeNode node) {
+        private Assignment33(ParseTreeNode node) {
             super(RULE, node);
         }
 

@@ -7,50 +7,50 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * exprlist_comp: 'expr_or_star' (',' 'expr_or_star')* [',']
+ * named_expr_list: 'named_expr_star' (',' 'named_expr_star')* [',']
  */
-public final class ExprlistComp extends NodeWrapper {
+public final class NamedExprList extends NodeWrapper {
 
     public static final ParserRule RULE =
-            new ParserRule("exprlist_comp", RuleType.Conjunction, true);
+            new ParserRule("named_expr_list", RuleType.Conjunction, true);
 
-    public static ExprlistComp of(ParseTreeNode node) {
-        return new ExprlistComp(node);
+    public static NamedExprList of(ParseTreeNode node) {
+        return new NamedExprList(node);
     }
 
-    private ExprlistComp(ParseTreeNode node) {
+    private NamedExprList(ParseTreeNode node) {
         super(RULE, node);
     }
 
-    private List<ExprlistComp2> exprlistComp2List;
+    private List<NamedExprList2> namedExprList2List;
 
     @Override
     protected void buildRule() {
-        addRequired(exprOrStar());
-        addRequired(exprlistComp2List());
+        addRequired(namedExprStar());
+        addRequired(namedExprList2List());
         addOptional(isTokenComma(), ",");
     }
 
-    public ExprOrStar exprOrStar() {
+    public NamedExprStar namedExprStar() {
         var element = getItem(0);
-        element.failIfAbsent(ExprOrStar.RULE);
-        return ExprOrStar.of(element);
+        element.failIfAbsent(NamedExprStar.RULE);
+        return NamedExprStar.of(element);
     }
 
-    public List<ExprlistComp2> exprlistComp2List() {
-        if (exprlistComp2List != null) {
-            return exprlistComp2List;
+    public List<NamedExprList2> namedExprList2List() {
+        if (namedExprList2List != null) {
+            return namedExprList2List;
         }
-        List<ExprlistComp2> result = null;
+        List<NamedExprList2> result = null;
         var element = getItem(1);
         for (var node : element.asCollection()) {
             if (result == null) {
                 result = new ArrayList<>();
             }
-            result.add(ExprlistComp2.of(node));
+            result.add(NamedExprList2.of(node));
         }
-        exprlistComp2List = result == null ? Collections.emptyList() : result;
-        return exprlistComp2List;
+        namedExprList2List = result == null ? Collections.emptyList() : result;
+        return namedExprList2List;
     }
 
     public boolean isTokenComma() {
@@ -65,22 +65,22 @@ public final class ExprlistComp extends NodeWrapper {
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
-        result = ExprOrStar.parse(parseTree, level + 1);
-        if (result) parseExprlistComp2List(parseTree, level + 1);
+        result = NamedExprStar.parse(parseTree, level + 1);
+        if (result) parseNamedExprList2List(parseTree, level + 1);
         if (result) parseTree.consumeToken(",");
 
         parseTree.exit(level, marker, result);
         return result;
     }
 
-    private static void parseExprlistComp2List(ParseTree parseTree, int level) {
+    private static void parseNamedExprList2List(ParseTree parseTree, int level) {
         if (!ParserUtil.recursionGuard(level, RULE)) {
             return;
         }
         parseTree.enterCollection();
         while (true) {
             var pos = parseTree.position();
-            if (!ExprlistComp2.parse(parseTree, level + 1) ||
+            if (!NamedExprList2.parse(parseTree, level + 1) ||
                     parseTree.guardLoopExit(pos)) {
                 break;
             }
@@ -89,25 +89,25 @@ public final class ExprlistComp extends NodeWrapper {
     }
 
     /**
-     * ',' 'expr_or_star'
+     * ',' 'named_expr_star'
      */
-    public static final class ExprlistComp2 extends NodeWrapper {
+    public static final class NamedExprList2 extends NodeWrapper {
 
         public static final ParserRule RULE =
-                new ParserRule("exprlist_comp:2", RuleType.Conjunction, false);
+                new ParserRule("named_expr_list:2", RuleType.Conjunction, false);
 
-        public static ExprlistComp2 of(ParseTreeNode node) {
-            return new ExprlistComp2(node);
+        public static NamedExprList2 of(ParseTreeNode node) {
+            return new NamedExprList2(node);
         }
 
-        private ExprlistComp2(ParseTreeNode node) {
+        private NamedExprList2(ParseTreeNode node) {
             super(RULE, node);
         }
 
         @Override
         protected void buildRule() {
             addRequired(isTokenComma(), ",");
-            addRequired(exprOrStar());
+            addRequired(namedExprStar());
         }
 
         public boolean isTokenComma() {
@@ -116,10 +116,10 @@ public final class ExprlistComp extends NodeWrapper {
             return element.asBoolean();
         }
 
-        public ExprOrStar exprOrStar() {
+        public NamedExprStar namedExprStar() {
             var element = getItem(1);
-            element.failIfAbsent(ExprOrStar.RULE);
-            return ExprOrStar.of(element);
+            element.failIfAbsent(NamedExprStar.RULE);
+            return NamedExprStar.of(element);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -130,7 +130,7 @@ public final class ExprlistComp extends NodeWrapper {
             boolean result;
 
             result = parseTree.consumeToken(",");
-            result = result && ExprOrStar.parse(parseTree, level + 1);
+            result = result && NamedExprStar.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);
             return result;
