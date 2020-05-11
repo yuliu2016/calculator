@@ -21,8 +21,8 @@ public class LexerTests {
     }
 
     public static List<ParserElement> tokenize(String code) {
-        var c = new LexingVisitor(code, 0, true);
-        var r = new SimpleLexer(c);
+        var c = LexingVisitor.of(code);
+        var r = SimpleLexer.of(c);
         return new LazyArrayList<>(r).getInnerList();
     }
 }

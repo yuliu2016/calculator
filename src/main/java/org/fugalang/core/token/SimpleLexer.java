@@ -7,11 +7,15 @@ import java.util.Iterator;
 
 public class SimpleLexer implements Iterator<ParserElement> {
 
+    public static Iterator<ParserElement> of(LexingContext context) {
+        return new SimpleLexer(context);
+    }
+
     private final TokenState state = new TokenState();
     private final LexingContext context;
     private ParserElement nextElement;
 
-    public SimpleLexer(LexingContext context) {
+    private SimpleLexer(LexingContext context) {
         this.context = context;
         computeNext();
     }

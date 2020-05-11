@@ -20,23 +20,24 @@ public class LazyArrayList<E> {
             if (iterator.hasNext()) {
                 list.add(iterator.next());
             } else {
-                throw new ArrayIndexOutOfBoundsException();
+                throw new ArrayIndexOutOfBoundsException(
+                        "Index " + index + " out of bounds for list" + list);
             }
         }
         return list.get(index);
     }
 
-    public int size() {
-        return list.size();
+    public boolean didFinish(int position) {
+        return position >= list.size() && !iterator.hasNext();
     }
 
-    public boolean isFinished(int position) {
-        return position >= list.size() && !iterator.hasNext();
+    public E getLast() {
+        return list.get(list.size() - 1);
     }
 
     public List<E> getInnerList() {
         int i = list.size();
-        while (!isFinished(i)) {
+        while (!didFinish(i)) {
             get(i);
             i++;
         }

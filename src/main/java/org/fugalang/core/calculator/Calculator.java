@@ -2,9 +2,10 @@ package org.fugalang.core.calculator;
 
 import org.fugalang.core.calculator.pgen.*;
 import org.fugalang.core.grammar.SyntaxError;
-import org.fugalang.core.parser.ParseTreeImpl;
-import org.fugalang.core.parser.context.SimpleContext;
-import org.fugalang.core.token.Tokenizer;
+import org.fugalang.core.parser.SimpleParseTree;
+import org.fugalang.core.parser.context.LazyParserContext;
+import org.fugalang.core.parser.context.LexingVisitor;
+import org.fugalang.core.token.SimpleLexer;
 
 import java.util.Scanner;
 
@@ -102,25 +103,28 @@ public class Calculator {
     }
 
     public static void main(String[] args) {
-        var parser = new ParseTreeImpl();
         var scanner = new Scanner(System.in);
-        String s;
+        String input;
         System.out.print(">>> ");
-        while (!(s = scanner.nextLine()).equals("exit")) {
-            if (s.isBlank()) {
+        while (!(input = scanner.nextLine()).equals("exit")) {
+            if (input.isBlank()) {
                 System.out.print(">>> ");
                 continue;
             }
             try {
-                var tokens = new Tokenizer(s).tokenizeAll();
-                var ctx = new SimpleContext(tokens, false);
-                var cst = parser.parse(ctx, Sum::parse, Sum::of);
-                var result = evaluate0(cst);
+                var visitor = LexingVisitor.of(input);
+                var lexer = SimpleLexer.of(visitor);
+                var context = LazyParserContext.of(lexer, visitor, false);
+                var tree = SimpleParseTree.parse(context, Sum::parse, Sum::of);
+
+                var result = evaluate0(tree);
+
                 System.out.println(result);
             } catch (SyntaxError e) {
-                System.out.println("Syntax Error: " + e.getMessage());
+                System.out.println(e.getMessage());
             } catch (Exception e) {
-                System.out.println("Syntax Error: Not Implemented");
+                e.printStackTrace(System.out);
+//                System.out.println("Error: Not Implemented");
             }
             System.out.print(">>> ");
         }

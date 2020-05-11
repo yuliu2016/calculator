@@ -24,7 +24,7 @@ public class LexingVisitor implements LexingContext {
     // value is the index of the string at the beginning of the line
     private final List<Integer> line_to_index;
 
-    public LexingVisitor(String code, int index, boolean hasTokenSequence) {
+    private LexingVisitor(String code, int index, boolean hasTokenSequence) {
         length = code.length();
         if (index < 0) {
             throw new IndexOutOfBoundsException("Index out of bounds");
@@ -32,6 +32,10 @@ public class LexingVisitor implements LexingContext {
         this.code = code;
         this.index = index;
         line_to_index = hasTokenSequence ? new ArrayList<>(List.of(0)) : null;
+    }
+
+    public static LexingContext of(String code) {
+        return new LexingVisitor(code, 0, true);
     }
 
     @Override

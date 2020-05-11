@@ -5,7 +5,6 @@ import java.util.List;
 
 public class ParseTreeFrame implements ParseTreeMarker {
 
-    private final ParseTreeFrame parentFrame;
     private final int position;
     private final int level;
     private final ParserRule rule;
@@ -14,8 +13,7 @@ public class ParseTreeFrame implements ParseTreeMarker {
 
     List<ParseTreeNode> collection = null;
 
-    public ParseTreeFrame(ParseTreeFrame parentFrame, int position, int level, ParserRule rule) {
-        this.parentFrame = parentFrame;
+    public ParseTreeFrame(int position, int level, ParserRule rule) {
         this.position = position;
         this.level = level;
         this.rule = rule;
@@ -36,10 +34,6 @@ public class ParseTreeFrame implements ParseTreeMarker {
 
     public List<ParseTreeNode> getNodes() {
         return nodes;
-    }
-
-    public ParseTreeFrame getParentFrame() {
-        return parentFrame;
     }
 
     @Override

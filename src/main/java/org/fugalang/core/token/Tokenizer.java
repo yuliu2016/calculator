@@ -417,19 +417,16 @@ public class Tokenizer {
         return s.getToken();
     }
 
+    @Deprecated
     private final String code;
 
-    @SuppressWarnings("DeprecatedIsStillUsed")
     @Deprecated
     public Tokenizer(String code) {
         this.code = code;
     }
 
-    @SuppressWarnings("DeprecatedIsStillUsed")
     @Deprecated
     public List<ParserElement> tokenizeAll() {
-        var c = new LexingVisitor(code, 0, true);
-        var r = new SimpleLexer(c);
-        return new LazyArrayList<>(r).getInnerList();
+        return new LazyArrayList<>(SimpleLexer.of(LexingVisitor.of(code))).getInnerList();
     }
 }
