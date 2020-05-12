@@ -6,7 +6,6 @@ import org.fugalang.core.pprint.TreeStringElem;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 class WrapperDelegate implements NodeDelegate {
     private final ParserRule rule;
@@ -166,30 +165,6 @@ class WrapperDelegate implements NodeDelegate {
             }
         }
         return repr;
-    }
-
-    @Override
-    public String toSimpleString() {
-        if (str != null) {
-            return str;
-        }
-        str = switch (rule.getRuleType()) {
-            case Disjunction -> chosenComponent.toString();
-            case Conjunction -> nodeToString(components);
-        };
-        return str;
-    }
-
-    private static String nodeToString(Object o) {
-        if (o instanceof NodeWrapper) {
-            return ((NodeWrapper) o).toSimpleString();
-        } else if (o instanceof List<?>) {
-            return ((List<?>) o).stream()
-                    .map(WrapperDelegate::nodeToString)
-                    .collect(Collectors.joining(" "));
-        } else {
-            return o.toString();
-        }
     }
 
     @Override

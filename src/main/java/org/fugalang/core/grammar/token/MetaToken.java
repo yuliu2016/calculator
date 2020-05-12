@@ -1,10 +1,11 @@
 package org.fugalang.core.grammar.token;
 
 import org.fugalang.core.parser.ElementType;
+import org.fugalang.core.parser.ParserElement;
 
 import java.util.Objects;
 
-public class MetaToken {
+public class MetaToken implements ParserElement {
     public final ElementType type;
     public final String value;
 
@@ -36,5 +37,40 @@ public class MetaToken {
             return type.getName() + " ";
         }
         return "'" + value + "' ";
+    }
+
+    @Override
+    public ElementType getType() {
+        return type;
+    }
+
+    @Override
+    public int getIndex() {
+        return 0;
+    }
+
+    @Override
+    public int getLineStart() {
+        return 0;
+    }
+
+    @Override
+    public int getLineEnd() {
+        return 0;
+    }
+
+    @Override
+    public int getColumnStart() {
+        return 0;
+    }
+
+    @Override
+    public int getColumnEnd() {
+        return 0;
+    }
+
+    @Override
+    public String getValue() {
+        return value;
     }
 }

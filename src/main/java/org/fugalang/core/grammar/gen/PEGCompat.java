@@ -24,16 +24,15 @@ public class PEGCompat {
         return constructString(andRule.repeatRule()) + andRule
                 .andRule2List()
                 .stream()
-                .map(rule -> " | " + rule.repeatRule().toString())
+                .map(rule -> " " + constructString(rule.repeatRule()))
                 .collect(Collectors.joining());
     }
 
     public static String constructString(RepeatRule repeatRule) {
-        return repeatRule.subRule() + (
-                repeatRule.hasRepeatRule2() ?
-                        (repeatRule.repeatRule2().isTokenPlus() ? "+" : "*")
-                        : ""
-        );
+        var modifier = repeatRule.hasRepeatRule2() ?
+                (repeatRule.repeatRule2().hasPlus() ? "+" : "*")
+                : "";
+        return constructString(repeatRule.subRule()) + modifier;
     }
 
     public static String constructString(SubRule subRule) {
@@ -70,7 +69,7 @@ public class PEGCompat {
 
     public static RepeatType getRepeatType(RepeatRule repeatRule) {
         return repeatRule.hasRepeatRule2() ?
-                repeatRule.repeatRule2().isTokenPlus() ?
+                repeatRule.repeatRule2().hasPlus() ?
                         RepeatType.OnceOrMore
                         : RepeatType.NoneOrMore
                 : RepeatType.Once;

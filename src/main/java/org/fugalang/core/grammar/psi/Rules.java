@@ -6,7 +6,6 @@ import org.fugalang.core.pprint.TreeStringElem;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@SuppressWarnings("DeprecatedIsStillUsed")
 @Deprecated
 public class Rules implements TreeStringElem {
     public final List<SingleRule> rules;

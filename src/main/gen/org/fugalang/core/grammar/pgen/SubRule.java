@@ -116,15 +116,15 @@ public final class SubRule extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenLpar(), "(");
+            addRequired(lpar());
             addRequired(orRule());
-            addRequired(isTokenRpar(), ")");
+            addRequired(rpar());
         }
 
-        public boolean isTokenLpar() {
+        public String lpar() {
             var element = getItem(0);
-            element.failIfAbsent();
-            return element.asBoolean();
+            element.failIfAbsent(MetaTokenType.LPAR);
+            return element.asString();
         }
 
         public OrRule orRule() {
@@ -133,10 +133,10 @@ public final class SubRule extends NodeWrapper {
             return OrRule.of(element);
         }
 
-        public boolean isTokenRpar() {
+        public String rpar() {
             var element = getItem(2);
-            element.failIfAbsent();
-            return element.asBoolean();
+            element.failIfAbsent(MetaTokenType.RPAR);
+            return element.asString();
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -146,9 +146,9 @@ public final class SubRule extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeToken("(");
+            result = parseTree.consumeToken(MetaTokenType.LPAR);
             result = result && OrRule.parse(parseTree, level + 1);
-            result = result && parseTree.consumeToken(")");
+            result = result && parseTree.consumeToken(MetaTokenType.RPAR);
 
             parseTree.exit(level, marker, result);
             return result;
@@ -173,15 +173,15 @@ public final class SubRule extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenLsqb(), "[");
+            addRequired(lsqb());
             addRequired(orRule());
-            addRequired(isTokenRsqb(), "]");
+            addRequired(rsqb());
         }
 
-        public boolean isTokenLsqb() {
+        public String lsqb() {
             var element = getItem(0);
-            element.failIfAbsent();
-            return element.asBoolean();
+            element.failIfAbsent(MetaTokenType.LSQB);
+            return element.asString();
         }
 
         public OrRule orRule() {
@@ -190,10 +190,10 @@ public final class SubRule extends NodeWrapper {
             return OrRule.of(element);
         }
 
-        public boolean isTokenRsqb() {
+        public String rsqb() {
             var element = getItem(2);
-            element.failIfAbsent();
-            return element.asBoolean();
+            element.failIfAbsent(MetaTokenType.RSQB);
+            return element.asString();
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -203,9 +203,9 @@ public final class SubRule extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeToken("[");
+            result = parseTree.consumeToken(MetaTokenType.LSQB);
             result = result && OrRule.parse(parseTree, level + 1);
-            result = result && parseTree.consumeToken("]");
+            result = result && parseTree.consumeToken(MetaTokenType.RSQB);
 
             parseTree.exit(level, marker, result);
             return result;

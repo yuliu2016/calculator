@@ -6,13 +6,12 @@ import org.fugalang.core.parser.ParserElement;
 import java.util.List;
 import java.util.function.Supplier;
 
-@Deprecated(forRemoval = true)
 public class SimpleContext implements ParserContext {
 
-    private final List<ParserElement> elements;
+    private final List<? extends ParserElement> elements;
     private final boolean debug;
 
-    public SimpleContext(List<ParserElement> elements, boolean debug) {
+    public SimpleContext(List<? extends ParserElement> elements, boolean debug) {
         this.elements = elements;
         this.debug = debug;
     }
@@ -20,9 +19,7 @@ public class SimpleContext implements ParserContext {
     @Override
     public void errorForElem(int index, String message) {
         var tok = getElem(index);
-        throw new SyntaxError("Invalid syntax: lines from " +
-                tok.getLineStart() + " to " + tok.getLineEnd() + " and columns from " +
-                tok.getColumnStart() + " to " + tok.getColumnEnd());
+        throw new SyntaxError(message + ": token = '" + tok.getValue() + "'");
     }
 
     @Override

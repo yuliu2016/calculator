@@ -35,8 +35,10 @@ public class SimpleParseTree implements ParseTree {
 
         var result = start.apply(this, 0);
 
-        if (!result || !context.didFinish(pos)) {
+        if (!result) {
             context.errorForElem(error_pos, "Invalid syntax");
+        } else if (!context.didFinish(pos)) {
+            context.errorForElem(error_pos, "Unfinished stream");
         }
 
         return converter.apply(result_node);

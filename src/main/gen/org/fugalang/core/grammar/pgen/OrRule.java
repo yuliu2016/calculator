@@ -1,5 +1,6 @@
 package org.fugalang.core.grammar.pgen;
 
+import org.fugalang.core.grammar.token.MetaTokenType;
 import org.fugalang.core.parser.*;
 
 import java.util.ArrayList;
@@ -99,14 +100,14 @@ public final class OrRule extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addRequired(isTokenOr(), "|");
+            addRequired(or());
             addRequired(andRule());
         }
 
-        public boolean isTokenOr() {
+        public String or() {
             var element = getItem(0);
-            element.failIfAbsent();
-            return element.asBoolean();
+            element.failIfAbsent(MetaTokenType.OR);
+            return element.asString();
         }
 
         public AndRule andRule() {
@@ -122,7 +123,7 @@ public final class OrRule extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeToken("|");
+            result = parseTree.consumeToken(MetaTokenType.OR);
             result = result && AndRule.parse(parseTree, level + 1);
 
             parseTree.exit(level, marker, result);

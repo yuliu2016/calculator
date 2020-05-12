@@ -63,7 +63,7 @@ public class MetaLexer {
         }
 
         if (newline && !tokens.isEmpty()) {
-            addToken(NEWLINE, null);
+            addToken(NEWLINE, "NEWLINE");
         }
 
         // this line must be after add_token for line no to be correct
@@ -144,21 +144,21 @@ public class MetaLexer {
 
     private boolean tokenizeOperators() {
         if (visitor.p1 == '(') {
-            addToken(LPAR, null);
+            addToken(LPAR, "(");
         } else if (visitor.p1 == ')') {
-            addToken(RPAR, null);
+            addToken(RPAR, ")");
         } else if (visitor.p1 == '[') {
-            addToken(LSQB, null);
+            addToken(LSQB, "[");
         } else if (visitor.p1 == ']') {
-            addToken(RSQB, null);
+            addToken(RSQB, "]");
         } else if (visitor.p1 == '*') {
-            addToken(STAR, null);
+            addToken(STAR, "*");
         } else if (visitor.p1 == '+') {
-            addToken(PLUS, null);
+            addToken(PLUS, "+");
         } else if (visitor.p1 == ':') {
-            addToken(COL, null);
+            addToken(COL, ":");
         } else if (visitor.p1 == '|') {
-            addToken(OR, null);
+            addToken(OR, "|");
         } else {
             return false;
         }

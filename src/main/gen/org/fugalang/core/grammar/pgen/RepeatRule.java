@@ -1,5 +1,6 @@
 package org.fugalang.core.grammar.pgen;
 
+import org.fugalang.core.grammar.token.MetaTokenType;
 import org.fugalang.core.parser.*;
 
 /**
@@ -81,18 +82,46 @@ public final class RepeatRule extends NodeWrapper {
 
         @Override
         protected void buildRule() {
-            addChoice(isTokenStar(), "*");
-            addChoice(isTokenPlus(), "+");
+            addChoice(starOrNull());
+            addChoice(plusOrNull());
         }
 
-        public boolean isTokenStar() {
+        public String star() {
             var element = getItem(0);
-            return element.asBoolean();
+            element.failIfAbsent(MetaTokenType.STAR);
+            return element.asString();
         }
 
-        public boolean isTokenPlus() {
+        public String starOrNull() {
+            var element = getItem(0);
+            if (!element.isPresent(MetaTokenType.STAR)) {
+                return null;
+            }
+            return element.asString();
+        }
+
+        public boolean hasStar() {
+            var element = getItem(0);
+            return element.isPresent(MetaTokenType.STAR);
+        }
+
+        public String plus() {
             var element = getItem(1);
-            return element.asBoolean();
+            element.failIfAbsent(MetaTokenType.PLUS);
+            return element.asString();
+        }
+
+        public String plusOrNull() {
+            var element = getItem(1);
+            if (!element.isPresent(MetaTokenType.PLUS)) {
+                return null;
+            }
+            return element.asString();
+        }
+
+        public boolean hasPlus() {
+            var element = getItem(1);
+            return element.isPresent(MetaTokenType.PLUS);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -102,8 +131,8 @@ public final class RepeatRule extends NodeWrapper {
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeToken("*");
-            result = result || parseTree.consumeToken("+");
+            result = parseTree.consumeToken(MetaTokenType.STAR);
+            result = result || parseTree.consumeToken(MetaTokenType.PLUS);
 
             parseTree.exit(level, marker, result);
             return result;

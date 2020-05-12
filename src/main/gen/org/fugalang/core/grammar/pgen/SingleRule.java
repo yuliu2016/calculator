@@ -22,9 +22,9 @@ public final class SingleRule extends NodeWrapper {
     @Override
     protected void buildRule() {
         addRequired(token());
-        addRequired(isTokenColon(), ":");
+        addRequired(colon());
         addRequired(orRule());
-        addRequired(isTokenNewline(), "\n");
+        addRequired(newline());
     }
 
     public String token() {
@@ -33,10 +33,10 @@ public final class SingleRule extends NodeWrapper {
         return element.asString();
     }
 
-    public boolean isTokenColon() {
+    public String colon() {
         var element = getItem(1);
-        element.failIfAbsent();
-        return element.asBoolean();
+        element.failIfAbsent(MetaTokenType.COL);
+        return element.asString();
     }
 
     public OrRule orRule() {
@@ -45,10 +45,10 @@ public final class SingleRule extends NodeWrapper {
         return OrRule.of(element);
     }
 
-    public boolean isTokenNewline() {
+    public String newline() {
         var element = getItem(3);
-        element.failIfAbsent();
-        return element.asBoolean();
+        element.failIfAbsent(MetaTokenType.NEWLINE);
+        return element.asString();
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -59,9 +59,9 @@ public final class SingleRule extends NodeWrapper {
         boolean result;
 
         result = parseTree.consumeToken(MetaTokenType.TOK);
-        result = result && parseTree.consumeToken(":");
+        result = result && parseTree.consumeToken(MetaTokenType.COL);
         result = result && OrRule.parse(parseTree, level + 1);
-        result = result && parseTree.consumeToken("\n");
+        result = result && parseTree.consumeToken(MetaTokenType.NEWLINE);
 
         parseTree.exit(level, marker, result);
         return result;

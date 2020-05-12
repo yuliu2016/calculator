@@ -17,8 +17,6 @@ public interface NodeDelegate {
 
     String toReprString();
 
-    String toSimpleString();
-
     void buildString(TreeStringBuilder builder);
 
     void didBuildRule();

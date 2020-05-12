@@ -75,7 +75,7 @@ public class PEGBuilder {
             // use a root class to reduce files
             ClassBuilder cb = classSet.createRootClass(className);
 
-            cb.setHeaderComments(entry.getKey() + ": " + entry.getValue().toSimpleString());
+            cb.setHeaderComments(entry.getKey() + ": " + PEGCompat.constructString(entry.getValue()));
             cb.setRuleType(RuleType.Disjunction);
 
             addOrRule(className, cb, entry.getValue());
@@ -117,7 +117,7 @@ public class PEGBuilder {
                     // a list can't hold multiple-ly typed objects
                     var component_cb = classSet.createComponentClass(newClassName);
 
-                    component_cb.setHeaderComments(andRule.toSimpleString());
+                    component_cb.setHeaderComments(PEGCompat.constructString(andRule));
                     component_cb.setRuleType(RuleType.Conjunction);
 
                     // Add a field to the class set
@@ -273,7 +273,7 @@ public class PEGBuilder {
         } else {
 
             var component_cb = classSet.createComponentClass(className);
-            component_cb.setHeaderComments(rule.toSimpleString());
+            component_cb.setHeaderComments(PEGCompat.constructString(rule));
             component_cb.setRuleType(RuleType.Disjunction);
 
             // Add a field to the class set

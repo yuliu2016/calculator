@@ -1,8 +1,10 @@
 package org.fugalang.core.grammar.gen;
 
-import org.fugalang.core.grammar.parser.MetaParser;
+import org.fugalang.core.grammar.pgen.Rules;
 import org.fugalang.core.grammar.token.MetaLexer;
 import org.fugalang.core.grammar.util.ParserStringUtil;
+import org.fugalang.core.parser.SimpleParseTree;
+import org.fugalang.core.parser.context.SimpleContext;
 import org.fugalang.core.token.Keyword;
 import org.fugalang.core.token.Operator;
 import org.fugalang.core.token.TokenType;
@@ -20,14 +22,15 @@ public class FugaGenerator {
             var data = Files.readString(Paths.get(res.toURI()));
             var tokens = new MetaLexer(data).tokenize();
 
-            var cst = MetaParser.parseRules(tokens);
+            var context = new SimpleContext(tokens, true);
+            var tree = SimpleParseTree.parse(context, Rules::parse, Rules::of);
 
             var path = Paths.get(
                     System.getProperty("user.dir"),
                     "src/main/gen/org/fugalang/core/pgen/"
             );
 
-            var gen = new ParserGenerator(cst, FugaGenerator::checkToken,
+            var gen = new PEGBuilder(tree, FugaGenerator::checkToken,
                     path, "org.fugalang.core.pgen",
                     "org.fugalang.core.token.TokenType");
             gen.generate(true);

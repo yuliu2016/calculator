@@ -3,7 +3,6 @@ package org.fugalang.core.grammar.psi;
 import org.fugalang.core.pprint.TreeStringBuilder;
 import org.fugalang.core.pprint.TreeStringElem;
 
-@SuppressWarnings("DeprecatedIsStillUsed")
 @Deprecated
 public class SubRule implements TreeStringElem {
     public final OrRule groupedOrRule;

@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-@SuppressWarnings("DeprecatedIsStillUsed")
 @Deprecated
 public class OrRule implements TreeStringElem {
     public final AndRule andRule;
