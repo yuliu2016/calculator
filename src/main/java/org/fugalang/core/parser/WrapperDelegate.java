@@ -6,11 +6,13 @@ import org.fugalang.core.pprint.TreeStringElem;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 class WrapperDelegate implements NodeDelegate {
     private final ParserRule rule;
 
     // string
+    private String repr = null;
     private String str = null;
     private int index = 0;
 
@@ -134,15 +136,14 @@ class WrapperDelegate implements NodeDelegate {
     }
 
     @Override
-    public String simpleString() {
-        if (str != null) {
-            return str;
+    public String toReprString() {
+        if (repr != null) {
+            return repr;
         }
         switch (rule.getRuleType()) {
             case Disjunction -> {
                 var maybeName = (rule.isExplicit() ? rule.getRuleName() : "") + "#" + chosenIndex;
-                str = "(" + maybeName + " " + chosenComponent + ")";
-                return str;
+                repr = "(" + maybeName + " " + chosenComponent + ")";
             }
             case Conjunction -> {
                 var maybeName = rule.isExplicit() ? rule.getRuleName() + " " : "";
@@ -161,10 +162,34 @@ class WrapperDelegate implements NodeDelegate {
                     }
                 }
                 sb.append(")");
-                str = sb.toString();
+                repr = sb.toString();
             }
         }
+        return repr;
+    }
+
+    @Override
+    public String toSimpleString() {
+        if (str != null) {
+            return str;
+        }
+        str = switch (rule.getRuleType()) {
+            case Disjunction -> chosenComponent.toString();
+            case Conjunction -> nodeToString(components);
+        };
         return str;
+    }
+
+    private static String nodeToString(Object o) {
+        if (o instanceof NodeWrapper) {
+            return ((NodeWrapper) o).toSimpleString();
+        } else if (o instanceof List<?>) {
+            return ((List<?>) o).stream()
+                    .map(WrapperDelegate::nodeToString)
+                    .collect(Collectors.joining(" "));
+        } else {
+            return o.toString();
+        }
     }
 
     @Override

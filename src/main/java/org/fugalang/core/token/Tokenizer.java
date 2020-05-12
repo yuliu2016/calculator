@@ -214,7 +214,7 @@ public class Tokenizer {
 
         // Fix: EOF after leading literal
         if (j == context.index() + 2) {
-            context.syntaxError("Error parsing hex: Nothing after leading literal", 2);
+            context.syntaxError("Cannot parse hexadecimal number after leading literal", 1);
         }
 
         if (isUnderscore(context.charAt(context.index() + 2)) ||
@@ -249,7 +249,7 @@ public class Tokenizer {
 
         // Fix: EOF after leading literal
         if (j == context.index() + 2) {
-            context.syntaxError("Error parsing bin: Nothing after leading literal", 2);
+            context.syntaxError("Cannot parse binary number after leading literal", 1);
         }
 
         if (isUnderscore(context.charAt(context.index() + 2)) ||
@@ -284,7 +284,7 @@ public class Tokenizer {
 
         // Fix: EOF after leading literal
         if (j == context.index() + 2) {
-            context.syntaxError("Error parsing oct: Nothing after leading literal", 2);
+            context.syntaxError("Cannot parse octal number after leading literal", 1);
         }
 
         if (isUnderscore(context.charAt(context.index() + 2)) ||

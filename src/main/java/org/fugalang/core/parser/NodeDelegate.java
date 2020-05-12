@@ -15,7 +15,9 @@ public interface NodeDelegate {
 
     void addOptional(Object value);
 
-    String simpleString();
+    String toReprString();
+
+    String toSimpleString();
 
     void buildString(TreeStringBuilder builder);
 

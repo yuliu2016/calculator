@@ -1,8 +1,5 @@
 package org.fugalang.core.token;
 
-import static java.lang.Character.isDigit;
-import static java.lang.Character.isLetterOrDigit;
-
 public class CharTest {
     public static boolean isNewline(char ch) {
         return ch == '\n' || ch == '\r';
@@ -16,8 +13,12 @@ public class CharTest {
         return ch1 == '\r' && ch2 == '\n';
     }
 
+    public static boolean isAlpha(char ch) {
+        return (ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z');
+    }
+
     public static boolean isSymbol(char ch) {
-        return isLetterOrDigit(ch) || isUnderscore(ch);
+        return isAlpha(ch) || isNumeric(ch) || isUnderscore(ch);
     }
 
     public static boolean isSpace(char ch) {
@@ -37,7 +38,7 @@ public class CharTest {
     }
 
     public static boolean isNumeric(char ch) {
-        return isDigit(ch);
+        return ch >= '0' && ch <= '9';
     }
 
     public static boolean isHexLead(String ch) {
@@ -69,8 +70,7 @@ public class CharTest {
     }
 
     public static boolean isAnyHex(char ch) {
-        var charCode = (int) (Character.toUpperCase(ch));
-        return (charCode >= 65 && charCode < 71) || isDigit(ch);
+        return (ch >= 'A' && ch <= 'F') || (ch >= 'a' && ch <= 'f') || isNumeric(ch);
     }
 
     public static boolean isAnyBin(char ch) {
@@ -78,6 +78,6 @@ public class CharTest {
     }
 
     public static boolean isAnyOct(char ch) {
-        return isDigit(ch) && !(ch == '8' || ch == '9');
+        return ch >= '0' && ch <= '7';
     }
 }

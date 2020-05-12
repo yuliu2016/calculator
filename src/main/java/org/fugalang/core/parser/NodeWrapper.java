@@ -68,7 +68,11 @@ public abstract class NodeWrapper implements TreeStringElem {
 
     @Override
     public String toString() {
-        return getOrCreateDelegate().simpleString();
+        return getOrCreateDelegate().toReprString();
+    }
+
+    public String toSimpleString() {
+        return getOrCreateDelegate().toSimpleString();
     }
 
     @Override

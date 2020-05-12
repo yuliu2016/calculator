@@ -3,6 +3,8 @@ package org.fugalang.core.grammar.psi;
 import org.fugalang.core.pprint.TreeStringBuilder;
 import org.fugalang.core.pprint.TreeStringElem;
 
+@SuppressWarnings("DeprecatedIsStillUsed")
+@Deprecated
 public class RepeatRule implements TreeStringElem {
     public final SubRule subRule;
     private final boolean tokenStar;

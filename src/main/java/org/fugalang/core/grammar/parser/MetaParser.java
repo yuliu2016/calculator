@@ -8,6 +8,8 @@ import org.fugalang.core.parser.ElementType;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("DeprecatedIsStillUsed")
+@Deprecated
 public class MetaParser {
     public static Rules parseRules(List<MetaToken> tokens) {
         var visitor = new MetaTokenVisitor(tokens);
