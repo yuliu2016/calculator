@@ -1,4 +1,4 @@
-package org.fugalang.core.pprint;
+package org.fugalang.core.parser;
 
 import java.util.List;
 
@@ -8,11 +8,15 @@ public interface TreeStringBuilder {
 
     TreeStringBuilder addString(String token);
 
-    TreeStringBuilder addUnquoted(String token);
-
     TreeStringBuilder addElem(TreeStringElem elem);
 
-    TreeStringBuilder addElems(List<? extends TreeStringElem> elems);
+    @Deprecated
+    default TreeStringBuilder addElems(List<? extends TreeStringElem> elems) {
+        for (var elem : elems) {
+            addElem(elem);
+        }
+        return this;
+    }
 
     TreeStringBuilder setOpenBracket(String openBracket);
 

@@ -1,8 +1,8 @@
 package org.fugalang.core.grammar.psi;
 
 import org.fugalang.core.grammar.util.FirstAndMore;
-import org.fugalang.core.pprint.TreeStringBuilder;
-import org.fugalang.core.pprint.TreeStringElem;
+import org.fugalang.core.parser.TreeStringBuilder;
+import org.fugalang.core.parser.TreeStringElem;
 
 import java.util.List;
 import java.util.Objects;

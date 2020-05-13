@@ -1,6 +1,6 @@
 package org.fugalang.core.parser;
 
-public interface ParseTreeNode {
+public interface ParseTreeNode extends TreeStringElem {
     ParseTreeNode getItem(int index);
 
     boolean isPresent();
@@ -20,4 +20,6 @@ public interface ParseTreeNode {
     boolean asBoolean();
 
     String asString();
+
+    boolean isLeaf();
 }

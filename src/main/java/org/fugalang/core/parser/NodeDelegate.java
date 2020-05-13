@@ -1,7 +1,5 @@
 package org.fugalang.core.parser;
 
-import org.fugalang.core.pprint.TreeStringBuilder;
-
 public interface NodeDelegate {
     void addChoice(Object choice);
 

@@ -1,7 +1,7 @@
 package org.fugalang.core.grammar.psi;
 
-import org.fugalang.core.pprint.TreeStringBuilder;
-import org.fugalang.core.pprint.TreeStringElem;
+import org.fugalang.core.parser.TreeStringBuilder;
+import org.fugalang.core.parser.TreeStringElem;
 
 @Deprecated
 public class SubRule implements TreeStringElem {

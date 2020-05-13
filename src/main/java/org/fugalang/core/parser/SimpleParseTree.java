@@ -98,8 +98,7 @@ public class SimpleParseTree implements ParseTree {
         }
         var current_frame = frame_deque.peek();
         if (current_frame.collection != null) {
-            // as opposed to a rule, collections should not
-            // contain a failed rule/node
+            // collections should not contain a failed rule/node
             if (node.isPresent()) {
                 current_frame.collection.add(node);
             }
@@ -133,7 +132,15 @@ public class SimpleParseTree implements ParseTree {
         if (current_frame.collection == null) {
             throw new ParserException("Mismatched exit collection");
         }
-        var node = ofCollection(current_frame.collection);
+
+        // empty lists are not considered a collection for string
+        // purposes. It is instead handled in ParseTreeNode#asCollection
+        // to return an empty iterable to the coller if the node
+        // is not present
+        var node = current_frame.collection.isEmpty() ?
+                IndexNode.NULL :
+                ofCollection(current_frame.collection);
+
         current_frame.collection = null;
         addNode(node);
     }

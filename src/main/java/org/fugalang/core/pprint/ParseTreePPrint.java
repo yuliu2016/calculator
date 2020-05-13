@@ -1,5 +1,8 @@
 package org.fugalang.core.pprint;
 
+import org.fugalang.core.parser.TreeStringBuilder;
+import org.fugalang.core.parser.TreeStringElem;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,25 +78,11 @@ public class ParseTreePPrint implements TreeStringBuilder {
     }
 
     @Override
-    public TreeStringBuilder addUnquoted(String token) {
-        elems.add(token);
-        return this;
-    }
-
-    @Override
     public TreeStringBuilder addElem(TreeStringElem elem) {
         var comp = new ParseTreePPrint(elem, indent, curr_indent);
         elems.add(comp.asString());
         isComplex = comp.isComplex || atLeastOneComp;
         atLeastOneComp = true;
-        return this;
-    }
-
-    @Override
-    public TreeStringBuilder addElems(List<? extends TreeStringElem> elems) {
-        for (var elem : elems) {
-            addElem(elem);
-        }
         return this;
     }
 

@@ -1,8 +1,9 @@
-package org.fugalang.core.parser;
+package org.fugalang.core.parser.wrapper;
 
+import org.fugalang.core.parser.ParserRule;
+import org.fugalang.core.parser.TreeStringBuilder;
+import org.fugalang.core.parser.TreeStringElem;
 import org.fugalang.core.pprint.ParseTreePPrint;
-import org.fugalang.core.pprint.TreeStringBuilder;
-import org.fugalang.core.pprint.TreeStringElem;
 
 @Deprecated(forRemoval = true)
 public abstract class DisjunctionRule implements TreeStringElem {

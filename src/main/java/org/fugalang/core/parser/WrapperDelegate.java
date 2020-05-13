@@ -1,8 +1,6 @@
 package org.fugalang.core.parser;
 
 import org.fugalang.core.pprint.ListStringElem;
-import org.fugalang.core.pprint.TreeStringBuilder;
-import org.fugalang.core.pprint.TreeStringElem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +10,6 @@ class WrapperDelegate implements NodeDelegate {
 
     // string
     private String repr = null;
-    private String str = null;
     private int index = 0;
 
     private boolean didBuildRule = false;

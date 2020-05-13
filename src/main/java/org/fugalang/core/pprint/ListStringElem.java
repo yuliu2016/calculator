@@ -1,5 +1,8 @@
 package org.fugalang.core.pprint;
 
+import org.fugalang.core.parser.TreeStringBuilder;
+import org.fugalang.core.parser.TreeStringElem;
+
 import java.util.List;
 
 public class ListStringElem implements TreeStringElem {

@@ -1,8 +1,6 @@
 package org.fugalang.core.parser;
 
 import org.fugalang.core.pprint.ParseTreePPrint;
-import org.fugalang.core.pprint.TreeStringBuilder;
-import org.fugalang.core.pprint.TreeStringElem;
 
 public abstract class NodeWrapper implements TreeStringElem {
 
@@ -78,5 +76,9 @@ public abstract class NodeWrapper implements TreeStringElem {
 
     public String prettyFormat(int indent) {
         return ParseTreePPrint.format(this, indent);
+    }
+
+    public ParseTreeNode getNode() {
+        return node;
     }
 }

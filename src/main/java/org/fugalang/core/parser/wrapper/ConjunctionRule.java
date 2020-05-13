@@ -1,8 +1,9 @@
-package org.fugalang.core.parser;
+package org.fugalang.core.parser.wrapper;
 
+import org.fugalang.core.parser.ParserRule;
+import org.fugalang.core.parser.TreeStringBuilder;
+import org.fugalang.core.parser.TreeStringElem;
 import org.fugalang.core.pprint.ParseTreePPrint;
-import org.fugalang.core.pprint.TreeStringBuilder;
-import org.fugalang.core.pprint.TreeStringElem;
 
 import java.util.ArrayList;
 import java.util.List;
