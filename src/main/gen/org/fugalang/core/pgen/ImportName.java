@@ -18,28 +18,16 @@ public final class ImportName extends NodeWrapper {
         super(RULE, node);
     }
 
-    @Override
-    protected void buildRule() {
-        addRequired(isTokenImport(), "import");
-        addRequired(dottedAsNames());
-    }
-
     public boolean isTokenImport() {
-        var element = getItem(0);
-        element.failIfAbsent();
-        return element.asBoolean();
+        return true;
     }
 
     public DottedAsNames dottedAsNames() {
-        var element = getItem(1);
-        element.failIfAbsent(DottedAsNames.RULE);
-        return DottedAsNames.of(element);
+        return DottedAsNames.of(getItem(1));
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 

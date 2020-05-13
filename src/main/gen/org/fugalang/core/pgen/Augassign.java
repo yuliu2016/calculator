@@ -18,92 +18,60 @@ public final class Augassign extends NodeWrapper {
         super(RULE, node);
     }
 
-    @Override
-    protected void buildRule() {
-        addChoice(isTokenPlusAssign(), "+=");
-        addChoice(isTokenMinusAssign(), "-=");
-        addChoice(isTokenTimesAssign(), "*=");
-        addChoice(isTokenMatrixTimesAssign(), "@=");
-        addChoice(isTokenDivAssign(), "/=");
-        addChoice(isTokenModulusAssign(), "%=");
-        addChoice(isTokenBitAndAssign(), "&=");
-        addChoice(isTokenBitOrAssign(), "|=");
-        addChoice(isTokenBitXorAssign(), "^=");
-        addChoice(isTokenLshiftAssign(), "<<=");
-        addChoice(isTokenRshiftAssign(), ">>=");
-        addChoice(isTokenPowerAssign(), "**=");
-        addChoice(isTokenFloorDivAssign(), "//=");
-    }
-
     public boolean isTokenPlusAssign() {
-        var element = getItem(0);
-        return element.asBoolean();
+        return getBoolean(0);
     }
 
     public boolean isTokenMinusAssign() {
-        var element = getItem(1);
-        return element.asBoolean();
+        return getBoolean(1);
     }
 
     public boolean isTokenTimesAssign() {
-        var element = getItem(2);
-        return element.asBoolean();
+        return getBoolean(2);
     }
 
     public boolean isTokenMatrixTimesAssign() {
-        var element = getItem(3);
-        return element.asBoolean();
+        return getBoolean(3);
     }
 
     public boolean isTokenDivAssign() {
-        var element = getItem(4);
-        return element.asBoolean();
+        return getBoolean(4);
     }
 
     public boolean isTokenModulusAssign() {
-        var element = getItem(5);
-        return element.asBoolean();
+        return getBoolean(5);
     }
 
     public boolean isTokenBitAndAssign() {
-        var element = getItem(6);
-        return element.asBoolean();
+        return getBoolean(6);
     }
 
     public boolean isTokenBitOrAssign() {
-        var element = getItem(7);
-        return element.asBoolean();
+        return getBoolean(7);
     }
 
     public boolean isTokenBitXorAssign() {
-        var element = getItem(8);
-        return element.asBoolean();
+        return getBoolean(8);
     }
 
     public boolean isTokenLshiftAssign() {
-        var element = getItem(9);
-        return element.asBoolean();
+        return getBoolean(9);
     }
 
     public boolean isTokenRshiftAssign() {
-        var element = getItem(10);
-        return element.asBoolean();
+        return getBoolean(10);
     }
 
     public boolean isTokenPowerAssign() {
-        var element = getItem(11);
-        return element.asBoolean();
+        return getBoolean(11);
     }
 
     public boolean isTokenFloorDivAssign() {
-        var element = getItem(12);
-        return element.asBoolean();
+        return getBoolean(12);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 

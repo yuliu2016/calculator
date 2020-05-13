@@ -18,102 +18,56 @@ public final class CompOp extends NodeWrapper {
         super(RULE, node);
     }
 
-    @Override
-    protected void buildRule() {
-        addChoice(isTokenLess(), "<");
-        addChoice(isTokenGreater(), ">");
-        addChoice(isTokenEqual(), "==");
-        addChoice(isTokenMoreEqual(), ">=");
-        addChoice(isTokenLessEqual(), "<=");
-        addChoice(isTokenNequal(), "!=");
-        addChoice(isTokenIn(), "in");
-        addChoice(compOp8OrNull());
-        addChoice(isTokenIs(), "is");
-        addChoice(compOp10OrNull());
-    }
-
     public boolean isTokenLess() {
-        var element = getItem(0);
-        return element.asBoolean();
+        return getBoolean(0);
     }
 
     public boolean isTokenGreater() {
-        var element = getItem(1);
-        return element.asBoolean();
+        return getBoolean(1);
     }
 
     public boolean isTokenEqual() {
-        var element = getItem(2);
-        return element.asBoolean();
+        return getBoolean(2);
     }
 
     public boolean isTokenMoreEqual() {
-        var element = getItem(3);
-        return element.asBoolean();
+        return getBoolean(3);
     }
 
     public boolean isTokenLessEqual() {
-        var element = getItem(4);
-        return element.asBoolean();
+        return getBoolean(4);
     }
 
     public boolean isTokenNequal() {
-        var element = getItem(5);
-        return element.asBoolean();
+        return getBoolean(5);
     }
 
     public boolean isTokenIn() {
-        var element = getItem(6);
-        return element.asBoolean();
+        return getBoolean(6);
     }
 
     public CompOp8 compOp8() {
-        var element = getItem(7);
-        element.failIfAbsent(CompOp8.RULE);
-        return CompOp8.of(element);
-    }
-
-    public CompOp8 compOp8OrNull() {
-        var element = getItem(7);
-        if (!element.isPresent(CompOp8.RULE)) {
-            return null;
-        }
-        return CompOp8.of(element);
+        return CompOp8.of(getItem(7));
     }
 
     public boolean hasCompOp8() {
-        var element = getItem(7);
-        return element.isPresent(CompOp8.RULE);
+        return hasItemOfRule(7, CompOp8.RULE);
     }
 
     public boolean isTokenIs() {
-        var element = getItem(8);
-        return element.asBoolean();
+        return getBoolean(8);
     }
 
     public CompOp10 compOp10() {
-        var element = getItem(9);
-        element.failIfAbsent(CompOp10.RULE);
-        return CompOp10.of(element);
-    }
-
-    public CompOp10 compOp10OrNull() {
-        var element = getItem(9);
-        if (!element.isPresent(CompOp10.RULE)) {
-            return null;
-        }
-        return CompOp10.of(element);
+        return CompOp10.of(getItem(9));
     }
 
     public boolean hasCompOp10() {
-        var element = getItem(9);
-        return element.isPresent(CompOp10.RULE);
+        return hasItemOfRule(9, CompOp10.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
@@ -148,28 +102,16 @@ public final class CompOp extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addRequired(isTokenNot(), "not");
-            addRequired(isTokenIn(), "in");
-        }
-
         public boolean isTokenNot() {
-            var element = getItem(0);
-            element.failIfAbsent();
-            return element.asBoolean();
+            return true;
         }
 
         public boolean isTokenIn() {
-            var element = getItem(1);
-            element.failIfAbsent();
-            return element.asBoolean();
+            return true;
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
@@ -197,28 +139,16 @@ public final class CompOp extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addRequired(isTokenIs(), "is");
-            addRequired(isTokenNot(), "not");
-        }
-
         public boolean isTokenIs() {
-            var element = getItem(0);
-            element.failIfAbsent();
-            return element.asBoolean();
+            return true;
         }
 
         public boolean isTokenNot() {
-            var element = getItem(1);
-            element.failIfAbsent();
-            return element.asBoolean();
+            return true;
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 

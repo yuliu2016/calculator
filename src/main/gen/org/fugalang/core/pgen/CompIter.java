@@ -18,54 +18,24 @@ public final class CompIter extends NodeWrapper {
         super(RULE, node);
     }
 
-    @Override
-    protected void buildRule() {
-        addChoice(compForOrNull());
-        addChoice(compIfOrNull());
-    }
-
     public CompFor compFor() {
-        var element = getItem(0);
-        element.failIfAbsent(CompFor.RULE);
-        return CompFor.of(element);
-    }
-
-    public CompFor compForOrNull() {
-        var element = getItem(0);
-        if (!element.isPresent(CompFor.RULE)) {
-            return null;
-        }
-        return CompFor.of(element);
+        return CompFor.of(getItem(0));
     }
 
     public boolean hasCompFor() {
-        var element = getItem(0);
-        return element.isPresent(CompFor.RULE);
+        return hasItemOfRule(0, CompFor.RULE);
     }
 
     public CompIf compIf() {
-        var element = getItem(1);
-        element.failIfAbsent(CompIf.RULE);
-        return CompIf.of(element);
-    }
-
-    public CompIf compIfOrNull() {
-        var element = getItem(1);
-        if (!element.isPresent(CompIf.RULE)) {
-            return null;
-        }
-        return CompIf.of(element);
+        return CompIf.of(getItem(1));
     }
 
     public boolean hasCompIf() {
-        var element = getItem(1);
-        return element.isPresent(CompIf.RULE);
+        return hasItemOfRule(1, CompIf.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 

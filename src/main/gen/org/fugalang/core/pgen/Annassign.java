@@ -18,48 +18,24 @@ public final class Annassign extends NodeWrapper {
         super(RULE, node);
     }
 
-    @Override
-    protected void buildRule() {
-        addRequired(isTokenColon(), ":");
-        addRequired(expr());
-        addOptional(annassign3OrNull());
-    }
-
     public boolean isTokenColon() {
-        var element = getItem(0);
-        element.failIfAbsent();
-        return element.asBoolean();
+        return true;
     }
 
     public Expr expr() {
-        var element = getItem(1);
-        element.failIfAbsent(Expr.RULE);
-        return Expr.of(element);
+        return Expr.of(getItem(1));
     }
 
     public Annassign3 annassign3() {
-        var element = getItem(2);
-        element.failIfAbsent(Annassign3.RULE);
-        return Annassign3.of(element);
-    }
-
-    public Annassign3 annassign3OrNull() {
-        var element = getItem(2);
-        if (!element.isPresent(Annassign3.RULE)) {
-            return null;
-        }
-        return Annassign3.of(element);
+        return Annassign3.of(getItem(2));
     }
 
     public boolean hasAnnassign3() {
-        var element = getItem(2);
-        return element.isPresent(Annassign3.RULE);
+        return hasItemOfRule(2, Annassign3.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
@@ -87,28 +63,16 @@ public final class Annassign extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addRequired(isTokenAssign(), "=");
-            addRequired(exprlistStar());
-        }
-
         public boolean isTokenAssign() {
-            var element = getItem(0);
-            element.failIfAbsent();
-            return element.asBoolean();
+            return true;
         }
 
         public ExprlistStar exprlistStar() {
-            var element = getItem(1);
-            element.failIfAbsent(ExprlistStar.RULE);
-            return ExprlistStar.of(element);
+            return ExprlistStar.of(getItem(1));
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 

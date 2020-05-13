@@ -3,8 +3,6 @@ package org.fugalang.core.grammar.pgen;
 import org.fugalang.core.grammar.token.MetaTokenType;
 import org.fugalang.core.parser.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -23,40 +21,16 @@ public final class OrRule extends NodeWrapper {
         super(RULE, node);
     }
 
-    private List<OrRule2> orRule2List;
-
-    @Override
-    protected void buildRule() {
-        addRequired(andRule());
-        addRequired(orRule2List());
-    }
-
     public AndRule andRule() {
-        var element = getItem(0);
-        element.failIfAbsent(AndRule.RULE);
-        return AndRule.of(element);
+        return AndRule.of(getItem(0));
     }
 
     public List<OrRule2> orRule2List() {
-        if (orRule2List != null) {
-            return orRule2List;
-        }
-        List<OrRule2> result = null;
-        var element = getItem(1);
-        for (var node : element.asCollection()) {
-            if (result == null) {
-                result = new ArrayList<>();
-            }
-            result.add(OrRule2.of(node));
-        }
-        orRule2List = result == null ? Collections.emptyList() : result;
-        return orRule2List;
+        return getList(1, OrRule2::of);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
@@ -98,28 +72,16 @@ public final class OrRule extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addRequired(or());
-            addRequired(andRule());
-        }
-
         public String or() {
-            var element = getItem(0);
-            element.failIfAbsent(MetaTokenType.OR);
-            return element.asString();
+            return getItemOfType(0,MetaTokenType.OR);
         }
 
         public AndRule andRule() {
-            var element = getItem(1);
-            element.failIfAbsent(AndRule.RULE);
-            return AndRule.of(element);
+            return AndRule.of(getItem(1));
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 

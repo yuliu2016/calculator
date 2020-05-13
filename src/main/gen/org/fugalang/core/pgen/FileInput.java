@@ -3,8 +3,6 @@ package org.fugalang.core.pgen;
 import org.fugalang.core.parser.*;
 import org.fugalang.core.token.TokenType;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -23,40 +21,16 @@ public final class FileInput extends NodeWrapper {
         super(RULE, node);
     }
 
-    private List<FileInput1> fileInput1List;
-
-    @Override
-    protected void buildRule() {
-        addRequired(fileInput1List());
-        addRequired(endmarker());
-    }
-
     public List<FileInput1> fileInput1List() {
-        if (fileInput1List != null) {
-            return fileInput1List;
-        }
-        List<FileInput1> result = null;
-        var element = getItem(0);
-        for (var node : element.asCollection()) {
-            if (result == null) {
-                result = new ArrayList<>();
-            }
-            result.add(FileInput1.of(node));
-        }
-        fileInput1List = result == null ? Collections.emptyList() : result;
-        return fileInput1List;
+        return getList(0, FileInput1::of);
     }
 
     public String endmarker() {
-        var element = getItem(1);
-        element.failIfAbsent(TokenType.ENDMARKER);
-        return element.asString();
+        return getItemOfType(1,TokenType.ENDMARKER);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
@@ -98,54 +72,24 @@ public final class FileInput extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addChoice(newlineOrNull());
-            addChoice(stmtOrNull());
-        }
-
         public String newline() {
-            var element = getItem(0);
-            element.failIfAbsent(TokenType.NEWLINE);
-            return element.asString();
-        }
-
-        public String newlineOrNull() {
-            var element = getItem(0);
-            if (!element.isPresent(TokenType.NEWLINE)) {
-                return null;
-            }
-            return element.asString();
+            return getItemOfType(0,TokenType.NEWLINE);
         }
 
         public boolean hasNewline() {
-            var element = getItem(0);
-            return element.isPresent(TokenType.NEWLINE);
+            return hasItemOfType(0, TokenType.NEWLINE);
         }
 
         public Stmt stmt() {
-            var element = getItem(1);
-            element.failIfAbsent(Stmt.RULE);
-            return Stmt.of(element);
-        }
-
-        public Stmt stmtOrNull() {
-            var element = getItem(1);
-            if (!element.isPresent(Stmt.RULE)) {
-                return null;
-            }
-            return Stmt.of(element);
+            return Stmt.of(getItem(1));
         }
 
         public boolean hasStmt() {
-            var element = getItem(1);
-            return element.isPresent(Stmt.RULE);
+            return hasItemOfRule(1, Stmt.RULE);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 

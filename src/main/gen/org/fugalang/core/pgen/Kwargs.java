@@ -18,34 +18,20 @@ public final class Kwargs extends NodeWrapper {
         super(RULE, node);
     }
 
-    @Override
-    protected void buildRule() {
-        addRequired(isTokenPower(), "**");
-        addRequired(typedArg());
-        addOptional(isTokenComma(), ",");
-    }
-
     public boolean isTokenPower() {
-        var element = getItem(0);
-        element.failIfAbsent();
-        return element.asBoolean();
+        return true;
     }
 
     public TypedArg typedArg() {
-        var element = getItem(1);
-        element.failIfAbsent(TypedArg.RULE);
-        return TypedArg.of(element);
+        return TypedArg.of(getItem(1));
     }
 
     public boolean isTokenComma() {
-        var element = getItem(2);
-        return element.asBoolean();
+        return getBoolean(2);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 

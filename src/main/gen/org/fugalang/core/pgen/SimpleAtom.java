@@ -19,92 +19,44 @@ public final class SimpleAtom extends NodeWrapper {
         super(RULE, node);
     }
 
-    @Override
-    protected void buildRule() {
-        addChoice(nameOrNull());
-        addChoice(numberOrNull());
-        addChoice(stringOrNull());
-        addChoice(isTokenNone(), "None");
-        addChoice(isTokenTrue(), "True");
-        addChoice(isTokenFalse(), "False");
-    }
-
     public String name() {
-        var element = getItem(0);
-        element.failIfAbsent(TokenType.NAME);
-        return element.asString();
-    }
-
-    public String nameOrNull() {
-        var element = getItem(0);
-        if (!element.isPresent(TokenType.NAME)) {
-            return null;
-        }
-        return element.asString();
+        return getItemOfType(0,TokenType.NAME);
     }
 
     public boolean hasName() {
-        var element = getItem(0);
-        return element.isPresent(TokenType.NAME);
+        return hasItemOfType(0, TokenType.NAME);
     }
 
     public String number() {
-        var element = getItem(1);
-        element.failIfAbsent(TokenType.NUMBER);
-        return element.asString();
-    }
-
-    public String numberOrNull() {
-        var element = getItem(1);
-        if (!element.isPresent(TokenType.NUMBER)) {
-            return null;
-        }
-        return element.asString();
+        return getItemOfType(1,TokenType.NUMBER);
     }
 
     public boolean hasNumber() {
-        var element = getItem(1);
-        return element.isPresent(TokenType.NUMBER);
+        return hasItemOfType(1, TokenType.NUMBER);
     }
 
     public String string() {
-        var element = getItem(2);
-        element.failIfAbsent(TokenType.STRING);
-        return element.asString();
-    }
-
-    public String stringOrNull() {
-        var element = getItem(2);
-        if (!element.isPresent(TokenType.STRING)) {
-            return null;
-        }
-        return element.asString();
+        return getItemOfType(2,TokenType.STRING);
     }
 
     public boolean hasString() {
-        var element = getItem(2);
-        return element.isPresent(TokenType.STRING);
+        return hasItemOfType(2, TokenType.STRING);
     }
 
     public boolean isTokenNone() {
-        var element = getItem(3);
-        return element.asBoolean();
+        return getBoolean(3);
     }
 
     public boolean isTokenTrue() {
-        var element = getItem(4);
-        return element.asBoolean();
+        return getBoolean(4);
     }
 
     public boolean isTokenFalse() {
-        var element = getItem(5);
-        return element.asBoolean();
+        return getBoolean(5);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 

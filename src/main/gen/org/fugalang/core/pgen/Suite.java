@@ -18,54 +18,24 @@ public final class Suite extends NodeWrapper {
         super(RULE, node);
     }
 
-    @Override
-    protected void buildRule() {
-        addChoice(suite1OrNull());
-        addChoice(blockSuiteOrNull());
-    }
-
     public Suite1 suite1() {
-        var element = getItem(0);
-        element.failIfAbsent(Suite1.RULE);
-        return Suite1.of(element);
-    }
-
-    public Suite1 suite1OrNull() {
-        var element = getItem(0);
-        if (!element.isPresent(Suite1.RULE)) {
-            return null;
-        }
-        return Suite1.of(element);
+        return Suite1.of(getItem(0));
     }
 
     public boolean hasSuite1() {
-        var element = getItem(0);
-        return element.isPresent(Suite1.RULE);
+        return hasItemOfRule(0, Suite1.RULE);
     }
 
     public BlockSuite blockSuite() {
-        var element = getItem(1);
-        element.failIfAbsent(BlockSuite.RULE);
-        return BlockSuite.of(element);
-    }
-
-    public BlockSuite blockSuiteOrNull() {
-        var element = getItem(1);
-        if (!element.isPresent(BlockSuite.RULE)) {
-            return null;
-        }
-        return BlockSuite.of(element);
+        return BlockSuite.of(getItem(1));
     }
 
     public boolean hasBlockSuite() {
-        var element = getItem(1);
-        return element.isPresent(BlockSuite.RULE);
+        return hasItemOfRule(1, BlockSuite.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
@@ -92,28 +62,16 @@ public final class Suite extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addRequired(isTokenColon(), ":");
-            addRequired(simpleStmt());
-        }
-
         public boolean isTokenColon() {
-            var element = getItem(0);
-            element.failIfAbsent();
-            return element.asBoolean();
+            return true;
         }
 
         public SimpleStmt simpleStmt() {
-            var element = getItem(1);
-            element.failIfAbsent(SimpleStmt.RULE);
-            return SimpleStmt.of(element);
+            return SimpleStmt.of(getItem(1));
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 

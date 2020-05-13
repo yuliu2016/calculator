@@ -18,134 +18,56 @@ public final class SmallStmt extends NodeWrapper {
         super(RULE, node);
     }
 
-    @Override
-    protected void buildRule() {
-        addChoice(delStmtOrNull());
-        addChoice(passStmtOrNull());
-        addChoice(flowStmtOrNull());
-        addChoice(importStmtOrNull());
-        addChoice(assertStmtOrNull());
-        addChoice(assignmentOrNull());
-    }
-
     public DelStmt delStmt() {
-        var element = getItem(0);
-        element.failIfAbsent(DelStmt.RULE);
-        return DelStmt.of(element);
-    }
-
-    public DelStmt delStmtOrNull() {
-        var element = getItem(0);
-        if (!element.isPresent(DelStmt.RULE)) {
-            return null;
-        }
-        return DelStmt.of(element);
+        return DelStmt.of(getItem(0));
     }
 
     public boolean hasDelStmt() {
-        var element = getItem(0);
-        return element.isPresent(DelStmt.RULE);
+        return hasItemOfRule(0, DelStmt.RULE);
     }
 
     public PassStmt passStmt() {
-        var element = getItem(1);
-        element.failIfAbsent(PassStmt.RULE);
-        return PassStmt.of(element);
-    }
-
-    public PassStmt passStmtOrNull() {
-        var element = getItem(1);
-        if (!element.isPresent(PassStmt.RULE)) {
-            return null;
-        }
-        return PassStmt.of(element);
+        return PassStmt.of(getItem(1));
     }
 
     public boolean hasPassStmt() {
-        var element = getItem(1);
-        return element.isPresent(PassStmt.RULE);
+        return hasItemOfRule(1, PassStmt.RULE);
     }
 
     public FlowStmt flowStmt() {
-        var element = getItem(2);
-        element.failIfAbsent(FlowStmt.RULE);
-        return FlowStmt.of(element);
-    }
-
-    public FlowStmt flowStmtOrNull() {
-        var element = getItem(2);
-        if (!element.isPresent(FlowStmt.RULE)) {
-            return null;
-        }
-        return FlowStmt.of(element);
+        return FlowStmt.of(getItem(2));
     }
 
     public boolean hasFlowStmt() {
-        var element = getItem(2);
-        return element.isPresent(FlowStmt.RULE);
+        return hasItemOfRule(2, FlowStmt.RULE);
     }
 
     public ImportStmt importStmt() {
-        var element = getItem(3);
-        element.failIfAbsent(ImportStmt.RULE);
-        return ImportStmt.of(element);
-    }
-
-    public ImportStmt importStmtOrNull() {
-        var element = getItem(3);
-        if (!element.isPresent(ImportStmt.RULE)) {
-            return null;
-        }
-        return ImportStmt.of(element);
+        return ImportStmt.of(getItem(3));
     }
 
     public boolean hasImportStmt() {
-        var element = getItem(3);
-        return element.isPresent(ImportStmt.RULE);
+        return hasItemOfRule(3, ImportStmt.RULE);
     }
 
     public AssertStmt assertStmt() {
-        var element = getItem(4);
-        element.failIfAbsent(AssertStmt.RULE);
-        return AssertStmt.of(element);
-    }
-
-    public AssertStmt assertStmtOrNull() {
-        var element = getItem(4);
-        if (!element.isPresent(AssertStmt.RULE)) {
-            return null;
-        }
-        return AssertStmt.of(element);
+        return AssertStmt.of(getItem(4));
     }
 
     public boolean hasAssertStmt() {
-        var element = getItem(4);
-        return element.isPresent(AssertStmt.RULE);
+        return hasItemOfRule(4, AssertStmt.RULE);
     }
 
     public Assignment assignment() {
-        var element = getItem(5);
-        element.failIfAbsent(Assignment.RULE);
-        return Assignment.of(element);
-    }
-
-    public Assignment assignmentOrNull() {
-        var element = getItem(5);
-        if (!element.isPresent(Assignment.RULE)) {
-            return null;
-        }
-        return Assignment.of(element);
+        return Assignment.of(getItem(5));
     }
 
     public boolean hasAssignment() {
-        var element = getItem(5);
-        return element.isPresent(Assignment.RULE);
+        return hasItemOfRule(5, Assignment.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 

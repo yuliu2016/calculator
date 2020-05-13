@@ -18,74 +18,32 @@ public final class Expr extends NodeWrapper {
         super(RULE, node);
     }
 
-    @Override
-    protected void buildRule() {
-        addChoice(expr1OrNull());
-        addChoice(funcdefOrNull());
-        addChoice(disjunctionOrNull());
-    }
-
     public Expr1 expr1() {
-        var element = getItem(0);
-        element.failIfAbsent(Expr1.RULE);
-        return Expr1.of(element);
-    }
-
-    public Expr1 expr1OrNull() {
-        var element = getItem(0);
-        if (!element.isPresent(Expr1.RULE)) {
-            return null;
-        }
-        return Expr1.of(element);
+        return Expr1.of(getItem(0));
     }
 
     public boolean hasExpr1() {
-        var element = getItem(0);
-        return element.isPresent(Expr1.RULE);
+        return hasItemOfRule(0, Expr1.RULE);
     }
 
     public Funcdef funcdef() {
-        var element = getItem(1);
-        element.failIfAbsent(Funcdef.RULE);
-        return Funcdef.of(element);
-    }
-
-    public Funcdef funcdefOrNull() {
-        var element = getItem(1);
-        if (!element.isPresent(Funcdef.RULE)) {
-            return null;
-        }
-        return Funcdef.of(element);
+        return Funcdef.of(getItem(1));
     }
 
     public boolean hasFuncdef() {
-        var element = getItem(1);
-        return element.isPresent(Funcdef.RULE);
+        return hasItemOfRule(1, Funcdef.RULE);
     }
 
     public Disjunction disjunction() {
-        var element = getItem(2);
-        element.failIfAbsent(Disjunction.RULE);
-        return Disjunction.of(element);
-    }
-
-    public Disjunction disjunctionOrNull() {
-        var element = getItem(2);
-        if (!element.isPresent(Disjunction.RULE)) {
-            return null;
-        }
-        return Disjunction.of(element);
+        return Disjunction.of(getItem(2));
     }
 
     public boolean hasDisjunction() {
-        var element = getItem(2);
-        return element.isPresent(Disjunction.RULE);
+        return hasItemOfRule(2, Disjunction.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
@@ -113,56 +71,32 @@ public final class Expr extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addRequired(isTokenIf(), "if");
-            addRequired(disjunction());
-            addRequired(isTokenTernery(), "?");
-            addRequired(disjunction1());
-            addRequired(isTokenElse(), "else");
-            addRequired(expr());
-        }
-
         public boolean isTokenIf() {
-            var element = getItem(0);
-            element.failIfAbsent();
-            return element.asBoolean();
+            return true;
         }
 
         public Disjunction disjunction() {
-            var element = getItem(1);
-            element.failIfAbsent(Disjunction.RULE);
-            return Disjunction.of(element);
+            return Disjunction.of(getItem(1));
         }
 
         public boolean isTokenTernery() {
-            var element = getItem(2);
-            element.failIfAbsent();
-            return element.asBoolean();
+            return true;
         }
 
         public Disjunction disjunction1() {
-            var element = getItem(3);
-            element.failIfAbsent(Disjunction.RULE);
-            return Disjunction.of(element);
+            return Disjunction.of(getItem(3));
         }
 
         public boolean isTokenElse() {
-            var element = getItem(4);
-            element.failIfAbsent();
-            return element.asBoolean();
+            return true;
         }
 
         public Expr expr() {
-            var element = getItem(5);
-            element.failIfAbsent(Expr.RULE);
-            return Expr.of(element);
+            return Expr.of(getItem(5));
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 

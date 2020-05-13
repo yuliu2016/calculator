@@ -18,54 +18,24 @@ public final class Factor extends NodeWrapper {
         super(RULE, node);
     }
 
-    @Override
-    protected void buildRule() {
-        addChoice(factor1OrNull());
-        addChoice(powerOrNull());
-    }
-
     public Factor1 factor1() {
-        var element = getItem(0);
-        element.failIfAbsent(Factor1.RULE);
-        return Factor1.of(element);
-    }
-
-    public Factor1 factor1OrNull() {
-        var element = getItem(0);
-        if (!element.isPresent(Factor1.RULE)) {
-            return null;
-        }
-        return Factor1.of(element);
+        return Factor1.of(getItem(0));
     }
 
     public boolean hasFactor1() {
-        var element = getItem(0);
-        return element.isPresent(Factor1.RULE);
+        return hasItemOfRule(0, Factor1.RULE);
     }
 
     public Power power() {
-        var element = getItem(1);
-        element.failIfAbsent(Power.RULE);
-        return Power.of(element);
-    }
-
-    public Power powerOrNull() {
-        var element = getItem(1);
-        if (!element.isPresent(Power.RULE)) {
-            return null;
-        }
-        return Power.of(element);
+        return Power.of(getItem(1));
     }
 
     public boolean hasPower() {
-        var element = getItem(1);
-        return element.isPresent(Power.RULE);
+        return hasItemOfRule(1, Power.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
@@ -92,28 +62,16 @@ public final class Factor extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addRequired(factor11());
-            addRequired(factor());
-        }
-
         public Factor11 factor11() {
-            var element = getItem(0);
-            element.failIfAbsent(Factor11.RULE);
-            return Factor11.of(element);
+            return Factor11.of(getItem(0));
         }
 
         public Factor factor() {
-            var element = getItem(1);
-            element.failIfAbsent(Factor.RULE);
-            return Factor.of(element);
+            return Factor.of(getItem(1));
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
@@ -141,32 +99,20 @@ public final class Factor extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addChoice(isTokenPlus(), "+");
-            addChoice(isTokenMinus(), "-");
-            addChoice(isTokenBitNot(), "~");
-        }
-
         public boolean isTokenPlus() {
-            var element = getItem(0);
-            return element.asBoolean();
+            return getBoolean(0);
         }
 
         public boolean isTokenMinus() {
-            var element = getItem(1);
-            return element.asBoolean();
+            return getBoolean(1);
         }
 
         public boolean isTokenBitNot() {
-            var element = getItem(2);
-            return element.asBoolean();
+            return getBoolean(2);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 

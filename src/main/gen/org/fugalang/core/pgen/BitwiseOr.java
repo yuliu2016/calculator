@@ -2,8 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -22,40 +20,16 @@ public final class BitwiseOr extends NodeWrapper {
         super(RULE, node);
     }
 
-    private List<BitwiseOr2> bitwiseOr2List;
-
-    @Override
-    protected void buildRule() {
-        addRequired(bitwiseXor());
-        addRequired(bitwiseOr2List());
-    }
-
     public BitwiseXor bitwiseXor() {
-        var element = getItem(0);
-        element.failIfAbsent(BitwiseXor.RULE);
-        return BitwiseXor.of(element);
+        return BitwiseXor.of(getItem(0));
     }
 
     public List<BitwiseOr2> bitwiseOr2List() {
-        if (bitwiseOr2List != null) {
-            return bitwiseOr2List;
-        }
-        List<BitwiseOr2> result = null;
-        var element = getItem(1);
-        for (var node : element.asCollection()) {
-            if (result == null) {
-                result = new ArrayList<>();
-            }
-            result.add(BitwiseOr2.of(node));
-        }
-        bitwiseOr2List = result == null ? Collections.emptyList() : result;
-        return bitwiseOr2List;
+        return getList(1, BitwiseOr2::of);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
@@ -97,28 +71,16 @@ public final class BitwiseOr extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addRequired(isTokenBitOr(), "|");
-            addRequired(bitwiseXor());
-        }
-
         public boolean isTokenBitOr() {
-            var element = getItem(0);
-            element.failIfAbsent();
-            return element.asBoolean();
+            return true;
         }
 
         public BitwiseXor bitwiseXor() {
-            var element = getItem(1);
-            element.failIfAbsent(BitwiseXor.RULE);
-            return BitwiseXor.of(element);
+            return BitwiseXor.of(getItem(1));
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 

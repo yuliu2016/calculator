@@ -19,41 +19,20 @@ public final class ExceptClause extends NodeWrapper {
         super(RULE, node);
     }
 
-    @Override
-    protected void buildRule() {
-        addRequired(isTokenExcept(), "except");
-        addOptional(exceptClause2OrNull());
-    }
-
     public boolean isTokenExcept() {
-        var element = getItem(0);
-        element.failIfAbsent();
-        return element.asBoolean();
+        return true;
     }
 
     public ExceptClause2 exceptClause2() {
-        var element = getItem(1);
-        element.failIfAbsent(ExceptClause2.RULE);
-        return ExceptClause2.of(element);
-    }
-
-    public ExceptClause2 exceptClause2OrNull() {
-        var element = getItem(1);
-        if (!element.isPresent(ExceptClause2.RULE)) {
-            return null;
-        }
-        return ExceptClause2.of(element);
+        return ExceptClause2.of(getItem(1));
     }
 
     public boolean hasExceptClause2() {
-        var element = getItem(1);
-        return element.isPresent(ExceptClause2.RULE);
+        return hasItemOfRule(1, ExceptClause2.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
@@ -80,41 +59,20 @@ public final class ExceptClause extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addRequired(expr());
-            addOptional(exceptClause22OrNull());
-        }
-
         public Expr expr() {
-            var element = getItem(0);
-            element.failIfAbsent(Expr.RULE);
-            return Expr.of(element);
+            return Expr.of(getItem(0));
         }
 
         public ExceptClause22 exceptClause22() {
-            var element = getItem(1);
-            element.failIfAbsent(ExceptClause22.RULE);
-            return ExceptClause22.of(element);
-        }
-
-        public ExceptClause22 exceptClause22OrNull() {
-            var element = getItem(1);
-            if (!element.isPresent(ExceptClause22.RULE)) {
-                return null;
-            }
-            return ExceptClause22.of(element);
+            return ExceptClause22.of(getItem(1));
         }
 
         public boolean hasExceptClause22() {
-            var element = getItem(1);
-            return element.isPresent(ExceptClause22.RULE);
+            return hasItemOfRule(1, ExceptClause22.RULE);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
@@ -142,28 +100,16 @@ public final class ExceptClause extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addRequired(isTokenAs(), "as");
-            addRequired(name());
-        }
-
         public boolean isTokenAs() {
-            var element = getItem(0);
-            element.failIfAbsent();
-            return element.asBoolean();
+            return true;
         }
 
         public String name() {
-            var element = getItem(1);
-            element.failIfAbsent(TokenType.NAME);
-            return element.asString();
+            return getItemOfType(1,TokenType.NAME);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 

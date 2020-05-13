@@ -2,8 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -22,40 +20,16 @@ public final class Sum extends NodeWrapper {
         super(RULE, node);
     }
 
-    private List<Sum2> sum2List;
-
-    @Override
-    protected void buildRule() {
-        addRequired(term());
-        addRequired(sum2List());
-    }
-
     public Term term() {
-        var element = getItem(0);
-        element.failIfAbsent(Term.RULE);
-        return Term.of(element);
+        return Term.of(getItem(0));
     }
 
     public List<Sum2> sum2List() {
-        if (sum2List != null) {
-            return sum2List;
-        }
-        List<Sum2> result = null;
-        var element = getItem(1);
-        for (var node : element.asCollection()) {
-            if (result == null) {
-                result = new ArrayList<>();
-            }
-            result.add(Sum2.of(node));
-        }
-        sum2List = result == null ? Collections.emptyList() : result;
-        return sum2List;
+        return getList(1, Sum2::of);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
@@ -97,28 +71,16 @@ public final class Sum extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addRequired(sum21());
-            addRequired(term());
-        }
-
         public Sum21 sum21() {
-            var element = getItem(0);
-            element.failIfAbsent(Sum21.RULE);
-            return Sum21.of(element);
+            return Sum21.of(getItem(0));
         }
 
         public Term term() {
-            var element = getItem(1);
-            element.failIfAbsent(Term.RULE);
-            return Term.of(element);
+            return Term.of(getItem(1));
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
@@ -146,26 +108,16 @@ public final class Sum extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addChoice(isTokenPlus(), "+");
-            addChoice(isTokenMinus(), "-");
-        }
-
         public boolean isTokenPlus() {
-            var element = getItem(0);
-            return element.asBoolean();
+            return getBoolean(0);
         }
 
         public boolean isTokenMinus() {
-            var element = getItem(1);
-            return element.asBoolean();
+            return getBoolean(1);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 

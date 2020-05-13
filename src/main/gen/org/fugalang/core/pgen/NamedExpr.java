@@ -19,54 +19,24 @@ public final class NamedExpr extends NodeWrapper {
         super(RULE, node);
     }
 
-    @Override
-    protected void buildRule() {
-        addChoice(namedExpr1OrNull());
-        addChoice(exprOrNull());
-    }
-
     public NamedExpr1 namedExpr1() {
-        var element = getItem(0);
-        element.failIfAbsent(NamedExpr1.RULE);
-        return NamedExpr1.of(element);
-    }
-
-    public NamedExpr1 namedExpr1OrNull() {
-        var element = getItem(0);
-        if (!element.isPresent(NamedExpr1.RULE)) {
-            return null;
-        }
-        return NamedExpr1.of(element);
+        return NamedExpr1.of(getItem(0));
     }
 
     public boolean hasNamedExpr1() {
-        var element = getItem(0);
-        return element.isPresent(NamedExpr1.RULE);
+        return hasItemOfRule(0, NamedExpr1.RULE);
     }
 
     public Expr expr() {
-        var element = getItem(1);
-        element.failIfAbsent(Expr.RULE);
-        return Expr.of(element);
-    }
-
-    public Expr exprOrNull() {
-        var element = getItem(1);
-        if (!element.isPresent(Expr.RULE)) {
-            return null;
-        }
-        return Expr.of(element);
+        return Expr.of(getItem(1));
     }
 
     public boolean hasExpr() {
-        var element = getItem(1);
-        return element.isPresent(Expr.RULE);
+        return hasItemOfRule(1, Expr.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
@@ -93,35 +63,20 @@ public final class NamedExpr extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addRequired(name());
-            addRequired(isTokenAsgnExpr(), ":=");
-            addRequired(expr());
-        }
-
         public String name() {
-            var element = getItem(0);
-            element.failIfAbsent(TokenType.NAME);
-            return element.asString();
+            return getItemOfType(0,TokenType.NAME);
         }
 
         public boolean isTokenAsgnExpr() {
-            var element = getItem(1);
-            element.failIfAbsent();
-            return element.asBoolean();
+            return true;
         }
 
         public Expr expr() {
-            var element = getItem(2);
-            element.failIfAbsent(Expr.RULE);
-            return Expr.of(element);
+            return Expr.of(getItem(2));
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 

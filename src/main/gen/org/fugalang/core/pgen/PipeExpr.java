@@ -18,54 +18,24 @@ public final class PipeExpr extends NodeWrapper {
         super(RULE, node);
     }
 
-    @Override
-    protected void buildRule() {
-        addChoice(pipeForOrNull());
-        addChoice(factorOrNull());
-    }
-
     public PipeFor pipeFor() {
-        var element = getItem(0);
-        element.failIfAbsent(PipeFor.RULE);
-        return PipeFor.of(element);
-    }
-
-    public PipeFor pipeForOrNull() {
-        var element = getItem(0);
-        if (!element.isPresent(PipeFor.RULE)) {
-            return null;
-        }
-        return PipeFor.of(element);
+        return PipeFor.of(getItem(0));
     }
 
     public boolean hasPipeFor() {
-        var element = getItem(0);
-        return element.isPresent(PipeFor.RULE);
+        return hasItemOfRule(0, PipeFor.RULE);
     }
 
     public Factor factor() {
-        var element = getItem(1);
-        element.failIfAbsent(Factor.RULE);
-        return Factor.of(element);
-    }
-
-    public Factor factorOrNull() {
-        var element = getItem(1);
-        if (!element.isPresent(Factor.RULE)) {
-            return null;
-        }
-        return Factor.of(element);
+        return Factor.of(getItem(1));
     }
 
     public boolean hasFactor() {
-        var element = getItem(1);
-        return element.isPresent(Factor.RULE);
+        return hasItemOfRule(1, Factor.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 

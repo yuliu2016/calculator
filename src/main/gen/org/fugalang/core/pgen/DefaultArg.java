@@ -18,41 +18,20 @@ public final class DefaultArg extends NodeWrapper {
         super(RULE, node);
     }
 
-    @Override
-    protected void buildRule() {
-        addRequired(typedArg());
-        addOptional(defaultArg2OrNull());
-    }
-
     public TypedArg typedArg() {
-        var element = getItem(0);
-        element.failIfAbsent(TypedArg.RULE);
-        return TypedArg.of(element);
+        return TypedArg.of(getItem(0));
     }
 
     public DefaultArg2 defaultArg2() {
-        var element = getItem(1);
-        element.failIfAbsent(DefaultArg2.RULE);
-        return DefaultArg2.of(element);
-    }
-
-    public DefaultArg2 defaultArg2OrNull() {
-        var element = getItem(1);
-        if (!element.isPresent(DefaultArg2.RULE)) {
-            return null;
-        }
-        return DefaultArg2.of(element);
+        return DefaultArg2.of(getItem(1));
     }
 
     public boolean hasDefaultArg2() {
-        var element = getItem(1);
-        return element.isPresent(DefaultArg2.RULE);
+        return hasItemOfRule(1, DefaultArg2.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
@@ -79,28 +58,16 @@ public final class DefaultArg extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addRequired(isTokenAssign(), "=");
-            addRequired(expr());
-        }
-
         public boolean isTokenAssign() {
-            var element = getItem(0);
-            element.failIfAbsent();
-            return element.asBoolean();
+            return true;
         }
 
         public Expr expr() {
-            var element = getItem(1);
-            element.failIfAbsent(Expr.RULE);
-            return Expr.of(element);
+            return Expr.of(getItem(1));
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 

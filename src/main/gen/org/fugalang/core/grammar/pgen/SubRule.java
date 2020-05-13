@@ -19,74 +19,32 @@ public final class SubRule extends NodeWrapper {
         super(RULE, node);
     }
 
-    @Override
-    protected void buildRule() {
-        addChoice(subRule1OrNull());
-        addChoice(subRule2OrNull());
-        addChoice(tokenOrNull());
-    }
-
     public SubRule1 subRule1() {
-        var element = getItem(0);
-        element.failIfAbsent(SubRule1.RULE);
-        return SubRule1.of(element);
-    }
-
-    public SubRule1 subRule1OrNull() {
-        var element = getItem(0);
-        if (!element.isPresent(SubRule1.RULE)) {
-            return null;
-        }
-        return SubRule1.of(element);
+        return SubRule1.of(getItem(0));
     }
 
     public boolean hasSubRule1() {
-        var element = getItem(0);
-        return element.isPresent(SubRule1.RULE);
+        return hasItemOfRule(0, SubRule1.RULE);
     }
 
     public SubRule2 subRule2() {
-        var element = getItem(1);
-        element.failIfAbsent(SubRule2.RULE);
-        return SubRule2.of(element);
-    }
-
-    public SubRule2 subRule2OrNull() {
-        var element = getItem(1);
-        if (!element.isPresent(SubRule2.RULE)) {
-            return null;
-        }
-        return SubRule2.of(element);
+        return SubRule2.of(getItem(1));
     }
 
     public boolean hasSubRule2() {
-        var element = getItem(1);
-        return element.isPresent(SubRule2.RULE);
+        return hasItemOfRule(1, SubRule2.RULE);
     }
 
     public String token() {
-        var element = getItem(2);
-        element.failIfAbsent(MetaTokenType.TOK);
-        return element.asString();
-    }
-
-    public String tokenOrNull() {
-        var element = getItem(2);
-        if (!element.isPresent(MetaTokenType.TOK)) {
-            return null;
-        }
-        return element.asString();
+        return getItemOfType(2,MetaTokenType.TOK);
     }
 
     public boolean hasToken() {
-        var element = getItem(2);
-        return element.isPresent(MetaTokenType.TOK);
+        return hasItemOfType(2, MetaTokenType.TOK);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
@@ -114,35 +72,20 @@ public final class SubRule extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addRequired(lpar());
-            addRequired(orRule());
-            addRequired(rpar());
-        }
-
         public String lpar() {
-            var element = getItem(0);
-            element.failIfAbsent(MetaTokenType.LPAR);
-            return element.asString();
+            return getItemOfType(0,MetaTokenType.LPAR);
         }
 
         public OrRule orRule() {
-            var element = getItem(1);
-            element.failIfAbsent(OrRule.RULE);
-            return OrRule.of(element);
+            return OrRule.of(getItem(1));
         }
 
         public String rpar() {
-            var element = getItem(2);
-            element.failIfAbsent(MetaTokenType.RPAR);
-            return element.asString();
+            return getItemOfType(2,MetaTokenType.RPAR);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
@@ -171,35 +114,20 @@ public final class SubRule extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addRequired(lsqb());
-            addRequired(orRule());
-            addRequired(rsqb());
-        }
-
         public String lsqb() {
-            var element = getItem(0);
-            element.failIfAbsent(MetaTokenType.LSQB);
-            return element.asString();
+            return getItemOfType(0,MetaTokenType.LSQB);
         }
 
         public OrRule orRule() {
-            var element = getItem(1);
-            element.failIfAbsent(OrRule.RULE);
-            return OrRule.of(element);
+            return OrRule.of(getItem(1));
         }
 
         public String rsqb() {
-            var element = getItem(2);
-            element.failIfAbsent(MetaTokenType.RSQB);
-            return element.asString();
+            return getItemOfType(2,MetaTokenType.RSQB);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 

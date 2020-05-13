@@ -18,54 +18,24 @@ public final class DictItem extends NodeWrapper {
         super(RULE, node);
     }
 
-    @Override
-    protected void buildRule() {
-        addChoice(dictItem1OrNull());
-        addChoice(dictItem2OrNull());
-    }
-
     public DictItem1 dictItem1() {
-        var element = getItem(0);
-        element.failIfAbsent(DictItem1.RULE);
-        return DictItem1.of(element);
-    }
-
-    public DictItem1 dictItem1OrNull() {
-        var element = getItem(0);
-        if (!element.isPresent(DictItem1.RULE)) {
-            return null;
-        }
-        return DictItem1.of(element);
+        return DictItem1.of(getItem(0));
     }
 
     public boolean hasDictItem1() {
-        var element = getItem(0);
-        return element.isPresent(DictItem1.RULE);
+        return hasItemOfRule(0, DictItem1.RULE);
     }
 
     public DictItem2 dictItem2() {
-        var element = getItem(1);
-        element.failIfAbsent(DictItem2.RULE);
-        return DictItem2.of(element);
-    }
-
-    public DictItem2 dictItem2OrNull() {
-        var element = getItem(1);
-        if (!element.isPresent(DictItem2.RULE)) {
-            return null;
-        }
-        return DictItem2.of(element);
+        return DictItem2.of(getItem(1));
     }
 
     public boolean hasDictItem2() {
-        var element = getItem(1);
-        return element.isPresent(DictItem2.RULE);
+        return hasItemOfRule(1, DictItem2.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
@@ -92,35 +62,20 @@ public final class DictItem extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addRequired(expr());
-            addRequired(isTokenColon(), ":");
-            addRequired(expr1());
-        }
-
         public Expr expr() {
-            var element = getItem(0);
-            element.failIfAbsent(Expr.RULE);
-            return Expr.of(element);
+            return Expr.of(getItem(0));
         }
 
         public boolean isTokenColon() {
-            var element = getItem(1);
-            element.failIfAbsent();
-            return element.asBoolean();
+            return true;
         }
 
         public Expr expr1() {
-            var element = getItem(2);
-            element.failIfAbsent(Expr.RULE);
-            return Expr.of(element);
+            return Expr.of(getItem(2));
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
@@ -149,28 +104,16 @@ public final class DictItem extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addRequired(isTokenPower(), "**");
-            addRequired(bitwiseOr());
-        }
-
         public boolean isTokenPower() {
-            var element = getItem(0);
-            element.failIfAbsent();
-            return element.asBoolean();
+            return true;
         }
 
         public BitwiseOr bitwiseOr() {
-            var element = getItem(1);
-            element.failIfAbsent(BitwiseOr.RULE);
-            return BitwiseOr.of(element);
+            return BitwiseOr.of(getItem(1));
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 

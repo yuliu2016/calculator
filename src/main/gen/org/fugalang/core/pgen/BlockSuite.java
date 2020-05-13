@@ -3,8 +3,6 @@ package org.fugalang.core.pgen;
 import org.fugalang.core.parser.*;
 import org.fugalang.core.token.TokenType;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -23,54 +21,24 @@ public final class BlockSuite extends NodeWrapper {
         super(RULE, node);
     }
 
-    @Override
-    protected void buildRule() {
-        addChoice(blockSuite1OrNull());
-        addChoice(blockSuite2OrNull());
-    }
-
     public BlockSuite1 blockSuite1() {
-        var element = getItem(0);
-        element.failIfAbsent(BlockSuite1.RULE);
-        return BlockSuite1.of(element);
-    }
-
-    public BlockSuite1 blockSuite1OrNull() {
-        var element = getItem(0);
-        if (!element.isPresent(BlockSuite1.RULE)) {
-            return null;
-        }
-        return BlockSuite1.of(element);
+        return BlockSuite1.of(getItem(0));
     }
 
     public boolean hasBlockSuite1() {
-        var element = getItem(0);
-        return element.isPresent(BlockSuite1.RULE);
+        return hasItemOfRule(0, BlockSuite1.RULE);
     }
 
     public BlockSuite2 blockSuite2() {
-        var element = getItem(1);
-        element.failIfAbsent(BlockSuite2.RULE);
-        return BlockSuite2.of(element);
-    }
-
-    public BlockSuite2 blockSuite2OrNull() {
-        var element = getItem(1);
-        if (!element.isPresent(BlockSuite2.RULE)) {
-            return null;
-        }
-        return BlockSuite2.of(element);
+        return BlockSuite2.of(getItem(1));
     }
 
     public boolean hasBlockSuite2() {
-        var element = getItem(1);
-        return element.isPresent(BlockSuite2.RULE);
+        return hasItemOfRule(1, BlockSuite2.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
@@ -97,35 +65,20 @@ public final class BlockSuite extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addRequired(isTokenLbrace(), "{");
-            addRequired(simpleStmt());
-            addRequired(isTokenRbrace(), "}");
-        }
-
         public boolean isTokenLbrace() {
-            var element = getItem(0);
-            element.failIfAbsent();
-            return element.asBoolean();
+            return true;
         }
 
         public SimpleStmt simpleStmt() {
-            var element = getItem(1);
-            element.failIfAbsent(SimpleStmt.RULE);
-            return SimpleStmt.of(element);
+            return SimpleStmt.of(getItem(1));
         }
 
         public boolean isTokenRbrace() {
-            var element = getItem(2);
-            element.failIfAbsent();
-            return element.asBoolean();
+            return true;
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
@@ -154,54 +107,24 @@ public final class BlockSuite extends NodeWrapper {
             super(RULE, node);
         }
 
-        private List<Stmt> stmtList;
-
-        @Override
-        protected void buildRule() {
-            addRequired(isTokenLbrace(), "{");
-            addRequired(newline());
-            addRequired(stmtList());
-            addRequired(isTokenRbrace(), "}");
-        }
-
         public boolean isTokenLbrace() {
-            var element = getItem(0);
-            element.failIfAbsent();
-            return element.asBoolean();
+            return true;
         }
 
         public String newline() {
-            var element = getItem(1);
-            element.failIfAbsent(TokenType.NEWLINE);
-            return element.asString();
+            return getItemOfType(1,TokenType.NEWLINE);
         }
 
         public List<Stmt> stmtList() {
-            if (stmtList != null) {
-                return stmtList;
-            }
-            List<Stmt> result = null;
-            var element = getItem(2);
-            for (var node : element.asCollection()) {
-                if (result == null) {
-                    result = new ArrayList<>();
-                }
-                result.add(Stmt.of(node));
-            }
-            stmtList = result == null ? Collections.emptyList() : result;
-            return stmtList;
+            return getList(2, Stmt::of);
         }
 
         public boolean isTokenRbrace() {
-            var element = getItem(3);
-            element.failIfAbsent();
-            return element.asBoolean();
+            return true;
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 

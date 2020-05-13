@@ -18,62 +18,32 @@ public final class CompFor extends NodeWrapper {
         super(RULE, node);
     }
 
-    @Override
-    protected void buildRule() {
-        addRequired(isTokenFor(), "for");
-        addRequired(targetlist());
-        addRequired(isTokenIn(), "in");
-        addRequired(disjunction());
-        addOptional(compIterOrNull());
-    }
-
     public boolean isTokenFor() {
-        var element = getItem(0);
-        element.failIfAbsent();
-        return element.asBoolean();
+        return true;
     }
 
     public Targetlist targetlist() {
-        var element = getItem(1);
-        element.failIfAbsent(Targetlist.RULE);
-        return Targetlist.of(element);
+        return Targetlist.of(getItem(1));
     }
 
     public boolean isTokenIn() {
-        var element = getItem(2);
-        element.failIfAbsent();
-        return element.asBoolean();
+        return true;
     }
 
     public Disjunction disjunction() {
-        var element = getItem(3);
-        element.failIfAbsent(Disjunction.RULE);
-        return Disjunction.of(element);
+        return Disjunction.of(getItem(3));
     }
 
     public CompIter compIter() {
-        var element = getItem(4);
-        element.failIfAbsent(CompIter.RULE);
-        return CompIter.of(element);
-    }
-
-    public CompIter compIterOrNull() {
-        var element = getItem(4);
-        if (!element.isPresent(CompIter.RULE)) {
-            return null;
-        }
-        return CompIter.of(element);
+        return CompIter.of(getItem(4));
     }
 
     public boolean hasCompIter() {
-        var element = getItem(4);
-        return element.isPresent(CompIter.RULE);
+        return hasItemOfRule(4, CompIter.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 

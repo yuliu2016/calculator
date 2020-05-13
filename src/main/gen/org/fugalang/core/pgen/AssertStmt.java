@@ -18,48 +18,24 @@ public final class AssertStmt extends NodeWrapper {
         super(RULE, node);
     }
 
-    @Override
-    protected void buildRule() {
-        addRequired(isTokenAssert(), "assert");
-        addRequired(expr());
-        addOptional(assertStmt3OrNull());
-    }
-
     public boolean isTokenAssert() {
-        var element = getItem(0);
-        element.failIfAbsent();
-        return element.asBoolean();
+        return true;
     }
 
     public Expr expr() {
-        var element = getItem(1);
-        element.failIfAbsent(Expr.RULE);
-        return Expr.of(element);
+        return Expr.of(getItem(1));
     }
 
     public AssertStmt3 assertStmt3() {
-        var element = getItem(2);
-        element.failIfAbsent(AssertStmt3.RULE);
-        return AssertStmt3.of(element);
-    }
-
-    public AssertStmt3 assertStmt3OrNull() {
-        var element = getItem(2);
-        if (!element.isPresent(AssertStmt3.RULE)) {
-            return null;
-        }
-        return AssertStmt3.of(element);
+        return AssertStmt3.of(getItem(2));
     }
 
     public boolean hasAssertStmt3() {
-        var element = getItem(2);
-        return element.isPresent(AssertStmt3.RULE);
+        return hasItemOfRule(2, AssertStmt3.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
@@ -87,28 +63,16 @@ public final class AssertStmt extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addRequired(isTokenComma(), ",");
-            addRequired(expr());
-        }
-
         public boolean isTokenComma() {
-            var element = getItem(0);
-            element.failIfAbsent();
-            return element.asBoolean();
+            return true;
         }
 
         public Expr expr() {
-            var element = getItem(1);
-            element.failIfAbsent(Expr.RULE);
-            return Expr.of(element);
+            return Expr.of(getItem(1));
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 

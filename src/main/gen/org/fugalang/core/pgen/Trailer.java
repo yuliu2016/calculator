@@ -19,74 +19,32 @@ public final class Trailer extends NodeWrapper {
         super(RULE, node);
     }
 
-    @Override
-    protected void buildRule() {
-        addChoice(trailer1OrNull());
-        addChoice(parametersOrNull());
-        addChoice(subscriptOrNull());
-    }
-
     public Trailer1 trailer1() {
-        var element = getItem(0);
-        element.failIfAbsent(Trailer1.RULE);
-        return Trailer1.of(element);
-    }
-
-    public Trailer1 trailer1OrNull() {
-        var element = getItem(0);
-        if (!element.isPresent(Trailer1.RULE)) {
-            return null;
-        }
-        return Trailer1.of(element);
+        return Trailer1.of(getItem(0));
     }
 
     public boolean hasTrailer1() {
-        var element = getItem(0);
-        return element.isPresent(Trailer1.RULE);
+        return hasItemOfRule(0, Trailer1.RULE);
     }
 
     public Parameters parameters() {
-        var element = getItem(1);
-        element.failIfAbsent(Parameters.RULE);
-        return Parameters.of(element);
-    }
-
-    public Parameters parametersOrNull() {
-        var element = getItem(1);
-        if (!element.isPresent(Parameters.RULE)) {
-            return null;
-        }
-        return Parameters.of(element);
+        return Parameters.of(getItem(1));
     }
 
     public boolean hasParameters() {
-        var element = getItem(1);
-        return element.isPresent(Parameters.RULE);
+        return hasItemOfRule(1, Parameters.RULE);
     }
 
     public Subscript subscript() {
-        var element = getItem(2);
-        element.failIfAbsent(Subscript.RULE);
-        return Subscript.of(element);
-    }
-
-    public Subscript subscriptOrNull() {
-        var element = getItem(2);
-        if (!element.isPresent(Subscript.RULE)) {
-            return null;
-        }
-        return Subscript.of(element);
+        return Subscript.of(getItem(2));
     }
 
     public boolean hasSubscript() {
-        var element = getItem(2);
-        return element.isPresent(Subscript.RULE);
+        return hasItemOfRule(2, Subscript.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
@@ -114,28 +72,16 @@ public final class Trailer extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addRequired(isTokenDot(), ".");
-            addRequired(name());
-        }
-
         public boolean isTokenDot() {
-            var element = getItem(0);
-            element.failIfAbsent();
-            return element.asBoolean();
+            return true;
         }
 
         public String name() {
-            var element = getItem(1);
-            element.failIfAbsent(TokenType.NAME);
-            return element.asString();
+            return getItemOfType(1,TokenType.NAME);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 

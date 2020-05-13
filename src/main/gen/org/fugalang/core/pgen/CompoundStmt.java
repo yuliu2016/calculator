@@ -18,114 +18,48 @@ public final class CompoundStmt extends NodeWrapper {
         super(RULE, node);
     }
 
-    @Override
-    protected void buildRule() {
-        addChoice(ifStmtOrNull());
-        addChoice(whileStmtOrNull());
-        addChoice(forStmtOrNull());
-        addChoice(tryStmtOrNull());
-        addChoice(withStmtOrNull());
-    }
-
     public IfStmt ifStmt() {
-        var element = getItem(0);
-        element.failIfAbsent(IfStmt.RULE);
-        return IfStmt.of(element);
-    }
-
-    public IfStmt ifStmtOrNull() {
-        var element = getItem(0);
-        if (!element.isPresent(IfStmt.RULE)) {
-            return null;
-        }
-        return IfStmt.of(element);
+        return IfStmt.of(getItem(0));
     }
 
     public boolean hasIfStmt() {
-        var element = getItem(0);
-        return element.isPresent(IfStmt.RULE);
+        return hasItemOfRule(0, IfStmt.RULE);
     }
 
     public WhileStmt whileStmt() {
-        var element = getItem(1);
-        element.failIfAbsent(WhileStmt.RULE);
-        return WhileStmt.of(element);
-    }
-
-    public WhileStmt whileStmtOrNull() {
-        var element = getItem(1);
-        if (!element.isPresent(WhileStmt.RULE)) {
-            return null;
-        }
-        return WhileStmt.of(element);
+        return WhileStmt.of(getItem(1));
     }
 
     public boolean hasWhileStmt() {
-        var element = getItem(1);
-        return element.isPresent(WhileStmt.RULE);
+        return hasItemOfRule(1, WhileStmt.RULE);
     }
 
     public ForStmt forStmt() {
-        var element = getItem(2);
-        element.failIfAbsent(ForStmt.RULE);
-        return ForStmt.of(element);
-    }
-
-    public ForStmt forStmtOrNull() {
-        var element = getItem(2);
-        if (!element.isPresent(ForStmt.RULE)) {
-            return null;
-        }
-        return ForStmt.of(element);
+        return ForStmt.of(getItem(2));
     }
 
     public boolean hasForStmt() {
-        var element = getItem(2);
-        return element.isPresent(ForStmt.RULE);
+        return hasItemOfRule(2, ForStmt.RULE);
     }
 
     public TryStmt tryStmt() {
-        var element = getItem(3);
-        element.failIfAbsent(TryStmt.RULE);
-        return TryStmt.of(element);
-    }
-
-    public TryStmt tryStmtOrNull() {
-        var element = getItem(3);
-        if (!element.isPresent(TryStmt.RULE)) {
-            return null;
-        }
-        return TryStmt.of(element);
+        return TryStmt.of(getItem(3));
     }
 
     public boolean hasTryStmt() {
-        var element = getItem(3);
-        return element.isPresent(TryStmt.RULE);
+        return hasItemOfRule(3, TryStmt.RULE);
     }
 
     public WithStmt withStmt() {
-        var element = getItem(4);
-        element.failIfAbsent(WithStmt.RULE);
-        return WithStmt.of(element);
-    }
-
-    public WithStmt withStmtOrNull() {
-        var element = getItem(4);
-        if (!element.isPresent(WithStmt.RULE)) {
-            return null;
-        }
-        return WithStmt.of(element);
+        return WithStmt.of(getItem(4));
     }
 
     public boolean hasWithStmt() {
-        var element = getItem(4);
-        return element.isPresent(WithStmt.RULE);
+        return hasItemOfRule(4, WithStmt.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 

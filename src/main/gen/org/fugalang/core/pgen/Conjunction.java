@@ -2,8 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -22,40 +20,16 @@ public final class Conjunction extends NodeWrapper {
         super(RULE, node);
     }
 
-    private List<Conjunction2> conjunction2List;
-
-    @Override
-    protected void buildRule() {
-        addRequired(inversion());
-        addRequired(conjunction2List());
-    }
-
     public Inversion inversion() {
-        var element = getItem(0);
-        element.failIfAbsent(Inversion.RULE);
-        return Inversion.of(element);
+        return Inversion.of(getItem(0));
     }
 
     public List<Conjunction2> conjunction2List() {
-        if (conjunction2List != null) {
-            return conjunction2List;
-        }
-        List<Conjunction2> result = null;
-        var element = getItem(1);
-        for (var node : element.asCollection()) {
-            if (result == null) {
-                result = new ArrayList<>();
-            }
-            result.add(Conjunction2.of(node));
-        }
-        conjunction2List = result == null ? Collections.emptyList() : result;
-        return conjunction2List;
+        return getList(1, Conjunction2::of);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
@@ -97,28 +71,16 @@ public final class Conjunction extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addRequired(isTokenAnd(), "and");
-            addRequired(inversion());
-        }
-
         public boolean isTokenAnd() {
-            var element = getItem(0);
-            element.failIfAbsent();
-            return element.asBoolean();
+            return true;
         }
 
         public Inversion inversion() {
-            var element = getItem(1);
-            element.failIfAbsent(Inversion.RULE);
-            return Inversion.of(element);
+            return Inversion.of(getItem(1));
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 

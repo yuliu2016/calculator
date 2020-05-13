@@ -19,74 +19,32 @@ public final class SingleInput extends NodeWrapper {
         super(RULE, node);
     }
 
-    @Override
-    protected void buildRule() {
-        addChoice(newlineOrNull());
-        addChoice(simpleStmtOrNull());
-        addChoice(singleInput3OrNull());
-    }
-
     public String newline() {
-        var element = getItem(0);
-        element.failIfAbsent(TokenType.NEWLINE);
-        return element.asString();
-    }
-
-    public String newlineOrNull() {
-        var element = getItem(0);
-        if (!element.isPresent(TokenType.NEWLINE)) {
-            return null;
-        }
-        return element.asString();
+        return getItemOfType(0,TokenType.NEWLINE);
     }
 
     public boolean hasNewline() {
-        var element = getItem(0);
-        return element.isPresent(TokenType.NEWLINE);
+        return hasItemOfType(0, TokenType.NEWLINE);
     }
 
     public SimpleStmt simpleStmt() {
-        var element = getItem(1);
-        element.failIfAbsent(SimpleStmt.RULE);
-        return SimpleStmt.of(element);
-    }
-
-    public SimpleStmt simpleStmtOrNull() {
-        var element = getItem(1);
-        if (!element.isPresent(SimpleStmt.RULE)) {
-            return null;
-        }
-        return SimpleStmt.of(element);
+        return SimpleStmt.of(getItem(1));
     }
 
     public boolean hasSimpleStmt() {
-        var element = getItem(1);
-        return element.isPresent(SimpleStmt.RULE);
+        return hasItemOfRule(1, SimpleStmt.RULE);
     }
 
     public SingleInput3 singleInput3() {
-        var element = getItem(2);
-        element.failIfAbsent(SingleInput3.RULE);
-        return SingleInput3.of(element);
-    }
-
-    public SingleInput3 singleInput3OrNull() {
-        var element = getItem(2);
-        if (!element.isPresent(SingleInput3.RULE)) {
-            return null;
-        }
-        return SingleInput3.of(element);
+        return SingleInput3.of(getItem(2));
     }
 
     public boolean hasSingleInput3() {
-        var element = getItem(2);
-        return element.isPresent(SingleInput3.RULE);
+        return hasItemOfRule(2, SingleInput3.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
@@ -114,28 +72,16 @@ public final class SingleInput extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addRequired(compoundStmt());
-            addRequired(newline());
-        }
-
         public CompoundStmt compoundStmt() {
-            var element = getItem(0);
-            element.failIfAbsent(CompoundStmt.RULE);
-            return CompoundStmt.of(element);
+            return CompoundStmt.of(getItem(0));
         }
 
         public String newline() {
-            var element = getItem(1);
-            element.failIfAbsent(TokenType.NEWLINE);
-            return element.asString();
+            return getItemOfType(1,TokenType.NEWLINE);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 

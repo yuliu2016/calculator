@@ -3,8 +3,6 @@ package org.fugalang.core.pgen;
 import org.fugalang.core.parser.*;
 import org.fugalang.core.token.TokenType;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -23,47 +21,20 @@ public final class EvalInput extends NodeWrapper {
         super(RULE, node);
     }
 
-    private List<String> newlineList;
-
-    @Override
-    protected void buildRule() {
-        addRequired(exprlist());
-        addRequired(newlineList());
-        addRequired(endmarker());
-    }
-
     public Exprlist exprlist() {
-        var element = getItem(0);
-        element.failIfAbsent(Exprlist.RULE);
-        return Exprlist.of(element);
+        return Exprlist.of(getItem(0));
     }
 
     public List<String> newlineList() {
-        if (newlineList != null) {
-            return newlineList;
-        }
-        List<String> result = null;
-        var element = getItem(1);
-        for (var node : element.asCollection()) {
-            if (result == null) {
-                result = new ArrayList<>();
-            }
-            result.add(node.asString());
-        }
-        newlineList = result == null ? Collections.emptyList() : result;
-        return newlineList;
+        return getList(1, ParseTreeNode::asString);
     }
 
     public String endmarker() {
-        var element = getItem(2);
-        element.failIfAbsent(TokenType.ENDMARKER);
-        return element.asString();
+        return getItemOfType(2,TokenType.ENDMARKER);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 

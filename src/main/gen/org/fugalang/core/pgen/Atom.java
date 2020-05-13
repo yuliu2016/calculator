@@ -18,54 +18,24 @@ public final class Atom extends NodeWrapper {
         super(RULE, node);
     }
 
-    @Override
-    protected void buildRule() {
-        addChoice(compoundAtomOrNull());
-        addChoice(simpleAtomOrNull());
-    }
-
     public CompoundAtom compoundAtom() {
-        var element = getItem(0);
-        element.failIfAbsent(CompoundAtom.RULE);
-        return CompoundAtom.of(element);
-    }
-
-    public CompoundAtom compoundAtomOrNull() {
-        var element = getItem(0);
-        if (!element.isPresent(CompoundAtom.RULE)) {
-            return null;
-        }
-        return CompoundAtom.of(element);
+        return CompoundAtom.of(getItem(0));
     }
 
     public boolean hasCompoundAtom() {
-        var element = getItem(0);
-        return element.isPresent(CompoundAtom.RULE);
+        return hasItemOfRule(0, CompoundAtom.RULE);
     }
 
     public SimpleAtom simpleAtom() {
-        var element = getItem(1);
-        element.failIfAbsent(SimpleAtom.RULE);
-        return SimpleAtom.of(element);
-    }
-
-    public SimpleAtom simpleAtomOrNull() {
-        var element = getItem(1);
-        if (!element.isPresent(SimpleAtom.RULE)) {
-            return null;
-        }
-        return SimpleAtom.of(element);
+        return SimpleAtom.of(getItem(1));
     }
 
     public boolean hasSimpleAtom() {
-        var element = getItem(1);
-        return element.isPresent(SimpleAtom.RULE);
+        return hasItemOfRule(1, SimpleAtom.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 

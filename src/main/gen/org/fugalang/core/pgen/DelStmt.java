@@ -18,28 +18,16 @@ public final class DelStmt extends NodeWrapper {
         super(RULE, node);
     }
 
-    @Override
-    protected void buildRule() {
-        addRequired(isTokenDel(), "del");
-        addRequired(targetlist());
-    }
-
     public boolean isTokenDel() {
-        var element = getItem(0);
-        element.failIfAbsent();
-        return element.asBoolean();
+        return true;
     }
 
     public Targetlist targetlist() {
-        var element = getItem(1);
-        element.failIfAbsent(Targetlist.RULE);
-        return Targetlist.of(element);
+        return Targetlist.of(getItem(1));
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 

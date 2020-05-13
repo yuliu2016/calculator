@@ -19,41 +19,20 @@ public final class SimpleArg extends NodeWrapper {
         super(RULE, node);
     }
 
-    @Override
-    protected void buildRule() {
-        addRequired(name());
-        addOptional(simpleArg2OrNull());
-    }
-
     public String name() {
-        var element = getItem(0);
-        element.failIfAbsent(TokenType.NAME);
-        return element.asString();
+        return getItemOfType(0,TokenType.NAME);
     }
 
     public SimpleArg2 simpleArg2() {
-        var element = getItem(1);
-        element.failIfAbsent(SimpleArg2.RULE);
-        return SimpleArg2.of(element);
-    }
-
-    public SimpleArg2 simpleArg2OrNull() {
-        var element = getItem(1);
-        if (!element.isPresent(SimpleArg2.RULE)) {
-            return null;
-        }
-        return SimpleArg2.of(element);
+        return SimpleArg2.of(getItem(1));
     }
 
     public boolean hasSimpleArg2() {
-        var element = getItem(1);
-        return element.isPresent(SimpleArg2.RULE);
+        return hasItemOfRule(1, SimpleArg2.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
@@ -80,28 +59,16 @@ public final class SimpleArg extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addRequired(isTokenAssign(), "=");
-            addRequired(expr());
-        }
-
         public boolean isTokenAssign() {
-            var element = getItem(0);
-            element.failIfAbsent();
-            return element.asBoolean();
+            return true;
         }
 
         public Expr expr() {
-            var element = getItem(1);
-            element.failIfAbsent(Expr.RULE);
-            return Expr.of(element);
+            return Expr.of(getItem(1));
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 

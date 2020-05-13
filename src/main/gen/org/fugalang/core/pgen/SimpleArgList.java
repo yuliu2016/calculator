@@ -2,8 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -22,40 +20,16 @@ public final class SimpleArgList extends NodeWrapper {
         super(RULE, node);
     }
 
-    private List<SimpleArgList2> simpleArgList2List;
-
-    @Override
-    protected void buildRule() {
-        addRequired(simpleArg());
-        addRequired(simpleArgList2List());
-    }
-
     public SimpleArg simpleArg() {
-        var element = getItem(0);
-        element.failIfAbsent(SimpleArg.RULE);
-        return SimpleArg.of(element);
+        return SimpleArg.of(getItem(0));
     }
 
     public List<SimpleArgList2> simpleArgList2List() {
-        if (simpleArgList2List != null) {
-            return simpleArgList2List;
-        }
-        List<SimpleArgList2> result = null;
-        var element = getItem(1);
-        for (var node : element.asCollection()) {
-            if (result == null) {
-                result = new ArrayList<>();
-            }
-            result.add(SimpleArgList2.of(node));
-        }
-        simpleArgList2List = result == null ? Collections.emptyList() : result;
-        return simpleArgList2List;
+        return getList(1, SimpleArgList2::of);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
@@ -97,21 +71,12 @@ public final class SimpleArgList extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addRequired(simpleArg());
-        }
-
         public SimpleArg simpleArg() {
-            var element = getItem(0);
-            element.failIfAbsent(SimpleArg.RULE);
-            return SimpleArg.of(element);
+            return SimpleArg.of(getItem(0));
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 

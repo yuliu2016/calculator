@@ -2,8 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -22,47 +20,24 @@ public final class Assignment extends NodeWrapper {
         super(RULE, node);
     }
 
-    @Override
-    protected void buildRule() {
-        addOptional(isTokenDiv(), "/");
-        addRequired(exprlistStar());
-        addOptional(assignment3OrNull());
-    }
-
     public boolean isTokenDiv() {
-        var element = getItem(0);
-        return element.asBoolean();
+        return getBoolean(0);
     }
 
     public ExprlistStar exprlistStar() {
-        var element = getItem(1);
-        element.failIfAbsent(ExprlistStar.RULE);
-        return ExprlistStar.of(element);
+        return ExprlistStar.of(getItem(1));
     }
 
     public Assignment3 assignment3() {
-        var element = getItem(2);
-        element.failIfAbsent(Assignment3.RULE);
-        return Assignment3.of(element);
-    }
-
-    public Assignment3 assignment3OrNull() {
-        var element = getItem(2);
-        if (!element.isPresent(Assignment3.RULE)) {
-            return null;
-        }
-        return Assignment3.of(element);
+        return Assignment3.of(getItem(2));
     }
 
     public boolean hasAssignment3() {
-        var element = getItem(2);
-        return element.isPresent(Assignment3.RULE);
+        return hasItemOfRule(2, Assignment3.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
@@ -90,73 +65,28 @@ public final class Assignment extends NodeWrapper {
             super(RULE, node);
         }
 
-        private List<Assignment32> assignment32List;
-
-        @Override
-        protected void buildRule() {
-            addChoice(annassignOrNull());
-            addChoice(assignment32List());
-            addChoice(assignment33OrNull());
-        }
-
         public Annassign annassign() {
-            var element = getItem(0);
-            element.failIfAbsent(Annassign.RULE);
-            return Annassign.of(element);
-        }
-
-        public Annassign annassignOrNull() {
-            var element = getItem(0);
-            if (!element.isPresent(Annassign.RULE)) {
-                return null;
-            }
-            return Annassign.of(element);
+            return Annassign.of(getItem(0));
         }
 
         public boolean hasAnnassign() {
-            var element = getItem(0);
-            return element.isPresent(Annassign.RULE);
+            return hasItemOfRule(0, Annassign.RULE);
         }
 
         public List<Assignment32> assignment32List() {
-            if (assignment32List != null) {
-                return assignment32List;
-            }
-            List<Assignment32> result = null;
-            var element = getItem(1);
-            for (var node : element.asCollection()) {
-                if (result == null) {
-                    result = new ArrayList<>();
-                }
-                result.add(Assignment32.of(node));
-            }
-            assignment32List = result == null ? Collections.emptyList() : result;
-            return assignment32List;
+            return getList(1, Assignment32::of);
         }
 
         public Assignment33 assignment33() {
-            var element = getItem(2);
-            element.failIfAbsent(Assignment33.RULE);
-            return Assignment33.of(element);
-        }
-
-        public Assignment33 assignment33OrNull() {
-            var element = getItem(2);
-            if (!element.isPresent(Assignment33.RULE)) {
-                return null;
-            }
-            return Assignment33.of(element);
+            return Assignment33.of(getItem(2));
         }
 
         public boolean hasAssignment33() {
-            var element = getItem(2);
-            return element.isPresent(Assignment33.RULE);
+            return hasItemOfRule(2, Assignment33.RULE);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
@@ -202,28 +132,16 @@ public final class Assignment extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addRequired(isTokenAssign(), "=");
-            addRequired(exprlistStar());
-        }
-
         public boolean isTokenAssign() {
-            var element = getItem(0);
-            element.failIfAbsent();
-            return element.asBoolean();
+            return true;
         }
 
         public ExprlistStar exprlistStar() {
-            var element = getItem(1);
-            element.failIfAbsent(ExprlistStar.RULE);
-            return ExprlistStar.of(element);
+            return ExprlistStar.of(getItem(1));
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
@@ -251,28 +169,16 @@ public final class Assignment extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addRequired(augassign());
-            addRequired(exprlist());
-        }
-
         public Augassign augassign() {
-            var element = getItem(0);
-            element.failIfAbsent(Augassign.RULE);
-            return Augassign.of(element);
+            return Augassign.of(getItem(0));
         }
 
         public Exprlist exprlist() {
-            var element = getItem(1);
-            element.failIfAbsent(Exprlist.RULE);
-            return Exprlist.of(element);
+            return Exprlist.of(getItem(1));
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 

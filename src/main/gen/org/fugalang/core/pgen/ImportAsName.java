@@ -19,41 +19,20 @@ public final class ImportAsName extends NodeWrapper {
         super(RULE, node);
     }
 
-    @Override
-    protected void buildRule() {
-        addRequired(name());
-        addOptional(importAsName2OrNull());
-    }
-
     public String name() {
-        var element = getItem(0);
-        element.failIfAbsent(TokenType.NAME);
-        return element.asString();
+        return getItemOfType(0,TokenType.NAME);
     }
 
     public ImportAsName2 importAsName2() {
-        var element = getItem(1);
-        element.failIfAbsent(ImportAsName2.RULE);
-        return ImportAsName2.of(element);
-    }
-
-    public ImportAsName2 importAsName2OrNull() {
-        var element = getItem(1);
-        if (!element.isPresent(ImportAsName2.RULE)) {
-            return null;
-        }
-        return ImportAsName2.of(element);
+        return ImportAsName2.of(getItem(1));
     }
 
     public boolean hasImportAsName2() {
-        var element = getItem(1);
-        return element.isPresent(ImportAsName2.RULE);
+        return hasItemOfRule(1, ImportAsName2.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
@@ -80,28 +59,16 @@ public final class ImportAsName extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addRequired(isTokenAs(), "as");
-            addRequired(name());
-        }
-
         public boolean isTokenAs() {
-            var element = getItem(0);
-            element.failIfAbsent();
-            return element.asBoolean();
+            return true;
         }
 
         public String name() {
-            var element = getItem(1);
-            element.failIfAbsent(TokenType.NAME);
-            return element.asString();
+            return getItemOfType(1,TokenType.NAME);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 

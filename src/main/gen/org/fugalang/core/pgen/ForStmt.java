@@ -18,69 +18,36 @@ public final class ForStmt extends NodeWrapper {
         super(RULE, node);
     }
 
-    @Override
-    protected void buildRule() {
-        addRequired(isTokenFor(), "for");
-        addRequired(targetlist());
-        addRequired(isTokenIn(), "in");
-        addRequired(exprlist());
-        addRequired(suite());
-        addOptional(elseSuiteOrNull());
-    }
-
     public boolean isTokenFor() {
-        var element = getItem(0);
-        element.failIfAbsent();
-        return element.asBoolean();
+        return true;
     }
 
     public Targetlist targetlist() {
-        var element = getItem(1);
-        element.failIfAbsent(Targetlist.RULE);
-        return Targetlist.of(element);
+        return Targetlist.of(getItem(1));
     }
 
     public boolean isTokenIn() {
-        var element = getItem(2);
-        element.failIfAbsent();
-        return element.asBoolean();
+        return true;
     }
 
     public Exprlist exprlist() {
-        var element = getItem(3);
-        element.failIfAbsent(Exprlist.RULE);
-        return Exprlist.of(element);
+        return Exprlist.of(getItem(3));
     }
 
     public Suite suite() {
-        var element = getItem(4);
-        element.failIfAbsent(Suite.RULE);
-        return Suite.of(element);
+        return Suite.of(getItem(4));
     }
 
     public ElseSuite elseSuite() {
-        var element = getItem(5);
-        element.failIfAbsent(ElseSuite.RULE);
-        return ElseSuite.of(element);
-    }
-
-    public ElseSuite elseSuiteOrNull() {
-        var element = getItem(5);
-        if (!element.isPresent(ElseSuite.RULE)) {
-            return null;
-        }
-        return ElseSuite.of(element);
+        return ElseSuite.of(getItem(5));
     }
 
     public boolean hasElseSuite() {
-        var element = getItem(5);
-        return element.isPresent(ElseSuite.RULE);
+        return hasItemOfRule(5, ElseSuite.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 

@@ -2,8 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -22,80 +20,32 @@ public final class ArgsKwargs extends NodeWrapper {
         super(RULE, node);
     }
 
-    private List<ArgsKwargs3> argsKwargs3List;
-
-    @Override
-    protected void buildRule() {
-        addRequired(isTokenTimes(), "*");
-        addOptional(typedArgOrNull());
-        addRequired(argsKwargs3List());
-        addOptional(argsKwargs4OrNull());
-    }
-
     public boolean isTokenTimes() {
-        var element = getItem(0);
-        element.failIfAbsent();
-        return element.asBoolean();
+        return true;
     }
 
     public TypedArg typedArg() {
-        var element = getItem(1);
-        element.failIfAbsent(TypedArg.RULE);
-        return TypedArg.of(element);
-    }
-
-    public TypedArg typedArgOrNull() {
-        var element = getItem(1);
-        if (!element.isPresent(TypedArg.RULE)) {
-            return null;
-        }
-        return TypedArg.of(element);
+        return TypedArg.of(getItem(1));
     }
 
     public boolean hasTypedArg() {
-        var element = getItem(1);
-        return element.isPresent(TypedArg.RULE);
+        return hasItemOfRule(1, TypedArg.RULE);
     }
 
     public List<ArgsKwargs3> argsKwargs3List() {
-        if (argsKwargs3List != null) {
-            return argsKwargs3List;
-        }
-        List<ArgsKwargs3> result = null;
-        var element = getItem(2);
-        for (var node : element.asCollection()) {
-            if (result == null) {
-                result = new ArrayList<>();
-            }
-            result.add(ArgsKwargs3.of(node));
-        }
-        argsKwargs3List = result == null ? Collections.emptyList() : result;
-        return argsKwargs3List;
+        return getList(2, ArgsKwargs3::of);
     }
 
     public ArgsKwargs4 argsKwargs4() {
-        var element = getItem(3);
-        element.failIfAbsent(ArgsKwargs4.RULE);
-        return ArgsKwargs4.of(element);
-    }
-
-    public ArgsKwargs4 argsKwargs4OrNull() {
-        var element = getItem(3);
-        if (!element.isPresent(ArgsKwargs4.RULE)) {
-            return null;
-        }
-        return ArgsKwargs4.of(element);
+        return ArgsKwargs4.of(getItem(3));
     }
 
     public boolean hasArgsKwargs4() {
-        var element = getItem(3);
-        return element.isPresent(ArgsKwargs4.RULE);
+        return hasItemOfRule(3, ArgsKwargs4.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
@@ -139,28 +89,16 @@ public final class ArgsKwargs extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addRequired(isTokenComma(), ",");
-            addRequired(defaultArg());
-        }
-
         public boolean isTokenComma() {
-            var element = getItem(0);
-            element.failIfAbsent();
-            return element.asBoolean();
+            return true;
         }
 
         public DefaultArg defaultArg() {
-            var element = getItem(1);
-            element.failIfAbsent(DefaultArg.RULE);
-            return DefaultArg.of(element);
+            return DefaultArg.of(getItem(1));
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
@@ -188,41 +126,20 @@ public final class ArgsKwargs extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addRequired(isTokenComma(), ",");
-            addOptional(kwargsOrNull());
-        }
-
         public boolean isTokenComma() {
-            var element = getItem(0);
-            element.failIfAbsent();
-            return element.asBoolean();
+            return true;
         }
 
         public Kwargs kwargs() {
-            var element = getItem(1);
-            element.failIfAbsent(Kwargs.RULE);
-            return Kwargs.of(element);
-        }
-
-        public Kwargs kwargsOrNull() {
-            var element = getItem(1);
-            if (!element.isPresent(Kwargs.RULE)) {
-                return null;
-            }
-            return Kwargs.of(element);
+            return Kwargs.of(getItem(1));
         }
 
         public boolean hasKwargs() {
-            var element = getItem(1);
-            return element.isPresent(Kwargs.RULE);
+            return hasItemOfRule(1, Kwargs.RULE);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 

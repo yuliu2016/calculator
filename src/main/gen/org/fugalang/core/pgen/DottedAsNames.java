@@ -2,8 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -22,40 +20,16 @@ public final class DottedAsNames extends NodeWrapper {
         super(RULE, node);
     }
 
-    private List<DottedAsNames2> dottedAsNames2List;
-
-    @Override
-    protected void buildRule() {
-        addRequired(dottedAsName());
-        addRequired(dottedAsNames2List());
-    }
-
     public DottedAsName dottedAsName() {
-        var element = getItem(0);
-        element.failIfAbsent(DottedAsName.RULE);
-        return DottedAsName.of(element);
+        return DottedAsName.of(getItem(0));
     }
 
     public List<DottedAsNames2> dottedAsNames2List() {
-        if (dottedAsNames2List != null) {
-            return dottedAsNames2List;
-        }
-        List<DottedAsNames2> result = null;
-        var element = getItem(1);
-        for (var node : element.asCollection()) {
-            if (result == null) {
-                result = new ArrayList<>();
-            }
-            result.add(DottedAsNames2.of(node));
-        }
-        dottedAsNames2List = result == null ? Collections.emptyList() : result;
-        return dottedAsNames2List;
+        return getList(1, DottedAsNames2::of);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
@@ -97,28 +71,16 @@ public final class DottedAsNames extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addRequired(isTokenComma(), ",");
-            addRequired(dottedAsName());
-        }
-
         public boolean isTokenComma() {
-            var element = getItem(0);
-            element.failIfAbsent();
-            return element.asBoolean();
+            return true;
         }
 
         public DottedAsName dottedAsName() {
-            var element = getItem(1);
-            element.failIfAbsent(DottedAsName.RULE);
-            return DottedAsName.of(element);
+            return DottedAsName.of(getItem(1));
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 

@@ -2,8 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -22,54 +20,24 @@ public final class WithStmt extends NodeWrapper {
         super(RULE, node);
     }
 
-    private List<WithStmt3> withStmt3List;
-
-    @Override
-    protected void buildRule() {
-        addRequired(isTokenWith(), "with");
-        addRequired(withItem());
-        addRequired(withStmt3List());
-        addRequired(suite());
-    }
-
     public boolean isTokenWith() {
-        var element = getItem(0);
-        element.failIfAbsent();
-        return element.asBoolean();
+        return true;
     }
 
     public WithItem withItem() {
-        var element = getItem(1);
-        element.failIfAbsent(WithItem.RULE);
-        return WithItem.of(element);
+        return WithItem.of(getItem(1));
     }
 
     public List<WithStmt3> withStmt3List() {
-        if (withStmt3List != null) {
-            return withStmt3List;
-        }
-        List<WithStmt3> result = null;
-        var element = getItem(2);
-        for (var node : element.asCollection()) {
-            if (result == null) {
-                result = new ArrayList<>();
-            }
-            result.add(WithStmt3.of(node));
-        }
-        withStmt3List = result == null ? Collections.emptyList() : result;
-        return withStmt3List;
+        return getList(2, WithStmt3::of);
     }
 
     public Suite suite() {
-        var element = getItem(3);
-        element.failIfAbsent(Suite.RULE);
-        return Suite.of(element);
+        return Suite.of(getItem(3));
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
@@ -113,28 +81,16 @@ public final class WithStmt extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addRequired(isTokenComma(), ",");
-            addRequired(withItem());
-        }
-
         public boolean isTokenComma() {
-            var element = getItem(0);
-            element.failIfAbsent();
-            return element.asBoolean();
+            return true;
         }
 
         public WithItem withItem() {
-            var element = getItem(1);
-            element.failIfAbsent(WithItem.RULE);
-            return WithItem.of(element);
+            return WithItem.of(getItem(1));
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 

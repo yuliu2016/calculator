@@ -2,8 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -22,46 +20,20 @@ public final class Targetlist extends NodeWrapper {
         super(RULE, node);
     }
 
-    private List<Targetlist2> targetlist2List;
-
-    @Override
-    protected void buildRule() {
-        addRequired(target());
-        addRequired(targetlist2List());
-        addOptional(isTokenComma(), ",");
-    }
-
     public Target target() {
-        var element = getItem(0);
-        element.failIfAbsent(Target.RULE);
-        return Target.of(element);
+        return Target.of(getItem(0));
     }
 
     public List<Targetlist2> targetlist2List() {
-        if (targetlist2List != null) {
-            return targetlist2List;
-        }
-        List<Targetlist2> result = null;
-        var element = getItem(1);
-        for (var node : element.asCollection()) {
-            if (result == null) {
-                result = new ArrayList<>();
-            }
-            result.add(Targetlist2.of(node));
-        }
-        targetlist2List = result == null ? Collections.emptyList() : result;
-        return targetlist2List;
+        return getList(1, Targetlist2::of);
     }
 
     public boolean isTokenComma() {
-        var element = getItem(2);
-        return element.asBoolean();
+        return getBoolean(2);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
@@ -104,28 +76,16 @@ public final class Targetlist extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addRequired(isTokenComma(), ",");
-            addRequired(target());
-        }
-
         public boolean isTokenComma() {
-            var element = getItem(0);
-            element.failIfAbsent();
-            return element.asBoolean();
+            return true;
         }
 
         public Target target() {
-            var element = getItem(1);
-            element.failIfAbsent(Target.RULE);
-            return Target.of(element);
+            return Target.of(getItem(1));
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 

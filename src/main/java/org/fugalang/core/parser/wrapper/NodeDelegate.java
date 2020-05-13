@@ -1,5 +1,8 @@
-package org.fugalang.core.parser;
+package org.fugalang.core.parser.wrapper;
 
+import org.fugalang.core.parser.TreeStringBuilder;
+
+@Deprecated
 public interface NodeDelegate {
     void addChoice(Object choice);
 

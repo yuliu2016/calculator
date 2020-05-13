@@ -2,8 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -22,40 +20,16 @@ public final class Disjunction extends NodeWrapper {
         super(RULE, node);
     }
 
-    private List<Disjunction2> disjunction2List;
-
-    @Override
-    protected void buildRule() {
-        addRequired(conjunction());
-        addRequired(disjunction2List());
-    }
-
     public Conjunction conjunction() {
-        var element = getItem(0);
-        element.failIfAbsent(Conjunction.RULE);
-        return Conjunction.of(element);
+        return Conjunction.of(getItem(0));
     }
 
     public List<Disjunction2> disjunction2List() {
-        if (disjunction2List != null) {
-            return disjunction2List;
-        }
-        List<Disjunction2> result = null;
-        var element = getItem(1);
-        for (var node : element.asCollection()) {
-            if (result == null) {
-                result = new ArrayList<>();
-            }
-            result.add(Disjunction2.of(node));
-        }
-        disjunction2List = result == null ? Collections.emptyList() : result;
-        return disjunction2List;
+        return getList(1, Disjunction2::of);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
@@ -97,28 +71,16 @@ public final class Disjunction extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addRequired(isTokenOr(), "or");
-            addRequired(conjunction());
-        }
-
         public boolean isTokenOr() {
-            var element = getItem(0);
-            element.failIfAbsent();
-            return element.asBoolean();
+            return true;
         }
 
         public Conjunction conjunction() {
-            var element = getItem(1);
-            element.failIfAbsent(Conjunction.RULE);
-            return Conjunction.of(element);
+            return Conjunction.of(getItem(1));
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 

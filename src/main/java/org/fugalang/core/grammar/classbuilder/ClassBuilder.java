@@ -1,7 +1,7 @@
 package org.fugalang.core.grammar.classbuilder;
 
-import org.fugalang.core.grammar.util.ParserStringUtil;
 import org.fugalang.core.grammar.util.FirstAndMore;
+import org.fugalang.core.grammar.util.ParserStringUtil;
 import org.fugalang.core.parser.RuleType;
 
 import java.util.*;
@@ -139,7 +139,7 @@ public class ClassBuilder {
                 .append("\", RuleType.")
                 .append(ruleType.name())
                 .append(", ")
-                .append(isStaticInnerClass ? "false": "true")
+                .append(isStaticInnerClass ? "false" : "true")
                 .append(");\n\n");
 
         sb.append("    public static ").append(className).append(" of(ParseTreeNode node) {\n")
@@ -151,37 +151,11 @@ public class ClassBuilder {
 
         sb.append("(ParseTreeNode node) {\n" +
                 "        super(RULE, node);\n" +
-                "    }\n\n");
-
-        var empty = true;
-        for (ClassField field : fields) {
-            var declaration = field.asFieldDeclaration();
-            if (!declaration.isEmpty()) {
-                empty = false;
-                sb.append(declaration);
-            }
-        }
-        if (!empty) {
-            sb.append("\n");
-        }
-
-        sb.append("    @Override\n    protected void buildRule() {\n");
-
-        for (ClassField field : fields) {
-            sb.append("        ");
-            sb.append(field.asRuleStmt(ruleType));
-            sb.append("\n");
-        }
-        sb.append("    }\n");
+                "    }\n");
 
         for (int i = 0; i < fields.size(); i++) {
             ClassField field = fields.get(i);
             sb.append(field.asGetter(ruleType, i));
-
-            var getOrNull = field.asGetOrNull(ruleType, i);
-            if (getOrNull != null) {
-                sb.append(getOrNull);
-            }
 
             var absentCheck = field.asAbsentCheck(ruleType, i);
             if (absentCheck != null) {
@@ -212,7 +186,7 @@ public class ClassBuilder {
         sb.append("    public static boolean parse(ParseTree parseTree, int level) {\n");
 
         var mb = new StringBuilder();
-        mb.append("if (!ParserUtil.recursionGuard(level, RULE)) {\n    return false;\n}\n");
+        mb.append("if (!ParserUtil.recursionGuard(level, RULE)) return false;\n");
         mb.append("var marker = parseTree.enter(level, RULE);\n");
         mb.append("boolean result;\n\n");
 

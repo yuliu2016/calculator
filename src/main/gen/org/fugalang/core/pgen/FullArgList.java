@@ -2,8 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -22,60 +20,24 @@ public final class FullArgList extends NodeWrapper {
         super(RULE, node);
     }
 
-    private List<FullArgList2> fullArgList2List;
-
-    @Override
-    protected void buildRule() {
-        addRequired(defaultArg());
-        addRequired(fullArgList2List());
-        addOptional(fullArgList3OrNull());
-    }
-
     public DefaultArg defaultArg() {
-        var element = getItem(0);
-        element.failIfAbsent(DefaultArg.RULE);
-        return DefaultArg.of(element);
+        return DefaultArg.of(getItem(0));
     }
 
     public List<FullArgList2> fullArgList2List() {
-        if (fullArgList2List != null) {
-            return fullArgList2List;
-        }
-        List<FullArgList2> result = null;
-        var element = getItem(1);
-        for (var node : element.asCollection()) {
-            if (result == null) {
-                result = new ArrayList<>();
-            }
-            result.add(FullArgList2.of(node));
-        }
-        fullArgList2List = result == null ? Collections.emptyList() : result;
-        return fullArgList2List;
+        return getList(1, FullArgList2::of);
     }
 
     public FullArgList3 fullArgList3() {
-        var element = getItem(2);
-        element.failIfAbsent(FullArgList3.RULE);
-        return FullArgList3.of(element);
-    }
-
-    public FullArgList3 fullArgList3OrNull() {
-        var element = getItem(2);
-        if (!element.isPresent(FullArgList3.RULE)) {
-            return null;
-        }
-        return FullArgList3.of(element);
+        return FullArgList3.of(getItem(2));
     }
 
     public boolean hasFullArgList3() {
-        var element = getItem(2);
-        return element.isPresent(FullArgList3.RULE);
+        return hasItemOfRule(2, FullArgList3.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
@@ -118,28 +80,16 @@ public final class FullArgList extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addRequired(isTokenComma(), ",");
-            addRequired(defaultArg());
-        }
-
         public boolean isTokenComma() {
-            var element = getItem(0);
-            element.failIfAbsent();
-            return element.asBoolean();
+            return true;
         }
 
         public DefaultArg defaultArg() {
-            var element = getItem(1);
-            element.failIfAbsent(DefaultArg.RULE);
-            return DefaultArg.of(element);
+            return DefaultArg.of(getItem(1));
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
@@ -167,41 +117,20 @@ public final class FullArgList extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addRequired(isTokenComma(), ",");
-            addOptional(fullArgList32OrNull());
-        }
-
         public boolean isTokenComma() {
-            var element = getItem(0);
-            element.failIfAbsent();
-            return element.asBoolean();
+            return true;
         }
 
         public FullArgList32 fullArgList32() {
-            var element = getItem(1);
-            element.failIfAbsent(FullArgList32.RULE);
-            return FullArgList32.of(element);
-        }
-
-        public FullArgList32 fullArgList32OrNull() {
-            var element = getItem(1);
-            if (!element.isPresent(FullArgList32.RULE)) {
-                return null;
-            }
-            return FullArgList32.of(element);
+            return FullArgList32.of(getItem(1));
         }
 
         public boolean hasFullArgList32() {
-            var element = getItem(1);
-            return element.isPresent(FullArgList32.RULE);
+            return hasItemOfRule(1, FullArgList32.RULE);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
@@ -229,54 +158,24 @@ public final class FullArgList extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addChoice(kwargsOrNull());
-            addChoice(argsKwargsOrNull());
-        }
-
         public Kwargs kwargs() {
-            var element = getItem(0);
-            element.failIfAbsent(Kwargs.RULE);
-            return Kwargs.of(element);
-        }
-
-        public Kwargs kwargsOrNull() {
-            var element = getItem(0);
-            if (!element.isPresent(Kwargs.RULE)) {
-                return null;
-            }
-            return Kwargs.of(element);
+            return Kwargs.of(getItem(0));
         }
 
         public boolean hasKwargs() {
-            var element = getItem(0);
-            return element.isPresent(Kwargs.RULE);
+            return hasItemOfRule(0, Kwargs.RULE);
         }
 
         public ArgsKwargs argsKwargs() {
-            var element = getItem(1);
-            element.failIfAbsent(ArgsKwargs.RULE);
-            return ArgsKwargs.of(element);
-        }
-
-        public ArgsKwargs argsKwargsOrNull() {
-            var element = getItem(1);
-            if (!element.isPresent(ArgsKwargs.RULE)) {
-                return null;
-            }
-            return ArgsKwargs.of(element);
+            return ArgsKwargs.of(getItem(1));
         }
 
         public boolean hasArgsKwargs() {
-            var element = getItem(1);
-            return element.isPresent(ArgsKwargs.RULE);
+            return hasItemOfRule(1, ArgsKwargs.RULE);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 

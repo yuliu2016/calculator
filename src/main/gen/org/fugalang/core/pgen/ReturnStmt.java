@@ -18,41 +18,20 @@ public final class ReturnStmt extends NodeWrapper {
         super(RULE, node);
     }
 
-    @Override
-    protected void buildRule() {
-        addRequired(isTokenReturn(), "return");
-        addOptional(exprlistStarOrNull());
-    }
-
     public boolean isTokenReturn() {
-        var element = getItem(0);
-        element.failIfAbsent();
-        return element.asBoolean();
+        return true;
     }
 
     public ExprlistStar exprlistStar() {
-        var element = getItem(1);
-        element.failIfAbsent(ExprlistStar.RULE);
-        return ExprlistStar.of(element);
-    }
-
-    public ExprlistStar exprlistStarOrNull() {
-        var element = getItem(1);
-        if (!element.isPresent(ExprlistStar.RULE)) {
-            return null;
-        }
-        return ExprlistStar.of(element);
+        return ExprlistStar.of(getItem(1));
     }
 
     public boolean hasExprlistStar() {
-        var element = getItem(1);
-        return element.isPresent(ExprlistStar.RULE);
+        return hasItemOfRule(1, ExprlistStar.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 

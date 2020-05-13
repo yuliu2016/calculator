@@ -2,80 +2,78 @@ package org.fugalang.core.parser;
 
 import org.fugalang.core.pprint.ParseTreePPrint;
 
-public abstract class NodeWrapper implements TreeStringElem {
+import java.util.*;
+import java.util.function.Function;
 
-    private final ParserRule rule;
+public abstract class NodeWrapper {
+
     private final ParseTreeNode node;
-    private NodeDelegate delegate;
+    private Map<Integer, List<?>> list_cache;
 
     public NodeWrapper(ParserRule rule, ParseTreeNode node) {
-        this.rule = rule;
+        // requires that the node matches the correct rule
+        node.failIfAbsent(rule);
         this.node = node;
     }
 
-    protected abstract void buildRule();
-
-    private NodeDelegate getOrCreateDelegate() {
-        if (delegate == null) {
-            delegate = new WrapperDelegate(rule);
-            buildRule();
-            delegate.didBuildRule();
-        }
-        return delegate;
-    }
-
-    private NodeDelegate getDelegate() {
-        if (delegate == null) {
-            throw new IllegalStateException("Delegate not initialized");
-        }
-        return delegate;
-    }
-
-    public ParserRule getRule() {
-        return rule;
-    }
-
-    protected void addChoice(Object choice) {
-        getDelegate().addChoice(choice);
-    }
-
-
-    protected void addChoice(boolean value, String literal) {
-        getDelegate().addChoice(value, literal);
-    }
-
-    protected void addRequired(boolean value, String literal) {
-        getDelegate().addRequired(value, literal);
-    }
-
-    protected void addRequired(Object value) {
-        getDelegate().addRequired(value);
-    }
-
-    protected void addOptional(Object value) {
-        getDelegate().addOptional(value);
-    }
-
-    protected void addOptional(boolean value, String literal) {
-        getDelegate().addOptional(value, literal);
-    }
-
-    public ParseTreeNode getItem(int index) {
+    protected ParseTreeNode getItem(int index) {
         return node.getItem(index);
+    }
+
+    protected boolean hasItemOfRule(int index, ParserRule rule) {
+        var e = node.getItem(index);
+        return e.isPresent(rule);
+    }
+
+    protected String getItemOfType(int index, ElementType type) {
+        var e = node.getItem(index);
+        e.failIfAbsent(type);
+        return e.asString();
+    }
+
+    protected boolean hasItemOfType(int index, ElementType type) {
+        var e = node.getItem(index);
+        return e.isPresent(type);
+    }
+
+    protected boolean getBoolean(int index) {
+        var e = node.getItem(index);
+        return e.asBoolean();
+    }
+
+    protected <T> List<T> getList(int index, Function<ParseTreeNode, T> converter) {
+        if (list_cache != null && list_cache.containsKey(index)) {
+            return uncheckedTypeCast(list_cache.get(index));
+        }
+        List<T> resultOrNull = null;
+        var e = node.getItem(index);
+        for (var node : e.asCollection()) {
+            if (resultOrNull == null) {
+                resultOrNull = new ArrayList<>();
+            }
+            resultOrNull.add(converter.apply(node));
+        }
+
+        List<T> result = resultOrNull == null ? Collections.emptyList() : resultOrNull;
+        if (list_cache == null) {
+            list_cache = new HashMap<>();
+        }
+        list_cache.put(index, result);
+        return result;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <T> List<T> uncheckedTypeCast(List<?> list) {
+        return (List<T>) list;
     }
 
     @Override
     public String toString() {
-        return getOrCreateDelegate().toReprString();
-    }
-
-    @Override
-    public void buildString(TreeStringBuilder builder) {
-        getOrCreateDelegate().buildString(builder);
+        return prettyFormat(0);
     }
 
     public String prettyFormat(int indent) {
-        return ParseTreePPrint.format(this, indent);
+        return ParseTreePPrint.format(node, indent);
     }
 
     public ParseTreeNode getNode() {

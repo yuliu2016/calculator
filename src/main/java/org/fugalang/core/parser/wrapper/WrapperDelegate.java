@@ -1,10 +1,12 @@
-package org.fugalang.core.parser;
+package org.fugalang.core.parser.wrapper;
 
+import org.fugalang.core.parser.*;
 import org.fugalang.core.pprint.ListStringElem;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated(forRemoval = true)
 class WrapperDelegate implements NodeDelegate {
     private final ParserRule rule;
 

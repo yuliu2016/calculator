@@ -2,8 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -22,40 +20,16 @@ public final class Pipeline extends NodeWrapper {
         super(RULE, node);
     }
 
-    private List<Pipeline2> pipeline2List;
-
-    @Override
-    protected void buildRule() {
-        addRequired(factor());
-        addRequired(pipeline2List());
-    }
-
     public Factor factor() {
-        var element = getItem(0);
-        element.failIfAbsent(Factor.RULE);
-        return Factor.of(element);
+        return Factor.of(getItem(0));
     }
 
     public List<Pipeline2> pipeline2List() {
-        if (pipeline2List != null) {
-            return pipeline2List;
-        }
-        List<Pipeline2> result = null;
-        var element = getItem(1);
-        for (var node : element.asCollection()) {
-            if (result == null) {
-                result = new ArrayList<>();
-            }
-            result.add(Pipeline2.of(node));
-        }
-        pipeline2List = result == null ? Collections.emptyList() : result;
-        return pipeline2List;
+        return getList(1, Pipeline2::of);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
@@ -97,28 +71,16 @@ public final class Pipeline extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addRequired(isTokenPipe(), "->");
-            addRequired(pipeExpr());
-        }
-
         public boolean isTokenPipe() {
-            var element = getItem(0);
-            element.failIfAbsent();
-            return element.asBoolean();
+            return true;
         }
 
         public PipeExpr pipeExpr() {
-            var element = getItem(1);
-            element.failIfAbsent(PipeExpr.RULE);
-            return PipeExpr.of(element);
+            return PipeExpr.of(getItem(1));
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 

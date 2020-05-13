@@ -18,48 +18,24 @@ public final class CompIf extends NodeWrapper {
         super(RULE, node);
     }
 
-    @Override
-    protected void buildRule() {
-        addRequired(isTokenIf(), "if");
-        addRequired(expr());
-        addOptional(compIterOrNull());
-    }
-
     public boolean isTokenIf() {
-        var element = getItem(0);
-        element.failIfAbsent();
-        return element.asBoolean();
+        return true;
     }
 
     public Expr expr() {
-        var element = getItem(1);
-        element.failIfAbsent(Expr.RULE);
-        return Expr.of(element);
+        return Expr.of(getItem(1));
     }
 
     public CompIter compIter() {
-        var element = getItem(2);
-        element.failIfAbsent(CompIter.RULE);
-        return CompIter.of(element);
-    }
-
-    public CompIter compIterOrNull() {
-        var element = getItem(2);
-        if (!element.isPresent(CompIter.RULE)) {
-            return null;
-        }
-        return CompIter.of(element);
+        return CompIter.of(getItem(2));
     }
 
     public boolean hasCompIter() {
-        var element = getItem(2);
-        return element.isPresent(CompIter.RULE);
+        return hasItemOfRule(2, CompIter.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 

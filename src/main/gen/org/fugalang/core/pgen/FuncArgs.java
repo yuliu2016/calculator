@@ -18,54 +18,24 @@ public final class FuncArgs extends NodeWrapper {
         super(RULE, node);
     }
 
-    @Override
-    protected void buildRule() {
-        addChoice(simpleArgListOrNull());
-        addChoice(funcArgs2OrNull());
-    }
-
     public SimpleArgList simpleArgList() {
-        var element = getItem(0);
-        element.failIfAbsent(SimpleArgList.RULE);
-        return SimpleArgList.of(element);
-    }
-
-    public SimpleArgList simpleArgListOrNull() {
-        var element = getItem(0);
-        if (!element.isPresent(SimpleArgList.RULE)) {
-            return null;
-        }
-        return SimpleArgList.of(element);
+        return SimpleArgList.of(getItem(0));
     }
 
     public boolean hasSimpleArgList() {
-        var element = getItem(0);
-        return element.isPresent(SimpleArgList.RULE);
+        return hasItemOfRule(0, SimpleArgList.RULE);
     }
 
     public FuncArgs2 funcArgs2() {
-        var element = getItem(1);
-        element.failIfAbsent(FuncArgs2.RULE);
-        return FuncArgs2.of(element);
-    }
-
-    public FuncArgs2 funcArgs2OrNull() {
-        var element = getItem(1);
-        if (!element.isPresent(FuncArgs2.RULE)) {
-            return null;
-        }
-        return FuncArgs2.of(element);
+        return FuncArgs2.of(getItem(1));
     }
 
     public boolean hasFuncArgs2() {
-        var element = getItem(1);
-        return element.isPresent(FuncArgs2.RULE);
+        return hasItemOfRule(1, FuncArgs2.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
@@ -92,48 +62,24 @@ public final class FuncArgs extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addRequired(isTokenLpar(), "(");
-            addOptional(typedArgListOrNull());
-            addRequired(isTokenRpar(), ")");
-        }
-
         public boolean isTokenLpar() {
-            var element = getItem(0);
-            element.failIfAbsent();
-            return element.asBoolean();
+            return true;
         }
 
         public TypedArgList typedArgList() {
-            var element = getItem(1);
-            element.failIfAbsent(TypedArgList.RULE);
-            return TypedArgList.of(element);
-        }
-
-        public TypedArgList typedArgListOrNull() {
-            var element = getItem(1);
-            if (!element.isPresent(TypedArgList.RULE)) {
-                return null;
-            }
-            return TypedArgList.of(element);
+            return TypedArgList.of(getItem(1));
         }
 
         public boolean hasTypedArgList() {
-            var element = getItem(1);
-            return element.isPresent(TypedArgList.RULE);
+            return hasItemOfRule(1, TypedArgList.RULE);
         }
 
         public boolean isTokenRpar() {
-            var element = getItem(2);
-            element.failIfAbsent();
-            return element.asBoolean();
+            return true;
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 

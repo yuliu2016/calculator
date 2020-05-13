@@ -2,8 +2,6 @@ package org.fugalang.core.grammar.pgen;
 
 import org.fugalang.core.parser.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -22,40 +20,16 @@ public final class AndRule extends NodeWrapper {
         super(RULE, node);
     }
 
-    private List<AndRule2> andRule2List;
-
-    @Override
-    protected void buildRule() {
-        addRequired(repeatRule());
-        addRequired(andRule2List());
-    }
-
     public RepeatRule repeatRule() {
-        var element = getItem(0);
-        element.failIfAbsent(RepeatRule.RULE);
-        return RepeatRule.of(element);
+        return RepeatRule.of(getItem(0));
     }
 
     public List<AndRule2> andRule2List() {
-        if (andRule2List != null) {
-            return andRule2List;
-        }
-        List<AndRule2> result = null;
-        var element = getItem(1);
-        for (var node : element.asCollection()) {
-            if (result == null) {
-                result = new ArrayList<>();
-            }
-            result.add(AndRule2.of(node));
-        }
-        andRule2List = result == null ? Collections.emptyList() : result;
-        return andRule2List;
+        return getList(1, AndRule2::of);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
@@ -97,21 +71,12 @@ public final class AndRule extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addRequired(repeatRule());
-        }
-
         public RepeatRule repeatRule() {
-            var element = getItem(0);
-            element.failIfAbsent(RepeatRule.RULE);
-            return RepeatRule.of(element);
+            return RepeatRule.of(getItem(0));
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 

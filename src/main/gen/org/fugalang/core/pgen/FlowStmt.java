@@ -18,94 +18,40 @@ public final class FlowStmt extends NodeWrapper {
         super(RULE, node);
     }
 
-    @Override
-    protected void buildRule() {
-        addChoice(breakStmtOrNull());
-        addChoice(continueStmtOrNull());
-        addChoice(returnStmtOrNull());
-        addChoice(raiseStmtOrNull());
-    }
-
     public BreakStmt breakStmt() {
-        var element = getItem(0);
-        element.failIfAbsent(BreakStmt.RULE);
-        return BreakStmt.of(element);
-    }
-
-    public BreakStmt breakStmtOrNull() {
-        var element = getItem(0);
-        if (!element.isPresent(BreakStmt.RULE)) {
-            return null;
-        }
-        return BreakStmt.of(element);
+        return BreakStmt.of(getItem(0));
     }
 
     public boolean hasBreakStmt() {
-        var element = getItem(0);
-        return element.isPresent(BreakStmt.RULE);
+        return hasItemOfRule(0, BreakStmt.RULE);
     }
 
     public ContinueStmt continueStmt() {
-        var element = getItem(1);
-        element.failIfAbsent(ContinueStmt.RULE);
-        return ContinueStmt.of(element);
-    }
-
-    public ContinueStmt continueStmtOrNull() {
-        var element = getItem(1);
-        if (!element.isPresent(ContinueStmt.RULE)) {
-            return null;
-        }
-        return ContinueStmt.of(element);
+        return ContinueStmt.of(getItem(1));
     }
 
     public boolean hasContinueStmt() {
-        var element = getItem(1);
-        return element.isPresent(ContinueStmt.RULE);
+        return hasItemOfRule(1, ContinueStmt.RULE);
     }
 
     public ReturnStmt returnStmt() {
-        var element = getItem(2);
-        element.failIfAbsent(ReturnStmt.RULE);
-        return ReturnStmt.of(element);
-    }
-
-    public ReturnStmt returnStmtOrNull() {
-        var element = getItem(2);
-        if (!element.isPresent(ReturnStmt.RULE)) {
-            return null;
-        }
-        return ReturnStmt.of(element);
+        return ReturnStmt.of(getItem(2));
     }
 
     public boolean hasReturnStmt() {
-        var element = getItem(2);
-        return element.isPresent(ReturnStmt.RULE);
+        return hasItemOfRule(2, ReturnStmt.RULE);
     }
 
     public RaiseStmt raiseStmt() {
-        var element = getItem(3);
-        element.failIfAbsent(RaiseStmt.RULE);
-        return RaiseStmt.of(element);
-    }
-
-    public RaiseStmt raiseStmtOrNull() {
-        var element = getItem(3);
-        if (!element.isPresent(RaiseStmt.RULE)) {
-            return null;
-        }
-        return RaiseStmt.of(element);
+        return RaiseStmt.of(getItem(3));
     }
 
     public boolean hasRaiseStmt() {
-        var element = getItem(3);
-        return element.isPresent(RaiseStmt.RULE);
+        return hasItemOfRule(3, RaiseStmt.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 

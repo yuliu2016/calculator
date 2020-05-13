@@ -2,8 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -22,46 +20,20 @@ public final class Arglist extends NodeWrapper {
         super(RULE, node);
     }
 
-    private List<Arglist2> arglist2List;
-
-    @Override
-    protected void buildRule() {
-        addRequired(argument());
-        addRequired(arglist2List());
-        addOptional(isTokenComma(), ",");
-    }
-
     public Argument argument() {
-        var element = getItem(0);
-        element.failIfAbsent(Argument.RULE);
-        return Argument.of(element);
+        return Argument.of(getItem(0));
     }
 
     public List<Arglist2> arglist2List() {
-        if (arglist2List != null) {
-            return arglist2List;
-        }
-        List<Arglist2> result = null;
-        var element = getItem(1);
-        for (var node : element.asCollection()) {
-            if (result == null) {
-                result = new ArrayList<>();
-            }
-            result.add(Arglist2.of(node));
-        }
-        arglist2List = result == null ? Collections.emptyList() : result;
-        return arglist2List;
+        return getList(1, Arglist2::of);
     }
 
     public boolean isTokenComma() {
-        var element = getItem(2);
-        return element.asBoolean();
+        return getBoolean(2);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
@@ -104,28 +76,16 @@ public final class Arglist extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addRequired(isTokenComma(), ",");
-            addRequired(argument());
-        }
-
         public boolean isTokenComma() {
-            var element = getItem(0);
-            element.failIfAbsent();
-            return element.asBoolean();
+            return true;
         }
 
         public Argument argument() {
-            var element = getItem(1);
-            element.failIfAbsent(Argument.RULE);
-            return Argument.of(element);
+            return Argument.of(getItem(1));
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 

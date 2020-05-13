@@ -19,42 +19,24 @@ public final class SingleRule extends NodeWrapper {
         super(RULE, node);
     }
 
-    @Override
-    protected void buildRule() {
-        addRequired(token());
-        addRequired(colon());
-        addRequired(orRule());
-        addRequired(newline());
-    }
-
     public String token() {
-        var element = getItem(0);
-        element.failIfAbsent(MetaTokenType.TOK);
-        return element.asString();
+        return getItemOfType(0,MetaTokenType.TOK);
     }
 
     public String colon() {
-        var element = getItem(1);
-        element.failIfAbsent(MetaTokenType.COL);
-        return element.asString();
+        return getItemOfType(1,MetaTokenType.COL);
     }
 
     public OrRule orRule() {
-        var element = getItem(2);
-        element.failIfAbsent(OrRule.RULE);
-        return OrRule.of(element);
+        return OrRule.of(getItem(2));
     }
 
     public String newline() {
-        var element = getItem(3);
-        element.failIfAbsent(MetaTokenType.NEWLINE);
-        return element.asString();
+        return getItemOfType(3,MetaTokenType.NEWLINE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 

@@ -18,28 +18,16 @@ public final class ElseSuite extends NodeWrapper {
         super(RULE, node);
     }
 
-    @Override
-    protected void buildRule() {
-        addRequired(isTokenElse(), "else");
-        addRequired(suite());
-    }
-
     public boolean isTokenElse() {
-        var element = getItem(0);
-        element.failIfAbsent();
-        return element.asBoolean();
+        return true;
     }
 
     public Suite suite() {
-        var element = getItem(1);
-        element.failIfAbsent(Suite.RULE);
-        return Suite.of(element);
+        return Suite.of(getItem(1));
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 

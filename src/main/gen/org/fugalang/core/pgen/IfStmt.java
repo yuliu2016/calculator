@@ -2,8 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -22,74 +20,32 @@ public final class IfStmt extends NodeWrapper {
         super(RULE, node);
     }
 
-    private List<ElifStmt> elifStmtList;
-
-    @Override
-    protected void buildRule() {
-        addRequired(isTokenIf(), "if");
-        addRequired(namedExpr());
-        addRequired(suite());
-        addRequired(elifStmtList());
-        addOptional(elseSuiteOrNull());
-    }
-
     public boolean isTokenIf() {
-        var element = getItem(0);
-        element.failIfAbsent();
-        return element.asBoolean();
+        return true;
     }
 
     public NamedExpr namedExpr() {
-        var element = getItem(1);
-        element.failIfAbsent(NamedExpr.RULE);
-        return NamedExpr.of(element);
+        return NamedExpr.of(getItem(1));
     }
 
     public Suite suite() {
-        var element = getItem(2);
-        element.failIfAbsent(Suite.RULE);
-        return Suite.of(element);
+        return Suite.of(getItem(2));
     }
 
     public List<ElifStmt> elifStmtList() {
-        if (elifStmtList != null) {
-            return elifStmtList;
-        }
-        List<ElifStmt> result = null;
-        var element = getItem(3);
-        for (var node : element.asCollection()) {
-            if (result == null) {
-                result = new ArrayList<>();
-            }
-            result.add(ElifStmt.of(node));
-        }
-        elifStmtList = result == null ? Collections.emptyList() : result;
-        return elifStmtList;
+        return getList(3, ElifStmt::of);
     }
 
     public ElseSuite elseSuite() {
-        var element = getItem(4);
-        element.failIfAbsent(ElseSuite.RULE);
-        return ElseSuite.of(element);
-    }
-
-    public ElseSuite elseSuiteOrNull() {
-        var element = getItem(4);
-        if (!element.isPresent(ElseSuite.RULE)) {
-            return null;
-        }
-        return ElseSuite.of(element);
+        return ElseSuite.of(getItem(4));
     }
 
     public boolean hasElseSuite() {
-        var element = getItem(4);
-        return element.isPresent(ElseSuite.RULE);
+        return hasItemOfRule(4, ElseSuite.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 

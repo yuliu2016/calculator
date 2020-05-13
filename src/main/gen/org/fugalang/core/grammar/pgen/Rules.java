@@ -2,8 +2,6 @@ package org.fugalang.core.grammar.pgen;
 
 import org.fugalang.core.parser.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -22,33 +20,12 @@ public final class Rules extends NodeWrapper {
         super(RULE, node);
     }
 
-    private List<SingleRule> singleRuleList;
-
-    @Override
-    protected void buildRule() {
-        addRequired(singleRuleList());
-    }
-
     public List<SingleRule> singleRuleList() {
-        if (singleRuleList != null) {
-            return singleRuleList;
-        }
-        List<SingleRule> result = null;
-        var element = getItem(0);
-        for (var node : element.asCollection()) {
-            if (result == null) {
-                result = new ArrayList<>();
-            }
-            result.add(SingleRule.of(node));
-        }
-        singleRuleList = result == null ? Collections.emptyList() : result;
-        return singleRuleList;
+        return getList(0, SingleRule::of);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 

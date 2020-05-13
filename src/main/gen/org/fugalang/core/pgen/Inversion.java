@@ -18,54 +18,24 @@ public final class Inversion extends NodeWrapper {
         super(RULE, node);
     }
 
-    @Override
-    protected void buildRule() {
-        addChoice(inversion1OrNull());
-        addChoice(comparisonOrNull());
-    }
-
     public Inversion1 inversion1() {
-        var element = getItem(0);
-        element.failIfAbsent(Inversion1.RULE);
-        return Inversion1.of(element);
-    }
-
-    public Inversion1 inversion1OrNull() {
-        var element = getItem(0);
-        if (!element.isPresent(Inversion1.RULE)) {
-            return null;
-        }
-        return Inversion1.of(element);
+        return Inversion1.of(getItem(0));
     }
 
     public boolean hasInversion1() {
-        var element = getItem(0);
-        return element.isPresent(Inversion1.RULE);
+        return hasItemOfRule(0, Inversion1.RULE);
     }
 
     public Comparison comparison() {
-        var element = getItem(1);
-        element.failIfAbsent(Comparison.RULE);
-        return Comparison.of(element);
-    }
-
-    public Comparison comparisonOrNull() {
-        var element = getItem(1);
-        if (!element.isPresent(Comparison.RULE)) {
-            return null;
-        }
-        return Comparison.of(element);
+        return Comparison.of(getItem(1));
     }
 
     public boolean hasComparison() {
-        var element = getItem(1);
-        return element.isPresent(Comparison.RULE);
+        return hasItemOfRule(1, Comparison.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
@@ -92,28 +62,16 @@ public final class Inversion extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addRequired(isTokenNot(), "not");
-            addRequired(inversion());
-        }
-
         public boolean isTokenNot() {
-            var element = getItem(0);
-            element.failIfAbsent();
-            return element.asBoolean();
+            return true;
         }
 
         public Inversion inversion() {
-            var element = getItem(1);
-            element.failIfAbsent(Inversion.RULE);
-            return Inversion.of(element);
+            return Inversion.of(getItem(1));
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 

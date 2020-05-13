@@ -2,8 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -22,46 +20,20 @@ public final class SimpleStmt extends NodeWrapper {
         super(RULE, node);
     }
 
-    private List<SimpleStmt2> simpleStmt2List;
-
-    @Override
-    protected void buildRule() {
-        addRequired(smallStmt());
-        addRequired(simpleStmt2List());
-        addOptional(isTokenSemicolon(), ";");
-    }
-
     public SmallStmt smallStmt() {
-        var element = getItem(0);
-        element.failIfAbsent(SmallStmt.RULE);
-        return SmallStmt.of(element);
+        return SmallStmt.of(getItem(0));
     }
 
     public List<SimpleStmt2> simpleStmt2List() {
-        if (simpleStmt2List != null) {
-            return simpleStmt2List;
-        }
-        List<SimpleStmt2> result = null;
-        var element = getItem(1);
-        for (var node : element.asCollection()) {
-            if (result == null) {
-                result = new ArrayList<>();
-            }
-            result.add(SimpleStmt2.of(node));
-        }
-        simpleStmt2List = result == null ? Collections.emptyList() : result;
-        return simpleStmt2List;
+        return getList(1, SimpleStmt2::of);
     }
 
     public boolean isTokenSemicolon() {
-        var element = getItem(2);
-        return element.asBoolean();
+        return getBoolean(2);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
@@ -104,28 +76,16 @@ public final class SimpleStmt extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addRequired(isTokenSemicolon(), ";");
-            addRequired(smallStmt());
-        }
-
         public boolean isTokenSemicolon() {
-            var element = getItem(0);
-            element.failIfAbsent();
-            return element.asBoolean();
+            return true;
         }
 
         public SmallStmt smallStmt() {
-            var element = getItem(1);
-            element.failIfAbsent(SmallStmt.RULE);
-            return SmallStmt.of(element);
+            return SmallStmt.of(getItem(1));
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 

@@ -18,54 +18,24 @@ public final class DictOrSet extends NodeWrapper {
         super(RULE, node);
     }
 
-    @Override
-    protected void buildRule() {
-        addChoice(dictMakerOrNull());
-        addChoice(setMakerOrNull());
-    }
-
     public DictMaker dictMaker() {
-        var element = getItem(0);
-        element.failIfAbsent(DictMaker.RULE);
-        return DictMaker.of(element);
-    }
-
-    public DictMaker dictMakerOrNull() {
-        var element = getItem(0);
-        if (!element.isPresent(DictMaker.RULE)) {
-            return null;
-        }
-        return DictMaker.of(element);
+        return DictMaker.of(getItem(0));
     }
 
     public boolean hasDictMaker() {
-        var element = getItem(0);
-        return element.isPresent(DictMaker.RULE);
+        return hasItemOfRule(0, DictMaker.RULE);
     }
 
     public SetMaker setMaker() {
-        var element = getItem(1);
-        element.failIfAbsent(SetMaker.RULE);
-        return SetMaker.of(element);
-    }
-
-    public SetMaker setMakerOrNull() {
-        var element = getItem(1);
-        if (!element.isPresent(SetMaker.RULE)) {
-            return null;
-        }
-        return SetMaker.of(element);
+        return SetMaker.of(getItem(1));
     }
 
     public boolean hasSetMaker() {
-        var element = getItem(1);
-        return element.isPresent(SetMaker.RULE);
+        return hasItemOfRule(1, SetMaker.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 

@@ -18,54 +18,24 @@ public final class Slice extends NodeWrapper {
         super(RULE, node);
     }
 
-    @Override
-    protected void buildRule() {
-        addChoice(exprOrNull());
-        addChoice(slice2OrNull());
-    }
-
     public Expr expr() {
-        var element = getItem(0);
-        element.failIfAbsent(Expr.RULE);
-        return Expr.of(element);
-    }
-
-    public Expr exprOrNull() {
-        var element = getItem(0);
-        if (!element.isPresent(Expr.RULE)) {
-            return null;
-        }
-        return Expr.of(element);
+        return Expr.of(getItem(0));
     }
 
     public boolean hasExpr() {
-        var element = getItem(0);
-        return element.isPresent(Expr.RULE);
+        return hasItemOfRule(0, Expr.RULE);
     }
 
     public Slice2 slice2() {
-        var element = getItem(1);
-        element.failIfAbsent(Slice2.RULE);
-        return Slice2.of(element);
-    }
-
-    public Slice2 slice2OrNull() {
-        var element = getItem(1);
-        if (!element.isPresent(Slice2.RULE)) {
-            return null;
-        }
-        return Slice2.of(element);
+        return Slice2.of(getItem(1));
     }
 
     public boolean hasSlice2() {
-        var element = getItem(1);
-        return element.isPresent(Slice2.RULE);
+        return hasItemOfRule(1, Slice2.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
@@ -92,81 +62,36 @@ public final class Slice extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addOptional(exprOrNull());
-            addRequired(isTokenColon(), ":");
-            addOptional(expr1OrNull());
-            addOptional(slice24OrNull());
-        }
-
         public Expr expr() {
-            var element = getItem(0);
-            element.failIfAbsent(Expr.RULE);
-            return Expr.of(element);
-        }
-
-        public Expr exprOrNull() {
-            var element = getItem(0);
-            if (!element.isPresent(Expr.RULE)) {
-                return null;
-            }
-            return Expr.of(element);
+            return Expr.of(getItem(0));
         }
 
         public boolean hasExpr() {
-            var element = getItem(0);
-            return element.isPresent(Expr.RULE);
+            return hasItemOfRule(0, Expr.RULE);
         }
 
         public boolean isTokenColon() {
-            var element = getItem(1);
-            element.failIfAbsent();
-            return element.asBoolean();
+            return true;
         }
 
         public Expr expr1() {
-            var element = getItem(2);
-            element.failIfAbsent(Expr.RULE);
-            return Expr.of(element);
-        }
-
-        public Expr expr1OrNull() {
-            var element = getItem(2);
-            if (!element.isPresent(Expr.RULE)) {
-                return null;
-            }
-            return Expr.of(element);
+            return Expr.of(getItem(2));
         }
 
         public boolean hasExpr1() {
-            var element = getItem(2);
-            return element.isPresent(Expr.RULE);
+            return hasItemOfRule(2, Expr.RULE);
         }
 
         public Slice24 slice24() {
-            var element = getItem(3);
-            element.failIfAbsent(Slice24.RULE);
-            return Slice24.of(element);
-        }
-
-        public Slice24 slice24OrNull() {
-            var element = getItem(3);
-            if (!element.isPresent(Slice24.RULE)) {
-                return null;
-            }
-            return Slice24.of(element);
+            return Slice24.of(getItem(3));
         }
 
         public boolean hasSlice24() {
-            var element = getItem(3);
-            return element.isPresent(Slice24.RULE);
+            return hasItemOfRule(3, Slice24.RULE);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
@@ -196,41 +121,20 @@ public final class Slice extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addRequired(isTokenColon(), ":");
-            addOptional(exprOrNull());
-        }
-
         public boolean isTokenColon() {
-            var element = getItem(0);
-            element.failIfAbsent();
-            return element.asBoolean();
+            return true;
         }
 
         public Expr expr() {
-            var element = getItem(1);
-            element.failIfAbsent(Expr.RULE);
-            return Expr.of(element);
-        }
-
-        public Expr exprOrNull() {
-            var element = getItem(1);
-            if (!element.isPresent(Expr.RULE)) {
-                return null;
-            }
-            return Expr.of(element);
+            return Expr.of(getItem(1));
         }
 
         public boolean hasExpr() {
-            var element = getItem(1);
-            return element.isPresent(Expr.RULE);
+            return hasItemOfRule(1, Expr.RULE);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 

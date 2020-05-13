@@ -18,74 +18,32 @@ public final class CompoundAtom extends NodeWrapper {
         super(RULE, node);
     }
 
-    @Override
-    protected void buildRule() {
-        addChoice(compoundAtom1OrNull());
-        addChoice(compoundAtom2OrNull());
-        addChoice(compoundAtom3OrNull());
-    }
-
     public CompoundAtom1 compoundAtom1() {
-        var element = getItem(0);
-        element.failIfAbsent(CompoundAtom1.RULE);
-        return CompoundAtom1.of(element);
-    }
-
-    public CompoundAtom1 compoundAtom1OrNull() {
-        var element = getItem(0);
-        if (!element.isPresent(CompoundAtom1.RULE)) {
-            return null;
-        }
-        return CompoundAtom1.of(element);
+        return CompoundAtom1.of(getItem(0));
     }
 
     public boolean hasCompoundAtom1() {
-        var element = getItem(0);
-        return element.isPresent(CompoundAtom1.RULE);
+        return hasItemOfRule(0, CompoundAtom1.RULE);
     }
 
     public CompoundAtom2 compoundAtom2() {
-        var element = getItem(1);
-        element.failIfAbsent(CompoundAtom2.RULE);
-        return CompoundAtom2.of(element);
-    }
-
-    public CompoundAtom2 compoundAtom2OrNull() {
-        var element = getItem(1);
-        if (!element.isPresent(CompoundAtom2.RULE)) {
-            return null;
-        }
-        return CompoundAtom2.of(element);
+        return CompoundAtom2.of(getItem(1));
     }
 
     public boolean hasCompoundAtom2() {
-        var element = getItem(1);
-        return element.isPresent(CompoundAtom2.RULE);
+        return hasItemOfRule(1, CompoundAtom2.RULE);
     }
 
     public CompoundAtom3 compoundAtom3() {
-        var element = getItem(2);
-        element.failIfAbsent(CompoundAtom3.RULE);
-        return CompoundAtom3.of(element);
-    }
-
-    public CompoundAtom3 compoundAtom3OrNull() {
-        var element = getItem(2);
-        if (!element.isPresent(CompoundAtom3.RULE)) {
-            return null;
-        }
-        return CompoundAtom3.of(element);
+        return CompoundAtom3.of(getItem(2));
     }
 
     public boolean hasCompoundAtom3() {
-        var element = getItem(2);
-        return element.isPresent(CompoundAtom3.RULE);
+        return hasItemOfRule(2, CompoundAtom3.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
@@ -113,48 +71,24 @@ public final class CompoundAtom extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addRequired(isTokenLpar(), "(");
-            addOptional(namedExprListOrNull());
-            addRequired(isTokenRpar(), ")");
-        }
-
         public boolean isTokenLpar() {
-            var element = getItem(0);
-            element.failIfAbsent();
-            return element.asBoolean();
+            return true;
         }
 
         public NamedExprList namedExprList() {
-            var element = getItem(1);
-            element.failIfAbsent(NamedExprList.RULE);
-            return NamedExprList.of(element);
-        }
-
-        public NamedExprList namedExprListOrNull() {
-            var element = getItem(1);
-            if (!element.isPresent(NamedExprList.RULE)) {
-                return null;
-            }
-            return NamedExprList.of(element);
+            return NamedExprList.of(getItem(1));
         }
 
         public boolean hasNamedExprList() {
-            var element = getItem(1);
-            return element.isPresent(NamedExprList.RULE);
+            return hasItemOfRule(1, NamedExprList.RULE);
         }
 
         public boolean isTokenRpar() {
-            var element = getItem(2);
-            element.failIfAbsent();
-            return element.asBoolean();
+            return true;
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
@@ -183,48 +117,24 @@ public final class CompoundAtom extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addRequired(isTokenLsqb(), "[");
-            addOptional(namedExprListOrNull());
-            addRequired(isTokenRsqb(), "]");
-        }
-
         public boolean isTokenLsqb() {
-            var element = getItem(0);
-            element.failIfAbsent();
-            return element.asBoolean();
+            return true;
         }
 
         public NamedExprList namedExprList() {
-            var element = getItem(1);
-            element.failIfAbsent(NamedExprList.RULE);
-            return NamedExprList.of(element);
-        }
-
-        public NamedExprList namedExprListOrNull() {
-            var element = getItem(1);
-            if (!element.isPresent(NamedExprList.RULE)) {
-                return null;
-            }
-            return NamedExprList.of(element);
+            return NamedExprList.of(getItem(1));
         }
 
         public boolean hasNamedExprList() {
-            var element = getItem(1);
-            return element.isPresent(NamedExprList.RULE);
+            return hasItemOfRule(1, NamedExprList.RULE);
         }
 
         public boolean isTokenRsqb() {
-            var element = getItem(2);
-            element.failIfAbsent();
-            return element.asBoolean();
+            return true;
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
@@ -253,48 +163,24 @@ public final class CompoundAtom extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addRequired(isTokenLbrace(), "{");
-            addOptional(dictOrSetOrNull());
-            addRequired(isTokenRbrace(), "}");
-        }
-
         public boolean isTokenLbrace() {
-            var element = getItem(0);
-            element.failIfAbsent();
-            return element.asBoolean();
+            return true;
         }
 
         public DictOrSet dictOrSet() {
-            var element = getItem(1);
-            element.failIfAbsent(DictOrSet.RULE);
-            return DictOrSet.of(element);
-        }
-
-        public DictOrSet dictOrSetOrNull() {
-            var element = getItem(1);
-            if (!element.isPresent(DictOrSet.RULE)) {
-                return null;
-            }
-            return DictOrSet.of(element);
+            return DictOrSet.of(getItem(1));
         }
 
         public boolean hasDictOrSet() {
-            var element = getItem(1);
-            return element.isPresent(DictOrSet.RULE);
+            return hasItemOfRule(1, DictOrSet.RULE);
         }
 
         public boolean isTokenRbrace() {
-            var element = getItem(2);
-            element.failIfAbsent();
-            return element.asBoolean();
+            return true;
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 

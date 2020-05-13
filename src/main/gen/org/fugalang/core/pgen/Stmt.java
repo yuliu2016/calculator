@@ -19,28 +19,16 @@ public final class Stmt extends NodeWrapper {
         super(RULE, node);
     }
 
-    @Override
-    protected void buildRule() {
-        addRequired(stmt1());
-        addRequired(newline());
-    }
-
     public Stmt1 stmt1() {
-        var element = getItem(0);
-        element.failIfAbsent(Stmt1.RULE);
-        return Stmt1.of(element);
+        return Stmt1.of(getItem(0));
     }
 
     public String newline() {
-        var element = getItem(1);
-        element.failIfAbsent(TokenType.NEWLINE);
-        return element.asString();
+        return getItemOfType(1,TokenType.NEWLINE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
@@ -67,54 +55,24 @@ public final class Stmt extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addChoice(simpleStmtOrNull());
-            addChoice(compoundStmtOrNull());
-        }
-
         public SimpleStmt simpleStmt() {
-            var element = getItem(0);
-            element.failIfAbsent(SimpleStmt.RULE);
-            return SimpleStmt.of(element);
-        }
-
-        public SimpleStmt simpleStmtOrNull() {
-            var element = getItem(0);
-            if (!element.isPresent(SimpleStmt.RULE)) {
-                return null;
-            }
-            return SimpleStmt.of(element);
+            return SimpleStmt.of(getItem(0));
         }
 
         public boolean hasSimpleStmt() {
-            var element = getItem(0);
-            return element.isPresent(SimpleStmt.RULE);
+            return hasItemOfRule(0, SimpleStmt.RULE);
         }
 
         public CompoundStmt compoundStmt() {
-            var element = getItem(1);
-            element.failIfAbsent(CompoundStmt.RULE);
-            return CompoundStmt.of(element);
-        }
-
-        public CompoundStmt compoundStmtOrNull() {
-            var element = getItem(1);
-            if (!element.isPresent(CompoundStmt.RULE)) {
-                return null;
-            }
-            return CompoundStmt.of(element);
+            return CompoundStmt.of(getItem(1));
         }
 
         public boolean hasCompoundStmt() {
-            var element = getItem(1);
-            return element.isPresent(CompoundStmt.RULE);
+            return hasItemOfRule(1, CompoundStmt.RULE);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 

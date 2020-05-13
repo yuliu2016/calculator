@@ -19,54 +19,24 @@ public final class Atom extends NodeWrapper {
         super(RULE, node);
     }
 
-    @Override
-    protected void buildRule() {
-        addChoice(atom1OrNull());
-        addChoice(numberOrNull());
-    }
-
     public Atom1 atom1() {
-        var element = getItem(0);
-        element.failIfAbsent(Atom1.RULE);
-        return Atom1.of(element);
-    }
-
-    public Atom1 atom1OrNull() {
-        var element = getItem(0);
-        if (!element.isPresent(Atom1.RULE)) {
-            return null;
-        }
-        return Atom1.of(element);
+        return Atom1.of(getItem(0));
     }
 
     public boolean hasAtom1() {
-        var element = getItem(0);
-        return element.isPresent(Atom1.RULE);
+        return hasItemOfRule(0, Atom1.RULE);
     }
 
     public String number() {
-        var element = getItem(1);
-        element.failIfAbsent(TokenType.NUMBER);
-        return element.asString();
-    }
-
-    public String numberOrNull() {
-        var element = getItem(1);
-        if (!element.isPresent(TokenType.NUMBER)) {
-            return null;
-        }
-        return element.asString();
+        return getItemOfType(1,TokenType.NUMBER);
     }
 
     public boolean hasNumber() {
-        var element = getItem(1);
-        return element.isPresent(TokenType.NUMBER);
+        return hasItemOfType(1, TokenType.NUMBER);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
@@ -93,35 +63,20 @@ public final class Atom extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addRequired(isTokenLpar(), "(");
-            addRequired(sum());
-            addRequired(isTokenRpar(), ")");
-        }
-
         public boolean isTokenLpar() {
-            var element = getItem(0);
-            element.failIfAbsent();
-            return element.asBoolean();
+            return true;
         }
 
         public Sum sum() {
-            var element = getItem(1);
-            element.failIfAbsent(Sum.RULE);
-            return Sum.of(element);
+            return Sum.of(getItem(1));
         }
 
         public boolean isTokenRpar() {
-            var element = getItem(2);
-            element.failIfAbsent();
-            return element.asBoolean();
+            return true;
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 

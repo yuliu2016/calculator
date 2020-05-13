@@ -18,35 +18,20 @@ public final class ElifStmt extends NodeWrapper {
         super(RULE, node);
     }
 
-    @Override
-    protected void buildRule() {
-        addRequired(isTokenElif(), "elif");
-        addRequired(namedExpr());
-        addRequired(suite());
-    }
-
     public boolean isTokenElif() {
-        var element = getItem(0);
-        element.failIfAbsent();
-        return element.asBoolean();
+        return true;
     }
 
     public NamedExpr namedExpr() {
-        var element = getItem(1);
-        element.failIfAbsent(NamedExpr.RULE);
-        return NamedExpr.of(element);
+        return NamedExpr.of(getItem(1));
     }
 
     public Suite suite() {
-        var element = getItem(2);
-        element.failIfAbsent(Suite.RULE);
-        return Suite.of(element);
+        return Suite.of(getItem(2));
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 

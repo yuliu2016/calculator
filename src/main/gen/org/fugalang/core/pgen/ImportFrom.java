@@ -18,42 +18,24 @@ public final class ImportFrom extends NodeWrapper {
         super(RULE, node);
     }
 
-    @Override
-    protected void buildRule() {
-        addRequired(isTokenFrom(), "from");
-        addRequired(importFromNames());
-        addRequired(isTokenImport(), "import");
-        addRequired(importFrom4());
-    }
-
     public boolean isTokenFrom() {
-        var element = getItem(0);
-        element.failIfAbsent();
-        return element.asBoolean();
+        return true;
     }
 
     public ImportFromNames importFromNames() {
-        var element = getItem(1);
-        element.failIfAbsent(ImportFromNames.RULE);
-        return ImportFromNames.of(element);
+        return ImportFromNames.of(getItem(1));
     }
 
     public boolean isTokenImport() {
-        var element = getItem(2);
-        element.failIfAbsent();
-        return element.asBoolean();
+        return true;
     }
 
     public ImportFrom4 importFrom4() {
-        var element = getItem(3);
-        element.failIfAbsent(ImportFrom4.RULE);
-        return ImportFrom4.of(element);
+        return ImportFrom4.of(getItem(3));
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
@@ -82,60 +64,28 @@ public final class ImportFrom extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addChoice(isTokenTimes(), "*");
-            addChoice(importFrom42OrNull());
-            addChoice(importAsNamesOrNull());
-        }
-
         public boolean isTokenTimes() {
-            var element = getItem(0);
-            return element.asBoolean();
+            return getBoolean(0);
         }
 
         public ImportFrom42 importFrom42() {
-            var element = getItem(1);
-            element.failIfAbsent(ImportFrom42.RULE);
-            return ImportFrom42.of(element);
-        }
-
-        public ImportFrom42 importFrom42OrNull() {
-            var element = getItem(1);
-            if (!element.isPresent(ImportFrom42.RULE)) {
-                return null;
-            }
-            return ImportFrom42.of(element);
+            return ImportFrom42.of(getItem(1));
         }
 
         public boolean hasImportFrom42() {
-            var element = getItem(1);
-            return element.isPresent(ImportFrom42.RULE);
+            return hasItemOfRule(1, ImportFrom42.RULE);
         }
 
         public ImportAsNames importAsNames() {
-            var element = getItem(2);
-            element.failIfAbsent(ImportAsNames.RULE);
-            return ImportAsNames.of(element);
-        }
-
-        public ImportAsNames importAsNamesOrNull() {
-            var element = getItem(2);
-            if (!element.isPresent(ImportAsNames.RULE)) {
-                return null;
-            }
-            return ImportAsNames.of(element);
+            return ImportAsNames.of(getItem(2));
         }
 
         public boolean hasImportAsNames() {
-            var element = getItem(2);
-            return element.isPresent(ImportAsNames.RULE);
+            return hasItemOfRule(2, ImportAsNames.RULE);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
@@ -164,41 +114,24 @@ public final class ImportFrom extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addRequired(isTokenLpar(), "(");
-            addRequired(importAsNames());
-            addOptional(isTokenComma(), ",");
-            addRequired(isTokenRpar(), ")");
-        }
-
         public boolean isTokenLpar() {
-            var element = getItem(0);
-            element.failIfAbsent();
-            return element.asBoolean();
+            return true;
         }
 
         public ImportAsNames importAsNames() {
-            var element = getItem(1);
-            element.failIfAbsent(ImportAsNames.RULE);
-            return ImportAsNames.of(element);
+            return ImportAsNames.of(getItem(1));
         }
 
         public boolean isTokenComma() {
-            var element = getItem(2);
-            return element.asBoolean();
+            return getBoolean(2);
         }
 
         public boolean isTokenRpar() {
-            var element = getItem(3);
-            element.failIfAbsent();
-            return element.asBoolean();
+            return true;
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 

@@ -2,8 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -22,53 +20,20 @@ public final class ImportFromNames extends NodeWrapper {
         super(RULE, node);
     }
 
-    private List<Boolean> isTokenDotList;
-
-    @Override
-    protected void buildRule() {
-        addChoice(importFromNames1OrNull());
-        addChoice(isTokenDotList());
-    }
-
     public ImportFromNames1 importFromNames1() {
-        var element = getItem(0);
-        element.failIfAbsent(ImportFromNames1.RULE);
-        return ImportFromNames1.of(element);
-    }
-
-    public ImportFromNames1 importFromNames1OrNull() {
-        var element = getItem(0);
-        if (!element.isPresent(ImportFromNames1.RULE)) {
-            return null;
-        }
-        return ImportFromNames1.of(element);
+        return ImportFromNames1.of(getItem(0));
     }
 
     public boolean hasImportFromNames1() {
-        var element = getItem(0);
-        return element.isPresent(ImportFromNames1.RULE);
+        return hasItemOfRule(0, ImportFromNames1.RULE);
     }
 
     public List<Boolean> isTokenDotList() {
-        if (isTokenDotList != null) {
-            return isTokenDotList;
-        }
-        List<Boolean> result = null;
-        var element = getItem(1);
-        for (var node : element.asCollection()) {
-            if (result == null) {
-                result = new ArrayList<>();
-            }
-            result.add(node.asBoolean());
-        }
-        isTokenDotList = result == null ? Collections.emptyList() : result;
-        return isTokenDotList;
+        return getList(1, ParseTreeNode::asBoolean);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
@@ -112,40 +77,16 @@ public final class ImportFromNames extends NodeWrapper {
             super(RULE, node);
         }
 
-        private List<Boolean> isTokenDotList;
-
-        @Override
-        protected void buildRule() {
-            addRequired(isTokenDotList());
-            addRequired(dottedName());
-        }
-
         public List<Boolean> isTokenDotList() {
-            if (isTokenDotList != null) {
-                return isTokenDotList;
-            }
-            List<Boolean> result = null;
-            var element = getItem(0);
-            for (var node : element.asCollection()) {
-                if (result == null) {
-                    result = new ArrayList<>();
-                }
-                result.add(node.asBoolean());
-            }
-            isTokenDotList = result == null ? Collections.emptyList() : result;
-            return isTokenDotList;
+            return getList(0, ParseTreeNode::asBoolean);
         }
 
         public DottedName dottedName() {
-            var element = getItem(1);
-            element.failIfAbsent(DottedName.RULE);
-            return DottedName.of(element);
+            return DottedName.of(getItem(1));
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 

@@ -2,8 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -22,40 +20,16 @@ public final class ShiftExpr extends NodeWrapper {
         super(RULE, node);
     }
 
-    private List<ShiftExpr2> shiftExpr2List;
-
-    @Override
-    protected void buildRule() {
-        addRequired(sum());
-        addRequired(shiftExpr2List());
-    }
-
     public Sum sum() {
-        var element = getItem(0);
-        element.failIfAbsent(Sum.RULE);
-        return Sum.of(element);
+        return Sum.of(getItem(0));
     }
 
     public List<ShiftExpr2> shiftExpr2List() {
-        if (shiftExpr2List != null) {
-            return shiftExpr2List;
-        }
-        List<ShiftExpr2> result = null;
-        var element = getItem(1);
-        for (var node : element.asCollection()) {
-            if (result == null) {
-                result = new ArrayList<>();
-            }
-            result.add(ShiftExpr2.of(node));
-        }
-        shiftExpr2List = result == null ? Collections.emptyList() : result;
-        return shiftExpr2List;
+        return getList(1, ShiftExpr2::of);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
@@ -97,28 +71,16 @@ public final class ShiftExpr extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addRequired(shiftExpr21());
-            addRequired(sum());
-        }
-
         public ShiftExpr21 shiftExpr21() {
-            var element = getItem(0);
-            element.failIfAbsent(ShiftExpr21.RULE);
-            return ShiftExpr21.of(element);
+            return ShiftExpr21.of(getItem(0));
         }
 
         public Sum sum() {
-            var element = getItem(1);
-            element.failIfAbsent(Sum.RULE);
-            return Sum.of(element);
+            return Sum.of(getItem(1));
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
@@ -146,26 +108,16 @@ public final class ShiftExpr extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addChoice(isTokenLshift(), "<<");
-            addChoice(isTokenRshift(), ">>");
-        }
-
         public boolean isTokenLshift() {
-            var element = getItem(0);
-            return element.asBoolean();
+            return getBoolean(0);
         }
 
         public boolean isTokenRshift() {
-            var element = getItem(1);
-            return element.asBoolean();
+            return getBoolean(1);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 

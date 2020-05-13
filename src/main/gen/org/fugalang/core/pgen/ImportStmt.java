@@ -18,54 +18,24 @@ public final class ImportStmt extends NodeWrapper {
         super(RULE, node);
     }
 
-    @Override
-    protected void buildRule() {
-        addChoice(importNameOrNull());
-        addChoice(importFromOrNull());
-    }
-
     public ImportName importName() {
-        var element = getItem(0);
-        element.failIfAbsent(ImportName.RULE);
-        return ImportName.of(element);
-    }
-
-    public ImportName importNameOrNull() {
-        var element = getItem(0);
-        if (!element.isPresent(ImportName.RULE)) {
-            return null;
-        }
-        return ImportName.of(element);
+        return ImportName.of(getItem(0));
     }
 
     public boolean hasImportName() {
-        var element = getItem(0);
-        return element.isPresent(ImportName.RULE);
+        return hasItemOfRule(0, ImportName.RULE);
     }
 
     public ImportFrom importFrom() {
-        var element = getItem(1);
-        element.failIfAbsent(ImportFrom.RULE);
-        return ImportFrom.of(element);
-    }
-
-    public ImportFrom importFromOrNull() {
-        var element = getItem(1);
-        if (!element.isPresent(ImportFrom.RULE)) {
-            return null;
-        }
-        return ImportFrom.of(element);
+        return ImportFrom.of(getItem(1));
     }
 
     public boolean hasImportFrom() {
-        var element = getItem(1);
-        return element.isPresent(ImportFrom.RULE);
+        return hasItemOfRule(1, ImportFrom.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 

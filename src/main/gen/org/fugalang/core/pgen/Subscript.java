@@ -18,35 +18,20 @@ public final class Subscript extends NodeWrapper {
         super(RULE, node);
     }
 
-    @Override
-    protected void buildRule() {
-        addRequired(isTokenLsqb(), "[");
-        addRequired(slicelist());
-        addRequired(isTokenRsqb(), "]");
-    }
-
     public boolean isTokenLsqb() {
-        var element = getItem(0);
-        element.failIfAbsent();
-        return element.asBoolean();
+        return true;
     }
 
     public Slicelist slicelist() {
-        var element = getItem(1);
-        element.failIfAbsent(Slicelist.RULE);
-        return Slicelist.of(element);
+        return Slicelist.of(getItem(1));
     }
 
     public boolean isTokenRsqb() {
-        var element = getItem(2);
-        element.failIfAbsent();
-        return element.asBoolean();
+        return true;
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 

@@ -18,41 +18,20 @@ public final class RaiseStmt extends NodeWrapper {
         super(RULE, node);
     }
 
-    @Override
-    protected void buildRule() {
-        addRequired(isTokenRaise(), "raise");
-        addOptional(raiseStmt2OrNull());
-    }
-
     public boolean isTokenRaise() {
-        var element = getItem(0);
-        element.failIfAbsent();
-        return element.asBoolean();
+        return true;
     }
 
     public RaiseStmt2 raiseStmt2() {
-        var element = getItem(1);
-        element.failIfAbsent(RaiseStmt2.RULE);
-        return RaiseStmt2.of(element);
-    }
-
-    public RaiseStmt2 raiseStmt2OrNull() {
-        var element = getItem(1);
-        if (!element.isPresent(RaiseStmt2.RULE)) {
-            return null;
-        }
-        return RaiseStmt2.of(element);
+        return RaiseStmt2.of(getItem(1));
     }
 
     public boolean hasRaiseStmt2() {
-        var element = getItem(1);
-        return element.isPresent(RaiseStmt2.RULE);
+        return hasItemOfRule(1, RaiseStmt2.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
@@ -79,41 +58,20 @@ public final class RaiseStmt extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addRequired(expr());
-            addOptional(raiseStmt22OrNull());
-        }
-
         public Expr expr() {
-            var element = getItem(0);
-            element.failIfAbsent(Expr.RULE);
-            return Expr.of(element);
+            return Expr.of(getItem(0));
         }
 
         public RaiseStmt22 raiseStmt22() {
-            var element = getItem(1);
-            element.failIfAbsent(RaiseStmt22.RULE);
-            return RaiseStmt22.of(element);
-        }
-
-        public RaiseStmt22 raiseStmt22OrNull() {
-            var element = getItem(1);
-            if (!element.isPresent(RaiseStmt22.RULE)) {
-                return null;
-            }
-            return RaiseStmt22.of(element);
+            return RaiseStmt22.of(getItem(1));
         }
 
         public boolean hasRaiseStmt22() {
-            var element = getItem(1);
-            return element.isPresent(RaiseStmt22.RULE);
+            return hasItemOfRule(1, RaiseStmt22.RULE);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
@@ -141,28 +99,16 @@ public final class RaiseStmt extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addRequired(isTokenFrom(), "from");
-            addRequired(expr());
-        }
-
         public boolean isTokenFrom() {
-            var element = getItem(0);
-            element.failIfAbsent();
-            return element.asBoolean();
+            return true;
         }
 
         public Expr expr() {
-            var element = getItem(1);
-            element.failIfAbsent(Expr.RULE);
-            return Expr.of(element);
+            return Expr.of(getItem(1));
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 

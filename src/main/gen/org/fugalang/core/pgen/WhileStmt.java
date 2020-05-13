@@ -18,55 +18,28 @@ public final class WhileStmt extends NodeWrapper {
         super(RULE, node);
     }
 
-    @Override
-    protected void buildRule() {
-        addRequired(isTokenWhile(), "while");
-        addRequired(namedExpr());
-        addRequired(suite());
-        addOptional(elseSuiteOrNull());
-    }
-
     public boolean isTokenWhile() {
-        var element = getItem(0);
-        element.failIfAbsent();
-        return element.asBoolean();
+        return true;
     }
 
     public NamedExpr namedExpr() {
-        var element = getItem(1);
-        element.failIfAbsent(NamedExpr.RULE);
-        return NamedExpr.of(element);
+        return NamedExpr.of(getItem(1));
     }
 
     public Suite suite() {
-        var element = getItem(2);
-        element.failIfAbsent(Suite.RULE);
-        return Suite.of(element);
+        return Suite.of(getItem(2));
     }
 
     public ElseSuite elseSuite() {
-        var element = getItem(3);
-        element.failIfAbsent(ElseSuite.RULE);
-        return ElseSuite.of(element);
-    }
-
-    public ElseSuite elseSuiteOrNull() {
-        var element = getItem(3);
-        if (!element.isPresent(ElseSuite.RULE)) {
-            return null;
-        }
-        return ElseSuite.of(element);
+        return ElseSuite.of(getItem(3));
     }
 
     public boolean hasElseSuite() {
-        var element = getItem(3);
-        return element.isPresent(ElseSuite.RULE);
+        return hasItemOfRule(3, ElseSuite.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 

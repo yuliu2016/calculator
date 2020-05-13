@@ -19,41 +19,20 @@ public final class RepeatRule extends NodeWrapper {
         super(RULE, node);
     }
 
-    @Override
-    protected void buildRule() {
-        addRequired(subRule());
-        addOptional(repeatRule2OrNull());
-    }
-
     public SubRule subRule() {
-        var element = getItem(0);
-        element.failIfAbsent(SubRule.RULE);
-        return SubRule.of(element);
+        return SubRule.of(getItem(0));
     }
 
     public RepeatRule2 repeatRule2() {
-        var element = getItem(1);
-        element.failIfAbsent(RepeatRule2.RULE);
-        return RepeatRule2.of(element);
-    }
-
-    public RepeatRule2 repeatRule2OrNull() {
-        var element = getItem(1);
-        if (!element.isPresent(RepeatRule2.RULE)) {
-            return null;
-        }
-        return RepeatRule2.of(element);
+        return RepeatRule2.of(getItem(1));
     }
 
     public boolean hasRepeatRule2() {
-        var element = getItem(1);
-        return element.isPresent(RepeatRule2.RULE);
+        return hasItemOfRule(1, RepeatRule2.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
@@ -80,54 +59,24 @@ public final class RepeatRule extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addChoice(starOrNull());
-            addChoice(plusOrNull());
-        }
-
         public String star() {
-            var element = getItem(0);
-            element.failIfAbsent(MetaTokenType.STAR);
-            return element.asString();
-        }
-
-        public String starOrNull() {
-            var element = getItem(0);
-            if (!element.isPresent(MetaTokenType.STAR)) {
-                return null;
-            }
-            return element.asString();
+            return getItemOfType(0,MetaTokenType.STAR);
         }
 
         public boolean hasStar() {
-            var element = getItem(0);
-            return element.isPresent(MetaTokenType.STAR);
+            return hasItemOfType(0, MetaTokenType.STAR);
         }
 
         public String plus() {
-            var element = getItem(1);
-            element.failIfAbsent(MetaTokenType.PLUS);
-            return element.asString();
-        }
-
-        public String plusOrNull() {
-            var element = getItem(1);
-            if (!element.isPresent(MetaTokenType.PLUS)) {
-                return null;
-            }
-            return element.asString();
+            return getItemOfType(1,MetaTokenType.PLUS);
         }
 
         public boolean hasPlus() {
-            var element = getItem(1);
-            return element.isPresent(MetaTokenType.PLUS);
+            return hasItemOfType(1, MetaTokenType.PLUS);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 

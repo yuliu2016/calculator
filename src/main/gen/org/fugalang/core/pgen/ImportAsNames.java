@@ -2,8 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -22,40 +20,16 @@ public final class ImportAsNames extends NodeWrapper {
         super(RULE, node);
     }
 
-    private List<ImportAsNames2> importAsNames2List;
-
-    @Override
-    protected void buildRule() {
-        addRequired(importAsName());
-        addRequired(importAsNames2List());
-    }
-
     public ImportAsName importAsName() {
-        var element = getItem(0);
-        element.failIfAbsent(ImportAsName.RULE);
-        return ImportAsName.of(element);
+        return ImportAsName.of(getItem(0));
     }
 
     public List<ImportAsNames2> importAsNames2List() {
-        if (importAsNames2List != null) {
-            return importAsNames2List;
-        }
-        List<ImportAsNames2> result = null;
-        var element = getItem(1);
-        for (var node : element.asCollection()) {
-            if (result == null) {
-                result = new ArrayList<>();
-            }
-            result.add(ImportAsNames2.of(node));
-        }
-        importAsNames2List = result == null ? Collections.emptyList() : result;
-        return importAsNames2List;
+        return getList(1, ImportAsNames2::of);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
@@ -97,28 +71,16 @@ public final class ImportAsNames extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addRequired(isTokenComma(), ",");
-            addRequired(importAsName());
-        }
-
         public boolean isTokenComma() {
-            var element = getItem(0);
-            element.failIfAbsent();
-            return element.asBoolean();
+            return true;
         }
 
         public ImportAsName importAsName() {
-            var element = getItem(1);
-            element.failIfAbsent(ImportAsName.RULE);
-            return ImportAsName.of(element);
+            return ImportAsName.of(getItem(1));
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 

@@ -18,54 +18,24 @@ public final class FuncSuite extends NodeWrapper {
         super(RULE, node);
     }
 
-    @Override
-    protected void buildRule() {
-        addChoice(funcSuite1OrNull());
-        addChoice(blockSuiteOrNull());
-    }
-
     public FuncSuite1 funcSuite1() {
-        var element = getItem(0);
-        element.failIfAbsent(FuncSuite1.RULE);
-        return FuncSuite1.of(element);
-    }
-
-    public FuncSuite1 funcSuite1OrNull() {
-        var element = getItem(0);
-        if (!element.isPresent(FuncSuite1.RULE)) {
-            return null;
-        }
-        return FuncSuite1.of(element);
+        return FuncSuite1.of(getItem(0));
     }
 
     public boolean hasFuncSuite1() {
-        var element = getItem(0);
-        return element.isPresent(FuncSuite1.RULE);
+        return hasItemOfRule(0, FuncSuite1.RULE);
     }
 
     public BlockSuite blockSuite() {
-        var element = getItem(1);
-        element.failIfAbsent(BlockSuite.RULE);
-        return BlockSuite.of(element);
-    }
-
-    public BlockSuite blockSuiteOrNull() {
-        var element = getItem(1);
-        if (!element.isPresent(BlockSuite.RULE)) {
-            return null;
-        }
-        return BlockSuite.of(element);
+        return BlockSuite.of(getItem(1));
     }
 
     public boolean hasBlockSuite() {
-        var element = getItem(1);
-        return element.isPresent(BlockSuite.RULE);
+        return hasItemOfRule(1, BlockSuite.RULE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);
         boolean result;
 
@@ -92,28 +62,16 @@ public final class FuncSuite extends NodeWrapper {
             super(RULE, node);
         }
 
-        @Override
-        protected void buildRule() {
-            addRequired(isTokenColon(), ":");
-            addRequired(expr());
-        }
-
         public boolean isTokenColon() {
-            var element = getItem(0);
-            element.failIfAbsent();
-            return element.asBoolean();
+            return true;
         }
 
         public Expr expr() {
-            var element = getItem(1);
-            element.failIfAbsent(Expr.RULE);
-            return Expr.of(element);
+            return Expr.of(getItem(1));
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
             boolean result;
 
