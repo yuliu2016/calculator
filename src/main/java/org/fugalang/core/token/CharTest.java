@@ -34,7 +34,7 @@ public class CharTest {
     }
 
     public static boolean isStringQuote(char ch) {
-        return ch == '\"';
+        return ch == '\"' || ch == '\'';
     }
 
     public static boolean isNumeric(char ch) {

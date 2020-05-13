@@ -38,7 +38,7 @@ public class SimpleParseTree implements ParseTree {
         if (!result) {
             context.errorForElem(error_pos, "Invalid syntax");
         } else if (!context.didFinish(pos)) {
-            context.errorForElem(error_pos, "Unfinished stream");
+            context.errorForElem(error_pos, "Invalid syntax");
         }
 
         return converter.apply(result_node);
@@ -155,6 +155,10 @@ public class SimpleParseTree implements ParseTree {
         var current_frame = frame_deque.peek();
 
         if (token.getType() == type) {
+            if (type.isLiteral()) {
+                throw new ParserException("The type " + type +
+                        " can only be parsed with literals");
+            }
             context.log(() -> "  ".repeat(current_frame.getLevel() + 1) +
                     "Success in type " + type + ": " + token.getValue());
             addNode(ofElement(token));
@@ -180,7 +184,7 @@ public class SimpleParseTree implements ParseTree {
         }
         var current_frame = frame_deque.peek();
 
-        if (token.getValue().equals(literal)) {
+        if (token.getType().isLiteral() && token.getValue().equals(literal)) {
             context.log(() -> "  ".repeat(current_frame.getLevel() + 1) +
                     "Success in literal " + literal + ": " + token.getValue());
 

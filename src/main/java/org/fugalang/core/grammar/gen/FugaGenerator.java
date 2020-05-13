@@ -22,7 +22,7 @@ public class FugaGenerator {
             var data = Files.readString(Paths.get(res.toURI()));
             var tokens = new MetaLexer(data).tokenize();
 
-            var context = new SimpleContext(tokens, true);
+            var context = new SimpleContext(tokens, false);
             var tree = SimpleParseTree.parse(context, Rules::parse, Rules::of);
 
             var path = Paths.get(
