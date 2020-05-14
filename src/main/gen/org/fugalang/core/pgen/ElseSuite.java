@@ -18,10 +18,6 @@ public final class ElseSuite extends NodeWrapper {
         super(RULE, node);
     }
 
-    public boolean isTokenElse() {
-        return true;
-    }
-
     public Suite suite() {
         return Suite.of(getItem(1));
     }

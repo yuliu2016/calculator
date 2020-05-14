@@ -20,10 +20,6 @@ public final class ArgsKwargs extends NodeWrapper {
         super(RULE, node);
     }
 
-    public boolean isTokenTimes() {
-        return true;
-    }
-
     public TypedArg typedArg() {
         return TypedArg.of(getItem(1));
     }
@@ -59,16 +55,12 @@ public final class ArgsKwargs extends NodeWrapper {
     }
 
     private static void parseArgsKwargs3List(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return;
         parseTree.enterCollection();
         while (true) {
             var pos = parseTree.position();
-            if (!ArgsKwargs3.parse(parseTree, level + 1) ||
-                    parseTree.guardLoopExit(pos)) {
-                break;
-            }
+            if (!ArgsKwargs3.parse(parseTree, level + 1)) break;
+            if (parseTree.guardLoopExit(pos)) break;
         }
         parseTree.exitCollection();
     }
@@ -87,10 +79,6 @@ public final class ArgsKwargs extends NodeWrapper {
 
         private ArgsKwargs3(ParseTreeNode node) {
             super(RULE, node);
-        }
-
-        public boolean isTokenComma() {
-            return true;
         }
 
         public DefaultArg defaultArg() {
@@ -124,10 +112,6 @@ public final class ArgsKwargs extends NodeWrapper {
 
         private ArgsKwargs4(ParseTreeNode node) {
             super(RULE, node);
-        }
-
-        public boolean isTokenComma() {
-            return true;
         }
 
         public Kwargs kwargs() {

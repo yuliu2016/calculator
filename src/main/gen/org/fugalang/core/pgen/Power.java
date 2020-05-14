@@ -58,10 +58,6 @@ public final class Power extends NodeWrapper {
             super(RULE, node);
         }
 
-        public boolean isTokenPower() {
-            return true;
-        }
-
         public Factor factor() {
             return Factor.of(getItem(1));
         }

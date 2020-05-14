@@ -18,16 +18,8 @@ public final class ImportFrom extends NodeWrapper {
         super(RULE, node);
     }
 
-    public boolean isTokenFrom() {
-        return true;
-    }
-
     public ImportFromNames importFromNames() {
         return ImportFromNames.of(getItem(1));
-    }
-
-    public boolean isTokenImport() {
-        return true;
     }
 
     public ImportFrom4 importFrom4() {
@@ -114,20 +106,12 @@ public final class ImportFrom extends NodeWrapper {
             super(RULE, node);
         }
 
-        public boolean isTokenLpar() {
-            return true;
-        }
-
         public ImportAsNames importAsNames() {
             return ImportAsNames.of(getItem(1));
         }
 
         public boolean isTokenComma() {
             return getBoolean(2);
-        }
-
-        public boolean isTokenRpar() {
-            return true;
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

@@ -20,10 +20,6 @@ public final class WithStmt extends NodeWrapper {
         super(RULE, node);
     }
 
-    public boolean isTokenWith() {
-        return true;
-    }
-
     public WithItem withItem() {
         return WithItem.of(getItem(1));
     }
@@ -51,16 +47,12 @@ public final class WithStmt extends NodeWrapper {
     }
 
     private static void parseWithStmt3List(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return;
         parseTree.enterCollection();
         while (true) {
             var pos = parseTree.position();
-            if (!WithStmt3.parse(parseTree, level + 1) ||
-                    parseTree.guardLoopExit(pos)) {
-                break;
-            }
+            if (!WithStmt3.parse(parseTree, level + 1)) break;
+            if (parseTree.guardLoopExit(pos)) break;
         }
         parseTree.exitCollection();
     }
@@ -79,10 +71,6 @@ public final class WithStmt extends NodeWrapper {
 
         private WithStmt3(ParseTreeNode node) {
             super(RULE, node);
-        }
-
-        public boolean isTokenComma() {
-            return true;
         }
 
         public WithItem withItem() {

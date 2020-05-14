@@ -20,10 +20,6 @@ public final class TryStmt extends NodeWrapper {
         super(RULE, node);
     }
 
-    public boolean isTokenTry() {
-        return true;
-    }
-
     public Suite suite() {
         return Suite.of(getItem(1));
     }
@@ -140,17 +136,13 @@ public final class TryStmt extends NodeWrapper {
         }
 
         private static boolean parseTryStmt311List(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             parseTree.enterCollection();
             var result = TryStmt311.parse(parseTree, level + 1);
             if (result) while (true) {
                 var pos = parseTree.position();
-                if (!TryStmt311.parse(parseTree, level + 1) ||
-                        parseTree.guardLoopExit(pos)) {
-                    break;
-                }
+                if (!TryStmt311.parse(parseTree, level + 1)) break;
+                if (parseTree.guardLoopExit(pos)) break;
             }
             parseTree.exitCollection();
             return result;

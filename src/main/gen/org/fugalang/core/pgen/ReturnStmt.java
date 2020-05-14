@@ -18,10 +18,6 @@ public final class ReturnStmt extends NodeWrapper {
         super(RULE, node);
     }
 
-    public boolean isTokenReturn() {
-        return true;
-    }
-
     public ExprlistStar exprlistStar() {
         return ExprlistStar.of(getItem(1));
     }

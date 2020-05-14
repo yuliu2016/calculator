@@ -18,10 +18,6 @@ public final class WhileStmt extends NodeWrapper {
         super(RULE, node);
     }
 
-    public boolean isTokenWhile() {
-        return true;
-    }
-
     public NamedExpr namedExpr() {
         return NamedExpr.of(getItem(1));
     }

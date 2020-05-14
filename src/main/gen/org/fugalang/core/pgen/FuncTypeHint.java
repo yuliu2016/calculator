@@ -18,16 +18,8 @@ public final class FuncTypeHint extends NodeWrapper {
         super(RULE, node);
     }
 
-    public boolean isTokenLess() {
-        return true;
-    }
-
     public Expr expr() {
         return Expr.of(getItem(1));
-    }
-
-    public boolean isTokenGreater() {
-        return true;
     }
 
     public static boolean parse(ParseTree parseTree, int level) {

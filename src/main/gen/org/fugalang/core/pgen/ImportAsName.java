@@ -59,10 +59,6 @@ public final class ImportAsName extends NodeWrapper {
             super(RULE, node);
         }
 
-        public boolean isTokenAs() {
-            return true;
-        }
-
         public String name() {
             return getItemOfType(1,TokenType.NAME);
         }

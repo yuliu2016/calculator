@@ -18,10 +18,6 @@ public final class StarExpr extends NodeWrapper {
         super(RULE, node);
     }
 
-    public boolean isTokenTimes() {
-        return true;
-    }
-
     public BitwiseOr bitwiseOr() {
         return BitwiseOr.of(getItem(1));
     }

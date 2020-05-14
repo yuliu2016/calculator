@@ -36,17 +36,13 @@ public class ClassField {
         return new ClassField(className, newFieldName, fieldType, resultSource);
     }
 
-    @Deprecated(forRemoval = true)
-    public String asFieldDeclaration() {
-        if (isSingular()) {
+    public String asGetter(RuleType ruleType, int index) {
+        var body = asGetterBody(ruleType, index);
+        if (body == null) {
             return null;
         }
-        return "    private " + className.asType() + " " + fieldName + ";\n";
-    }
-
-    public String asGetter(RuleType ruleType, int index) {
         return "\n    public " + className.asType() + " " + fieldName + "() {\n" +
-                asGetterBody(ruleType, index) +
+                body +
                 "    }\n";
     }
 
@@ -54,102 +50,27 @@ public class ClassField {
         return switch (resultSource.getType()) {
             case Class -> {
                 if (isSingular()) {
-                    yield "        return " + className.asType() +
-                            ".of(getItem(" + index + "));\n";
-//                    yield "        var element = getItem(" + index + ");\n" +
-//                            "        element.failIfAbsent(" + className.asType() + ".RULE);\n" +
-//                            "        return " + className.asType() + ".of(element);\n";
+                    yield "        return " + className.asType() + ".of(getItem(" + index + "));\n";
                 }
-//                yield listTemplate(index, className.getRealClassName() + ".of(node)");
-                yield listTemplate(index, className.getRealClassName() + "::of");
+                yield "        return getList(" + index + ", " + className.getRealClassName() + "::of);\n";
             }
 
             case TokenType -> {
                 if (isSingular()) {
                     yield "        return getItemOfType(" + index + "," +
                             resultSource.getValue() + ");\n";
-//                    yield "        var element = getItem(" + index + ");\n" +
-//                            "        element.failIfAbsent(" + resultSource.getValue() + ");\n" +
-//                            "        return element.asString();\n";
                 }
-//                yield listTemplate(index, "node.asString()");
-                yield listTemplate(index, "ParseTreeNode::asString");
+                yield "        return getList(" + index + ", ParseTreeNode::asString);\n";
             }
             case TokenLiteral -> {
                 if (ruleType == RuleType.Conjunction && fieldType == FieldType.Required) {
-                    yield "        return true;\n";
-//                    yield "        var element = getItem(" + index + ");\n" +
-//                            "        element.failIfAbsent();\n" +
-//                            "        return element.asBoolean();\n";
+                    yield null;
                 }
                 if (isSingular()) {
                     yield "        return getBoolean(" + index + ");\n";
-//                    yield "        var element = getItem(" + index + ");\n" +
-//                            "        return element.asBoolean();\n";
                 }
-                yield listTemplate(index, "ParseTreeNode::asBoolean");
+                yield "        return getList(" + index + ", ParseTreeNode::asBoolean);\n";
             }
-        };
-    }
-
-    private String listTemplate(int index, String covertExpr) {
-        return "        return getList(" + index + ", " + covertExpr + ");\n";
-/*        return "        if (" + fieldName + " != null) {\n" +
-                "            return " + fieldName + ";\n" +
-                "        }\n" +
-                "        " + className.asType() + " result = null;\n" +
-                "        var element = getItem(" + index + ");\n" +
-                "        for (var node : element.asCollection()) {\n" +
-                "            if (result == null) {\n" +
-                "                result = new ArrayList<>();\n" +
-                "            }\n" +
-                "            result.add(" + covertExpr + ");\n" +
-                "        }\n" +
-                "        " + fieldName + " = result == null ? Collections.emptyList() : result;\n" +
-                "        return " + fieldName + ";\n";*/
-    }
-
-    @Deprecated(forRemoval = true)
-    public String asGetOrNull(RuleType ruleType, int index) {
-        var body = getterOrNull(ruleType, index);
-        if (body == null) {
-            return null;
-        }
-        return "\n    public " + className.asType() + " " + fieldName +
-                "OrNull() {\n" + body + "    }\n";
-    }
-
-    @Deprecated
-    private String getterOrNull(RuleType ruleType, int index) {
-        return switch (resultSource.getType()) {
-            case Class -> {
-                if (ruleType == RuleType.Conjunction && fieldType == FieldType.Required) {
-                    yield null;
-                }
-                if (isSingular()) {
-                    yield "        var element = getItem(" + index + ");\n" +
-                            "        if (!element.isPresent(" + className.asType() + ".RULE)) {\n" +
-                            "            return null;\n" +
-                            "        }\n" +
-                            "        return " + className.asType() + ".of(element);\n";
-                }
-                yield null;
-            }
-
-            case TokenType -> {
-                if (ruleType == RuleType.Conjunction && fieldType == FieldType.Required) {
-                    yield null;
-                }
-                if (isSingular()) {
-                    yield "        var element = getItem(" + index + ");\n" +
-                            "        if (!element.isPresent(" + resultSource.getValue() + ")) {\n" +
-                            "            return null;\n" +
-                            "        }\n" +
-                            "        return element.asString();\n";
-                }
-                yield null;
-            }
-            case TokenLiteral -> null;
         };
     }
 
@@ -170,9 +91,8 @@ public class ClassField {
                     yield null;
                 }
                 if (isSingular()) {
-                    yield // "        var element = getItem(" + index + ");\n" +
-                            "        return hasItemOfRule(" + index + ", " +
-                                    className.asType() + ".RULE);\n";
+                    yield "        return hasItemOfRule(" + index + ", " +
+                            className.asType() + ".RULE);\n";
                 }
                 yield null;
             }
@@ -182,52 +102,13 @@ public class ClassField {
                     yield null;
                 }
                 if (isSingular()) {
-                    yield // "        var element = getItem(" + index + ");\n" +
-                            "        return hasItemOfType(" + index + ", " +
-                                    resultSource.getValue() + ");\n";
+                    yield "        return hasItemOfType(" + index + ", " +
+                            resultSource.getValue() + ");\n";
                 }
                 yield null;
             }
             case TokenLiteral -> null;
         };
-    }
-
-    @Deprecated(forRemoval = true)
-    public String asRuleStmt(RuleType ruleType) {
-        String callParams = switch (resultSource.getType()) {
-            case Class, TokenType -> {
-                String postfix;
-                if (ruleType == RuleType.Conjunction && fieldType == FieldType.Required) {
-                    postfix = "()";
-                } else if (isSingular()) {
-                    postfix = "OrNull()";
-                } else {
-                    postfix = "()";
-                }
-                yield fieldName + postfix;
-            }
-            case TokenLiteral -> {
-                if (isSingular()) {
-                    yield fieldName + "(), \"" + resultSource.getValue() + "\"";
-                } else {
-                    yield fieldName + "()";
-                }
-            }
-        };
-
-        switch (ruleType) {
-            case Disjunction -> {
-                return "addChoice(" + callParams + ");";
-            }
-            case Conjunction -> {
-                if (fieldType == FieldType.Optional) {
-                    return "addOptional(" + callParams + ");";
-                } else {
-                    return "addRequired(" + callParams + ");";
-                }
-            }
-            default -> throw new IllegalArgumentException("ClassField does not support RuleType" + ruleType);
-        }
     }
 
     public String asParserStmt(RuleType ruleType, boolean isFirst) {
@@ -283,17 +164,13 @@ public class ClassField {
         var resultExpr = getResultExpr();
         var name = ParserStringUtil.capitalizeFirstCharOnly(fieldName);
         return "\n    private static boolean parse" + name + "(ParseTree parseTree, int level) {\n" +
-                "        if (!ParserUtil.recursionGuard(level, RULE)) {\n" +
-                "            return false;\n" +
-                "        }\n" +
+                "        if (!ParserUtil.recursionGuard(level, RULE)) return false;\n" +
                 "        parseTree.enterCollection();\n" +
                 "        var result = " + resultExpr + ";\n" +
                 "        if (result) while (true) {\n" +
                 "            var pos = parseTree.position();\n" +
-                "            if (!" + resultExpr + " ||\n" +
-                "                    parseTree.guardLoopExit(pos)) {\n" +
-                "                break;\n" +
-                "            }\n" +
+                "            if (!" + resultExpr + ") break;\n" +
+                "            if (parseTree.guardLoopExit(pos)) break;\n" +
                 "        }\n" +
                 "        parseTree.exitCollection();\n" +
                 "        return result;\n" +
@@ -304,16 +181,12 @@ public class ClassField {
         var resultExpr = getResultExpr();
         var name = ParserStringUtil.capitalizeFirstCharOnly(fieldName);
         return "\n    private static void parse" + name + "(ParseTree parseTree, int level) {\n" +
-                "        if (!ParserUtil.recursionGuard(level, RULE)) {\n" +
-                "            return;\n" +
-                "        }\n" +
+                "        if (!ParserUtil.recursionGuard(level, RULE)) return;\n" +
                 "        parseTree.enterCollection();\n" +
                 "        while (true) {\n" +
                 "            var pos = parseTree.position();\n" +
-                "            if (!" + resultExpr + " ||\n" +
-                "                    parseTree.guardLoopExit(pos)) {\n" +
-                "                break;\n" +
-                "            }\n" +
+                "            if (!" + resultExpr + ") break;\n" +
+                "            if (parseTree.guardLoopExit(pos)) break;\n" +
                 "        }\n" +
                 "        parseTree.exitCollection();\n" +
                 "    }\n";

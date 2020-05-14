@@ -45,17 +45,13 @@ public final class ImportFromNames extends NodeWrapper {
     }
 
     private static boolean parseIsTokenDotList(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return false;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         parseTree.enterCollection();
         var result = parseTree.consumeToken(".");
         if (result) while (true) {
             var pos = parseTree.position();
-            if (!parseTree.consumeToken(".") ||
-                    parseTree.guardLoopExit(pos)) {
-                break;
-            }
+            if (!parseTree.consumeToken(".")) break;
+            if (parseTree.guardLoopExit(pos)) break;
         }
         parseTree.exitCollection();
         return result;
@@ -98,16 +94,12 @@ public final class ImportFromNames extends NodeWrapper {
         }
 
         private static void parseIsTokenDotList(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return;
             parseTree.enterCollection();
             while (true) {
                 var pos = parseTree.position();
-                if (!parseTree.consumeToken(".") ||
-                        parseTree.guardLoopExit(pos)) {
-                    break;
-                }
+                if (!parseTree.consumeToken(".")) break;
+                if (parseTree.guardLoopExit(pos)) break;
             }
             parseTree.exitCollection();
         }

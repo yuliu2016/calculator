@@ -66,10 +66,6 @@ public final class DictItem extends NodeWrapper {
             return Expr.of(getItem(0));
         }
 
-        public boolean isTokenColon() {
-            return true;
-        }
-
         public Expr expr1() {
             return Expr.of(getItem(2));
         }
@@ -102,10 +98,6 @@ public final class DictItem extends NodeWrapper {
 
         private DictItem2(ParseTreeNode node) {
             super(RULE, node);
-        }
-
-        public boolean isTokenPower() {
-            return true;
         }
 
         public BitwiseOr bitwiseOr() {

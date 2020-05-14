@@ -41,16 +41,12 @@ public final class BitwiseAnd extends NodeWrapper {
     }
 
     private static void parseBitwiseAnd2List(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return;
         parseTree.enterCollection();
         while (true) {
             var pos = parseTree.position();
-            if (!BitwiseAnd2.parse(parseTree, level + 1) ||
-                    parseTree.guardLoopExit(pos)) {
-                break;
-            }
+            if (!BitwiseAnd2.parse(parseTree, level + 1)) break;
+            if (parseTree.guardLoopExit(pos)) break;
         }
         parseTree.exitCollection();
     }
@@ -69,10 +65,6 @@ public final class BitwiseAnd extends NodeWrapper {
 
         private BitwiseAnd2(ParseTreeNode node) {
             super(RULE, node);
-        }
-
-        public boolean isTokenBitAnd() {
-            return true;
         }
 
         public ShiftExpr shiftExpr() {

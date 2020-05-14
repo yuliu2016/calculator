@@ -18,10 +18,6 @@ public final class PassStmt extends NodeWrapper {
         super(RULE, node);
     }
 
-    public boolean isTokenPass() {
-        return true;
-    }
-
     public static boolean parse(ParseTree parseTree, int level) {
         if (!ParserUtil.recursionGuard(level, RULE)) return false;
         var marker = parseTree.enter(level, RULE);

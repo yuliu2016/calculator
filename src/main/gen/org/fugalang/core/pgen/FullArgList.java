@@ -50,16 +50,12 @@ public final class FullArgList extends NodeWrapper {
     }
 
     private static void parseFullArgList2List(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return;
         parseTree.enterCollection();
         while (true) {
             var pos = parseTree.position();
-            if (!FullArgList2.parse(parseTree, level + 1) ||
-                    parseTree.guardLoopExit(pos)) {
-                break;
-            }
+            if (!FullArgList2.parse(parseTree, level + 1)) break;
+            if (parseTree.guardLoopExit(pos)) break;
         }
         parseTree.exitCollection();
     }
@@ -78,10 +74,6 @@ public final class FullArgList extends NodeWrapper {
 
         private FullArgList2(ParseTreeNode node) {
             super(RULE, node);
-        }
-
-        public boolean isTokenComma() {
-            return true;
         }
 
         public DefaultArg defaultArg() {
@@ -115,10 +107,6 @@ public final class FullArgList extends NodeWrapper {
 
         private FullArgList3(ParseTreeNode node) {
             super(RULE, node);
-        }
-
-        public boolean isTokenComma() {
-            return true;
         }
 
         public FullArgList32 fullArgList32() {

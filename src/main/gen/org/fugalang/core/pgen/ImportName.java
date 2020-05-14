@@ -18,10 +18,6 @@ public final class ImportName extends NodeWrapper {
         super(RULE, node);
     }
 
-    public boolean isTokenImport() {
-        return true;
-    }
-
     public DottedAsNames dottedAsNames() {
         return DottedAsNames.of(getItem(1));
     }

@@ -18,10 +18,6 @@ public final class Annassign extends NodeWrapper {
         super(RULE, node);
     }
 
-    public boolean isTokenColon() {
-        return true;
-    }
-
     public Expr expr() {
         return Expr.of(getItem(1));
     }
@@ -61,10 +57,6 @@ public final class Annassign extends NodeWrapper {
 
         private Annassign3(ParseTreeNode node) {
             super(RULE, node);
-        }
-
-        public boolean isTokenAssign() {
-            return true;
         }
 
         public ExprlistStar exprlistStar() {

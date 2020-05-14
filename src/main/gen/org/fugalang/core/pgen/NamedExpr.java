@@ -67,10 +67,6 @@ public final class NamedExpr extends NodeWrapper {
             return getItemOfType(0,TokenType.NAME);
         }
 
-        public boolean isTokenAsgnExpr() {
-            return true;
-        }
-
         public Expr expr() {
             return Expr.of(getItem(2));
         }

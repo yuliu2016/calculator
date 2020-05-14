@@ -42,16 +42,12 @@ public final class FileInput extends NodeWrapper {
     }
 
     private static void parseFileInput1List(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return;
         parseTree.enterCollection();
         while (true) {
             var pos = parseTree.position();
-            if (!FileInput1.parse(parseTree, level + 1) ||
-                    parseTree.guardLoopExit(pos)) {
-                break;
-            }
+            if (!FileInput1.parse(parseTree, level + 1)) break;
+            if (parseTree.guardLoopExit(pos)) break;
         }
         parseTree.exitCollection();
     }

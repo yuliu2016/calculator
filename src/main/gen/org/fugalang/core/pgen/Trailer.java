@@ -72,10 +72,6 @@ public final class Trailer extends NodeWrapper {
             super(RULE, node);
         }
 
-        public boolean isTokenDot() {
-            return true;
-        }
-
         public String name() {
             return getItemOfType(1,TokenType.NAME);
         }

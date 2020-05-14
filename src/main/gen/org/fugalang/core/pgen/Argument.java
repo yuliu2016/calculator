@@ -94,10 +94,6 @@ public final class Argument extends NodeWrapper {
             return getItemOfType(0,TokenType.NAME);
         }
 
-        public boolean isTokenAsgnExpr() {
-            return true;
-        }
-
         public Expr expr() {
             return Expr.of(getItem(2));
         }
@@ -136,10 +132,6 @@ public final class Argument extends NodeWrapper {
             return getItemOfType(0,TokenType.NAME);
         }
 
-        public boolean isTokenAssign() {
-            return true;
-        }
-
         public Expr expr() {
             return Expr.of(getItem(2));
         }
@@ -174,10 +166,6 @@ public final class Argument extends NodeWrapper {
             super(RULE, node);
         }
 
-        public boolean isTokenPower() {
-            return true;
-        }
-
         public Expr expr() {
             return Expr.of(getItem(1));
         }
@@ -209,10 +197,6 @@ public final class Argument extends NodeWrapper {
 
         private Argument4(ParseTreeNode node) {
             super(RULE, node);
-        }
-
-        public boolean isTokenTimes() {
-            return true;
         }
 
         public Expr expr() {

@@ -18,10 +18,6 @@ public final class DelStmt extends NodeWrapper {
         super(RULE, node);
     }
 
-    public boolean isTokenDel() {
-        return true;
-    }
-
     public Targetlist targetlist() {
         return Targetlist.of(getItem(1));
     }

@@ -62,10 +62,6 @@ public final class Suite extends NodeWrapper {
             super(RULE, node);
         }
 
-        public boolean isTokenColon() {
-            return true;
-        }
-
         public SimpleStmt simpleStmt() {
             return SimpleStmt.of(getItem(1));
         }

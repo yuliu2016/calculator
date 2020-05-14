@@ -18,16 +18,8 @@ public final class Subscript extends NodeWrapper {
         super(RULE, node);
     }
 
-    public boolean isTokenLsqb() {
-        return true;
-    }
-
     public Slicelist slicelist() {
         return Slicelist.of(getItem(1));
-    }
-
-    public boolean isTokenRsqb() {
-        return true;
     }
 
     public static boolean parse(ParseTree parseTree, int level) {

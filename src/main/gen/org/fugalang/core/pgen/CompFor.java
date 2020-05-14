@@ -18,16 +18,8 @@ public final class CompFor extends NodeWrapper {
         super(RULE, node);
     }
 
-    public boolean isTokenFor() {
-        return true;
-    }
-
     public Targetlist targetlist() {
         return Targetlist.of(getItem(1));
-    }
-
-    public boolean isTokenIn() {
-        return true;
     }
 
     public Disjunction disjunction() {

@@ -59,10 +59,6 @@ public final class TypedArg extends NodeWrapper {
             super(RULE, node);
         }
 
-        public boolean isTokenColon() {
-            return true;
-        }
-
         public Expr expr() {
             return Expr.of(getItem(1));
         }

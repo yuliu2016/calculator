@@ -18,20 +18,12 @@ public final class Parameters extends NodeWrapper {
         super(RULE, node);
     }
 
-    public boolean isTokenLpar() {
-        return true;
-    }
-
     public Arglist arglist() {
         return Arglist.of(getItem(1));
     }
 
     public boolean hasArglist() {
         return hasItemOfRule(1, Arglist.RULE);
-    }
-
-    public boolean isTokenRpar() {
-        return true;
     }
 
     public static boolean parse(ParseTree parseTree, int level) {

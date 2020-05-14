@@ -18,10 +18,6 @@ public final class AssertStmt extends NodeWrapper {
         super(RULE, node);
     }
 
-    public boolean isTokenAssert() {
-        return true;
-    }
-
     public Expr expr() {
         return Expr.of(getItem(1));
     }
@@ -61,10 +57,6 @@ public final class AssertStmt extends NodeWrapper {
 
         private AssertStmt3(ParseTreeNode node) {
             super(RULE, node);
-        }
-
-        public boolean isTokenComma() {
-            return true;
         }
 
         public Expr expr() {

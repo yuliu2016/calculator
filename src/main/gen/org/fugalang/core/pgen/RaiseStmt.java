@@ -18,10 +18,6 @@ public final class RaiseStmt extends NodeWrapper {
         super(RULE, node);
     }
 
-    public boolean isTokenRaise() {
-        return true;
-    }
-
     public RaiseStmt2 raiseStmt2() {
         return RaiseStmt2.of(getItem(1));
     }
@@ -97,10 +93,6 @@ public final class RaiseStmt extends NodeWrapper {
 
         private RaiseStmt22(ParseTreeNode node) {
             super(RULE, node);
-        }
-
-        public boolean isTokenFrom() {
-            return true;
         }
 
         public Expr expr() {

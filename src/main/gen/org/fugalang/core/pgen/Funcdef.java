@@ -18,10 +18,6 @@ public final class Funcdef extends NodeWrapper {
         super(RULE, node);
     }
 
-    public boolean isTokenDef() {
-        return true;
-    }
-
     public FuncTypeHint funcTypeHint() {
         return FuncTypeHint.of(getItem(1));
     }

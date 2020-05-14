@@ -46,16 +46,12 @@ public final class Arglist extends NodeWrapper {
     }
 
     private static void parseArglist2List(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return;
         parseTree.enterCollection();
         while (true) {
             var pos = parseTree.position();
-            if (!Arglist2.parse(parseTree, level + 1) ||
-                    parseTree.guardLoopExit(pos)) {
-                break;
-            }
+            if (!Arglist2.parse(parseTree, level + 1)) break;
+            if (parseTree.guardLoopExit(pos)) break;
         }
         parseTree.exitCollection();
     }
@@ -74,10 +70,6 @@ public final class Arglist extends NodeWrapper {
 
         private Arglist2(ParseTreeNode node) {
             super(RULE, node);
-        }
-
-        public boolean isTokenComma() {
-            return true;
         }
 
         public Argument argument() {

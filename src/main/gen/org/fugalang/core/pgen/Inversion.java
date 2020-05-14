@@ -62,10 +62,6 @@ public final class Inversion extends NodeWrapper {
             super(RULE, node);
         }
 
-        public boolean isTokenNot() {
-            return true;
-        }
-
         public Inversion inversion() {
             return Inversion.of(getItem(1));
         }

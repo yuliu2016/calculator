@@ -18,10 +18,6 @@ public final class CompIf extends NodeWrapper {
         super(RULE, node);
     }
 
-    public boolean isTokenIf() {
-        return true;
-    }
-
     public Expr expr() {
         return Expr.of(getItem(1));
     }

@@ -63,16 +63,8 @@ public final class Atom extends NodeWrapper {
             super(RULE, node);
         }
 
-        public boolean isTokenLpar() {
-            return true;
-        }
-
         public Sum sum() {
             return Sum.of(getItem(1));
-        }
-
-        public boolean isTokenRpar() {
-            return true;
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

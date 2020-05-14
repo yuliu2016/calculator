@@ -71,24 +71,12 @@ public final class Expr extends NodeWrapper {
             super(RULE, node);
         }
 
-        public boolean isTokenIf() {
-            return true;
-        }
-
         public Disjunction disjunction() {
             return Disjunction.of(getItem(1));
         }
 
-        public boolean isTokenTernery() {
-            return true;
-        }
-
         public Disjunction disjunction1() {
             return Disjunction.of(getItem(3));
-        }
-
-        public boolean isTokenElse() {
-            return true;
         }
 
         public Expr expr() {

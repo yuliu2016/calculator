@@ -18,10 +18,6 @@ public final class ElifStmt extends NodeWrapper {
         super(RULE, node);
     }
 
-    public boolean isTokenElif() {
-        return true;
-    }
-
     public NamedExpr namedExpr() {
         return NamedExpr.of(getItem(1));
     }

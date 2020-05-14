@@ -18,10 +18,6 @@ public final class Kwargs extends NodeWrapper {
         super(RULE, node);
     }
 
-    public boolean isTokenPower() {
-        return true;
-    }
-
     public TypedArg typedArg() {
         return TypedArg.of(getItem(1));
     }

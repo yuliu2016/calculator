@@ -155,7 +155,11 @@ public class ClassBuilder {
 
         for (int i = 0; i < fields.size(); i++) {
             ClassField field = fields.get(i);
-            sb.append(field.asGetter(ruleType, i));
+
+            var getter = field.asGetter(ruleType, i);
+            if (getter != null) {
+                sb.append(getter);
+            }
 
             var absentCheck = field.asAbsentCheck(ruleType, i);
             if (absentCheck != null) {

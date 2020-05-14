@@ -70,10 +70,6 @@ public final class Slice extends NodeWrapper {
             return hasItemOfRule(0, Expr.RULE);
         }
 
-        public boolean isTokenColon() {
-            return true;
-        }
-
         public Expr expr1() {
             return Expr.of(getItem(2));
         }
@@ -119,10 +115,6 @@ public final class Slice extends NodeWrapper {
 
         private Slice24(ParseTreeNode node) {
             super(RULE, node);
-        }
-
-        public boolean isTokenColon() {
-            return true;
         }
 
         public Expr expr() {

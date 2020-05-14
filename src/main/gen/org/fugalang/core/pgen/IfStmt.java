@@ -20,10 +20,6 @@ public final class IfStmt extends NodeWrapper {
         super(RULE, node);
     }
 
-    public boolean isTokenIf() {
-        return true;
-    }
-
     public NamedExpr namedExpr() {
         return NamedExpr.of(getItem(1));
     }
@@ -60,16 +56,12 @@ public final class IfStmt extends NodeWrapper {
     }
 
     private static void parseElifStmtList(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return;
         parseTree.enterCollection();
         while (true) {
             var pos = parseTree.position();
-            if (!ElifStmt.parse(parseTree, level + 1) ||
-                    parseTree.guardLoopExit(pos)) {
-                break;
-            }
+            if (!ElifStmt.parse(parseTree, level + 1)) break;
+            if (parseTree.guardLoopExit(pos)) break;
         }
         parseTree.exitCollection();
     }

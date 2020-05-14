@@ -47,16 +47,12 @@ public final class EvalInput extends NodeWrapper {
     }
 
     private static void parseNewlineList(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return;
         parseTree.enterCollection();
         while (true) {
             var pos = parseTree.position();
-            if (!parseTree.consumeToken(TokenType.NEWLINE) ||
-                    parseTree.guardLoopExit(pos)) {
-                break;
-            }
+            if (!parseTree.consumeToken(TokenType.NEWLINE)) break;
+            if (parseTree.guardLoopExit(pos)) break;
         }
         parseTree.exitCollection();
     }

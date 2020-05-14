@@ -62,20 +62,12 @@ public final class FuncArgs extends NodeWrapper {
             super(RULE, node);
         }
 
-        public boolean isTokenLpar() {
-            return true;
-        }
-
         public TypedArgList typedArgList() {
             return TypedArgList.of(getItem(1));
         }
 
         public boolean hasTypedArgList() {
             return hasItemOfRule(1, TypedArgList.RULE);
-        }
-
-        public boolean isTokenRpar() {
-            return true;
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

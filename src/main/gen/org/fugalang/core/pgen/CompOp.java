@@ -102,14 +102,6 @@ public final class CompOp extends NodeWrapper {
             super(RULE, node);
         }
 
-        public boolean isTokenNot() {
-            return true;
-        }
-
-        public boolean isTokenIn() {
-            return true;
-        }
-
         public static boolean parse(ParseTree parseTree, int level) {
             if (!ParserUtil.recursionGuard(level, RULE)) return false;
             var marker = parseTree.enter(level, RULE);
@@ -137,14 +129,6 @@ public final class CompOp extends NodeWrapper {
 
         private CompOp10(ParseTreeNode node) {
             super(RULE, node);
-        }
-
-        public boolean isTokenIs() {
-            return true;
-        }
-
-        public boolean isTokenNot() {
-            return true;
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

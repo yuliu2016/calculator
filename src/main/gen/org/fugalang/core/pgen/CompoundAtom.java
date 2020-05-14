@@ -71,20 +71,12 @@ public final class CompoundAtom extends NodeWrapper {
             super(RULE, node);
         }
 
-        public boolean isTokenLpar() {
-            return true;
-        }
-
         public NamedExprList namedExprList() {
             return NamedExprList.of(getItem(1));
         }
 
         public boolean hasNamedExprList() {
             return hasItemOfRule(1, NamedExprList.RULE);
-        }
-
-        public boolean isTokenRpar() {
-            return true;
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -117,20 +109,12 @@ public final class CompoundAtom extends NodeWrapper {
             super(RULE, node);
         }
 
-        public boolean isTokenLsqb() {
-            return true;
-        }
-
         public NamedExprList namedExprList() {
             return NamedExprList.of(getItem(1));
         }
 
         public boolean hasNamedExprList() {
             return hasItemOfRule(1, NamedExprList.RULE);
-        }
-
-        public boolean isTokenRsqb() {
-            return true;
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -163,20 +147,12 @@ public final class CompoundAtom extends NodeWrapper {
             super(RULE, node);
         }
 
-        public boolean isTokenLbrace() {
-            return true;
-        }
-
         public DictOrSet dictOrSet() {
             return DictOrSet.of(getItem(1));
         }
 
         public boolean hasDictOrSet() {
             return hasItemOfRule(1, DictOrSet.RULE);
-        }
-
-        public boolean isTokenRbrace() {
-            return true;
         }
 
         public static boolean parse(ParseTree parseTree, int level) {

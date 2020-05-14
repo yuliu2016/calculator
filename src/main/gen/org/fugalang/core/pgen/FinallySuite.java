@@ -18,10 +18,6 @@ public final class FinallySuite extends NodeWrapper {
         super(RULE, node);
     }
 
-    public boolean isTokenFinally() {
-        return true;
-    }
-
     public Suite suite() {
         return Suite.of(getItem(1));
     }

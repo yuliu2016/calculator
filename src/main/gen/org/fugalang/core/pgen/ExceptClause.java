@@ -19,10 +19,6 @@ public final class ExceptClause extends NodeWrapper {
         super(RULE, node);
     }
 
-    public boolean isTokenExcept() {
-        return true;
-    }
-
     public ExceptClause2 exceptClause2() {
         return ExceptClause2.of(getItem(1));
     }
@@ -98,10 +94,6 @@ public final class ExceptClause extends NodeWrapper {
 
         private ExceptClause22(ParseTreeNode node) {
             super(RULE, node);
-        }
-
-        public boolean isTokenAs() {
-            return true;
         }
 
         public String name() {

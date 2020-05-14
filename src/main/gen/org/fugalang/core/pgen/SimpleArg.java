@@ -59,10 +59,6 @@ public final class SimpleArg extends NodeWrapper {
             super(RULE, node);
         }
 
-        public boolean isTokenAssign() {
-            return true;
-        }
-
         public Expr expr() {
             return Expr.of(getItem(1));
         }

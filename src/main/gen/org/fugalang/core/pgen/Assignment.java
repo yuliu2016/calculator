@@ -99,17 +99,13 @@ public final class Assignment extends NodeWrapper {
         }
 
         private static boolean parseAssignment32List(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             parseTree.enterCollection();
             var result = Assignment32.parse(parseTree, level + 1);
             if (result) while (true) {
                 var pos = parseTree.position();
-                if (!Assignment32.parse(parseTree, level + 1) ||
-                        parseTree.guardLoopExit(pos)) {
-                    break;
-                }
+                if (!Assignment32.parse(parseTree, level + 1)) break;
+                if (parseTree.guardLoopExit(pos)) break;
             }
             parseTree.exitCollection();
             return result;
@@ -130,10 +126,6 @@ public final class Assignment extends NodeWrapper {
 
         private Assignment32(ParseTreeNode node) {
             super(RULE, node);
-        }
-
-        public boolean isTokenAssign() {
-            return true;
         }
 
         public ExprlistStar exprlistStar() {

@@ -28,10 +28,6 @@ public final class PipeFor extends NodeWrapper {
         return hasItemOfRule(0, CompFor.RULE);
     }
 
-    public boolean isTokenFor() {
-        return true;
-    }
-
     public Targetlist targetlist() {
         return Targetlist.of(getItem(2));
     }
@@ -73,16 +69,12 @@ public final class PipeFor extends NodeWrapper {
     }
 
     private static void parsePipeFor4List(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) {
-            return;
-        }
+        if (!ParserUtil.recursionGuard(level, RULE)) return;
         parseTree.enterCollection();
         while (true) {
             var pos = parseTree.position();
-            if (!PipeFor4.parse(parseTree, level + 1) ||
-                    parseTree.guardLoopExit(pos)) {
-                break;
-            }
+            if (!PipeFor4.parse(parseTree, level + 1)) break;
+            if (parseTree.guardLoopExit(pos)) break;
         }
         parseTree.exitCollection();
     }
@@ -101,10 +93,6 @@ public final class PipeFor extends NodeWrapper {
 
         private PipeFor4(ParseTreeNode node) {
             super(RULE, node);
-        }
-
-        public boolean isTokenIf() {
-            return true;
         }
 
         public Expr expr() {

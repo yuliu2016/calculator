@@ -65,16 +65,8 @@ public final class BlockSuite extends NodeWrapper {
             super(RULE, node);
         }
 
-        public boolean isTokenLbrace() {
-            return true;
-        }
-
         public SimpleStmt simpleStmt() {
             return SimpleStmt.of(getItem(1));
-        }
-
-        public boolean isTokenRbrace() {
-            return true;
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -107,20 +99,12 @@ public final class BlockSuite extends NodeWrapper {
             super(RULE, node);
         }
 
-        public boolean isTokenLbrace() {
-            return true;
-        }
-
         public String newline() {
             return getItemOfType(1,TokenType.NEWLINE);
         }
 
         public List<Stmt> stmtList() {
             return getList(2, Stmt::of);
-        }
-
-        public boolean isTokenRbrace() {
-            return true;
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -138,17 +122,13 @@ public final class BlockSuite extends NodeWrapper {
         }
 
         private static boolean parseStmtList(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) {
-                return false;
-            }
+            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             parseTree.enterCollection();
             var result = Stmt.parse(parseTree, level + 1);
             if (result) while (true) {
                 var pos = parseTree.position();
-                if (!Stmt.parse(parseTree, level + 1) ||
-                        parseTree.guardLoopExit(pos)) {
-                    break;
-                }
+                if (!Stmt.parse(parseTree, level + 1)) break;
+                if (parseTree.guardLoopExit(pos)) break;
             }
             parseTree.exitCollection();
             return result;
