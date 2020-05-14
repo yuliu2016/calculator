@@ -42,20 +42,19 @@ public final class ArgsKwargs extends NodeWrapper {
 
     public static boolean parse(ParseTree parseTree, int level) {
         if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        var marker = parseTree.enter(level, RULE);
+        parseTree.enter(level, RULE);
         boolean result;
 
         result = parseTree.consumeToken("*");
         if (result) TypedArg.parse(parseTree, level + 1);
-        if (result) parseArgsKwargs3List(parseTree, level + 1);
+        if (result) parseArgsKwargs3List(parseTree, level);
         if (result) ArgsKwargs4.parse(parseTree, level + 1);
 
-        parseTree.exit(level, marker, result);
+        parseTree.exit(result);
         return result;
     }
 
     private static void parseArgsKwargs3List(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) return;
         parseTree.enterCollection();
         while (true) {
             var pos = parseTree.position();
@@ -87,13 +86,13 @@ public final class ArgsKwargs extends NodeWrapper {
 
         public static boolean parse(ParseTree parseTree, int level) {
             if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            var marker = parseTree.enter(level, RULE);
+            parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeToken(",");
             result = result && DefaultArg.parse(parseTree, level + 1);
 
-            parseTree.exit(level, marker, result);
+            parseTree.exit(result);
             return result;
         }
     }
@@ -124,13 +123,13 @@ public final class ArgsKwargs extends NodeWrapper {
 
         public static boolean parse(ParseTree parseTree, int level) {
             if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            var marker = parseTree.enter(level, RULE);
+            parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeToken(",");
             if (result) Kwargs.parse(parseTree, level + 1);
 
-            parseTree.exit(level, marker, result);
+            parseTree.exit(result);
             return result;
         }
     }

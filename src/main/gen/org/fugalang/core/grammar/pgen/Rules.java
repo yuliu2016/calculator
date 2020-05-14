@@ -26,17 +26,16 @@ public final class Rules extends NodeWrapper {
 
     public static boolean parse(ParseTree parseTree, int level) {
         if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        var marker = parseTree.enter(level, RULE);
+        parseTree.enter(level, RULE);
         boolean result;
 
-        result = parseSingleRuleList(parseTree, level + 1);
+        result = parseSingleRuleList(parseTree, level);
 
-        parseTree.exit(level, marker, result);
+        parseTree.exit(result);
         return result;
     }
 
     private static boolean parseSingleRuleList(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) return false;
         parseTree.enterCollection();
         var result = SingleRule.parse(parseTree, level + 1);
         if (result) while (true) {

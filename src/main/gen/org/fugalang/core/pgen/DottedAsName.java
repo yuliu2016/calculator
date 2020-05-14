@@ -33,13 +33,13 @@ public final class DottedAsName extends NodeWrapper {
 
     public static boolean parse(ParseTree parseTree, int level) {
         if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        var marker = parseTree.enter(level, RULE);
+        parseTree.enter(level, RULE);
         boolean result;
 
         result = DottedName.parse(parseTree, level + 1);
         if (result) DottedAsName2.parse(parseTree, level + 1);
 
-        parseTree.exit(level, marker, result);
+        parseTree.exit(result);
         return result;
     }
 
@@ -60,18 +60,18 @@ public final class DottedAsName extends NodeWrapper {
         }
 
         public String name() {
-            return getItemOfType(1,TokenType.NAME);
+            return getItemOfType(1, TokenType.NAME);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
             if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            var marker = parseTree.enter(level, RULE);
+            parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeToken("as");
             result = result && parseTree.consumeToken(TokenType.NAME);
 
-            parseTree.exit(level, marker, result);
+            parseTree.exit(result);
             return result;
         }
     }

@@ -28,13 +28,13 @@ public final class RaiseStmt extends NodeWrapper {
 
     public static boolean parse(ParseTree parseTree, int level) {
         if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        var marker = parseTree.enter(level, RULE);
+        parseTree.enter(level, RULE);
         boolean result;
 
         result = parseTree.consumeToken("raise");
         if (result) RaiseStmt2.parse(parseTree, level + 1);
 
-        parseTree.exit(level, marker, result);
+        parseTree.exit(result);
         return result;
     }
 
@@ -68,13 +68,13 @@ public final class RaiseStmt extends NodeWrapper {
 
         public static boolean parse(ParseTree parseTree, int level) {
             if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            var marker = parseTree.enter(level, RULE);
+            parseTree.enter(level, RULE);
             boolean result;
 
             result = Expr.parse(parseTree, level + 1);
             if (result) RaiseStmt22.parse(parseTree, level + 1);
 
-            parseTree.exit(level, marker, result);
+            parseTree.exit(result);
             return result;
         }
     }
@@ -101,13 +101,13 @@ public final class RaiseStmt extends NodeWrapper {
 
         public static boolean parse(ParseTree parseTree, int level) {
             if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            var marker = parseTree.enter(level, RULE);
+            parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeToken("from");
             result = result && Expr.parse(parseTree, level + 1);
 
-            parseTree.exit(level, marker, result);
+            parseTree.exit(result);
             return result;
         }
     }

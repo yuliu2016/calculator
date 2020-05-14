@@ -33,13 +33,13 @@ public final class RepeatRule extends NodeWrapper {
 
     public static boolean parse(ParseTree parseTree, int level) {
         if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        var marker = parseTree.enter(level, RULE);
+        parseTree.enter(level, RULE);
         boolean result;
 
         result = SubRule.parse(parseTree, level + 1);
         if (result) RepeatRule2.parse(parseTree, level + 1);
 
-        parseTree.exit(level, marker, result);
+        parseTree.exit(result);
         return result;
     }
 
@@ -60,7 +60,7 @@ public final class RepeatRule extends NodeWrapper {
         }
 
         public String star() {
-            return getItemOfType(0,MetaTokenType.STAR);
+            return getItemOfType(0, MetaTokenType.STAR);
         }
 
         public boolean hasStar() {
@@ -68,7 +68,7 @@ public final class RepeatRule extends NodeWrapper {
         }
 
         public String plus() {
-            return getItemOfType(1,MetaTokenType.PLUS);
+            return getItemOfType(1, MetaTokenType.PLUS);
         }
 
         public boolean hasPlus() {
@@ -77,13 +77,13 @@ public final class RepeatRule extends NodeWrapper {
 
         public static boolean parse(ParseTree parseTree, int level) {
             if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            var marker = parseTree.enter(level, RULE);
+            parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeToken(MetaTokenType.STAR);
             result = result || parseTree.consumeToken(MetaTokenType.PLUS);
 
-            parseTree.exit(level, marker, result);
+            parseTree.exit(result);
             return result;
         }
     }

@@ -36,13 +36,13 @@ public final class Factor extends NodeWrapper {
 
     public static boolean parse(ParseTree parseTree, int level) {
         if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        var marker = parseTree.enter(level, RULE);
+        parseTree.enter(level, RULE);
         boolean result;
 
         result = Factor1.parse(parseTree, level + 1);
         result = result || Power.parse(parseTree, level + 1);
 
-        parseTree.exit(level, marker, result);
+        parseTree.exit(result);
         return result;
     }
 
@@ -72,13 +72,13 @@ public final class Factor extends NodeWrapper {
 
         public static boolean parse(ParseTree parseTree, int level) {
             if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            var marker = parseTree.enter(level, RULE);
+            parseTree.enter(level, RULE);
             boolean result;
 
             result = Factor11.parse(parseTree, level + 1);
             result = result && Factor.parse(parseTree, level + 1);
 
-            parseTree.exit(level, marker, result);
+            parseTree.exit(result);
             return result;
         }
     }
@@ -113,14 +113,14 @@ public final class Factor extends NodeWrapper {
 
         public static boolean parse(ParseTree parseTree, int level) {
             if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            var marker = parseTree.enter(level, RULE);
+            parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeToken("+");
             result = result || parseTree.consumeToken("-");
             result = result || parseTree.consumeToken("~");
 
-            parseTree.exit(level, marker, result);
+            parseTree.exit(result);
             return result;
         }
     }

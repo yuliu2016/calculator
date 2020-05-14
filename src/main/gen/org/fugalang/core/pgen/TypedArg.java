@@ -20,7 +20,7 @@ public final class TypedArg extends NodeWrapper {
     }
 
     public String name() {
-        return getItemOfType(0,TokenType.NAME);
+        return getItemOfType(0, TokenType.NAME);
     }
 
     public TypedArg2 typedArg2() {
@@ -33,13 +33,13 @@ public final class TypedArg extends NodeWrapper {
 
     public static boolean parse(ParseTree parseTree, int level) {
         if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        var marker = parseTree.enter(level, RULE);
+        parseTree.enter(level, RULE);
         boolean result;
 
         result = parseTree.consumeToken(TokenType.NAME);
         if (result) TypedArg2.parse(parseTree, level + 1);
 
-        parseTree.exit(level, marker, result);
+        parseTree.exit(result);
         return result;
     }
 
@@ -65,13 +65,13 @@ public final class TypedArg extends NodeWrapper {
 
         public static boolean parse(ParseTree parseTree, int level) {
             if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            var marker = parseTree.enter(level, RULE);
+            parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeToken(":");
             result = result && Expr.parse(parseTree, level + 1);
 
-            parseTree.exit(level, marker, result);
+            parseTree.exit(result);
             return result;
         }
     }

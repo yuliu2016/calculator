@@ -20,7 +20,7 @@ public final class SimpleAtom extends NodeWrapper {
     }
 
     public String name() {
-        return getItemOfType(0,TokenType.NAME);
+        return getItemOfType(0, TokenType.NAME);
     }
 
     public boolean hasName() {
@@ -28,7 +28,7 @@ public final class SimpleAtom extends NodeWrapper {
     }
 
     public String number() {
-        return getItemOfType(1,TokenType.NUMBER);
+        return getItemOfType(1, TokenType.NUMBER);
     }
 
     public boolean hasNumber() {
@@ -36,7 +36,7 @@ public final class SimpleAtom extends NodeWrapper {
     }
 
     public String string() {
-        return getItemOfType(2,TokenType.STRING);
+        return getItemOfType(2, TokenType.STRING);
     }
 
     public boolean hasString() {
@@ -57,7 +57,7 @@ public final class SimpleAtom extends NodeWrapper {
 
     public static boolean parse(ParseTree parseTree, int level) {
         if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        var marker = parseTree.enter(level, RULE);
+        parseTree.enter(level, RULE);
         boolean result;
 
         result = parseTree.consumeToken(TokenType.NAME);
@@ -67,7 +67,7 @@ public final class SimpleAtom extends NodeWrapper {
         result = result || parseTree.consumeToken("True");
         result = result || parseTree.consumeToken("False");
 
-        parseTree.exit(level, marker, result);
+        parseTree.exit(result);
         return result;
     }
 }

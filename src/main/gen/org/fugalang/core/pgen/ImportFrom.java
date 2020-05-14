@@ -28,7 +28,7 @@ public final class ImportFrom extends NodeWrapper {
 
     public static boolean parse(ParseTree parseTree, int level) {
         if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        var marker = parseTree.enter(level, RULE);
+        parseTree.enter(level, RULE);
         boolean result;
 
         result = parseTree.consumeToken("from");
@@ -36,7 +36,7 @@ public final class ImportFrom extends NodeWrapper {
         result = result && parseTree.consumeToken("import");
         result = result && ImportFrom4.parse(parseTree, level + 1);
 
-        parseTree.exit(level, marker, result);
+        parseTree.exit(result);
         return result;
     }
 
@@ -78,14 +78,14 @@ public final class ImportFrom extends NodeWrapper {
 
         public static boolean parse(ParseTree parseTree, int level) {
             if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            var marker = parseTree.enter(level, RULE);
+            parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeToken("*");
             result = result || ImportFrom42.parse(parseTree, level + 1);
             result = result || ImportAsNames.parse(parseTree, level + 1);
 
-            parseTree.exit(level, marker, result);
+            parseTree.exit(result);
             return result;
         }
     }
@@ -116,7 +116,7 @@ public final class ImportFrom extends NodeWrapper {
 
         public static boolean parse(ParseTree parseTree, int level) {
             if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            var marker = parseTree.enter(level, RULE);
+            parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeToken("(");
@@ -124,7 +124,7 @@ public final class ImportFrom extends NodeWrapper {
             if (result) parseTree.consumeToken(",");
             result = result && parseTree.consumeToken(")");
 
-            parseTree.exit(level, marker, result);
+            parseTree.exit(result);
             return result;
         }
     }

@@ -24,18 +24,18 @@ public final class Stmt extends NodeWrapper {
     }
 
     public String newline() {
-        return getItemOfType(1,TokenType.NEWLINE);
+        return getItemOfType(1, TokenType.NEWLINE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
         if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        var marker = parseTree.enter(level, RULE);
+        parseTree.enter(level, RULE);
         boolean result;
 
         result = Stmt1.parse(parseTree, level + 1);
         result = result && parseTree.consumeToken(TokenType.NEWLINE);
 
-        parseTree.exit(level, marker, result);
+        parseTree.exit(result);
         return result;
     }
 
@@ -73,13 +73,13 @@ public final class Stmt extends NodeWrapper {
 
         public static boolean parse(ParseTree parseTree, int level) {
             if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            var marker = parseTree.enter(level, RULE);
+            parseTree.enter(level, RULE);
             boolean result;
 
             result = SimpleStmt.parse(parseTree, level + 1);
             result = result || CompoundStmt.parse(parseTree, level + 1);
 
-            parseTree.exit(level, marker, result);
+            parseTree.exit(result);
             return result;
         }
     }

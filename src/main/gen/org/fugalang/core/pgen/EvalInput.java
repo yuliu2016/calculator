@@ -30,24 +30,23 @@ public final class EvalInput extends NodeWrapper {
     }
 
     public String endmarker() {
-        return getItemOfType(2,TokenType.ENDMARKER);
+        return getItemOfType(2, TokenType.ENDMARKER);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
         if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        var marker = parseTree.enter(level, RULE);
+        parseTree.enter(level, RULE);
         boolean result;
 
         result = Exprlist.parse(parseTree, level + 1);
-        if (result) parseNewlineList(parseTree, level + 1);
+        if (result) parseNewlineList(parseTree, level);
         result = result && parseTree.consumeToken(TokenType.ENDMARKER);
 
-        parseTree.exit(level, marker, result);
+        parseTree.exit(result);
         return result;
     }
 
     private static void parseNewlineList(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) return;
         parseTree.enterCollection();
         while (true) {
             var pos = parseTree.position();

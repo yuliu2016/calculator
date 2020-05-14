@@ -38,14 +38,14 @@ public final class Assignment extends NodeWrapper {
 
     public static boolean parse(ParseTree parseTree, int level) {
         if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        var marker = parseTree.enter(level, RULE);
+        parseTree.enter(level, RULE);
         boolean result;
 
         parseTree.consumeToken("/");
         result = ExprlistStar.parse(parseTree, level + 1);
         if (result) Assignment3.parse(parseTree, level + 1);
 
-        parseTree.exit(level, marker, result);
+        parseTree.exit(result);
         return result;
     }
 
@@ -87,19 +87,18 @@ public final class Assignment extends NodeWrapper {
 
         public static boolean parse(ParseTree parseTree, int level) {
             if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            var marker = parseTree.enter(level, RULE);
+            parseTree.enter(level, RULE);
             boolean result;
 
             result = Annassign.parse(parseTree, level + 1);
-            result = result || parseAssignment32List(parseTree, level + 1);
+            result = result || parseAssignment32List(parseTree, level);
             result = result || Assignment33.parse(parseTree, level + 1);
 
-            parseTree.exit(level, marker, result);
+            parseTree.exit(result);
             return result;
         }
 
         private static boolean parseAssignment32List(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             parseTree.enterCollection();
             var result = Assignment32.parse(parseTree, level + 1);
             if (result) while (true) {
@@ -134,13 +133,13 @@ public final class Assignment extends NodeWrapper {
 
         public static boolean parse(ParseTree parseTree, int level) {
             if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            var marker = parseTree.enter(level, RULE);
+            parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeToken("=");
             result = result && ExprlistStar.parse(parseTree, level + 1);
 
-            parseTree.exit(level, marker, result);
+            parseTree.exit(result);
             return result;
         }
     }
@@ -171,13 +170,13 @@ public final class Assignment extends NodeWrapper {
 
         public static boolean parse(ParseTree parseTree, int level) {
             if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            var marker = parseTree.enter(level, RULE);
+            parseTree.enter(level, RULE);
             boolean result;
 
             result = Augassign.parse(parseTree, level + 1);
             result = result && Exprlist.parse(parseTree, level + 1);
 
-            parseTree.exit(level, marker, result);
+            parseTree.exit(result);
             return result;
         }
     }

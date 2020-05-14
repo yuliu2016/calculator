@@ -54,22 +54,21 @@ public final class PipeFor extends NodeWrapper {
 
     public static boolean parse(ParseTree parseTree, int level) {
         if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        var marker = parseTree.enter(level, RULE);
+        parseTree.enter(level, RULE);
         boolean result;
 
         CompFor.parse(parseTree, level + 1);
         result = parseTree.consumeToken("for");
         result = result && Targetlist.parse(parseTree, level + 1);
-        if (result) parsePipeFor4List(parseTree, level + 1);
+        if (result) parsePipeFor4List(parseTree, level);
         if (result) Parameters.parse(parseTree, level + 1);
         if (result) BlockSuite.parse(parseTree, level + 1);
 
-        parseTree.exit(level, marker, result);
+        parseTree.exit(result);
         return result;
     }
 
     private static void parsePipeFor4List(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) return;
         parseTree.enterCollection();
         while (true) {
             var pos = parseTree.position();
@@ -101,13 +100,13 @@ public final class PipeFor extends NodeWrapper {
 
         public static boolean parse(ParseTree parseTree, int level) {
             if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            var marker = parseTree.enter(level, RULE);
+            parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeToken("if");
             result = result && Expr.parse(parseTree, level + 1);
 
-            parseTree.exit(level, marker, result);
+            parseTree.exit(result);
             return result;
         }
     }

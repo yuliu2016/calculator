@@ -57,7 +57,7 @@ public class ClassField {
 
             case TokenType -> {
                 if (isSingular()) {
-                    yield "        return getItemOfType(" + index + "," +
+                    yield "        return getItemOfType(" + index + ", " +
                             resultSource.getValue() + ");\n";
                 }
                 yield "        return getList(" + index + ", ParseTreeNode::asString);\n";
@@ -124,7 +124,7 @@ public class ClassField {
 
     private String getLoopExpr() {
         var name = ParserStringUtil.capitalizeFirstCharOnly(fieldName);
-        return "parse" + name + "(parseTree, level + 1)";
+        return "parse" + name + "(parseTree, level)";
     }
 
     private String getOptionalStmt(String resultExpr, RuleType ruleType, boolean isFirst) {
@@ -164,7 +164,6 @@ public class ClassField {
         var resultExpr = getResultExpr();
         var name = ParserStringUtil.capitalizeFirstCharOnly(fieldName);
         return "\n    private static boolean parse" + name + "(ParseTree parseTree, int level) {\n" +
-                "        if (!ParserUtil.recursionGuard(level, RULE)) return false;\n" +
                 "        parseTree.enterCollection();\n" +
                 "        var result = " + resultExpr + ";\n" +
                 "        if (result) while (true) {\n" +
@@ -181,7 +180,6 @@ public class ClassField {
         var resultExpr = getResultExpr();
         var name = ParserStringUtil.capitalizeFirstCharOnly(fieldName);
         return "\n    private static void parse" + name + "(ParseTree parseTree, int level) {\n" +
-                "        if (!ParserUtil.recursionGuard(level, RULE)) return;\n" +
                 "        parseTree.enterCollection();\n" +
                 "        while (true) {\n" +
                 "            var pos = parseTree.position();\n" +

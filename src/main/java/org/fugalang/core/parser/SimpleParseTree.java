@@ -45,7 +45,7 @@ public class SimpleParseTree implements ParseTree {
     }
 
     @Override
-    public ParseTreeMarker enter(int level, ParserRule rule) {
+    public void enter(int level, ParserRule rule) {
         var new_frame = new ParseTreeFrame(pos, level, rule);
         frame_deque.push(new_frame);
 
@@ -54,18 +54,11 @@ public class SimpleParseTree implements ParseTree {
         }
 
         context.log(() -> "  ".repeat(level) + "Entering Frame: " + rule + " at level " + level);
-        return new_frame;
     }
 
     @Override
-    public void exit(int level, ParseTreeMarker marker, boolean success) {
+    public void exit(boolean success) {
         var current_frame = frame_deque.pop();
-        if (marker != current_frame) {
-            throw new ParserException("Mismatched frame reference");
-        }
-        if (level != current_frame.getLevel()) {
-            throw new ParserException("Mismatched frame level");
-        }
 
         if (success) {
             context.log(() -> "  ".repeat(current_frame.getLevel()) +

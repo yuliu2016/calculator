@@ -44,14 +44,14 @@ public final class Expr extends NodeWrapper {
 
     public static boolean parse(ParseTree parseTree, int level) {
         if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        var marker = parseTree.enter(level, RULE);
+        parseTree.enter(level, RULE);
         boolean result;
 
         result = Expr1.parse(parseTree, level + 1);
         result = result || Funcdef.parse(parseTree, level + 1);
         result = result || Disjunction.parse(parseTree, level + 1);
 
-        parseTree.exit(level, marker, result);
+        parseTree.exit(result);
         return result;
     }
 
@@ -85,7 +85,7 @@ public final class Expr extends NodeWrapper {
 
         public static boolean parse(ParseTree parseTree, int level) {
             if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            var marker = parseTree.enter(level, RULE);
+            parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeToken("if");
@@ -95,7 +95,7 @@ public final class Expr extends NodeWrapper {
             result = result && parseTree.consumeToken("else");
             result = result && Expr.parse(parseTree, level + 1);
 
-            parseTree.exit(level, marker, result);
+            parseTree.exit(result);
             return result;
         }
     }

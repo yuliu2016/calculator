@@ -20,12 +20,12 @@ public final class PassStmt extends NodeWrapper {
 
     public static boolean parse(ParseTree parseTree, int level) {
         if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        var marker = parseTree.enter(level, RULE);
+        parseTree.enter(level, RULE);
         boolean result;
 
         result = parseTree.consumeToken("pass");
 
-        parseTree.exit(level, marker, result);
+        parseTree.exit(result);
         return result;
     }
 }

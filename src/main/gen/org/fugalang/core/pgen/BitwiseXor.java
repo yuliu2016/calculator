@@ -30,18 +30,17 @@ public final class BitwiseXor extends NodeWrapper {
 
     public static boolean parse(ParseTree parseTree, int level) {
         if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        var marker = parseTree.enter(level, RULE);
+        parseTree.enter(level, RULE);
         boolean result;
 
         result = BitwiseAnd.parse(parseTree, level + 1);
-        if (result) parseBitwiseXor2List(parseTree, level + 1);
+        if (result) parseBitwiseXor2List(parseTree, level);
 
-        parseTree.exit(level, marker, result);
+        parseTree.exit(result);
         return result;
     }
 
     private static void parseBitwiseXor2List(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) return;
         parseTree.enterCollection();
         while (true) {
             var pos = parseTree.position();
@@ -73,13 +72,13 @@ public final class BitwiseXor extends NodeWrapper {
 
         public static boolean parse(ParseTree parseTree, int level) {
             if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            var marker = parseTree.enter(level, RULE);
+            parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeToken("^");
             result = result && BitwiseAnd.parse(parseTree, level + 1);
 
-            parseTree.exit(level, marker, result);
+            parseTree.exit(result);
             return result;
         }
     }

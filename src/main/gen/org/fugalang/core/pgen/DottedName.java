@@ -22,7 +22,7 @@ public final class DottedName extends NodeWrapper {
     }
 
     public String name() {
-        return getItemOfType(0,TokenType.NAME);
+        return getItemOfType(0, TokenType.NAME);
     }
 
     public List<DottedName2> dottedName2List() {
@@ -31,18 +31,17 @@ public final class DottedName extends NodeWrapper {
 
     public static boolean parse(ParseTree parseTree, int level) {
         if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        var marker = parseTree.enter(level, RULE);
+        parseTree.enter(level, RULE);
         boolean result;
 
         result = parseTree.consumeToken(TokenType.NAME);
-        if (result) parseDottedName2List(parseTree, level + 1);
+        if (result) parseDottedName2List(parseTree, level);
 
-        parseTree.exit(level, marker, result);
+        parseTree.exit(result);
         return result;
     }
 
     private static void parseDottedName2List(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) return;
         parseTree.enterCollection();
         while (true) {
             var pos = parseTree.position();
@@ -69,18 +68,18 @@ public final class DottedName extends NodeWrapper {
         }
 
         public String name() {
-            return getItemOfType(1,TokenType.NAME);
+            return getItemOfType(1, TokenType.NAME);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
             if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            var marker = parseTree.enter(level, RULE);
+            parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeToken(".");
             result = result && parseTree.consumeToken(TokenType.NAME);
 
-            parseTree.exit(level, marker, result);
+            parseTree.exit(result);
             return result;
         }
     }

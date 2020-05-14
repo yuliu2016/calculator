@@ -3,7 +3,7 @@ package org.fugalang.core.parser;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ParseTreeFrame implements ParseTreeMarker {
+public class ParseTreeFrame {
 
     private final int position;
     private final int level;
@@ -19,7 +19,6 @@ public class ParseTreeFrame implements ParseTreeMarker {
         this.rule = rule;
     }
 
-    @Override
     public int position() {
         return position;
     }

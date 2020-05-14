@@ -39,13 +39,13 @@ public final class BlockSuite extends NodeWrapper {
 
     public static boolean parse(ParseTree parseTree, int level) {
         if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        var marker = parseTree.enter(level, RULE);
+        parseTree.enter(level, RULE);
         boolean result;
 
         result = BlockSuite1.parse(parseTree, level + 1);
         result = result || BlockSuite2.parse(parseTree, level + 1);
 
-        parseTree.exit(level, marker, result);
+        parseTree.exit(result);
         return result;
     }
 
@@ -71,14 +71,14 @@ public final class BlockSuite extends NodeWrapper {
 
         public static boolean parse(ParseTree parseTree, int level) {
             if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            var marker = parseTree.enter(level, RULE);
+            parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeToken("{");
             result = result && SimpleStmt.parse(parseTree, level + 1);
             result = result && parseTree.consumeToken("}");
 
-            parseTree.exit(level, marker, result);
+            parseTree.exit(result);
             return result;
         }
     }
@@ -100,7 +100,7 @@ public final class BlockSuite extends NodeWrapper {
         }
 
         public String newline() {
-            return getItemOfType(1,TokenType.NEWLINE);
+            return getItemOfType(1, TokenType.NEWLINE);
         }
 
         public List<Stmt> stmtList() {
@@ -109,20 +109,19 @@ public final class BlockSuite extends NodeWrapper {
 
         public static boolean parse(ParseTree parseTree, int level) {
             if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            var marker = parseTree.enter(level, RULE);
+            parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeToken("{");
             result = result && parseTree.consumeToken(TokenType.NEWLINE);
-            result = result && parseStmtList(parseTree, level + 1);
+            result = result && parseStmtList(parseTree, level);
             result = result && parseTree.consumeToken("}");
 
-            parseTree.exit(level, marker, result);
+            parseTree.exit(result);
             return result;
         }
 
         private static boolean parseStmtList(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) return false;
             parseTree.enterCollection();
             var result = Stmt.parse(parseTree, level + 1);
             if (result) while (true) {

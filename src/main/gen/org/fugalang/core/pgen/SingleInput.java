@@ -20,7 +20,7 @@ public final class SingleInput extends NodeWrapper {
     }
 
     public String newline() {
-        return getItemOfType(0,TokenType.NEWLINE);
+        return getItemOfType(0, TokenType.NEWLINE);
     }
 
     public boolean hasNewline() {
@@ -45,14 +45,14 @@ public final class SingleInput extends NodeWrapper {
 
     public static boolean parse(ParseTree parseTree, int level) {
         if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        var marker = parseTree.enter(level, RULE);
+        parseTree.enter(level, RULE);
         boolean result;
 
         result = parseTree.consumeToken(TokenType.NEWLINE);
         result = result || SimpleStmt.parse(parseTree, level + 1);
         result = result || SingleInput3.parse(parseTree, level + 1);
 
-        parseTree.exit(level, marker, result);
+        parseTree.exit(result);
         return result;
     }
 
@@ -77,18 +77,18 @@ public final class SingleInput extends NodeWrapper {
         }
 
         public String newline() {
-            return getItemOfType(1,TokenType.NEWLINE);
+            return getItemOfType(1, TokenType.NEWLINE);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
             if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            var marker = parseTree.enter(level, RULE);
+            parseTree.enter(level, RULE);
             boolean result;
 
             result = CompoundStmt.parse(parseTree, level + 1);
             result = result && parseTree.consumeToken(TokenType.NEWLINE);
 
-            parseTree.exit(level, marker, result);
+            parseTree.exit(result);
             return result;
         }
     }

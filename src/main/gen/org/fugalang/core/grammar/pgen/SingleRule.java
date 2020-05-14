@@ -20,11 +20,11 @@ public final class SingleRule extends NodeWrapper {
     }
 
     public String token() {
-        return getItemOfType(0,MetaTokenType.TOK);
+        return getItemOfType(0, MetaTokenType.TOK);
     }
 
     public String colon() {
-        return getItemOfType(1,MetaTokenType.COL);
+        return getItemOfType(1, MetaTokenType.COL);
     }
 
     public OrRule orRule() {
@@ -32,12 +32,12 @@ public final class SingleRule extends NodeWrapper {
     }
 
     public String newline() {
-        return getItemOfType(3,MetaTokenType.NEWLINE);
+        return getItemOfType(3, MetaTokenType.NEWLINE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
         if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        var marker = parseTree.enter(level, RULE);
+        parseTree.enter(level, RULE);
         boolean result;
 
         result = parseTree.consumeToken(MetaTokenType.TOK);
@@ -45,7 +45,7 @@ public final class SingleRule extends NodeWrapper {
         result = result && OrRule.parse(parseTree, level + 1);
         result = result && parseTree.consumeToken(MetaTokenType.NEWLINE);
 
-        parseTree.exit(level, marker, result);
+        parseTree.exit(result);
         return result;
     }
 }

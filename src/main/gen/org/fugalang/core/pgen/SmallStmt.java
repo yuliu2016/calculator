@@ -68,7 +68,7 @@ public final class SmallStmt extends NodeWrapper {
 
     public static boolean parse(ParseTree parseTree, int level) {
         if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        var marker = parseTree.enter(level, RULE);
+        parseTree.enter(level, RULE);
         boolean result;
 
         result = DelStmt.parse(parseTree, level + 1);
@@ -78,7 +78,7 @@ public final class SmallStmt extends NodeWrapper {
         result = result || AssertStmt.parse(parseTree, level + 1);
         result = result || Assignment.parse(parseTree, level + 1);
 
-        parseTree.exit(level, marker, result);
+        parseTree.exit(result);
         return result;
     }
 }

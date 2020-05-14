@@ -44,14 +44,14 @@ public final class TypedArgList extends NodeWrapper {
 
     public static boolean parse(ParseTree parseTree, int level) {
         if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        var marker = parseTree.enter(level, RULE);
+        parseTree.enter(level, RULE);
         boolean result;
 
         result = Kwargs.parse(parseTree, level + 1);
         result = result || ArgsKwargs.parse(parseTree, level + 1);
         result = result || FullArgList.parse(parseTree, level + 1);
 
-        parseTree.exit(level, marker, result);
+        parseTree.exit(result);
         return result;
     }
 }

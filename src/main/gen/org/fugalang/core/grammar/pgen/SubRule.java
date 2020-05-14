@@ -36,7 +36,7 @@ public final class SubRule extends NodeWrapper {
     }
 
     public String token() {
-        return getItemOfType(2,MetaTokenType.TOK);
+        return getItemOfType(2, MetaTokenType.TOK);
     }
 
     public boolean hasToken() {
@@ -45,14 +45,14 @@ public final class SubRule extends NodeWrapper {
 
     public static boolean parse(ParseTree parseTree, int level) {
         if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        var marker = parseTree.enter(level, RULE);
+        parseTree.enter(level, RULE);
         boolean result;
 
         result = SubRule1.parse(parseTree, level + 1);
         result = result || SubRule2.parse(parseTree, level + 1);
         result = result || parseTree.consumeToken(MetaTokenType.TOK);
 
-        parseTree.exit(level, marker, result);
+        parseTree.exit(result);
         return result;
     }
 
@@ -73,7 +73,7 @@ public final class SubRule extends NodeWrapper {
         }
 
         public String lpar() {
-            return getItemOfType(0,MetaTokenType.LPAR);
+            return getItemOfType(0, MetaTokenType.LPAR);
         }
 
         public OrRule orRule() {
@@ -81,19 +81,19 @@ public final class SubRule extends NodeWrapper {
         }
 
         public String rpar() {
-            return getItemOfType(2,MetaTokenType.RPAR);
+            return getItemOfType(2, MetaTokenType.RPAR);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
             if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            var marker = parseTree.enter(level, RULE);
+            parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeToken(MetaTokenType.LPAR);
             result = result && OrRule.parse(parseTree, level + 1);
             result = result && parseTree.consumeToken(MetaTokenType.RPAR);
 
-            parseTree.exit(level, marker, result);
+            parseTree.exit(result);
             return result;
         }
     }
@@ -115,7 +115,7 @@ public final class SubRule extends NodeWrapper {
         }
 
         public String lsqb() {
-            return getItemOfType(0,MetaTokenType.LSQB);
+            return getItemOfType(0, MetaTokenType.LSQB);
         }
 
         public OrRule orRule() {
@@ -123,19 +123,19 @@ public final class SubRule extends NodeWrapper {
         }
 
         public String rsqb() {
-            return getItemOfType(2,MetaTokenType.RSQB);
+            return getItemOfType(2, MetaTokenType.RSQB);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
             if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            var marker = parseTree.enter(level, RULE);
+            parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeToken(MetaTokenType.LSQB);
             result = result && OrRule.parse(parseTree, level + 1);
             result = result && parseTree.consumeToken(MetaTokenType.RSQB);
 
-            parseTree.exit(level, marker, result);
+            parseTree.exit(result);
             return result;
         }
     }

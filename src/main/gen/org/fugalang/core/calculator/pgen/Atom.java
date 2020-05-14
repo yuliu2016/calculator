@@ -28,7 +28,7 @@ public final class Atom extends NodeWrapper {
     }
 
     public String number() {
-        return getItemOfType(1,TokenType.NUMBER);
+        return getItemOfType(1, TokenType.NUMBER);
     }
 
     public boolean hasNumber() {
@@ -37,13 +37,13 @@ public final class Atom extends NodeWrapper {
 
     public static boolean parse(ParseTree parseTree, int level) {
         if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        var marker = parseTree.enter(level, RULE);
+        parseTree.enter(level, RULE);
         boolean result;
 
         result = Atom1.parse(parseTree, level + 1);
         result = result || parseTree.consumeToken(TokenType.NUMBER);
 
-        parseTree.exit(level, marker, result);
+        parseTree.exit(result);
         return result;
     }
 
@@ -69,14 +69,14 @@ public final class Atom extends NodeWrapper {
 
         public static boolean parse(ParseTree parseTree, int level) {
             if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            var marker = parseTree.enter(level, RULE);
+            parseTree.enter(level, RULE);
             boolean result;
 
             result = parseTree.consumeToken("(");
             result = result && Sum.parse(parseTree, level + 1);
             result = result && parseTree.consumeToken(")");
 
-            parseTree.exit(level, marker, result);
+            parseTree.exit(result);
             return result;
         }
     }

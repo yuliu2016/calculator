@@ -191,7 +191,7 @@ public class ClassBuilder {
 
         var mb = new StringBuilder();
         mb.append("if (!ParserUtil.recursionGuard(level, RULE)) return false;\n");
-        mb.append("var marker = parseTree.enter(level, RULE);\n");
+        mb.append("parseTree.enter(level, RULE);\n");
         mb.append("boolean result;\n\n");
 
         var first = true;
@@ -208,7 +208,7 @@ public class ClassBuilder {
                     " may match an empty string");
         }
 
-        mb.append("\nparseTree.exit(level, marker, result);\n");
+        mb.append("\nparseTree.exit(result);\n");
         mb.append("return result;\n");
 
         sb.append(ParserStringUtil.indent(mb.toString(), 8));
