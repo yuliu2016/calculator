@@ -1,11 +1,12 @@
 package org.fugalang.core.grammar.pgen;
 
 import org.fugalang.core.parser.*;
+import org.fugalang.core.token.TokenType;
 
 import java.util.List;
 
 /**
- * rules: 'single_rule'+
+ * rules: ['NEWLINE'] 'single_rule'+
  */
 public final class Rules extends NodeWrapper {
 
@@ -20,8 +21,16 @@ public final class Rules extends NodeWrapper {
         super(RULE, node);
     }
 
+    public String newline() {
+        return getItemOfType(0, TokenType.NEWLINE);
+    }
+
+    public boolean hasNewline() {
+        return hasItemOfType(0, TokenType.NEWLINE);
+    }
+
     public List<SingleRule> singleRuleList() {
-        return getList(0, SingleRule::of);
+        return getList(1, SingleRule::of);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -29,6 +38,7 @@ public final class Rules extends NodeWrapper {
         parseTree.enter(level, RULE);
         boolean result;
 
+        parseTree.consumeToken(TokenType.NEWLINE);
         result = parseSingleRuleList(parseTree, level);
 
         parseTree.exit(result);

@@ -1,4 +1,4 @@
-package org.fugalang.core.grammar.psi;
+package org.fugalang.core.grammar.gen;
 
 public enum RepeatType {
     Once,

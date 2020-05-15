@@ -1,6 +1,5 @@
 package org.fugalang.core.grammar.token;
 
-import org.fugalang.core.grammar.MetaGrammarError;
 import org.fugalang.core.parser.ElementType;
 import org.fugalang.core.token.CharTest;
 import org.fugalang.core.token.Visitor;
@@ -10,6 +9,7 @@ import java.util.List;
 
 import static org.fugalang.core.grammar.token.MetaTokenType.*;
 
+@Deprecated
 public class MetaLexer {
     public final List<MetaToken> tokens = new ArrayList<>();
 

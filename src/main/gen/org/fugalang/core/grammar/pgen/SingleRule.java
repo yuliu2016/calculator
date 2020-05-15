@@ -1,10 +1,10 @@
 package org.fugalang.core.grammar.pgen;
 
-import org.fugalang.core.grammar.token.MetaTokenType;
 import org.fugalang.core.parser.*;
+import org.fugalang.core.token.TokenType;
 
 /**
- * single_rule: 'TOK' ':' 'or_rule' 'NEWLINE'
+ * single_rule: 'NAME' ':' 'or_rule' 'NEWLINE'
  */
 public final class SingleRule extends NodeWrapper {
 
@@ -19,12 +19,8 @@ public final class SingleRule extends NodeWrapper {
         super(RULE, node);
     }
 
-    public String token() {
-        return getItemOfType(0, MetaTokenType.TOK);
-    }
-
-    public String colon() {
-        return getItemOfType(1, MetaTokenType.COL);
+    public String name() {
+        return getItemOfType(0, TokenType.NAME);
     }
 
     public OrRule orRule() {
@@ -32,7 +28,7 @@ public final class SingleRule extends NodeWrapper {
     }
 
     public String newline() {
-        return getItemOfType(3, MetaTokenType.NEWLINE);
+        return getItemOfType(3, TokenType.NEWLINE);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -40,10 +36,10 @@ public final class SingleRule extends NodeWrapper {
         parseTree.enter(level, RULE);
         boolean result;
 
-        result = parseTree.consumeToken(MetaTokenType.TOK);
-        result = result && parseTree.consumeToken(MetaTokenType.COL);
+        result = parseTree.consumeToken(TokenType.NAME);
+        result = result && parseTree.consumeToken(":");
         result = result && OrRule.parse(parseTree, level + 1);
-        result = result && parseTree.consumeToken(MetaTokenType.NEWLINE);
+        result = result && parseTree.consumeToken(TokenType.NEWLINE);
 
         parseTree.exit(result);
         return result;

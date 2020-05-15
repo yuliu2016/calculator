@@ -4,8 +4,6 @@ import org.fugalang.core.grammar.pgen.AndRule;
 import org.fugalang.core.grammar.pgen.OrRule;
 import org.fugalang.core.grammar.pgen.RepeatRule;
 import org.fugalang.core.grammar.pgen.SubRule;
-import org.fugalang.core.grammar.psi.RepeatType;
-import org.fugalang.core.grammar.psi.SubRuleType;
 import org.fugalang.core.grammar.util.FirstAndMore;
 
 import java.util.stream.Collectors;
@@ -30,7 +28,7 @@ public class PEGCompat {
 
     public static String constructString(RepeatRule repeatRule) {
         var modifier = repeatRule.hasRepeatRule2() ?
-                (repeatRule.repeatRule2().hasPlus() ? "+" : "*")
+                (repeatRule.repeatRule2().isTokenPlus() ? "+" : "*")
                 : "";
         return constructString(repeatRule.subRule()) + modifier;
     }
@@ -38,7 +36,7 @@ public class PEGCompat {
     public static String constructString(SubRule subRule) {
         return subRule.hasSubRule1() ? "(" + constructString(subRule.subRule1().orRule()) + ")" :
                 subRule.hasSubRule2() ? "[" + constructString(subRule.subRule2().orRule()) + "]" :
-                        "'" + subRule.token() + "'";
+                        "'" + getSubruleString(subRule) + "'";
     }
 
     public static Iterable<AndRule> allAndRules(OrRule orRule) {
@@ -69,9 +67,15 @@ public class PEGCompat {
 
     public static RepeatType getRepeatType(RepeatRule repeatRule) {
         return repeatRule.hasRepeatRule2() ?
-                repeatRule.repeatRule2().hasPlus() ?
+                repeatRule.repeatRule2().isTokenPlus() ?
                         RepeatType.OnceOrMore
                         : RepeatType.NoneOrMore
                 : RepeatType.Once;
+    }
+
+    public static String getSubruleString(SubRule subRule) {
+//        return subRule.token();
+        return subRule.hasName() ? subRule.name() :
+                subRule.hasString() ? subRule.string() : null;
     }
 }

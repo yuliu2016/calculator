@@ -1,10 +1,10 @@
 package org.fugalang.core.grammar.pgen;
 
-import org.fugalang.core.grammar.token.MetaTokenType;
 import org.fugalang.core.parser.*;
+import org.fugalang.core.token.TokenType;
 
 /**
- * sub_rule: '(' 'or_rule' ')' | '[' 'or_rule' ']' | 'TOK'
+ * sub_rule: '(' 'or_rule' ')' | '[' 'or_rule' ']' | 'NAME' | 'STRING'
  */
 public final class SubRule extends NodeWrapper {
 
@@ -35,12 +35,20 @@ public final class SubRule extends NodeWrapper {
         return hasItemOfRule(1, SubRule2.RULE);
     }
 
-    public String token() {
-        return getItemOfType(2, MetaTokenType.TOK);
+    public String name() {
+        return getItemOfType(2, TokenType.NAME);
     }
 
-    public boolean hasToken() {
-        return hasItemOfType(2, MetaTokenType.TOK);
+    public boolean hasName() {
+        return hasItemOfType(2, TokenType.NAME);
+    }
+
+    public String string() {
+        return getItemOfType(3, TokenType.STRING);
+    }
+
+    public boolean hasString() {
+        return hasItemOfType(3, TokenType.STRING);
     }
 
     public static boolean parse(ParseTree parseTree, int level) {
@@ -50,7 +58,8 @@ public final class SubRule extends NodeWrapper {
 
         result = SubRule1.parse(parseTree, level + 1);
         result = result || SubRule2.parse(parseTree, level + 1);
-        result = result || parseTree.consumeToken(MetaTokenType.TOK);
+        result = result || parseTree.consumeToken(TokenType.NAME);
+        result = result || parseTree.consumeToken(TokenType.STRING);
 
         parseTree.exit(result);
         return result;
@@ -72,16 +81,8 @@ public final class SubRule extends NodeWrapper {
             super(RULE, node);
         }
 
-        public String lpar() {
-            return getItemOfType(0, MetaTokenType.LPAR);
-        }
-
         public OrRule orRule() {
             return OrRule.of(getItem(1));
-        }
-
-        public String rpar() {
-            return getItemOfType(2, MetaTokenType.RPAR);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -89,9 +90,9 @@ public final class SubRule extends NodeWrapper {
             parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeToken(MetaTokenType.LPAR);
+            result = parseTree.consumeToken("(");
             result = result && OrRule.parse(parseTree, level + 1);
-            result = result && parseTree.consumeToken(MetaTokenType.RPAR);
+            result = result && parseTree.consumeToken(")");
 
             parseTree.exit(result);
             return result;
@@ -114,16 +115,8 @@ public final class SubRule extends NodeWrapper {
             super(RULE, node);
         }
 
-        public String lsqb() {
-            return getItemOfType(0, MetaTokenType.LSQB);
-        }
-
         public OrRule orRule() {
             return OrRule.of(getItem(1));
-        }
-
-        public String rsqb() {
-            return getItemOfType(2, MetaTokenType.RSQB);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -131,9 +124,9 @@ public final class SubRule extends NodeWrapper {
             parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeToken(MetaTokenType.LSQB);
+            result = parseTree.consumeToken("[");
             result = result && OrRule.parse(parseTree, level + 1);
-            result = result && parseTree.consumeToken(MetaTokenType.RSQB);
+            result = result && parseTree.consumeToken("]");
 
             parseTree.exit(result);
             return result;

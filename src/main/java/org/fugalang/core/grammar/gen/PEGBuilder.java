@@ -1,11 +1,7 @@
 package org.fugalang.core.grammar.gen;
 
 import org.fugalang.core.grammar.classbuilder.*;
-import org.fugalang.core.grammar.pgen.AndRule;
-import org.fugalang.core.grammar.pgen.OrRule;
-import org.fugalang.core.grammar.pgen.RepeatRule;
-import org.fugalang.core.grammar.pgen.Rules;
-import org.fugalang.core.grammar.psi.RepeatType;
+import org.fugalang.core.grammar.pgen.*;
 import org.fugalang.core.grammar.util.ParserStringUtil;
 import org.fugalang.core.parser.RuleType;
 
@@ -34,7 +30,7 @@ public class PEGBuilder {
     ) {
         ruleMap = new LinkedHashMap<>();
         for (var rule : rules.singleRuleList()) {
-            ruleMap.put(rule.token(), rule.orRule());
+            ruleMap.put(rule.name(), rule.orRule());
         }
         this.converter = converter;
 
@@ -168,7 +164,7 @@ public class PEGBuilder {
             RepeatRule repeatRule,
             boolean isOptional
     ) {
-        var subRule = repeatRule.subRule();
+        SubRule subRule = repeatRule.subRule();
 
         var repeatType = PEGCompat.getRepeatType(repeatRule);
 
@@ -179,7 +175,7 @@ public class PEGBuilder {
             case Optional -> addOrRuleAsComponent(className, cb,
                     subRule.subRule2().orRule(), repeatType, OPTIONAL);
 
-            case Token -> addToken(cb, repeatType, subRule.token(), isOptional);
+            case Token -> addToken(cb, repeatType, PEGCompat.getSubruleString(subRule), isOptional);
         }
     }
 

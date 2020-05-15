@@ -133,8 +133,11 @@ public class ClassSet {
             }
 
             for (var aClass : classes) {
+                var code = aClass.generateClassCode()
+                        .replace("\n", System.lineSeparator());
+
                 Files.writeString(Paths.get(path.toString(),
-                        aClass.getClassName() + ".java"), aClass.generateClassCode());
+                        aClass.getClassName() + ".java"), code);
             }
         } catch (IOException e) {
             e.printStackTrace();

@@ -1,8 +1,8 @@
 # Meta Grammar
 
-rules:       single_rule+
-single_rule: TOK ':' or_rule NEWLINE
+rules:       [NEWLINE] single_rule+
+single_rule: NAME ':' or_rule NEWLINE
 or_rule:     and_rule ('|' and_rule)*
 and_rule:    repeat_rule (repeat_rule)*
 repeat_rule: sub_rule ['*' | '+']
-sub_rule:    '(' or_rule ')' | '[' or_rule ']' | TOK
+sub_rule:    '(' or_rule ')' | '[' or_rule ']' | NAME | STRING

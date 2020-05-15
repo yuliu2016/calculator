@@ -2,6 +2,7 @@ package org.fugalang.core.grammar.token;
 
 import org.fugalang.core.parser.ElementType;
 
+@Deprecated
 public class MetaTokenType {
     public static final ElementType NEWLINE = ElementType.of("NEWLINE", false);
     public static final ElementType TOK = ElementType.of("TOK", false);

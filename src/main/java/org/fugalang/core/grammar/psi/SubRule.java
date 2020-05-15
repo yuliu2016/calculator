@@ -1,5 +1,6 @@
 package org.fugalang.core.grammar.psi;
 
+import org.fugalang.core.grammar.gen.SubRuleType;
 import org.fugalang.core.parser.TreeStringBuilder;
 import org.fugalang.core.parser.TreeStringElem;
 

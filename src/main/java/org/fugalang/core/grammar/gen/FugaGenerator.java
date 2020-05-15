@@ -1,12 +1,13 @@
 package org.fugalang.core.grammar.gen;
 
 import org.fugalang.core.grammar.pgen.Rules;
-import org.fugalang.core.grammar.token.MetaLexer;
 import org.fugalang.core.grammar.util.ParserStringUtil;
 import org.fugalang.core.parser.SimpleParseTree;
-import org.fugalang.core.parser.context.SimpleContext;
+import org.fugalang.core.parser.context.LazyParserContext;
+import org.fugalang.core.parser.context.LexingVisitor;
 import org.fugalang.core.token.Keyword;
 import org.fugalang.core.token.Operator;
+import org.fugalang.core.token.SimpleLexer;
 import org.fugalang.core.token.TokenType;
 
 import java.io.IOException;
@@ -20,9 +21,9 @@ public class FugaGenerator {
         var res = FugaGenerator.class.getResource("/org/fugalang/core/grammar/Grammar");
         try {
             var data = Files.readString(Paths.get(res.toURI()));
-            var tokens = new MetaLexer(data).tokenize();
-
-            var context = new SimpleContext(tokens, false);
+            var visitor = LexingVisitor.of(data);
+            var lexer = SimpleLexer.of(visitor);
+            var context = LazyParserContext.of(lexer, visitor, false);
             var tree = SimpleParseTree.parse(context, Rules::parse, Rules::of);
 
             var path = Paths.get(

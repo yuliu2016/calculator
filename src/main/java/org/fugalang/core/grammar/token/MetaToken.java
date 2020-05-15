@@ -5,6 +5,7 @@ import org.fugalang.core.parser.ParserElement;
 
 import java.util.Objects;
 
+@Deprecated
 public class MetaToken implements ParserElement {
     public final ElementType type;
     public final String value;

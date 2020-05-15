@@ -1,6 +1,5 @@
 package org.fugalang.core.grammar.pgen;
 
-import org.fugalang.core.grammar.token.MetaTokenType;
 import org.fugalang.core.parser.*;
 
 /**
@@ -59,20 +58,12 @@ public final class RepeatRule extends NodeWrapper {
             super(RULE, node);
         }
 
-        public String star() {
-            return getItemOfType(0, MetaTokenType.STAR);
+        public boolean isTokenTimes() {
+            return getBoolean(0);
         }
 
-        public boolean hasStar() {
-            return hasItemOfType(0, MetaTokenType.STAR);
-        }
-
-        public String plus() {
-            return getItemOfType(1, MetaTokenType.PLUS);
-        }
-
-        public boolean hasPlus() {
-            return hasItemOfType(1, MetaTokenType.PLUS);
+        public boolean isTokenPlus() {
+            return getBoolean(1);
         }
 
         public static boolean parse(ParseTree parseTree, int level) {
@@ -80,8 +71,8 @@ public final class RepeatRule extends NodeWrapper {
             parseTree.enter(level, RULE);
             boolean result;
 
-            result = parseTree.consumeToken(MetaTokenType.STAR);
-            result = result || parseTree.consumeToken(MetaTokenType.PLUS);
+            result = parseTree.consumeToken("*");
+            result = result || parseTree.consumeToken("+");
 
             parseTree.exit(result);
             return result;

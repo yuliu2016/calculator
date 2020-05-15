@@ -1,9 +1,10 @@
 package org.fugalang.core.grammar.gen;
 
 import org.fugalang.core.grammar.pgen.Rules;
-import org.fugalang.core.grammar.token.MetaLexer;
 import org.fugalang.core.parser.SimpleParseTree;
-import org.fugalang.core.parser.context.SimpleContext;
+import org.fugalang.core.parser.context.LazyParserContext;
+import org.fugalang.core.parser.context.LexingVisitor;
+import org.fugalang.core.token.SimpleLexer;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -15,9 +16,9 @@ public class CalculatorGenerator {
         var res = CalculatorGenerator.class.getResource("/org/fugalang/core/grammar/CalculatorGrammar");
         try {
             var data = Files.readString(Paths.get(res.toURI()));
-            var tokens = new MetaLexer(data).tokenize();
-
-            var context = new SimpleContext(tokens, false);
+            var visitor = LexingVisitor.of(data);
+            var lexer = SimpleLexer.of(visitor);
+            var context = LazyParserContext.of(lexer, visitor, false);
             var tree = SimpleParseTree.parse(context, Rules::parse, Rules::of);
 
             var path = Paths.get(
