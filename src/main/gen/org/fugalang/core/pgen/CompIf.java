@@ -3,7 +3,7 @@ package org.fugalang.core.pgen;
 import org.fugalang.core.parser.*;
 
 /**
- * comp_if: 'if' 'expr' ['comp_iter']
+ * comp_if: 'if' 'named_expr' ['comp_iter']
  */
 public final class CompIf extends NodeWrapper {
     public static final ParserRule RULE =
@@ -17,8 +17,8 @@ public final class CompIf extends NodeWrapper {
         super(RULE, node);
     }
 
-    public Expr expr() {
-        return Expr.of(getItem(1));
+    public NamedExpr namedExpr() {
+        return NamedExpr.of(getItem(1));
     }
 
     public CompIter compIter() {
@@ -34,7 +34,7 @@ public final class CompIf extends NodeWrapper {
         t.enter(lv, RULE);
         boolean r;
         r = t.consumeToken("if");
-        r = r && Expr.parse(t, lv + 1);
+        r = r && NamedExpr.parse(t, lv + 1);
         if (r) CompIter.parse(t, lv + 1);
         t.exit(r);
         return r;

@@ -77,7 +77,8 @@ funcdef: 'def' [func_type_hint] [func_args] func_suite
 # Expressions
 
 named_expr: NAME ':=' expr | expr
-expr: 'if' disjunction '?' disjunction 'else' expr | funcdef | disjunction
+conditional: 'if' disjunction '?' disjunction 'else' expr
+expr: conditional | funcdef | disjunction
 disjunction: conjunction ('or' conjunction)*
 conjunction: inversion ('and' inversion)*
 inversion: 'not' inversion | comparison
@@ -92,9 +93,9 @@ term: pipeline (('*'|'@'|'/'|'%'|'//') pipeline)*
 pipeline: factor ('->' pipe_expr)*
 pipe_expr: pipe_for | factor
 
-pipe_for: [comp_for] 'for' targetlist ('if' expr)* [parameters] [block_suite]
+pipe_for: [comp_for] 'for' targetlist ['if' named_expr] [parameters | block_suite]
 comp_for: 'for' targetlist 'in' disjunction [comp_iter]
-comp_if: 'if' expr [comp_iter]
+comp_if: 'if' named_expr [comp_iter]
 comp_iter: comp_for | comp_if
 
 factor: ('+'|'-'|'~') factor | power
@@ -113,7 +114,8 @@ named_expr_list: named_expr_star (',' named_expr_star)* [',']
 trailer: '.' NAME | parameters | subscript
 subscript: '[' slicelist ']'
 slicelist: slice (',' slice)* [',']
-slice: expr | [expr] ':' [expr] [':' [expr]]
+slice: [expr] slice_expr [slice_expr] | expr
+slice_expr: ':' [expr]
 parameters: '(' [arglist] ')'
 
 target: bitwise_or | star_expr
