@@ -6,6 +6,7 @@ import org.fugalang.core.parser.ParserElement;
 import java.util.List;
 import java.util.function.Supplier;
 
+@Deprecated(forRemoval = true)
 public class SimpleContext implements ParserContext {
 
     private final List<? extends ParserElement> elements;
