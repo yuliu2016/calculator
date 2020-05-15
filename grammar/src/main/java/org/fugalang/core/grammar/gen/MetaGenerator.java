@@ -28,7 +28,7 @@ public class MetaGenerator {
                     "src/main/gen/org/fugalang/core/grammar/pgen/"
             );
 
-            var gen = new PEGBuilder(tree, TokenType::checkToken,
+            var gen = new PEGBuilder(tree, new ConverterImpl(),
                     path, "org.fugalang.core.grammar.pgen",
                     "org.fugalang.core.token.TokenType");
             gen.generate(true);

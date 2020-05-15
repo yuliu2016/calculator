@@ -12,9 +12,9 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public class CalculatorGenerator {
+public class FugaGenerator {
     public static void main(String[] args) {
-        var res = CalculatorGenerator.class.getResource("/org/fugalang/core/grammar/CalculatorGrammar");
+        var res = FugaGenerator.class.getResource("/org/fugalang/core/grammar/Grammar");
         try {
             var data = Files.readString(Paths.get(res.toURI()));
             var visitor = LexingVisitor.of(data);
@@ -24,17 +24,17 @@ public class CalculatorGenerator {
 
             var path = Paths.get(
                     System.getProperty("user.dir"),
-                    "src/main/gen/org/fugalang/core/calculator/pgen/"
+                    "src/main/gen/org/fugalang/core/pgen/"
             );
 
-            var gen = new PEGBuilder(tree, TokenType::checkToken,
-                    path, "org.fugalang.core.calculator.pgen",
+            var gen = new PEGBuilder(tree, new ConverterImpl(),
+                    path, "org.fugalang.core.pgen",
                     "org.fugalang.core.token.TokenType");
-
             gen.generate(true);
 
         } catch (IOException | URISyntaxException e) {
             e.printStackTrace();
         }
     }
+
 }
