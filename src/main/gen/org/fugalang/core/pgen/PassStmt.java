@@ -21,7 +21,7 @@ public final class PassStmt extends NodeWrapper {
         if (!ParserUtil.recursionGuard(lv, RULE)) return false;
         t.enter(lv, RULE);
         boolean r;
-        r = t.consumeToken("pass");
+        r = t.consume("pass");
         t.exit(r);
         return r;
     }

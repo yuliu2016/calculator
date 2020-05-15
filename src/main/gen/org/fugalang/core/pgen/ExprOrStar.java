@@ -18,19 +18,19 @@ public final class ExprOrStar extends NodeWrapper {
     }
 
     public StarExpr starExpr() {
-        return StarExpr.of(getItem(0));
+        return StarExpr.of(get(0));
     }
 
     public boolean hasStarExpr() {
-        return hasItemOfRule(0, StarExpr.RULE);
+        return has(0, StarExpr.RULE);
     }
 
     public Expr expr() {
-        return Expr.of(getItem(1));
+        return Expr.of(get(1));
     }
 
     public boolean hasExpr() {
-        return hasItemOfRule(1, Expr.RULE);
+        return has(1, Expr.RULE);
     }
 
     public static boolean parse(ParseTree t, int lv) {

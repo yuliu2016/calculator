@@ -10,11 +10,11 @@ public interface ParseTree {
 
     void exitCollection();
 
-    boolean consumeToken(ElementType type);
+    boolean consume(ElementType type);
 
-    boolean consumeToken(String literal);
+    boolean consume(String literal);
 
     int position();
 
-    boolean guardLoopExit(int position);
+    boolean loopGuard(int position);
 }

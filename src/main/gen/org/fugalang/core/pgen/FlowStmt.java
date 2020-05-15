@@ -18,35 +18,35 @@ public final class FlowStmt extends NodeWrapper {
     }
 
     public BreakStmt breakStmt() {
-        return BreakStmt.of(getItem(0));
+        return BreakStmt.of(get(0));
     }
 
     public boolean hasBreakStmt() {
-        return hasItemOfRule(0, BreakStmt.RULE);
+        return has(0, BreakStmt.RULE);
     }
 
     public ContinueStmt continueStmt() {
-        return ContinueStmt.of(getItem(1));
+        return ContinueStmt.of(get(1));
     }
 
     public boolean hasContinueStmt() {
-        return hasItemOfRule(1, ContinueStmt.RULE);
+        return has(1, ContinueStmt.RULE);
     }
 
     public ReturnStmt returnStmt() {
-        return ReturnStmt.of(getItem(2));
+        return ReturnStmt.of(get(2));
     }
 
     public boolean hasReturnStmt() {
-        return hasItemOfRule(2, ReturnStmt.RULE);
+        return has(2, ReturnStmt.RULE);
     }
 
     public RaiseStmt raiseStmt() {
-        return RaiseStmt.of(getItem(3));
+        return RaiseStmt.of(get(3));
     }
 
     public boolean hasRaiseStmt() {
-        return hasItemOfRule(3, RaiseStmt.RULE);
+        return has(3, RaiseStmt.RULE);
     }
 
     public static boolean parse(ParseTree t, int lv) {

@@ -21,7 +21,7 @@ public final class ContinueStmt extends NodeWrapper {
         if (!ParserUtil.recursionGuard(lv, RULE)) return false;
         t.enter(lv, RULE);
         boolean r;
-        r = t.consumeToken("continue");
+        r = t.consume("continue");
         t.exit(r);
         return r;
     }

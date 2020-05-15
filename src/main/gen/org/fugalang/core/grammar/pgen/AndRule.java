@@ -20,7 +20,7 @@ public final class AndRule extends NodeWrapper {
     }
 
     public RepeatRule repeatRule() {
-        return RepeatRule.of(getItem(0));
+        return RepeatRule.of(get(0));
     }
 
     public List<AndRule2> andRule2List() {
@@ -41,8 +41,7 @@ public final class AndRule extends NodeWrapper {
         t.enterCollection();
         while (true) {
             var p = t.position();
-            if (!AndRule2.parse(t, lv + 1)) break;
-            if (t.guardLoopExit(p)) break;
+            if (!AndRule2.parse(t, lv + 1) || t.loopGuard(p)) break;
         }
         t.exitCollection();
     }
@@ -63,7 +62,7 @@ public final class AndRule extends NodeWrapper {
         }
 
         public RepeatRule repeatRule() {
-            return RepeatRule.of(getItem(0));
+            return RepeatRule.of(get(0));
         }
 
         public static boolean parse(ParseTree t, int lv) {

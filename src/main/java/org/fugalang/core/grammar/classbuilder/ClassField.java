@@ -50,14 +50,14 @@ public class ClassField {
         return switch (resultSource.getType()) {
             case Class -> {
                 if (isSingular()) {
-                    yield "        return " + className.asType() + ".of(getItem(" + index + "));\n";
+                    yield "        return " + className.asType() + ".of(get(" + index + "));\n";
                 }
                 yield "        return getList(" + index + ", " + className.getRealClassName() + "::of);\n";
             }
 
             case TokenType -> {
                 if (isSingular()) {
-                    yield "        return getItemOfType(" + index + ", " +
+                    yield "        return get(" + index + ", " +
                             resultSource.getValue() + ");\n";
                 }
                 yield "        return getList(" + index + ", ParseTreeNode::asString);\n";
@@ -67,7 +67,7 @@ public class ClassField {
                     yield null;
                 }
                 if (isSingular()) {
-                    yield "        return getBoolean(" + index + ");\n";
+                    yield "        return is(" + index + ");\n";
                 }
                 yield "        return getList(" + index + ", ParseTreeNode::asBoolean);\n";
             }
@@ -91,7 +91,7 @@ public class ClassField {
                     yield null;
                 }
                 if (isSingular()) {
-                    yield "        return hasItemOfRule(" + index + ", " +
+                    yield "        return has(" + index + ", " +
                             className.asType() + ".RULE);\n";
                 }
                 yield null;
@@ -102,7 +102,7 @@ public class ClassField {
                     yield null;
                 }
                 if (isSingular()) {
-                    yield "        return hasItemOfType(" + index + ", " +
+                    yield "        return has(" + index + ", " +
                             resultSource.getValue() + ");\n";
                 }
                 yield null;
@@ -147,8 +147,8 @@ public class ClassField {
     private String getResultExpr() {
         return switch (resultSource.getType()) {
             case Class -> resultSource.getValue() + ".parse(t, lv + 1)";
-            case TokenType -> "t.consumeToken(" + resultSource.getValue() + ")";
-            case TokenLiteral -> "t.consumeToken(\"" + resultSource.getValue() + "\")";
+            case TokenType -> "t.consume(" + resultSource.getValue() + ")";
+            case TokenLiteral -> "t.consume(\"" + resultSource.getValue() + "\")";
         };
     }
 
@@ -168,8 +168,7 @@ public class ClassField {
                 "        var r = " + resultExpr + ";\n" +
                 "        if (r) while (true) {\n" +
                 "            var p = t.position();\n" +
-                "            if (!" + resultExpr + ") break;\n" +
-                "            if (t.guardLoopExit(p)) break;\n" +
+                "            if (!" + resultExpr + " || t.loopGuard(p)) break;\n" +
                 "        }\n" +
                 "        t.exitCollection();\n" +
                 "        return r;\n" +
@@ -183,8 +182,7 @@ public class ClassField {
                 "        t.enterCollection();\n" +
                 "        while (true) {\n" +
                 "            var p = t.position();\n" +
-                "            if (!" + resultExpr + ") break;\n" +
-                "            if (t.guardLoopExit(p)) break;\n" +
+                "            if (!" + resultExpr + " || t.loopGuard(p)) break;\n" +
                 "        }\n" +
                 "        t.exitCollection();\n" +
                 "    }\n";

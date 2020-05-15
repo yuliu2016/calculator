@@ -20,11 +20,11 @@ public final class ArgsKwargs extends NodeWrapper {
     }
 
     public TypedArg typedArg() {
-        return TypedArg.of(getItem(1));
+        return TypedArg.of(get(1));
     }
 
     public boolean hasTypedArg() {
-        return hasItemOfRule(1, TypedArg.RULE);
+        return has(1, TypedArg.RULE);
     }
 
     public List<ArgsKwargs3> argsKwargs3List() {
@@ -32,18 +32,18 @@ public final class ArgsKwargs extends NodeWrapper {
     }
 
     public ArgsKwargs4 argsKwargs4() {
-        return ArgsKwargs4.of(getItem(3));
+        return ArgsKwargs4.of(get(3));
     }
 
     public boolean hasArgsKwargs4() {
-        return hasItemOfRule(3, ArgsKwargs4.RULE);
+        return has(3, ArgsKwargs4.RULE);
     }
 
     public static boolean parse(ParseTree t, int lv) {
         if (!ParserUtil.recursionGuard(lv, RULE)) return false;
         t.enter(lv, RULE);
         boolean r;
-        r = t.consumeToken("*");
+        r = t.consume("*");
         if (r) TypedArg.parse(t, lv + 1);
         if (r) parseArgsKwargs3List(t, lv);
         if (r) ArgsKwargs4.parse(t, lv + 1);
@@ -55,8 +55,7 @@ public final class ArgsKwargs extends NodeWrapper {
         t.enterCollection();
         while (true) {
             var p = t.position();
-            if (!ArgsKwargs3.parse(t, lv + 1)) break;
-            if (t.guardLoopExit(p)) break;
+            if (!ArgsKwargs3.parse(t, lv + 1) || t.loopGuard(p)) break;
         }
         t.exitCollection();
     }
@@ -77,14 +76,14 @@ public final class ArgsKwargs extends NodeWrapper {
         }
 
         public DefaultArg defaultArg() {
-            return DefaultArg.of(getItem(1));
+            return DefaultArg.of(get(1));
         }
 
         public static boolean parse(ParseTree t, int lv) {
             if (!ParserUtil.recursionGuard(lv, RULE)) return false;
             t.enter(lv, RULE);
             boolean r;
-            r = t.consumeToken(",");
+            r = t.consume(",");
             r = r && DefaultArg.parse(t, lv + 1);
             t.exit(r);
             return r;
@@ -107,18 +106,18 @@ public final class ArgsKwargs extends NodeWrapper {
         }
 
         public Kwargs kwargs() {
-            return Kwargs.of(getItem(1));
+            return Kwargs.of(get(1));
         }
 
         public boolean hasKwargs() {
-            return hasItemOfRule(1, Kwargs.RULE);
+            return has(1, Kwargs.RULE);
         }
 
         public static boolean parse(ParseTree t, int lv) {
             if (!ParserUtil.recursionGuard(lv, RULE)) return false;
             t.enter(lv, RULE);
             boolean r;
-            r = t.consumeToken(",");
+            r = t.consume(",");
             if (r) Kwargs.parse(t, lv + 1);
             t.exit(r);
             return r;

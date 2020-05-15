@@ -18,20 +18,20 @@ public final class ImportFrom extends NodeWrapper {
     }
 
     public ImportFromNames importFromNames() {
-        return ImportFromNames.of(getItem(1));
+        return ImportFromNames.of(get(1));
     }
 
     public ImportFrom4 importFrom4() {
-        return ImportFrom4.of(getItem(3));
+        return ImportFrom4.of(get(3));
     }
 
     public static boolean parse(ParseTree t, int lv) {
         if (!ParserUtil.recursionGuard(lv, RULE)) return false;
         t.enter(lv, RULE);
         boolean r;
-        r = t.consumeToken("from");
+        r = t.consume("from");
         r = r && ImportFromNames.parse(t, lv + 1);
-        r = r && t.consumeToken("import");
+        r = r && t.consume("import");
         r = r && ImportFrom4.parse(t, lv + 1);
         t.exit(r);
         return r;
@@ -52,31 +52,31 @@ public final class ImportFrom extends NodeWrapper {
             super(RULE, node);
         }
 
-        public boolean isTokenTimes() {
-            return getBoolean(0);
+        public boolean isTimes() {
+            return is(0);
         }
 
         public ImportFrom42 importFrom42() {
-            return ImportFrom42.of(getItem(1));
+            return ImportFrom42.of(get(1));
         }
 
         public boolean hasImportFrom42() {
-            return hasItemOfRule(1, ImportFrom42.RULE);
+            return has(1, ImportFrom42.RULE);
         }
 
         public ImportAsNames importAsNames() {
-            return ImportAsNames.of(getItem(2));
+            return ImportAsNames.of(get(2));
         }
 
         public boolean hasImportAsNames() {
-            return hasItemOfRule(2, ImportAsNames.RULE);
+            return has(2, ImportAsNames.RULE);
         }
 
         public static boolean parse(ParseTree t, int lv) {
             if (!ParserUtil.recursionGuard(lv, RULE)) return false;
             t.enter(lv, RULE);
             boolean r;
-            r = t.consumeToken("*");
+            r = t.consume("*");
             r = r || ImportFrom42.parse(t, lv + 1);
             r = r || ImportAsNames.parse(t, lv + 1);
             t.exit(r);
@@ -100,21 +100,21 @@ public final class ImportFrom extends NodeWrapper {
         }
 
         public ImportAsNames importAsNames() {
-            return ImportAsNames.of(getItem(1));
+            return ImportAsNames.of(get(1));
         }
 
-        public boolean isTokenComma() {
-            return getBoolean(2);
+        public boolean isComma() {
+            return is(2);
         }
 
         public static boolean parse(ParseTree t, int lv) {
             if (!ParserUtil.recursionGuard(lv, RULE)) return false;
             t.enter(lv, RULE);
             boolean r;
-            r = t.consumeToken("(");
+            r = t.consume("(");
             r = r && ImportAsNames.parse(t, lv + 1);
-            if (r) t.consumeToken(",");
-            r = r && t.consumeToken(")");
+            if (r) t.consume(",");
+            r = r && t.consume(")");
             t.exit(r);
             return r;
         }

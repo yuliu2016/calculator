@@ -18,15 +18,15 @@ public final class Power extends NodeWrapper {
     }
 
     public AtomExpr atomExpr() {
-        return AtomExpr.of(getItem(0));
+        return AtomExpr.of(get(0));
     }
 
     public Power2 power2() {
-        return Power2.of(getItem(1));
+        return Power2.of(get(1));
     }
 
     public boolean hasPower2() {
-        return hasItemOfRule(1, Power2.RULE);
+        return has(1, Power2.RULE);
     }
 
     public static boolean parse(ParseTree t, int lv) {
@@ -55,14 +55,14 @@ public final class Power extends NodeWrapper {
         }
 
         public Factor factor() {
-            return Factor.of(getItem(1));
+            return Factor.of(get(1));
         }
 
         public static boolean parse(ParseTree t, int lv) {
             if (!ParserUtil.recursionGuard(lv, RULE)) return false;
             t.enter(lv, RULE);
             boolean r;
-            r = t.consumeToken("**");
+            r = t.consume("**");
             r = r && Factor.parse(t, lv + 1);
             t.exit(r);
             return r;

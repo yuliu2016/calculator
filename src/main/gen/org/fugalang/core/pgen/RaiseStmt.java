@@ -18,18 +18,18 @@ public final class RaiseStmt extends NodeWrapper {
     }
 
     public RaiseStmt2 raiseStmt2() {
-        return RaiseStmt2.of(getItem(1));
+        return RaiseStmt2.of(get(1));
     }
 
     public boolean hasRaiseStmt2() {
-        return hasItemOfRule(1, RaiseStmt2.RULE);
+        return has(1, RaiseStmt2.RULE);
     }
 
     public static boolean parse(ParseTree t, int lv) {
         if (!ParserUtil.recursionGuard(lv, RULE)) return false;
         t.enter(lv, RULE);
         boolean r;
-        r = t.consumeToken("raise");
+        r = t.consume("raise");
         if (r) RaiseStmt2.parse(t, lv + 1);
         t.exit(r);
         return r;
@@ -51,15 +51,15 @@ public final class RaiseStmt extends NodeWrapper {
         }
 
         public Expr expr() {
-            return Expr.of(getItem(0));
+            return Expr.of(get(0));
         }
 
         public RaiseStmt22 raiseStmt22() {
-            return RaiseStmt22.of(getItem(1));
+            return RaiseStmt22.of(get(1));
         }
 
         public boolean hasRaiseStmt22() {
-            return hasItemOfRule(1, RaiseStmt22.RULE);
+            return has(1, RaiseStmt22.RULE);
         }
 
         public static boolean parse(ParseTree t, int lv) {
@@ -89,14 +89,14 @@ public final class RaiseStmt extends NodeWrapper {
         }
 
         public Expr expr() {
-            return Expr.of(getItem(1));
+            return Expr.of(get(1));
         }
 
         public static boolean parse(ParseTree t, int lv) {
             if (!ParserUtil.recursionGuard(lv, RULE)) return false;
             t.enter(lv, RULE);
             boolean r;
-            r = t.consumeToken("from");
+            r = t.consume("from");
             r = r && Expr.parse(t, lv + 1);
             t.exit(r);
             return r;

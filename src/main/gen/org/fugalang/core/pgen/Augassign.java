@@ -17,75 +17,75 @@ public final class Augassign extends NodeWrapper {
         super(RULE, node);
     }
 
-    public boolean isTokenPlusAssign() {
-        return getBoolean(0);
+    public boolean isPlusAssign() {
+        return is(0);
     }
 
-    public boolean isTokenMinusAssign() {
-        return getBoolean(1);
+    public boolean isMinusAssign() {
+        return is(1);
     }
 
-    public boolean isTokenTimesAssign() {
-        return getBoolean(2);
+    public boolean isTimesAssign() {
+        return is(2);
     }
 
-    public boolean isTokenMatrixTimesAssign() {
-        return getBoolean(3);
+    public boolean isMatrixTimesAssign() {
+        return is(3);
     }
 
-    public boolean isTokenDivAssign() {
-        return getBoolean(4);
+    public boolean isDivAssign() {
+        return is(4);
     }
 
-    public boolean isTokenModulusAssign() {
-        return getBoolean(5);
+    public boolean isModulusAssign() {
+        return is(5);
     }
 
-    public boolean isTokenBitAndAssign() {
-        return getBoolean(6);
+    public boolean isBitAndAssign() {
+        return is(6);
     }
 
-    public boolean isTokenBitOrAssign() {
-        return getBoolean(7);
+    public boolean isBitOrAssign() {
+        return is(7);
     }
 
-    public boolean isTokenBitXorAssign() {
-        return getBoolean(8);
+    public boolean isBitXorAssign() {
+        return is(8);
     }
 
-    public boolean isTokenLshiftAssign() {
-        return getBoolean(9);
+    public boolean isLshiftAssign() {
+        return is(9);
     }
 
-    public boolean isTokenRshiftAssign() {
-        return getBoolean(10);
+    public boolean isRshiftAssign() {
+        return is(10);
     }
 
-    public boolean isTokenPowerAssign() {
-        return getBoolean(11);
+    public boolean isPowerAssign() {
+        return is(11);
     }
 
-    public boolean isTokenFloorDivAssign() {
-        return getBoolean(12);
+    public boolean isFloorDivAssign() {
+        return is(12);
     }
 
     public static boolean parse(ParseTree t, int lv) {
         if (!ParserUtil.recursionGuard(lv, RULE)) return false;
         t.enter(lv, RULE);
         boolean r;
-        r = t.consumeToken("+=");
-        r = r || t.consumeToken("-=");
-        r = r || t.consumeToken("*=");
-        r = r || t.consumeToken("@=");
-        r = r || t.consumeToken("/=");
-        r = r || t.consumeToken("%=");
-        r = r || t.consumeToken("&=");
-        r = r || t.consumeToken("|=");
-        r = r || t.consumeToken("^=");
-        r = r || t.consumeToken("<<=");
-        r = r || t.consumeToken(">>=");
-        r = r || t.consumeToken("**=");
-        r = r || t.consumeToken("//=");
+        r = t.consume("+=");
+        r = r || t.consume("-=");
+        r = r || t.consume("*=");
+        r = r || t.consume("@=");
+        r = r || t.consume("/=");
+        r = r || t.consume("%=");
+        r = r || t.consume("&=");
+        r = r || t.consume("|=");
+        r = r || t.consume("^=");
+        r = r || t.consume("<<=");
+        r = r || t.consume(">>=");
+        r = r || t.consume("**=");
+        r = r || t.consume("//=");
         t.exit(r);
         return r;
     }

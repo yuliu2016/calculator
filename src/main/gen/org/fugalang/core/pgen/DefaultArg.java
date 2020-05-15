@@ -18,15 +18,15 @@ public final class DefaultArg extends NodeWrapper {
     }
 
     public TypedArg typedArg() {
-        return TypedArg.of(getItem(0));
+        return TypedArg.of(get(0));
     }
 
     public DefaultArg2 defaultArg2() {
-        return DefaultArg2.of(getItem(1));
+        return DefaultArg2.of(get(1));
     }
 
     public boolean hasDefaultArg2() {
-        return hasItemOfRule(1, DefaultArg2.RULE);
+        return has(1, DefaultArg2.RULE);
     }
 
     public static boolean parse(ParseTree t, int lv) {
@@ -55,14 +55,14 @@ public final class DefaultArg extends NodeWrapper {
         }
 
         public Expr expr() {
-            return Expr.of(getItem(1));
+            return Expr.of(get(1));
         }
 
         public static boolean parse(ParseTree t, int lv) {
             if (!ParserUtil.recursionGuard(lv, RULE)) return false;
             t.enter(lv, RULE);
             boolean r;
-            r = t.consumeToken("=");
+            r = t.consume("=");
             r = r && Expr.parse(t, lv + 1);
             t.exit(r);
             return r;

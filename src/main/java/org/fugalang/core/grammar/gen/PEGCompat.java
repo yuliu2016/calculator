@@ -27,7 +27,7 @@ public class PEGCompat {
 
     public static String constructString(RepeatRule repeatRule) {
         var modifier = repeatRule.hasRepeatRule2() ?
-                (repeatRule.repeatRule2().isTokenPlus() ? "+" : "*")
+                (repeatRule.repeatRule2().isPlus() ? "+" : "*")
                 : "";
         return constructString(repeatRule.subRule()) + modifier;
     }
@@ -66,7 +66,7 @@ public class PEGCompat {
 
     public static RepeatType getRepeatType(RepeatRule repeatRule) {
         return repeatRule.hasRepeatRule2() ?
-                repeatRule.repeatRule2().isTokenPlus() ?
+                repeatRule.repeatRule2().isPlus() ?
                         RepeatType.OnceOrMore
                         : RepeatType.NoneOrMore
                 : RepeatType.Once;

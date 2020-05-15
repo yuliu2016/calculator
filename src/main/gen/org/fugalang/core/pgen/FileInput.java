@@ -25,7 +25,7 @@ public final class FileInput extends NodeWrapper {
     }
 
     public String endmarker() {
-        return getItemOfType(1, TokenType.ENDMARKER);
+        return get(1, TokenType.ENDMARKER);
     }
 
     public static boolean parse(ParseTree t, int lv) {
@@ -33,7 +33,7 @@ public final class FileInput extends NodeWrapper {
         t.enter(lv, RULE);
         boolean r;
         parseFileInput1List(t, lv);
-        r = t.consumeToken(TokenType.ENDMARKER);
+        r = t.consume(TokenType.ENDMARKER);
         t.exit(r);
         return r;
     }
@@ -42,8 +42,7 @@ public final class FileInput extends NodeWrapper {
         t.enterCollection();
         while (true) {
             var p = t.position();
-            if (!FileInput1.parse(t, lv + 1)) break;
-            if (t.guardLoopExit(p)) break;
+            if (!FileInput1.parse(t, lv + 1) || t.loopGuard(p)) break;
         }
         t.exitCollection();
     }
@@ -64,26 +63,26 @@ public final class FileInput extends NodeWrapper {
         }
 
         public String newline() {
-            return getItemOfType(0, TokenType.NEWLINE);
+            return get(0, TokenType.NEWLINE);
         }
 
         public boolean hasNewline() {
-            return hasItemOfType(0, TokenType.NEWLINE);
+            return has(0, TokenType.NEWLINE);
         }
 
         public Stmt stmt() {
-            return Stmt.of(getItem(1));
+            return Stmt.of(get(1));
         }
 
         public boolean hasStmt() {
-            return hasItemOfRule(1, Stmt.RULE);
+            return has(1, Stmt.RULE);
         }
 
         public static boolean parse(ParseTree t, int lv) {
             if (!ParserUtil.recursionGuard(lv, RULE)) return false;
             t.enter(lv, RULE);
             boolean r;
-            r = t.consumeToken(TokenType.NEWLINE);
+            r = t.consume(TokenType.NEWLINE);
             r = r || Stmt.parse(t, lv + 1);
             t.exit(r);
             return r;

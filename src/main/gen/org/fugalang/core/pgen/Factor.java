@@ -18,19 +18,19 @@ public final class Factor extends NodeWrapper {
     }
 
     public Factor1 factor1() {
-        return Factor1.of(getItem(0));
+        return Factor1.of(get(0));
     }
 
     public boolean hasFactor1() {
-        return hasItemOfRule(0, Factor1.RULE);
+        return has(0, Factor1.RULE);
     }
 
     public Power power() {
-        return Power.of(getItem(1));
+        return Power.of(get(1));
     }
 
     public boolean hasPower() {
-        return hasItemOfRule(1, Power.RULE);
+        return has(1, Power.RULE);
     }
 
     public static boolean parse(ParseTree t, int lv) {
@@ -59,11 +59,11 @@ public final class Factor extends NodeWrapper {
         }
 
         public Factor11 factor11() {
-            return Factor11.of(getItem(0));
+            return Factor11.of(get(0));
         }
 
         public Factor factor() {
-            return Factor.of(getItem(1));
+            return Factor.of(get(1));
         }
 
         public static boolean parse(ParseTree t, int lv) {
@@ -92,25 +92,25 @@ public final class Factor extends NodeWrapper {
             super(RULE, node);
         }
 
-        public boolean isTokenPlus() {
-            return getBoolean(0);
+        public boolean isPlus() {
+            return is(0);
         }
 
-        public boolean isTokenMinus() {
-            return getBoolean(1);
+        public boolean isMinus() {
+            return is(1);
         }
 
-        public boolean isTokenBitNot() {
-            return getBoolean(2);
+        public boolean isBitNot() {
+            return is(2);
         }
 
         public static boolean parse(ParseTree t, int lv) {
             if (!ParserUtil.recursionGuard(lv, RULE)) return false;
             t.enter(lv, RULE);
             boolean r;
-            r = t.consumeToken("+");
-            r = r || t.consumeToken("-");
-            r = r || t.consumeToken("~");
+            r = t.consume("+");
+            r = r || t.consume("-");
+            r = r || t.consume("~");
             t.exit(r);
             return r;
         }

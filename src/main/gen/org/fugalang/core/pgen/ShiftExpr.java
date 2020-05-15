@@ -20,7 +20,7 @@ public final class ShiftExpr extends NodeWrapper {
     }
 
     public Sum sum() {
-        return Sum.of(getItem(0));
+        return Sum.of(get(0));
     }
 
     public List<ShiftExpr2> shiftExpr2List() {
@@ -41,8 +41,7 @@ public final class ShiftExpr extends NodeWrapper {
         t.enterCollection();
         while (true) {
             var p = t.position();
-            if (!ShiftExpr2.parse(t, lv + 1)) break;
-            if (t.guardLoopExit(p)) break;
+            if (!ShiftExpr2.parse(t, lv + 1) || t.loopGuard(p)) break;
         }
         t.exitCollection();
     }
@@ -63,11 +62,11 @@ public final class ShiftExpr extends NodeWrapper {
         }
 
         public ShiftExpr21 shiftExpr21() {
-            return ShiftExpr21.of(getItem(0));
+            return ShiftExpr21.of(get(0));
         }
 
         public Sum sum() {
-            return Sum.of(getItem(1));
+            return Sum.of(get(1));
         }
 
         public static boolean parse(ParseTree t, int lv) {
@@ -96,20 +95,20 @@ public final class ShiftExpr extends NodeWrapper {
             super(RULE, node);
         }
 
-        public boolean isTokenLshift() {
-            return getBoolean(0);
+        public boolean isLshift() {
+            return is(0);
         }
 
-        public boolean isTokenRshift() {
-            return getBoolean(1);
+        public boolean isRshift() {
+            return is(1);
         }
 
         public static boolean parse(ParseTree t, int lv) {
             if (!ParserUtil.recursionGuard(lv, RULE)) return false;
             t.enter(lv, RULE);
             boolean r;
-            r = t.consumeToken("<<");
-            r = r || t.consumeToken(">>");
+            r = t.consume("<<");
+            r = r || t.consume(">>");
             t.exit(r);
             return r;
         }

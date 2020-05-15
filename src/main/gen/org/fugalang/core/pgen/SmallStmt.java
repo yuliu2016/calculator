@@ -18,51 +18,51 @@ public final class SmallStmt extends NodeWrapper {
     }
 
     public DelStmt delStmt() {
-        return DelStmt.of(getItem(0));
+        return DelStmt.of(get(0));
     }
 
     public boolean hasDelStmt() {
-        return hasItemOfRule(0, DelStmt.RULE);
+        return has(0, DelStmt.RULE);
     }
 
     public PassStmt passStmt() {
-        return PassStmt.of(getItem(1));
+        return PassStmt.of(get(1));
     }
 
     public boolean hasPassStmt() {
-        return hasItemOfRule(1, PassStmt.RULE);
+        return has(1, PassStmt.RULE);
     }
 
     public FlowStmt flowStmt() {
-        return FlowStmt.of(getItem(2));
+        return FlowStmt.of(get(2));
     }
 
     public boolean hasFlowStmt() {
-        return hasItemOfRule(2, FlowStmt.RULE);
+        return has(2, FlowStmt.RULE);
     }
 
     public ImportStmt importStmt() {
-        return ImportStmt.of(getItem(3));
+        return ImportStmt.of(get(3));
     }
 
     public boolean hasImportStmt() {
-        return hasItemOfRule(3, ImportStmt.RULE);
+        return has(3, ImportStmt.RULE);
     }
 
     public AssertStmt assertStmt() {
-        return AssertStmt.of(getItem(4));
+        return AssertStmt.of(get(4));
     }
 
     public boolean hasAssertStmt() {
-        return hasItemOfRule(4, AssertStmt.RULE);
+        return has(4, AssertStmt.RULE);
     }
 
     public Assignment assignment() {
-        return Assignment.of(getItem(5));
+        return Assignment.of(get(5));
     }
 
     public boolean hasAssignment() {
-        return hasItemOfRule(5, Assignment.RULE);
+        return has(5, Assignment.RULE);
     }
 
     public static boolean parse(ParseTree t, int lv) {

@@ -18,19 +18,19 @@ public final class Target extends NodeWrapper {
     }
 
     public BitwiseOr bitwiseOr() {
-        return BitwiseOr.of(getItem(0));
+        return BitwiseOr.of(get(0));
     }
 
     public boolean hasBitwiseOr() {
-        return hasItemOfRule(0, BitwiseOr.RULE);
+        return has(0, BitwiseOr.RULE);
     }
 
     public StarExpr starExpr() {
-        return StarExpr.of(getItem(1));
+        return StarExpr.of(get(1));
     }
 
     public boolean hasStarExpr() {
-        return hasItemOfRule(1, StarExpr.RULE);
+        return has(1, StarExpr.RULE);
     }
 
     public static boolean parse(ParseTree t, int lv) {

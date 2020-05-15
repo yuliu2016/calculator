@@ -19,19 +19,19 @@ public final class Atom extends NodeWrapper {
     }
 
     public Atom1 atom1() {
-        return Atom1.of(getItem(0));
+        return Atom1.of(get(0));
     }
 
     public boolean hasAtom1() {
-        return hasItemOfRule(0, Atom1.RULE);
+        return has(0, Atom1.RULE);
     }
 
     public String number() {
-        return getItemOfType(1, TokenType.NUMBER);
+        return get(1, TokenType.NUMBER);
     }
 
     public boolean hasNumber() {
-        return hasItemOfType(1, TokenType.NUMBER);
+        return has(1, TokenType.NUMBER);
     }
 
     public static boolean parse(ParseTree t, int lv) {
@@ -39,7 +39,7 @@ public final class Atom extends NodeWrapper {
         t.enter(lv, RULE);
         boolean r;
         r = Atom1.parse(t, lv + 1);
-        r = r || t.consumeToken(TokenType.NUMBER);
+        r = r || t.consume(TokenType.NUMBER);
         t.exit(r);
         return r;
     }
@@ -60,16 +60,16 @@ public final class Atom extends NodeWrapper {
         }
 
         public Sum sum() {
-            return Sum.of(getItem(1));
+            return Sum.of(get(1));
         }
 
         public static boolean parse(ParseTree t, int lv) {
             if (!ParserUtil.recursionGuard(lv, RULE)) return false;
             t.enter(lv, RULE);
             boolean r;
-            r = t.consumeToken("(");
+            r = t.consume("(");
             r = r && Sum.parse(t, lv + 1);
-            r = r && t.consumeToken(")");
+            r = r && t.consume(")");
             t.exit(r);
             return r;
         }

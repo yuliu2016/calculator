@@ -19,22 +19,22 @@ public final class ImportAsName extends NodeWrapper {
     }
 
     public String name() {
-        return getItemOfType(0, TokenType.NAME);
+        return get(0, TokenType.NAME);
     }
 
     public ImportAsName2 importAsName2() {
-        return ImportAsName2.of(getItem(1));
+        return ImportAsName2.of(get(1));
     }
 
     public boolean hasImportAsName2() {
-        return hasItemOfRule(1, ImportAsName2.RULE);
+        return has(1, ImportAsName2.RULE);
     }
 
     public static boolean parse(ParseTree t, int lv) {
         if (!ParserUtil.recursionGuard(lv, RULE)) return false;
         t.enter(lv, RULE);
         boolean r;
-        r = t.consumeToken(TokenType.NAME);
+        r = t.consume(TokenType.NAME);
         if (r) ImportAsName2.parse(t, lv + 1);
         t.exit(r);
         return r;
@@ -56,15 +56,15 @@ public final class ImportAsName extends NodeWrapper {
         }
 
         public String name() {
-            return getItemOfType(1, TokenType.NAME);
+            return get(1, TokenType.NAME);
         }
 
         public static boolean parse(ParseTree t, int lv) {
             if (!ParserUtil.recursionGuard(lv, RULE)) return false;
             t.enter(lv, RULE);
             boolean r;
-            r = t.consumeToken("as");
-            r = r && t.consumeToken(TokenType.NAME);
+            r = t.consume("as");
+            r = r && t.consume(TokenType.NAME);
             t.exit(r);
             return r;
         }

@@ -18,43 +18,43 @@ public final class CompoundStmt extends NodeWrapper {
     }
 
     public IfStmt ifStmt() {
-        return IfStmt.of(getItem(0));
+        return IfStmt.of(get(0));
     }
 
     public boolean hasIfStmt() {
-        return hasItemOfRule(0, IfStmt.RULE);
+        return has(0, IfStmt.RULE);
     }
 
     public WhileStmt whileStmt() {
-        return WhileStmt.of(getItem(1));
+        return WhileStmt.of(get(1));
     }
 
     public boolean hasWhileStmt() {
-        return hasItemOfRule(1, WhileStmt.RULE);
+        return has(1, WhileStmt.RULE);
     }
 
     public ForStmt forStmt() {
-        return ForStmt.of(getItem(2));
+        return ForStmt.of(get(2));
     }
 
     public boolean hasForStmt() {
-        return hasItemOfRule(2, ForStmt.RULE);
+        return has(2, ForStmt.RULE);
     }
 
     public TryStmt tryStmt() {
-        return TryStmt.of(getItem(3));
+        return TryStmt.of(get(3));
     }
 
     public boolean hasTryStmt() {
-        return hasItemOfRule(3, TryStmt.RULE);
+        return has(3, TryStmt.RULE);
     }
 
     public WithStmt withStmt() {
-        return WithStmt.of(getItem(4));
+        return WithStmt.of(get(4));
     }
 
     public boolean hasWithStmt() {
-        return hasItemOfRule(4, WithStmt.RULE);
+        return has(4, WithStmt.RULE);
     }
 
     public static boolean parse(ParseTree t, int lv) {

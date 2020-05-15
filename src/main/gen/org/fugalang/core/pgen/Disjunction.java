@@ -20,7 +20,7 @@ public final class Disjunction extends NodeWrapper {
     }
 
     public Conjunction conjunction() {
-        return Conjunction.of(getItem(0));
+        return Conjunction.of(get(0));
     }
 
     public List<Disjunction2> disjunction2List() {
@@ -41,8 +41,7 @@ public final class Disjunction extends NodeWrapper {
         t.enterCollection();
         while (true) {
             var p = t.position();
-            if (!Disjunction2.parse(t, lv + 1)) break;
-            if (t.guardLoopExit(p)) break;
+            if (!Disjunction2.parse(t, lv + 1) || t.loopGuard(p)) break;
         }
         t.exitCollection();
     }
@@ -63,14 +62,14 @@ public final class Disjunction extends NodeWrapper {
         }
 
         public Conjunction conjunction() {
-            return Conjunction.of(getItem(1));
+            return Conjunction.of(get(1));
         }
 
         public static boolean parse(ParseTree t, int lv) {
             if (!ParserUtil.recursionGuard(lv, RULE)) return false;
             t.enter(lv, RULE);
             boolean r;
-            r = t.consumeToken("or");
+            r = t.consume("or");
             r = r && Conjunction.parse(t, lv + 1);
             t.exit(r);
             return r;

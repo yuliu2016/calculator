@@ -18,31 +18,31 @@ public final class PipeFor extends NodeWrapper {
     }
 
     public CompFor compFor() {
-        return CompFor.of(getItem(0));
+        return CompFor.of(get(0));
     }
 
     public boolean hasCompFor() {
-        return hasItemOfRule(0, CompFor.RULE);
+        return has(0, CompFor.RULE);
     }
 
     public Targetlist targetlist() {
-        return Targetlist.of(getItem(2));
+        return Targetlist.of(get(2));
     }
 
     public PipeFor4 pipeFor4() {
-        return PipeFor4.of(getItem(3));
+        return PipeFor4.of(get(3));
     }
 
     public boolean hasPipeFor4() {
-        return hasItemOfRule(3, PipeFor4.RULE);
+        return has(3, PipeFor4.RULE);
     }
 
     public PipeFor5 pipeFor5() {
-        return PipeFor5.of(getItem(4));
+        return PipeFor5.of(get(4));
     }
 
     public boolean hasPipeFor5() {
-        return hasItemOfRule(4, PipeFor5.RULE);
+        return has(4, PipeFor5.RULE);
     }
 
     public static boolean parse(ParseTree t, int lv) {
@@ -50,7 +50,7 @@ public final class PipeFor extends NodeWrapper {
         t.enter(lv, RULE);
         boolean r;
         CompFor.parse(t, lv + 1);
-        r = t.consumeToken("for");
+        r = t.consume("for");
         r = r && Targetlist.parse(t, lv + 1);
         if (r) PipeFor4.parse(t, lv + 1);
         if (r) PipeFor5.parse(t, lv + 1);
@@ -74,14 +74,14 @@ public final class PipeFor extends NodeWrapper {
         }
 
         public NamedExpr namedExpr() {
-            return NamedExpr.of(getItem(1));
+            return NamedExpr.of(get(1));
         }
 
         public static boolean parse(ParseTree t, int lv) {
             if (!ParserUtil.recursionGuard(lv, RULE)) return false;
             t.enter(lv, RULE);
             boolean r;
-            r = t.consumeToken("if");
+            r = t.consume("if");
             r = r && NamedExpr.parse(t, lv + 1);
             t.exit(r);
             return r;
@@ -104,19 +104,19 @@ public final class PipeFor extends NodeWrapper {
         }
 
         public Parameters parameters() {
-            return Parameters.of(getItem(0));
+            return Parameters.of(get(0));
         }
 
         public boolean hasParameters() {
-            return hasItemOfRule(0, Parameters.RULE);
+            return has(0, Parameters.RULE);
         }
 
         public BlockSuite blockSuite() {
-            return BlockSuite.of(getItem(1));
+            return BlockSuite.of(get(1));
         }
 
         public boolean hasBlockSuite() {
-            return hasItemOfRule(1, BlockSuite.RULE);
+            return has(1, BlockSuite.RULE);
         }
 
         public static boolean parse(ParseTree t, int lv) {

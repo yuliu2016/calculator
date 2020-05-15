@@ -20,7 +20,7 @@ public final class AtomExpr extends NodeWrapper {
     }
 
     public Atom atom() {
-        return Atom.of(getItem(0));
+        return Atom.of(get(0));
     }
 
     public List<Trailer> trailerList() {
@@ -28,11 +28,11 @@ public final class AtomExpr extends NodeWrapper {
     }
 
     public BlockSuite blockSuite() {
-        return BlockSuite.of(getItem(2));
+        return BlockSuite.of(get(2));
     }
 
     public boolean hasBlockSuite() {
-        return hasItemOfRule(2, BlockSuite.RULE);
+        return has(2, BlockSuite.RULE);
     }
 
     public static boolean parse(ParseTree t, int lv) {
@@ -50,8 +50,7 @@ public final class AtomExpr extends NodeWrapper {
         t.enterCollection();
         while (true) {
             var p = t.position();
-            if (!Trailer.parse(t, lv + 1)) break;
-            if (t.guardLoopExit(p)) break;
+            if (!Trailer.parse(t, lv + 1) || t.loopGuard(p)) break;
         }
         t.exitCollection();
     }

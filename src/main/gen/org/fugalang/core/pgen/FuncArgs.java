@@ -18,19 +18,19 @@ public final class FuncArgs extends NodeWrapper {
     }
 
     public SimpleArgList simpleArgList() {
-        return SimpleArgList.of(getItem(0));
+        return SimpleArgList.of(get(0));
     }
 
     public boolean hasSimpleArgList() {
-        return hasItemOfRule(0, SimpleArgList.RULE);
+        return has(0, SimpleArgList.RULE);
     }
 
     public FuncArgs2 funcArgs2() {
-        return FuncArgs2.of(getItem(1));
+        return FuncArgs2.of(get(1));
     }
 
     public boolean hasFuncArgs2() {
-        return hasItemOfRule(1, FuncArgs2.RULE);
+        return has(1, FuncArgs2.RULE);
     }
 
     public static boolean parse(ParseTree t, int lv) {
@@ -59,20 +59,20 @@ public final class FuncArgs extends NodeWrapper {
         }
 
         public TypedArgList typedArgList() {
-            return TypedArgList.of(getItem(1));
+            return TypedArgList.of(get(1));
         }
 
         public boolean hasTypedArgList() {
-            return hasItemOfRule(1, TypedArgList.RULE);
+            return has(1, TypedArgList.RULE);
         }
 
         public static boolean parse(ParseTree t, int lv) {
             if (!ParserUtil.recursionGuard(lv, RULE)) return false;
             t.enter(lv, RULE);
             boolean r;
-            r = t.consumeToken("(");
+            r = t.consume("(");
             if (r) TypedArgList.parse(t, lv + 1);
-            r = r && t.consumeToken(")");
+            r = r && t.consume(")");
             t.exit(r);
             return r;
         }

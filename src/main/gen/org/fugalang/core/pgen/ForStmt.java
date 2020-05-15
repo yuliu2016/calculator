@@ -18,32 +18,32 @@ public final class ForStmt extends NodeWrapper {
     }
 
     public Targetlist targetlist() {
-        return Targetlist.of(getItem(1));
+        return Targetlist.of(get(1));
     }
 
     public Exprlist exprlist() {
-        return Exprlist.of(getItem(3));
+        return Exprlist.of(get(3));
     }
 
     public Suite suite() {
-        return Suite.of(getItem(4));
+        return Suite.of(get(4));
     }
 
     public ElseSuite elseSuite() {
-        return ElseSuite.of(getItem(5));
+        return ElseSuite.of(get(5));
     }
 
     public boolean hasElseSuite() {
-        return hasItemOfRule(5, ElseSuite.RULE);
+        return has(5, ElseSuite.RULE);
     }
 
     public static boolean parse(ParseTree t, int lv) {
         if (!ParserUtil.recursionGuard(lv, RULE)) return false;
         t.enter(lv, RULE);
         boolean r;
-        r = t.consumeToken("for");
+        r = t.consume("for");
         r = r && Targetlist.parse(t, lv + 1);
-        r = r && t.consumeToken("in");
+        r = r && t.consume("in");
         r = r && Exprlist.parse(t, lv + 1);
         r = r && Suite.parse(t, lv + 1);
         if (r) ElseSuite.parse(t, lv + 1);

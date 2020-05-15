@@ -18,26 +18,26 @@ public final class Conditional extends NodeWrapper {
     }
 
     public Disjunction disjunction() {
-        return Disjunction.of(getItem(1));
+        return Disjunction.of(get(1));
     }
 
     public Disjunction disjunction1() {
-        return Disjunction.of(getItem(3));
+        return Disjunction.of(get(3));
     }
 
     public Expr expr() {
-        return Expr.of(getItem(5));
+        return Expr.of(get(5));
     }
 
     public static boolean parse(ParseTree t, int lv) {
         if (!ParserUtil.recursionGuard(lv, RULE)) return false;
         t.enter(lv, RULE);
         boolean r;
-        r = t.consumeToken("if");
+        r = t.consume("if");
         r = r && Disjunction.parse(t, lv + 1);
-        r = r && t.consumeToken("?");
+        r = r && t.consume("?");
         r = r && Disjunction.parse(t, lv + 1);
-        r = r && t.consumeToken("else");
+        r = r && t.consume("else");
         r = r && Expr.parse(t, lv + 1);
         t.exit(r);
         return r;

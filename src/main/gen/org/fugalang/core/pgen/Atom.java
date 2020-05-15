@@ -18,19 +18,19 @@ public final class Atom extends NodeWrapper {
     }
 
     public CompoundAtom compoundAtom() {
-        return CompoundAtom.of(getItem(0));
+        return CompoundAtom.of(get(0));
     }
 
     public boolean hasCompoundAtom() {
-        return hasItemOfRule(0, CompoundAtom.RULE);
+        return has(0, CompoundAtom.RULE);
     }
 
     public SimpleAtom simpleAtom() {
-        return SimpleAtom.of(getItem(1));
+        return SimpleAtom.of(get(1));
     }
 
     public boolean hasSimpleAtom() {
-        return hasItemOfRule(1, SimpleAtom.RULE);
+        return has(1, SimpleAtom.RULE);
     }
 
     public static boolean parse(ParseTree t, int lv) {

@@ -18,19 +18,19 @@ public final class FuncSuite extends NodeWrapper {
     }
 
     public FuncSuite1 funcSuite1() {
-        return FuncSuite1.of(getItem(0));
+        return FuncSuite1.of(get(0));
     }
 
     public boolean hasFuncSuite1() {
-        return hasItemOfRule(0, FuncSuite1.RULE);
+        return has(0, FuncSuite1.RULE);
     }
 
     public BlockSuite blockSuite() {
-        return BlockSuite.of(getItem(1));
+        return BlockSuite.of(get(1));
     }
 
     public boolean hasBlockSuite() {
-        return hasItemOfRule(1, BlockSuite.RULE);
+        return has(1, BlockSuite.RULE);
     }
 
     public static boolean parse(ParseTree t, int lv) {
@@ -59,14 +59,14 @@ public final class FuncSuite extends NodeWrapper {
         }
 
         public Expr expr() {
-            return Expr.of(getItem(1));
+            return Expr.of(get(1));
         }
 
         public static boolean parse(ParseTree t, int lv) {
             if (!ParserUtil.recursionGuard(lv, RULE)) return false;
             t.enter(lv, RULE);
             boolean r;
-            r = t.consumeToken(":");
+            r = t.consume(":");
             r = r && Expr.parse(t, lv + 1);
             t.exit(r);
             return r;

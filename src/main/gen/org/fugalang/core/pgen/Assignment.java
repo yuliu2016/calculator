@@ -19,27 +19,27 @@ public final class Assignment extends NodeWrapper {
         super(RULE, node);
     }
 
-    public boolean isTokenDiv() {
-        return getBoolean(0);
+    public boolean isDiv() {
+        return is(0);
     }
 
     public ExprlistStar exprlistStar() {
-        return ExprlistStar.of(getItem(1));
+        return ExprlistStar.of(get(1));
     }
 
     public Assignment3 assignment3() {
-        return Assignment3.of(getItem(2));
+        return Assignment3.of(get(2));
     }
 
     public boolean hasAssignment3() {
-        return hasItemOfRule(2, Assignment3.RULE);
+        return has(2, Assignment3.RULE);
     }
 
     public static boolean parse(ParseTree t, int lv) {
         if (!ParserUtil.recursionGuard(lv, RULE)) return false;
         t.enter(lv, RULE);
         boolean r;
-        t.consumeToken("/");
+        t.consume("/");
         r = ExprlistStar.parse(t, lv + 1);
         if (r) Assignment3.parse(t, lv + 1);
         t.exit(r);
@@ -62,11 +62,11 @@ public final class Assignment extends NodeWrapper {
         }
 
         public Annassign annassign() {
-            return Annassign.of(getItem(0));
+            return Annassign.of(get(0));
         }
 
         public boolean hasAnnassign() {
-            return hasItemOfRule(0, Annassign.RULE);
+            return has(0, Annassign.RULE);
         }
 
         public List<Assignment32> assignment32List() {
@@ -74,11 +74,11 @@ public final class Assignment extends NodeWrapper {
         }
 
         public Assignment33 assignment33() {
-            return Assignment33.of(getItem(2));
+            return Assignment33.of(get(2));
         }
 
         public boolean hasAssignment33() {
-            return hasItemOfRule(2, Assignment33.RULE);
+            return has(2, Assignment33.RULE);
         }
 
         public static boolean parse(ParseTree t, int lv) {
@@ -97,8 +97,7 @@ public final class Assignment extends NodeWrapper {
             var r = Assignment32.parse(t, lv + 1);
             if (r) while (true) {
                 var p = t.position();
-                if (!Assignment32.parse(t, lv + 1)) break;
-                if (t.guardLoopExit(p)) break;
+                if (!Assignment32.parse(t, lv + 1) || t.loopGuard(p)) break;
             }
             t.exitCollection();
             return r;
@@ -121,14 +120,14 @@ public final class Assignment extends NodeWrapper {
         }
 
         public ExprlistStar exprlistStar() {
-            return ExprlistStar.of(getItem(1));
+            return ExprlistStar.of(get(1));
         }
 
         public static boolean parse(ParseTree t, int lv) {
             if (!ParserUtil.recursionGuard(lv, RULE)) return false;
             t.enter(lv, RULE);
             boolean r;
-            r = t.consumeToken("=");
+            r = t.consume("=");
             r = r && ExprlistStar.parse(t, lv + 1);
             t.exit(r);
             return r;
@@ -151,11 +150,11 @@ public final class Assignment extends NodeWrapper {
         }
 
         public Augassign augassign() {
-            return Augassign.of(getItem(0));
+            return Augassign.of(get(0));
         }
 
         public Exprlist exprlist() {
-            return Exprlist.of(getItem(1));
+            return Exprlist.of(get(1));
         }
 
         public static boolean parse(ParseTree t, int lv) {

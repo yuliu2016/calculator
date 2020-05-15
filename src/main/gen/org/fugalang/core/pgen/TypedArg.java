@@ -19,22 +19,22 @@ public final class TypedArg extends NodeWrapper {
     }
 
     public String name() {
-        return getItemOfType(0, TokenType.NAME);
+        return get(0, TokenType.NAME);
     }
 
     public TypedArg2 typedArg2() {
-        return TypedArg2.of(getItem(1));
+        return TypedArg2.of(get(1));
     }
 
     public boolean hasTypedArg2() {
-        return hasItemOfRule(1, TypedArg2.RULE);
+        return has(1, TypedArg2.RULE);
     }
 
     public static boolean parse(ParseTree t, int lv) {
         if (!ParserUtil.recursionGuard(lv, RULE)) return false;
         t.enter(lv, RULE);
         boolean r;
-        r = t.consumeToken(TokenType.NAME);
+        r = t.consume(TokenType.NAME);
         if (r) TypedArg2.parse(t, lv + 1);
         t.exit(r);
         return r;
@@ -56,14 +56,14 @@ public final class TypedArg extends NodeWrapper {
         }
 
         public Expr expr() {
-            return Expr.of(getItem(1));
+            return Expr.of(get(1));
         }
 
         public static boolean parse(ParseTree t, int lv) {
             if (!ParserUtil.recursionGuard(lv, RULE)) return false;
             t.enter(lv, RULE);
             boolean r;
-            r = t.consumeToken(":");
+            r = t.consume(":");
             r = r && Expr.parse(t, lv + 1);
             t.exit(r);
             return r;

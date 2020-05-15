@@ -143,7 +143,7 @@ public class SimpleParseTree implements ParseTree {
     }
 
     @Override
-    public boolean consumeToken(ElementType type) {
+    public boolean consume(ElementType type) {
         if (context.didFinish(pos)) {
             return false;
         }
@@ -173,7 +173,7 @@ public class SimpleParseTree implements ParseTree {
     }
 
     @Override
-    public boolean consumeToken(String literal) {
+    public boolean consume(String literal) {
         if (context.didFinish(pos)) {
             return false;
         }
@@ -205,9 +205,9 @@ public class SimpleParseTree implements ParseTree {
     }
 
     @Override
-    public boolean guardLoopExit(int position) {
+    public boolean loopGuard(int position) {
         if (position == this.pos) {
-            throw new ParserException("Loop parsed an empty string");
+            throw new ParserException("Parsed an empty string");
         }
         return false;
     }

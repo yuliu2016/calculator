@@ -19,19 +19,19 @@ public final class NamedExpr extends NodeWrapper {
     }
 
     public NamedExpr1 namedExpr1() {
-        return NamedExpr1.of(getItem(0));
+        return NamedExpr1.of(get(0));
     }
 
     public boolean hasNamedExpr1() {
-        return hasItemOfRule(0, NamedExpr1.RULE);
+        return has(0, NamedExpr1.RULE);
     }
 
     public Expr expr() {
-        return Expr.of(getItem(1));
+        return Expr.of(get(1));
     }
 
     public boolean hasExpr() {
-        return hasItemOfRule(1, Expr.RULE);
+        return has(1, Expr.RULE);
     }
 
     public static boolean parse(ParseTree t, int lv) {
@@ -60,19 +60,19 @@ public final class NamedExpr extends NodeWrapper {
         }
 
         public String name() {
-            return getItemOfType(0, TokenType.NAME);
+            return get(0, TokenType.NAME);
         }
 
         public Expr expr() {
-            return Expr.of(getItem(2));
+            return Expr.of(get(2));
         }
 
         public static boolean parse(ParseTree t, int lv) {
             if (!ParserUtil.recursionGuard(lv, RULE)) return false;
             t.enter(lv, RULE);
             boolean r;
-            r = t.consumeToken(TokenType.NAME);
-            r = r && t.consumeToken(":=");
+            r = t.consume(TokenType.NAME);
+            r = r && t.consume(":=");
             r = r && Expr.parse(t, lv + 1);
             t.exit(r);
             return r;

@@ -17,67 +17,67 @@ public final class CompOp extends NodeWrapper {
         super(RULE, node);
     }
 
-    public boolean isTokenLess() {
-        return getBoolean(0);
+    public boolean isLess() {
+        return is(0);
     }
 
-    public boolean isTokenGreater() {
-        return getBoolean(1);
+    public boolean isGreater() {
+        return is(1);
     }
 
-    public boolean isTokenEqual() {
-        return getBoolean(2);
+    public boolean isEqual() {
+        return is(2);
     }
 
-    public boolean isTokenMoreEqual() {
-        return getBoolean(3);
+    public boolean isMoreEqual() {
+        return is(3);
     }
 
-    public boolean isTokenLessEqual() {
-        return getBoolean(4);
+    public boolean isLessEqual() {
+        return is(4);
     }
 
-    public boolean isTokenNequal() {
-        return getBoolean(5);
+    public boolean isNequal() {
+        return is(5);
     }
 
-    public boolean isTokenIn() {
-        return getBoolean(6);
+    public boolean isIn() {
+        return is(6);
     }
 
     public CompOp8 compOp8() {
-        return CompOp8.of(getItem(7));
+        return CompOp8.of(get(7));
     }
 
     public boolean hasCompOp8() {
-        return hasItemOfRule(7, CompOp8.RULE);
+        return has(7, CompOp8.RULE);
     }
 
-    public boolean isTokenIs() {
-        return getBoolean(8);
+    public boolean isIs() {
+        return is(8);
     }
 
     public CompOp10 compOp10() {
-        return CompOp10.of(getItem(9));
+        return CompOp10.of(get(9));
     }
 
     public boolean hasCompOp10() {
-        return hasItemOfRule(9, CompOp10.RULE);
+        return has(9, CompOp10.RULE);
     }
 
     public static boolean parse(ParseTree t, int lv) {
         if (!ParserUtil.recursionGuard(lv, RULE)) return false;
         t.enter(lv, RULE);
         boolean r;
-        r = t.consumeToken("<");
-        r = r || t.consumeToken(">");
-        r = r || t.consumeToken("==");
-        r = r || t.consumeToken(">=");
-        r = r || t.consumeToken("<=");
-        r = r || t.consumeToken("!=");
-        r = r || t.consumeToken("in");
+        r = t.consume("<");
+        r = r || t.consume(">");
+        r = r || t.consume("==");
+        r = r || t.consume(">=");
+        r = r || t.consume("<=");
+        r = r || t.consume("!=");
+        r = r || t.consume("in");
         r = r || CompOp8.parse(t, lv + 1);
-        r = r || t.consumeToken("is");
+        r = r || t.consume("is");
         r = r || CompOp10.parse(t, lv + 1);
         t.exit(r);
         return r;
@@ -102,8 +102,8 @@ public final class CompOp extends NodeWrapper {
             if (!ParserUtil.recursionGuard(lv, RULE)) return false;
             t.enter(lv, RULE);
             boolean r;
-            r = t.consumeToken("not");
-            r = r && t.consumeToken("in");
+            r = t.consume("not");
+            r = r && t.consume("in");
             t.exit(r);
             return r;
         }
@@ -128,8 +128,8 @@ public final class CompOp extends NodeWrapper {
             if (!ParserUtil.recursionGuard(lv, RULE)) return false;
             t.enter(lv, RULE);
             boolean r;
-            r = t.consumeToken("is");
-            r = r && t.consumeToken("not");
+            r = t.consume("is");
+            r = r && t.consume("not");
             t.exit(r);
             return r;
         }

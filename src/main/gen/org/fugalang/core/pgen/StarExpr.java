@@ -18,14 +18,14 @@ public final class StarExpr extends NodeWrapper {
     }
 
     public BitwiseOr bitwiseOr() {
-        return BitwiseOr.of(getItem(1));
+        return BitwiseOr.of(get(1));
     }
 
     public static boolean parse(ParseTree t, int lv) {
         if (!ParserUtil.recursionGuard(lv, RULE)) return false;
         t.enter(lv, RULE);
         boolean r;
-        r = t.consumeToken("*");
+        r = t.consume("*");
         r = r && BitwiseOr.parse(t, lv + 1);
         t.exit(r);
         return r;

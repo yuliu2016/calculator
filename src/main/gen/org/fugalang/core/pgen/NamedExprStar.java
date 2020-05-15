@@ -18,19 +18,19 @@ public final class NamedExprStar extends NodeWrapper {
     }
 
     public StarExpr starExpr() {
-        return StarExpr.of(getItem(0));
+        return StarExpr.of(get(0));
     }
 
     public boolean hasStarExpr() {
-        return hasItemOfRule(0, StarExpr.RULE);
+        return has(0, StarExpr.RULE);
     }
 
     public NamedExpr namedExpr() {
-        return NamedExpr.of(getItem(1));
+        return NamedExpr.of(get(1));
     }
 
     public boolean hasNamedExpr() {
-        return hasItemOfRule(1, NamedExpr.RULE);
+        return has(1, NamedExpr.RULE);
     }
 
     public static boolean parse(ParseTree t, int lv) {

@@ -21,7 +21,7 @@ public final class BreakStmt extends NodeWrapper {
         if (!ParserUtil.recursionGuard(lv, RULE)) return false;
         t.enter(lv, RULE);
         boolean r;
-        r = t.consumeToken("break");
+        r = t.consume("break");
         t.exit(r);
         return r;
     }

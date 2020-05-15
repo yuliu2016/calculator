@@ -18,9 +18,9 @@ public class Calculator {
             var term = opTerm.term();
             var value = evaluate0(term);
 
-            if (opTerm.sum21().isTokenPlus()) {
+            if (opTerm.sum21().isPlus()) {
                 sum += value;
-            } else if (opTerm.sum21().isTokenMinus()) {
+            } else if (opTerm.sum21().isMinus()) {
                 sum -= value;
             }
         }
@@ -35,12 +35,12 @@ public class Calculator {
             var factor = opFactor.factor();
             var value = evaluate0(factor);
 
-            if (opFactor.term21().isTokenTimes()) {
+            if (opFactor.term21().isTimes()) {
                 product *= value;
-            } else if (opFactor.term21().isTokenDiv()) {
+            } else if (opFactor.term21().isDiv()) {
                 product /= value;
             }
-            if (opFactor.term21().isTokenModulus()) {
+            if (opFactor.term21().isModulus()) {
                 product %= value;
             }
         }
@@ -54,13 +54,13 @@ public class Calculator {
             return evaluate0(factor.power());
         } else if (factor.hasFactor1()) {
             var factor1 = factor.factor1();
-            if (factor1.factor11().isTokenBitNot()) {
+            if (factor1.factor11().isBitNot()) {
                 return ~((int) evaluate0(factor1.factor()));
             }
-            if (factor1.factor11().isTokenMinus()) {
+            if (factor1.factor11().isMinus()) {
                 return -evaluate0(factor1.factor());
             }
-            if (factor1.factor11().isTokenPlus()) {
+            if (factor1.factor11().isPlus()) {
                 return +evaluate0(factor1.factor());
             }
         }

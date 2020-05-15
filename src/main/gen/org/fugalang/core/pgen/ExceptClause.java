@@ -19,18 +19,18 @@ public final class ExceptClause extends NodeWrapper {
     }
 
     public ExceptClause2 exceptClause2() {
-        return ExceptClause2.of(getItem(1));
+        return ExceptClause2.of(get(1));
     }
 
     public boolean hasExceptClause2() {
-        return hasItemOfRule(1, ExceptClause2.RULE);
+        return has(1, ExceptClause2.RULE);
     }
 
     public static boolean parse(ParseTree t, int lv) {
         if (!ParserUtil.recursionGuard(lv, RULE)) return false;
         t.enter(lv, RULE);
         boolean r;
-        r = t.consumeToken("except");
+        r = t.consume("except");
         if (r) ExceptClause2.parse(t, lv + 1);
         t.exit(r);
         return r;
@@ -52,15 +52,15 @@ public final class ExceptClause extends NodeWrapper {
         }
 
         public Expr expr() {
-            return Expr.of(getItem(0));
+            return Expr.of(get(0));
         }
 
         public ExceptClause22 exceptClause22() {
-            return ExceptClause22.of(getItem(1));
+            return ExceptClause22.of(get(1));
         }
 
         public boolean hasExceptClause22() {
-            return hasItemOfRule(1, ExceptClause22.RULE);
+            return has(1, ExceptClause22.RULE);
         }
 
         public static boolean parse(ParseTree t, int lv) {
@@ -90,15 +90,15 @@ public final class ExceptClause extends NodeWrapper {
         }
 
         public String name() {
-            return getItemOfType(1, TokenType.NAME);
+            return get(1, TokenType.NAME);
         }
 
         public static boolean parse(ParseTree t, int lv) {
             if (!ParserUtil.recursionGuard(lv, RULE)) return false;
             t.enter(lv, RULE);
             boolean r;
-            r = t.consumeToken("as");
-            r = r && t.consumeToken(TokenType.NAME);
+            r = t.consume("as");
+            r = r && t.consume(TokenType.NAME);
             t.exit(r);
             return r;
         }

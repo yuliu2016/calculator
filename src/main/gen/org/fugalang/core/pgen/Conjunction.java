@@ -20,7 +20,7 @@ public final class Conjunction extends NodeWrapper {
     }
 
     public Inversion inversion() {
-        return Inversion.of(getItem(0));
+        return Inversion.of(get(0));
     }
 
     public List<Conjunction2> conjunction2List() {
@@ -41,8 +41,7 @@ public final class Conjunction extends NodeWrapper {
         t.enterCollection();
         while (true) {
             var p = t.position();
-            if (!Conjunction2.parse(t, lv + 1)) break;
-            if (t.guardLoopExit(p)) break;
+            if (!Conjunction2.parse(t, lv + 1) || t.loopGuard(p)) break;
         }
         t.exitCollection();
     }
@@ -63,14 +62,14 @@ public final class Conjunction extends NodeWrapper {
         }
 
         public Inversion inversion() {
-            return Inversion.of(getItem(1));
+            return Inversion.of(get(1));
         }
 
         public static boolean parse(ParseTree t, int lv) {
             if (!ParserUtil.recursionGuard(lv, RULE)) return false;
             t.enter(lv, RULE);
             boolean r;
-            r = t.consumeToken("and");
+            r = t.consume("and");
             r = r && Inversion.parse(t, lv + 1);
             t.exit(r);
             return r;

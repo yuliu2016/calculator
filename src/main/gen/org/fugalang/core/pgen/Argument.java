@@ -19,43 +19,43 @@ public final class Argument extends NodeWrapper {
     }
 
     public Argument1 argument1() {
-        return Argument1.of(getItem(0));
+        return Argument1.of(get(0));
     }
 
     public boolean hasArgument1() {
-        return hasItemOfRule(0, Argument1.RULE);
+        return has(0, Argument1.RULE);
     }
 
     public Argument2 argument2() {
-        return Argument2.of(getItem(1));
+        return Argument2.of(get(1));
     }
 
     public boolean hasArgument2() {
-        return hasItemOfRule(1, Argument2.RULE);
+        return has(1, Argument2.RULE);
     }
 
     public Argument3 argument3() {
-        return Argument3.of(getItem(2));
+        return Argument3.of(get(2));
     }
 
     public boolean hasArgument3() {
-        return hasItemOfRule(2, Argument3.RULE);
+        return has(2, Argument3.RULE);
     }
 
     public Argument4 argument4() {
-        return Argument4.of(getItem(3));
+        return Argument4.of(get(3));
     }
 
     public boolean hasArgument4() {
-        return hasItemOfRule(3, Argument4.RULE);
+        return has(3, Argument4.RULE);
     }
 
     public Expr expr() {
-        return Expr.of(getItem(4));
+        return Expr.of(get(4));
     }
 
     public boolean hasExpr() {
-        return hasItemOfRule(4, Expr.RULE);
+        return has(4, Expr.RULE);
     }
 
     public static boolean parse(ParseTree t, int lv) {
@@ -87,19 +87,19 @@ public final class Argument extends NodeWrapper {
         }
 
         public String name() {
-            return getItemOfType(0, TokenType.NAME);
+            return get(0, TokenType.NAME);
         }
 
         public Expr expr() {
-            return Expr.of(getItem(2));
+            return Expr.of(get(2));
         }
 
         public static boolean parse(ParseTree t, int lv) {
             if (!ParserUtil.recursionGuard(lv, RULE)) return false;
             t.enter(lv, RULE);
             boolean r;
-            r = t.consumeToken(TokenType.NAME);
-            r = r && t.consumeToken(":=");
+            r = t.consume(TokenType.NAME);
+            r = r && t.consume(":=");
             r = r && Expr.parse(t, lv + 1);
             t.exit(r);
             return r;
@@ -122,19 +122,19 @@ public final class Argument extends NodeWrapper {
         }
 
         public String name() {
-            return getItemOfType(0, TokenType.NAME);
+            return get(0, TokenType.NAME);
         }
 
         public Expr expr() {
-            return Expr.of(getItem(2));
+            return Expr.of(get(2));
         }
 
         public static boolean parse(ParseTree t, int lv) {
             if (!ParserUtil.recursionGuard(lv, RULE)) return false;
             t.enter(lv, RULE);
             boolean r;
-            r = t.consumeToken(TokenType.NAME);
-            r = r && t.consumeToken("=");
+            r = t.consume(TokenType.NAME);
+            r = r && t.consume("=");
             r = r && Expr.parse(t, lv + 1);
             t.exit(r);
             return r;
@@ -157,14 +157,14 @@ public final class Argument extends NodeWrapper {
         }
 
         public Expr expr() {
-            return Expr.of(getItem(1));
+            return Expr.of(get(1));
         }
 
         public static boolean parse(ParseTree t, int lv) {
             if (!ParserUtil.recursionGuard(lv, RULE)) return false;
             t.enter(lv, RULE);
             boolean r;
-            r = t.consumeToken("**");
+            r = t.consume("**");
             r = r && Expr.parse(t, lv + 1);
             t.exit(r);
             return r;
@@ -187,14 +187,14 @@ public final class Argument extends NodeWrapper {
         }
 
         public Expr expr() {
-            return Expr.of(getItem(1));
+            return Expr.of(get(1));
         }
 
         public static boolean parse(ParseTree t, int lv) {
             if (!ParserUtil.recursionGuard(lv, RULE)) return false;
             t.enter(lv, RULE);
             boolean r;
-            r = t.consumeToken("*");
+            r = t.consume("*");
             r = r && Expr.parse(t, lv + 1);
             t.exit(r);
             return r;

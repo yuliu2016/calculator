@@ -18,18 +18,18 @@ public final class SliceExpr extends NodeWrapper {
     }
 
     public Expr expr() {
-        return Expr.of(getItem(1));
+        return Expr.of(get(1));
     }
 
     public boolean hasExpr() {
-        return hasItemOfRule(1, Expr.RULE);
+        return has(1, Expr.RULE);
     }
 
     public static boolean parse(ParseTree t, int lv) {
         if (!ParserUtil.recursionGuard(lv, RULE)) return false;
         t.enter(lv, RULE);
         boolean r;
-        r = t.consumeToken(":");
+        r = t.consume(":");
         if (r) Expr.parse(t, lv + 1);
         t.exit(r);
         return r;

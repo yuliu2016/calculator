@@ -29,7 +29,7 @@ import java.util.Map;
  * <h2>Class Rules</h2>
  * <li>A class can represent an And rule or an Or rule</li>
  */
-@Deprecated
+@Deprecated(forRemoval = true)
 public class ParserGenerator {
     private final Map<String, OrRule> ruleMap;
     private final TokenConverter converter;

@@ -20,7 +20,7 @@ public final class FullArgList extends NodeWrapper {
     }
 
     public DefaultArg defaultArg() {
-        return DefaultArg.of(getItem(0));
+        return DefaultArg.of(get(0));
     }
 
     public List<FullArgList2> fullArgList2List() {
@@ -28,11 +28,11 @@ public final class FullArgList extends NodeWrapper {
     }
 
     public FullArgList3 fullArgList3() {
-        return FullArgList3.of(getItem(2));
+        return FullArgList3.of(get(2));
     }
 
     public boolean hasFullArgList3() {
-        return hasItemOfRule(2, FullArgList3.RULE);
+        return has(2, FullArgList3.RULE);
     }
 
     public static boolean parse(ParseTree t, int lv) {
@@ -50,8 +50,7 @@ public final class FullArgList extends NodeWrapper {
         t.enterCollection();
         while (true) {
             var p = t.position();
-            if (!FullArgList2.parse(t, lv + 1)) break;
-            if (t.guardLoopExit(p)) break;
+            if (!FullArgList2.parse(t, lv + 1) || t.loopGuard(p)) break;
         }
         t.exitCollection();
     }
@@ -72,14 +71,14 @@ public final class FullArgList extends NodeWrapper {
         }
 
         public DefaultArg defaultArg() {
-            return DefaultArg.of(getItem(1));
+            return DefaultArg.of(get(1));
         }
 
         public static boolean parse(ParseTree t, int lv) {
             if (!ParserUtil.recursionGuard(lv, RULE)) return false;
             t.enter(lv, RULE);
             boolean r;
-            r = t.consumeToken(",");
+            r = t.consume(",");
             r = r && DefaultArg.parse(t, lv + 1);
             t.exit(r);
             return r;
@@ -102,18 +101,18 @@ public final class FullArgList extends NodeWrapper {
         }
 
         public FullArgList32 fullArgList32() {
-            return FullArgList32.of(getItem(1));
+            return FullArgList32.of(get(1));
         }
 
         public boolean hasFullArgList32() {
-            return hasItemOfRule(1, FullArgList32.RULE);
+            return has(1, FullArgList32.RULE);
         }
 
         public static boolean parse(ParseTree t, int lv) {
             if (!ParserUtil.recursionGuard(lv, RULE)) return false;
             t.enter(lv, RULE);
             boolean r;
-            r = t.consumeToken(",");
+            r = t.consume(",");
             if (r) FullArgList32.parse(t, lv + 1);
             t.exit(r);
             return r;
@@ -136,19 +135,19 @@ public final class FullArgList extends NodeWrapper {
         }
 
         public Kwargs kwargs() {
-            return Kwargs.of(getItem(0));
+            return Kwargs.of(get(0));
         }
 
         public boolean hasKwargs() {
-            return hasItemOfRule(0, Kwargs.RULE);
+            return has(0, Kwargs.RULE);
         }
 
         public ArgsKwargs argsKwargs() {
-            return ArgsKwargs.of(getItem(1));
+            return ArgsKwargs.of(get(1));
         }
 
         public boolean hasArgsKwargs() {
-            return hasItemOfRule(1, ArgsKwargs.RULE);
+            return has(1, ArgsKwargs.RULE);
         }
 
         public static boolean parse(ParseTree t, int lv) {

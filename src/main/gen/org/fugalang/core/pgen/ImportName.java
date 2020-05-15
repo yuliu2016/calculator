@@ -18,14 +18,14 @@ public final class ImportName extends NodeWrapper {
     }
 
     public DottedAsNames dottedAsNames() {
-        return DottedAsNames.of(getItem(1));
+        return DottedAsNames.of(get(1));
     }
 
     public static boolean parse(ParseTree t, int lv) {
         if (!ParserUtil.recursionGuard(lv, RULE)) return false;
         t.enter(lv, RULE);
         boolean r;
-        r = t.consumeToken("import");
+        r = t.consume("import");
         r = r && DottedAsNames.parse(t, lv + 1);
         t.exit(r);
         return r;

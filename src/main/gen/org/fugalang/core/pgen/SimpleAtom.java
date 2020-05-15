@@ -19,51 +19,51 @@ public final class SimpleAtom extends NodeWrapper {
     }
 
     public String name() {
-        return getItemOfType(0, TokenType.NAME);
+        return get(0, TokenType.NAME);
     }
 
     public boolean hasName() {
-        return hasItemOfType(0, TokenType.NAME);
+        return has(0, TokenType.NAME);
     }
 
     public String number() {
-        return getItemOfType(1, TokenType.NUMBER);
+        return get(1, TokenType.NUMBER);
     }
 
     public boolean hasNumber() {
-        return hasItemOfType(1, TokenType.NUMBER);
+        return has(1, TokenType.NUMBER);
     }
 
     public String string() {
-        return getItemOfType(2, TokenType.STRING);
+        return get(2, TokenType.STRING);
     }
 
     public boolean hasString() {
-        return hasItemOfType(2, TokenType.STRING);
+        return has(2, TokenType.STRING);
     }
 
-    public boolean isTokenNone() {
-        return getBoolean(3);
+    public boolean isNone() {
+        return is(3);
     }
 
-    public boolean isTokenTrue() {
-        return getBoolean(4);
+    public boolean isTrue() {
+        return is(4);
     }
 
-    public boolean isTokenFalse() {
-        return getBoolean(5);
+    public boolean isFalse() {
+        return is(5);
     }
 
     public static boolean parse(ParseTree t, int lv) {
         if (!ParserUtil.recursionGuard(lv, RULE)) return false;
         t.enter(lv, RULE);
         boolean r;
-        r = t.consumeToken(TokenType.NAME);
-        r = r || t.consumeToken(TokenType.NUMBER);
-        r = r || t.consumeToken(TokenType.STRING);
-        r = r || t.consumeToken("None");
-        r = r || t.consumeToken("True");
-        r = r || t.consumeToken("False");
+        r = t.consume(TokenType.NAME);
+        r = r || t.consume(TokenType.NUMBER);
+        r = r || t.consume(TokenType.STRING);
+        r = r || t.consume("None");
+        r = r || t.consume("True");
+        r = r || t.consume("False");
         t.exit(r);
         return r;
     }

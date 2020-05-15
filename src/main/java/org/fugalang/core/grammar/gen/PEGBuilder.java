@@ -208,7 +208,7 @@ public class PEGBuilder {
 
             if (classType.equals("boolean")) {
                 var fieldName = ParserStringUtil
-                        .prefixCap("isToken", convertedValue.getFieldName());
+                        .prefixCap("is", convertedValue.getFieldName());
                 var resultSource = ResultSource.ofTokenLiteral(convertedValue.getSourceLiteral());
 
                 addRepeatField(className, cb, fieldName, repeatType, isOptional, resultSource);

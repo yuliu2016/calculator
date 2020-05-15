@@ -20,7 +20,7 @@ public final class DottedAsNames extends NodeWrapper {
     }
 
     public DottedAsName dottedAsName() {
-        return DottedAsName.of(getItem(0));
+        return DottedAsName.of(get(0));
     }
 
     public List<DottedAsNames2> dottedAsNames2List() {
@@ -41,8 +41,7 @@ public final class DottedAsNames extends NodeWrapper {
         t.enterCollection();
         while (true) {
             var p = t.position();
-            if (!DottedAsNames2.parse(t, lv + 1)) break;
-            if (t.guardLoopExit(p)) break;
+            if (!DottedAsNames2.parse(t, lv + 1) || t.loopGuard(p)) break;
         }
         t.exitCollection();
     }
@@ -63,14 +62,14 @@ public final class DottedAsNames extends NodeWrapper {
         }
 
         public DottedAsName dottedAsName() {
-            return DottedAsName.of(getItem(1));
+            return DottedAsName.of(get(1));
         }
 
         public static boolean parse(ParseTree t, int lv) {
             if (!ParserUtil.recursionGuard(lv, RULE)) return false;
             t.enter(lv, RULE);
             boolean r;
-            r = t.consumeToken(",");
+            r = t.consume(",");
             r = r && DottedAsName.parse(t, lv + 1);
             t.exit(r);
             return r;

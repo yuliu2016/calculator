@@ -21,19 +21,19 @@ public final class BlockSuite extends NodeWrapper {
     }
 
     public BlockSuite1 blockSuite1() {
-        return BlockSuite1.of(getItem(0));
+        return BlockSuite1.of(get(0));
     }
 
     public boolean hasBlockSuite1() {
-        return hasItemOfRule(0, BlockSuite1.RULE);
+        return has(0, BlockSuite1.RULE);
     }
 
     public BlockSuite2 blockSuite2() {
-        return BlockSuite2.of(getItem(1));
+        return BlockSuite2.of(get(1));
     }
 
     public boolean hasBlockSuite2() {
-        return hasItemOfRule(1, BlockSuite2.RULE);
+        return has(1, BlockSuite2.RULE);
     }
 
     public static boolean parse(ParseTree t, int lv) {
@@ -62,16 +62,16 @@ public final class BlockSuite extends NodeWrapper {
         }
 
         public SimpleStmt simpleStmt() {
-            return SimpleStmt.of(getItem(1));
+            return SimpleStmt.of(get(1));
         }
 
         public static boolean parse(ParseTree t, int lv) {
             if (!ParserUtil.recursionGuard(lv, RULE)) return false;
             t.enter(lv, RULE);
             boolean r;
-            r = t.consumeToken("{");
+            r = t.consume("{");
             r = r && SimpleStmt.parse(t, lv + 1);
-            r = r && t.consumeToken("}");
+            r = r && t.consume("}");
             t.exit(r);
             return r;
         }
@@ -93,7 +93,7 @@ public final class BlockSuite extends NodeWrapper {
         }
 
         public String newline() {
-            return getItemOfType(1, TokenType.NEWLINE);
+            return get(1, TokenType.NEWLINE);
         }
 
         public List<Stmt> stmtList() {
@@ -104,10 +104,10 @@ public final class BlockSuite extends NodeWrapper {
             if (!ParserUtil.recursionGuard(lv, RULE)) return false;
             t.enter(lv, RULE);
             boolean r;
-            r = t.consumeToken("{");
-            r = r && t.consumeToken(TokenType.NEWLINE);
+            r = t.consume("{");
+            r = r && t.consume(TokenType.NEWLINE);
             r = r && parseStmtList(t, lv);
-            r = r && t.consumeToken("}");
+            r = r && t.consume("}");
             t.exit(r);
             return r;
         }
@@ -117,8 +117,7 @@ public final class BlockSuite extends NodeWrapper {
             var r = Stmt.parse(t, lv + 1);
             if (r) while (true) {
                 var p = t.position();
-                if (!Stmt.parse(t, lv + 1)) break;
-                if (t.guardLoopExit(p)) break;
+                if (!Stmt.parse(t, lv + 1) || t.loopGuard(p)) break;
             }
             t.exitCollection();
             return r;

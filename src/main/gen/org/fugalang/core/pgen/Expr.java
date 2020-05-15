@@ -18,27 +18,27 @@ public final class Expr extends NodeWrapper {
     }
 
     public Conditional conditional() {
-        return Conditional.of(getItem(0));
+        return Conditional.of(get(0));
     }
 
     public boolean hasConditional() {
-        return hasItemOfRule(0, Conditional.RULE);
+        return has(0, Conditional.RULE);
     }
 
     public Funcdef funcdef() {
-        return Funcdef.of(getItem(1));
+        return Funcdef.of(get(1));
     }
 
     public boolean hasFuncdef() {
-        return hasItemOfRule(1, Funcdef.RULE);
+        return has(1, Funcdef.RULE);
     }
 
     public Disjunction disjunction() {
-        return Disjunction.of(getItem(2));
+        return Disjunction.of(get(2));
     }
 
     public boolean hasDisjunction() {
-        return hasItemOfRule(2, Disjunction.RULE);
+        return has(2, Disjunction.RULE);
     }
 
     public static boolean parse(ParseTree t, int lv) {

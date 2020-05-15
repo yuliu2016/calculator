@@ -19,15 +19,15 @@ public final class DottedAsName extends NodeWrapper {
     }
 
     public DottedName dottedName() {
-        return DottedName.of(getItem(0));
+        return DottedName.of(get(0));
     }
 
     public DottedAsName2 dottedAsName2() {
-        return DottedAsName2.of(getItem(1));
+        return DottedAsName2.of(get(1));
     }
 
     public boolean hasDottedAsName2() {
-        return hasItemOfRule(1, DottedAsName2.RULE);
+        return has(1, DottedAsName2.RULE);
     }
 
     public static boolean parse(ParseTree t, int lv) {
@@ -56,15 +56,15 @@ public final class DottedAsName extends NodeWrapper {
         }
 
         public String name() {
-            return getItemOfType(1, TokenType.NAME);
+            return get(1, TokenType.NAME);
         }
 
         public static boolean parse(ParseTree t, int lv) {
             if (!ParserUtil.recursionGuard(lv, RULE)) return false;
             t.enter(lv, RULE);
             boolean r;
-            r = t.consumeToken("as");
-            r = r && t.consumeToken(TokenType.NAME);
+            r = t.consume("as");
+            r = r && t.consume(TokenType.NAME);
             t.exit(r);
             return r;
         }

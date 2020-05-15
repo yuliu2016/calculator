@@ -18,14 +18,14 @@ public final class FinallySuite extends NodeWrapper {
     }
 
     public Suite suite() {
-        return Suite.of(getItem(1));
+        return Suite.of(get(1));
     }
 
     public static boolean parse(ParseTree t, int lv) {
         if (!ParserUtil.recursionGuard(lv, RULE)) return false;
         t.enter(lv, RULE);
         boolean r;
-        r = t.consumeToken("finally");
+        r = t.consume("finally");
         r = r && Suite.parse(t, lv + 1);
         t.exit(r);
         return r;

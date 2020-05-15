@@ -18,19 +18,19 @@ public final class CompIter extends NodeWrapper {
     }
 
     public CompFor compFor() {
-        return CompFor.of(getItem(0));
+        return CompFor.of(get(0));
     }
 
     public boolean hasCompFor() {
-        return hasItemOfRule(0, CompFor.RULE);
+        return has(0, CompFor.RULE);
     }
 
     public CompIf compIf() {
-        return CompIf.of(getItem(1));
+        return CompIf.of(get(1));
     }
 
     public boolean hasCompIf() {
-        return hasItemOfRule(1, CompIf.RULE);
+        return has(1, CompIf.RULE);
     }
 
     public static boolean parse(ParseTree t, int lv) {

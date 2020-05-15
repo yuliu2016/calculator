@@ -18,19 +18,19 @@ public final class DictOrSet extends NodeWrapper {
     }
 
     public DictMaker dictMaker() {
-        return DictMaker.of(getItem(0));
+        return DictMaker.of(get(0));
     }
 
     public boolean hasDictMaker() {
-        return hasItemOfRule(0, DictMaker.RULE);
+        return has(0, DictMaker.RULE);
     }
 
     public SetMaker setMaker() {
-        return SetMaker.of(getItem(1));
+        return SetMaker.of(get(1));
     }
 
     public boolean hasSetMaker() {
-        return hasItemOfRule(1, SetMaker.RULE);
+        return has(1, SetMaker.RULE);
     }
 
     public static boolean parse(ParseTree t, int lv) {

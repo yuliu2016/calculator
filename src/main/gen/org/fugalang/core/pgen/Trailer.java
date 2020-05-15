@@ -19,27 +19,27 @@ public final class Trailer extends NodeWrapper {
     }
 
     public Trailer1 trailer1() {
-        return Trailer1.of(getItem(0));
+        return Trailer1.of(get(0));
     }
 
     public boolean hasTrailer1() {
-        return hasItemOfRule(0, Trailer1.RULE);
+        return has(0, Trailer1.RULE);
     }
 
     public Parameters parameters() {
-        return Parameters.of(getItem(1));
+        return Parameters.of(get(1));
     }
 
     public boolean hasParameters() {
-        return hasItemOfRule(1, Parameters.RULE);
+        return has(1, Parameters.RULE);
     }
 
     public Subscript subscript() {
-        return Subscript.of(getItem(2));
+        return Subscript.of(get(2));
     }
 
     public boolean hasSubscript() {
-        return hasItemOfRule(2, Subscript.RULE);
+        return has(2, Subscript.RULE);
     }
 
     public static boolean parse(ParseTree t, int lv) {
@@ -69,15 +69,15 @@ public final class Trailer extends NodeWrapper {
         }
 
         public String name() {
-            return getItemOfType(1, TokenType.NAME);
+            return get(1, TokenType.NAME);
         }
 
         public static boolean parse(ParseTree t, int lv) {
             if (!ParserUtil.recursionGuard(lv, RULE)) return false;
             t.enter(lv, RULE);
             boolean r;
-            r = t.consumeToken(".");
-            r = r && t.consumeToken(TokenType.NAME);
+            r = t.consume(".");
+            r = r && t.consume(TokenType.NAME);
             t.exit(r);
             return r;
         }

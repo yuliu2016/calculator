@@ -18,18 +18,18 @@ public final class ElifStmt extends NodeWrapper {
     }
 
     public NamedExpr namedExpr() {
-        return NamedExpr.of(getItem(1));
+        return NamedExpr.of(get(1));
     }
 
     public Suite suite() {
-        return Suite.of(getItem(2));
+        return Suite.of(get(2));
     }
 
     public static boolean parse(ParseTree t, int lv) {
         if (!ParserUtil.recursionGuard(lv, RULE)) return false;
         t.enter(lv, RULE);
         boolean r;
-        r = t.consumeToken("elif");
+        r = t.consume("elif");
         r = r && NamedExpr.parse(t, lv + 1);
         r = r && Suite.parse(t, lv + 1);
         t.exit(r);

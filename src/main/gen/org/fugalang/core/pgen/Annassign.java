@@ -18,22 +18,22 @@ public final class Annassign extends NodeWrapper {
     }
 
     public Expr expr() {
-        return Expr.of(getItem(1));
+        return Expr.of(get(1));
     }
 
     public Annassign3 annassign3() {
-        return Annassign3.of(getItem(2));
+        return Annassign3.of(get(2));
     }
 
     public boolean hasAnnassign3() {
-        return hasItemOfRule(2, Annassign3.RULE);
+        return has(2, Annassign3.RULE);
     }
 
     public static boolean parse(ParseTree t, int lv) {
         if (!ParserUtil.recursionGuard(lv, RULE)) return false;
         t.enter(lv, RULE);
         boolean r;
-        r = t.consumeToken(":");
+        r = t.consume(":");
         r = r && Expr.parse(t, lv + 1);
         if (r) Annassign3.parse(t, lv + 1);
         t.exit(r);
@@ -56,14 +56,14 @@ public final class Annassign extends NodeWrapper {
         }
 
         public ExprlistStar exprlistStar() {
-            return ExprlistStar.of(getItem(1));
+            return ExprlistStar.of(get(1));
         }
 
         public static boolean parse(ParseTree t, int lv) {
             if (!ParserUtil.recursionGuard(lv, RULE)) return false;
             t.enter(lv, RULE);
             boolean r;
-            r = t.consumeToken("=");
+            r = t.consume("=");
             r = r && ExprlistStar.parse(t, lv + 1);
             t.exit(r);
             return r;

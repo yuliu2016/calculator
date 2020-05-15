@@ -20,7 +20,7 @@ public final class Pipeline extends NodeWrapper {
     }
 
     public Factor factor() {
-        return Factor.of(getItem(0));
+        return Factor.of(get(0));
     }
 
     public List<Pipeline2> pipeline2List() {
@@ -41,8 +41,7 @@ public final class Pipeline extends NodeWrapper {
         t.enterCollection();
         while (true) {
             var p = t.position();
-            if (!Pipeline2.parse(t, lv + 1)) break;
-            if (t.guardLoopExit(p)) break;
+            if (!Pipeline2.parse(t, lv + 1) || t.loopGuard(p)) break;
         }
         t.exitCollection();
     }
@@ -63,14 +62,14 @@ public final class Pipeline extends NodeWrapper {
         }
 
         public PipeExpr pipeExpr() {
-            return PipeExpr.of(getItem(1));
+            return PipeExpr.of(get(1));
         }
 
         public static boolean parse(ParseTree t, int lv) {
             if (!ParserUtil.recursionGuard(lv, RULE)) return false;
             t.enter(lv, RULE);
             boolean r;
-            r = t.consumeToken("->");
+            r = t.consume("->");
             r = r && PipeExpr.parse(t, lv + 1);
             t.exit(r);
             return r;

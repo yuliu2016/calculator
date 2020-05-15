@@ -20,7 +20,7 @@ public final class Term extends NodeWrapper {
     }
 
     public Pipeline pipeline() {
-        return Pipeline.of(getItem(0));
+        return Pipeline.of(get(0));
     }
 
     public List<Term2> term2List() {
@@ -41,8 +41,7 @@ public final class Term extends NodeWrapper {
         t.enterCollection();
         while (true) {
             var p = t.position();
-            if (!Term2.parse(t, lv + 1)) break;
-            if (t.guardLoopExit(p)) break;
+            if (!Term2.parse(t, lv + 1) || t.loopGuard(p)) break;
         }
         t.exitCollection();
     }
@@ -63,11 +62,11 @@ public final class Term extends NodeWrapper {
         }
 
         public Term21 term21() {
-            return Term21.of(getItem(0));
+            return Term21.of(get(0));
         }
 
         public Pipeline pipeline() {
-            return Pipeline.of(getItem(1));
+            return Pipeline.of(get(1));
         }
 
         public static boolean parse(ParseTree t, int lv) {
@@ -96,35 +95,35 @@ public final class Term extends NodeWrapper {
             super(RULE, node);
         }
 
-        public boolean isTokenTimes() {
-            return getBoolean(0);
+        public boolean isTimes() {
+            return is(0);
         }
 
-        public boolean isTokenMatrixTimes() {
-            return getBoolean(1);
+        public boolean isMatrixTimes() {
+            return is(1);
         }
 
-        public boolean isTokenDiv() {
-            return getBoolean(2);
+        public boolean isDiv() {
+            return is(2);
         }
 
-        public boolean isTokenModulus() {
-            return getBoolean(3);
+        public boolean isModulus() {
+            return is(3);
         }
 
-        public boolean isTokenFloorDiv() {
-            return getBoolean(4);
+        public boolean isFloorDiv() {
+            return is(4);
         }
 
         public static boolean parse(ParseTree t, int lv) {
             if (!ParserUtil.recursionGuard(lv, RULE)) return false;
             t.enter(lv, RULE);
             boolean r;
-            r = t.consumeToken("*");
-            r = r || t.consumeToken("@");
-            r = r || t.consumeToken("/");
-            r = r || t.consumeToken("%");
-            r = r || t.consumeToken("//");
+            r = t.consume("*");
+            r = r || t.consume("@");
+            r = r || t.consume("/");
+            r = r || t.consume("%");
+            r = r || t.consume("//");
             t.exit(r);
             return r;
         }

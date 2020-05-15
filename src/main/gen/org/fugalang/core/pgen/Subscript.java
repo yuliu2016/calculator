@@ -18,16 +18,16 @@ public final class Subscript extends NodeWrapper {
     }
 
     public Slicelist slicelist() {
-        return Slicelist.of(getItem(1));
+        return Slicelist.of(get(1));
     }
 
     public static boolean parse(ParseTree t, int lv) {
         if (!ParserUtil.recursionGuard(lv, RULE)) return false;
         t.enter(lv, RULE);
         boolean r;
-        r = t.consumeToken("[");
+        r = t.consume("[");
         r = r && Slicelist.parse(t, lv + 1);
-        r = r && t.consumeToken("]");
+        r = r && t.consume("]");
         t.exit(r);
         return r;
     }

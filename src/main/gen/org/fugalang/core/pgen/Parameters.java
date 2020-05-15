@@ -18,20 +18,20 @@ public final class Parameters extends NodeWrapper {
     }
 
     public Arglist arglist() {
-        return Arglist.of(getItem(1));
+        return Arglist.of(get(1));
     }
 
     public boolean hasArglist() {
-        return hasItemOfRule(1, Arglist.RULE);
+        return has(1, Arglist.RULE);
     }
 
     public static boolean parse(ParseTree t, int lv) {
         if (!ParserUtil.recursionGuard(lv, RULE)) return false;
         t.enter(lv, RULE);
         boolean r;
-        r = t.consumeToken("(");
+        r = t.consume("(");
         if (r) Arglist.parse(t, lv + 1);
-        r = r && t.consumeToken(")");
+        r = r && t.consume(")");
         t.exit(r);
         return r;
     }

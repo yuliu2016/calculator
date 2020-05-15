@@ -20,7 +20,7 @@ public final class Sum extends NodeWrapper {
     }
 
     public Term term() {
-        return Term.of(getItem(0));
+        return Term.of(get(0));
     }
 
     public List<Sum2> sum2List() {
@@ -41,8 +41,7 @@ public final class Sum extends NodeWrapper {
         t.enterCollection();
         while (true) {
             var p = t.position();
-            if (!Sum2.parse(t, lv + 1)) break;
-            if (t.guardLoopExit(p)) break;
+            if (!Sum2.parse(t, lv + 1) || t.loopGuard(p)) break;
         }
         t.exitCollection();
     }
@@ -63,11 +62,11 @@ public final class Sum extends NodeWrapper {
         }
 
         public Sum21 sum21() {
-            return Sum21.of(getItem(0));
+            return Sum21.of(get(0));
         }
 
         public Term term() {
-            return Term.of(getItem(1));
+            return Term.of(get(1));
         }
 
         public static boolean parse(ParseTree t, int lv) {
@@ -96,20 +95,20 @@ public final class Sum extends NodeWrapper {
             super(RULE, node);
         }
 
-        public boolean isTokenPlus() {
-            return getBoolean(0);
+        public boolean isPlus() {
+            return is(0);
         }
 
-        public boolean isTokenMinus() {
-            return getBoolean(1);
+        public boolean isMinus() {
+            return is(1);
         }
 
         public static boolean parse(ParseTree t, int lv) {
             if (!ParserUtil.recursionGuard(lv, RULE)) return false;
             t.enter(lv, RULE);
             boolean r;
-            r = t.consumeToken("+");
-            r = r || t.consumeToken("-");
+            r = t.consume("+");
+            r = r || t.consume("-");
             t.exit(r);
             return r;
         }

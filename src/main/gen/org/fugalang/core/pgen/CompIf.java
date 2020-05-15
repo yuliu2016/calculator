@@ -18,22 +18,22 @@ public final class CompIf extends NodeWrapper {
     }
 
     public NamedExpr namedExpr() {
-        return NamedExpr.of(getItem(1));
+        return NamedExpr.of(get(1));
     }
 
     public CompIter compIter() {
-        return CompIter.of(getItem(2));
+        return CompIter.of(get(2));
     }
 
     public boolean hasCompIter() {
-        return hasItemOfRule(2, CompIter.RULE);
+        return has(2, CompIter.RULE);
     }
 
     public static boolean parse(ParseTree t, int lv) {
         if (!ParserUtil.recursionGuard(lv, RULE)) return false;
         t.enter(lv, RULE);
         boolean r;
-        r = t.consumeToken("if");
+        r = t.consume("if");
         r = r && NamedExpr.parse(t, lv + 1);
         if (r) CompIter.parse(t, lv + 1);
         t.exit(r);

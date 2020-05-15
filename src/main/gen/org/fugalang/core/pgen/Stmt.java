@@ -19,11 +19,11 @@ public final class Stmt extends NodeWrapper {
     }
 
     public Stmt1 stmt1() {
-        return Stmt1.of(getItem(0));
+        return Stmt1.of(get(0));
     }
 
     public String newline() {
-        return getItemOfType(1, TokenType.NEWLINE);
+        return get(1, TokenType.NEWLINE);
     }
 
     public static boolean parse(ParseTree t, int lv) {
@@ -31,7 +31,7 @@ public final class Stmt extends NodeWrapper {
         t.enter(lv, RULE);
         boolean r;
         r = Stmt1.parse(t, lv + 1);
-        r = r && t.consumeToken(TokenType.NEWLINE);
+        r = r && t.consume(TokenType.NEWLINE);
         t.exit(r);
         return r;
     }
@@ -52,19 +52,19 @@ public final class Stmt extends NodeWrapper {
         }
 
         public SimpleStmt simpleStmt() {
-            return SimpleStmt.of(getItem(0));
+            return SimpleStmt.of(get(0));
         }
 
         public boolean hasSimpleStmt() {
-            return hasItemOfRule(0, SimpleStmt.RULE);
+            return has(0, SimpleStmt.RULE);
         }
 
         public CompoundStmt compoundStmt() {
-            return CompoundStmt.of(getItem(1));
+            return CompoundStmt.of(get(1));
         }
 
         public boolean hasCompoundStmt() {
-            return hasItemOfRule(1, CompoundStmt.RULE);
+            return has(1, CompoundStmt.RULE);
         }
 
         public static boolean parse(ParseTree t, int lv) {

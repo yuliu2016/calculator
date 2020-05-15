@@ -20,7 +20,7 @@ public final class WithStmt extends NodeWrapper {
     }
 
     public WithItem withItem() {
-        return WithItem.of(getItem(1));
+        return WithItem.of(get(1));
     }
 
     public List<WithStmt3> withStmt3List() {
@@ -28,14 +28,14 @@ public final class WithStmt extends NodeWrapper {
     }
 
     public Suite suite() {
-        return Suite.of(getItem(3));
+        return Suite.of(get(3));
     }
 
     public static boolean parse(ParseTree t, int lv) {
         if (!ParserUtil.recursionGuard(lv, RULE)) return false;
         t.enter(lv, RULE);
         boolean r;
-        r = t.consumeToken("with");
+        r = t.consume("with");
         r = r && WithItem.parse(t, lv + 1);
         if (r) parseWithStmt3List(t, lv);
         r = r && Suite.parse(t, lv + 1);
@@ -47,8 +47,7 @@ public final class WithStmt extends NodeWrapper {
         t.enterCollection();
         while (true) {
             var p = t.position();
-            if (!WithStmt3.parse(t, lv + 1)) break;
-            if (t.guardLoopExit(p)) break;
+            if (!WithStmt3.parse(t, lv + 1) || t.loopGuard(p)) break;
         }
         t.exitCollection();
     }
@@ -69,14 +68,14 @@ public final class WithStmt extends NodeWrapper {
         }
 
         public WithItem withItem() {
-            return WithItem.of(getItem(1));
+            return WithItem.of(get(1));
         }
 
         public static boolean parse(ParseTree t, int lv) {
             if (!ParserUtil.recursionGuard(lv, RULE)) return false;
             t.enter(lv, RULE);
             boolean r;
-            r = t.consumeToken(",");
+            r = t.consume(",");
             r = r && WithItem.parse(t, lv + 1);
             t.exit(r);
             return r;

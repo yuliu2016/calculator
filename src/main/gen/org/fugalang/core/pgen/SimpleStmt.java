@@ -20,15 +20,15 @@ public final class SimpleStmt extends NodeWrapper {
     }
 
     public SmallStmt smallStmt() {
-        return SmallStmt.of(getItem(0));
+        return SmallStmt.of(get(0));
     }
 
     public List<SimpleStmt2> simpleStmt2List() {
         return getList(1, SimpleStmt2::of);
     }
 
-    public boolean isTokenSemicolon() {
-        return getBoolean(2);
+    public boolean isSemicolon() {
+        return is(2);
     }
 
     public static boolean parse(ParseTree t, int lv) {
@@ -37,7 +37,7 @@ public final class SimpleStmt extends NodeWrapper {
         boolean r;
         r = SmallStmt.parse(t, lv + 1);
         if (r) parseSimpleStmt2List(t, lv);
-        if (r) t.consumeToken(";");
+        if (r) t.consume(";");
         t.exit(r);
         return r;
     }
@@ -46,8 +46,7 @@ public final class SimpleStmt extends NodeWrapper {
         t.enterCollection();
         while (true) {
             var p = t.position();
-            if (!SimpleStmt2.parse(t, lv + 1)) break;
-            if (t.guardLoopExit(p)) break;
+            if (!SimpleStmt2.parse(t, lv + 1) || t.loopGuard(p)) break;
         }
         t.exitCollection();
     }
@@ -68,14 +67,14 @@ public final class SimpleStmt extends NodeWrapper {
         }
 
         public SmallStmt smallStmt() {
-            return SmallStmt.of(getItem(1));
+            return SmallStmt.of(get(1));
         }
 
         public static boolean parse(ParseTree t, int lv) {
             if (!ParserUtil.recursionGuard(lv, RULE)) return false;
             t.enter(lv, RULE);
             boolean r;
-            r = t.consumeToken(";");
+            r = t.consume(";");
             r = r && SmallStmt.parse(t, lv + 1);
             t.exit(r);
             return r;

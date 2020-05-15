@@ -18,19 +18,19 @@ public final class ImportStmt extends NodeWrapper {
     }
 
     public ImportName importName() {
-        return ImportName.of(getItem(0));
+        return ImportName.of(get(0));
     }
 
     public boolean hasImportName() {
-        return hasItemOfRule(0, ImportName.RULE);
+        return has(0, ImportName.RULE);
     }
 
     public ImportFrom importFrom() {
-        return ImportFrom.of(getItem(1));
+        return ImportFrom.of(get(1));
     }
 
     public boolean hasImportFrom() {
-        return hasItemOfRule(1, ImportFrom.RULE);
+        return has(1, ImportFrom.RULE);
     }
 
     public static boolean parse(ParseTree t, int lv) {

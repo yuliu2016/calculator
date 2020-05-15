@@ -20,7 +20,7 @@ public final class SimpleArgList extends NodeWrapper {
     }
 
     public SimpleArg simpleArg() {
-        return SimpleArg.of(getItem(0));
+        return SimpleArg.of(get(0));
     }
 
     public List<SimpleArgList2> simpleArgList2List() {
@@ -41,8 +41,7 @@ public final class SimpleArgList extends NodeWrapper {
         t.enterCollection();
         while (true) {
             var p = t.position();
-            if (!SimpleArgList2.parse(t, lv + 1)) break;
-            if (t.guardLoopExit(p)) break;
+            if (!SimpleArgList2.parse(t, lv + 1) || t.loopGuard(p)) break;
         }
         t.exitCollection();
     }
@@ -63,7 +62,7 @@ public final class SimpleArgList extends NodeWrapper {
         }
 
         public SimpleArg simpleArg() {
-            return SimpleArg.of(getItem(0));
+            return SimpleArg.of(get(0));
         }
 
         public static boolean parse(ParseTree t, int lv) {

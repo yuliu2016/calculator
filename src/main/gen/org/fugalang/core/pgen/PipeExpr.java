@@ -18,19 +18,19 @@ public final class PipeExpr extends NodeWrapper {
     }
 
     public PipeFor pipeFor() {
-        return PipeFor.of(getItem(0));
+        return PipeFor.of(get(0));
     }
 
     public boolean hasPipeFor() {
-        return hasItemOfRule(0, PipeFor.RULE);
+        return has(0, PipeFor.RULE);
     }
 
     public Factor factor() {
-        return Factor.of(getItem(1));
+        return Factor.of(get(1));
     }
 
     public boolean hasFactor() {
-        return hasItemOfRule(1, Factor.RULE);
+        return has(1, Factor.RULE);
     }
 
     public static boolean parse(ParseTree t, int lv) {

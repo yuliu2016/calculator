@@ -21,11 +21,11 @@ public final class Rules extends NodeWrapper {
     }
 
     public String newline() {
-        return getItemOfType(0, TokenType.NEWLINE);
+        return get(0, TokenType.NEWLINE);
     }
 
     public boolean hasNewline() {
-        return hasItemOfType(0, TokenType.NEWLINE);
+        return has(0, TokenType.NEWLINE);
     }
 
     public List<SingleRule> singleRuleList() {
@@ -36,7 +36,7 @@ public final class Rules extends NodeWrapper {
         if (!ParserUtil.recursionGuard(lv, RULE)) return false;
         t.enter(lv, RULE);
         boolean r;
-        t.consumeToken(TokenType.NEWLINE);
+        t.consume(TokenType.NEWLINE);
         r = parseSingleRuleList(t, lv);
         t.exit(r);
         return r;
@@ -47,8 +47,7 @@ public final class Rules extends NodeWrapper {
         var r = SingleRule.parse(t, lv + 1);
         if (r) while (true) {
             var p = t.position();
-            if (!SingleRule.parse(t, lv + 1)) break;
-            if (t.guardLoopExit(p)) break;
+            if (!SingleRule.parse(t, lv + 1) || t.loopGuard(p)) break;
         }
         t.exitCollection();
         return r;

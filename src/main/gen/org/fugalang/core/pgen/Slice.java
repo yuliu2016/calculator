@@ -18,19 +18,19 @@ public final class Slice extends NodeWrapper {
     }
 
     public Slice1 slice1() {
-        return Slice1.of(getItem(0));
+        return Slice1.of(get(0));
     }
 
     public boolean hasSlice1() {
-        return hasItemOfRule(0, Slice1.RULE);
+        return has(0, Slice1.RULE);
     }
 
     public Expr expr() {
-        return Expr.of(getItem(1));
+        return Expr.of(get(1));
     }
 
     public boolean hasExpr() {
-        return hasItemOfRule(1, Expr.RULE);
+        return has(1, Expr.RULE);
     }
 
     public static boolean parse(ParseTree t, int lv) {
@@ -59,23 +59,23 @@ public final class Slice extends NodeWrapper {
         }
 
         public Expr expr() {
-            return Expr.of(getItem(0));
+            return Expr.of(get(0));
         }
 
         public boolean hasExpr() {
-            return hasItemOfRule(0, Expr.RULE);
+            return has(0, Expr.RULE);
         }
 
         public SliceExpr sliceExpr() {
-            return SliceExpr.of(getItem(1));
+            return SliceExpr.of(get(1));
         }
 
         public SliceExpr sliceExpr1() {
-            return SliceExpr.of(getItem(2));
+            return SliceExpr.of(get(2));
         }
 
         public boolean hasSliceExpr1() {
-            return hasItemOfRule(2, SliceExpr.RULE);
+            return has(2, SliceExpr.RULE);
         }
 
         public static boolean parse(ParseTree t, int lv) {

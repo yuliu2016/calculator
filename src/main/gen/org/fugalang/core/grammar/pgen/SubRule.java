@@ -19,35 +19,35 @@ public final class SubRule extends NodeWrapper {
     }
 
     public SubRule1 subRule1() {
-        return SubRule1.of(getItem(0));
+        return SubRule1.of(get(0));
     }
 
     public boolean hasSubRule1() {
-        return hasItemOfRule(0, SubRule1.RULE);
+        return has(0, SubRule1.RULE);
     }
 
     public SubRule2 subRule2() {
-        return SubRule2.of(getItem(1));
+        return SubRule2.of(get(1));
     }
 
     public boolean hasSubRule2() {
-        return hasItemOfRule(1, SubRule2.RULE);
+        return has(1, SubRule2.RULE);
     }
 
     public String name() {
-        return getItemOfType(2, TokenType.NAME);
+        return get(2, TokenType.NAME);
     }
 
     public boolean hasName() {
-        return hasItemOfType(2, TokenType.NAME);
+        return has(2, TokenType.NAME);
     }
 
     public String string() {
-        return getItemOfType(3, TokenType.STRING);
+        return get(3, TokenType.STRING);
     }
 
     public boolean hasString() {
-        return hasItemOfType(3, TokenType.STRING);
+        return has(3, TokenType.STRING);
     }
 
     public static boolean parse(ParseTree t, int lv) {
@@ -56,8 +56,8 @@ public final class SubRule extends NodeWrapper {
         boolean r;
         r = SubRule1.parse(t, lv + 1);
         r = r || SubRule2.parse(t, lv + 1);
-        r = r || t.consumeToken(TokenType.NAME);
-        r = r || t.consumeToken(TokenType.STRING);
+        r = r || t.consume(TokenType.NAME);
+        r = r || t.consume(TokenType.STRING);
         t.exit(r);
         return r;
     }
@@ -78,16 +78,16 @@ public final class SubRule extends NodeWrapper {
         }
 
         public OrRule orRule() {
-            return OrRule.of(getItem(1));
+            return OrRule.of(get(1));
         }
 
         public static boolean parse(ParseTree t, int lv) {
             if (!ParserUtil.recursionGuard(lv, RULE)) return false;
             t.enter(lv, RULE);
             boolean r;
-            r = t.consumeToken("(");
+            r = t.consume("(");
             r = r && OrRule.parse(t, lv + 1);
-            r = r && t.consumeToken(")");
+            r = r && t.consume(")");
             t.exit(r);
             return r;
         }
@@ -109,16 +109,16 @@ public final class SubRule extends NodeWrapper {
         }
 
         public OrRule orRule() {
-            return OrRule.of(getItem(1));
+            return OrRule.of(get(1));
         }
 
         public static boolean parse(ParseTree t, int lv) {
             if (!ParserUtil.recursionGuard(lv, RULE)) return false;
             t.enter(lv, RULE);
             boolean r;
-            r = t.consumeToken("[");
+            r = t.consume("[");
             r = r && OrRule.parse(t, lv + 1);
-            r = r && t.consumeToken("]");
+            r = r && t.consume("]");
             t.exit(r);
             return r;
         }

@@ -18,19 +18,19 @@ public final class DictItem extends NodeWrapper {
     }
 
     public DictItem1 dictItem1() {
-        return DictItem1.of(getItem(0));
+        return DictItem1.of(get(0));
     }
 
     public boolean hasDictItem1() {
-        return hasItemOfRule(0, DictItem1.RULE);
+        return has(0, DictItem1.RULE);
     }
 
     public DictItem2 dictItem2() {
-        return DictItem2.of(getItem(1));
+        return DictItem2.of(get(1));
     }
 
     public boolean hasDictItem2() {
-        return hasItemOfRule(1, DictItem2.RULE);
+        return has(1, DictItem2.RULE);
     }
 
     public static boolean parse(ParseTree t, int lv) {
@@ -59,11 +59,11 @@ public final class DictItem extends NodeWrapper {
         }
 
         public Expr expr() {
-            return Expr.of(getItem(0));
+            return Expr.of(get(0));
         }
 
         public Expr expr1() {
-            return Expr.of(getItem(2));
+            return Expr.of(get(2));
         }
 
         public static boolean parse(ParseTree t, int lv) {
@@ -71,7 +71,7 @@ public final class DictItem extends NodeWrapper {
             t.enter(lv, RULE);
             boolean r;
             r = Expr.parse(t, lv + 1);
-            r = r && t.consumeToken(":");
+            r = r && t.consume(":");
             r = r && Expr.parse(t, lv + 1);
             t.exit(r);
             return r;
@@ -94,14 +94,14 @@ public final class DictItem extends NodeWrapper {
         }
 
         public BitwiseOr bitwiseOr() {
-            return BitwiseOr.of(getItem(1));
+            return BitwiseOr.of(get(1));
         }
 
         public static boolean parse(ParseTree t, int lv) {
             if (!ParserUtil.recursionGuard(lv, RULE)) return false;
             t.enter(lv, RULE);
             boolean r;
-            r = t.consumeToken("**");
+            r = t.consume("**");
             r = r && BitwiseOr.parse(t, lv + 1);
             t.exit(r);
             return r;

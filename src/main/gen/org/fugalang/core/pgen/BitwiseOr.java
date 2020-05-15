@@ -20,7 +20,7 @@ public final class BitwiseOr extends NodeWrapper {
     }
 
     public BitwiseXor bitwiseXor() {
-        return BitwiseXor.of(getItem(0));
+        return BitwiseXor.of(get(0));
     }
 
     public List<BitwiseOr2> bitwiseOr2List() {
@@ -41,8 +41,7 @@ public final class BitwiseOr extends NodeWrapper {
         t.enterCollection();
         while (true) {
             var p = t.position();
-            if (!BitwiseOr2.parse(t, lv + 1)) break;
-            if (t.guardLoopExit(p)) break;
+            if (!BitwiseOr2.parse(t, lv + 1) || t.loopGuard(p)) break;
         }
         t.exitCollection();
     }
@@ -63,14 +62,14 @@ public final class BitwiseOr extends NodeWrapper {
         }
 
         public BitwiseXor bitwiseXor() {
-            return BitwiseXor.of(getItem(1));
+            return BitwiseXor.of(get(1));
         }
 
         public static boolean parse(ParseTree t, int lv) {
             if (!ParserUtil.recursionGuard(lv, RULE)) return false;
             t.enter(lv, RULE);
             boolean r;
-            r = t.consumeToken("|");
+            r = t.consume("|");
             r = r && BitwiseXor.parse(t, lv + 1);
             t.exit(r);
             return r;

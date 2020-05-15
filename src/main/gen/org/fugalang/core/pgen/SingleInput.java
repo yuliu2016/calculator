@@ -19,34 +19,34 @@ public final class SingleInput extends NodeWrapper {
     }
 
     public String newline() {
-        return getItemOfType(0, TokenType.NEWLINE);
+        return get(0, TokenType.NEWLINE);
     }
 
     public boolean hasNewline() {
-        return hasItemOfType(0, TokenType.NEWLINE);
+        return has(0, TokenType.NEWLINE);
     }
 
     public SimpleStmt simpleStmt() {
-        return SimpleStmt.of(getItem(1));
+        return SimpleStmt.of(get(1));
     }
 
     public boolean hasSimpleStmt() {
-        return hasItemOfRule(1, SimpleStmt.RULE);
+        return has(1, SimpleStmt.RULE);
     }
 
     public SingleInput3 singleInput3() {
-        return SingleInput3.of(getItem(2));
+        return SingleInput3.of(get(2));
     }
 
     public boolean hasSingleInput3() {
-        return hasItemOfRule(2, SingleInput3.RULE);
+        return has(2, SingleInput3.RULE);
     }
 
     public static boolean parse(ParseTree t, int lv) {
         if (!ParserUtil.recursionGuard(lv, RULE)) return false;
         t.enter(lv, RULE);
         boolean r;
-        r = t.consumeToken(TokenType.NEWLINE);
+        r = t.consume(TokenType.NEWLINE);
         r = r || SimpleStmt.parse(t, lv + 1);
         r = r || SingleInput3.parse(t, lv + 1);
         t.exit(r);
@@ -69,11 +69,11 @@ public final class SingleInput extends NodeWrapper {
         }
 
         public CompoundStmt compoundStmt() {
-            return CompoundStmt.of(getItem(0));
+            return CompoundStmt.of(get(0));
         }
 
         public String newline() {
-            return getItemOfType(1, TokenType.NEWLINE);
+            return get(1, TokenType.NEWLINE);
         }
 
         public static boolean parse(ParseTree t, int lv) {
@@ -81,7 +81,7 @@ public final class SingleInput extends NodeWrapper {
             t.enter(lv, RULE);
             boolean r;
             r = CompoundStmt.parse(t, lv + 1);
-            r = r && t.consumeToken(TokenType.NEWLINE);
+            r = r && t.consume(TokenType.NEWLINE);
             t.exit(r);
             return r;
         }

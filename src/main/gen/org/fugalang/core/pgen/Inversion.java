@@ -18,19 +18,19 @@ public final class Inversion extends NodeWrapper {
     }
 
     public Inversion1 inversion1() {
-        return Inversion1.of(getItem(0));
+        return Inversion1.of(get(0));
     }
 
     public boolean hasInversion1() {
-        return hasItemOfRule(0, Inversion1.RULE);
+        return has(0, Inversion1.RULE);
     }
 
     public Comparison comparison() {
-        return Comparison.of(getItem(1));
+        return Comparison.of(get(1));
     }
 
     public boolean hasComparison() {
-        return hasItemOfRule(1, Comparison.RULE);
+        return has(1, Comparison.RULE);
     }
 
     public static boolean parse(ParseTree t, int lv) {
@@ -59,14 +59,14 @@ public final class Inversion extends NodeWrapper {
         }
 
         public Inversion inversion() {
-            return Inversion.of(getItem(1));
+            return Inversion.of(get(1));
         }
 
         public static boolean parse(ParseTree t, int lv) {
             if (!ParserUtil.recursionGuard(lv, RULE)) return false;
             t.enter(lv, RULE);
             boolean r;
-            r = t.consumeToken("not");
+            r = t.consume("not");
             r = r && Inversion.parse(t, lv + 1);
             t.exit(r);
             return r;

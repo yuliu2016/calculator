@@ -18,30 +18,30 @@ public final class Funcdef extends NodeWrapper {
     }
 
     public FuncTypeHint funcTypeHint() {
-        return FuncTypeHint.of(getItem(1));
+        return FuncTypeHint.of(get(1));
     }
 
     public boolean hasFuncTypeHint() {
-        return hasItemOfRule(1, FuncTypeHint.RULE);
+        return has(1, FuncTypeHint.RULE);
     }
 
     public FuncArgs funcArgs() {
-        return FuncArgs.of(getItem(2));
+        return FuncArgs.of(get(2));
     }
 
     public boolean hasFuncArgs() {
-        return hasItemOfRule(2, FuncArgs.RULE);
+        return has(2, FuncArgs.RULE);
     }
 
     public FuncSuite funcSuite() {
-        return FuncSuite.of(getItem(3));
+        return FuncSuite.of(get(3));
     }
 
     public static boolean parse(ParseTree t, int lv) {
         if (!ParserUtil.recursionGuard(lv, RULE)) return false;
         t.enter(lv, RULE);
         boolean r;
-        r = t.consumeToken("def");
+        r = t.consume("def");
         if (r) FuncTypeHint.parse(t, lv + 1);
         if (r) FuncArgs.parse(t, lv + 1);
         r = r && FuncSuite.parse(t, lv + 1);

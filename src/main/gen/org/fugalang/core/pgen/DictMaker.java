@@ -20,15 +20,15 @@ public final class DictMaker extends NodeWrapper {
     }
 
     public DictItem dictItem() {
-        return DictItem.of(getItem(0));
+        return DictItem.of(get(0));
     }
 
     public List<DictMaker2> dictMaker2List() {
         return getList(1, DictMaker2::of);
     }
 
-    public boolean isTokenComma() {
-        return getBoolean(2);
+    public boolean isComma() {
+        return is(2);
     }
 
     public static boolean parse(ParseTree t, int lv) {
@@ -37,7 +37,7 @@ public final class DictMaker extends NodeWrapper {
         boolean r;
         r = DictItem.parse(t, lv + 1);
         if (r) parseDictMaker2List(t, lv);
-        if (r) t.consumeToken(",");
+        if (r) t.consume(",");
         t.exit(r);
         return r;
     }
@@ -46,8 +46,7 @@ public final class DictMaker extends NodeWrapper {
         t.enterCollection();
         while (true) {
             var p = t.position();
-            if (!DictMaker2.parse(t, lv + 1)) break;
-            if (t.guardLoopExit(p)) break;
+            if (!DictMaker2.parse(t, lv + 1) || t.loopGuard(p)) break;
         }
         t.exitCollection();
     }
@@ -68,14 +67,14 @@ public final class DictMaker extends NodeWrapper {
         }
 
         public DictItem dictItem() {
-            return DictItem.of(getItem(1));
+            return DictItem.of(get(1));
         }
 
         public static boolean parse(ParseTree t, int lv) {
             if (!ParserUtil.recursionGuard(lv, RULE)) return false;
             t.enter(lv, RULE);
             boolean r;
-            r = t.consumeToken(",");
+            r = t.consume(",");
             r = r && DictItem.parse(t, lv + 1);
             t.exit(r);
             return r;

@@ -16,27 +16,28 @@ public abstract class NodeWrapper {
         this.node = node;
     }
 
-    protected ParseTreeNode getItem(int index) {
+
+    protected ParseTreeNode get(int index) {
         return node.getItem(index);
     }
 
-    protected boolean hasItemOfRule(int index, ParserRule rule) {
-        var e = node.getItem(index);
-        return e.isPresent(rule);
-    }
-
-    protected String getItemOfType(int index, ElementType type) {
+    protected String get(int index, ElementType type) {
         var e = node.getItem(index);
         e.failIfAbsent(type);
         return e.asString();
     }
 
-    protected boolean hasItemOfType(int index, ElementType type) {
+    protected boolean has(int index, ParserRule rule) {
+        var e = node.getItem(index);
+        return e.isPresent(rule);
+    }
+
+    protected boolean has(int index, ElementType type) {
         var e = node.getItem(index);
         return e.isPresent(type);
     }
 
-    protected boolean getBoolean(int index) {
+    protected boolean is(int index) {
         var e = node.getItem(index);
         return e.asBoolean();
     }

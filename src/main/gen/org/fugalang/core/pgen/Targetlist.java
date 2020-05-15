@@ -20,15 +20,15 @@ public final class Targetlist extends NodeWrapper {
     }
 
     public Target target() {
-        return Target.of(getItem(0));
+        return Target.of(get(0));
     }
 
     public List<Targetlist2> targetlist2List() {
         return getList(1, Targetlist2::of);
     }
 
-    public boolean isTokenComma() {
-        return getBoolean(2);
+    public boolean isComma() {
+        return is(2);
     }
 
     public static boolean parse(ParseTree t, int lv) {
@@ -37,7 +37,7 @@ public final class Targetlist extends NodeWrapper {
         boolean r;
         r = Target.parse(t, lv + 1);
         if (r) parseTargetlist2List(t, lv);
-        if (r) t.consumeToken(",");
+        if (r) t.consume(",");
         t.exit(r);
         return r;
     }
@@ -46,8 +46,7 @@ public final class Targetlist extends NodeWrapper {
         t.enterCollection();
         while (true) {
             var p = t.position();
-            if (!Targetlist2.parse(t, lv + 1)) break;
-            if (t.guardLoopExit(p)) break;
+            if (!Targetlist2.parse(t, lv + 1) || t.loopGuard(p)) break;
         }
         t.exitCollection();
     }
@@ -68,14 +67,14 @@ public final class Targetlist extends NodeWrapper {
         }
 
         public Target target() {
-            return Target.of(getItem(1));
+            return Target.of(get(1));
         }
 
         public static boolean parse(ParseTree t, int lv) {
             if (!ParserUtil.recursionGuard(lv, RULE)) return false;
             t.enter(lv, RULE);
             boolean r;
-            r = t.consumeToken(",");
+            r = t.consume(",");
             r = r && Target.parse(t, lv + 1);
             t.exit(r);
             return r;

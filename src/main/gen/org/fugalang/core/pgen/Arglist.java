@@ -20,15 +20,15 @@ public final class Arglist extends NodeWrapper {
     }
 
     public Argument argument() {
-        return Argument.of(getItem(0));
+        return Argument.of(get(0));
     }
 
     public List<Arglist2> arglist2List() {
         return getList(1, Arglist2::of);
     }
 
-    public boolean isTokenComma() {
-        return getBoolean(2);
+    public boolean isComma() {
+        return is(2);
     }
 
     public static boolean parse(ParseTree t, int lv) {
@@ -37,7 +37,7 @@ public final class Arglist extends NodeWrapper {
         boolean r;
         r = Argument.parse(t, lv + 1);
         if (r) parseArglist2List(t, lv);
-        if (r) t.consumeToken(",");
+        if (r) t.consume(",");
         t.exit(r);
         return r;
     }
@@ -46,8 +46,7 @@ public final class Arglist extends NodeWrapper {
         t.enterCollection();
         while (true) {
             var p = t.position();
-            if (!Arglist2.parse(t, lv + 1)) break;
-            if (t.guardLoopExit(p)) break;
+            if (!Arglist2.parse(t, lv + 1) || t.loopGuard(p)) break;
         }
         t.exitCollection();
     }
@@ -68,14 +67,14 @@ public final class Arglist extends NodeWrapper {
         }
 
         public Argument argument() {
-            return Argument.of(getItem(1));
+            return Argument.of(get(1));
         }
 
         public static boolean parse(ParseTree t, int lv) {
             if (!ParserUtil.recursionGuard(lv, RULE)) return false;
             t.enter(lv, RULE);
             boolean r;
-            r = t.consumeToken(",");
+            r = t.consume(",");
             r = r && Argument.parse(t, lv + 1);
             t.exit(r);
             return r;

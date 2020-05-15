@@ -19,25 +19,25 @@ public final class SingleRule extends NodeWrapper {
     }
 
     public String name() {
-        return getItemOfType(0, TokenType.NAME);
+        return get(0, TokenType.NAME);
     }
 
     public OrRule orRule() {
-        return OrRule.of(getItem(2));
+        return OrRule.of(get(2));
     }
 
     public String newline() {
-        return getItemOfType(3, TokenType.NEWLINE);
+        return get(3, TokenType.NEWLINE);
     }
 
     public static boolean parse(ParseTree t, int lv) {
         if (!ParserUtil.recursionGuard(lv, RULE)) return false;
         t.enter(lv, RULE);
         boolean r;
-        r = t.consumeToken(TokenType.NAME);
-        r = r && t.consumeToken(":");
+        r = t.consume(TokenType.NAME);
+        r = r && t.consume(":");
         r = r && OrRule.parse(t, lv + 1);
-        r = r && t.consumeToken(TokenType.NEWLINE);
+        r = r && t.consume(TokenType.NEWLINE);
         t.exit(r);
         return r;
     }

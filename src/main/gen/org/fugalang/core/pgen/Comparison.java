@@ -20,7 +20,7 @@ public final class Comparison extends NodeWrapper {
     }
 
     public BitwiseOr bitwiseOr() {
-        return BitwiseOr.of(getItem(0));
+        return BitwiseOr.of(get(0));
     }
 
     public List<Comparison2> comparison2List() {
@@ -41,8 +41,7 @@ public final class Comparison extends NodeWrapper {
         t.enterCollection();
         while (true) {
             var p = t.position();
-            if (!Comparison2.parse(t, lv + 1)) break;
-            if (t.guardLoopExit(p)) break;
+            if (!Comparison2.parse(t, lv + 1) || t.loopGuard(p)) break;
         }
         t.exitCollection();
     }
@@ -63,11 +62,11 @@ public final class Comparison extends NodeWrapper {
         }
 
         public CompOp compOp() {
-            return CompOp.of(getItem(0));
+            return CompOp.of(get(0));
         }
 
         public BitwiseOr bitwiseOr() {
-            return BitwiseOr.of(getItem(1));
+            return BitwiseOr.of(get(1));
         }
 
         public static boolean parse(ParseTree t, int lv) {

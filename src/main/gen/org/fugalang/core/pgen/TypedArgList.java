@@ -18,27 +18,27 @@ public final class TypedArgList extends NodeWrapper {
     }
 
     public Kwargs kwargs() {
-        return Kwargs.of(getItem(0));
+        return Kwargs.of(get(0));
     }
 
     public boolean hasKwargs() {
-        return hasItemOfRule(0, Kwargs.RULE);
+        return has(0, Kwargs.RULE);
     }
 
     public ArgsKwargs argsKwargs() {
-        return ArgsKwargs.of(getItem(1));
+        return ArgsKwargs.of(get(1));
     }
 
     public boolean hasArgsKwargs() {
-        return hasItemOfRule(1, ArgsKwargs.RULE);
+        return has(1, ArgsKwargs.RULE);
     }
 
     public FullArgList fullArgList() {
-        return FullArgList.of(getItem(2));
+        return FullArgList.of(get(2));
     }
 
     public boolean hasFullArgList() {
-        return hasItemOfRule(2, FullArgList.RULE);
+        return has(2, FullArgList.RULE);
     }
 
     public static boolean parse(ParseTree t, int lv) {

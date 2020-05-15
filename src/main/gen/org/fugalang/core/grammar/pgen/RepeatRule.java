@@ -18,15 +18,15 @@ public final class RepeatRule extends NodeWrapper {
     }
 
     public SubRule subRule() {
-        return SubRule.of(getItem(0));
+        return SubRule.of(get(0));
     }
 
     public RepeatRule2 repeatRule2() {
-        return RepeatRule2.of(getItem(1));
+        return RepeatRule2.of(get(1));
     }
 
     public boolean hasRepeatRule2() {
-        return hasItemOfRule(1, RepeatRule2.RULE);
+        return has(1, RepeatRule2.RULE);
     }
 
     public static boolean parse(ParseTree t, int lv) {
@@ -54,20 +54,20 @@ public final class RepeatRule extends NodeWrapper {
             super(RULE, node);
         }
 
-        public boolean isTokenTimes() {
-            return getBoolean(0);
+        public boolean isTimes() {
+            return is(0);
         }
 
-        public boolean isTokenPlus() {
-            return getBoolean(1);
+        public boolean isPlus() {
+            return is(1);
         }
 
         public static boolean parse(ParseTree t, int lv) {
             if (!ParserUtil.recursionGuard(lv, RULE)) return false;
             t.enter(lv, RULE);
             boolean r;
-            r = t.consumeToken("*");
-            r = r || t.consumeToken("+");
+            r = t.consume("*");
+            r = r || t.consume("+");
             t.exit(r);
             return r;
         }

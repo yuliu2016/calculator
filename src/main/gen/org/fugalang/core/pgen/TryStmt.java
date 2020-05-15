@@ -20,18 +20,18 @@ public final class TryStmt extends NodeWrapper {
     }
 
     public Suite suite() {
-        return Suite.of(getItem(1));
+        return Suite.of(get(1));
     }
 
     public TryStmt3 tryStmt3() {
-        return TryStmt3.of(getItem(2));
+        return TryStmt3.of(get(2));
     }
 
     public static boolean parse(ParseTree t, int lv) {
         if (!ParserUtil.recursionGuard(lv, RULE)) return false;
         t.enter(lv, RULE);
         boolean r;
-        r = t.consumeToken("try");
+        r = t.consume("try");
         r = r && Suite.parse(t, lv + 1);
         r = r && TryStmt3.parse(t, lv + 1);
         t.exit(r);
@@ -54,19 +54,19 @@ public final class TryStmt extends NodeWrapper {
         }
 
         public TryStmt31 tryStmt31() {
-            return TryStmt31.of(getItem(0));
+            return TryStmt31.of(get(0));
         }
 
         public boolean hasTryStmt31() {
-            return hasItemOfRule(0, TryStmt31.RULE);
+            return has(0, TryStmt31.RULE);
         }
 
         public FinallySuite finallySuite() {
-            return FinallySuite.of(getItem(1));
+            return FinallySuite.of(get(1));
         }
 
         public boolean hasFinallySuite() {
-            return hasItemOfRule(1, FinallySuite.RULE);
+            return has(1, FinallySuite.RULE);
         }
 
         public static boolean parse(ParseTree t, int lv) {
@@ -100,19 +100,19 @@ public final class TryStmt extends NodeWrapper {
         }
 
         public ElseSuite elseSuite() {
-            return ElseSuite.of(getItem(1));
+            return ElseSuite.of(get(1));
         }
 
         public boolean hasElseSuite() {
-            return hasItemOfRule(1, ElseSuite.RULE);
+            return has(1, ElseSuite.RULE);
         }
 
         public FinallySuite finallySuite() {
-            return FinallySuite.of(getItem(2));
+            return FinallySuite.of(get(2));
         }
 
         public boolean hasFinallySuite() {
-            return hasItemOfRule(2, FinallySuite.RULE);
+            return has(2, FinallySuite.RULE);
         }
 
         public static boolean parse(ParseTree t, int lv) {
@@ -131,8 +131,7 @@ public final class TryStmt extends NodeWrapper {
             var r = TryStmt311.parse(t, lv + 1);
             if (r) while (true) {
                 var p = t.position();
-                if (!TryStmt311.parse(t, lv + 1)) break;
-                if (t.guardLoopExit(p)) break;
+                if (!TryStmt311.parse(t, lv + 1) || t.loopGuard(p)) break;
             }
             t.exitCollection();
             return r;
@@ -155,11 +154,11 @@ public final class TryStmt extends NodeWrapper {
         }
 
         public ExceptClause exceptClause() {
-            return ExceptClause.of(getItem(0));
+            return ExceptClause.of(get(0));
         }
 
         public Suite suite() {
-            return Suite.of(getItem(1));
+            return Suite.of(get(1));
         }
 
         public static boolean parse(ParseTree t, int lv) {

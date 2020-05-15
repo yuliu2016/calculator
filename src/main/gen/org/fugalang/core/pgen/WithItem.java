@@ -19,15 +19,15 @@ public final class WithItem extends NodeWrapper {
     }
 
     public Expr expr() {
-        return Expr.of(getItem(0));
+        return Expr.of(get(0));
     }
 
     public WithItem2 withItem2() {
-        return WithItem2.of(getItem(1));
+        return WithItem2.of(get(1));
     }
 
     public boolean hasWithItem2() {
-        return hasItemOfRule(1, WithItem2.RULE);
+        return has(1, WithItem2.RULE);
     }
 
     public static boolean parse(ParseTree t, int lv) {
@@ -56,15 +56,15 @@ public final class WithItem extends NodeWrapper {
         }
 
         public String name() {
-            return getItemOfType(1, TokenType.NAME);
+            return get(1, TokenType.NAME);
         }
 
         public static boolean parse(ParseTree t, int lv) {
             if (!ParserUtil.recursionGuard(lv, RULE)) return false;
             t.enter(lv, RULE);
             boolean r;
-            r = t.consumeToken("as");
-            r = r && t.consumeToken(TokenType.NAME);
+            r = t.consume("as");
+            r = r && t.consume(TokenType.NAME);
             t.exit(r);
             return r;
         }

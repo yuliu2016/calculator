@@ -21,7 +21,7 @@ public final class EvalInput extends NodeWrapper {
     }
 
     public Exprlist exprlist() {
-        return Exprlist.of(getItem(0));
+        return Exprlist.of(get(0));
     }
 
     public List<String> newlineList() {
@@ -29,7 +29,7 @@ public final class EvalInput extends NodeWrapper {
     }
 
     public String endmarker() {
-        return getItemOfType(2, TokenType.ENDMARKER);
+        return get(2, TokenType.ENDMARKER);
     }
 
     public static boolean parse(ParseTree t, int lv) {
@@ -38,7 +38,7 @@ public final class EvalInput extends NodeWrapper {
         boolean r;
         r = Exprlist.parse(t, lv + 1);
         if (r) parseNewlineList(t, lv);
-        r = r && t.consumeToken(TokenType.ENDMARKER);
+        r = r && t.consume(TokenType.ENDMARKER);
         t.exit(r);
         return r;
     }
@@ -47,8 +47,7 @@ public final class EvalInput extends NodeWrapper {
         t.enterCollection();
         while (true) {
             var p = t.position();
-            if (!t.consumeToken(TokenType.NEWLINE)) break;
-            if (t.guardLoopExit(p)) break;
+            if (!t.consume(TokenType.NEWLINE) || t.loopGuard(p)) break;
         }
         t.exitCollection();
     }

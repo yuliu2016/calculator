@@ -18,20 +18,20 @@ public final class Kwargs extends NodeWrapper {
     }
 
     public TypedArg typedArg() {
-        return TypedArg.of(getItem(1));
+        return TypedArg.of(get(1));
     }
 
-    public boolean isTokenComma() {
-        return getBoolean(2);
+    public boolean isComma() {
+        return is(2);
     }
 
     public static boolean parse(ParseTree t, int lv) {
         if (!ParserUtil.recursionGuard(lv, RULE)) return false;
         t.enter(lv, RULE);
         boolean r;
-        r = t.consumeToken("**");
+        r = t.consume("**");
         r = r && TypedArg.parse(t, lv + 1);
-        if (r) t.consumeToken(",");
+        if (r) t.consume(",");
         t.exit(r);
         return r;
     }
