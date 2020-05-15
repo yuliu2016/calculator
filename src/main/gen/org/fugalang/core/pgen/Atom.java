@@ -34,15 +34,13 @@ public final class Atom extends NodeWrapper {
         return hasItemOfRule(1, SimpleAtom.RULE);
     }
 
-    public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        parseTree.enter(level, RULE);
-        boolean result;
-
-        result = CompoundAtom.parse(parseTree, level + 1);
-        result = result || SimpleAtom.parse(parseTree, level + 1);
-
-        parseTree.exit(result);
-        return result;
+    public static boolean parse(ParseTree t, int l) {
+        if (!ParserUtil.recursionGuard(l, RULE)) return false;
+        t.enter(l, RULE);
+        boolean r;
+        r = CompoundAtom.parse(t, l + 1);
+        r = r || SimpleAtom.parse(t, l + 1);
+        t.exit(r);
+        return r;
     }
 }

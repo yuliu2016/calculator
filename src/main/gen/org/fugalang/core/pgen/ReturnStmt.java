@@ -26,15 +26,13 @@ public final class ReturnStmt extends NodeWrapper {
         return hasItemOfRule(1, ExprlistStar.RULE);
     }
 
-    public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        parseTree.enter(level, RULE);
-        boolean result;
-
-        result = parseTree.consumeToken("return");
-        if (result) ExprlistStar.parse(parseTree, level + 1);
-
-        parseTree.exit(result);
-        return result;
+    public static boolean parse(ParseTree t, int l) {
+        if (!ParserUtil.recursionGuard(l, RULE)) return false;
+        t.enter(l, RULE);
+        boolean r;
+        r = t.consumeToken("return");
+        if (r) ExprlistStar.parse(t, l + 1);
+        t.exit(r);
+        return r;
     }
 }

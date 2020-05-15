@@ -28,26 +28,24 @@ public final class Term extends NodeWrapper {
         return getList(1, Term2::of);
     }
 
-    public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        parseTree.enter(level, RULE);
-        boolean result;
-
-        result = Pipeline.parse(parseTree, level + 1);
-        if (result) parseTerm2List(parseTree, level);
-
-        parseTree.exit(result);
-        return result;
+    public static boolean parse(ParseTree t, int l) {
+        if (!ParserUtil.recursionGuard(l, RULE)) return false;
+        t.enter(l, RULE);
+        boolean r;
+        r = Pipeline.parse(t, l + 1);
+        if (r) parseTerm2List(t, l);
+        t.exit(r);
+        return r;
     }
 
-    private static void parseTerm2List(ParseTree parseTree, int level) {
-        parseTree.enterCollection();
+    private static void parseTerm2List(ParseTree t, int l) {
+        t.enterCollection();
         while (true) {
-            var pos = parseTree.position();
-            if (!Term2.parse(parseTree, level + 1)) break;
-            if (parseTree.guardLoopExit(pos)) break;
+            var p = t.position();
+            if (!Term2.parse(t, l + 1)) break;
+            if (t.guardLoopExit(p)) break;
         }
-        parseTree.exitCollection();
+        t.exitCollection();
     }
 
     /**
@@ -74,16 +72,14 @@ public final class Term extends NodeWrapper {
             return Pipeline.of(getItem(1));
         }
 
-        public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            parseTree.enter(level, RULE);
-            boolean result;
-
-            result = Term21.parse(parseTree, level + 1);
-            result = result && Pipeline.parse(parseTree, level + 1);
-
-            parseTree.exit(result);
-            return result;
+        public static boolean parse(ParseTree t, int l) {
+            if (!ParserUtil.recursionGuard(l, RULE)) return false;
+            t.enter(l, RULE);
+            boolean r;
+            r = Term21.parse(t, l + 1);
+            r = r && Pipeline.parse(t, l + 1);
+            t.exit(r);
+            return r;
         }
     }
 
@@ -123,19 +119,17 @@ public final class Term extends NodeWrapper {
             return getBoolean(4);
         }
 
-        public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            parseTree.enter(level, RULE);
-            boolean result;
-
-            result = parseTree.consumeToken("*");
-            result = result || parseTree.consumeToken("@");
-            result = result || parseTree.consumeToken("/");
-            result = result || parseTree.consumeToken("%");
-            result = result || parseTree.consumeToken("//");
-
-            parseTree.exit(result);
-            return result;
+        public static boolean parse(ParseTree t, int l) {
+            if (!ParserUtil.recursionGuard(l, RULE)) return false;
+            t.enter(l, RULE);
+            boolean r;
+            r = t.consumeToken("*");
+            r = r || t.consumeToken("@");
+            r = r || t.consumeToken("/");
+            r = r || t.consumeToken("%");
+            r = r || t.consumeToken("//");
+            t.exit(r);
+            return r;
         }
     }
 }

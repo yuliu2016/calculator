@@ -35,16 +35,14 @@ public final class Atom extends NodeWrapper {
         return hasItemOfType(1, TokenType.NUMBER);
     }
 
-    public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        parseTree.enter(level, RULE);
-        boolean result;
-
-        result = Atom1.parse(parseTree, level + 1);
-        result = result || parseTree.consumeToken(TokenType.NUMBER);
-
-        parseTree.exit(result);
-        return result;
+    public static boolean parse(ParseTree t, int l) {
+        if (!ParserUtil.recursionGuard(l, RULE)) return false;
+        t.enter(l, RULE);
+        boolean r;
+        r = Atom1.parse(t, l + 1);
+        r = r || t.consumeToken(TokenType.NUMBER);
+        t.exit(r);
+        return r;
     }
 
     /**
@@ -67,17 +65,15 @@ public final class Atom extends NodeWrapper {
             return Sum.of(getItem(1));
         }
 
-        public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            parseTree.enter(level, RULE);
-            boolean result;
-
-            result = parseTree.consumeToken("(");
-            result = result && Sum.parse(parseTree, level + 1);
-            result = result && parseTree.consumeToken(")");
-
-            parseTree.exit(result);
-            return result;
+        public static boolean parse(ParseTree t, int l) {
+            if (!ParserUtil.recursionGuard(l, RULE)) return false;
+            t.enter(l, RULE);
+            boolean r;
+            r = t.consumeToken("(");
+            r = r && Sum.parse(t, l + 1);
+            r = r && t.consumeToken(")");
+            t.exit(r);
+            return r;
         }
     }
 }

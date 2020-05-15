@@ -33,27 +33,25 @@ public final class Rules extends NodeWrapper {
         return getList(1, SingleRule::of);
     }
 
-    public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        parseTree.enter(level, RULE);
-        boolean result;
-
-        parseTree.consumeToken(TokenType.NEWLINE);
-        result = parseSingleRuleList(parseTree, level);
-
-        parseTree.exit(result);
-        return result;
+    public static boolean parse(ParseTree t, int l) {
+        if (!ParserUtil.recursionGuard(l, RULE)) return false;
+        t.enter(l, RULE);
+        boolean r;
+        t.consumeToken(TokenType.NEWLINE);
+        r = parseSingleRuleList(t, l);
+        t.exit(r);
+        return r;
     }
 
-    private static boolean parseSingleRuleList(ParseTree parseTree, int level) {
-        parseTree.enterCollection();
-        var result = SingleRule.parse(parseTree, level + 1);
-        if (result) while (true) {
-            var pos = parseTree.position();
-            if (!SingleRule.parse(parseTree, level + 1)) break;
-            if (parseTree.guardLoopExit(pos)) break;
+    private static boolean parseSingleRuleList(ParseTree t, int l) {
+        t.enterCollection();
+        var r = SingleRule.parse(t, l + 1);
+        if (r) while (true) {
+            var p = t.position();
+            if (!SingleRule.parse(t, l + 1)) break;
+            if (t.guardLoopExit(p)) break;
         }
-        parseTree.exitCollection();
-        return result;
+        t.exitCollection();
+        return r;
     }
 }

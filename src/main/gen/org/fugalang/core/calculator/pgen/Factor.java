@@ -34,16 +34,14 @@ public final class Factor extends NodeWrapper {
         return hasItemOfRule(1, Power.RULE);
     }
 
-    public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        parseTree.enter(level, RULE);
-        boolean result;
-
-        result = Factor1.parse(parseTree, level + 1);
-        result = result || Power.parse(parseTree, level + 1);
-
-        parseTree.exit(result);
-        return result;
+    public static boolean parse(ParseTree t, int l) {
+        if (!ParserUtil.recursionGuard(l, RULE)) return false;
+        t.enter(l, RULE);
+        boolean r;
+        r = Factor1.parse(t, l + 1);
+        r = r || Power.parse(t, l + 1);
+        t.exit(r);
+        return r;
     }
 
     /**
@@ -70,16 +68,14 @@ public final class Factor extends NodeWrapper {
             return Factor.of(getItem(1));
         }
 
-        public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            parseTree.enter(level, RULE);
-            boolean result;
-
-            result = Factor11.parse(parseTree, level + 1);
-            result = result && Factor.parse(parseTree, level + 1);
-
-            parseTree.exit(result);
-            return result;
+        public static boolean parse(ParseTree t, int l) {
+            if (!ParserUtil.recursionGuard(l, RULE)) return false;
+            t.enter(l, RULE);
+            boolean r;
+            r = Factor11.parse(t, l + 1);
+            r = r && Factor.parse(t, l + 1);
+            t.exit(r);
+            return r;
         }
     }
 
@@ -111,17 +107,15 @@ public final class Factor extends NodeWrapper {
             return getBoolean(2);
         }
 
-        public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            parseTree.enter(level, RULE);
-            boolean result;
-
-            result = parseTree.consumeToken("+");
-            result = result || parseTree.consumeToken("-");
-            result = result || parseTree.consumeToken("~");
-
-            parseTree.exit(result);
-            return result;
+        public static boolean parse(ParseTree t, int l) {
+            if (!ParserUtil.recursionGuard(l, RULE)) return false;
+            t.enter(l, RULE);
+            boolean r;
+            r = t.consumeToken("+");
+            r = r || t.consumeToken("-");
+            r = r || t.consumeToken("~");
+            t.exit(r);
+            return r;
         }
     }
 }

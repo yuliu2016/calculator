@@ -55,19 +55,17 @@ public final class SimpleAtom extends NodeWrapper {
         return getBoolean(5);
     }
 
-    public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        parseTree.enter(level, RULE);
-        boolean result;
-
-        result = parseTree.consumeToken(TokenType.NAME);
-        result = result || parseTree.consumeToken(TokenType.NUMBER);
-        result = result || parseTree.consumeToken(TokenType.STRING);
-        result = result || parseTree.consumeToken("None");
-        result = result || parseTree.consumeToken("True");
-        result = result || parseTree.consumeToken("False");
-
-        parseTree.exit(result);
-        return result;
+    public static boolean parse(ParseTree t, int l) {
+        if (!ParserUtil.recursionGuard(l, RULE)) return false;
+        t.enter(l, RULE);
+        boolean r;
+        r = t.consumeToken(TokenType.NAME);
+        r = r || t.consumeToken(TokenType.NUMBER);
+        r = r || t.consumeToken(TokenType.STRING);
+        r = r || t.consumeToken("None");
+        r = r || t.consumeToken("True");
+        r = r || t.consumeToken("False");
+        t.exit(r);
+        return r;
     }
 }

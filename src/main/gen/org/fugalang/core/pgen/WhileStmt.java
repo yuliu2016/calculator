@@ -34,17 +34,15 @@ public final class WhileStmt extends NodeWrapper {
         return hasItemOfRule(3, ElseSuite.RULE);
     }
 
-    public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        parseTree.enter(level, RULE);
-        boolean result;
-
-        result = parseTree.consumeToken("while");
-        result = result && NamedExpr.parse(parseTree, level + 1);
-        result = result && Suite.parse(parseTree, level + 1);
-        if (result) ElseSuite.parse(parseTree, level + 1);
-
-        parseTree.exit(result);
-        return result;
+    public static boolean parse(ParseTree t, int l) {
+        if (!ParserUtil.recursionGuard(l, RULE)) return false;
+        t.enter(l, RULE);
+        boolean r;
+        r = t.consumeToken("while");
+        r = r && NamedExpr.parse(t, l + 1);
+        r = r && Suite.parse(t, l + 1);
+        if (r) ElseSuite.parse(t, l + 1);
+        t.exit(r);
+        return r;
     }
 }

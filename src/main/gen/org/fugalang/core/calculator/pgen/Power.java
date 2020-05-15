@@ -30,16 +30,14 @@ public final class Power extends NodeWrapper {
         return hasItemOfRule(1, Power2.RULE);
     }
 
-    public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        parseTree.enter(level, RULE);
-        boolean result;
-
-        result = Atom.parse(parseTree, level + 1);
-        if (result) Power2.parse(parseTree, level + 1);
-
-        parseTree.exit(result);
-        return result;
+    public static boolean parse(ParseTree t, int l) {
+        if (!ParserUtil.recursionGuard(l, RULE)) return false;
+        t.enter(l, RULE);
+        boolean r;
+        r = Atom.parse(t, l + 1);
+        if (r) Power2.parse(t, l + 1);
+        t.exit(r);
+        return r;
     }
 
     /**
@@ -62,16 +60,14 @@ public final class Power extends NodeWrapper {
             return Factor.of(getItem(1));
         }
 
-        public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            parseTree.enter(level, RULE);
-            boolean result;
-
-            result = parseTree.consumeToken("**");
-            result = result && Factor.parse(parseTree, level + 1);
-
-            parseTree.exit(result);
-            return result;
+        public static boolean parse(ParseTree t, int l) {
+            if (!ParserUtil.recursionGuard(l, RULE)) return false;
+            t.enter(l, RULE);
+            boolean r;
+            r = t.consumeToken("**");
+            r = r && Factor.parse(t, l + 1);
+            t.exit(r);
+            return r;
         }
     }
 }

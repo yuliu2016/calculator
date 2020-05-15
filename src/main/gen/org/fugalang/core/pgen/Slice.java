@@ -34,16 +34,14 @@ public final class Slice extends NodeWrapper {
         return hasItemOfRule(1, Slice2.RULE);
     }
 
-    public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        parseTree.enter(level, RULE);
-        boolean result;
-
-        result = Expr.parse(parseTree, level + 1);
-        result = result || Slice2.parse(parseTree, level + 1);
-
-        parseTree.exit(result);
-        return result;
+    public static boolean parse(ParseTree t, int l) {
+        if (!ParserUtil.recursionGuard(l, RULE)) return false;
+        t.enter(l, RULE);
+        boolean r;
+        r = Expr.parse(t, l + 1);
+        r = r || Slice2.parse(t, l + 1);
+        t.exit(r);
+        return r;
     }
 
     /**
@@ -86,18 +84,16 @@ public final class Slice extends NodeWrapper {
             return hasItemOfRule(3, Slice24.RULE);
         }
 
-        public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            parseTree.enter(level, RULE);
-            boolean result;
-
-            Expr.parse(parseTree, level + 1);
-            result = parseTree.consumeToken(":");
-            if (result) Expr.parse(parseTree, level + 1);
-            if (result) Slice24.parse(parseTree, level + 1);
-
-            parseTree.exit(result);
-            return result;
+        public static boolean parse(ParseTree t, int l) {
+            if (!ParserUtil.recursionGuard(l, RULE)) return false;
+            t.enter(l, RULE);
+            boolean r;
+            Expr.parse(t, l + 1);
+            r = t.consumeToken(":");
+            if (r) Expr.parse(t, l + 1);
+            if (r) Slice24.parse(t, l + 1);
+            t.exit(r);
+            return r;
         }
     }
 
@@ -125,16 +121,14 @@ public final class Slice extends NodeWrapper {
             return hasItemOfRule(1, Expr.RULE);
         }
 
-        public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            parseTree.enter(level, RULE);
-            boolean result;
-
-            result = parseTree.consumeToken(":");
-            if (result) Expr.parse(parseTree, level + 1);
-
-            parseTree.exit(result);
-            return result;
+        public static boolean parse(ParseTree t, int l) {
+            if (!ParserUtil.recursionGuard(l, RULE)) return false;
+            t.enter(l, RULE);
+            boolean r;
+            r = t.consumeToken(":");
+            if (r) Expr.parse(t, l + 1);
+            t.exit(r);
+            return r;
         }
     }
 }

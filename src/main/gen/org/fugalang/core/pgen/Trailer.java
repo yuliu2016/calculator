@@ -43,17 +43,15 @@ public final class Trailer extends NodeWrapper {
         return hasItemOfRule(2, Subscript.RULE);
     }
 
-    public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        parseTree.enter(level, RULE);
-        boolean result;
-
-        result = Trailer1.parse(parseTree, level + 1);
-        result = result || Parameters.parse(parseTree, level + 1);
-        result = result || Subscript.parse(parseTree, level + 1);
-
-        parseTree.exit(result);
-        return result;
+    public static boolean parse(ParseTree t, int l) {
+        if (!ParserUtil.recursionGuard(l, RULE)) return false;
+        t.enter(l, RULE);
+        boolean r;
+        r = Trailer1.parse(t, l + 1);
+        r = r || Parameters.parse(t, l + 1);
+        r = r || Subscript.parse(t, l + 1);
+        t.exit(r);
+        return r;
     }
 
     /**
@@ -76,16 +74,14 @@ public final class Trailer extends NodeWrapper {
             return getItemOfType(1, TokenType.NAME);
         }
 
-        public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            parseTree.enter(level, RULE);
-            boolean result;
-
-            result = parseTree.consumeToken(".");
-            result = result && parseTree.consumeToken(TokenType.NAME);
-
-            parseTree.exit(result);
-            return result;
+        public static boolean parse(ParseTree t, int l) {
+            if (!ParserUtil.recursionGuard(l, RULE)) return false;
+            t.enter(l, RULE);
+            boolean r;
+            r = t.consumeToken(".");
+            r = r && t.consumeToken(TokenType.NAME);
+            t.exit(r);
+            return r;
         }
     }
 }

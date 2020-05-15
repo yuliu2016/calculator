@@ -51,18 +51,16 @@ public final class SubRule extends NodeWrapper {
         return hasItemOfType(3, TokenType.STRING);
     }
 
-    public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        parseTree.enter(level, RULE);
-        boolean result;
-
-        result = SubRule1.parse(parseTree, level + 1);
-        result = result || SubRule2.parse(parseTree, level + 1);
-        result = result || parseTree.consumeToken(TokenType.NAME);
-        result = result || parseTree.consumeToken(TokenType.STRING);
-
-        parseTree.exit(result);
-        return result;
+    public static boolean parse(ParseTree t, int l) {
+        if (!ParserUtil.recursionGuard(l, RULE)) return false;
+        t.enter(l, RULE);
+        boolean r;
+        r = SubRule1.parse(t, l + 1);
+        r = r || SubRule2.parse(t, l + 1);
+        r = r || t.consumeToken(TokenType.NAME);
+        r = r || t.consumeToken(TokenType.STRING);
+        t.exit(r);
+        return r;
     }
 
     /**
@@ -85,17 +83,15 @@ public final class SubRule extends NodeWrapper {
             return OrRule.of(getItem(1));
         }
 
-        public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            parseTree.enter(level, RULE);
-            boolean result;
-
-            result = parseTree.consumeToken("(");
-            result = result && OrRule.parse(parseTree, level + 1);
-            result = result && parseTree.consumeToken(")");
-
-            parseTree.exit(result);
-            return result;
+        public static boolean parse(ParseTree t, int l) {
+            if (!ParserUtil.recursionGuard(l, RULE)) return false;
+            t.enter(l, RULE);
+            boolean r;
+            r = t.consumeToken("(");
+            r = r && OrRule.parse(t, l + 1);
+            r = r && t.consumeToken(")");
+            t.exit(r);
+            return r;
         }
     }
 
@@ -119,17 +115,15 @@ public final class SubRule extends NodeWrapper {
             return OrRule.of(getItem(1));
         }
 
-        public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            parseTree.enter(level, RULE);
-            boolean result;
-
-            result = parseTree.consumeToken("[");
-            result = result && OrRule.parse(parseTree, level + 1);
-            result = result && parseTree.consumeToken("]");
-
-            parseTree.exit(result);
-            return result;
+        public static boolean parse(ParseTree t, int l) {
+            if (!ParserUtil.recursionGuard(l, RULE)) return false;
+            t.enter(l, RULE);
+            boolean r;
+            r = t.consumeToken("[");
+            r = r && OrRule.parse(t, l + 1);
+            r = r && t.consumeToken("]");
+            t.exit(r);
+            return r;
         }
     }
 }

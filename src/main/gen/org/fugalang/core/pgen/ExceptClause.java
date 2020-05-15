@@ -27,16 +27,14 @@ public final class ExceptClause extends NodeWrapper {
         return hasItemOfRule(1, ExceptClause2.RULE);
     }
 
-    public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        parseTree.enter(level, RULE);
-        boolean result;
-
-        result = parseTree.consumeToken("except");
-        if (result) ExceptClause2.parse(parseTree, level + 1);
-
-        parseTree.exit(result);
-        return result;
+    public static boolean parse(ParseTree t, int l) {
+        if (!ParserUtil.recursionGuard(l, RULE)) return false;
+        t.enter(l, RULE);
+        boolean r;
+        r = t.consumeToken("except");
+        if (r) ExceptClause2.parse(t, l + 1);
+        t.exit(r);
+        return r;
     }
 
     /**
@@ -67,16 +65,14 @@ public final class ExceptClause extends NodeWrapper {
             return hasItemOfRule(1, ExceptClause22.RULE);
         }
 
-        public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            parseTree.enter(level, RULE);
-            boolean result;
-
-            result = Expr.parse(parseTree, level + 1);
-            if (result) ExceptClause22.parse(parseTree, level + 1);
-
-            parseTree.exit(result);
-            return result;
+        public static boolean parse(ParseTree t, int l) {
+            if (!ParserUtil.recursionGuard(l, RULE)) return false;
+            t.enter(l, RULE);
+            boolean r;
+            r = Expr.parse(t, l + 1);
+            if (r) ExceptClause22.parse(t, l + 1);
+            t.exit(r);
+            return r;
         }
     }
 
@@ -100,16 +96,14 @@ public final class ExceptClause extends NodeWrapper {
             return getItemOfType(1, TokenType.NAME);
         }
 
-        public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            parseTree.enter(level, RULE);
-            boolean result;
-
-            result = parseTree.consumeToken("as");
-            result = result && parseTree.consumeToken(TokenType.NAME);
-
-            parseTree.exit(result);
-            return result;
+        public static boolean parse(ParseTree t, int l) {
+            if (!ParserUtil.recursionGuard(l, RULE)) return false;
+            t.enter(l, RULE);
+            boolean r;
+            r = t.consumeToken("as");
+            r = r && t.consumeToken(TokenType.NAME);
+            t.exit(r);
+            return r;
         }
     }
 }

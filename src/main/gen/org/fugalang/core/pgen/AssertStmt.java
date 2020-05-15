@@ -30,17 +30,15 @@ public final class AssertStmt extends NodeWrapper {
         return hasItemOfRule(2, AssertStmt3.RULE);
     }
 
-    public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        parseTree.enter(level, RULE);
-        boolean result;
-
-        result = parseTree.consumeToken("assert");
-        result = result && Expr.parse(parseTree, level + 1);
-        if (result) AssertStmt3.parse(parseTree, level + 1);
-
-        parseTree.exit(result);
-        return result;
+    public static boolean parse(ParseTree t, int l) {
+        if (!ParserUtil.recursionGuard(l, RULE)) return false;
+        t.enter(l, RULE);
+        boolean r;
+        r = t.consumeToken("assert");
+        r = r && Expr.parse(t, l + 1);
+        if (r) AssertStmt3.parse(t, l + 1);
+        t.exit(r);
+        return r;
     }
 
     /**
@@ -63,16 +61,14 @@ public final class AssertStmt extends NodeWrapper {
             return Expr.of(getItem(1));
         }
 
-        public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            parseTree.enter(level, RULE);
-            boolean result;
-
-            result = parseTree.consumeToken(",");
-            result = result && Expr.parse(parseTree, level + 1);
-
-            parseTree.exit(result);
-            return result;
+        public static boolean parse(ParseTree t, int l) {
+            if (!ParserUtil.recursionGuard(l, RULE)) return false;
+            t.enter(l, RULE);
+            boolean r;
+            r = t.consumeToken(",");
+            r = r && Expr.parse(t, l + 1);
+            t.exit(r);
+            return r;
         }
     }
 }

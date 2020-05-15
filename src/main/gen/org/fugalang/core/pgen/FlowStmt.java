@@ -50,17 +50,15 @@ public final class FlowStmt extends NodeWrapper {
         return hasItemOfRule(3, RaiseStmt.RULE);
     }
 
-    public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        parseTree.enter(level, RULE);
-        boolean result;
-
-        result = BreakStmt.parse(parseTree, level + 1);
-        result = result || ContinueStmt.parse(parseTree, level + 1);
-        result = result || ReturnStmt.parse(parseTree, level + 1);
-        result = result || RaiseStmt.parse(parseTree, level + 1);
-
-        parseTree.exit(result);
-        return result;
+    public static boolean parse(ParseTree t, int l) {
+        if (!ParserUtil.recursionGuard(l, RULE)) return false;
+        t.enter(l, RULE);
+        boolean r;
+        r = BreakStmt.parse(t, l + 1);
+        r = r || ContinueStmt.parse(t, l + 1);
+        r = r || ReturnStmt.parse(t, l + 1);
+        r = r || RaiseStmt.parse(t, l + 1);
+        t.exit(r);
+        return r;
     }
 }

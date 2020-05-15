@@ -30,16 +30,14 @@ public final class CompIf extends NodeWrapper {
         return hasItemOfRule(2, CompIter.RULE);
     }
 
-    public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        parseTree.enter(level, RULE);
-        boolean result;
-
-        result = parseTree.consumeToken("if");
-        result = result && Expr.parse(parseTree, level + 1);
-        if (result) CompIter.parse(parseTree, level + 1);
-
-        parseTree.exit(result);
-        return result;
+    public static boolean parse(ParseTree t, int l) {
+        if (!ParserUtil.recursionGuard(l, RULE)) return false;
+        t.enter(l, RULE);
+        boolean r;
+        r = t.consumeToken("if");
+        r = r && Expr.parse(t, l + 1);
+        if (r) CompIter.parse(t, l + 1);
+        t.exit(r);
+        return r;
     }
 }

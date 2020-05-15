@@ -42,17 +42,15 @@ public final class CompoundAtom extends NodeWrapper {
         return hasItemOfRule(2, CompoundAtom3.RULE);
     }
 
-    public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        parseTree.enter(level, RULE);
-        boolean result;
-
-        result = CompoundAtom1.parse(parseTree, level + 1);
-        result = result || CompoundAtom2.parse(parseTree, level + 1);
-        result = result || CompoundAtom3.parse(parseTree, level + 1);
-
-        parseTree.exit(result);
-        return result;
+    public static boolean parse(ParseTree t, int l) {
+        if (!ParserUtil.recursionGuard(l, RULE)) return false;
+        t.enter(l, RULE);
+        boolean r;
+        r = CompoundAtom1.parse(t, l + 1);
+        r = r || CompoundAtom2.parse(t, l + 1);
+        r = r || CompoundAtom3.parse(t, l + 1);
+        t.exit(r);
+        return r;
     }
 
     /**
@@ -79,17 +77,15 @@ public final class CompoundAtom extends NodeWrapper {
             return hasItemOfRule(1, NamedExprList.RULE);
         }
 
-        public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            parseTree.enter(level, RULE);
-            boolean result;
-
-            result = parseTree.consumeToken("(");
-            if (result) NamedExprList.parse(parseTree, level + 1);
-            result = result && parseTree.consumeToken(")");
-
-            parseTree.exit(result);
-            return result;
+        public static boolean parse(ParseTree t, int l) {
+            if (!ParserUtil.recursionGuard(l, RULE)) return false;
+            t.enter(l, RULE);
+            boolean r;
+            r = t.consumeToken("(");
+            if (r) NamedExprList.parse(t, l + 1);
+            r = r && t.consumeToken(")");
+            t.exit(r);
+            return r;
         }
     }
 
@@ -117,17 +113,15 @@ public final class CompoundAtom extends NodeWrapper {
             return hasItemOfRule(1, NamedExprList.RULE);
         }
 
-        public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            parseTree.enter(level, RULE);
-            boolean result;
-
-            result = parseTree.consumeToken("[");
-            if (result) NamedExprList.parse(parseTree, level + 1);
-            result = result && parseTree.consumeToken("]");
-
-            parseTree.exit(result);
-            return result;
+        public static boolean parse(ParseTree t, int l) {
+            if (!ParserUtil.recursionGuard(l, RULE)) return false;
+            t.enter(l, RULE);
+            boolean r;
+            r = t.consumeToken("[");
+            if (r) NamedExprList.parse(t, l + 1);
+            r = r && t.consumeToken("]");
+            t.exit(r);
+            return r;
         }
     }
 
@@ -155,17 +149,15 @@ public final class CompoundAtom extends NodeWrapper {
             return hasItemOfRule(1, DictOrSet.RULE);
         }
 
-        public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            parseTree.enter(level, RULE);
-            boolean result;
-
-            result = parseTree.consumeToken("{");
-            if (result) DictOrSet.parse(parseTree, level + 1);
-            result = result && parseTree.consumeToken("}");
-
-            parseTree.exit(result);
-            return result;
+        public static boolean parse(ParseTree t, int l) {
+            if (!ParserUtil.recursionGuard(l, RULE)) return false;
+            t.enter(l, RULE);
+            boolean r;
+            r = t.consumeToken("{");
+            if (r) DictOrSet.parse(t, l + 1);
+            r = r && t.consumeToken("}");
+            t.exit(r);
+            return r;
         }
     }
 }

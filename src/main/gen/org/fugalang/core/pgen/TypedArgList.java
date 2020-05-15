@@ -42,16 +42,14 @@ public final class TypedArgList extends NodeWrapper {
         return hasItemOfRule(2, FullArgList.RULE);
     }
 
-    public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        parseTree.enter(level, RULE);
-        boolean result;
-
-        result = Kwargs.parse(parseTree, level + 1);
-        result = result || ArgsKwargs.parse(parseTree, level + 1);
-        result = result || FullArgList.parse(parseTree, level + 1);
-
-        parseTree.exit(result);
-        return result;
+    public static boolean parse(ParseTree t, int l) {
+        if (!ParserUtil.recursionGuard(l, RULE)) return false;
+        t.enter(l, RULE);
+        boolean r;
+        r = Kwargs.parse(t, l + 1);
+        r = r || ArgsKwargs.parse(t, l + 1);
+        r = r || FullArgList.parse(t, l + 1);
+        t.exit(r);
+        return r;
     }
 }

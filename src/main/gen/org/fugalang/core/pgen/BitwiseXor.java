@@ -28,26 +28,24 @@ public final class BitwiseXor extends NodeWrapper {
         return getList(1, BitwiseXor2::of);
     }
 
-    public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        parseTree.enter(level, RULE);
-        boolean result;
-
-        result = BitwiseAnd.parse(parseTree, level + 1);
-        if (result) parseBitwiseXor2List(parseTree, level);
-
-        parseTree.exit(result);
-        return result;
+    public static boolean parse(ParseTree t, int l) {
+        if (!ParserUtil.recursionGuard(l, RULE)) return false;
+        t.enter(l, RULE);
+        boolean r;
+        r = BitwiseAnd.parse(t, l + 1);
+        if (r) parseBitwiseXor2List(t, l);
+        t.exit(r);
+        return r;
     }
 
-    private static void parseBitwiseXor2List(ParseTree parseTree, int level) {
-        parseTree.enterCollection();
+    private static void parseBitwiseXor2List(ParseTree t, int l) {
+        t.enterCollection();
         while (true) {
-            var pos = parseTree.position();
-            if (!BitwiseXor2.parse(parseTree, level + 1)) break;
-            if (parseTree.guardLoopExit(pos)) break;
+            var p = t.position();
+            if (!BitwiseXor2.parse(t, l + 1)) break;
+            if (t.guardLoopExit(p)) break;
         }
-        parseTree.exitCollection();
+        t.exitCollection();
     }
 
     /**
@@ -70,16 +68,14 @@ public final class BitwiseXor extends NodeWrapper {
             return BitwiseAnd.of(getItem(1));
         }
 
-        public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            parseTree.enter(level, RULE);
-            boolean result;
-
-            result = parseTree.consumeToken("^");
-            result = result && BitwiseAnd.parse(parseTree, level + 1);
-
-            parseTree.exit(result);
-            return result;
+        public static boolean parse(ParseTree t, int l) {
+            if (!ParserUtil.recursionGuard(l, RULE)) return false;
+            t.enter(l, RULE);
+            boolean r;
+            r = t.consumeToken("^");
+            r = r && BitwiseAnd.parse(t, l + 1);
+            t.exit(r);
+            return r;
         }
     }
 }

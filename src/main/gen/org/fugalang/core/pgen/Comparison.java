@@ -28,26 +28,24 @@ public final class Comparison extends NodeWrapper {
         return getList(1, Comparison2::of);
     }
 
-    public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        parseTree.enter(level, RULE);
-        boolean result;
-
-        result = BitwiseOr.parse(parseTree, level + 1);
-        if (result) parseComparison2List(parseTree, level);
-
-        parseTree.exit(result);
-        return result;
+    public static boolean parse(ParseTree t, int l) {
+        if (!ParserUtil.recursionGuard(l, RULE)) return false;
+        t.enter(l, RULE);
+        boolean r;
+        r = BitwiseOr.parse(t, l + 1);
+        if (r) parseComparison2List(t, l);
+        t.exit(r);
+        return r;
     }
 
-    private static void parseComparison2List(ParseTree parseTree, int level) {
-        parseTree.enterCollection();
+    private static void parseComparison2List(ParseTree t, int l) {
+        t.enterCollection();
         while (true) {
-            var pos = parseTree.position();
-            if (!Comparison2.parse(parseTree, level + 1)) break;
-            if (parseTree.guardLoopExit(pos)) break;
+            var p = t.position();
+            if (!Comparison2.parse(t, l + 1)) break;
+            if (t.guardLoopExit(p)) break;
         }
-        parseTree.exitCollection();
+        t.exitCollection();
     }
 
     /**
@@ -74,16 +72,14 @@ public final class Comparison extends NodeWrapper {
             return BitwiseOr.of(getItem(1));
         }
 
-        public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            parseTree.enter(level, RULE);
-            boolean result;
-
-            result = CompOp.parse(parseTree, level + 1);
-            result = result && BitwiseOr.parse(parseTree, level + 1);
-
-            parseTree.exit(result);
-            return result;
+        public static boolean parse(ParseTree t, int l) {
+            if (!ParserUtil.recursionGuard(l, RULE)) return false;
+            t.enter(l, RULE);
+            boolean r;
+            r = CompOp.parse(t, l + 1);
+            r = r && BitwiseOr.parse(t, l + 1);
+            t.exit(r);
+            return r;
         }
     }
 }

@@ -42,17 +42,15 @@ public final class Expr extends NodeWrapper {
         return hasItemOfRule(2, Disjunction.RULE);
     }
 
-    public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        parseTree.enter(level, RULE);
-        boolean result;
-
-        result = Expr1.parse(parseTree, level + 1);
-        result = result || Funcdef.parse(parseTree, level + 1);
-        result = result || Disjunction.parse(parseTree, level + 1);
-
-        parseTree.exit(result);
-        return result;
+    public static boolean parse(ParseTree t, int l) {
+        if (!ParserUtil.recursionGuard(l, RULE)) return false;
+        t.enter(l, RULE);
+        boolean r;
+        r = Expr1.parse(t, l + 1);
+        r = r || Funcdef.parse(t, l + 1);
+        r = r || Disjunction.parse(t, l + 1);
+        t.exit(r);
+        return r;
     }
 
     /**
@@ -83,20 +81,18 @@ public final class Expr extends NodeWrapper {
             return Expr.of(getItem(5));
         }
 
-        public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            parseTree.enter(level, RULE);
-            boolean result;
-
-            result = parseTree.consumeToken("if");
-            result = result && Disjunction.parse(parseTree, level + 1);
-            result = result && parseTree.consumeToken("?");
-            result = result && Disjunction.parse(parseTree, level + 1);
-            result = result && parseTree.consumeToken("else");
-            result = result && Expr.parse(parseTree, level + 1);
-
-            parseTree.exit(result);
-            return result;
+        public static boolean parse(ParseTree t, int l) {
+            if (!ParserUtil.recursionGuard(l, RULE)) return false;
+            t.enter(l, RULE);
+            boolean r;
+            r = t.consumeToken("if");
+            r = r && Disjunction.parse(t, l + 1);
+            r = r && t.consumeToken("?");
+            r = r && Disjunction.parse(t, l + 1);
+            r = r && t.consumeToken("else");
+            r = r && Expr.parse(t, l + 1);
+            t.exit(r);
+            return r;
         }
     }
 }

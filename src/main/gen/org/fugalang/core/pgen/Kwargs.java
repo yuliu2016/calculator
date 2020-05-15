@@ -26,16 +26,14 @@ public final class Kwargs extends NodeWrapper {
         return getBoolean(2);
     }
 
-    public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        parseTree.enter(level, RULE);
-        boolean result;
-
-        result = parseTree.consumeToken("**");
-        result = result && TypedArg.parse(parseTree, level + 1);
-        if (result) parseTree.consumeToken(",");
-
-        parseTree.exit(result);
-        return result;
+    public static boolean parse(ParseTree t, int l) {
+        if (!ParserUtil.recursionGuard(l, RULE)) return false;
+        t.enter(l, RULE);
+        boolean r;
+        r = t.consumeToken("**");
+        r = r && TypedArg.parse(t, l + 1);
+        if (r) t.consumeToken(",");
+        t.exit(r);
+        return r;
     }
 }

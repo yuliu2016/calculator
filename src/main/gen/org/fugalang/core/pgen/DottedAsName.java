@@ -31,16 +31,14 @@ public final class DottedAsName extends NodeWrapper {
         return hasItemOfRule(1, DottedAsName2.RULE);
     }
 
-    public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        parseTree.enter(level, RULE);
-        boolean result;
-
-        result = DottedName.parse(parseTree, level + 1);
-        if (result) DottedAsName2.parse(parseTree, level + 1);
-
-        parseTree.exit(result);
-        return result;
+    public static boolean parse(ParseTree t, int l) {
+        if (!ParserUtil.recursionGuard(l, RULE)) return false;
+        t.enter(l, RULE);
+        boolean r;
+        r = DottedName.parse(t, l + 1);
+        if (r) DottedAsName2.parse(t, l + 1);
+        t.exit(r);
+        return r;
     }
 
     /**
@@ -63,16 +61,14 @@ public final class DottedAsName extends NodeWrapper {
             return getItemOfType(1, TokenType.NAME);
         }
 
-        public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            parseTree.enter(level, RULE);
-            boolean result;
-
-            result = parseTree.consumeToken("as");
-            result = result && parseTree.consumeToken(TokenType.NAME);
-
-            parseTree.exit(result);
-            return result;
+        public static boolean parse(ParseTree t, int l) {
+            if (!ParserUtil.recursionGuard(l, RULE)) return false;
+            t.enter(l, RULE);
+            boolean r;
+            r = t.consumeToken("as");
+            r = r && t.consumeToken(TokenType.NAME);
+            t.exit(r);
+            return r;
         }
     }
 }

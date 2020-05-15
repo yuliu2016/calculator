@@ -29,26 +29,24 @@ public final class FileInput extends NodeWrapper {
         return getItemOfType(1, TokenType.ENDMARKER);
     }
 
-    public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        parseTree.enter(level, RULE);
-        boolean result;
-
-        parseFileInput1List(parseTree, level);
-        result = parseTree.consumeToken(TokenType.ENDMARKER);
-
-        parseTree.exit(result);
-        return result;
+    public static boolean parse(ParseTree t, int l) {
+        if (!ParserUtil.recursionGuard(l, RULE)) return false;
+        t.enter(l, RULE);
+        boolean r;
+        parseFileInput1List(t, l);
+        r = t.consumeToken(TokenType.ENDMARKER);
+        t.exit(r);
+        return r;
     }
 
-    private static void parseFileInput1List(ParseTree parseTree, int level) {
-        parseTree.enterCollection();
+    private static void parseFileInput1List(ParseTree t, int l) {
+        t.enterCollection();
         while (true) {
-            var pos = parseTree.position();
-            if (!FileInput1.parse(parseTree, level + 1)) break;
-            if (parseTree.guardLoopExit(pos)) break;
+            var p = t.position();
+            if (!FileInput1.parse(t, l + 1)) break;
+            if (t.guardLoopExit(p)) break;
         }
-        parseTree.exitCollection();
+        t.exitCollection();
     }
 
     /**
@@ -83,16 +81,14 @@ public final class FileInput extends NodeWrapper {
             return hasItemOfRule(1, Stmt.RULE);
         }
 
-        public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            parseTree.enter(level, RULE);
-            boolean result;
-
-            result = parseTree.consumeToken(TokenType.NEWLINE);
-            result = result || Stmt.parse(parseTree, level + 1);
-
-            parseTree.exit(result);
-            return result;
+        public static boolean parse(ParseTree t, int l) {
+            if (!ParserUtil.recursionGuard(l, RULE)) return false;
+            t.enter(l, RULE);
+            boolean r;
+            r = t.consumeToken(TokenType.NEWLINE);
+            r = r || Stmt.parse(t, l + 1);
+            t.exit(r);
+            return r;
         }
     }
 }

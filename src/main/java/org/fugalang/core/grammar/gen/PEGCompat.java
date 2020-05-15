@@ -8,7 +8,6 @@ import org.fugalang.core.grammar.util.FirstAndMore;
 
 import java.util.stream.Collectors;
 
-@SuppressWarnings("unused")
 public class PEGCompat {
     public static String constructString(OrRule orRule) {
         return constructString(orRule.andRule()) + orRule
@@ -74,7 +73,6 @@ public class PEGCompat {
     }
 
     public static String getSubruleString(SubRule subRule) {
-//        return subRule.token();
         return subRule.hasName() ? subRule.name() :
                 subRule.hasString() ? subRule.string() : null;
     }

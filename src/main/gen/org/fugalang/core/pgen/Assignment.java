@@ -36,17 +36,15 @@ public final class Assignment extends NodeWrapper {
         return hasItemOfRule(2, Assignment3.RULE);
     }
 
-    public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        parseTree.enter(level, RULE);
-        boolean result;
-
-        parseTree.consumeToken("/");
-        result = ExprlistStar.parse(parseTree, level + 1);
-        if (result) Assignment3.parse(parseTree, level + 1);
-
-        parseTree.exit(result);
-        return result;
+    public static boolean parse(ParseTree t, int l) {
+        if (!ParserUtil.recursionGuard(l, RULE)) return false;
+        t.enter(l, RULE);
+        boolean r;
+        t.consumeToken("/");
+        r = ExprlistStar.parse(t, l + 1);
+        if (r) Assignment3.parse(t, l + 1);
+        t.exit(r);
+        return r;
     }
 
     /**
@@ -85,29 +83,27 @@ public final class Assignment extends NodeWrapper {
             return hasItemOfRule(2, Assignment33.RULE);
         }
 
-        public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            parseTree.enter(level, RULE);
-            boolean result;
-
-            result = Annassign.parse(parseTree, level + 1);
-            result = result || parseAssignment32List(parseTree, level);
-            result = result || Assignment33.parse(parseTree, level + 1);
-
-            parseTree.exit(result);
-            return result;
+        public static boolean parse(ParseTree t, int l) {
+            if (!ParserUtil.recursionGuard(l, RULE)) return false;
+            t.enter(l, RULE);
+            boolean r;
+            r = Annassign.parse(t, l + 1);
+            r = r || parseAssignment32List(t, l);
+            r = r || Assignment33.parse(t, l + 1);
+            t.exit(r);
+            return r;
         }
 
-        private static boolean parseAssignment32List(ParseTree parseTree, int level) {
-            parseTree.enterCollection();
-            var result = Assignment32.parse(parseTree, level + 1);
-            if (result) while (true) {
-                var pos = parseTree.position();
-                if (!Assignment32.parse(parseTree, level + 1)) break;
-                if (parseTree.guardLoopExit(pos)) break;
+        private static boolean parseAssignment32List(ParseTree t, int l) {
+            t.enterCollection();
+            var r = Assignment32.parse(t, l + 1);
+            if (r) while (true) {
+                var p = t.position();
+                if (!Assignment32.parse(t, l + 1)) break;
+                if (t.guardLoopExit(p)) break;
             }
-            parseTree.exitCollection();
-            return result;
+            t.exitCollection();
+            return r;
         }
     }
 
@@ -131,16 +127,14 @@ public final class Assignment extends NodeWrapper {
             return ExprlistStar.of(getItem(1));
         }
 
-        public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            parseTree.enter(level, RULE);
-            boolean result;
-
-            result = parseTree.consumeToken("=");
-            result = result && ExprlistStar.parse(parseTree, level + 1);
-
-            parseTree.exit(result);
-            return result;
+        public static boolean parse(ParseTree t, int l) {
+            if (!ParserUtil.recursionGuard(l, RULE)) return false;
+            t.enter(l, RULE);
+            boolean r;
+            r = t.consumeToken("=");
+            r = r && ExprlistStar.parse(t, l + 1);
+            t.exit(r);
+            return r;
         }
     }
 
@@ -168,16 +162,14 @@ public final class Assignment extends NodeWrapper {
             return Exprlist.of(getItem(1));
         }
 
-        public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            parseTree.enter(level, RULE);
-            boolean result;
-
-            result = Augassign.parse(parseTree, level + 1);
-            result = result && Exprlist.parse(parseTree, level + 1);
-
-            parseTree.exit(result);
-            return result;
+        public static boolean parse(ParseTree t, int l) {
+            if (!ParserUtil.recursionGuard(l, RULE)) return false;
+            t.enter(l, RULE);
+            boolean r;
+            r = Augassign.parse(t, l + 1);
+            r = r && Exprlist.parse(t, l + 1);
+            t.exit(r);
+            return r;
         }
     }
 }

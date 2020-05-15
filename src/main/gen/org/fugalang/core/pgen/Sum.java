@@ -28,26 +28,24 @@ public final class Sum extends NodeWrapper {
         return getList(1, Sum2::of);
     }
 
-    public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        parseTree.enter(level, RULE);
-        boolean result;
-
-        result = Term.parse(parseTree, level + 1);
-        if (result) parseSum2List(parseTree, level);
-
-        parseTree.exit(result);
-        return result;
+    public static boolean parse(ParseTree t, int l) {
+        if (!ParserUtil.recursionGuard(l, RULE)) return false;
+        t.enter(l, RULE);
+        boolean r;
+        r = Term.parse(t, l + 1);
+        if (r) parseSum2List(t, l);
+        t.exit(r);
+        return r;
     }
 
-    private static void parseSum2List(ParseTree parseTree, int level) {
-        parseTree.enterCollection();
+    private static void parseSum2List(ParseTree t, int l) {
+        t.enterCollection();
         while (true) {
-            var pos = parseTree.position();
-            if (!Sum2.parse(parseTree, level + 1)) break;
-            if (parseTree.guardLoopExit(pos)) break;
+            var p = t.position();
+            if (!Sum2.parse(t, l + 1)) break;
+            if (t.guardLoopExit(p)) break;
         }
-        parseTree.exitCollection();
+        t.exitCollection();
     }
 
     /**
@@ -74,16 +72,14 @@ public final class Sum extends NodeWrapper {
             return Term.of(getItem(1));
         }
 
-        public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            parseTree.enter(level, RULE);
-            boolean result;
-
-            result = Sum21.parse(parseTree, level + 1);
-            result = result && Term.parse(parseTree, level + 1);
-
-            parseTree.exit(result);
-            return result;
+        public static boolean parse(ParseTree t, int l) {
+            if (!ParserUtil.recursionGuard(l, RULE)) return false;
+            t.enter(l, RULE);
+            boolean r;
+            r = Sum21.parse(t, l + 1);
+            r = r && Term.parse(t, l + 1);
+            t.exit(r);
+            return r;
         }
     }
 
@@ -111,16 +107,14 @@ public final class Sum extends NodeWrapper {
             return getBoolean(1);
         }
 
-        public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            parseTree.enter(level, RULE);
-            boolean result;
-
-            result = parseTree.consumeToken("+");
-            result = result || parseTree.consumeToken("-");
-
-            parseTree.exit(result);
-            return result;
+        public static boolean parse(ParseTree t, int l) {
+            if (!ParserUtil.recursionGuard(l, RULE)) return false;
+            t.enter(l, RULE);
+            boolean r;
+            r = t.consumeToken("+");
+            r = r || t.consumeToken("-");
+            t.exit(r);
+            return r;
         }
     }
 }

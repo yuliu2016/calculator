@@ -124,31 +124,31 @@ public class ClassField {
 
     private String getLoopExpr() {
         var name = ParserStringUtil.capitalizeFirstCharOnly(fieldName);
-        return "parse" + name + "(parseTree, level)";
+        return "parse" + name + "(t, l)";
     }
 
     private String getOptionalStmt(String resultExpr, RuleType ruleType, boolean isFirst) {
         var condition = isFirst ? "" : switch (ruleType) {
-            case Conjunction -> "if (result) ";
-            case Disjunction -> "if (!result) ";
+            case Conjunction -> "if (r) ";
+            case Disjunction -> "if (!r) ";
         };
         return condition + resultExpr + ";\n";
     }
 
     private String getRequiredStmt(String resultExpr, RuleType ruleType, boolean isFirst) {
-        var condition = isFirst ? "result = " :
+        var condition = isFirst ? "r = " :
                 switch (ruleType) {
-                    case Conjunction -> "result = result && ";
-                    case Disjunction -> "result = result || ";
+                    case Conjunction -> "r = r && ";
+                    case Disjunction -> "r = r || ";
                 };
         return condition + resultExpr + ";\n";
     }
 
     private String getResultExpr() {
         return switch (resultSource.getType()) {
-            case Class -> resultSource.getValue() + ".parse(parseTree, level + 1)";
-            case TokenType -> "parseTree.consumeToken(" + resultSource.getValue() + ")";
-            case TokenLiteral -> "parseTree.consumeToken(\"" + resultSource.getValue() + "\")";
+            case Class -> resultSource.getValue() + ".parse(t, l + 1)";
+            case TokenType -> "t.consumeToken(" + resultSource.getValue() + ")";
+            case TokenLiteral -> "t.consumeToken(\"" + resultSource.getValue() + "\")";
         };
     }
 
@@ -163,30 +163,30 @@ public class ClassField {
     private String getRequiredLoopParser() {
         var resultExpr = getResultExpr();
         var name = ParserStringUtil.capitalizeFirstCharOnly(fieldName);
-        return "\n    private static boolean parse" + name + "(ParseTree parseTree, int level) {\n" +
-                "        parseTree.enterCollection();\n" +
-                "        var result = " + resultExpr + ";\n" +
-                "        if (result) while (true) {\n" +
-                "            var pos = parseTree.position();\n" +
+        return "\n    private static boolean parse" + name + "(ParseTree t, int l) {\n" +
+                "        t.enterCollection();\n" +
+                "        var r = " + resultExpr + ";\n" +
+                "        if (r) while (true) {\n" +
+                "            var p = t.position();\n" +
                 "            if (!" + resultExpr + ") break;\n" +
-                "            if (parseTree.guardLoopExit(pos)) break;\n" +
+                "            if (t.guardLoopExit(p)) break;\n" +
                 "        }\n" +
-                "        parseTree.exitCollection();\n" +
-                "        return result;\n" +
+                "        t.exitCollection();\n" +
+                "        return r;\n" +
                 "    }\n";
     }
 
     private String getOptionalLoopParser() {
         var resultExpr = getResultExpr();
         var name = ParserStringUtil.capitalizeFirstCharOnly(fieldName);
-        return "\n    private static void parse" + name + "(ParseTree parseTree, int level) {\n" +
-                "        parseTree.enterCollection();\n" +
+        return "\n    private static void parse" + name + "(ParseTree t, int l) {\n" +
+                "        t.enterCollection();\n" +
                 "        while (true) {\n" +
-                "            var pos = parseTree.position();\n" +
+                "            var p = t.position();\n" +
                 "            if (!" + resultExpr + ") break;\n" +
-                "            if (parseTree.guardLoopExit(pos)) break;\n" +
+                "            if (t.guardLoopExit(p)) break;\n" +
                 "        }\n" +
-                "        parseTree.exitCollection();\n" +
+                "        t.exitCollection();\n" +
                 "    }\n";
     }
 }

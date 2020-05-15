@@ -34,15 +34,13 @@ public final class NamedExprStar extends NodeWrapper {
         return hasItemOfRule(1, NamedExpr.RULE);
     }
 
-    public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        parseTree.enter(level, RULE);
-        boolean result;
-
-        result = StarExpr.parse(parseTree, level + 1);
-        result = result || NamedExpr.parse(parseTree, level + 1);
-
-        parseTree.exit(result);
-        return result;
+    public static boolean parse(ParseTree t, int l) {
+        if (!ParserUtil.recursionGuard(l, RULE)) return false;
+        t.enter(l, RULE);
+        boolean r;
+        r = StarExpr.parse(t, l + 1);
+        r = r || NamedExpr.parse(t, l + 1);
+        t.exit(r);
+        return r;
     }
 }

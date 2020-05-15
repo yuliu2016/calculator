@@ -58,18 +58,16 @@ public final class CompoundStmt extends NodeWrapper {
         return hasItemOfRule(4, WithStmt.RULE);
     }
 
-    public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        parseTree.enter(level, RULE);
-        boolean result;
-
-        result = IfStmt.parse(parseTree, level + 1);
-        result = result || WhileStmt.parse(parseTree, level + 1);
-        result = result || ForStmt.parse(parseTree, level + 1);
-        result = result || TryStmt.parse(parseTree, level + 1);
-        result = result || WithStmt.parse(parseTree, level + 1);
-
-        parseTree.exit(result);
-        return result;
+    public static boolean parse(ParseTree t, int l) {
+        if (!ParserUtil.recursionGuard(l, RULE)) return false;
+        t.enter(l, RULE);
+        boolean r;
+        r = IfStmt.parse(t, l + 1);
+        r = r || WhileStmt.parse(t, l + 1);
+        r = r || ForStmt.parse(t, l + 1);
+        r = r || TryStmt.parse(t, l + 1);
+        r = r || WithStmt.parse(t, l + 1);
+        t.exit(r);
+        return r;
     }
 }

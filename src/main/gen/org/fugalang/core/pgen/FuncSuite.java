@@ -34,16 +34,14 @@ public final class FuncSuite extends NodeWrapper {
         return hasItemOfRule(1, BlockSuite.RULE);
     }
 
-    public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        parseTree.enter(level, RULE);
-        boolean result;
-
-        result = FuncSuite1.parse(parseTree, level + 1);
-        result = result || BlockSuite.parse(parseTree, level + 1);
-
-        parseTree.exit(result);
-        return result;
+    public static boolean parse(ParseTree t, int l) {
+        if (!ParserUtil.recursionGuard(l, RULE)) return false;
+        t.enter(l, RULE);
+        boolean r;
+        r = FuncSuite1.parse(t, l + 1);
+        r = r || BlockSuite.parse(t, l + 1);
+        t.exit(r);
+        return r;
     }
 
     /**
@@ -66,16 +64,14 @@ public final class FuncSuite extends NodeWrapper {
             return Expr.of(getItem(1));
         }
 
-        public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            parseTree.enter(level, RULE);
-            boolean result;
-
-            result = parseTree.consumeToken(":");
-            result = result && Expr.parse(parseTree, level + 1);
-
-            parseTree.exit(result);
-            return result;
+        public static boolean parse(ParseTree t, int l) {
+            if (!ParserUtil.recursionGuard(l, RULE)) return false;
+            t.enter(l, RULE);
+            boolean r;
+            r = t.consumeToken(":");
+            r = r && Expr.parse(t, l + 1);
+            t.exit(r);
+            return r;
         }
     }
 }

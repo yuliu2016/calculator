@@ -36,27 +36,25 @@ public final class FullArgList extends NodeWrapper {
         return hasItemOfRule(2, FullArgList3.RULE);
     }
 
-    public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        parseTree.enter(level, RULE);
-        boolean result;
-
-        result = DefaultArg.parse(parseTree, level + 1);
-        if (result) parseFullArgList2List(parseTree, level);
-        if (result) FullArgList3.parse(parseTree, level + 1);
-
-        parseTree.exit(result);
-        return result;
+    public static boolean parse(ParseTree t, int l) {
+        if (!ParserUtil.recursionGuard(l, RULE)) return false;
+        t.enter(l, RULE);
+        boolean r;
+        r = DefaultArg.parse(t, l + 1);
+        if (r) parseFullArgList2List(t, l);
+        if (r) FullArgList3.parse(t, l + 1);
+        t.exit(r);
+        return r;
     }
 
-    private static void parseFullArgList2List(ParseTree parseTree, int level) {
-        parseTree.enterCollection();
+    private static void parseFullArgList2List(ParseTree t, int l) {
+        t.enterCollection();
         while (true) {
-            var pos = parseTree.position();
-            if (!FullArgList2.parse(parseTree, level + 1)) break;
-            if (parseTree.guardLoopExit(pos)) break;
+            var p = t.position();
+            if (!FullArgList2.parse(t, l + 1)) break;
+            if (t.guardLoopExit(p)) break;
         }
-        parseTree.exitCollection();
+        t.exitCollection();
     }
 
     /**
@@ -79,16 +77,14 @@ public final class FullArgList extends NodeWrapper {
             return DefaultArg.of(getItem(1));
         }
 
-        public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            parseTree.enter(level, RULE);
-            boolean result;
-
-            result = parseTree.consumeToken(",");
-            result = result && DefaultArg.parse(parseTree, level + 1);
-
-            parseTree.exit(result);
-            return result;
+        public static boolean parse(ParseTree t, int l) {
+            if (!ParserUtil.recursionGuard(l, RULE)) return false;
+            t.enter(l, RULE);
+            boolean r;
+            r = t.consumeToken(",");
+            r = r && DefaultArg.parse(t, l + 1);
+            t.exit(r);
+            return r;
         }
     }
 
@@ -116,16 +112,14 @@ public final class FullArgList extends NodeWrapper {
             return hasItemOfRule(1, FullArgList32.RULE);
         }
 
-        public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            parseTree.enter(level, RULE);
-            boolean result;
-
-            result = parseTree.consumeToken(",");
-            if (result) FullArgList32.parse(parseTree, level + 1);
-
-            parseTree.exit(result);
-            return result;
+        public static boolean parse(ParseTree t, int l) {
+            if (!ParserUtil.recursionGuard(l, RULE)) return false;
+            t.enter(l, RULE);
+            boolean r;
+            r = t.consumeToken(",");
+            if (r) FullArgList32.parse(t, l + 1);
+            t.exit(r);
+            return r;
         }
     }
 
@@ -161,16 +155,14 @@ public final class FullArgList extends NodeWrapper {
             return hasItemOfRule(1, ArgsKwargs.RULE);
         }
 
-        public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            parseTree.enter(level, RULE);
-            boolean result;
-
-            result = Kwargs.parse(parseTree, level + 1);
-            result = result || ArgsKwargs.parse(parseTree, level + 1);
-
-            parseTree.exit(result);
-            return result;
+        public static boolean parse(ParseTree t, int l) {
+            if (!ParserUtil.recursionGuard(l, RULE)) return false;
+            t.enter(l, RULE);
+            boolean r;
+            r = Kwargs.parse(t, l + 1);
+            r = r || ArgsKwargs.parse(t, l + 1);
+            t.exit(r);
+            return r;
         }
     }
 }

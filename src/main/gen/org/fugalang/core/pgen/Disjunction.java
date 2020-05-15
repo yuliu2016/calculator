@@ -28,26 +28,24 @@ public final class Disjunction extends NodeWrapper {
         return getList(1, Disjunction2::of);
     }
 
-    public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        parseTree.enter(level, RULE);
-        boolean result;
-
-        result = Conjunction.parse(parseTree, level + 1);
-        if (result) parseDisjunction2List(parseTree, level);
-
-        parseTree.exit(result);
-        return result;
+    public static boolean parse(ParseTree t, int l) {
+        if (!ParserUtil.recursionGuard(l, RULE)) return false;
+        t.enter(l, RULE);
+        boolean r;
+        r = Conjunction.parse(t, l + 1);
+        if (r) parseDisjunction2List(t, l);
+        t.exit(r);
+        return r;
     }
 
-    private static void parseDisjunction2List(ParseTree parseTree, int level) {
-        parseTree.enterCollection();
+    private static void parseDisjunction2List(ParseTree t, int l) {
+        t.enterCollection();
         while (true) {
-            var pos = parseTree.position();
-            if (!Disjunction2.parse(parseTree, level + 1)) break;
-            if (parseTree.guardLoopExit(pos)) break;
+            var p = t.position();
+            if (!Disjunction2.parse(t, l + 1)) break;
+            if (t.guardLoopExit(p)) break;
         }
-        parseTree.exitCollection();
+        t.exitCollection();
     }
 
     /**
@@ -70,16 +68,14 @@ public final class Disjunction extends NodeWrapper {
             return Conjunction.of(getItem(1));
         }
 
-        public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            parseTree.enter(level, RULE);
-            boolean result;
-
-            result = parseTree.consumeToken("or");
-            result = result && Conjunction.parse(parseTree, level + 1);
-
-            parseTree.exit(result);
-            return result;
+        public static boolean parse(ParseTree t, int l) {
+            if (!ParserUtil.recursionGuard(l, RULE)) return false;
+            t.enter(l, RULE);
+            boolean r;
+            r = t.consumeToken("or");
+            r = r && Conjunction.parse(t, l + 1);
+            t.exit(r);
+            return r;
         }
     }
 }

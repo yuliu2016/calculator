@@ -37,16 +37,14 @@ public final class BlockSuite extends NodeWrapper {
         return hasItemOfRule(1, BlockSuite2.RULE);
     }
 
-    public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        parseTree.enter(level, RULE);
-        boolean result;
-
-        result = BlockSuite1.parse(parseTree, level + 1);
-        result = result || BlockSuite2.parse(parseTree, level + 1);
-
-        parseTree.exit(result);
-        return result;
+    public static boolean parse(ParseTree t, int l) {
+        if (!ParserUtil.recursionGuard(l, RULE)) return false;
+        t.enter(l, RULE);
+        boolean r;
+        r = BlockSuite1.parse(t, l + 1);
+        r = r || BlockSuite2.parse(t, l + 1);
+        t.exit(r);
+        return r;
     }
 
     /**
@@ -69,17 +67,15 @@ public final class BlockSuite extends NodeWrapper {
             return SimpleStmt.of(getItem(1));
         }
 
-        public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            parseTree.enter(level, RULE);
-            boolean result;
-
-            result = parseTree.consumeToken("{");
-            result = result && SimpleStmt.parse(parseTree, level + 1);
-            result = result && parseTree.consumeToken("}");
-
-            parseTree.exit(result);
-            return result;
+        public static boolean parse(ParseTree t, int l) {
+            if (!ParserUtil.recursionGuard(l, RULE)) return false;
+            t.enter(l, RULE);
+            boolean r;
+            r = t.consumeToken("{");
+            r = r && SimpleStmt.parse(t, l + 1);
+            r = r && t.consumeToken("}");
+            t.exit(r);
+            return r;
         }
     }
 
@@ -107,30 +103,28 @@ public final class BlockSuite extends NodeWrapper {
             return getList(2, Stmt::of);
         }
 
-        public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            parseTree.enter(level, RULE);
-            boolean result;
-
-            result = parseTree.consumeToken("{");
-            result = result && parseTree.consumeToken(TokenType.NEWLINE);
-            result = result && parseStmtList(parseTree, level);
-            result = result && parseTree.consumeToken("}");
-
-            parseTree.exit(result);
-            return result;
+        public static boolean parse(ParseTree t, int l) {
+            if (!ParserUtil.recursionGuard(l, RULE)) return false;
+            t.enter(l, RULE);
+            boolean r;
+            r = t.consumeToken("{");
+            r = r && t.consumeToken(TokenType.NEWLINE);
+            r = r && parseStmtList(t, l);
+            r = r && t.consumeToken("}");
+            t.exit(r);
+            return r;
         }
 
-        private static boolean parseStmtList(ParseTree parseTree, int level) {
-            parseTree.enterCollection();
-            var result = Stmt.parse(parseTree, level + 1);
-            if (result) while (true) {
-                var pos = parseTree.position();
-                if (!Stmt.parse(parseTree, level + 1)) break;
-                if (parseTree.guardLoopExit(pos)) break;
+        private static boolean parseStmtList(ParseTree t, int l) {
+            t.enterCollection();
+            var r = Stmt.parse(t, l + 1);
+            if (r) while (true) {
+                var p = t.position();
+                if (!Stmt.parse(t, l + 1)) break;
+                if (t.guardLoopExit(p)) break;
             }
-            parseTree.exitCollection();
-            return result;
+            t.exitCollection();
+            return r;
         }
     }
 }

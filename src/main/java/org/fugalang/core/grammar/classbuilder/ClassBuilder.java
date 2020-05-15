@@ -187,12 +187,12 @@ public class ClassBuilder {
 
     private void generateParsingFunc(StringBuilder sb) {
         sb.append("\n");
-        sb.append("    public static boolean parse(ParseTree parseTree, int level) {\n");
+        sb.append("    public static boolean parse(ParseTree t, int l) {\n");
 
         var mb = new StringBuilder();
-        mb.append("if (!ParserUtil.recursionGuard(level, RULE)) return false;\n");
-        mb.append("parseTree.enter(level, RULE);\n");
-        mb.append("boolean result;\n\n");
+        mb.append("if (!ParserUtil.recursionGuard(l, RULE)) return false;\n");
+        mb.append("t.enter(l, RULE);\n");
+        mb.append("boolean r;\n");
 
         var first = true;
         for (ClassField field : fields) {
@@ -208,8 +208,8 @@ public class ClassBuilder {
                     " may match an empty string");
         }
 
-        mb.append("\nparseTree.exit(result);\n");
-        mb.append("return result;\n");
+        mb.append("t.exit(r);\n");
+        mb.append("return r;\n");
 
         sb.append(ParserStringUtil.indent(mb.toString(), 8));
 

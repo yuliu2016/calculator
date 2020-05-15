@@ -38,17 +38,15 @@ public final class Funcdef extends NodeWrapper {
         return FuncSuite.of(getItem(3));
     }
 
-    public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        parseTree.enter(level, RULE);
-        boolean result;
-
-        result = parseTree.consumeToken("def");
-        if (result) FuncTypeHint.parse(parseTree, level + 1);
-        if (result) FuncArgs.parse(parseTree, level + 1);
-        result = result && FuncSuite.parse(parseTree, level + 1);
-
-        parseTree.exit(result);
-        return result;
+    public static boolean parse(ParseTree t, int l) {
+        if (!ParserUtil.recursionGuard(l, RULE)) return false;
+        t.enter(l, RULE);
+        boolean r;
+        r = t.consumeToken("def");
+        if (r) FuncTypeHint.parse(t, l + 1);
+        if (r) FuncArgs.parse(t, l + 1);
+        r = r && FuncSuite.parse(t, l + 1);
+        t.exit(r);
+        return r;
     }
 }

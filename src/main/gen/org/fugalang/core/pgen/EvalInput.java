@@ -33,26 +33,24 @@ public final class EvalInput extends NodeWrapper {
         return getItemOfType(2, TokenType.ENDMARKER);
     }
 
-    public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        parseTree.enter(level, RULE);
-        boolean result;
-
-        result = Exprlist.parse(parseTree, level + 1);
-        if (result) parseNewlineList(parseTree, level);
-        result = result && parseTree.consumeToken(TokenType.ENDMARKER);
-
-        parseTree.exit(result);
-        return result;
+    public static boolean parse(ParseTree t, int l) {
+        if (!ParserUtil.recursionGuard(l, RULE)) return false;
+        t.enter(l, RULE);
+        boolean r;
+        r = Exprlist.parse(t, l + 1);
+        if (r) parseNewlineList(t, l);
+        r = r && t.consumeToken(TokenType.ENDMARKER);
+        t.exit(r);
+        return r;
     }
 
-    private static void parseNewlineList(ParseTree parseTree, int level) {
-        parseTree.enterCollection();
+    private static void parseNewlineList(ParseTree t, int l) {
+        t.enterCollection();
         while (true) {
-            var pos = parseTree.position();
-            if (!parseTree.consumeToken(TokenType.NEWLINE)) break;
-            if (parseTree.guardLoopExit(pos)) break;
+            var p = t.position();
+            if (!t.consumeToken(TokenType.NEWLINE)) break;
+            if (t.guardLoopExit(p)) break;
         }
-        parseTree.exitCollection();
+        t.exitCollection();
     }
 }

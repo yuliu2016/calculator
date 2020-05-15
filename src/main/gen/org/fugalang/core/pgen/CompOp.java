@@ -66,24 +66,22 @@ public final class CompOp extends NodeWrapper {
         return hasItemOfRule(9, CompOp10.RULE);
     }
 
-    public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        parseTree.enter(level, RULE);
-        boolean result;
-
-        result = parseTree.consumeToken("<");
-        result = result || parseTree.consumeToken(">");
-        result = result || parseTree.consumeToken("==");
-        result = result || parseTree.consumeToken(">=");
-        result = result || parseTree.consumeToken("<=");
-        result = result || parseTree.consumeToken("!=");
-        result = result || parseTree.consumeToken("in");
-        result = result || CompOp8.parse(parseTree, level + 1);
-        result = result || parseTree.consumeToken("is");
-        result = result || CompOp10.parse(parseTree, level + 1);
-
-        parseTree.exit(result);
-        return result;
+    public static boolean parse(ParseTree t, int l) {
+        if (!ParserUtil.recursionGuard(l, RULE)) return false;
+        t.enter(l, RULE);
+        boolean r;
+        r = t.consumeToken("<");
+        r = r || t.consumeToken(">");
+        r = r || t.consumeToken("==");
+        r = r || t.consumeToken(">=");
+        r = r || t.consumeToken("<=");
+        r = r || t.consumeToken("!=");
+        r = r || t.consumeToken("in");
+        r = r || CompOp8.parse(t, l + 1);
+        r = r || t.consumeToken("is");
+        r = r || CompOp10.parse(t, l + 1);
+        t.exit(r);
+        return r;
     }
 
     /**
@@ -102,16 +100,14 @@ public final class CompOp extends NodeWrapper {
             super(RULE, node);
         }
 
-        public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            parseTree.enter(level, RULE);
-            boolean result;
-
-            result = parseTree.consumeToken("not");
-            result = result && parseTree.consumeToken("in");
-
-            parseTree.exit(result);
-            return result;
+        public static boolean parse(ParseTree t, int l) {
+            if (!ParserUtil.recursionGuard(l, RULE)) return false;
+            t.enter(l, RULE);
+            boolean r;
+            r = t.consumeToken("not");
+            r = r && t.consumeToken("in");
+            t.exit(r);
+            return r;
         }
     }
 
@@ -131,16 +127,14 @@ public final class CompOp extends NodeWrapper {
             super(RULE, node);
         }
 
-        public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            parseTree.enter(level, RULE);
-            boolean result;
-
-            result = parseTree.consumeToken("is");
-            result = result && parseTree.consumeToken("not");
-
-            parseTree.exit(result);
-            return result;
+        public static boolean parse(ParseTree t, int l) {
+            if (!ParserUtil.recursionGuard(l, RULE)) return false;
+            t.enter(l, RULE);
+            boolean r;
+            r = t.consumeToken("is");
+            r = r && t.consumeToken("not");
+            t.exit(r);
+            return r;
         }
     }
 }

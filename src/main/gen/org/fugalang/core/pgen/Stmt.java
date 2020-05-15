@@ -27,16 +27,14 @@ public final class Stmt extends NodeWrapper {
         return getItemOfType(1, TokenType.NEWLINE);
     }
 
-    public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        parseTree.enter(level, RULE);
-        boolean result;
-
-        result = Stmt1.parse(parseTree, level + 1);
-        result = result && parseTree.consumeToken(TokenType.NEWLINE);
-
-        parseTree.exit(result);
-        return result;
+    public static boolean parse(ParseTree t, int l) {
+        if (!ParserUtil.recursionGuard(l, RULE)) return false;
+        t.enter(l, RULE);
+        boolean r;
+        r = Stmt1.parse(t, l + 1);
+        r = r && t.consumeToken(TokenType.NEWLINE);
+        t.exit(r);
+        return r;
     }
 
     /**
@@ -71,16 +69,14 @@ public final class Stmt extends NodeWrapper {
             return hasItemOfRule(1, CompoundStmt.RULE);
         }
 
-        public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            parseTree.enter(level, RULE);
-            boolean result;
-
-            result = SimpleStmt.parse(parseTree, level + 1);
-            result = result || CompoundStmt.parse(parseTree, level + 1);
-
-            parseTree.exit(result);
-            return result;
+        public static boolean parse(ParseTree t, int l) {
+            if (!ParserUtil.recursionGuard(l, RULE)) return false;
+            t.enter(l, RULE);
+            boolean r;
+            r = SimpleStmt.parse(t, l + 1);
+            r = r || CompoundStmt.parse(t, l + 1);
+            t.exit(r);
+            return r;
         }
     }
 }

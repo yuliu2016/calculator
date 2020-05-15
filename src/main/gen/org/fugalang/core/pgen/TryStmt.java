@@ -28,17 +28,15 @@ public final class TryStmt extends NodeWrapper {
         return TryStmt3.of(getItem(2));
     }
 
-    public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        parseTree.enter(level, RULE);
-        boolean result;
-
-        result = parseTree.consumeToken("try");
-        result = result && Suite.parse(parseTree, level + 1);
-        result = result && TryStmt3.parse(parseTree, level + 1);
-
-        parseTree.exit(result);
-        return result;
+    public static boolean parse(ParseTree t, int l) {
+        if (!ParserUtil.recursionGuard(l, RULE)) return false;
+        t.enter(l, RULE);
+        boolean r;
+        r = t.consumeToken("try");
+        r = r && Suite.parse(t, l + 1);
+        r = r && TryStmt3.parse(t, l + 1);
+        t.exit(r);
+        return r;
     }
 
     /**
@@ -73,16 +71,14 @@ public final class TryStmt extends NodeWrapper {
             return hasItemOfRule(1, FinallySuite.RULE);
         }
 
-        public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            parseTree.enter(level, RULE);
-            boolean result;
-
-            result = TryStmt31.parse(parseTree, level + 1);
-            result = result || FinallySuite.parse(parseTree, level + 1);
-
-            parseTree.exit(result);
-            return result;
+        public static boolean parse(ParseTree t, int l) {
+            if (!ParserUtil.recursionGuard(l, RULE)) return false;
+            t.enter(l, RULE);
+            boolean r;
+            r = TryStmt31.parse(t, l + 1);
+            r = r || FinallySuite.parse(t, l + 1);
+            t.exit(r);
+            return r;
         }
     }
 
@@ -122,29 +118,27 @@ public final class TryStmt extends NodeWrapper {
             return hasItemOfRule(2, FinallySuite.RULE);
         }
 
-        public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            parseTree.enter(level, RULE);
-            boolean result;
-
-            result = parseTryStmt311List(parseTree, level);
-            if (result) ElseSuite.parse(parseTree, level + 1);
-            if (result) FinallySuite.parse(parseTree, level + 1);
-
-            parseTree.exit(result);
-            return result;
+        public static boolean parse(ParseTree t, int l) {
+            if (!ParserUtil.recursionGuard(l, RULE)) return false;
+            t.enter(l, RULE);
+            boolean r;
+            r = parseTryStmt311List(t, l);
+            if (r) ElseSuite.parse(t, l + 1);
+            if (r) FinallySuite.parse(t, l + 1);
+            t.exit(r);
+            return r;
         }
 
-        private static boolean parseTryStmt311List(ParseTree parseTree, int level) {
-            parseTree.enterCollection();
-            var result = TryStmt311.parse(parseTree, level + 1);
-            if (result) while (true) {
-                var pos = parseTree.position();
-                if (!TryStmt311.parse(parseTree, level + 1)) break;
-                if (parseTree.guardLoopExit(pos)) break;
+        private static boolean parseTryStmt311List(ParseTree t, int l) {
+            t.enterCollection();
+            var r = TryStmt311.parse(t, l + 1);
+            if (r) while (true) {
+                var p = t.position();
+                if (!TryStmt311.parse(t, l + 1)) break;
+                if (t.guardLoopExit(p)) break;
             }
-            parseTree.exitCollection();
-            return result;
+            t.exitCollection();
+            return r;
         }
     }
 
@@ -172,16 +166,14 @@ public final class TryStmt extends NodeWrapper {
             return Suite.of(getItem(1));
         }
 
-        public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            parseTree.enter(level, RULE);
-            boolean result;
-
-            result = ExceptClause.parse(parseTree, level + 1);
-            result = result && Suite.parse(parseTree, level + 1);
-
-            parseTree.exit(result);
-            return result;
+        public static boolean parse(ParseTree t, int l) {
+            if (!ParserUtil.recursionGuard(l, RULE)) return false;
+            t.enter(l, RULE);
+            boolean r;
+            r = ExceptClause.parse(t, l + 1);
+            r = r && Suite.parse(t, l + 1);
+            t.exit(r);
+            return r;
         }
     }
 }

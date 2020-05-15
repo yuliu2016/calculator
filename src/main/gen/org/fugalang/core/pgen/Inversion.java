@@ -34,16 +34,14 @@ public final class Inversion extends NodeWrapper {
         return hasItemOfRule(1, Comparison.RULE);
     }
 
-    public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        parseTree.enter(level, RULE);
-        boolean result;
-
-        result = Inversion1.parse(parseTree, level + 1);
-        result = result || Comparison.parse(parseTree, level + 1);
-
-        parseTree.exit(result);
-        return result;
+    public static boolean parse(ParseTree t, int l) {
+        if (!ParserUtil.recursionGuard(l, RULE)) return false;
+        t.enter(l, RULE);
+        boolean r;
+        r = Inversion1.parse(t, l + 1);
+        r = r || Comparison.parse(t, l + 1);
+        t.exit(r);
+        return r;
     }
 
     /**
@@ -66,16 +64,14 @@ public final class Inversion extends NodeWrapper {
             return Inversion.of(getItem(1));
         }
 
-        public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            parseTree.enter(level, RULE);
-            boolean result;
-
-            result = parseTree.consumeToken("not");
-            result = result && Inversion.parse(parseTree, level + 1);
-
-            parseTree.exit(result);
-            return result;
+        public static boolean parse(ParseTree t, int l) {
+            if (!ParserUtil.recursionGuard(l, RULE)) return false;
+            t.enter(l, RULE);
+            boolean r;
+            r = t.consumeToken("not");
+            r = r && Inversion.parse(t, l + 1);
+            t.exit(r);
+            return r;
         }
     }
 }

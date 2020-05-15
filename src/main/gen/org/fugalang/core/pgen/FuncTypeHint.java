@@ -22,16 +22,14 @@ public final class FuncTypeHint extends NodeWrapper {
         return Expr.of(getItem(1));
     }
 
-    public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        parseTree.enter(level, RULE);
-        boolean result;
-
-        result = parseTree.consumeToken("<");
-        result = result && Expr.parse(parseTree, level + 1);
-        result = result && parseTree.consumeToken(">");
-
-        parseTree.exit(result);
-        return result;
+    public static boolean parse(ParseTree t, int l) {
+        if (!ParserUtil.recursionGuard(l, RULE)) return false;
+        t.enter(l, RULE);
+        boolean r;
+        r = t.consumeToken("<");
+        r = r && Expr.parse(t, l + 1);
+        r = r && t.consumeToken(">");
+        t.exit(r);
+        return r;
     }
 }

@@ -36,26 +36,24 @@ public final class AtomExpr extends NodeWrapper {
         return hasItemOfRule(2, BlockSuite.RULE);
     }
 
-    public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        parseTree.enter(level, RULE);
-        boolean result;
-
-        result = Atom.parse(parseTree, level + 1);
-        if (result) parseTrailerList(parseTree, level);
-        if (result) BlockSuite.parse(parseTree, level + 1);
-
-        parseTree.exit(result);
-        return result;
+    public static boolean parse(ParseTree t, int l) {
+        if (!ParserUtil.recursionGuard(l, RULE)) return false;
+        t.enter(l, RULE);
+        boolean r;
+        r = Atom.parse(t, l + 1);
+        if (r) parseTrailerList(t, l);
+        if (r) BlockSuite.parse(t, l + 1);
+        t.exit(r);
+        return r;
     }
 
-    private static void parseTrailerList(ParseTree parseTree, int level) {
-        parseTree.enterCollection();
+    private static void parseTrailerList(ParseTree t, int l) {
+        t.enterCollection();
         while (true) {
-            var pos = parseTree.position();
-            if (!Trailer.parse(parseTree, level + 1)) break;
-            if (parseTree.guardLoopExit(pos)) break;
+            var p = t.position();
+            if (!Trailer.parse(t, l + 1)) break;
+            if (t.guardLoopExit(p)) break;
         }
-        parseTree.exitCollection();
+        t.exitCollection();
     }
 }

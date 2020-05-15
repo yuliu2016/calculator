@@ -32,28 +32,26 @@ public final class WithStmt extends NodeWrapper {
         return Suite.of(getItem(3));
     }
 
-    public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        parseTree.enter(level, RULE);
-        boolean result;
-
-        result = parseTree.consumeToken("with");
-        result = result && WithItem.parse(parseTree, level + 1);
-        if (result) parseWithStmt3List(parseTree, level);
-        result = result && Suite.parse(parseTree, level + 1);
-
-        parseTree.exit(result);
-        return result;
+    public static boolean parse(ParseTree t, int l) {
+        if (!ParserUtil.recursionGuard(l, RULE)) return false;
+        t.enter(l, RULE);
+        boolean r;
+        r = t.consumeToken("with");
+        r = r && WithItem.parse(t, l + 1);
+        if (r) parseWithStmt3List(t, l);
+        r = r && Suite.parse(t, l + 1);
+        t.exit(r);
+        return r;
     }
 
-    private static void parseWithStmt3List(ParseTree parseTree, int level) {
-        parseTree.enterCollection();
+    private static void parseWithStmt3List(ParseTree t, int l) {
+        t.enterCollection();
         while (true) {
-            var pos = parseTree.position();
-            if (!WithStmt3.parse(parseTree, level + 1)) break;
-            if (parseTree.guardLoopExit(pos)) break;
+            var p = t.position();
+            if (!WithStmt3.parse(t, l + 1)) break;
+            if (t.guardLoopExit(p)) break;
         }
-        parseTree.exitCollection();
+        t.exitCollection();
     }
 
     /**
@@ -76,16 +74,14 @@ public final class WithStmt extends NodeWrapper {
             return WithItem.of(getItem(1));
         }
 
-        public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            parseTree.enter(level, RULE);
-            boolean result;
-
-            result = parseTree.consumeToken(",");
-            result = result && WithItem.parse(parseTree, level + 1);
-
-            parseTree.exit(result);
-            return result;
+        public static boolean parse(ParseTree t, int l) {
+            if (!ParserUtil.recursionGuard(l, RULE)) return false;
+            t.enter(l, RULE);
+            boolean r;
+            r = t.consumeToken(",");
+            r = r && WithItem.parse(t, l + 1);
+            t.exit(r);
+            return r;
         }
     }
 }

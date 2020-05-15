@@ -34,16 +34,14 @@ public final class FuncArgs extends NodeWrapper {
         return hasItemOfRule(1, FuncArgs2.RULE);
     }
 
-    public static boolean parse(ParseTree parseTree, int level) {
-        if (!ParserUtil.recursionGuard(level, RULE)) return false;
-        parseTree.enter(level, RULE);
-        boolean result;
-
-        result = SimpleArgList.parse(parseTree, level + 1);
-        result = result || FuncArgs2.parse(parseTree, level + 1);
-
-        parseTree.exit(result);
-        return result;
+    public static boolean parse(ParseTree t, int l) {
+        if (!ParserUtil.recursionGuard(l, RULE)) return false;
+        t.enter(l, RULE);
+        boolean r;
+        r = SimpleArgList.parse(t, l + 1);
+        r = r || FuncArgs2.parse(t, l + 1);
+        t.exit(r);
+        return r;
     }
 
     /**
@@ -70,17 +68,15 @@ public final class FuncArgs extends NodeWrapper {
             return hasItemOfRule(1, TypedArgList.RULE);
         }
 
-        public static boolean parse(ParseTree parseTree, int level) {
-            if (!ParserUtil.recursionGuard(level, RULE)) return false;
-            parseTree.enter(level, RULE);
-            boolean result;
-
-            result = parseTree.consumeToken("(");
-            if (result) TypedArgList.parse(parseTree, level + 1);
-            result = result && parseTree.consumeToken(")");
-
-            parseTree.exit(result);
-            return result;
+        public static boolean parse(ParseTree t, int l) {
+            if (!ParserUtil.recursionGuard(l, RULE)) return false;
+            t.enter(l, RULE);
+            boolean r;
+            r = t.consumeToken("(");
+            if (r) TypedArgList.parse(t, l + 1);
+            r = r && t.consumeToken(")");
+            t.exit(r);
+            return r;
         }
     }
 }
