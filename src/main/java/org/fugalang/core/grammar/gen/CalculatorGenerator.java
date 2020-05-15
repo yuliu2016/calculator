@@ -5,6 +5,7 @@ import org.fugalang.core.parser.SimpleParseTree;
 import org.fugalang.core.parser.context.LazyParserContext;
 import org.fugalang.core.parser.context.LexingVisitor;
 import org.fugalang.core.token.SimpleLexer;
+import org.fugalang.core.token.TokenType;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -26,7 +27,7 @@ public class CalculatorGenerator {
                     "src/main/gen/org/fugalang/core/calculator/pgen/"
             );
 
-            var gen = new PEGBuilder(tree, FugaGenerator::checkToken,
+            var gen = new PEGBuilder(tree, TokenType::checkToken,
                     path, "org.fugalang.core.calculator.pgen",
                     "org.fugalang.core.token.TokenType");
 

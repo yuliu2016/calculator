@@ -1,6 +1,6 @@
 package org.fugalang.core;
 
-import org.fugalang.core.grammar.SyntaxError;
+import org.fugalang.core.parser.SyntaxError;
 import org.fugalang.core.parser.SimpleParseTree;
 import org.fugalang.core.parser.context.LazyParserContext;
 import org.fugalang.core.parser.context.LexingVisitor;

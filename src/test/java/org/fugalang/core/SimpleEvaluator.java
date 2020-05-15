@@ -9,13 +9,12 @@ package org.fugalang.core;
      "100 * ( 2 + 12 ) / 14" ---> 100     
 */
 
-import org.fugalang.core.grammar.SyntaxError;
+import org.fugalang.core.parser.SyntaxError;
 import org.fugalang.core.parser.ParserElement;
 import org.fugalang.core.pprint.ConsoleColor;
 import org.fugalang.core.token.LexerTests;
 import org.fugalang.core.token.Operator;
 import org.fugalang.core.token.TokenType;
-import org.fugalang.core.token.Tokenizer;
 
 import java.util.List;
 import java.util.Scanner;

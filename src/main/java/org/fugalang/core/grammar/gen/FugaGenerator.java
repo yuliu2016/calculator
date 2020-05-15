@@ -1,12 +1,9 @@
 package org.fugalang.core.grammar.gen;
 
 import org.fugalang.core.grammar.pgen.Rules;
-import org.fugalang.core.grammar.util.ParserStringUtil;
 import org.fugalang.core.parser.SimpleParseTree;
 import org.fugalang.core.parser.context.LazyParserContext;
 import org.fugalang.core.parser.context.LexingVisitor;
-import org.fugalang.core.token.Keyword;
-import org.fugalang.core.token.Operator;
 import org.fugalang.core.token.SimpleLexer;
 import org.fugalang.core.token.TokenType;
 
@@ -14,7 +11,6 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Optional;
 
 public class FugaGenerator {
     public static void main(String[] args) {
@@ -31,7 +27,7 @@ public class FugaGenerator {
                     "src/main/gen/org/fugalang/core/pgen/"
             );
 
-            var gen = new PEGBuilder(tree, FugaGenerator::checkToken,
+            var gen = new PEGBuilder(tree, TokenType::checkToken,
                     path, "org.fugalang.core.pgen",
                     "org.fugalang.core.token.TokenType");
             gen.generate(true);
@@ -41,20 +37,4 @@ public class FugaGenerator {
         }
     }
 
-    public static Optional<ConvertedValue> checkToken(String s) {
-
-        if (Keyword.ALL_KEYWORDS.contains(s)) {
-            return Optional.of(new ConvertedValue("boolean", s, s));
-        }
-        if (Operator.CODE_TO_NAME.containsKey(s)) {
-            var name = ParserStringUtil.convertCase(Operator.CODE_TO_NAME.get(s));
-            return Optional.of(new ConvertedValue("boolean", name, s));
-        }
-
-        if (TokenType.NAMES.contains(s)) {
-            return Optional.of(new ConvertedValue("String", s.toLowerCase(), s));
-        }
-
-        return Optional.empty();
-    }
 }

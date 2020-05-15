@@ -1,6 +1,6 @@
 package org.fugalang.core.parser.context;
 
-import org.fugalang.core.grammar.SyntaxError;
+import org.fugalang.core.parser.SyntaxError;
 import org.fugalang.core.parser.ParserElement;
 
 import java.util.List;

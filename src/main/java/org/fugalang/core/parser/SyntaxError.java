@@ -1,4 +1,4 @@
-package org.fugalang.core.grammar;
+package org.fugalang.core.parser;
 
 /**
  * A syntax error generated from the tokenizer/compiler
