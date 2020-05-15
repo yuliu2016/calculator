@@ -6,9 +6,8 @@ import org.fugalang.core.parser.*;
  * parameters: '(' ['arglist'] ')'
  */
 public final class Parameters extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("parameters", RuleType.Conjunction, true);
+            ParserRule.of("parameters", RuleType.Conjunction);
 
     public static Parameters of(ParseTreeNode node) {
         return new Parameters(node);
@@ -26,12 +25,12 @@ public final class Parameters extends NodeWrapper {
         return hasItemOfRule(1, Arglist.RULE);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
         r = t.consumeToken("(");
-        if (r) Arglist.parse(t, l + 1);
+        if (r) Arglist.parse(t, lv + 1);
         r = r && t.consumeToken(")");
         t.exit(r);
         return r;

@@ -8,9 +8,8 @@ import java.util.List;
  * assignment: ['/'] 'exprlist_star' ['annassign' | ('=' 'exprlist_star')+ | 'augassign' 'exprlist']
  */
 public final class Assignment extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("assignment", RuleType.Conjunction, true);
+            ParserRule.of("assignment", RuleType.Conjunction);
 
     public static Assignment of(ParseTreeNode node) {
         return new Assignment(node);
@@ -36,13 +35,13 @@ public final class Assignment extends NodeWrapper {
         return hasItemOfRule(2, Assignment3.RULE);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
         t.consumeToken("/");
-        r = ExprlistStar.parse(t, l + 1);
-        if (r) Assignment3.parse(t, l + 1);
+        r = ExprlistStar.parse(t, lv + 1);
+        if (r) Assignment3.parse(t, lv + 1);
         t.exit(r);
         return r;
     }
@@ -51,9 +50,8 @@ public final class Assignment extends NodeWrapper {
      * 'annassign' | ('=' 'exprlist_star')+ | 'augassign' 'exprlist'
      */
     public static final class Assignment3 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("assignment:3", RuleType.Disjunction, false);
+                ParserRule.of("assignment:3", RuleType.Disjunction);
 
         public static Assignment3 of(ParseTreeNode node) {
             return new Assignment3(node);
@@ -83,23 +81,23 @@ public final class Assignment extends NodeWrapper {
             return hasItemOfRule(2, Assignment33.RULE);
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
-            r = Annassign.parse(t, l + 1);
-            r = r || parseAssignment32List(t, l);
-            r = r || Assignment33.parse(t, l + 1);
+            r = Annassign.parse(t, lv + 1);
+            r = r || parseAssignment32List(t, lv);
+            r = r || Assignment33.parse(t, lv + 1);
             t.exit(r);
             return r;
         }
 
-        private static boolean parseAssignment32List(ParseTree t, int l) {
+        private static boolean parseAssignment32List(ParseTree t, int lv) {
             t.enterCollection();
-            var r = Assignment32.parse(t, l + 1);
+            var r = Assignment32.parse(t, lv + 1);
             if (r) while (true) {
                 var p = t.position();
-                if (!Assignment32.parse(t, l + 1)) break;
+                if (!Assignment32.parse(t, lv + 1)) break;
                 if (t.guardLoopExit(p)) break;
             }
             t.exitCollection();
@@ -111,9 +109,8 @@ public final class Assignment extends NodeWrapper {
      * '=' 'exprlist_star'
      */
     public static final class Assignment32 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("assignment:3:2", RuleType.Conjunction, false);
+                ParserRule.of("assignment:3:2", RuleType.Conjunction);
 
         public static Assignment32 of(ParseTreeNode node) {
             return new Assignment32(node);
@@ -127,12 +124,12 @@ public final class Assignment extends NodeWrapper {
             return ExprlistStar.of(getItem(1));
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
             r = t.consumeToken("=");
-            r = r && ExprlistStar.parse(t, l + 1);
+            r = r && ExprlistStar.parse(t, lv + 1);
             t.exit(r);
             return r;
         }
@@ -142,9 +139,8 @@ public final class Assignment extends NodeWrapper {
      * 'augassign' 'exprlist'
      */
     public static final class Assignment33 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("assignment:3:3", RuleType.Conjunction, false);
+                ParserRule.of("assignment:3:3", RuleType.Conjunction);
 
         public static Assignment33 of(ParseTreeNode node) {
             return new Assignment33(node);
@@ -162,12 +158,12 @@ public final class Assignment extends NodeWrapper {
             return Exprlist.of(getItem(1));
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
-            r = Augassign.parse(t, l + 1);
-            r = r && Exprlist.parse(t, l + 1);
+            r = Augassign.parse(t, lv + 1);
+            r = r && Exprlist.parse(t, lv + 1);
             t.exit(r);
             return r;
         }

@@ -7,9 +7,8 @@ import org.fugalang.core.token.TokenType;
  * stmt: ('simple_stmt' | 'compound_stmt') 'NEWLINE'
  */
 public final class Stmt extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("stmt", RuleType.Conjunction, true);
+            ParserRule.of("stmt", RuleType.Conjunction);
 
     public static Stmt of(ParseTreeNode node) {
         return new Stmt(node);
@@ -27,11 +26,11 @@ public final class Stmt extends NodeWrapper {
         return getItemOfType(1, TokenType.NEWLINE);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
-        r = Stmt1.parse(t, l + 1);
+        r = Stmt1.parse(t, lv + 1);
         r = r && t.consumeToken(TokenType.NEWLINE);
         t.exit(r);
         return r;
@@ -41,9 +40,8 @@ public final class Stmt extends NodeWrapper {
      * 'simple_stmt' | 'compound_stmt'
      */
     public static final class Stmt1 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("stmt:1", RuleType.Disjunction, false);
+                ParserRule.of("stmt:1", RuleType.Disjunction);
 
         public static Stmt1 of(ParseTreeNode node) {
             return new Stmt1(node);
@@ -69,12 +67,12 @@ public final class Stmt extends NodeWrapper {
             return hasItemOfRule(1, CompoundStmt.RULE);
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
-            r = SimpleStmt.parse(t, l + 1);
-            r = r || CompoundStmt.parse(t, l + 1);
+            r = SimpleStmt.parse(t, lv + 1);
+            r = r || CompoundStmt.parse(t, lv + 1);
             t.exit(r);
             return r;
         }

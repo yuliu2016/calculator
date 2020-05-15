@@ -130,16 +130,14 @@ public class ClassBuilder {
             throw new IllegalStateException("No Rule Type");
         }
 
-        sb.append(" {\n\n");
+        sb.append(" {\n");
 
         // rule name constant
         sb.append("    public static final ParserRule RULE =\n")
-                .append("            new ParserRule(\"")
+                .append("            ParserRule.of(\"")
                 .append(printName)
                 .append("\", RuleType.")
                 .append(ruleType.name())
-                .append(", ")
-                .append(isStaticInnerClass ? "false" : "true")
                 .append(");\n\n");
 
         sb.append("    public static ").append(className).append(" of(ParseTreeNode node) {\n")
@@ -187,11 +185,11 @@ public class ClassBuilder {
 
     private void generateParsingFunc(StringBuilder sb) {
         sb.append("\n");
-        sb.append("    public static boolean parse(ParseTree t, int l) {\n");
+        sb.append("    public static boolean parse(ParseTree t, int lv) {\n");
 
         var mb = new StringBuilder();
-        mb.append("if (!ParserUtil.recursionGuard(l, RULE)) return false;\n");
-        mb.append("t.enter(l, RULE);\n");
+        mb.append("if (!ParserUtil.recursionGuard(lv, RULE)) return false;\n");
+        mb.append("t.enter(lv, RULE);\n");
         mb.append("boolean r;\n");
 
         var first = true;

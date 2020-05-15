@@ -6,9 +6,8 @@ import org.fugalang.core.parser.*;
  * annassign: ':' 'expr' ['=' 'exprlist_star']
  */
 public final class Annassign extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("annassign", RuleType.Conjunction, true);
+            ParserRule.of("annassign", RuleType.Conjunction);
 
     public static Annassign of(ParseTreeNode node) {
         return new Annassign(node);
@@ -30,13 +29,13 @@ public final class Annassign extends NodeWrapper {
         return hasItemOfRule(2, Annassign3.RULE);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
         r = t.consumeToken(":");
-        r = r && Expr.parse(t, l + 1);
-        if (r) Annassign3.parse(t, l + 1);
+        r = r && Expr.parse(t, lv + 1);
+        if (r) Annassign3.parse(t, lv + 1);
         t.exit(r);
         return r;
     }
@@ -45,9 +44,8 @@ public final class Annassign extends NodeWrapper {
      * '=' 'exprlist_star'
      */
     public static final class Annassign3 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("annassign:3", RuleType.Conjunction, false);
+                ParserRule.of("annassign:3", RuleType.Conjunction);
 
         public static Annassign3 of(ParseTreeNode node) {
             return new Annassign3(node);
@@ -61,12 +59,12 @@ public final class Annassign extends NodeWrapper {
             return ExprlistStar.of(getItem(1));
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
             r = t.consumeToken("=");
-            r = r && ExprlistStar.parse(t, l + 1);
+            r = r && ExprlistStar.parse(t, lv + 1);
             t.exit(r);
             return r;
         }

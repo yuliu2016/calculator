@@ -7,9 +7,8 @@ import org.fugalang.core.token.TokenType;
  * trailer: '.' 'NAME' | 'parameters' | 'subscript'
  */
 public final class Trailer extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("trailer", RuleType.Disjunction, true);
+            ParserRule.of("trailer", RuleType.Disjunction);
 
     public static Trailer of(ParseTreeNode node) {
         return new Trailer(node);
@@ -43,13 +42,13 @@ public final class Trailer extends NodeWrapper {
         return hasItemOfRule(2, Subscript.RULE);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
-        r = Trailer1.parse(t, l + 1);
-        r = r || Parameters.parse(t, l + 1);
-        r = r || Subscript.parse(t, l + 1);
+        r = Trailer1.parse(t, lv + 1);
+        r = r || Parameters.parse(t, lv + 1);
+        r = r || Subscript.parse(t, lv + 1);
         t.exit(r);
         return r;
     }
@@ -58,9 +57,8 @@ public final class Trailer extends NodeWrapper {
      * '.' 'NAME'
      */
     public static final class Trailer1 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("trailer:1", RuleType.Conjunction, false);
+                ParserRule.of("trailer:1", RuleType.Conjunction);
 
         public static Trailer1 of(ParseTreeNode node) {
             return new Trailer1(node);
@@ -74,9 +72,9 @@ public final class Trailer extends NodeWrapper {
             return getItemOfType(1, TokenType.NAME);
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
             r = t.consumeToken(".");
             r = r && t.consumeToken(TokenType.NAME);

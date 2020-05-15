@@ -6,9 +6,8 @@ import org.fugalang.core.parser.*;
  * assert_stmt: 'assert' 'expr' [',' 'expr']
  */
 public final class AssertStmt extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("assert_stmt", RuleType.Conjunction, true);
+            ParserRule.of("assert_stmt", RuleType.Conjunction);
 
     public static AssertStmt of(ParseTreeNode node) {
         return new AssertStmt(node);
@@ -30,13 +29,13 @@ public final class AssertStmt extends NodeWrapper {
         return hasItemOfRule(2, AssertStmt3.RULE);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
         r = t.consumeToken("assert");
-        r = r && Expr.parse(t, l + 1);
-        if (r) AssertStmt3.parse(t, l + 1);
+        r = r && Expr.parse(t, lv + 1);
+        if (r) AssertStmt3.parse(t, lv + 1);
         t.exit(r);
         return r;
     }
@@ -45,9 +44,8 @@ public final class AssertStmt extends NodeWrapper {
      * ',' 'expr'
      */
     public static final class AssertStmt3 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("assert_stmt:3", RuleType.Conjunction, false);
+                ParserRule.of("assert_stmt:3", RuleType.Conjunction);
 
         public static AssertStmt3 of(ParseTreeNode node) {
             return new AssertStmt3(node);
@@ -61,12 +59,12 @@ public final class AssertStmt extends NodeWrapper {
             return Expr.of(getItem(1));
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
             r = t.consumeToken(",");
-            r = r && Expr.parse(t, l + 1);
+            r = r && Expr.parse(t, lv + 1);
             t.exit(r);
             return r;
         }

@@ -6,9 +6,8 @@ import org.fugalang.core.parser.*;
  * inversion: 'not' 'inversion' | 'comparison'
  */
 public final class Inversion extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("inversion", RuleType.Disjunction, true);
+            ParserRule.of("inversion", RuleType.Disjunction);
 
     public static Inversion of(ParseTreeNode node) {
         return new Inversion(node);
@@ -34,12 +33,12 @@ public final class Inversion extends NodeWrapper {
         return hasItemOfRule(1, Comparison.RULE);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
-        r = Inversion1.parse(t, l + 1);
-        r = r || Comparison.parse(t, l + 1);
+        r = Inversion1.parse(t, lv + 1);
+        r = r || Comparison.parse(t, lv + 1);
         t.exit(r);
         return r;
     }
@@ -48,9 +47,8 @@ public final class Inversion extends NodeWrapper {
      * 'not' 'inversion'
      */
     public static final class Inversion1 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("inversion:1", RuleType.Conjunction, false);
+                ParserRule.of("inversion:1", RuleType.Conjunction);
 
         public static Inversion1 of(ParseTreeNode node) {
             return new Inversion1(node);
@@ -64,12 +62,12 @@ public final class Inversion extends NodeWrapper {
             return Inversion.of(getItem(1));
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
             r = t.consumeToken("not");
-            r = r && Inversion.parse(t, l + 1);
+            r = r && Inversion.parse(t, lv + 1);
             t.exit(r);
             return r;
         }

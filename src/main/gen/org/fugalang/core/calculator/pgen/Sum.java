@@ -8,9 +8,8 @@ import java.util.List;
  * sum: 'term' (('+' | '-') 'term')*
  */
 public final class Sum extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("sum", RuleType.Conjunction, true);
+            ParserRule.of("sum", RuleType.Conjunction);
 
     public static Sum of(ParseTreeNode node) {
         return new Sum(node);
@@ -28,21 +27,21 @@ public final class Sum extends NodeWrapper {
         return getList(1, Sum2::of);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
-        r = Term.parse(t, l + 1);
-        if (r) parseSum2List(t, l);
+        r = Term.parse(t, lv + 1);
+        if (r) parseSum2List(t, lv);
         t.exit(r);
         return r;
     }
 
-    private static void parseSum2List(ParseTree t, int l) {
+    private static void parseSum2List(ParseTree t, int lv) {
         t.enterCollection();
         while (true) {
             var p = t.position();
-            if (!Sum2.parse(t, l + 1)) break;
+            if (!Sum2.parse(t, lv + 1)) break;
             if (t.guardLoopExit(p)) break;
         }
         t.exitCollection();
@@ -52,9 +51,8 @@ public final class Sum extends NodeWrapper {
      * ('+' | '-') 'term'
      */
     public static final class Sum2 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("sum:2", RuleType.Conjunction, false);
+                ParserRule.of("sum:2", RuleType.Conjunction);
 
         public static Sum2 of(ParseTreeNode node) {
             return new Sum2(node);
@@ -72,12 +70,12 @@ public final class Sum extends NodeWrapper {
             return Term.of(getItem(1));
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
-            r = Sum21.parse(t, l + 1);
-            r = r && Term.parse(t, l + 1);
+            r = Sum21.parse(t, lv + 1);
+            r = r && Term.parse(t, lv + 1);
             t.exit(r);
             return r;
         }
@@ -87,9 +85,8 @@ public final class Sum extends NodeWrapper {
      * '+' | '-'
      */
     public static final class Sum21 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("sum:2:1", RuleType.Disjunction, false);
+                ParserRule.of("sum:2:1", RuleType.Disjunction);
 
         public static Sum21 of(ParseTreeNode node) {
             return new Sum21(node);
@@ -107,9 +104,9 @@ public final class Sum extends NodeWrapper {
             return getBoolean(1);
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
             r = t.consumeToken("+");
             r = r || t.consumeToken("-");

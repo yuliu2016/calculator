@@ -6,9 +6,8 @@ import org.fugalang.core.parser.*;
  * func_suite: ':' 'expr' | 'block_suite'
  */
 public final class FuncSuite extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("func_suite", RuleType.Disjunction, true);
+            ParserRule.of("func_suite", RuleType.Disjunction);
 
     public static FuncSuite of(ParseTreeNode node) {
         return new FuncSuite(node);
@@ -34,12 +33,12 @@ public final class FuncSuite extends NodeWrapper {
         return hasItemOfRule(1, BlockSuite.RULE);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
-        r = FuncSuite1.parse(t, l + 1);
-        r = r || BlockSuite.parse(t, l + 1);
+        r = FuncSuite1.parse(t, lv + 1);
+        r = r || BlockSuite.parse(t, lv + 1);
         t.exit(r);
         return r;
     }
@@ -48,9 +47,8 @@ public final class FuncSuite extends NodeWrapper {
      * ':' 'expr'
      */
     public static final class FuncSuite1 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("func_suite:1", RuleType.Conjunction, false);
+                ParserRule.of("func_suite:1", RuleType.Conjunction);
 
         public static FuncSuite1 of(ParseTreeNode node) {
             return new FuncSuite1(node);
@@ -64,12 +62,12 @@ public final class FuncSuite extends NodeWrapper {
             return Expr.of(getItem(1));
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
             r = t.consumeToken(":");
-            r = r && Expr.parse(t, l + 1);
+            r = r && Expr.parse(t, lv + 1);
             t.exit(r);
             return r;
         }

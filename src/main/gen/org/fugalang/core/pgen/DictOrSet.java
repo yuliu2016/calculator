@@ -6,9 +6,8 @@ import org.fugalang.core.parser.*;
  * dict_or_set: 'dict_maker' | 'set_maker'
  */
 public final class DictOrSet extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("dict_or_set", RuleType.Disjunction, true);
+            ParserRule.of("dict_or_set", RuleType.Disjunction);
 
     public static DictOrSet of(ParseTreeNode node) {
         return new DictOrSet(node);
@@ -34,12 +33,12 @@ public final class DictOrSet extends NodeWrapper {
         return hasItemOfRule(1, SetMaker.RULE);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
-        r = DictMaker.parse(t, l + 1);
-        r = r || SetMaker.parse(t, l + 1);
+        r = DictMaker.parse(t, lv + 1);
+        r = r || SetMaker.parse(t, lv + 1);
         t.exit(r);
         return r;
     }

@@ -7,9 +7,8 @@ import org.fugalang.core.token.TokenType;
  * sub_rule: '(' 'or_rule' ')' | '[' 'or_rule' ']' | 'NAME' | 'STRING'
  */
 public final class SubRule extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("sub_rule", RuleType.Disjunction, true);
+            ParserRule.of("sub_rule", RuleType.Disjunction);
 
     public static SubRule of(ParseTreeNode node) {
         return new SubRule(node);
@@ -51,12 +50,12 @@ public final class SubRule extends NodeWrapper {
         return hasItemOfType(3, TokenType.STRING);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
-        r = SubRule1.parse(t, l + 1);
-        r = r || SubRule2.parse(t, l + 1);
+        r = SubRule1.parse(t, lv + 1);
+        r = r || SubRule2.parse(t, lv + 1);
         r = r || t.consumeToken(TokenType.NAME);
         r = r || t.consumeToken(TokenType.STRING);
         t.exit(r);
@@ -67,9 +66,8 @@ public final class SubRule extends NodeWrapper {
      * '(' 'or_rule' ')'
      */
     public static final class SubRule1 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("sub_rule:1", RuleType.Conjunction, false);
+                ParserRule.of("sub_rule:1", RuleType.Conjunction);
 
         public static SubRule1 of(ParseTreeNode node) {
             return new SubRule1(node);
@@ -83,12 +81,12 @@ public final class SubRule extends NodeWrapper {
             return OrRule.of(getItem(1));
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
             r = t.consumeToken("(");
-            r = r && OrRule.parse(t, l + 1);
+            r = r && OrRule.parse(t, lv + 1);
             r = r && t.consumeToken(")");
             t.exit(r);
             return r;
@@ -99,9 +97,8 @@ public final class SubRule extends NodeWrapper {
      * '[' 'or_rule' ']'
      */
     public static final class SubRule2 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("sub_rule:2", RuleType.Conjunction, false);
+                ParserRule.of("sub_rule:2", RuleType.Conjunction);
 
         public static SubRule2 of(ParseTreeNode node) {
             return new SubRule2(node);
@@ -115,12 +112,12 @@ public final class SubRule extends NodeWrapper {
             return OrRule.of(getItem(1));
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
             r = t.consumeToken("[");
-            r = r && OrRule.parse(t, l + 1);
+            r = r && OrRule.parse(t, lv + 1);
             r = r && t.consumeToken("]");
             t.exit(r);
             return r;

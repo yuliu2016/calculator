@@ -8,9 +8,8 @@ import java.util.List;
  * bitwise_xor: 'bitwise_and' ('^' 'bitwise_and')*
  */
 public final class BitwiseXor extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("bitwise_xor", RuleType.Conjunction, true);
+            ParserRule.of("bitwise_xor", RuleType.Conjunction);
 
     public static BitwiseXor of(ParseTreeNode node) {
         return new BitwiseXor(node);
@@ -28,21 +27,21 @@ public final class BitwiseXor extends NodeWrapper {
         return getList(1, BitwiseXor2::of);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
-        r = BitwiseAnd.parse(t, l + 1);
-        if (r) parseBitwiseXor2List(t, l);
+        r = BitwiseAnd.parse(t, lv + 1);
+        if (r) parseBitwiseXor2List(t, lv);
         t.exit(r);
         return r;
     }
 
-    private static void parseBitwiseXor2List(ParseTree t, int l) {
+    private static void parseBitwiseXor2List(ParseTree t, int lv) {
         t.enterCollection();
         while (true) {
             var p = t.position();
-            if (!BitwiseXor2.parse(t, l + 1)) break;
+            if (!BitwiseXor2.parse(t, lv + 1)) break;
             if (t.guardLoopExit(p)) break;
         }
         t.exitCollection();
@@ -52,9 +51,8 @@ public final class BitwiseXor extends NodeWrapper {
      * '^' 'bitwise_and'
      */
     public static final class BitwiseXor2 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("bitwise_xor:2", RuleType.Conjunction, false);
+                ParserRule.of("bitwise_xor:2", RuleType.Conjunction);
 
         public static BitwiseXor2 of(ParseTreeNode node) {
             return new BitwiseXor2(node);
@@ -68,12 +66,12 @@ public final class BitwiseXor extends NodeWrapper {
             return BitwiseAnd.of(getItem(1));
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
             r = t.consumeToken("^");
-            r = r && BitwiseAnd.parse(t, l + 1);
+            r = r && BitwiseAnd.parse(t, lv + 1);
             t.exit(r);
             return r;
         }

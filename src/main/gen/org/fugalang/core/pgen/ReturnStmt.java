@@ -6,9 +6,8 @@ import org.fugalang.core.parser.*;
  * return_stmt: 'return' ['exprlist_star']
  */
 public final class ReturnStmt extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("return_stmt", RuleType.Conjunction, true);
+            ParserRule.of("return_stmt", RuleType.Conjunction);
 
     public static ReturnStmt of(ParseTreeNode node) {
         return new ReturnStmt(node);
@@ -26,12 +25,12 @@ public final class ReturnStmt extends NodeWrapper {
         return hasItemOfRule(1, ExprlistStar.RULE);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
         r = t.consumeToken("return");
-        if (r) ExprlistStar.parse(t, l + 1);
+        if (r) ExprlistStar.parse(t, lv + 1);
         t.exit(r);
         return r;
     }

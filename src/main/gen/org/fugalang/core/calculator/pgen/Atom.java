@@ -7,9 +7,8 @@ import org.fugalang.core.token.TokenType;
  * atom: '(' 'sum' ')' | 'NUMBER'
  */
 public final class Atom extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("atom", RuleType.Disjunction, true);
+            ParserRule.of("atom", RuleType.Disjunction);
 
     public static Atom of(ParseTreeNode node) {
         return new Atom(node);
@@ -35,11 +34,11 @@ public final class Atom extends NodeWrapper {
         return hasItemOfType(1, TokenType.NUMBER);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
-        r = Atom1.parse(t, l + 1);
+        r = Atom1.parse(t, lv + 1);
         r = r || t.consumeToken(TokenType.NUMBER);
         t.exit(r);
         return r;
@@ -49,9 +48,8 @@ public final class Atom extends NodeWrapper {
      * '(' 'sum' ')'
      */
     public static final class Atom1 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("atom:1", RuleType.Conjunction, false);
+                ParserRule.of("atom:1", RuleType.Conjunction);
 
         public static Atom1 of(ParseTreeNode node) {
             return new Atom1(node);
@@ -65,12 +63,12 @@ public final class Atom extends NodeWrapper {
             return Sum.of(getItem(1));
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
             r = t.consumeToken("(");
-            r = r && Sum.parse(t, l + 1);
+            r = r && Sum.parse(t, lv + 1);
             r = r && t.consumeToken(")");
             t.exit(r);
             return r;

@@ -8,9 +8,8 @@ import java.util.List;
  * pipeline: 'factor' ('->' 'pipe_expr')*
  */
 public final class Pipeline extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("pipeline", RuleType.Conjunction, true);
+            ParserRule.of("pipeline", RuleType.Conjunction);
 
     public static Pipeline of(ParseTreeNode node) {
         return new Pipeline(node);
@@ -28,21 +27,21 @@ public final class Pipeline extends NodeWrapper {
         return getList(1, Pipeline2::of);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
-        r = Factor.parse(t, l + 1);
-        if (r) parsePipeline2List(t, l);
+        r = Factor.parse(t, lv + 1);
+        if (r) parsePipeline2List(t, lv);
         t.exit(r);
         return r;
     }
 
-    private static void parsePipeline2List(ParseTree t, int l) {
+    private static void parsePipeline2List(ParseTree t, int lv) {
         t.enterCollection();
         while (true) {
             var p = t.position();
-            if (!Pipeline2.parse(t, l + 1)) break;
+            if (!Pipeline2.parse(t, lv + 1)) break;
             if (t.guardLoopExit(p)) break;
         }
         t.exitCollection();
@@ -52,9 +51,8 @@ public final class Pipeline extends NodeWrapper {
      * '->' 'pipe_expr'
      */
     public static final class Pipeline2 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("pipeline:2", RuleType.Conjunction, false);
+                ParserRule.of("pipeline:2", RuleType.Conjunction);
 
         public static Pipeline2 of(ParseTreeNode node) {
             return new Pipeline2(node);
@@ -68,12 +66,12 @@ public final class Pipeline extends NodeWrapper {
             return PipeExpr.of(getItem(1));
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
             r = t.consumeToken("->");
-            r = r && PipeExpr.parse(t, l + 1);
+            r = r && PipeExpr.parse(t, lv + 1);
             t.exit(r);
             return r;
         }

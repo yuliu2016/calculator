@@ -6,9 +6,8 @@ import org.fugalang.core.parser.*;
  * subscript: '[' 'slicelist' ']'
  */
 public final class Subscript extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("subscript", RuleType.Conjunction, true);
+            ParserRule.of("subscript", RuleType.Conjunction);
 
     public static Subscript of(ParseTreeNode node) {
         return new Subscript(node);
@@ -22,12 +21,12 @@ public final class Subscript extends NodeWrapper {
         return Slicelist.of(getItem(1));
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
         r = t.consumeToken("[");
-        r = r && Slicelist.parse(t, l + 1);
+        r = r && Slicelist.parse(t, lv + 1);
         r = r && t.consumeToken("]");
         t.exit(r);
         return r;

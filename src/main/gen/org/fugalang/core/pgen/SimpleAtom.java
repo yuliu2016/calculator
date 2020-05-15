@@ -7,9 +7,8 @@ import org.fugalang.core.token.TokenType;
  * simple_atom: 'NAME' | 'NUMBER' | 'STRING' | 'None' | 'True' | 'False'
  */
 public final class SimpleAtom extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("simple_atom", RuleType.Disjunction, true);
+            ParserRule.of("simple_atom", RuleType.Disjunction);
 
     public static SimpleAtom of(ParseTreeNode node) {
         return new SimpleAtom(node);
@@ -55,9 +54,9 @@ public final class SimpleAtom extends NodeWrapper {
         return getBoolean(5);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
         r = t.consumeToken(TokenType.NAME);
         r = r || t.consumeToken(TokenType.NUMBER);

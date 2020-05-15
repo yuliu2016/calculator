@@ -8,9 +8,8 @@ import java.util.List;
  * and_rule: 'repeat_rule' ('repeat_rule')*
  */
 public final class AndRule extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("and_rule", RuleType.Conjunction, true);
+            ParserRule.of("and_rule", RuleType.Conjunction);
 
     public static AndRule of(ParseTreeNode node) {
         return new AndRule(node);
@@ -28,21 +27,21 @@ public final class AndRule extends NodeWrapper {
         return getList(1, AndRule2::of);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
-        r = RepeatRule.parse(t, l + 1);
-        if (r) parseAndRule2List(t, l);
+        r = RepeatRule.parse(t, lv + 1);
+        if (r) parseAndRule2List(t, lv);
         t.exit(r);
         return r;
     }
 
-    private static void parseAndRule2List(ParseTree t, int l) {
+    private static void parseAndRule2List(ParseTree t, int lv) {
         t.enterCollection();
         while (true) {
             var p = t.position();
-            if (!AndRule2.parse(t, l + 1)) break;
+            if (!AndRule2.parse(t, lv + 1)) break;
             if (t.guardLoopExit(p)) break;
         }
         t.exitCollection();
@@ -52,9 +51,8 @@ public final class AndRule extends NodeWrapper {
      * 'repeat_rule'
      */
     public static final class AndRule2 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("and_rule:2", RuleType.Conjunction, false);
+                ParserRule.of("and_rule:2", RuleType.Conjunction);
 
         public static AndRule2 of(ParseTreeNode node) {
             return new AndRule2(node);
@@ -68,11 +66,11 @@ public final class AndRule extends NodeWrapper {
             return RepeatRule.of(getItem(0));
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
-            r = RepeatRule.parse(t, l + 1);
+            r = RepeatRule.parse(t, lv + 1);
             t.exit(r);
             return r;
         }

@@ -8,9 +8,8 @@ import java.util.List;
  * import_from_names: '.'* 'dotted_name' | '.'+
  */
 public final class ImportFromNames extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("import_from_names", RuleType.Disjunction, true);
+            ParserRule.of("import_from_names", RuleType.Disjunction);
 
     public static ImportFromNames of(ParseTreeNode node) {
         return new ImportFromNames(node);
@@ -32,17 +31,17 @@ public final class ImportFromNames extends NodeWrapper {
         return getList(1, ParseTreeNode::asBoolean);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
-        r = ImportFromNames1.parse(t, l + 1);
-        r = r || parseIsTokenDotList(t, l);
+        r = ImportFromNames1.parse(t, lv + 1);
+        r = r || parseIsTokenDotList(t, lv);
         t.exit(r);
         return r;
     }
 
-    private static boolean parseIsTokenDotList(ParseTree t, int l) {
+    private static boolean parseIsTokenDotList(ParseTree t, int lv) {
         t.enterCollection();
         var r = t.consumeToken(".");
         if (r) while (true) {
@@ -58,9 +57,8 @@ public final class ImportFromNames extends NodeWrapper {
      * '.'* 'dotted_name'
      */
     public static final class ImportFromNames1 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("import_from_names:1", RuleType.Conjunction, false);
+                ParserRule.of("import_from_names:1", RuleType.Conjunction);
 
         public static ImportFromNames1 of(ParseTreeNode node) {
             return new ImportFromNames1(node);
@@ -78,17 +76,17 @@ public final class ImportFromNames extends NodeWrapper {
             return DottedName.of(getItem(1));
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
-            parseIsTokenDotList(t, l);
-            r = DottedName.parse(t, l + 1);
+            parseIsTokenDotList(t, lv);
+            r = DottedName.parse(t, lv + 1);
             t.exit(r);
             return r;
         }
 
-        private static void parseIsTokenDotList(ParseTree t, int l) {
+        private static void parseIsTokenDotList(ParseTree t, int lv) {
             t.enterCollection();
             while (true) {
                 var p = t.position();

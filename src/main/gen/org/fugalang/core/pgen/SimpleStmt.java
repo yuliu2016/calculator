@@ -8,9 +8,8 @@ import java.util.List;
  * simple_stmt: 'small_stmt' (';' 'small_stmt')* [';']
  */
 public final class SimpleStmt extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("simple_stmt", RuleType.Conjunction, true);
+            ParserRule.of("simple_stmt", RuleType.Conjunction);
 
     public static SimpleStmt of(ParseTreeNode node) {
         return new SimpleStmt(node);
@@ -32,22 +31,22 @@ public final class SimpleStmt extends NodeWrapper {
         return getBoolean(2);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
-        r = SmallStmt.parse(t, l + 1);
-        if (r) parseSimpleStmt2List(t, l);
+        r = SmallStmt.parse(t, lv + 1);
+        if (r) parseSimpleStmt2List(t, lv);
         if (r) t.consumeToken(";");
         t.exit(r);
         return r;
     }
 
-    private static void parseSimpleStmt2List(ParseTree t, int l) {
+    private static void parseSimpleStmt2List(ParseTree t, int lv) {
         t.enterCollection();
         while (true) {
             var p = t.position();
-            if (!SimpleStmt2.parse(t, l + 1)) break;
+            if (!SimpleStmt2.parse(t, lv + 1)) break;
             if (t.guardLoopExit(p)) break;
         }
         t.exitCollection();
@@ -57,9 +56,8 @@ public final class SimpleStmt extends NodeWrapper {
      * ';' 'small_stmt'
      */
     public static final class SimpleStmt2 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("simple_stmt:2", RuleType.Conjunction, false);
+                ParserRule.of("simple_stmt:2", RuleType.Conjunction);
 
         public static SimpleStmt2 of(ParseTreeNode node) {
             return new SimpleStmt2(node);
@@ -73,12 +71,12 @@ public final class SimpleStmt extends NodeWrapper {
             return SmallStmt.of(getItem(1));
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
             r = t.consumeToken(";");
-            r = r && SmallStmt.parse(t, l + 1);
+            r = r && SmallStmt.parse(t, lv + 1);
             t.exit(r);
             return r;
         }

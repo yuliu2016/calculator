@@ -6,9 +6,8 @@ import org.fugalang.core.parser.*;
  * while_stmt: 'while' 'named_expr' 'suite' ['else_suite']
  */
 public final class WhileStmt extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("while_stmt", RuleType.Conjunction, true);
+            ParserRule.of("while_stmt", RuleType.Conjunction);
 
     public static WhileStmt of(ParseTreeNode node) {
         return new WhileStmt(node);
@@ -34,14 +33,14 @@ public final class WhileStmt extends NodeWrapper {
         return hasItemOfRule(3, ElseSuite.RULE);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
         r = t.consumeToken("while");
-        r = r && NamedExpr.parse(t, l + 1);
-        r = r && Suite.parse(t, l + 1);
-        if (r) ElseSuite.parse(t, l + 1);
+        r = r && NamedExpr.parse(t, lv + 1);
+        r = r && Suite.parse(t, lv + 1);
+        if (r) ElseSuite.parse(t, lv + 1);
         t.exit(r);
         return r;
     }

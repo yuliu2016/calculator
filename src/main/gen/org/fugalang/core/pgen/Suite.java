@@ -6,9 +6,8 @@ import org.fugalang.core.parser.*;
  * suite: ':' 'simple_stmt' | 'block_suite'
  */
 public final class Suite extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("suite", RuleType.Disjunction, true);
+            ParserRule.of("suite", RuleType.Disjunction);
 
     public static Suite of(ParseTreeNode node) {
         return new Suite(node);
@@ -34,12 +33,12 @@ public final class Suite extends NodeWrapper {
         return hasItemOfRule(1, BlockSuite.RULE);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
-        r = Suite1.parse(t, l + 1);
-        r = r || BlockSuite.parse(t, l + 1);
+        r = Suite1.parse(t, lv + 1);
+        r = r || BlockSuite.parse(t, lv + 1);
         t.exit(r);
         return r;
     }
@@ -48,9 +47,8 @@ public final class Suite extends NodeWrapper {
      * ':' 'simple_stmt'
      */
     public static final class Suite1 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("suite:1", RuleType.Conjunction, false);
+                ParserRule.of("suite:1", RuleType.Conjunction);
 
         public static Suite1 of(ParseTreeNode node) {
             return new Suite1(node);
@@ -64,12 +62,12 @@ public final class Suite extends NodeWrapper {
             return SimpleStmt.of(getItem(1));
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
             r = t.consumeToken(":");
-            r = r && SimpleStmt.parse(t, l + 1);
+            r = r && SimpleStmt.parse(t, lv + 1);
             t.exit(r);
             return r;
         }

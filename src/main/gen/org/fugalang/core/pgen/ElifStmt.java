@@ -6,9 +6,8 @@ import org.fugalang.core.parser.*;
  * elif_stmt: 'elif' 'named_expr' 'suite'
  */
 public final class ElifStmt extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("elif_stmt", RuleType.Conjunction, true);
+            ParserRule.of("elif_stmt", RuleType.Conjunction);
 
     public static ElifStmt of(ParseTreeNode node) {
         return new ElifStmt(node);
@@ -26,13 +25,13 @@ public final class ElifStmt extends NodeWrapper {
         return Suite.of(getItem(2));
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
         r = t.consumeToken("elif");
-        r = r && NamedExpr.parse(t, l + 1);
-        r = r && Suite.parse(t, l + 1);
+        r = r && NamedExpr.parse(t, lv + 1);
+        r = r && Suite.parse(t, lv + 1);
         t.exit(r);
         return r;
     }

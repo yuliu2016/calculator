@@ -8,9 +8,8 @@ import java.util.List;
  * conjunction: 'inversion' ('and' 'inversion')*
  */
 public final class Conjunction extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("conjunction", RuleType.Conjunction, true);
+            ParserRule.of("conjunction", RuleType.Conjunction);
 
     public static Conjunction of(ParseTreeNode node) {
         return new Conjunction(node);
@@ -28,21 +27,21 @@ public final class Conjunction extends NodeWrapper {
         return getList(1, Conjunction2::of);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
-        r = Inversion.parse(t, l + 1);
-        if (r) parseConjunction2List(t, l);
+        r = Inversion.parse(t, lv + 1);
+        if (r) parseConjunction2List(t, lv);
         t.exit(r);
         return r;
     }
 
-    private static void parseConjunction2List(ParseTree t, int l) {
+    private static void parseConjunction2List(ParseTree t, int lv) {
         t.enterCollection();
         while (true) {
             var p = t.position();
-            if (!Conjunction2.parse(t, l + 1)) break;
+            if (!Conjunction2.parse(t, lv + 1)) break;
             if (t.guardLoopExit(p)) break;
         }
         t.exitCollection();
@@ -52,9 +51,8 @@ public final class Conjunction extends NodeWrapper {
      * 'and' 'inversion'
      */
     public static final class Conjunction2 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("conjunction:2", RuleType.Conjunction, false);
+                ParserRule.of("conjunction:2", RuleType.Conjunction);
 
         public static Conjunction2 of(ParseTreeNode node) {
             return new Conjunction2(node);
@@ -68,12 +66,12 @@ public final class Conjunction extends NodeWrapper {
             return Inversion.of(getItem(1));
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
             r = t.consumeToken("and");
-            r = r && Inversion.parse(t, l + 1);
+            r = r && Inversion.parse(t, lv + 1);
             t.exit(r);
             return r;
         }

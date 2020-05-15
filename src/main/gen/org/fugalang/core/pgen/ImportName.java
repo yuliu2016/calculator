@@ -6,9 +6,8 @@ import org.fugalang.core.parser.*;
  * import_name: 'import' 'dotted_as_names'
  */
 public final class ImportName extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("import_name", RuleType.Conjunction, true);
+            ParserRule.of("import_name", RuleType.Conjunction);
 
     public static ImportName of(ParseTreeNode node) {
         return new ImportName(node);
@@ -22,12 +21,12 @@ public final class ImportName extends NodeWrapper {
         return DottedAsNames.of(getItem(1));
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
         r = t.consumeToken("import");
-        r = r && DottedAsNames.parse(t, l + 1);
+        r = r && DottedAsNames.parse(t, lv + 1);
         t.exit(r);
         return r;
     }

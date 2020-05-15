@@ -8,9 +8,8 @@ import java.util.List;
  * named_expr_list: 'named_expr_star' (',' 'named_expr_star')* [',']
  */
 public final class NamedExprList extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("named_expr_list", RuleType.Conjunction, true);
+            ParserRule.of("named_expr_list", RuleType.Conjunction);
 
     public static NamedExprList of(ParseTreeNode node) {
         return new NamedExprList(node);
@@ -32,22 +31,22 @@ public final class NamedExprList extends NodeWrapper {
         return getBoolean(2);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
-        r = NamedExprStar.parse(t, l + 1);
-        if (r) parseNamedExprList2List(t, l);
+        r = NamedExprStar.parse(t, lv + 1);
+        if (r) parseNamedExprList2List(t, lv);
         if (r) t.consumeToken(",");
         t.exit(r);
         return r;
     }
 
-    private static void parseNamedExprList2List(ParseTree t, int l) {
+    private static void parseNamedExprList2List(ParseTree t, int lv) {
         t.enterCollection();
         while (true) {
             var p = t.position();
-            if (!NamedExprList2.parse(t, l + 1)) break;
+            if (!NamedExprList2.parse(t, lv + 1)) break;
             if (t.guardLoopExit(p)) break;
         }
         t.exitCollection();
@@ -57,9 +56,8 @@ public final class NamedExprList extends NodeWrapper {
      * ',' 'named_expr_star'
      */
     public static final class NamedExprList2 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("named_expr_list:2", RuleType.Conjunction, false);
+                ParserRule.of("named_expr_list:2", RuleType.Conjunction);
 
         public static NamedExprList2 of(ParseTreeNode node) {
             return new NamedExprList2(node);
@@ -73,12 +71,12 @@ public final class NamedExprList extends NodeWrapper {
             return NamedExprStar.of(getItem(1));
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
             r = t.consumeToken(",");
-            r = r && NamedExprStar.parse(t, l + 1);
+            r = r && NamedExprStar.parse(t, lv + 1);
             t.exit(r);
             return r;
         }

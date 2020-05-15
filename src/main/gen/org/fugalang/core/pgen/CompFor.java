@@ -6,9 +6,8 @@ import org.fugalang.core.parser.*;
  * comp_for: 'for' 'targetlist' 'in' 'disjunction' ['comp_iter']
  */
 public final class CompFor extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("comp_for", RuleType.Conjunction, true);
+            ParserRule.of("comp_for", RuleType.Conjunction);
 
     public static CompFor of(ParseTreeNode node) {
         return new CompFor(node);
@@ -34,15 +33,15 @@ public final class CompFor extends NodeWrapper {
         return hasItemOfRule(4, CompIter.RULE);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
         r = t.consumeToken("for");
-        r = r && Targetlist.parse(t, l + 1);
+        r = r && Targetlist.parse(t, lv + 1);
         r = r && t.consumeToken("in");
-        r = r && Disjunction.parse(t, l + 1);
-        if (r) CompIter.parse(t, l + 1);
+        r = r && Disjunction.parse(t, lv + 1);
+        if (r) CompIter.parse(t, lv + 1);
         t.exit(r);
         return r;
     }

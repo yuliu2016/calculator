@@ -8,9 +8,8 @@ import java.util.List;
  * args_kwargs: '*' ['typed_arg'] (',' 'default_arg')* [',' ['kwargs']]
  */
 public final class ArgsKwargs extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("args_kwargs", RuleType.Conjunction, true);
+            ParserRule.of("args_kwargs", RuleType.Conjunction);
 
     public static ArgsKwargs of(ParseTreeNode node) {
         return new ArgsKwargs(node);
@@ -40,23 +39,23 @@ public final class ArgsKwargs extends NodeWrapper {
         return hasItemOfRule(3, ArgsKwargs4.RULE);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
         r = t.consumeToken("*");
-        if (r) TypedArg.parse(t, l + 1);
-        if (r) parseArgsKwargs3List(t, l);
-        if (r) ArgsKwargs4.parse(t, l + 1);
+        if (r) TypedArg.parse(t, lv + 1);
+        if (r) parseArgsKwargs3List(t, lv);
+        if (r) ArgsKwargs4.parse(t, lv + 1);
         t.exit(r);
         return r;
     }
 
-    private static void parseArgsKwargs3List(ParseTree t, int l) {
+    private static void parseArgsKwargs3List(ParseTree t, int lv) {
         t.enterCollection();
         while (true) {
             var p = t.position();
-            if (!ArgsKwargs3.parse(t, l + 1)) break;
+            if (!ArgsKwargs3.parse(t, lv + 1)) break;
             if (t.guardLoopExit(p)) break;
         }
         t.exitCollection();
@@ -66,9 +65,8 @@ public final class ArgsKwargs extends NodeWrapper {
      * ',' 'default_arg'
      */
     public static final class ArgsKwargs3 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("args_kwargs:3", RuleType.Conjunction, false);
+                ParserRule.of("args_kwargs:3", RuleType.Conjunction);
 
         public static ArgsKwargs3 of(ParseTreeNode node) {
             return new ArgsKwargs3(node);
@@ -82,12 +80,12 @@ public final class ArgsKwargs extends NodeWrapper {
             return DefaultArg.of(getItem(1));
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
             r = t.consumeToken(",");
-            r = r && DefaultArg.parse(t, l + 1);
+            r = r && DefaultArg.parse(t, lv + 1);
             t.exit(r);
             return r;
         }
@@ -97,9 +95,8 @@ public final class ArgsKwargs extends NodeWrapper {
      * ',' ['kwargs']
      */
     public static final class ArgsKwargs4 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("args_kwargs:4", RuleType.Conjunction, false);
+                ParserRule.of("args_kwargs:4", RuleType.Conjunction);
 
         public static ArgsKwargs4 of(ParseTreeNode node) {
             return new ArgsKwargs4(node);
@@ -117,12 +114,12 @@ public final class ArgsKwargs extends NodeWrapper {
             return hasItemOfRule(1, Kwargs.RULE);
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
             r = t.consumeToken(",");
-            if (r) Kwargs.parse(t, l + 1);
+            if (r) Kwargs.parse(t, lv + 1);
             t.exit(r);
             return r;
         }

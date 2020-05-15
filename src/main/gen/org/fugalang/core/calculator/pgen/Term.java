@@ -8,9 +8,8 @@ import java.util.List;
  * term: 'factor' (('*' | '/' | '%') 'factor')*
  */
 public final class Term extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("term", RuleType.Conjunction, true);
+            ParserRule.of("term", RuleType.Conjunction);
 
     public static Term of(ParseTreeNode node) {
         return new Term(node);
@@ -28,21 +27,21 @@ public final class Term extends NodeWrapper {
         return getList(1, Term2::of);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
-        r = Factor.parse(t, l + 1);
-        if (r) parseTerm2List(t, l);
+        r = Factor.parse(t, lv + 1);
+        if (r) parseTerm2List(t, lv);
         t.exit(r);
         return r;
     }
 
-    private static void parseTerm2List(ParseTree t, int l) {
+    private static void parseTerm2List(ParseTree t, int lv) {
         t.enterCollection();
         while (true) {
             var p = t.position();
-            if (!Term2.parse(t, l + 1)) break;
+            if (!Term2.parse(t, lv + 1)) break;
             if (t.guardLoopExit(p)) break;
         }
         t.exitCollection();
@@ -52,9 +51,8 @@ public final class Term extends NodeWrapper {
      * ('*' | '/' | '%') 'factor'
      */
     public static final class Term2 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("term:2", RuleType.Conjunction, false);
+                ParserRule.of("term:2", RuleType.Conjunction);
 
         public static Term2 of(ParseTreeNode node) {
             return new Term2(node);
@@ -72,12 +70,12 @@ public final class Term extends NodeWrapper {
             return Factor.of(getItem(1));
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
-            r = Term21.parse(t, l + 1);
-            r = r && Factor.parse(t, l + 1);
+            r = Term21.parse(t, lv + 1);
+            r = r && Factor.parse(t, lv + 1);
             t.exit(r);
             return r;
         }
@@ -87,9 +85,8 @@ public final class Term extends NodeWrapper {
      * '*' | '/' | '%'
      */
     public static final class Term21 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("term:2:1", RuleType.Disjunction, false);
+                ParserRule.of("term:2:1", RuleType.Disjunction);
 
         public static Term21 of(ParseTreeNode node) {
             return new Term21(node);
@@ -111,9 +108,9 @@ public final class Term extends NodeWrapper {
             return getBoolean(2);
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
             r = t.consumeToken("*");
             r = r || t.consumeToken("/");

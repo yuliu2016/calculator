@@ -6,9 +6,8 @@ import org.fugalang.core.parser.*;
  * for_stmt: 'for' 'targetlist' 'in' 'exprlist' 'suite' ['else_suite']
  */
 public final class ForStmt extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("for_stmt", RuleType.Conjunction, true);
+            ParserRule.of("for_stmt", RuleType.Conjunction);
 
     public static ForStmt of(ParseTreeNode node) {
         return new ForStmt(node);
@@ -38,16 +37,16 @@ public final class ForStmt extends NodeWrapper {
         return hasItemOfRule(5, ElseSuite.RULE);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
         r = t.consumeToken("for");
-        r = r && Targetlist.parse(t, l + 1);
+        r = r && Targetlist.parse(t, lv + 1);
         r = r && t.consumeToken("in");
-        r = r && Exprlist.parse(t, l + 1);
-        r = r && Suite.parse(t, l + 1);
-        if (r) ElseSuite.parse(t, l + 1);
+        r = r && Exprlist.parse(t, lv + 1);
+        r = r && Suite.parse(t, lv + 1);
+        if (r) ElseSuite.parse(t, lv + 1);
         t.exit(r);
         return r;
     }

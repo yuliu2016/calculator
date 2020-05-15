@@ -8,9 +8,8 @@ import java.util.List;
  * try_stmt: 'try' 'suite' (('except_clause' 'suite')+ ['else_suite'] ['finally_suite'] | 'finally_suite')
  */
 public final class TryStmt extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("try_stmt", RuleType.Conjunction, true);
+            ParserRule.of("try_stmt", RuleType.Conjunction);
 
     public static TryStmt of(ParseTreeNode node) {
         return new TryStmt(node);
@@ -28,13 +27,13 @@ public final class TryStmt extends NodeWrapper {
         return TryStmt3.of(getItem(2));
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
         r = t.consumeToken("try");
-        r = r && Suite.parse(t, l + 1);
-        r = r && TryStmt3.parse(t, l + 1);
+        r = r && Suite.parse(t, lv + 1);
+        r = r && TryStmt3.parse(t, lv + 1);
         t.exit(r);
         return r;
     }
@@ -43,9 +42,8 @@ public final class TryStmt extends NodeWrapper {
      * ('except_clause' 'suite')+ ['else_suite'] ['finally_suite'] | 'finally_suite'
      */
     public static final class TryStmt3 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("try_stmt:3", RuleType.Disjunction, false);
+                ParserRule.of("try_stmt:3", RuleType.Disjunction);
 
         public static TryStmt3 of(ParseTreeNode node) {
             return new TryStmt3(node);
@@ -71,12 +69,12 @@ public final class TryStmt extends NodeWrapper {
             return hasItemOfRule(1, FinallySuite.RULE);
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
-            r = TryStmt31.parse(t, l + 1);
-            r = r || FinallySuite.parse(t, l + 1);
+            r = TryStmt31.parse(t, lv + 1);
+            r = r || FinallySuite.parse(t, lv + 1);
             t.exit(r);
             return r;
         }
@@ -86,9 +84,8 @@ public final class TryStmt extends NodeWrapper {
      * ('except_clause' 'suite')+ ['else_suite'] ['finally_suite']
      */
     public static final class TryStmt31 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("try_stmt:3:1", RuleType.Conjunction, false);
+                ParserRule.of("try_stmt:3:1", RuleType.Conjunction);
 
         public static TryStmt31 of(ParseTreeNode node) {
             return new TryStmt31(node);
@@ -118,23 +115,23 @@ public final class TryStmt extends NodeWrapper {
             return hasItemOfRule(2, FinallySuite.RULE);
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
-            r = parseTryStmt311List(t, l);
-            if (r) ElseSuite.parse(t, l + 1);
-            if (r) FinallySuite.parse(t, l + 1);
+            r = parseTryStmt311List(t, lv);
+            if (r) ElseSuite.parse(t, lv + 1);
+            if (r) FinallySuite.parse(t, lv + 1);
             t.exit(r);
             return r;
         }
 
-        private static boolean parseTryStmt311List(ParseTree t, int l) {
+        private static boolean parseTryStmt311List(ParseTree t, int lv) {
             t.enterCollection();
-            var r = TryStmt311.parse(t, l + 1);
+            var r = TryStmt311.parse(t, lv + 1);
             if (r) while (true) {
                 var p = t.position();
-                if (!TryStmt311.parse(t, l + 1)) break;
+                if (!TryStmt311.parse(t, lv + 1)) break;
                 if (t.guardLoopExit(p)) break;
             }
             t.exitCollection();
@@ -146,9 +143,8 @@ public final class TryStmt extends NodeWrapper {
      * 'except_clause' 'suite'
      */
     public static final class TryStmt311 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("try_stmt:3:1:1", RuleType.Conjunction, false);
+                ParserRule.of("try_stmt:3:1:1", RuleType.Conjunction);
 
         public static TryStmt311 of(ParseTreeNode node) {
             return new TryStmt311(node);
@@ -166,12 +162,12 @@ public final class TryStmt extends NodeWrapper {
             return Suite.of(getItem(1));
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
-            r = ExceptClause.parse(t, l + 1);
-            r = r && Suite.parse(t, l + 1);
+            r = ExceptClause.parse(t, lv + 1);
+            r = r && Suite.parse(t, lv + 1);
             t.exit(r);
             return r;
         }

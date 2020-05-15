@@ -6,9 +6,8 @@ import org.fugalang.core.parser.*;
  * dict_item: 'expr' ':' 'expr' | '**' 'bitwise_or'
  */
 public final class DictItem extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("dict_item", RuleType.Disjunction, true);
+            ParserRule.of("dict_item", RuleType.Disjunction);
 
     public static DictItem of(ParseTreeNode node) {
         return new DictItem(node);
@@ -34,12 +33,12 @@ public final class DictItem extends NodeWrapper {
         return hasItemOfRule(1, DictItem2.RULE);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
-        r = DictItem1.parse(t, l + 1);
-        r = r || DictItem2.parse(t, l + 1);
+        r = DictItem1.parse(t, lv + 1);
+        r = r || DictItem2.parse(t, lv + 1);
         t.exit(r);
         return r;
     }
@@ -48,9 +47,8 @@ public final class DictItem extends NodeWrapper {
      * 'expr' ':' 'expr'
      */
     public static final class DictItem1 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("dict_item:1", RuleType.Conjunction, false);
+                ParserRule.of("dict_item:1", RuleType.Conjunction);
 
         public static DictItem1 of(ParseTreeNode node) {
             return new DictItem1(node);
@@ -68,13 +66,13 @@ public final class DictItem extends NodeWrapper {
             return Expr.of(getItem(2));
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
-            r = Expr.parse(t, l + 1);
+            r = Expr.parse(t, lv + 1);
             r = r && t.consumeToken(":");
-            r = r && Expr.parse(t, l + 1);
+            r = r && Expr.parse(t, lv + 1);
             t.exit(r);
             return r;
         }
@@ -84,9 +82,8 @@ public final class DictItem extends NodeWrapper {
      * '**' 'bitwise_or'
      */
     public static final class DictItem2 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("dict_item:2", RuleType.Conjunction, false);
+                ParserRule.of("dict_item:2", RuleType.Conjunction);
 
         public static DictItem2 of(ParseTreeNode node) {
             return new DictItem2(node);
@@ -100,12 +97,12 @@ public final class DictItem extends NodeWrapper {
             return BitwiseOr.of(getItem(1));
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
             r = t.consumeToken("**");
-            r = r && BitwiseOr.parse(t, l + 1);
+            r = r && BitwiseOr.parse(t, lv + 1);
             t.exit(r);
             return r;
         }

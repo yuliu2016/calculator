@@ -6,9 +6,8 @@ import org.fugalang.core.parser.*;
  * target: 'bitwise_or' | 'star_expr'
  */
 public final class Target extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("target", RuleType.Disjunction, true);
+            ParserRule.of("target", RuleType.Disjunction);
 
     public static Target of(ParseTreeNode node) {
         return new Target(node);
@@ -34,12 +33,12 @@ public final class Target extends NodeWrapper {
         return hasItemOfRule(1, StarExpr.RULE);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
-        r = BitwiseOr.parse(t, l + 1);
-        r = r || StarExpr.parse(t, l + 1);
+        r = BitwiseOr.parse(t, lv + 1);
+        r = r || StarExpr.parse(t, lv + 1);
         t.exit(r);
         return r;
     }

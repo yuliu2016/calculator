@@ -8,9 +8,8 @@ import java.util.List;
  * pipe_for: ['comp_for'] 'for' 'targetlist' ('if' 'expr')* ['parameters'] ['block_suite']
  */
 public final class PipeFor extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("pipe_for", RuleType.Conjunction, true);
+            ParserRule.of("pipe_for", RuleType.Conjunction);
 
     public static PipeFor of(ParseTreeNode node) {
         return new PipeFor(node);
@@ -52,25 +51,25 @@ public final class PipeFor extends NodeWrapper {
         return hasItemOfRule(5, BlockSuite.RULE);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
-        CompFor.parse(t, l + 1);
+        CompFor.parse(t, lv + 1);
         r = t.consumeToken("for");
-        r = r && Targetlist.parse(t, l + 1);
-        if (r) parsePipeFor4List(t, l);
-        if (r) Parameters.parse(t, l + 1);
-        if (r) BlockSuite.parse(t, l + 1);
+        r = r && Targetlist.parse(t, lv + 1);
+        if (r) parsePipeFor4List(t, lv);
+        if (r) Parameters.parse(t, lv + 1);
+        if (r) BlockSuite.parse(t, lv + 1);
         t.exit(r);
         return r;
     }
 
-    private static void parsePipeFor4List(ParseTree t, int l) {
+    private static void parsePipeFor4List(ParseTree t, int lv) {
         t.enterCollection();
         while (true) {
             var p = t.position();
-            if (!PipeFor4.parse(t, l + 1)) break;
+            if (!PipeFor4.parse(t, lv + 1)) break;
             if (t.guardLoopExit(p)) break;
         }
         t.exitCollection();
@@ -80,9 +79,8 @@ public final class PipeFor extends NodeWrapper {
      * 'if' 'expr'
      */
     public static final class PipeFor4 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("pipe_for:4", RuleType.Conjunction, false);
+                ParserRule.of("pipe_for:4", RuleType.Conjunction);
 
         public static PipeFor4 of(ParseTreeNode node) {
             return new PipeFor4(node);
@@ -96,12 +94,12 @@ public final class PipeFor extends NodeWrapper {
             return Expr.of(getItem(1));
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
             r = t.consumeToken("if");
-            r = r && Expr.parse(t, l + 1);
+            r = r && Expr.parse(t, lv + 1);
             t.exit(r);
             return r;
         }

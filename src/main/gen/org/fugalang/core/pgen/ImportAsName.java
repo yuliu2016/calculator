@@ -7,9 +7,8 @@ import org.fugalang.core.token.TokenType;
  * import_as_name: 'NAME' ['as' 'NAME']
  */
 public final class ImportAsName extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("import_as_name", RuleType.Conjunction, true);
+            ParserRule.of("import_as_name", RuleType.Conjunction);
 
     public static ImportAsName of(ParseTreeNode node) {
         return new ImportAsName(node);
@@ -31,12 +30,12 @@ public final class ImportAsName extends NodeWrapper {
         return hasItemOfRule(1, ImportAsName2.RULE);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
         r = t.consumeToken(TokenType.NAME);
-        if (r) ImportAsName2.parse(t, l + 1);
+        if (r) ImportAsName2.parse(t, lv + 1);
         t.exit(r);
         return r;
     }
@@ -45,9 +44,8 @@ public final class ImportAsName extends NodeWrapper {
      * 'as' 'NAME'
      */
     public static final class ImportAsName2 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("import_as_name:2", RuleType.Conjunction, false);
+                ParserRule.of("import_as_name:2", RuleType.Conjunction);
 
         public static ImportAsName2 of(ParseTreeNode node) {
             return new ImportAsName2(node);
@@ -61,9 +59,9 @@ public final class ImportAsName extends NodeWrapper {
             return getItemOfType(1, TokenType.NAME);
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
             r = t.consumeToken("as");
             r = r && t.consumeToken(TokenType.NAME);

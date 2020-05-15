@@ -6,9 +6,8 @@ import org.fugalang.core.parser.*;
  * slice: 'expr' | ['expr'] ':' ['expr'] [':' ['expr']]
  */
 public final class Slice extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("slice", RuleType.Disjunction, true);
+            ParserRule.of("slice", RuleType.Disjunction);
 
     public static Slice of(ParseTreeNode node) {
         return new Slice(node);
@@ -34,12 +33,12 @@ public final class Slice extends NodeWrapper {
         return hasItemOfRule(1, Slice2.RULE);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
-        r = Expr.parse(t, l + 1);
-        r = r || Slice2.parse(t, l + 1);
+        r = Expr.parse(t, lv + 1);
+        r = r || Slice2.parse(t, lv + 1);
         t.exit(r);
         return r;
     }
@@ -48,9 +47,8 @@ public final class Slice extends NodeWrapper {
      * ['expr'] ':' ['expr'] [':' ['expr']]
      */
     public static final class Slice2 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("slice:2", RuleType.Conjunction, false);
+                ParserRule.of("slice:2", RuleType.Conjunction);
 
         public static Slice2 of(ParseTreeNode node) {
             return new Slice2(node);
@@ -84,14 +82,14 @@ public final class Slice extends NodeWrapper {
             return hasItemOfRule(3, Slice24.RULE);
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
-            Expr.parse(t, l + 1);
+            Expr.parse(t, lv + 1);
             r = t.consumeToken(":");
-            if (r) Expr.parse(t, l + 1);
-            if (r) Slice24.parse(t, l + 1);
+            if (r) Expr.parse(t, lv + 1);
+            if (r) Slice24.parse(t, lv + 1);
             t.exit(r);
             return r;
         }
@@ -101,9 +99,8 @@ public final class Slice extends NodeWrapper {
      * ':' ['expr']
      */
     public static final class Slice24 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("slice:2:4", RuleType.Conjunction, false);
+                ParserRule.of("slice:2:4", RuleType.Conjunction);
 
         public static Slice24 of(ParseTreeNode node) {
             return new Slice24(node);
@@ -121,12 +118,12 @@ public final class Slice extends NodeWrapper {
             return hasItemOfRule(1, Expr.RULE);
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
             r = t.consumeToken(":");
-            if (r) Expr.parse(t, l + 1);
+            if (r) Expr.parse(t, lv + 1);
             t.exit(r);
             return r;
         }

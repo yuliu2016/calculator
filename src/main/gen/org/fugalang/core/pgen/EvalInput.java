@@ -9,9 +9,8 @@ import java.util.List;
  * eval_input: 'exprlist' 'NEWLINE'* 'ENDMARKER'
  */
 public final class EvalInput extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("eval_input", RuleType.Conjunction, true);
+            ParserRule.of("eval_input", RuleType.Conjunction);
 
     public static EvalInput of(ParseTreeNode node) {
         return new EvalInput(node);
@@ -33,18 +32,18 @@ public final class EvalInput extends NodeWrapper {
         return getItemOfType(2, TokenType.ENDMARKER);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
-        r = Exprlist.parse(t, l + 1);
-        if (r) parseNewlineList(t, l);
+        r = Exprlist.parse(t, lv + 1);
+        if (r) parseNewlineList(t, lv);
         r = r && t.consumeToken(TokenType.ENDMARKER);
         t.exit(r);
         return r;
     }
 
-    private static void parseNewlineList(ParseTree t, int l) {
+    private static void parseNewlineList(ParseTree t, int lv) {
         t.enterCollection();
         while (true) {
             var p = t.position();

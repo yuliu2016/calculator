@@ -7,9 +7,8 @@ import org.fugalang.core.token.TokenType;
  * with_item: 'expr' ['as' 'NAME']
  */
 public final class WithItem extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("with_item", RuleType.Conjunction, true);
+            ParserRule.of("with_item", RuleType.Conjunction);
 
     public static WithItem of(ParseTreeNode node) {
         return new WithItem(node);
@@ -31,12 +30,12 @@ public final class WithItem extends NodeWrapper {
         return hasItemOfRule(1, WithItem2.RULE);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
-        r = Expr.parse(t, l + 1);
-        if (r) WithItem2.parse(t, l + 1);
+        r = Expr.parse(t, lv + 1);
+        if (r) WithItem2.parse(t, lv + 1);
         t.exit(r);
         return r;
     }
@@ -45,9 +44,8 @@ public final class WithItem extends NodeWrapper {
      * 'as' 'NAME'
      */
     public static final class WithItem2 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("with_item:2", RuleType.Conjunction, false);
+                ParserRule.of("with_item:2", RuleType.Conjunction);
 
         public static WithItem2 of(ParseTreeNode node) {
             return new WithItem2(node);
@@ -61,9 +59,9 @@ public final class WithItem extends NodeWrapper {
             return getItemOfType(1, TokenType.NAME);
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
             r = t.consumeToken("as");
             r = r && t.consumeToken(TokenType.NAME);

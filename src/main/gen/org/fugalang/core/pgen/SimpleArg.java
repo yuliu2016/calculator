@@ -7,9 +7,8 @@ import org.fugalang.core.token.TokenType;
  * simple_arg: 'NAME' ['=' 'expr']
  */
 public final class SimpleArg extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("simple_arg", RuleType.Conjunction, true);
+            ParserRule.of("simple_arg", RuleType.Conjunction);
 
     public static SimpleArg of(ParseTreeNode node) {
         return new SimpleArg(node);
@@ -31,12 +30,12 @@ public final class SimpleArg extends NodeWrapper {
         return hasItemOfRule(1, SimpleArg2.RULE);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
         r = t.consumeToken(TokenType.NAME);
-        if (r) SimpleArg2.parse(t, l + 1);
+        if (r) SimpleArg2.parse(t, lv + 1);
         t.exit(r);
         return r;
     }
@@ -45,9 +44,8 @@ public final class SimpleArg extends NodeWrapper {
      * '=' 'expr'
      */
     public static final class SimpleArg2 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("simple_arg:2", RuleType.Conjunction, false);
+                ParserRule.of("simple_arg:2", RuleType.Conjunction);
 
         public static SimpleArg2 of(ParseTreeNode node) {
             return new SimpleArg2(node);
@@ -61,12 +59,12 @@ public final class SimpleArg extends NodeWrapper {
             return Expr.of(getItem(1));
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
             r = t.consumeToken("=");
-            r = r && Expr.parse(t, l + 1);
+            r = r && Expr.parse(t, lv + 1);
             t.exit(r);
             return r;
         }

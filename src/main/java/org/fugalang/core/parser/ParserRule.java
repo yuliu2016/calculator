@@ -3,16 +3,10 @@ package org.fugalang.core.parser;
 public class ParserRule {
     private final String ruleName;
     private final RuleType ruleType;
-    private final boolean isExplicit;
 
-    public ParserRule(String ruleName, RuleType ruleType) {
-        this(ruleName, ruleType, true);
-    }
-
-    public ParserRule(String ruleName, RuleType ruleType, boolean isExplicit) {
+    private ParserRule(String ruleName, RuleType ruleType) {
         this.ruleName = ruleName;
         this.ruleType = ruleType;
-        this.isExplicit = isExplicit;
     }
 
     public String getRuleName() {
@@ -23,12 +17,12 @@ public class ParserRule {
         return ruleType;
     }
 
-    public boolean isExplicit() {
-        return isExplicit;
-    }
-
     @Override
     public String toString() {
         return ruleName;
+    }
+
+    public static ParserRule of(String ruleName, RuleType ruleType) {
+        return new ParserRule(ruleName, ruleType);
     }
 }

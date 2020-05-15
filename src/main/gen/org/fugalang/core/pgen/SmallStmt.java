@@ -6,9 +6,8 @@ import org.fugalang.core.parser.*;
  * small_stmt: 'del_stmt' | 'pass_stmt' | 'flow_stmt' | 'import_stmt' | 'assert_stmt' | 'assignment'
  */
 public final class SmallStmt extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("small_stmt", RuleType.Disjunction, true);
+            ParserRule.of("small_stmt", RuleType.Disjunction);
 
     public static SmallStmt of(ParseTreeNode node) {
         return new SmallStmt(node);
@@ -66,16 +65,16 @@ public final class SmallStmt extends NodeWrapper {
         return hasItemOfRule(5, Assignment.RULE);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
-        r = DelStmt.parse(t, l + 1);
-        r = r || PassStmt.parse(t, l + 1);
-        r = r || FlowStmt.parse(t, l + 1);
-        r = r || ImportStmt.parse(t, l + 1);
-        r = r || AssertStmt.parse(t, l + 1);
-        r = r || Assignment.parse(t, l + 1);
+        r = DelStmt.parse(t, lv + 1);
+        r = r || PassStmt.parse(t, lv + 1);
+        r = r || FlowStmt.parse(t, lv + 1);
+        r = r || ImportStmt.parse(t, lv + 1);
+        r = r || AssertStmt.parse(t, lv + 1);
+        r = r || Assignment.parse(t, lv + 1);
         t.exit(r);
         return r;
     }

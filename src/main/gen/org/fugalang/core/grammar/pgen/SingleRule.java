@@ -7,9 +7,8 @@ import org.fugalang.core.token.TokenType;
  * single_rule: 'NAME' ':' 'or_rule' 'NEWLINE'
  */
 public final class SingleRule extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("single_rule", RuleType.Conjunction, true);
+            ParserRule.of("single_rule", RuleType.Conjunction);
 
     public static SingleRule of(ParseTreeNode node) {
         return new SingleRule(node);
@@ -31,13 +30,13 @@ public final class SingleRule extends NodeWrapper {
         return getItemOfType(3, TokenType.NEWLINE);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
         r = t.consumeToken(TokenType.NAME);
         r = r && t.consumeToken(":");
-        r = r && OrRule.parse(t, l + 1);
+        r = r && OrRule.parse(t, lv + 1);
         r = r && t.consumeToken(TokenType.NEWLINE);
         t.exit(r);
         return r;

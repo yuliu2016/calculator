@@ -6,9 +6,8 @@ import org.fugalang.core.parser.*;
  * pass_stmt: 'pass'
  */
 public final class PassStmt extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("pass_stmt", RuleType.Conjunction, true);
+            ParserRule.of("pass_stmt", RuleType.Conjunction);
 
     public static PassStmt of(ParseTreeNode node) {
         return new PassStmt(node);
@@ -18,9 +17,9 @@ public final class PassStmt extends NodeWrapper {
         super(RULE, node);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
         r = t.consumeToken("pass");
         t.exit(r);

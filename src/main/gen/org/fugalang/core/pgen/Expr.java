@@ -6,9 +6,8 @@ import org.fugalang.core.parser.*;
  * expr: 'if' 'disjunction' '?' 'disjunction' 'else' 'expr' | 'funcdef' | 'disjunction'
  */
 public final class Expr extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("expr", RuleType.Disjunction, true);
+            ParserRule.of("expr", RuleType.Disjunction);
 
     public static Expr of(ParseTreeNode node) {
         return new Expr(node);
@@ -42,13 +41,13 @@ public final class Expr extends NodeWrapper {
         return hasItemOfRule(2, Disjunction.RULE);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
-        r = Expr1.parse(t, l + 1);
-        r = r || Funcdef.parse(t, l + 1);
-        r = r || Disjunction.parse(t, l + 1);
+        r = Expr1.parse(t, lv + 1);
+        r = r || Funcdef.parse(t, lv + 1);
+        r = r || Disjunction.parse(t, lv + 1);
         t.exit(r);
         return r;
     }
@@ -57,9 +56,8 @@ public final class Expr extends NodeWrapper {
      * 'if' 'disjunction' '?' 'disjunction' 'else' 'expr'
      */
     public static final class Expr1 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("expr:1", RuleType.Conjunction, false);
+                ParserRule.of("expr:1", RuleType.Conjunction);
 
         public static Expr1 of(ParseTreeNode node) {
             return new Expr1(node);
@@ -81,16 +79,16 @@ public final class Expr extends NodeWrapper {
             return Expr.of(getItem(5));
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
             r = t.consumeToken("if");
-            r = r && Disjunction.parse(t, l + 1);
+            r = r && Disjunction.parse(t, lv + 1);
             r = r && t.consumeToken("?");
-            r = r && Disjunction.parse(t, l + 1);
+            r = r && Disjunction.parse(t, lv + 1);
             r = r && t.consumeToken("else");
-            r = r && Expr.parse(t, l + 1);
+            r = r && Expr.parse(t, lv + 1);
             t.exit(r);
             return r;
         }

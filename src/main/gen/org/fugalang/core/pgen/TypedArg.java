@@ -7,9 +7,8 @@ import org.fugalang.core.token.TokenType;
  * typed_arg: 'NAME' [':' 'expr']
  */
 public final class TypedArg extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("typed_arg", RuleType.Conjunction, true);
+            ParserRule.of("typed_arg", RuleType.Conjunction);
 
     public static TypedArg of(ParseTreeNode node) {
         return new TypedArg(node);
@@ -31,12 +30,12 @@ public final class TypedArg extends NodeWrapper {
         return hasItemOfRule(1, TypedArg2.RULE);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
         r = t.consumeToken(TokenType.NAME);
-        if (r) TypedArg2.parse(t, l + 1);
+        if (r) TypedArg2.parse(t, lv + 1);
         t.exit(r);
         return r;
     }
@@ -45,9 +44,8 @@ public final class TypedArg extends NodeWrapper {
      * ':' 'expr'
      */
     public static final class TypedArg2 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("typed_arg:2", RuleType.Conjunction, false);
+                ParserRule.of("typed_arg:2", RuleType.Conjunction);
 
         public static TypedArg2 of(ParseTreeNode node) {
             return new TypedArg2(node);
@@ -61,12 +59,12 @@ public final class TypedArg extends NodeWrapper {
             return Expr.of(getItem(1));
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
             r = t.consumeToken(":");
-            r = r && Expr.parse(t, l + 1);
+            r = r && Expr.parse(t, lv + 1);
             t.exit(r);
             return r;
         }

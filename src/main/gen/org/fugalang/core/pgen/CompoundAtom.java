@@ -6,9 +6,8 @@ import org.fugalang.core.parser.*;
  * compound_atom: '(' ['named_expr_list'] ')' | '[' ['named_expr_list'] ']' | '{' ['dict_or_set'] '}'
  */
 public final class CompoundAtom extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("compound_atom", RuleType.Disjunction, true);
+            ParserRule.of("compound_atom", RuleType.Disjunction);
 
     public static CompoundAtom of(ParseTreeNode node) {
         return new CompoundAtom(node);
@@ -42,13 +41,13 @@ public final class CompoundAtom extends NodeWrapper {
         return hasItemOfRule(2, CompoundAtom3.RULE);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
-        r = CompoundAtom1.parse(t, l + 1);
-        r = r || CompoundAtom2.parse(t, l + 1);
-        r = r || CompoundAtom3.parse(t, l + 1);
+        r = CompoundAtom1.parse(t, lv + 1);
+        r = r || CompoundAtom2.parse(t, lv + 1);
+        r = r || CompoundAtom3.parse(t, lv + 1);
         t.exit(r);
         return r;
     }
@@ -57,9 +56,8 @@ public final class CompoundAtom extends NodeWrapper {
      * '(' ['named_expr_list'] ')'
      */
     public static final class CompoundAtom1 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("compound_atom:1", RuleType.Conjunction, false);
+                ParserRule.of("compound_atom:1", RuleType.Conjunction);
 
         public static CompoundAtom1 of(ParseTreeNode node) {
             return new CompoundAtom1(node);
@@ -77,12 +75,12 @@ public final class CompoundAtom extends NodeWrapper {
             return hasItemOfRule(1, NamedExprList.RULE);
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
             r = t.consumeToken("(");
-            if (r) NamedExprList.parse(t, l + 1);
+            if (r) NamedExprList.parse(t, lv + 1);
             r = r && t.consumeToken(")");
             t.exit(r);
             return r;
@@ -93,9 +91,8 @@ public final class CompoundAtom extends NodeWrapper {
      * '[' ['named_expr_list'] ']'
      */
     public static final class CompoundAtom2 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("compound_atom:2", RuleType.Conjunction, false);
+                ParserRule.of("compound_atom:2", RuleType.Conjunction);
 
         public static CompoundAtom2 of(ParseTreeNode node) {
             return new CompoundAtom2(node);
@@ -113,12 +110,12 @@ public final class CompoundAtom extends NodeWrapper {
             return hasItemOfRule(1, NamedExprList.RULE);
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
             r = t.consumeToken("[");
-            if (r) NamedExprList.parse(t, l + 1);
+            if (r) NamedExprList.parse(t, lv + 1);
             r = r && t.consumeToken("]");
             t.exit(r);
             return r;
@@ -129,9 +126,8 @@ public final class CompoundAtom extends NodeWrapper {
      * '{' ['dict_or_set'] '}'
      */
     public static final class CompoundAtom3 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("compound_atom:3", RuleType.Conjunction, false);
+                ParserRule.of("compound_atom:3", RuleType.Conjunction);
 
         public static CompoundAtom3 of(ParseTreeNode node) {
             return new CompoundAtom3(node);
@@ -149,12 +145,12 @@ public final class CompoundAtom extends NodeWrapper {
             return hasItemOfRule(1, DictOrSet.RULE);
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
             r = t.consumeToken("{");
-            if (r) DictOrSet.parse(t, l + 1);
+            if (r) DictOrSet.parse(t, lv + 1);
             r = r && t.consumeToken("}");
             t.exit(r);
             return r;

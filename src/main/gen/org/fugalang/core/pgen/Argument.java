@@ -7,9 +7,8 @@ import org.fugalang.core.token.TokenType;
  * argument: 'NAME' ':=' 'expr' | 'NAME' '=' 'expr' | '**' 'expr' | '*' 'expr' | 'expr'
  */
 public final class Argument extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("argument", RuleType.Disjunction, true);
+            ParserRule.of("argument", RuleType.Disjunction);
 
     public static Argument of(ParseTreeNode node) {
         return new Argument(node);
@@ -59,15 +58,15 @@ public final class Argument extends NodeWrapper {
         return hasItemOfRule(4, Expr.RULE);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
-        r = Argument1.parse(t, l + 1);
-        r = r || Argument2.parse(t, l + 1);
-        r = r || Argument3.parse(t, l + 1);
-        r = r || Argument4.parse(t, l + 1);
-        r = r || Expr.parse(t, l + 1);
+        r = Argument1.parse(t, lv + 1);
+        r = r || Argument2.parse(t, lv + 1);
+        r = r || Argument3.parse(t, lv + 1);
+        r = r || Argument4.parse(t, lv + 1);
+        r = r || Expr.parse(t, lv + 1);
         t.exit(r);
         return r;
     }
@@ -76,9 +75,8 @@ public final class Argument extends NodeWrapper {
      * 'NAME' ':=' 'expr'
      */
     public static final class Argument1 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("argument:1", RuleType.Conjunction, false);
+                ParserRule.of("argument:1", RuleType.Conjunction);
 
         public static Argument1 of(ParseTreeNode node) {
             return new Argument1(node);
@@ -96,13 +94,13 @@ public final class Argument extends NodeWrapper {
             return Expr.of(getItem(2));
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
             r = t.consumeToken(TokenType.NAME);
             r = r && t.consumeToken(":=");
-            r = r && Expr.parse(t, l + 1);
+            r = r && Expr.parse(t, lv + 1);
             t.exit(r);
             return r;
         }
@@ -112,9 +110,8 @@ public final class Argument extends NodeWrapper {
      * 'NAME' '=' 'expr'
      */
     public static final class Argument2 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("argument:2", RuleType.Conjunction, false);
+                ParserRule.of("argument:2", RuleType.Conjunction);
 
         public static Argument2 of(ParseTreeNode node) {
             return new Argument2(node);
@@ -132,13 +129,13 @@ public final class Argument extends NodeWrapper {
             return Expr.of(getItem(2));
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
             r = t.consumeToken(TokenType.NAME);
             r = r && t.consumeToken("=");
-            r = r && Expr.parse(t, l + 1);
+            r = r && Expr.parse(t, lv + 1);
             t.exit(r);
             return r;
         }
@@ -148,9 +145,8 @@ public final class Argument extends NodeWrapper {
      * '**' 'expr'
      */
     public static final class Argument3 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("argument:3", RuleType.Conjunction, false);
+                ParserRule.of("argument:3", RuleType.Conjunction);
 
         public static Argument3 of(ParseTreeNode node) {
             return new Argument3(node);
@@ -164,12 +160,12 @@ public final class Argument extends NodeWrapper {
             return Expr.of(getItem(1));
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
             r = t.consumeToken("**");
-            r = r && Expr.parse(t, l + 1);
+            r = r && Expr.parse(t, lv + 1);
             t.exit(r);
             return r;
         }
@@ -179,9 +175,8 @@ public final class Argument extends NodeWrapper {
      * '*' 'expr'
      */
     public static final class Argument4 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("argument:4", RuleType.Conjunction, false);
+                ParserRule.of("argument:4", RuleType.Conjunction);
 
         public static Argument4 of(ParseTreeNode node) {
             return new Argument4(node);
@@ -195,12 +190,12 @@ public final class Argument extends NodeWrapper {
             return Expr.of(getItem(1));
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
             r = t.consumeToken("*");
-            r = r && Expr.parse(t, l + 1);
+            r = r && Expr.parse(t, lv + 1);
             t.exit(r);
             return r;
         }

@@ -6,9 +6,8 @@ import org.fugalang.core.parser.*;
  * repeat_rule: 'sub_rule' ['*' | '+']
  */
 public final class RepeatRule extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("repeat_rule", RuleType.Conjunction, true);
+            ParserRule.of("repeat_rule", RuleType.Conjunction);
 
     public static RepeatRule of(ParseTreeNode node) {
         return new RepeatRule(node);
@@ -30,12 +29,12 @@ public final class RepeatRule extends NodeWrapper {
         return hasItemOfRule(1, RepeatRule2.RULE);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
-        r = SubRule.parse(t, l + 1);
-        if (r) RepeatRule2.parse(t, l + 1);
+        r = SubRule.parse(t, lv + 1);
+        if (r) RepeatRule2.parse(t, lv + 1);
         t.exit(r);
         return r;
     }
@@ -44,9 +43,8 @@ public final class RepeatRule extends NodeWrapper {
      * '*' | '+'
      */
     public static final class RepeatRule2 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("repeat_rule:2", RuleType.Disjunction, false);
+                ParserRule.of("repeat_rule:2", RuleType.Disjunction);
 
         public static RepeatRule2 of(ParseTreeNode node) {
             return new RepeatRule2(node);
@@ -64,9 +62,9 @@ public final class RepeatRule extends NodeWrapper {
             return getBoolean(1);
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
             r = t.consumeToken("*");
             r = r || t.consumeToken("+");

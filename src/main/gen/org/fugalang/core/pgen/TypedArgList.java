@@ -6,9 +6,8 @@ import org.fugalang.core.parser.*;
  * typed_arg_list: 'kwargs' | 'args_kwargs' | 'full_arg_list'
  */
 public final class TypedArgList extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("typed_arg_list", RuleType.Disjunction, true);
+            ParserRule.of("typed_arg_list", RuleType.Disjunction);
 
     public static TypedArgList of(ParseTreeNode node) {
         return new TypedArgList(node);
@@ -42,13 +41,13 @@ public final class TypedArgList extends NodeWrapper {
         return hasItemOfRule(2, FullArgList.RULE);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
-        r = Kwargs.parse(t, l + 1);
-        r = r || ArgsKwargs.parse(t, l + 1);
-        r = r || FullArgList.parse(t, l + 1);
+        r = Kwargs.parse(t, lv + 1);
+        r = r || ArgsKwargs.parse(t, lv + 1);
+        r = r || FullArgList.parse(t, lv + 1);
         t.exit(r);
         return r;
     }

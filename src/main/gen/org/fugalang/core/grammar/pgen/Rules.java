@@ -9,9 +9,8 @@ import java.util.List;
  * rules: ['NEWLINE'] 'single_rule'+
  */
 public final class Rules extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("rules", RuleType.Conjunction, true);
+            ParserRule.of("rules", RuleType.Conjunction);
 
     public static Rules of(ParseTreeNode node) {
         return new Rules(node);
@@ -33,22 +32,22 @@ public final class Rules extends NodeWrapper {
         return getList(1, SingleRule::of);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
         t.consumeToken(TokenType.NEWLINE);
-        r = parseSingleRuleList(t, l);
+        r = parseSingleRuleList(t, lv);
         t.exit(r);
         return r;
     }
 
-    private static boolean parseSingleRuleList(ParseTree t, int l) {
+    private static boolean parseSingleRuleList(ParseTree t, int lv) {
         t.enterCollection();
-        var r = SingleRule.parse(t, l + 1);
+        var r = SingleRule.parse(t, lv + 1);
         if (r) while (true) {
             var p = t.position();
-            if (!SingleRule.parse(t, l + 1)) break;
+            if (!SingleRule.parse(t, lv + 1)) break;
             if (t.guardLoopExit(p)) break;
         }
         t.exitCollection();

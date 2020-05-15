@@ -8,9 +8,8 @@ import java.util.List;
  * simple_arg_list: 'simple_arg' ('simple_arg')*
  */
 public final class SimpleArgList extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("simple_arg_list", RuleType.Conjunction, true);
+            ParserRule.of("simple_arg_list", RuleType.Conjunction);
 
     public static SimpleArgList of(ParseTreeNode node) {
         return new SimpleArgList(node);
@@ -28,21 +27,21 @@ public final class SimpleArgList extends NodeWrapper {
         return getList(1, SimpleArgList2::of);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
-        r = SimpleArg.parse(t, l + 1);
-        if (r) parseSimpleArgList2List(t, l);
+        r = SimpleArg.parse(t, lv + 1);
+        if (r) parseSimpleArgList2List(t, lv);
         t.exit(r);
         return r;
     }
 
-    private static void parseSimpleArgList2List(ParseTree t, int l) {
+    private static void parseSimpleArgList2List(ParseTree t, int lv) {
         t.enterCollection();
         while (true) {
             var p = t.position();
-            if (!SimpleArgList2.parse(t, l + 1)) break;
+            if (!SimpleArgList2.parse(t, lv + 1)) break;
             if (t.guardLoopExit(p)) break;
         }
         t.exitCollection();
@@ -52,9 +51,8 @@ public final class SimpleArgList extends NodeWrapper {
      * 'simple_arg'
      */
     public static final class SimpleArgList2 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("simple_arg_list:2", RuleType.Conjunction, false);
+                ParserRule.of("simple_arg_list:2", RuleType.Conjunction);
 
         public static SimpleArgList2 of(ParseTreeNode node) {
             return new SimpleArgList2(node);
@@ -68,11 +66,11 @@ public final class SimpleArgList extends NodeWrapper {
             return SimpleArg.of(getItem(0));
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
-            r = SimpleArg.parse(t, l + 1);
+            r = SimpleArg.parse(t, lv + 1);
             t.exit(r);
             return r;
         }

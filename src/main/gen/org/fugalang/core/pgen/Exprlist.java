@@ -8,9 +8,8 @@ import java.util.List;
  * exprlist: 'expr' (',' 'expr')* [',']
  */
 public final class Exprlist extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("exprlist", RuleType.Conjunction, true);
+            ParserRule.of("exprlist", RuleType.Conjunction);
 
     public static Exprlist of(ParseTreeNode node) {
         return new Exprlist(node);
@@ -32,22 +31,22 @@ public final class Exprlist extends NodeWrapper {
         return getBoolean(2);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
-        r = Expr.parse(t, l + 1);
-        if (r) parseExprlist2List(t, l);
+        r = Expr.parse(t, lv + 1);
+        if (r) parseExprlist2List(t, lv);
         if (r) t.consumeToken(",");
         t.exit(r);
         return r;
     }
 
-    private static void parseExprlist2List(ParseTree t, int l) {
+    private static void parseExprlist2List(ParseTree t, int lv) {
         t.enterCollection();
         while (true) {
             var p = t.position();
-            if (!Exprlist2.parse(t, l + 1)) break;
+            if (!Exprlist2.parse(t, lv + 1)) break;
             if (t.guardLoopExit(p)) break;
         }
         t.exitCollection();
@@ -57,9 +56,8 @@ public final class Exprlist extends NodeWrapper {
      * ',' 'expr'
      */
     public static final class Exprlist2 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("exprlist:2", RuleType.Conjunction, false);
+                ParserRule.of("exprlist:2", RuleType.Conjunction);
 
         public static Exprlist2 of(ParseTreeNode node) {
             return new Exprlist2(node);
@@ -73,12 +71,12 @@ public final class Exprlist extends NodeWrapper {
             return Expr.of(getItem(1));
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
             r = t.consumeToken(",");
-            r = r && Expr.parse(t, l + 1);
+            r = r && Expr.parse(t, lv + 1);
             t.exit(r);
             return r;
         }

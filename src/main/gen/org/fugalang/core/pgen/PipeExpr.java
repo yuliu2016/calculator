@@ -6,9 +6,8 @@ import org.fugalang.core.parser.*;
  * pipe_expr: 'pipe_for' | 'factor'
  */
 public final class PipeExpr extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("pipe_expr", RuleType.Disjunction, true);
+            ParserRule.of("pipe_expr", RuleType.Disjunction);
 
     public static PipeExpr of(ParseTreeNode node) {
         return new PipeExpr(node);
@@ -34,12 +33,12 @@ public final class PipeExpr extends NodeWrapper {
         return hasItemOfRule(1, Factor.RULE);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
-        r = PipeFor.parse(t, l + 1);
-        r = r || Factor.parse(t, l + 1);
+        r = PipeFor.parse(t, lv + 1);
+        r = r || Factor.parse(t, lv + 1);
         t.exit(r);
         return r;
     }

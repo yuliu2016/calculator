@@ -6,9 +6,8 @@ import org.fugalang.core.parser.*;
  * import_stmt: 'import_name' | 'import_from'
  */
 public final class ImportStmt extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("import_stmt", RuleType.Disjunction, true);
+            ParserRule.of("import_stmt", RuleType.Disjunction);
 
     public static ImportStmt of(ParseTreeNode node) {
         return new ImportStmt(node);
@@ -34,12 +33,12 @@ public final class ImportStmt extends NodeWrapper {
         return hasItemOfRule(1, ImportFrom.RULE);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
-        r = ImportName.parse(t, l + 1);
-        r = r || ImportFrom.parse(t, l + 1);
+        r = ImportName.parse(t, lv + 1);
+        r = r || ImportFrom.parse(t, lv + 1);
         t.exit(r);
         return r;
     }

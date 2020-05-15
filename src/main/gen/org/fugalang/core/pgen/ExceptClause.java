@@ -7,9 +7,8 @@ import org.fugalang.core.token.TokenType;
  * except_clause: 'except' ['expr' ['as' 'NAME']]
  */
 public final class ExceptClause extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("except_clause", RuleType.Conjunction, true);
+            ParserRule.of("except_clause", RuleType.Conjunction);
 
     public static ExceptClause of(ParseTreeNode node) {
         return new ExceptClause(node);
@@ -27,12 +26,12 @@ public final class ExceptClause extends NodeWrapper {
         return hasItemOfRule(1, ExceptClause2.RULE);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
         r = t.consumeToken("except");
-        if (r) ExceptClause2.parse(t, l + 1);
+        if (r) ExceptClause2.parse(t, lv + 1);
         t.exit(r);
         return r;
     }
@@ -41,9 +40,8 @@ public final class ExceptClause extends NodeWrapper {
      * 'expr' ['as' 'NAME']
      */
     public static final class ExceptClause2 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("except_clause:2", RuleType.Conjunction, false);
+                ParserRule.of("except_clause:2", RuleType.Conjunction);
 
         public static ExceptClause2 of(ParseTreeNode node) {
             return new ExceptClause2(node);
@@ -65,12 +63,12 @@ public final class ExceptClause extends NodeWrapper {
             return hasItemOfRule(1, ExceptClause22.RULE);
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
-            r = Expr.parse(t, l + 1);
-            if (r) ExceptClause22.parse(t, l + 1);
+            r = Expr.parse(t, lv + 1);
+            if (r) ExceptClause22.parse(t, lv + 1);
             t.exit(r);
             return r;
         }
@@ -80,9 +78,8 @@ public final class ExceptClause extends NodeWrapper {
      * 'as' 'NAME'
      */
     public static final class ExceptClause22 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("except_clause:2:2", RuleType.Conjunction, false);
+                ParserRule.of("except_clause:2:2", RuleType.Conjunction);
 
         public static ExceptClause22 of(ParseTreeNode node) {
             return new ExceptClause22(node);
@@ -96,9 +93,9 @@ public final class ExceptClause extends NodeWrapper {
             return getItemOfType(1, TokenType.NAME);
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
             r = t.consumeToken("as");
             r = r && t.consumeToken(TokenType.NAME);

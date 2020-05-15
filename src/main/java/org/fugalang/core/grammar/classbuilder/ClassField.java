@@ -124,7 +124,7 @@ public class ClassField {
 
     private String getLoopExpr() {
         var name = ParserStringUtil.capitalizeFirstCharOnly(fieldName);
-        return "parse" + name + "(t, l)";
+        return "parse" + name + "(t, lv)";
     }
 
     private String getOptionalStmt(String resultExpr, RuleType ruleType, boolean isFirst) {
@@ -146,7 +146,7 @@ public class ClassField {
 
     private String getResultExpr() {
         return switch (resultSource.getType()) {
-            case Class -> resultSource.getValue() + ".parse(t, l + 1)";
+            case Class -> resultSource.getValue() + ".parse(t, lv + 1)";
             case TokenType -> "t.consumeToken(" + resultSource.getValue() + ")";
             case TokenLiteral -> "t.consumeToken(\"" + resultSource.getValue() + "\")";
         };
@@ -163,7 +163,7 @@ public class ClassField {
     private String getRequiredLoopParser() {
         var resultExpr = getResultExpr();
         var name = ParserStringUtil.capitalizeFirstCharOnly(fieldName);
-        return "\n    private static boolean parse" + name + "(ParseTree t, int l) {\n" +
+        return "\n    private static boolean parse" + name + "(ParseTree t, int lv) {\n" +
                 "        t.enterCollection();\n" +
                 "        var r = " + resultExpr + ";\n" +
                 "        if (r) while (true) {\n" +
@@ -179,7 +179,7 @@ public class ClassField {
     private String getOptionalLoopParser() {
         var resultExpr = getResultExpr();
         var name = ParserStringUtil.capitalizeFirstCharOnly(fieldName);
-        return "\n    private static void parse" + name + "(ParseTree t, int l) {\n" +
+        return "\n    private static void parse" + name + "(ParseTree t, int lv) {\n" +
                 "        t.enterCollection();\n" +
                 "        while (true) {\n" +
                 "            var p = t.position();\n" +

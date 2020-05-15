@@ -6,9 +6,8 @@ import org.fugalang.core.parser.*;
  * break_stmt: 'break'
  */
 public final class BreakStmt extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("break_stmt", RuleType.Conjunction, true);
+            ParserRule.of("break_stmt", RuleType.Conjunction);
 
     public static BreakStmt of(ParseTreeNode node) {
         return new BreakStmt(node);
@@ -18,9 +17,9 @@ public final class BreakStmt extends NodeWrapper {
         super(RULE, node);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
         r = t.consumeToken("break");
         t.exit(r);

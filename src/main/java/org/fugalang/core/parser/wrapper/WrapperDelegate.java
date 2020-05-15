@@ -1,6 +1,9 @@
 package org.fugalang.core.parser.wrapper;
 
-import org.fugalang.core.parser.*;
+import org.fugalang.core.parser.ParserRule;
+import org.fugalang.core.parser.RuleType;
+import org.fugalang.core.parser.TreeStringBuilder;
+import org.fugalang.core.parser.TreeStringElem;
 import org.fugalang.core.pprint.ListStringElem;
 
 import java.util.ArrayList;
@@ -140,11 +143,11 @@ class WrapperDelegate implements NodeDelegate {
         }
         switch (rule.getRuleType()) {
             case Disjunction -> {
-                var maybeName = (rule.isExplicit() ? rule.getRuleName() : "") + "#" + chosenIndex;
+                var maybeName = rule.getRuleName() + "#" + chosenIndex;
                 repr = "(" + maybeName + " " + chosenComponent + ")";
             }
             case Conjunction -> {
-                var maybeName = rule.isExplicit() ? rule.getRuleName() + " " : "";
+                var maybeName = rule.getRuleName() + " ";
                 var sb = new StringBuilder();
                 sb.append("(");
                 sb.append(maybeName);

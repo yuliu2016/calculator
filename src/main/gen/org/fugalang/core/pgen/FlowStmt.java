@@ -6,9 +6,8 @@ import org.fugalang.core.parser.*;
  * flow_stmt: 'break_stmt' | 'continue_stmt' | 'return_stmt' | 'raise_stmt'
  */
 public final class FlowStmt extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("flow_stmt", RuleType.Disjunction, true);
+            ParserRule.of("flow_stmt", RuleType.Disjunction);
 
     public static FlowStmt of(ParseTreeNode node) {
         return new FlowStmt(node);
@@ -50,14 +49,14 @@ public final class FlowStmt extends NodeWrapper {
         return hasItemOfRule(3, RaiseStmt.RULE);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
-        r = BreakStmt.parse(t, l + 1);
-        r = r || ContinueStmt.parse(t, l + 1);
-        r = r || ReturnStmt.parse(t, l + 1);
-        r = r || RaiseStmt.parse(t, l + 1);
+        r = BreakStmt.parse(t, lv + 1);
+        r = r || ContinueStmt.parse(t, lv + 1);
+        r = r || ReturnStmt.parse(t, lv + 1);
+        r = r || RaiseStmt.parse(t, lv + 1);
         t.exit(r);
         return r;
     }

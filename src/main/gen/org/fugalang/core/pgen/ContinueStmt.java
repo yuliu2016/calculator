@@ -6,9 +6,8 @@ import org.fugalang.core.parser.*;
  * continue_stmt: 'continue'
  */
 public final class ContinueStmt extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("continue_stmt", RuleType.Conjunction, true);
+            ParserRule.of("continue_stmt", RuleType.Conjunction);
 
     public static ContinueStmt of(ParseTreeNode node) {
         return new ContinueStmt(node);
@@ -18,9 +17,9 @@ public final class ContinueStmt extends NodeWrapper {
         super(RULE, node);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
         r = t.consumeToken("continue");
         t.exit(r);

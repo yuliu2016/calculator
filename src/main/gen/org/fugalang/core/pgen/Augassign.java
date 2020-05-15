@@ -6,9 +6,8 @@ import org.fugalang.core.parser.*;
  * augassign: '+=' | '-=' | '*=' | '@=' | '/=' | '%=' | '&=' | '|=' | '^=' | '<<=' | '>>=' | '**=' | '//='
  */
 public final class Augassign extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("augassign", RuleType.Disjunction, true);
+            ParserRule.of("augassign", RuleType.Disjunction);
 
     public static Augassign of(ParseTreeNode node) {
         return new Augassign(node);
@@ -70,9 +69,9 @@ public final class Augassign extends NodeWrapper {
         return getBoolean(12);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
         r = t.consumeToken("+=");
         r = r || t.consumeToken("-=");

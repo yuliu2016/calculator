@@ -8,9 +8,8 @@ import java.util.List;
  * dotted_as_names: 'dotted_as_name' (',' 'dotted_as_name')*
  */
 public final class DottedAsNames extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("dotted_as_names", RuleType.Conjunction, true);
+            ParserRule.of("dotted_as_names", RuleType.Conjunction);
 
     public static DottedAsNames of(ParseTreeNode node) {
         return new DottedAsNames(node);
@@ -28,21 +27,21 @@ public final class DottedAsNames extends NodeWrapper {
         return getList(1, DottedAsNames2::of);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
-        r = DottedAsName.parse(t, l + 1);
-        if (r) parseDottedAsNames2List(t, l);
+        r = DottedAsName.parse(t, lv + 1);
+        if (r) parseDottedAsNames2List(t, lv);
         t.exit(r);
         return r;
     }
 
-    private static void parseDottedAsNames2List(ParseTree t, int l) {
+    private static void parseDottedAsNames2List(ParseTree t, int lv) {
         t.enterCollection();
         while (true) {
             var p = t.position();
-            if (!DottedAsNames2.parse(t, l + 1)) break;
+            if (!DottedAsNames2.parse(t, lv + 1)) break;
             if (t.guardLoopExit(p)) break;
         }
         t.exitCollection();
@@ -52,9 +51,8 @@ public final class DottedAsNames extends NodeWrapper {
      * ',' 'dotted_as_name'
      */
     public static final class DottedAsNames2 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("dotted_as_names:2", RuleType.Conjunction, false);
+                ParserRule.of("dotted_as_names:2", RuleType.Conjunction);
 
         public static DottedAsNames2 of(ParseTreeNode node) {
             return new DottedAsNames2(node);
@@ -68,12 +66,12 @@ public final class DottedAsNames extends NodeWrapper {
             return DottedAsName.of(getItem(1));
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
             r = t.consumeToken(",");
-            r = r && DottedAsName.parse(t, l + 1);
+            r = r && DottedAsName.parse(t, lv + 1);
             t.exit(r);
             return r;
         }

@@ -6,9 +6,8 @@ import org.fugalang.core.parser.*;
  * import_from: 'from' 'import_from_names' 'import' ('*' | '(' 'import_as_names' [','] ')' | 'import_as_names')
  */
 public final class ImportFrom extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("import_from", RuleType.Conjunction, true);
+            ParserRule.of("import_from", RuleType.Conjunction);
 
     public static ImportFrom of(ParseTreeNode node) {
         return new ImportFrom(node);
@@ -26,14 +25,14 @@ public final class ImportFrom extends NodeWrapper {
         return ImportFrom4.of(getItem(3));
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
         r = t.consumeToken("from");
-        r = r && ImportFromNames.parse(t, l + 1);
+        r = r && ImportFromNames.parse(t, lv + 1);
         r = r && t.consumeToken("import");
-        r = r && ImportFrom4.parse(t, l + 1);
+        r = r && ImportFrom4.parse(t, lv + 1);
         t.exit(r);
         return r;
     }
@@ -42,9 +41,8 @@ public final class ImportFrom extends NodeWrapper {
      * '*' | '(' 'import_as_names' [','] ')' | 'import_as_names'
      */
     public static final class ImportFrom4 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("import_from:4", RuleType.Disjunction, false);
+                ParserRule.of("import_from:4", RuleType.Disjunction);
 
         public static ImportFrom4 of(ParseTreeNode node) {
             return new ImportFrom4(node);
@@ -74,13 +72,13 @@ public final class ImportFrom extends NodeWrapper {
             return hasItemOfRule(2, ImportAsNames.RULE);
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
             r = t.consumeToken("*");
-            r = r || ImportFrom42.parse(t, l + 1);
-            r = r || ImportAsNames.parse(t, l + 1);
+            r = r || ImportFrom42.parse(t, lv + 1);
+            r = r || ImportAsNames.parse(t, lv + 1);
             t.exit(r);
             return r;
         }
@@ -90,9 +88,8 @@ public final class ImportFrom extends NodeWrapper {
      * '(' 'import_as_names' [','] ')'
      */
     public static final class ImportFrom42 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("import_from:4:2", RuleType.Conjunction, false);
+                ParserRule.of("import_from:4:2", RuleType.Conjunction);
 
         public static ImportFrom42 of(ParseTreeNode node) {
             return new ImportFrom42(node);
@@ -110,12 +107,12 @@ public final class ImportFrom extends NodeWrapper {
             return getBoolean(2);
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
             r = t.consumeToken("(");
-            r = r && ImportAsNames.parse(t, l + 1);
+            r = r && ImportAsNames.parse(t, lv + 1);
             if (r) t.consumeToken(",");
             r = r && t.consumeToken(")");
             t.exit(r);

@@ -7,9 +7,8 @@ import org.fugalang.core.token.TokenType;
  * single_input: 'NEWLINE' | 'simple_stmt' | 'compound_stmt' 'NEWLINE'
  */
 public final class SingleInput extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("single_input", RuleType.Disjunction, true);
+            ParserRule.of("single_input", RuleType.Disjunction);
 
     public static SingleInput of(ParseTreeNode node) {
         return new SingleInput(node);
@@ -43,13 +42,13 @@ public final class SingleInput extends NodeWrapper {
         return hasItemOfRule(2, SingleInput3.RULE);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
         r = t.consumeToken(TokenType.NEWLINE);
-        r = r || SimpleStmt.parse(t, l + 1);
-        r = r || SingleInput3.parse(t, l + 1);
+        r = r || SimpleStmt.parse(t, lv + 1);
+        r = r || SingleInput3.parse(t, lv + 1);
         t.exit(r);
         return r;
     }
@@ -58,9 +57,8 @@ public final class SingleInput extends NodeWrapper {
      * 'compound_stmt' 'NEWLINE'
      */
     public static final class SingleInput3 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("single_input:3", RuleType.Conjunction, false);
+                ParserRule.of("single_input:3", RuleType.Conjunction);
 
         public static SingleInput3 of(ParseTreeNode node) {
             return new SingleInput3(node);
@@ -78,11 +76,11 @@ public final class SingleInput extends NodeWrapper {
             return getItemOfType(1, TokenType.NEWLINE);
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
-            r = CompoundStmt.parse(t, l + 1);
+            r = CompoundStmt.parse(t, lv + 1);
             r = r && t.consumeToken(TokenType.NEWLINE);
             t.exit(r);
             return r;

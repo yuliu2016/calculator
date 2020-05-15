@@ -9,9 +9,8 @@ import java.util.List;
  * block_suite: '{' 'simple_stmt' '}' | '{' 'NEWLINE' 'stmt'+ '}'
  */
 public final class BlockSuite extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("block_suite", RuleType.Disjunction, true);
+            ParserRule.of("block_suite", RuleType.Disjunction);
 
     public static BlockSuite of(ParseTreeNode node) {
         return new BlockSuite(node);
@@ -37,12 +36,12 @@ public final class BlockSuite extends NodeWrapper {
         return hasItemOfRule(1, BlockSuite2.RULE);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
-        r = BlockSuite1.parse(t, l + 1);
-        r = r || BlockSuite2.parse(t, l + 1);
+        r = BlockSuite1.parse(t, lv + 1);
+        r = r || BlockSuite2.parse(t, lv + 1);
         t.exit(r);
         return r;
     }
@@ -51,9 +50,8 @@ public final class BlockSuite extends NodeWrapper {
      * '{' 'simple_stmt' '}'
      */
     public static final class BlockSuite1 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("block_suite:1", RuleType.Conjunction, false);
+                ParserRule.of("block_suite:1", RuleType.Conjunction);
 
         public static BlockSuite1 of(ParseTreeNode node) {
             return new BlockSuite1(node);
@@ -67,12 +65,12 @@ public final class BlockSuite extends NodeWrapper {
             return SimpleStmt.of(getItem(1));
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
             r = t.consumeToken("{");
-            r = r && SimpleStmt.parse(t, l + 1);
+            r = r && SimpleStmt.parse(t, lv + 1);
             r = r && t.consumeToken("}");
             t.exit(r);
             return r;
@@ -83,9 +81,8 @@ public final class BlockSuite extends NodeWrapper {
      * '{' 'NEWLINE' 'stmt'+ '}'
      */
     public static final class BlockSuite2 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("block_suite:2", RuleType.Conjunction, false);
+                ParserRule.of("block_suite:2", RuleType.Conjunction);
 
         public static BlockSuite2 of(ParseTreeNode node) {
             return new BlockSuite2(node);
@@ -103,24 +100,24 @@ public final class BlockSuite extends NodeWrapper {
             return getList(2, Stmt::of);
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
             r = t.consumeToken("{");
             r = r && t.consumeToken(TokenType.NEWLINE);
-            r = r && parseStmtList(t, l);
+            r = r && parseStmtList(t, lv);
             r = r && t.consumeToken("}");
             t.exit(r);
             return r;
         }
 
-        private static boolean parseStmtList(ParseTree t, int l) {
+        private static boolean parseStmtList(ParseTree t, int lv) {
             t.enterCollection();
-            var r = Stmt.parse(t, l + 1);
+            var r = Stmt.parse(t, lv + 1);
             if (r) while (true) {
                 var p = t.position();
-                if (!Stmt.parse(t, l + 1)) break;
+                if (!Stmt.parse(t, lv + 1)) break;
                 if (t.guardLoopExit(p)) break;
             }
             t.exitCollection();

@@ -6,9 +6,8 @@ import org.fugalang.core.parser.*;
  * comp_op: '<' | '>' | '==' | '>=' | '<=' | '!=' | 'in' | 'not' 'in' | 'is' | 'is' 'not'
  */
 public final class CompOp extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("comp_op", RuleType.Disjunction, true);
+            ParserRule.of("comp_op", RuleType.Disjunction);
 
     public static CompOp of(ParseTreeNode node) {
         return new CompOp(node);
@@ -66,9 +65,9 @@ public final class CompOp extends NodeWrapper {
         return hasItemOfRule(9, CompOp10.RULE);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
         r = t.consumeToken("<");
         r = r || t.consumeToken(">");
@@ -77,9 +76,9 @@ public final class CompOp extends NodeWrapper {
         r = r || t.consumeToken("<=");
         r = r || t.consumeToken("!=");
         r = r || t.consumeToken("in");
-        r = r || CompOp8.parse(t, l + 1);
+        r = r || CompOp8.parse(t, lv + 1);
         r = r || t.consumeToken("is");
-        r = r || CompOp10.parse(t, l + 1);
+        r = r || CompOp10.parse(t, lv + 1);
         t.exit(r);
         return r;
     }
@@ -88,9 +87,8 @@ public final class CompOp extends NodeWrapper {
      * 'not' 'in'
      */
     public static final class CompOp8 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("comp_op:8", RuleType.Conjunction, false);
+                ParserRule.of("comp_op:8", RuleType.Conjunction);
 
         public static CompOp8 of(ParseTreeNode node) {
             return new CompOp8(node);
@@ -100,9 +98,9 @@ public final class CompOp extends NodeWrapper {
             super(RULE, node);
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
             r = t.consumeToken("not");
             r = r && t.consumeToken("in");
@@ -115,9 +113,8 @@ public final class CompOp extends NodeWrapper {
      * 'is' 'not'
      */
     public static final class CompOp10 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("comp_op:10", RuleType.Conjunction, false);
+                ParserRule.of("comp_op:10", RuleType.Conjunction);
 
         public static CompOp10 of(ParseTreeNode node) {
             return new CompOp10(node);
@@ -127,9 +124,9 @@ public final class CompOp extends NodeWrapper {
             super(RULE, node);
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
             r = t.consumeToken("is");
             r = r && t.consumeToken("not");

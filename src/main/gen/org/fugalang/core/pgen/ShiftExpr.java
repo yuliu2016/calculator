@@ -8,9 +8,8 @@ import java.util.List;
  * shift_expr: 'sum' (('<<' | '>>') 'sum')*
  */
 public final class ShiftExpr extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("shift_expr", RuleType.Conjunction, true);
+            ParserRule.of("shift_expr", RuleType.Conjunction);
 
     public static ShiftExpr of(ParseTreeNode node) {
         return new ShiftExpr(node);
@@ -28,21 +27,21 @@ public final class ShiftExpr extends NodeWrapper {
         return getList(1, ShiftExpr2::of);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
-        r = Sum.parse(t, l + 1);
-        if (r) parseShiftExpr2List(t, l);
+        r = Sum.parse(t, lv + 1);
+        if (r) parseShiftExpr2List(t, lv);
         t.exit(r);
         return r;
     }
 
-    private static void parseShiftExpr2List(ParseTree t, int l) {
+    private static void parseShiftExpr2List(ParseTree t, int lv) {
         t.enterCollection();
         while (true) {
             var p = t.position();
-            if (!ShiftExpr2.parse(t, l + 1)) break;
+            if (!ShiftExpr2.parse(t, lv + 1)) break;
             if (t.guardLoopExit(p)) break;
         }
         t.exitCollection();
@@ -52,9 +51,8 @@ public final class ShiftExpr extends NodeWrapper {
      * ('<<' | '>>') 'sum'
      */
     public static final class ShiftExpr2 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("shift_expr:2", RuleType.Conjunction, false);
+                ParserRule.of("shift_expr:2", RuleType.Conjunction);
 
         public static ShiftExpr2 of(ParseTreeNode node) {
             return new ShiftExpr2(node);
@@ -72,12 +70,12 @@ public final class ShiftExpr extends NodeWrapper {
             return Sum.of(getItem(1));
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
-            r = ShiftExpr21.parse(t, l + 1);
-            r = r && Sum.parse(t, l + 1);
+            r = ShiftExpr21.parse(t, lv + 1);
+            r = r && Sum.parse(t, lv + 1);
             t.exit(r);
             return r;
         }
@@ -87,9 +85,8 @@ public final class ShiftExpr extends NodeWrapper {
      * '<<' | '>>'
      */
     public static final class ShiftExpr21 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("shift_expr:2:1", RuleType.Disjunction, false);
+                ParserRule.of("shift_expr:2:1", RuleType.Disjunction);
 
         public static ShiftExpr21 of(ParseTreeNode node) {
             return new ShiftExpr21(node);
@@ -107,9 +104,9 @@ public final class ShiftExpr extends NodeWrapper {
             return getBoolean(1);
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
             r = t.consumeToken("<<");
             r = r || t.consumeToken(">>");

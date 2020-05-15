@@ -6,9 +6,8 @@ import org.fugalang.core.parser.*;
  * factor: ('+' | '-' | '~') 'factor' | 'power'
  */
 public final class Factor extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("factor", RuleType.Disjunction, true);
+            ParserRule.of("factor", RuleType.Disjunction);
 
     public static Factor of(ParseTreeNode node) {
         return new Factor(node);
@@ -34,12 +33,12 @@ public final class Factor extends NodeWrapper {
         return hasItemOfRule(1, Power.RULE);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
-        r = Factor1.parse(t, l + 1);
-        r = r || Power.parse(t, l + 1);
+        r = Factor1.parse(t, lv + 1);
+        r = r || Power.parse(t, lv + 1);
         t.exit(r);
         return r;
     }
@@ -48,9 +47,8 @@ public final class Factor extends NodeWrapper {
      * ('+' | '-' | '~') 'factor'
      */
     public static final class Factor1 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("factor:1", RuleType.Conjunction, false);
+                ParserRule.of("factor:1", RuleType.Conjunction);
 
         public static Factor1 of(ParseTreeNode node) {
             return new Factor1(node);
@@ -68,12 +66,12 @@ public final class Factor extends NodeWrapper {
             return Factor.of(getItem(1));
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
-            r = Factor11.parse(t, l + 1);
-            r = r && Factor.parse(t, l + 1);
+            r = Factor11.parse(t, lv + 1);
+            r = r && Factor.parse(t, lv + 1);
             t.exit(r);
             return r;
         }
@@ -83,9 +81,8 @@ public final class Factor extends NodeWrapper {
      * '+' | '-' | '~'
      */
     public static final class Factor11 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("factor:1:1", RuleType.Disjunction, false);
+                ParserRule.of("factor:1:1", RuleType.Disjunction);
 
         public static Factor11 of(ParseTreeNode node) {
             return new Factor11(node);
@@ -107,9 +104,9 @@ public final class Factor extends NodeWrapper {
             return getBoolean(2);
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
             r = t.consumeToken("+");
             r = r || t.consumeToken("-");

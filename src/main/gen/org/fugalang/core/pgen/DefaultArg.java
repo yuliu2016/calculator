@@ -6,9 +6,8 @@ import org.fugalang.core.parser.*;
  * default_arg: 'typed_arg' ['=' 'expr']
  */
 public final class DefaultArg extends NodeWrapper {
-
     public static final ParserRule RULE =
-            new ParserRule("default_arg", RuleType.Conjunction, true);
+            ParserRule.of("default_arg", RuleType.Conjunction);
 
     public static DefaultArg of(ParseTreeNode node) {
         return new DefaultArg(node);
@@ -30,12 +29,12 @@ public final class DefaultArg extends NodeWrapper {
         return hasItemOfRule(1, DefaultArg2.RULE);
     }
 
-    public static boolean parse(ParseTree t, int l) {
-        if (!ParserUtil.recursionGuard(l, RULE)) return false;
-        t.enter(l, RULE);
+    public static boolean parse(ParseTree t, int lv) {
+        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        t.enter(lv, RULE);
         boolean r;
-        r = TypedArg.parse(t, l + 1);
-        if (r) DefaultArg2.parse(t, l + 1);
+        r = TypedArg.parse(t, lv + 1);
+        if (r) DefaultArg2.parse(t, lv + 1);
         t.exit(r);
         return r;
     }
@@ -44,9 +43,8 @@ public final class DefaultArg extends NodeWrapper {
      * '=' 'expr'
      */
     public static final class DefaultArg2 extends NodeWrapper {
-
         public static final ParserRule RULE =
-                new ParserRule("default_arg:2", RuleType.Conjunction, false);
+                ParserRule.of("default_arg:2", RuleType.Conjunction);
 
         public static DefaultArg2 of(ParseTreeNode node) {
             return new DefaultArg2(node);
@@ -60,12 +58,12 @@ public final class DefaultArg extends NodeWrapper {
             return Expr.of(getItem(1));
         }
 
-        public static boolean parse(ParseTree t, int l) {
-            if (!ParserUtil.recursionGuard(l, RULE)) return false;
-            t.enter(l, RULE);
+        public static boolean parse(ParseTree t, int lv) {
+            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            t.enter(lv, RULE);
             boolean r;
             r = t.consumeToken("=");
-            r = r && Expr.parse(t, l + 1);
+            r = r && Expr.parse(t, lv + 1);
             t.exit(r);
             return r;
         }
