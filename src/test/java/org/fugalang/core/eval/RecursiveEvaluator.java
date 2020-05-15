@@ -1,14 +1,14 @@
 package org.fugalang.core.eval;
 
-import org.fugalang.core.parser.SyntaxError;
 import org.fugalang.core.parser.ParserElement;
+import org.fugalang.core.parser.SyntaxError;
 import org.fugalang.core.parser.simple.ArithmeticExpr;
 import org.fugalang.core.parser.simple.Atom;
 import org.fugalang.core.parser.simple.SimpleParser;
 import org.fugalang.core.parser.simple.Term;
 import org.fugalang.core.pprint.ConsoleColor;
+import org.fugalang.core.token.LexerTests;
 import org.fugalang.core.token.Operator;
-import org.fugalang.core.token.Tokenizer;
 
 import java.util.List;
 import java.util.Scanner;
@@ -94,7 +94,7 @@ public class RecursiveEvaluator {
                 continue;
             }
             try {
-                var tokens = new Tokenizer(s).tokenizeAll();
+                var tokens = LexerTests.tokenize(s);
                 var result = "" + evaluate(tokens);
                 System.out.println(ConsoleColor.wrap("\033[34;1m", result));
             } catch (SyntaxError e) {

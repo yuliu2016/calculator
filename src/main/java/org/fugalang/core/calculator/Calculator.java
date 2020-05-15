@@ -2,9 +2,9 @@ package org.fugalang.core.calculator;
 
 import org.fugalang.core.calculator.pgen.*;
 import org.fugalang.core.parser.SyntaxError;
-import org.fugalang.core.parser.SimpleParseTree;
-import org.fugalang.core.parser.context.LazyParserContext;
-import org.fugalang.core.parser.context.LexingVisitor;
+import org.fugalang.core.parser.impl.SimpleParseTree;
+import org.fugalang.core.parser.impl.LazyParserContext;
+import org.fugalang.core.parser.impl.LexingVisitor;
 import org.fugalang.core.token.SimpleLexer;
 
 import java.util.Scanner;

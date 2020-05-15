@@ -113,9 +113,4 @@ public class SimpleParser {
 
         return null;
     }
-
-    public static void main(String[] args) {
-        System.out.println(parse(new Tokenizer("(2 + 3) * 5").tokenizeAll()));
-        System.out.println(parse(new Tokenizer("2 + 3 * 5").tokenizeAll()));
-    }
 }

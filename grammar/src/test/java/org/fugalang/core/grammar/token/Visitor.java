@@ -1,9 +1,10 @@
-package org.fugalang.core.token;
+package org.fugalang.core.grammar.token;
 
 /**
  * Defines a visitor to a piece of code
  * Allows peeking and moving indices
  */
+@Deprecated
 public class Visitor {
     public String code;
 

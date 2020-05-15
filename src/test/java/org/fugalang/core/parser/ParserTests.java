@@ -1,7 +1,8 @@
 package org.fugalang.core.parser;
 
-import org.fugalang.core.parser.context.LazyParserContext;
-import org.fugalang.core.parser.context.LexingVisitor;
+import org.fugalang.core.parser.impl.LazyParserContext;
+import org.fugalang.core.parser.impl.LexingVisitor;
+import org.fugalang.core.parser.impl.SimpleParseTree;
 import org.fugalang.core.pgen.SingleInput;
 import org.fugalang.core.token.SimpleLexer;
 

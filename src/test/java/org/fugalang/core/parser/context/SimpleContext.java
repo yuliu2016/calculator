@@ -1,5 +1,6 @@
 package org.fugalang.core.parser.context;
 
+import org.fugalang.core.parser.ParserContext;
 import org.fugalang.core.parser.SyntaxError;
 import org.fugalang.core.parser.ParserElement;
 

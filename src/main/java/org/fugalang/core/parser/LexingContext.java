@@ -1,7 +1,4 @@
-package org.fugalang.core.parser.context;
-
-import org.fugalang.core.parser.ElementType;
-import org.fugalang.core.parser.ParserElement;
+package org.fugalang.core.parser;
 
 public interface LexingContext {
 

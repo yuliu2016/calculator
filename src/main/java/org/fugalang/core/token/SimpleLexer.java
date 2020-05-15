@@ -1,7 +1,7 @@
 package org.fugalang.core.token;
 
 import org.fugalang.core.parser.ParserElement;
-import org.fugalang.core.parser.context.LexingContext;
+import org.fugalang.core.parser.LexingContext;
 
 import java.util.Iterator;
 

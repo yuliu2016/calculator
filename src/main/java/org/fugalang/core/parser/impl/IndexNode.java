@@ -1,4 +1,6 @@
-package org.fugalang.core.parser;
+package org.fugalang.core.parser.impl;
+
+import org.fugalang.core.parser.*;
 
 import java.util.Collections;
 import java.util.List;

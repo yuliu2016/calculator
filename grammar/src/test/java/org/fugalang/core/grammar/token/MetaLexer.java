@@ -2,7 +2,6 @@ package org.fugalang.core.grammar.token;
 
 import org.fugalang.core.parser.ElementType;
 import org.fugalang.core.token.CharTest;
-import org.fugalang.core.token.Visitor;
 
 import java.util.ArrayList;
 import java.util.List;

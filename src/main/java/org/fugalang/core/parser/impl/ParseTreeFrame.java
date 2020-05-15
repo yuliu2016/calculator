@@ -1,4 +1,7 @@
-package org.fugalang.core.parser;
+package org.fugalang.core.parser.impl;
+
+import org.fugalang.core.parser.ParseTreeNode;
+import org.fugalang.core.parser.ParserRule;
 
 import java.util.ArrayList;
 import java.util.List;

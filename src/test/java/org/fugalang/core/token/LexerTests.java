@@ -2,8 +2,8 @@ package org.fugalang.core.token;
 
 import org.fugalang.core.parser.ElementType;
 import org.fugalang.core.parser.ParserElement;
-import org.fugalang.core.parser.context.LazyArrayList;
-import org.fugalang.core.parser.context.LexingVisitor;
+import org.fugalang.core.util.LazyArrayList;
+import org.fugalang.core.parser.impl.LexingVisitor;
 import org.junit.jupiter.api.Assertions;
 
 import java.util.List;

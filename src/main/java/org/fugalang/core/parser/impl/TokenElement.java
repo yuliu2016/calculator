@@ -1,4 +1,4 @@
-package org.fugalang.core.parser.context;
+package org.fugalang.core.parser.impl;
 
 import org.fugalang.core.parser.ElementType;
 import org.fugalang.core.parser.ParserElement;

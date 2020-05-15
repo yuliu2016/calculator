@@ -1,4 +1,4 @@
-package org.fugalang.core.parser.context;
+package org.fugalang.core.util;
 
 import java.util.ArrayList;
 import java.util.Iterator;

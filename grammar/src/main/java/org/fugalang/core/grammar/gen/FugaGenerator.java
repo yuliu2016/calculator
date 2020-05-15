@@ -1,9 +1,9 @@
 package org.fugalang.core.grammar.gen;
 
 import org.fugalang.core.grammar.pgen.Rules;
-import org.fugalang.core.parser.SimpleParseTree;
-import org.fugalang.core.parser.context.LazyParserContext;
-import org.fugalang.core.parser.context.LexingVisitor;
+import org.fugalang.core.parser.impl.SimpleParseTree;
+import org.fugalang.core.parser.impl.LazyParserContext;
+import org.fugalang.core.parser.impl.LexingVisitor;
 import org.fugalang.core.token.SimpleLexer;
 
 import java.io.IOException;

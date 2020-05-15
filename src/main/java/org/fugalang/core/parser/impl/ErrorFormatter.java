@@ -1,4 +1,4 @@
-package org.fugalang.core.parser.context;
+package org.fugalang.core.parser.impl;
 
 public class ErrorFormatter {
     public static String format(String message, int lineno, String line, int col) {

@@ -20,7 +20,8 @@ public class AndRule implements TreeStringElem {
 
     @Override
     public void buildString(TreeStringBuilder builder) {
-        builder.setName("and").addElem(repeatRule).addElems(repeatRules);
+        builder.setName("and").addElem(repeatRule);
+        repeatRules.forEach(builder::addElem);
     }
 
     private String str = null;

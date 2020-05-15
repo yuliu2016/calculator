@@ -1,11 +1,7 @@
 package org.fugalang.core.token;
 
+import org.fugalang.core.parser.LexingContext;
 import org.fugalang.core.parser.ParserElement;
-import org.fugalang.core.parser.context.LazyArrayList;
-import org.fugalang.core.parser.context.LexingContext;
-import org.fugalang.core.parser.context.LexingVisitor;
-
-import java.util.List;
 
 import static org.fugalang.core.token.CharTest.*;
 import static org.fugalang.core.token.TokenType.*;
@@ -415,18 +411,5 @@ public class Tokenizer {
             }
         }
         return s.getToken();
-    }
-
-    @Deprecated
-    private final String code;
-
-    @Deprecated
-    public Tokenizer(String code) {
-        this.code = code;
-    }
-
-    @Deprecated
-    public List<ParserElement> tokenizeAll() {
-        return new LazyArrayList<>(SimpleLexer.of(LexingVisitor.of(code))).getInnerList();
     }
 }

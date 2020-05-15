@@ -22,8 +22,9 @@ public class OrRule implements TreeStringElem {
     @Override
     public void buildString(TreeStringBuilder builder) {
         builder.setName("or")
-                .addElem(andRule)
-                .addElems(andRules);
+                .addElem(andRule);
+
+        andRules.forEach(builder::addElem);
     }
 
     private String str = null;

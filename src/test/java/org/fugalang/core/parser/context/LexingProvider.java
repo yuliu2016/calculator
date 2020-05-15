@@ -1,9 +1,11 @@
 package org.fugalang.core.parser.context;
 
+import org.fugalang.core.parser.LexingContext;
 import org.fugalang.core.parser.ParserElement;
 
 import java.util.Iterator;
 
+@Deprecated(forRemoval = true)
 @FunctionalInterface
 public interface LexingProvider {
 

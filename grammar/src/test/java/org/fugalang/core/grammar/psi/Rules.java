@@ -16,7 +16,8 @@ public class Rules implements TreeStringElem {
 
     @Override
     public void buildString(TreeStringBuilder builder) {
-        builder.setName("rules").addElems(rules);
+        builder.setName("rules");
+        rules.forEach(builder::addElem);
     }
 
     private String str = null;

@@ -1,6 +1,4 @@
-package org.fugalang.core.parser.context;
-
-import org.fugalang.core.parser.ParserElement;
+package org.fugalang.core.parser;
 
 import java.util.function.Supplier;
 

@@ -1,8 +1,6 @@
-package org.fugalang.core.parser.context;
+package org.fugalang.core.parser.impl;
 
-import org.fugalang.core.parser.SyntaxError;
-import org.fugalang.core.parser.ElementType;
-import org.fugalang.core.parser.ParserElement;
+import org.fugalang.core.parser.*;
 import org.fugalang.core.token.CharTest;
 
 import java.util.ArrayList;

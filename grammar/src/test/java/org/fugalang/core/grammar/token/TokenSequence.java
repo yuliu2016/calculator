@@ -1,9 +1,10 @@
-package org.fugalang.core.token;
+package org.fugalang.core.grammar.token;
 
-import org.fugalang.core.parser.SyntaxError;
 import org.fugalang.core.parser.ElementType;
 import org.fugalang.core.parser.ParserElement;
-import org.fugalang.core.parser.context.TokenElement;
+import org.fugalang.core.parser.SyntaxError;
+import org.fugalang.core.parser.impl.TokenElement;
+import org.fugalang.core.token.CharTest;
 
 import java.util.ArrayList;
 import java.util.List;

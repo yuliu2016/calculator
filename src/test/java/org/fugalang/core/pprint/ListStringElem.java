@@ -5,6 +5,7 @@ import org.fugalang.core.parser.TreeStringElem;
 
 import java.util.List;
 
+@Deprecated
 public class ListStringElem implements TreeStringElem {
 
     private final List<?> components;
