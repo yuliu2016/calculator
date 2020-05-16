@@ -27,7 +27,7 @@ public final class ArgsKwargs extends NodeWrapper {
         return has(1, TypedArg.RULE);
     }
 
-    public List<ArgsKwargs3> argsKwargs3List() {
+    public List<ArgsKwargs3> defaultArgList() {
         return getList(2, ArgsKwargs3::of);
     }
 
@@ -45,13 +45,13 @@ public final class ArgsKwargs extends NodeWrapper {
         boolean r;
         r = t.consume("*");
         if (r) TypedArg.parse(t, lv + 1);
-        if (r) parseArgsKwargs3List(t, lv);
+        if (r) parseDefaultArgList(t, lv);
         if (r) ArgsKwargs4.parse(t, lv + 1);
         t.exit(r);
         return r;
     }
 
-    private static void parseArgsKwargs3List(ParseTree t, int lv) {
+    private static void parseDefaultArgList(ParseTree t, int lv) {
         t.enterCollection();
         while (true) {
             var p = t.position();

@@ -23,7 +23,7 @@ public final class FullArgList extends NodeWrapper {
         return DefaultArg.of(get(0));
     }
 
-    public List<FullArgList2> fullArgList2List() {
+    public List<FullArgList2> defaultArgList() {
         return getList(1, FullArgList2::of);
     }
 
@@ -40,13 +40,13 @@ public final class FullArgList extends NodeWrapper {
         t.enter(lv, RULE);
         boolean r;
         r = DefaultArg.parse(t, lv + 1);
-        if (r) parseFullArgList2List(t, lv);
+        if (r) parseDefaultArgList(t, lv);
         if (r) FullArgList3.parse(t, lv + 1);
         t.exit(r);
         return r;
     }
 
-    private static void parseFullArgList2List(ParseTree t, int lv) {
+    private static void parseDefaultArgList(ParseTree t, int lv) {
         t.enterCollection();
         while (true) {
             var p = t.position();
@@ -100,11 +100,11 @@ public final class FullArgList extends NodeWrapper {
             super(RULE, node);
         }
 
-        public FullArgList32 fullArgList32() {
+        public FullArgList32 kwargsOrArgsKwargs() {
             return FullArgList32.of(get(1));
         }
 
-        public boolean hasFullArgList32() {
+        public boolean hasKwargsOrArgsKwargs() {
             return has(1, FullArgList32.RULE);
         }
 

@@ -18,11 +18,11 @@ public final class NamedExpr extends NodeWrapper {
         super(RULE, node);
     }
 
-    public NamedExpr1 namedExpr1() {
+    public NamedExpr1 nameExpr() {
         return NamedExpr1.of(get(0));
     }
 
-    public boolean hasNamedExpr1() {
+    public boolean hasNameExpr() {
         return has(0, NamedExpr1.RULE);
     }
 

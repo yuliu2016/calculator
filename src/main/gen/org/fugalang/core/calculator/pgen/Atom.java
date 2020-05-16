@@ -18,11 +18,11 @@ public final class Atom extends NodeWrapper {
         super(RULE, node);
     }
 
-    public Atom1 atom1() {
+    public Atom1 sum() {
         return Atom1.of(get(0));
     }
 
-    public boolean hasAtom1() {
+    public boolean hasSum() {
         return has(0, Atom1.RULE);
     }
 

@@ -2,9 +2,9 @@ package org.fugalang.core.calculator;
 
 import org.fugalang.core.calculator.pgen.*;
 import org.fugalang.core.parser.SyntaxError;
-import org.fugalang.core.parser.impl.SimpleParseTree;
 import org.fugalang.core.parser.impl.LazyParserContext;
 import org.fugalang.core.parser.impl.LexingVisitor;
+import org.fugalang.core.parser.impl.SimpleParseTree;
 import org.fugalang.core.token.SimpleLexer;
 
 import java.util.Scanner;
@@ -18,9 +18,9 @@ public class Calculator {
             var term = opTerm.term();
             var value = evaluate0(term);
 
-            if (opTerm.sum21().isPlus()) {
+            if (opTerm.plusOrMinus().isPlus()) {
                 sum += value;
-            } else if (opTerm.sum21().isMinus()) {
+            } else if (opTerm.plusOrMinus().isMinus()) {
                 sum -= value;
             }
         }
@@ -71,8 +71,8 @@ public class Calculator {
 
         var pow = evaluate0(power.atom());
 
-        if (power.hasPower2()) {
-            pow = Math.pow(pow, evaluate0(power.power2().factor()));
+        if (power.hasFactor()) {
+            pow = Math.pow(pow, evaluate0(power.factor().factor()));
         }
 
         return pow;
@@ -80,8 +80,8 @@ public class Calculator {
 
     private static double evaluate0(Atom atom) {
 
-        if (atom.hasAtom1()) {
-            return evaluate0(atom.atom1().sum());
+        if (atom.hasSum()) {
+            return evaluate0(atom.sum().sum());
         } else if (atom.hasNumber()) {
             var valStr = atom.number()
                     .replace("_", "")

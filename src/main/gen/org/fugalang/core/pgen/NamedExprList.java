@@ -23,7 +23,7 @@ public final class NamedExprList extends NodeWrapper {
         return NamedExprStar.of(get(0));
     }
 
-    public List<NamedExprList2> namedExprList2List() {
+    public List<NamedExprList2> namedExprStarList() {
         return getList(1, NamedExprList2::of);
     }
 
@@ -36,13 +36,13 @@ public final class NamedExprList extends NodeWrapper {
         t.enter(lv, RULE);
         boolean r;
         r = NamedExprStar.parse(t, lv + 1);
-        if (r) parseNamedExprList2List(t, lv);
+        if (r) parseNamedExprStarList(t, lv);
         if (r) t.consume(",");
         t.exit(r);
         return r;
     }
 
-    private static void parseNamedExprList2List(ParseTree t, int lv) {
+    private static void parseNamedExprStarList(ParseTree t, int lv) {
         t.enterCollection();
         while (true) {
             var p = t.position();

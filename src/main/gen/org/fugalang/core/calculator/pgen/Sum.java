@@ -61,7 +61,7 @@ public final class Sum extends NodeWrapper {
             super(RULE, node);
         }
 
-        public Sum21 sum21() {
+        public Sum21 plusOrMinus() {
             return Sum21.of(get(0));
         }
 

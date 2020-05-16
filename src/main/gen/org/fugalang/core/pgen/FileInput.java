@@ -20,7 +20,7 @@ public final class FileInput extends NodeWrapper {
         super(RULE, node);
     }
 
-    public List<FileInput1> fileInput1List() {
+    public List<FileInput1> newlineOrStmtList() {
         return getList(0, FileInput1::of);
     }
 
@@ -32,13 +32,13 @@ public final class FileInput extends NodeWrapper {
         if (!ParserUtil.recursionGuard(lv, RULE)) return false;
         t.enter(lv, RULE);
         boolean r;
-        parseFileInput1List(t, lv);
+        parseNewlineOrStmtList(t, lv);
         r = t.consume(TokenType.ENDMARKER);
         t.exit(r);
         return r;
     }
 
-    private static void parseFileInput1List(ParseTree t, int lv) {
+    private static void parseNewlineOrStmtList(ParseTree t, int lv) {
         t.enterCollection();
         while (true) {
             var p = t.position();

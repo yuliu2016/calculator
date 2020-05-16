@@ -21,11 +21,11 @@ public final class Annassign extends NodeWrapper {
         return Expr.of(get(1));
     }
 
-    public Annassign3 annassign3() {
+    public Annassign3 exprlistStar() {
         return Annassign3.of(get(2));
     }
 
-    public boolean hasAnnassign3() {
+    public boolean hasExprlistStar() {
         return has(2, Annassign3.RULE);
     }
 

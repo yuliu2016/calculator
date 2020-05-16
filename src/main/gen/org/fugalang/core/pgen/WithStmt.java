@@ -23,7 +23,7 @@ public final class WithStmt extends NodeWrapper {
         return WithItem.of(get(1));
     }
 
-    public List<WithStmt3> withStmt3List() {
+    public List<WithStmt3> withItemList() {
         return getList(2, WithStmt3::of);
     }
 
@@ -37,13 +37,13 @@ public final class WithStmt extends NodeWrapper {
         boolean r;
         r = t.consume("with");
         r = r && WithItem.parse(t, lv + 1);
-        if (r) parseWithStmt3List(t, lv);
+        if (r) parseWithItemList(t, lv);
         r = r && Suite.parse(t, lv + 1);
         t.exit(r);
         return r;
     }
 
-    private static void parseWithStmt3List(ParseTree t, int lv) {
+    private static void parseWithItemList(ParseTree t, int lv) {
         t.enterCollection();
         while (true) {
             var p = t.position();

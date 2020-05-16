@@ -18,43 +18,43 @@ public final class Argument extends NodeWrapper {
         super(RULE, node);
     }
 
-    public Argument1 argument1() {
+    public Argument1 nameExpr() {
         return Argument1.of(get(0));
     }
 
-    public boolean hasArgument1() {
+    public boolean hasNameExpr() {
         return has(0, Argument1.RULE);
     }
 
-    public Argument2 argument2() {
+    public Argument2 nameExpr1() {
         return Argument2.of(get(1));
     }
 
-    public boolean hasArgument2() {
+    public boolean hasNameExpr1() {
         return has(1, Argument2.RULE);
     }
 
-    public Argument3 argument3() {
+    public Argument3 expr() {
         return Argument3.of(get(2));
     }
 
-    public boolean hasArgument3() {
+    public boolean hasExpr() {
         return has(2, Argument3.RULE);
     }
 
-    public Argument4 argument4() {
+    public Argument4 expr1() {
         return Argument4.of(get(3));
     }
 
-    public boolean hasArgument4() {
+    public boolean hasExpr1() {
         return has(3, Argument4.RULE);
     }
 
-    public Expr expr() {
+    public Expr expr2() {
         return Expr.of(get(4));
     }
 
-    public boolean hasExpr() {
+    public boolean hasExpr2() {
         return has(4, Expr.RULE);
     }
 

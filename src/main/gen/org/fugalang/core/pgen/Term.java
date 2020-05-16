@@ -5,7 +5,7 @@ import org.fugalang.core.parser.*;
 import java.util.List;
 
 /**
- * term: 'pipeline' (('*' | '@' | '/' | '%' | '//') 'pipeline')*
+ * term: 'pipeline' ('term_op' 'pipeline')*
  */
 public final class Term extends NodeWrapper {
     public static final ParserRule RULE =
@@ -23,7 +23,7 @@ public final class Term extends NodeWrapper {
         return Pipeline.of(get(0));
     }
 
-    public List<Term2> term2List() {
+    public List<Term2> termOpPipelineList() {
         return getList(1, Term2::of);
     }
 
@@ -32,12 +32,12 @@ public final class Term extends NodeWrapper {
         t.enter(lv, RULE);
         boolean r;
         r = Pipeline.parse(t, lv + 1);
-        if (r) parseTerm2List(t, lv);
+        if (r) parseTermOpPipelineList(t, lv);
         t.exit(r);
         return r;
     }
 
-    private static void parseTerm2List(ParseTree t, int lv) {
+    private static void parseTermOpPipelineList(ParseTree t, int lv) {
         t.enterCollection();
         while (true) {
             var p = t.position();
@@ -47,7 +47,7 @@ public final class Term extends NodeWrapper {
     }
 
     /**
-     * ('*' | '@' | '/' | '%' | '//') 'pipeline'
+     * 'term_op' 'pipeline'
      */
     public static final class Term2 extends NodeWrapper {
         public static final ParserRule RULE =
@@ -61,8 +61,8 @@ public final class Term extends NodeWrapper {
             super(RULE, node);
         }
 
-        public Term21 term21() {
-            return Term21.of(get(0));
+        public TermOp termOp() {
+            return TermOp.of(get(0));
         }
 
         public Pipeline pipeline() {
@@ -73,57 +73,8 @@ public final class Term extends NodeWrapper {
             if (!ParserUtil.recursionGuard(lv, RULE)) return false;
             t.enter(lv, RULE);
             boolean r;
-            r = Term21.parse(t, lv + 1);
+            r = TermOp.parse(t, lv + 1);
             r = r && Pipeline.parse(t, lv + 1);
-            t.exit(r);
-            return r;
-        }
-    }
-
-    /**
-     * '*' | '@' | '/' | '%' | '//'
-     */
-    public static final class Term21 extends NodeWrapper {
-        public static final ParserRule RULE =
-                ParserRule.of("term:2:1", RuleType.Disjunction);
-
-        public static Term21 of(ParseTreeNode node) {
-            return new Term21(node);
-        }
-
-        private Term21(ParseTreeNode node) {
-            super(RULE, node);
-        }
-
-        public boolean isTimes() {
-            return is(0);
-        }
-
-        public boolean isMatrixTimes() {
-            return is(1);
-        }
-
-        public boolean isDiv() {
-            return is(2);
-        }
-
-        public boolean isModulus() {
-            return is(3);
-        }
-
-        public boolean isFloorDiv() {
-            return is(4);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = t.consume("*");
-            r = r || t.consume("@");
-            r = r || t.consume("/");
-            r = r || t.consume("%");
-            r = r || t.consume("//");
             t.exit(r);
             return r;
         }

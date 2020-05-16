@@ -20,11 +20,11 @@ public final class BlockSuite extends NodeWrapper {
         super(RULE, node);
     }
 
-    public BlockSuite1 blockSuite1() {
+    public BlockSuite1 simpleStmt() {
         return BlockSuite1.of(get(0));
     }
 
-    public boolean hasBlockSuite1() {
+    public boolean hasSimpleStmt() {
         return has(0, BlockSuite1.RULE);
     }
 

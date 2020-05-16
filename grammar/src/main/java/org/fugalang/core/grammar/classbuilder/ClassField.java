@@ -41,7 +41,7 @@ public class ClassField {
         if (body == null) {
             return null;
         }
-        return "\n    public " + className.asType() + " " + fieldName + "() {\n" +
+        return "\n    public " + className.getType() + " " + fieldName + "() {\n" +
                 body +
                 "    }\n";
     }
@@ -50,7 +50,7 @@ public class ClassField {
         return switch (resultSource.getType()) {
             case Class -> {
                 if (isSingular()) {
-                    yield "        return " + className.asType() + ".of(get(" + index + "));\n";
+                    yield "        return " + className.getType() + ".of(get(" + index + "));\n";
                 }
                 yield "        return getList(" + index + ", " + className.getRealClassName() + "::of);\n";
             }
@@ -80,7 +80,7 @@ public class ClassField {
             return null;
         }
         return "\n    public boolean has" +
-                ParserStringUtil.capitalizeFirstCharOnly(fieldName) +
+                ParserStringUtil.capitalizeFirstChar(fieldName) +
                 "() {\n" + body + "    }\n";
     }
 
@@ -92,7 +92,7 @@ public class ClassField {
                 }
                 if (isSingular()) {
                     yield "        return has(" + index + ", " +
-                            className.asType() + ".RULE);\n";
+                            className.getType() + ".RULE);\n";
                 }
                 yield null;
             }
@@ -123,7 +123,7 @@ public class ClassField {
     }
 
     private String getLoopExpr() {
-        var name = ParserStringUtil.capitalizeFirstCharOnly(fieldName);
+        var name = ParserStringUtil.capitalizeFirstChar(fieldName);
         return "parse" + name + "(t, lv)";
     }
 
@@ -162,7 +162,7 @@ public class ClassField {
 
     private String getRequiredLoopParser() {
         var resultExpr = getResultExpr();
-        var name = ParserStringUtil.capitalizeFirstCharOnly(fieldName);
+        var name = ParserStringUtil.capitalizeFirstChar(fieldName);
         return "\n    private static boolean parse" + name + "(ParseTree t, int lv) {\n" +
                 "        t.enterCollection();\n" +
                 "        var r = " + resultExpr + ";\n" +
@@ -177,7 +177,7 @@ public class ClassField {
 
     private String getOptionalLoopParser() {
         var resultExpr = getResultExpr();
-        var name = ParserStringUtil.capitalizeFirstCharOnly(fieldName);
+        var name = ParserStringUtil.capitalizeFirstChar(fieldName);
         return "\n    private static void parse" + name + "(ParseTree t, int lv) {\n" +
                 "        t.enterCollection();\n" +
                 "        while (true) {\n" +

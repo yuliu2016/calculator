@@ -15,10 +15,10 @@ public class ParserStringUtil {
     }
 
     public static String prefixCap(String pf, String s) {
-        return pf + capitalizeFirstCharOnly(s);
+        return pf + capitalizeFirstChar(s);
     }
 
-    public static String capitalizeFirstCharOnly(String word) {
+    public static String capitalizeFirstChar(String word) {
         return word.isEmpty() ? word : word.substring(0, 1).toUpperCase() +
                 word.substring(1);
     }

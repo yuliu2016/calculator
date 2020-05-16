@@ -23,7 +23,7 @@ public final class Comparison extends NodeWrapper {
         return BitwiseOr.of(get(0));
     }
 
-    public List<Comparison2> comparison2List() {
+    public List<Comparison2> compOpBitwiseOrList() {
         return getList(1, Comparison2::of);
     }
 
@@ -32,12 +32,12 @@ public final class Comparison extends NodeWrapper {
         t.enter(lv, RULE);
         boolean r;
         r = BitwiseOr.parse(t, lv + 1);
-        if (r) parseComparison2List(t, lv);
+        if (r) parseCompOpBitwiseOrList(t, lv);
         t.exit(r);
         return r;
     }
 
-    private static void parseComparison2List(ParseTree t, int lv) {
+    private static void parseCompOpBitwiseOrList(ParseTree t, int lv) {
         t.enterCollection();
         while (true) {
             var p = t.position();

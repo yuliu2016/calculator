@@ -5,7 +5,7 @@ import org.fugalang.core.parser.*;
 import java.util.List;
 
 /**
- * sum: 'term' (('+' | '-') 'term')*
+ * sum: 'term' ('sum_op' 'term')*
  */
 public final class Sum extends NodeWrapper {
     public static final ParserRule RULE =
@@ -23,7 +23,7 @@ public final class Sum extends NodeWrapper {
         return Term.of(get(0));
     }
 
-    public List<Sum2> sum2List() {
+    public List<Sum2> sumOpTermList() {
         return getList(1, Sum2::of);
     }
 
@@ -32,12 +32,12 @@ public final class Sum extends NodeWrapper {
         t.enter(lv, RULE);
         boolean r;
         r = Term.parse(t, lv + 1);
-        if (r) parseSum2List(t, lv);
+        if (r) parseSumOpTermList(t, lv);
         t.exit(r);
         return r;
     }
 
-    private static void parseSum2List(ParseTree t, int lv) {
+    private static void parseSumOpTermList(ParseTree t, int lv) {
         t.enterCollection();
         while (true) {
             var p = t.position();
@@ -47,7 +47,7 @@ public final class Sum extends NodeWrapper {
     }
 
     /**
-     * ('+' | '-') 'term'
+     * 'sum_op' 'term'
      */
     public static final class Sum2 extends NodeWrapper {
         public static final ParserRule RULE =
@@ -61,8 +61,8 @@ public final class Sum extends NodeWrapper {
             super(RULE, node);
         }
 
-        public Sum21 sum21() {
-            return Sum21.of(get(0));
+        public SumOp sumOp() {
+            return SumOp.of(get(0));
         }
 
         public Term term() {
@@ -73,42 +73,8 @@ public final class Sum extends NodeWrapper {
             if (!ParserUtil.recursionGuard(lv, RULE)) return false;
             t.enter(lv, RULE);
             boolean r;
-            r = Sum21.parse(t, lv + 1);
+            r = SumOp.parse(t, lv + 1);
             r = r && Term.parse(t, lv + 1);
-            t.exit(r);
-            return r;
-        }
-    }
-
-    /**
-     * '+' | '-'
-     */
-    public static final class Sum21 extends NodeWrapper {
-        public static final ParserRule RULE =
-                ParserRule.of("sum:2:1", RuleType.Disjunction);
-
-        public static Sum21 of(ParseTreeNode node) {
-            return new Sum21(node);
-        }
-
-        private Sum21(ParseTreeNode node) {
-            super(RULE, node);
-        }
-
-        public boolean isPlus() {
-            return is(0);
-        }
-
-        public boolean isMinus() {
-            return is(1);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = t.consume("+");
-            r = r || t.consume("-");
             t.exit(r);
             return r;
         }

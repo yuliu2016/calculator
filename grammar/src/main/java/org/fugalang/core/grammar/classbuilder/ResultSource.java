@@ -24,7 +24,7 @@ public class ResultSource {
     }
 
     public static ResultSource ofClass(ClassName className) {
-        return ofClass(className.asType());
+        return ofClass(className.getType());
     }
 
     public static ResultSource ofTokenType(String tokenType) {

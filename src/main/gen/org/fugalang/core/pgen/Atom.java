@@ -1,9 +1,10 @@
 package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.*;
+import org.fugalang.core.token.TokenType;
 
 /**
- * atom: 'compound_atom' | 'simple_atom'
+ * atom: 'tuple_atom' | 'list_atom' | 'dict_or_set' | 'NAME' | 'NUMBER' | 'STRING' | 'None' | 'True' | 'False'
  */
 public final class Atom extends NodeWrapper {
     public static final ParserRule RULE =
@@ -17,28 +18,79 @@ public final class Atom extends NodeWrapper {
         super(RULE, node);
     }
 
-    public CompoundAtom compoundAtom() {
-        return CompoundAtom.of(get(0));
+    public TupleAtom tupleAtom() {
+        return TupleAtom.of(get(0));
     }
 
-    public boolean hasCompoundAtom() {
-        return has(0, CompoundAtom.RULE);
+    public boolean hasTupleAtom() {
+        return has(0, TupleAtom.RULE);
     }
 
-    public SimpleAtom simpleAtom() {
-        return SimpleAtom.of(get(1));
+    public ListAtom listAtom() {
+        return ListAtom.of(get(1));
     }
 
-    public boolean hasSimpleAtom() {
-        return has(1, SimpleAtom.RULE);
+    public boolean hasListAtom() {
+        return has(1, ListAtom.RULE);
+    }
+
+    public DictOrSet dictOrSet() {
+        return DictOrSet.of(get(2));
+    }
+
+    public boolean hasDictOrSet() {
+        return has(2, DictOrSet.RULE);
+    }
+
+    public String name() {
+        return get(3, TokenType.NAME);
+    }
+
+    public boolean hasName() {
+        return has(3, TokenType.NAME);
+    }
+
+    public String number() {
+        return get(4, TokenType.NUMBER);
+    }
+
+    public boolean hasNumber() {
+        return has(4, TokenType.NUMBER);
+    }
+
+    public String string() {
+        return get(5, TokenType.STRING);
+    }
+
+    public boolean hasString() {
+        return has(5, TokenType.STRING);
+    }
+
+    public boolean isNone() {
+        return is(6);
+    }
+
+    public boolean isTrue() {
+        return is(7);
+    }
+
+    public boolean isFalse() {
+        return is(8);
     }
 
     public static boolean parse(ParseTree t, int lv) {
         if (!ParserUtil.recursionGuard(lv, RULE)) return false;
         t.enter(lv, RULE);
         boolean r;
-        r = CompoundAtom.parse(t, lv + 1);
-        r = r || SimpleAtom.parse(t, lv + 1);
+        r = TupleAtom.parse(t, lv + 1);
+        r = r || ListAtom.parse(t, lv + 1);
+        r = r || DictOrSet.parse(t, lv + 1);
+        r = r || t.consume(TokenType.NAME);
+        r = r || t.consume(TokenType.NUMBER);
+        r = r || t.consume(TokenType.STRING);
+        r = r || t.consume("None");
+        r = r || t.consume("True");
+        r = r || t.consume("False");
         t.exit(r);
         return r;
     }

@@ -23,7 +23,7 @@ public final class SimpleStmt extends NodeWrapper {
         return SmallStmt.of(get(0));
     }
 
-    public List<SimpleStmt2> simpleStmt2List() {
+    public List<SimpleStmt2> smallStmtList() {
         return getList(1, SimpleStmt2::of);
     }
 
@@ -36,13 +36,13 @@ public final class SimpleStmt extends NodeWrapper {
         t.enter(lv, RULE);
         boolean r;
         r = SmallStmt.parse(t, lv + 1);
-        if (r) parseSimpleStmt2List(t, lv);
+        if (r) parseSmallStmtList(t, lv);
         if (r) t.consume(";");
         t.exit(r);
         return r;
     }
 
-    private static void parseSimpleStmt2List(ParseTree t, int lv) {
+    private static void parseSmallStmtList(ParseTree t, int lv) {
         t.enterCollection();
         while (true) {
             var p = t.position();

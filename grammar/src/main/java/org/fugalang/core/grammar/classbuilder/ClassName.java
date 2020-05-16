@@ -2,43 +2,27 @@ package org.fugalang.core.grammar.classbuilder;
 
 import org.fugalang.core.grammar.util.ParserStringUtil;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class ClassName {
     private final String realClassName;
-    private final List<String> genericWrappers;
+    private final boolean isList;
     private final String typeStr;
-    private final String printName;
+    private final String ruleName;
 
-    private ClassName(String realClassName, List<String> genericWrappers, String printName) {
+    private ClassName(String realClassName, boolean isList, String ruleName) {
         this.realClassName = realClassName;
-        this.genericWrappers = genericWrappers;
-        this.printName = printName;
+        this.isList = isList;
+        this.ruleName = ruleName;
         typeStr = computeType();
     }
 
     private String computeType() {
-        if (genericWrappers.isEmpty()) {
-            return realClassName;
+        if (isList) {
+            return "List<" + ParserStringUtil.capitalizeFirstChar(realClassName) + ">";
         }
-
-        StringBuilder sb = new StringBuilder();
-
-        for (String genericWrapper : genericWrappers) {
-            sb.append(genericWrapper);
-            sb.append("<");
-        }
-
-        // assuming classes start with upper-case,
-        // this deals with booleans
-        sb.append(ParserStringUtil.capitalizeFirstCharOnly(realClassName));
-
-        sb.append(">".repeat(genericWrappers.size()));
-        return sb.toString();
+        return realClassName;
     }
 
-    public String asType() {
+    public String getType() {
         return typeStr;
     }
 
@@ -46,26 +30,22 @@ public class ClassName {
         return realClassName;
     }
 
-    public String asPrintName() {
-        if (printName == null) {
-            throw new RuntimeException("Cannot get a null print name");
+    public String getRuleName() {
+        if (ruleName == null) {
+            throw new RuntimeException("No Rule Name");
         }
-        return printName;
+        return ruleName;
     }
 
-    public ClassName wrapIn(String genericWrapper) {
-        List<String> wrappers = new ArrayList<>();
-        wrappers.add(genericWrapper);
-        wrappers.addAll(genericWrappers);
-        return new ClassName(realClassName, wrappers, printName);
-    }
-
-    public ClassName suffix(Object suffix) {
+    public ClassName suffix(int suffix) {
         return new ClassName(
-                realClassName + suffix.toString(),
-                List.copyOf(genericWrappers),
-                printName == null ? null : printName + ":" + suffix.toString()
+                realClassName + suffix, isList,
+                ruleName == null ? null : ruleName + ":" + suffix
         );
+    }
+
+    public ClassName asList() {
+        return new ClassName(realClassName, true, ruleName);
     }
 
     public String decapName() {
@@ -82,6 +62,6 @@ public class ClassName {
     }
 
     public static ClassName of(String realClassName, String printName) {
-        return new ClassName(realClassName, List.of(), printName);
+        return new ClassName(realClassName, false, printName);
     }
 }

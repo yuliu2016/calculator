@@ -18,7 +18,7 @@ public final class Stmt extends NodeWrapper {
         super(RULE, node);
     }
 
-    public Stmt1 stmt1() {
+    public Stmt1 simpleStmtOrCompoundStmt() {
         return Stmt1.of(get(0));
     }
 

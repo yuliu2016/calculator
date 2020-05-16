@@ -23,7 +23,7 @@ public final class Pipeline extends NodeWrapper {
         return Factor.of(get(0));
     }
 
-    public List<Pipeline2> pipeline2List() {
+    public List<Pipeline2> pipeExprList() {
         return getList(1, Pipeline2::of);
     }
 
@@ -32,12 +32,12 @@ public final class Pipeline extends NodeWrapper {
         t.enter(lv, RULE);
         boolean r;
         r = Factor.parse(t, lv + 1);
-        if (r) parsePipeline2List(t, lv);
+        if (r) parsePipeExprList(t, lv);
         t.exit(r);
         return r;
     }
 
-    private static void parsePipeline2List(ParseTree t, int lv) {
+    private static void parsePipeExprList(ParseTree t, int lv) {
         t.enterCollection();
         while (true) {
             var p = t.position();

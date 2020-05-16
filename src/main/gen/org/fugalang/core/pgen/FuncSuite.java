@@ -17,11 +17,11 @@ public final class FuncSuite extends NodeWrapper {
         super(RULE, node);
     }
 
-    public FuncSuite1 funcSuite1() {
+    public FuncSuite1 expr() {
         return FuncSuite1.of(get(0));
     }
 
-    public boolean hasFuncSuite1() {
+    public boolean hasExpr() {
         return has(0, FuncSuite1.RULE);
     }
 

@@ -69,15 +69,15 @@ public final class Assignment extends NodeWrapper {
             return has(0, Annassign.RULE);
         }
 
-        public List<Assignment32> assignment32List() {
+        public List<Assignment32> exprlistStarList() {
             return getList(1, Assignment32::of);
         }
 
-        public Assignment33 assignment33() {
+        public Assignment33 augassignExprlist() {
             return Assignment33.of(get(2));
         }
 
-        public boolean hasAssignment33() {
+        public boolean hasAugassignExprlist() {
             return has(2, Assignment33.RULE);
         }
 
@@ -86,13 +86,13 @@ public final class Assignment extends NodeWrapper {
             t.enter(lv, RULE);
             boolean r;
             r = Annassign.parse(t, lv + 1);
-            r = r || parseAssignment32List(t, lv);
+            r = r || parseExprlistStarList(t, lv);
             r = r || Assignment33.parse(t, lv + 1);
             t.exit(r);
             return r;
         }
 
-        private static boolean parseAssignment32List(ParseTree t, int lv) {
+        private static boolean parseExprlistStarList(ParseTree t, int lv) {
             t.enterCollection();
             var r = Assignment32.parse(t, lv + 1);
             if (r) while (true) {

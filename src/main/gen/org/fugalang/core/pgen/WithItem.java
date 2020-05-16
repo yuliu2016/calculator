@@ -22,11 +22,11 @@ public final class WithItem extends NodeWrapper {
         return Expr.of(get(0));
     }
 
-    public WithItem2 withItem2() {
+    public WithItem2 asName() {
         return WithItem2.of(get(1));
     }
 
-    public boolean hasWithItem2() {
+    public boolean hasAsName() {
         return has(1, WithItem2.RULE);
     }
 

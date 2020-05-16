@@ -23,7 +23,7 @@ public final class Exprlist extends NodeWrapper {
         return Expr.of(get(0));
     }
 
-    public List<Exprlist2> exprlist2List() {
+    public List<Exprlist2> exprList() {
         return getList(1, Exprlist2::of);
     }
 
@@ -36,13 +36,13 @@ public final class Exprlist extends NodeWrapper {
         t.enter(lv, RULE);
         boolean r;
         r = Expr.parse(t, lv + 1);
-        if (r) parseExprlist2List(t, lv);
+        if (r) parseExprList(t, lv);
         if (r) t.consume(",");
         t.exit(r);
         return r;
     }
 
-    private static void parseExprlist2List(ParseTree t, int lv) {
+    private static void parseExprList(ParseTree t, int lv) {
         t.enterCollection();
         while (true) {
             var p = t.position();

@@ -55,11 +55,11 @@ public final class ExceptClause extends NodeWrapper {
             return Expr.of(get(0));
         }
 
-        public ExceptClause22 exceptClause22() {
+        public ExceptClause22 asName() {
             return ExceptClause22.of(get(1));
         }
 
-        public boolean hasExceptClause22() {
+        public boolean hasAsName() {
             return has(1, ExceptClause22.RULE);
         }
 

@@ -45,11 +45,11 @@ public final class CompOp extends NodeWrapper {
         return is(6);
     }
 
-    public CompOp8 compOp8() {
+    public CompOp8 notIn() {
         return CompOp8.of(get(7));
     }
 
-    public boolean hasCompOp8() {
+    public boolean hasNotIn() {
         return has(7, CompOp8.RULE);
     }
 
@@ -57,11 +57,11 @@ public final class CompOp extends NodeWrapper {
         return is(8);
     }
 
-    public CompOp10 compOp10() {
+    public CompOp10 isNot() {
         return CompOp10.of(get(9));
     }
 
-    public boolean hasCompOp10() {
+    public boolean hasIsNot() {
         return has(9, CompOp10.RULE);
     }
 

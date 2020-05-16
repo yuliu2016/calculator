@@ -23,7 +23,7 @@ public final class DottedAsNames extends NodeWrapper {
         return DottedAsName.of(get(0));
     }
 
-    public List<DottedAsNames2> dottedAsNames2List() {
+    public List<DottedAsNames2> dottedAsNameList() {
         return getList(1, DottedAsNames2::of);
     }
 
@@ -32,12 +32,12 @@ public final class DottedAsNames extends NodeWrapper {
         t.enter(lv, RULE);
         boolean r;
         r = DottedAsName.parse(t, lv + 1);
-        if (r) parseDottedAsNames2List(t, lv);
+        if (r) parseDottedAsNameList(t, lv);
         t.exit(r);
         return r;
     }
 
-    private static void parseDottedAsNames2List(ParseTree t, int lv) {
+    private static void parseDottedAsNameList(ParseTree t, int lv) {
         t.enterCollection();
         while (true) {
             var p = t.position();

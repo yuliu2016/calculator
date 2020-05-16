@@ -34,11 +34,11 @@ public final class SingleInput extends NodeWrapper {
         return has(1, SimpleStmt.RULE);
     }
 
-    public SingleInput3 singleInput3() {
+    public SingleInput3 compoundStmtNewline() {
         return SingleInput3.of(get(2));
     }
 
-    public boolean hasSingleInput3() {
+    public boolean hasCompoundStmtNewline() {
         return has(2, SingleInput3.RULE);
     }
 

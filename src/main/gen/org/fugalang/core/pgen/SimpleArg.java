@@ -22,11 +22,11 @@ public final class SimpleArg extends NodeWrapper {
         return get(0, TokenType.NAME);
     }
 
-    public SimpleArg2 simpleArg2() {
+    public SimpleArg2 expr() {
         return SimpleArg2.of(get(1));
     }
 
-    public boolean hasSimpleArg2() {
+    public boolean hasExpr() {
         return has(1, SimpleArg2.RULE);
     }
 

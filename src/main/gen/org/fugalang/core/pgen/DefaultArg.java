@@ -21,11 +21,11 @@ public final class DefaultArg extends NodeWrapper {
         return TypedArg.of(get(0));
     }
 
-    public DefaultArg2 defaultArg2() {
+    public DefaultArg2 expr() {
         return DefaultArg2.of(get(1));
     }
 
-    public boolean hasDefaultArg2() {
+    public boolean hasExpr() {
         return has(1, DefaultArg2.RULE);
     }
 

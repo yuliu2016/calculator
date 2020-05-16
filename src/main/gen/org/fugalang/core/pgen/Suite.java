@@ -17,11 +17,11 @@ public final class Suite extends NodeWrapper {
         super(RULE, node);
     }
 
-    public Suite1 suite1() {
+    public Suite1 simpleStmt() {
         return Suite1.of(get(0));
     }
 
-    public boolean hasSuite1() {
+    public boolean hasSimpleStmt() {
         return has(0, Suite1.RULE);
     }
 

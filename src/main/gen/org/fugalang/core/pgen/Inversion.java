@@ -17,11 +17,11 @@ public final class Inversion extends NodeWrapper {
         super(RULE, node);
     }
 
-    public Inversion1 inversion1() {
+    public Inversion1 notInversion() {
         return Inversion1.of(get(0));
     }
 
-    public boolean hasInversion1() {
+    public boolean hasNotInversion() {
         return has(0, Inversion1.RULE);
     }
 

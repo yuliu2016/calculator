@@ -54,11 +54,11 @@ public final class RaiseStmt extends NodeWrapper {
             return Expr.of(get(0));
         }
 
-        public RaiseStmt22 raiseStmt22() {
+        public RaiseStmt22 fromExpr() {
             return RaiseStmt22.of(get(1));
         }
 
-        public boolean hasRaiseStmt22() {
+        public boolean hasFromExpr() {
             return has(1, RaiseStmt22.RULE);
         }
 

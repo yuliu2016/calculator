@@ -18,19 +18,19 @@ public final class SubRule extends NodeWrapper {
         super(RULE, node);
     }
 
-    public SubRule1 subRule1() {
+    public SubRule1 orRule() {
         return SubRule1.of(get(0));
     }
 
-    public boolean hasSubRule1() {
+    public boolean hasOrRule() {
         return has(0, SubRule1.RULE);
     }
 
-    public SubRule2 subRule2() {
+    public SubRule2 orRule1() {
         return SubRule2.of(get(1));
     }
 
-    public boolean hasSubRule2() {
+    public boolean hasOrRule1() {
         return has(1, SubRule2.RULE);
     }
 

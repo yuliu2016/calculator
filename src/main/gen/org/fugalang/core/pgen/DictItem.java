@@ -17,19 +17,19 @@ public final class DictItem extends NodeWrapper {
         super(RULE, node);
     }
 
-    public DictItem1 dictItem1() {
+    public DictItem1 exprExpr() {
         return DictItem1.of(get(0));
     }
 
-    public boolean hasDictItem1() {
+    public boolean hasExprExpr() {
         return has(0, DictItem1.RULE);
     }
 
-    public DictItem2 dictItem2() {
+    public DictItem2 bitwiseOr() {
         return DictItem2.of(get(1));
     }
 
-    public boolean hasDictItem2() {
+    public boolean hasBitwiseOr() {
         return has(1, DictItem2.RULE);
     }
 

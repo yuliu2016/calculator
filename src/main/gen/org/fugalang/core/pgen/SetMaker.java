@@ -23,7 +23,7 @@ public final class SetMaker extends NodeWrapper {
         return ExprOrStar.of(get(0));
     }
 
-    public List<SetMaker2> setMaker2List() {
+    public List<SetMaker2> exprOrStarList() {
         return getList(1, SetMaker2::of);
     }
 
@@ -36,13 +36,13 @@ public final class SetMaker extends NodeWrapper {
         t.enter(lv, RULE);
         boolean r;
         r = ExprOrStar.parse(t, lv + 1);
-        if (r) parseSetMaker2List(t, lv);
+        if (r) parseExprOrStarList(t, lv);
         if (r) t.consume(",");
         t.exit(r);
         return r;
     }
 
-    private static void parseSetMaker2List(ParseTree t, int lv) {
+    private static void parseExprOrStarList(ParseTree t, int lv) {
         t.enterCollection();
         while (true) {
             var p = t.position();

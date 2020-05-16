@@ -29,19 +29,19 @@ public final class PipeFor extends NodeWrapper {
         return Targetlist.of(get(2));
     }
 
-    public PipeFor4 pipeFor4() {
+    public PipeFor4 ifNamedExpr() {
         return PipeFor4.of(get(3));
     }
 
-    public boolean hasPipeFor4() {
+    public boolean hasIfNamedExpr() {
         return has(3, PipeFor4.RULE);
     }
 
-    public PipeFor5 pipeFor5() {
+    public PipeFor5 parametersOrBlockSuite() {
         return PipeFor5.of(get(4));
     }
 
-    public boolean hasPipeFor5() {
+    public boolean hasParametersOrBlockSuite() {
         return has(4, PipeFor5.RULE);
     }
 

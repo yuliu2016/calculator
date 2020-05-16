@@ -22,11 +22,11 @@ public final class DottedAsName extends NodeWrapper {
         return DottedName.of(get(0));
     }
 
-    public DottedAsName2 dottedAsName2() {
+    public DottedAsName2 asName() {
         return DottedAsName2.of(get(1));
     }
 
-    public boolean hasDottedAsName2() {
+    public boolean hasAsName() {
         return has(1, DottedAsName2.RULE);
     }
 

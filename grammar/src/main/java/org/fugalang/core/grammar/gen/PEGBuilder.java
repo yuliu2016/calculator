@@ -85,7 +85,7 @@ public class PEGBuilder {
     }
 
     private void addOrRule(ClassName className, ClassBuilder cb, OrRule rule) {
-        if (rule.orRule2List().isEmpty()) {
+        if (rule.andRuleList().isEmpty()) {
             // only one rule - can propagate fields of this class
             // but need to change the type here
             cb.setRuleType(RuleType.Conjunction);
@@ -105,7 +105,7 @@ public class PEGBuilder {
                 var newClassName = className.suffix(class_count);
                 class_count++;
 
-                if (andRule.andRule2List().isEmpty()) {
+                if (andRule.repeatRuleList().isEmpty()) {
                     // only one repeat rule - can propagate fields of this class
                     addAndRule(newClassName, cb, andRule, REQUIRED);
                 } else {
@@ -113,13 +113,16 @@ public class PEGBuilder {
                     // a list can't hold multiple-ly typed objects
                     var component_cb = classSet.createComponentClass(newClassName);
 
-                    component_cb.setHeaderComments(PEGCompat.constructString(andRule));
+                    var rule_repr = PEGCompat.constructString(andRule);
+                    component_cb.setHeaderComments(rule_repr);
                     component_cb.setRuleType(RuleType.Conjunction);
+
+                    var smart_name = FieldName.getSmartName(newClassName, andRule, converter);
 
                     // Add a field to the class set
                     // The reason to do this first is that if adding the rule fails,
                     // this class can still show that this point was reached
-                    addRepeatField(newClassName, cb, newClassName.decapName(),
+                    addRepeatField(newClassName, cb, smart_name,
                             RepeatType.Once, REQUIRED, ResultSource.ofClass(newClassName));
 
                     addAndRule(newClassName, component_cb, andRule, REQUIRED);
@@ -135,7 +138,7 @@ public class PEGBuilder {
             boolean isOptional
     ) {
 
-        if (rule.andRule2List().isEmpty()) {
+        if (rule.repeatRuleList().isEmpty()) {
             addRepeatedSubRule(className, cb, rule.repeatRule(), isOptional);
         } else {
             // don't need to check for component classes - every RepeatRule
@@ -169,11 +172,11 @@ public class PEGBuilder {
         var repeatType = PEGCompat.getRepeatType(repeatRule);
 
         switch (PEGCompat.getRuleType(subRule)) {
-            case Group -> addOrRuleAsComponent(className, cb, subRule.subRule1().orRule(),
+            case Group -> addOrRuleAsComponent(className, cb, subRule.orRule().orRule(),
                     repeatType, REQUIRED);
 
             case Optional -> addOrRuleAsComponent(className, cb,
-                    subRule.subRule2().orRule(), repeatType, OPTIONAL);
+                    subRule.orRule1().orRule(), repeatType, OPTIONAL);
 
             case Token -> addToken(cb, repeatType, PEGCompat.getSubruleString(subRule), isOptional);
         }
@@ -237,7 +240,7 @@ public class PEGBuilder {
             cb.addField(field);
         } else {
             cb.addImport("java.util.List");
-            var newClassName = className.wrapIn("List");
+            var newClassName = className.asList();
             var newFieldName = fieldName + "List";
 
             var fieldType = repeatType == RepeatType.OnceOrMore ?
@@ -258,7 +261,7 @@ public class PEGBuilder {
         // maybe this can just be added to this class
         // but maybe there needs to be a separate class
 
-        if (rule.orRule2List().isEmpty() && rule.andRule().andRule2List().isEmpty() &&
+        if (rule.andRuleList().isEmpty() && rule.andRule().repeatRuleList().isEmpty() &&
                 repeatType == RepeatType.Once) {
             // ^fix - single-char repeats
 
@@ -267,13 +270,16 @@ public class PEGBuilder {
         } else {
 
             var component_cb = classSet.createComponentClass(className);
-            component_cb.setHeaderComments(PEGCompat.constructString(rule));
+            var rule_repr = PEGCompat.constructString(rule);
+            component_cb.setHeaderComments(rule_repr);
             component_cb.setRuleType(RuleType.Disjunction);
+
+            var smart_name = FieldName.getSmartName(className, rule, converter);
 
             // Add a field to the class set
             // The reason to do this first is that if adding the rule fails,
             // this class can still show that this point was reached
-            addRepeatField(className, cb, className.decapName(),
+            addRepeatField(className, cb, smart_name,
                     repeatType, isOptional, ResultSource.ofClass(className));
 
             addOrRule(className, component_cb, rule);

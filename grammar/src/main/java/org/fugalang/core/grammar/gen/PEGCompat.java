@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 public class PEGCompat {
     public static String constructString(OrRule orRule) {
         return constructString(orRule.andRule()) + orRule
-                .orRule2List()
+                .andRuleList()
                 .stream()
                 .map(rule -> " | " + constructString(rule.andRule()))
                 .collect(Collectors.joining());
@@ -19,29 +19,29 @@ public class PEGCompat {
 
     public static String constructString(AndRule andRule) {
         return constructString(andRule.repeatRule()) + andRule
-                .andRule2List()
+                .repeatRuleList()
                 .stream()
                 .map(rule -> " " + constructString(rule.repeatRule()))
                 .collect(Collectors.joining());
     }
 
     public static String constructString(RepeatRule repeatRule) {
-        var modifier = repeatRule.hasRepeatRule2() ?
-                (repeatRule.repeatRule2().isPlus() ? "+" : "*")
+        var modifier = repeatRule.hasTimesOrPlus() ?
+                (repeatRule.timesOrPlus().isPlus() ? "+" : "*")
                 : "";
         return constructString(repeatRule.subRule()) + modifier;
     }
 
     public static String constructString(SubRule subRule) {
-        return subRule.hasSubRule1() ? "(" + constructString(subRule.subRule1().orRule()) + ")" :
-                subRule.hasSubRule2() ? "[" + constructString(subRule.subRule2().orRule()) + "]" :
+        return subRule.hasOrRule() ? "(" + constructString(subRule.orRule().orRule()) + ")" :
+                subRule.hasOrRule1() ? "[" + constructString(subRule.orRule1().orRule()) + "]" :
                         "'" + getSubruleString(subRule) + "'";
     }
 
     public static Iterable<AndRule> allAndRules(OrRule orRule) {
         return FirstAndMore.of(
                 orRule.andRule(),
-                orRule.orRule2List()
+                orRule.andRuleList()
                         .stream()
                         .map(OrRule.OrRule2::andRule)
                         .iterator()
@@ -51,7 +51,7 @@ public class PEGCompat {
     public static Iterable<RepeatRule> allRepeatRules(AndRule andRule) {
         return FirstAndMore.of(
                 andRule.repeatRule(),
-                andRule.andRule2List()
+                andRule.repeatRuleList()
                         .stream()
                         .map(AndRule.AndRule2::repeatRule)
                         .iterator()
@@ -59,14 +59,14 @@ public class PEGCompat {
     }
 
     public static SubRuleType getRuleType(SubRule subRule) {
-        return subRule.hasSubRule1() ? SubRuleType.Group :
-                subRule.hasSubRule2() ? SubRuleType.Optional :
+        return subRule.hasOrRule() ? SubRuleType.Group :
+                subRule.hasOrRule1() ? SubRuleType.Optional :
                         SubRuleType.Token;
     }
 
     public static RepeatType getRepeatType(RepeatRule repeatRule) {
-        return repeatRule.hasRepeatRule2() ?
-                repeatRule.repeatRule2().isPlus() ?
+        return repeatRule.hasTimesOrPlus() ?
+                repeatRule.timesOrPlus().isPlus() ?
                         RepeatType.OnceOrMore
                         : RepeatType.NoneOrMore
                 : RepeatType.Once;

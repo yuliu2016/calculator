@@ -23,7 +23,7 @@ public final class ImportAsNames extends NodeWrapper {
         return ImportAsName.of(get(0));
     }
 
-    public List<ImportAsNames2> importAsNames2List() {
+    public List<ImportAsNames2> importAsNameList() {
         return getList(1, ImportAsNames2::of);
     }
 
@@ -32,12 +32,12 @@ public final class ImportAsNames extends NodeWrapper {
         t.enter(lv, RULE);
         boolean r;
         r = ImportAsName.parse(t, lv + 1);
-        if (r) parseImportAsNames2List(t, lv);
+        if (r) parseImportAsNameList(t, lv);
         t.exit(r);
         return r;
     }
 
-    private static void parseImportAsNames2List(ParseTree t, int lv) {
+    private static void parseImportAsNameList(ParseTree t, int lv) {
         t.enterCollection();
         while (true) {
             var p = t.position();

@@ -23,7 +23,7 @@ public final class OrRule extends NodeWrapper {
         return AndRule.of(get(0));
     }
 
-    public List<OrRule2> orRule2List() {
+    public List<OrRule2> andRuleList() {
         return getList(1, OrRule2::of);
     }
 
@@ -32,12 +32,12 @@ public final class OrRule extends NodeWrapper {
         t.enter(lv, RULE);
         boolean r;
         r = AndRule.parse(t, lv + 1);
-        if (r) parseOrRule2List(t, lv);
+        if (r) parseAndRuleList(t, lv);
         t.exit(r);
         return r;
     }
 
-    private static void parseOrRule2List(ParseTree t, int lv) {
+    private static void parseAndRuleList(ParseTree t, int lv) {
         t.enterCollection();
         while (true) {
             var p = t.position();

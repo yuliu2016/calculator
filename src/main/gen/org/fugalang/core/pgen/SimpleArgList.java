@@ -23,7 +23,7 @@ public final class SimpleArgList extends NodeWrapper {
         return SimpleArg.of(get(0));
     }
 
-    public List<SimpleArgList2> simpleArgList2List() {
+    public List<SimpleArgList2> simpleArgList() {
         return getList(1, SimpleArgList2::of);
     }
 
@@ -32,12 +32,12 @@ public final class SimpleArgList extends NodeWrapper {
         t.enter(lv, RULE);
         boolean r;
         r = SimpleArg.parse(t, lv + 1);
-        if (r) parseSimpleArgList2List(t, lv);
+        if (r) parseSimpleArgList(t, lv);
         t.exit(r);
         return r;
     }
 
-    private static void parseSimpleArgList2List(ParseTree t, int lv) {
+    private static void parseSimpleArgList(ParseTree t, int lv) {
         t.enterCollection();
         while (true) {
             var p = t.position();

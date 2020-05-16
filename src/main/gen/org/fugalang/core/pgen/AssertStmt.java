@@ -21,11 +21,11 @@ public final class AssertStmt extends NodeWrapper {
         return Expr.of(get(1));
     }
 
-    public AssertStmt3 assertStmt3() {
+    public AssertStmt3 expr1() {
         return AssertStmt3.of(get(2));
     }
 
-    public boolean hasAssertStmt3() {
+    public boolean hasExpr1() {
         return has(2, AssertStmt3.RULE);
     }
 

@@ -22,11 +22,11 @@ public final class ImportAsName extends NodeWrapper {
         return get(0, TokenType.NAME);
     }
 
-    public ImportAsName2 importAsName2() {
+    public ImportAsName2 asName() {
         return ImportAsName2.of(get(1));
     }
 
-    public boolean hasImportAsName2() {
+    public boolean hasAsName() {
         return has(1, ImportAsName2.RULE);
     }
 

@@ -47,16 +47,18 @@ if_stmt: 'if' named_expr suite elif_stmt* [else_suite]
 elif_stmt: 'elif' named_expr suite
 while_stmt: 'while' named_expr suite [else_suite]
 for_stmt: 'for' targetlist 'in' exprlist suite [else_suite]
-try_stmt: 'try' suite ((except_clause suite)+ [else_suite] [finally_suite] | finally_suite)
-except_clause: 'except' [expr ['as' NAME]]
+try_stmt: 'try' suite (except_suite | finally_suite)
 with_stmt: 'with' with_item (',' with_item)* suite
+
 with_item: expr ['as' NAME]
+except_clause: 'except' [expr ['as' NAME]]
 
 block_suite:  '{' simple_stmt '}' | '{' NEWLINE stmt+ '}'
 suite: ':' simple_stmt | block_suite
 else_suite: 'else' suite
 finally_suite: 'finally' suite
 func_suite: ':' expr | block_suite
+except_suite: (except_clause suite)+ [else_suite] [finally_suite]
 
 # Function definitions
 
@@ -87,9 +89,12 @@ comp_op: '<'|'>'|'=='|'>='|'<='|'!='|'in'|'not' 'in'|'is'|'is' 'not'
 bitwise_or: bitwise_xor ('|' bitwise_xor)*
 bitwise_xor: bitwise_and ('^' bitwise_and)*
 bitwise_and: shift_expr ('&' shift_expr)*
-shift_expr: sum (('<<'|'>>') sum)*
-sum: term (('+'|'-') term)*
-term: pipeline (('*'|'@'|'/'|'%'|'//') pipeline)*
+shift_op: '<<' | '>>'
+shift_expr: sum (shift_op sum)*
+sum_op: '+'|'-'
+sum: term (sum_op term)*
+term_op: '*'|'@'|'/'|'%'|'//'
+term: pipeline (term_op pipeline)*
 pipeline: factor ('->' pipe_expr)*
 pipe_expr: pipe_for | factor
 
@@ -104,9 +109,11 @@ power: atom_expr ['**' factor]
 # Atoms
 
 atom_expr: atom trailer* [block_suite]
-atom: compound_atom | simple_atom
-compound_atom: '(' [named_expr_list] ')' | '[' [named_expr_list] ']' | '{' [dict_or_set] '}'
-simple_atom: NAME | NUMBER | STRING | 'None' | 'True' | 'False'
+atom: tuple_atom | list_atom | dict_or_set | NAME | NUMBER | STRING | 'None' | 'True' | 'False'
+
+tuple_atom: '(' [named_expr_list] ')'
+list_atom: '[' [named_expr_list] ']'
+dict_or_set: '{' [dict_maker | set_maker] '}'
 
 named_expr_star: star_expr | named_expr
 named_expr_list: named_expr_star (',' named_expr_star)* [',']
@@ -121,8 +128,6 @@ parameters: '(' [arglist] ')'
 target: bitwise_or | star_expr
 targetlist: target (',' target)* [',']
 exprlist: expr (',' expr)* [',']
-
-dict_or_set: dict_maker | set_maker
 
 dict_item: expr ':' expr | '**' bitwise_or
 dict_maker: dict_item (',' dict_item)* [',']

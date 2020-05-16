@@ -24,7 +24,7 @@ public final class DottedName extends NodeWrapper {
         return get(0, TokenType.NAME);
     }
 
-    public List<DottedName2> dottedName2List() {
+    public List<DottedName2> nameList() {
         return getList(1, DottedName2::of);
     }
 
@@ -33,12 +33,12 @@ public final class DottedName extends NodeWrapper {
         t.enter(lv, RULE);
         boolean r;
         r = t.consume(TokenType.NAME);
-        if (r) parseDottedName2List(t, lv);
+        if (r) parseNameList(t, lv);
         t.exit(r);
         return r;
     }
 
-    private static void parseDottedName2List(ParseTree t, int lv) {
+    private static void parseNameList(ParseTree t, int lv) {
         t.enterCollection();
         while (true) {
             var p = t.position();

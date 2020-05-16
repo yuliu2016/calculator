@@ -9,7 +9,7 @@ import java.util.*;
 public class ClassBuilder {
     private final String packageName;
     private final String className;
-    private final String printName;
+    private final String ruleName;
 
     private final List<ClassField> fields = new ArrayList<>();
     private final Map<String, Integer> fieldNameCounter = new HashMap<>();
@@ -20,10 +20,10 @@ public class ClassBuilder {
 
     private RuleType ruleType = null;
 
-    public ClassBuilder(String packageName, String className, String printName) {
+    public ClassBuilder(String packageName, String className, String ruleName) {
         this.packageName = packageName;
         this.className = className;
-        this.printName = printName;
+        this.ruleName = ruleName;
 
         resolvePrelude();
     }
@@ -135,7 +135,7 @@ public class ClassBuilder {
         // rule name constant
         sb.append("    public static final ParserRule RULE =\n")
                 .append("            ParserRule.of(\"")
-                .append(printName)
+                .append(ruleName)
                 .append("\", RuleType.")
                 .append(ruleType.name())
                 .append(");\n\n");

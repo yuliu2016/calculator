@@ -294,7 +294,7 @@ public class ParserGenerator {
             cb.addImport("java.util.List");
             cb.addImport("java.util.ArrayList");
             cb.addImport("java.util.Collections");
-            var newClassName = className.wrapIn("List");
+            var newClassName = className.asList();
             var newFieldName = fieldName + "List";
 
             var fieldType = repeatType == RepeatType.OnceOrMore ?

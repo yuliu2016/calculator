@@ -18,11 +18,11 @@ public final class Trailer extends NodeWrapper {
         super(RULE, node);
     }
 
-    public Trailer1 trailer1() {
+    public Trailer1 name() {
         return Trailer1.of(get(0));
     }
 
-    public boolean hasTrailer1() {
+    public boolean hasName() {
         return has(0, Trailer1.RULE);
     }
 

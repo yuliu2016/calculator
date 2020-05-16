@@ -21,11 +21,11 @@ public final class RepeatRule extends NodeWrapper {
         return SubRule.of(get(0));
     }
 
-    public RepeatRule2 repeatRule2() {
+    public RepeatRule2 timesOrPlus() {
         return RepeatRule2.of(get(1));
     }
 
-    public boolean hasRepeatRule2() {
+    public boolean hasTimesOrPlus() {
         return has(1, RepeatRule2.RULE);
     }
 

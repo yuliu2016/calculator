@@ -23,7 +23,7 @@ public final class DictMaker extends NodeWrapper {
         return DictItem.of(get(0));
     }
 
-    public List<DictMaker2> dictMaker2List() {
+    public List<DictMaker2> dictItemList() {
         return getList(1, DictMaker2::of);
     }
 
@@ -36,13 +36,13 @@ public final class DictMaker extends NodeWrapper {
         t.enter(lv, RULE);
         boolean r;
         r = DictItem.parse(t, lv + 1);
-        if (r) parseDictMaker2List(t, lv);
+        if (r) parseDictItemList(t, lv);
         if (r) t.consume(",");
         t.exit(r);
         return r;
     }
 
-    private static void parseDictMaker2List(ParseTree t, int lv) {
+    private static void parseDictItemList(ParseTree t, int lv) {
         t.enterCollection();
         while (true) {
             var p = t.position();

@@ -21,11 +21,11 @@ public final class Power extends NodeWrapper {
         return AtomExpr.of(get(0));
     }
 
-    public Power2 power2() {
+    public Power2 factor() {
         return Power2.of(get(1));
     }
 
-    public boolean hasPower2() {
+    public boolean hasFactor() {
         return has(1, Power2.RULE);
     }
 

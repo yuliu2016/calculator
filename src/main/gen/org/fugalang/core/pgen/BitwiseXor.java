@@ -23,7 +23,7 @@ public final class BitwiseXor extends NodeWrapper {
         return BitwiseAnd.of(get(0));
     }
 
-    public List<BitwiseXor2> bitwiseXor2List() {
+    public List<BitwiseXor2> bitwiseAndList() {
         return getList(1, BitwiseXor2::of);
     }
 
@@ -32,12 +32,12 @@ public final class BitwiseXor extends NodeWrapper {
         t.enter(lv, RULE);
         boolean r;
         r = BitwiseAnd.parse(t, lv + 1);
-        if (r) parseBitwiseXor2List(t, lv);
+        if (r) parseBitwiseAndList(t, lv);
         t.exit(r);
         return r;
     }
 
-    private static void parseBitwiseXor2List(ParseTree t, int lv) {
+    private static void parseBitwiseAndList(ParseTree t, int lv) {
         t.enterCollection();
         while (true) {
             var p = t.position();

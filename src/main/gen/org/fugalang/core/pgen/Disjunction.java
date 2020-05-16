@@ -23,7 +23,7 @@ public final class Disjunction extends NodeWrapper {
         return Conjunction.of(get(0));
     }
 
-    public List<Disjunction2> disjunction2List() {
+    public List<Disjunction2> orConjunctionList() {
         return getList(1, Disjunction2::of);
     }
 
@@ -32,12 +32,12 @@ public final class Disjunction extends NodeWrapper {
         t.enter(lv, RULE);
         boolean r;
         r = Conjunction.parse(t, lv + 1);
-        if (r) parseDisjunction2List(t, lv);
+        if (r) parseOrConjunctionList(t, lv);
         t.exit(r);
         return r;
     }
 
-    private static void parseDisjunction2List(ParseTree t, int lv) {
+    private static void parseOrConjunctionList(ParseTree t, int lv) {
         t.enterCollection();
         while (true) {
             var p = t.position();

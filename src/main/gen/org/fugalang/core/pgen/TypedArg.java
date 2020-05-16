@@ -22,11 +22,11 @@ public final class TypedArg extends NodeWrapper {
         return get(0, TokenType.NAME);
     }
 
-    public TypedArg2 typedArg2() {
+    public TypedArg2 expr() {
         return TypedArg2.of(get(1));
     }
 
-    public boolean hasTypedArg2() {
+    public boolean hasExpr() {
         return has(1, TypedArg2.RULE);
     }
 
