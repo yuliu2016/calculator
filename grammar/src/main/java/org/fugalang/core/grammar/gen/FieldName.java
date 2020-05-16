@@ -10,7 +10,7 @@ import static org.fugalang.core.grammar.util.ParserStringUtil.*;
 public class FieldName {
     public static String getSmartName(ClassName className, AndRule andRule, TokenConverter converter) {
         if (isSingle(andRule.repeatRule()) && andRule
-                .repeatRuleList()
+                .repeatRules()
                 .stream()
                 .map(AndRule.AndRule2::repeatRule)
                 .allMatch(FieldName::isSingle)) {
@@ -46,7 +46,7 @@ public class FieldName {
     }
 
     public static String getSmartName(ClassName className, OrRule orRule, TokenConverter converter) {
-        var andList = orRule.andRuleList();
+        var andList = orRule.andRules();
         if (andList.isEmpty()) {
             return getSmartName(className, orRule.andRule(), converter);
         }

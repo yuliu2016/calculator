@@ -21,10 +21,10 @@ public final class EvalInput extends NodeWrapper {
     }
 
     public Exprlist exprlist() {
-        return Exprlist.of(get(0));
+        return get(0, Exprlist::of);
     }
 
-    public List<String> newlineList() {
+    public List<String> newlines() {
         return getList(1, ParseTreeNode::asString);
     }
 
@@ -37,13 +37,13 @@ public final class EvalInput extends NodeWrapper {
         t.enter(lv, RULE);
         boolean r;
         r = Exprlist.parse(t, lv + 1);
-        if (r) parseNewlineList(t, lv);
+        if (r) parseNewlines(t, lv);
         r = r && t.consume(TokenType.ENDMARKER);
         t.exit(r);
         return r;
     }
 
-    private static void parseNewlineList(ParseTree t, int lv) {
+    private static void parseNewlines(ParseTree t, int lv) {
         t.enterCollection();
         while (true) {
             var p = t.position();

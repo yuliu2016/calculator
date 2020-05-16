@@ -18,7 +18,7 @@ public final class Suite extends NodeWrapper {
     }
 
     public Suite1 simpleStmt() {
-        return Suite1.of(get(0));
+        return get(0, Suite1::of);
     }
 
     public boolean hasSimpleStmt() {
@@ -26,7 +26,7 @@ public final class Suite extends NodeWrapper {
     }
 
     public BlockSuite blockSuite() {
-        return BlockSuite.of(get(1));
+        return get(1, BlockSuite::of);
     }
 
     public boolean hasBlockSuite() {
@@ -59,7 +59,7 @@ public final class Suite extends NodeWrapper {
         }
 
         public SimpleStmt simpleStmt() {
-            return SimpleStmt.of(get(1));
+            return get(1, SimpleStmt::of);
         }
 
         public static boolean parse(ParseTree t, int lv) {

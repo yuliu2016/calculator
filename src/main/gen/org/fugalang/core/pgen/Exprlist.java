@@ -20,10 +20,10 @@ public final class Exprlist extends NodeWrapper {
     }
 
     public Expr expr() {
-        return Expr.of(get(0));
+        return get(0, Expr::of);
     }
 
-    public List<Exprlist2> exprList() {
+    public List<Exprlist2> exprs() {
         return getList(1, Exprlist2::of);
     }
 
@@ -36,13 +36,13 @@ public final class Exprlist extends NodeWrapper {
         t.enter(lv, RULE);
         boolean r;
         r = Expr.parse(t, lv + 1);
-        if (r) parseExprList(t, lv);
+        if (r) parseExprs(t, lv);
         if (r) t.consume(",");
         t.exit(r);
         return r;
     }
 
-    private static void parseExprList(ParseTree t, int lv) {
+    private static void parseExprs(ParseTree t, int lv) {
         t.enterCollection();
         while (true) {
             var p = t.position();
@@ -67,7 +67,7 @@ public final class Exprlist extends NodeWrapper {
         }
 
         public Expr expr() {
-            return Expr.of(get(1));
+            return get(1, Expr::of);
         }
 
         public static boolean parse(ParseTree t, int lv) {

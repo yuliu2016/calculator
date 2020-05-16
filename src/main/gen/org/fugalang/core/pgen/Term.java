@@ -20,7 +20,7 @@ public final class Term extends NodeWrapper {
     }
 
     public Pipeline pipeline() {
-        return Pipeline.of(get(0));
+        return get(0, Pipeline::of);
     }
 
     public List<Term2> termOpPipelineList() {
@@ -32,12 +32,12 @@ public final class Term extends NodeWrapper {
         t.enter(lv, RULE);
         boolean r;
         r = Pipeline.parse(t, lv + 1);
-        if (r) parseTermOpPipelineList(t, lv);
+        if (r) parseTermOpPipelines(t, lv);
         t.exit(r);
         return r;
     }
 
-    private static void parseTermOpPipelineList(ParseTree t, int lv) {
+    private static void parseTermOpPipelines(ParseTree t, int lv) {
         t.enterCollection();
         while (true) {
             var p = t.position();
@@ -62,11 +62,11 @@ public final class Term extends NodeWrapper {
         }
 
         public TermOp termOp() {
-            return TermOp.of(get(0));
+            return get(0, TermOp::of);
         }
 
         public Pipeline pipeline() {
-            return Pipeline.of(get(1));
+            return get(1, Pipeline::of);
         }
 
         public static boolean parse(ParseTree t, int lv) {

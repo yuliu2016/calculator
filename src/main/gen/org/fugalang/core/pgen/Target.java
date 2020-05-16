@@ -18,7 +18,7 @@ public final class Target extends NodeWrapper {
     }
 
     public BitwiseOr bitwiseOr() {
-        return BitwiseOr.of(get(0));
+        return get(0, BitwiseOr::of);
     }
 
     public boolean hasBitwiseOr() {
@@ -26,7 +26,7 @@ public final class Target extends NodeWrapper {
     }
 
     public StarExpr starExpr() {
-        return StarExpr.of(get(1));
+        return get(1, StarExpr::of);
     }
 
     public boolean hasStarExpr() {

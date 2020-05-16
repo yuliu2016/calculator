@@ -20,19 +20,19 @@ public final class ArgsKwargs extends NodeWrapper {
     }
 
     public TypedArg typedArg() {
-        return TypedArg.of(get(1));
+        return get(1, TypedArg::of);
     }
 
     public boolean hasTypedArg() {
         return has(1, TypedArg.RULE);
     }
 
-    public List<ArgsKwargs3> defaultArgList() {
+    public List<ArgsKwargs3> defaultArgs() {
         return getList(2, ArgsKwargs3::of);
     }
 
     public ArgsKwargs4 argsKwargs4() {
-        return ArgsKwargs4.of(get(3));
+        return get(3, ArgsKwargs4::of);
     }
 
     public boolean hasArgsKwargs4() {
@@ -45,13 +45,13 @@ public final class ArgsKwargs extends NodeWrapper {
         boolean r;
         r = t.consume("*");
         if (r) TypedArg.parse(t, lv + 1);
-        if (r) parseDefaultArgList(t, lv);
+        if (r) parseDefaultArgs(t, lv);
         if (r) ArgsKwargs4.parse(t, lv + 1);
         t.exit(r);
         return r;
     }
 
-    private static void parseDefaultArgList(ParseTree t, int lv) {
+    private static void parseDefaultArgs(ParseTree t, int lv) {
         t.enterCollection();
         while (true) {
             var p = t.position();
@@ -76,7 +76,7 @@ public final class ArgsKwargs extends NodeWrapper {
         }
 
         public DefaultArg defaultArg() {
-            return DefaultArg.of(get(1));
+            return get(1, DefaultArg::of);
         }
 
         public static boolean parse(ParseTree t, int lv) {
@@ -106,7 +106,7 @@ public final class ArgsKwargs extends NodeWrapper {
         }
 
         public Kwargs kwargs() {
-            return Kwargs.of(get(1));
+            return get(1, Kwargs::of);
         }
 
         public boolean hasKwargs() {

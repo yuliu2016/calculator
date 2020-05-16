@@ -20,19 +20,19 @@ public final class IfStmt extends NodeWrapper {
     }
 
     public NamedExpr namedExpr() {
-        return NamedExpr.of(get(1));
+        return get(1, NamedExpr::of);
     }
 
     public Suite suite() {
-        return Suite.of(get(2));
+        return get(2, Suite::of);
     }
 
-    public List<ElifStmt> elifStmtList() {
+    public List<ElifStmt> elifStmts() {
         return getList(3, ElifStmt::of);
     }
 
     public ElseSuite elseSuite() {
-        return ElseSuite.of(get(4));
+        return get(4, ElseSuite::of);
     }
 
     public boolean hasElseSuite() {
@@ -46,13 +46,13 @@ public final class IfStmt extends NodeWrapper {
         r = t.consume("if");
         r = r && NamedExpr.parse(t, lv + 1);
         r = r && Suite.parse(t, lv + 1);
-        if (r) parseElifStmtList(t, lv);
+        if (r) parseElifStmts(t, lv);
         if (r) ElseSuite.parse(t, lv + 1);
         t.exit(r);
         return r;
     }
 
-    private static void parseElifStmtList(ParseTree t, int lv) {
+    private static void parseElifStmts(ParseTree t, int lv) {
         t.enterCollection();
         while (true) {
             var p = t.position();

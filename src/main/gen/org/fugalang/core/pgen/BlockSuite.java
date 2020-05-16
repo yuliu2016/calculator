@@ -21,7 +21,7 @@ public final class BlockSuite extends NodeWrapper {
     }
 
     public BlockSuite1 simpleStmt() {
-        return BlockSuite1.of(get(0));
+        return get(0, BlockSuite1::of);
     }
 
     public boolean hasSimpleStmt() {
@@ -29,7 +29,7 @@ public final class BlockSuite extends NodeWrapper {
     }
 
     public BlockSuite2 blockSuite2() {
-        return BlockSuite2.of(get(1));
+        return get(1, BlockSuite2::of);
     }
 
     public boolean hasBlockSuite2() {
@@ -62,7 +62,7 @@ public final class BlockSuite extends NodeWrapper {
         }
 
         public SimpleStmt simpleStmt() {
-            return SimpleStmt.of(get(1));
+            return get(1, SimpleStmt::of);
         }
 
         public static boolean parse(ParseTree t, int lv) {
@@ -96,7 +96,7 @@ public final class BlockSuite extends NodeWrapper {
             return get(1, TokenType.NEWLINE);
         }
 
-        public List<Stmt> stmtList() {
+        public List<Stmt> stmts() {
             return getList(2, Stmt::of);
         }
 
@@ -106,13 +106,13 @@ public final class BlockSuite extends NodeWrapper {
             boolean r;
             r = t.consume("{");
             r = r && t.consume(TokenType.NEWLINE);
-            r = r && parseStmtList(t, lv);
+            r = r && parseStmts(t, lv);
             r = r && t.consume("}");
             t.exit(r);
             return r;
         }
 
-        private static boolean parseStmtList(ParseTree t, int lv) {
+        private static boolean parseStmts(ParseTree t, int lv) {
             t.enterCollection();
             var r = Stmt.parse(t, lv + 1);
             if (r) while (true) {

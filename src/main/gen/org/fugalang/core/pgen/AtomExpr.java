@@ -20,15 +20,15 @@ public final class AtomExpr extends NodeWrapper {
     }
 
     public Atom atom() {
-        return Atom.of(get(0));
+        return get(0, Atom::of);
     }
 
-    public List<Trailer> trailerList() {
+    public List<Trailer> trailers() {
         return getList(1, Trailer::of);
     }
 
     public BlockSuite blockSuite() {
-        return BlockSuite.of(get(2));
+        return get(2, BlockSuite::of);
     }
 
     public boolean hasBlockSuite() {
@@ -40,13 +40,13 @@ public final class AtomExpr extends NodeWrapper {
         t.enter(lv, RULE);
         boolean r;
         r = Atom.parse(t, lv + 1);
-        if (r) parseTrailerList(t, lv);
+        if (r) parseTrailers(t, lv);
         if (r) BlockSuite.parse(t, lv + 1);
         t.exit(r);
         return r;
     }
 
-    private static void parseTrailerList(ParseTree t, int lv) {
+    private static void parseTrailers(ParseTree t, int lv) {
         t.enterCollection();
         while (true) {
             var p = t.position();

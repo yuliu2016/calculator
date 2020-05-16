@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 public class PEGCompat {
     public static String constructString(OrRule orRule) {
         return constructString(orRule.andRule()) + orRule
-                .andRuleList()
+                .andRules()
                 .stream()
                 .map(rule -> " | " + constructString(rule.andRule()))
                 .collect(Collectors.joining());
@@ -19,7 +19,7 @@ public class PEGCompat {
 
     public static String constructString(AndRule andRule) {
         return constructString(andRule.repeatRule()) + andRule
-                .repeatRuleList()
+                .repeatRules()
                 .stream()
                 .map(rule -> " " + constructString(rule.repeatRule()))
                 .collect(Collectors.joining());
@@ -41,7 +41,7 @@ public class PEGCompat {
     public static Iterable<AndRule> allAndRules(OrRule orRule) {
         return FirstAndMore.of(
                 orRule.andRule(),
-                orRule.andRuleList()
+                orRule.andRules()
                         .stream()
                         .map(OrRule.OrRule2::andRule)
                         .iterator()
@@ -51,7 +51,7 @@ public class PEGCompat {
     public static Iterable<RepeatRule> allRepeatRules(AndRule andRule) {
         return FirstAndMore.of(
                 andRule.repeatRule(),
-                andRule.repeatRuleList()
+                andRule.repeatRules()
                         .stream()
                         .map(AndRule.AndRule2::repeatRule)
                         .iterator()

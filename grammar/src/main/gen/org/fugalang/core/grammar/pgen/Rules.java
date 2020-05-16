@@ -28,7 +28,7 @@ public final class Rules extends NodeWrapper {
         return has(0, TokenType.NEWLINE);
     }
 
-    public List<SingleRule> singleRuleList() {
+    public List<SingleRule> singleRules() {
         return getList(1, SingleRule::of);
     }
 
@@ -37,12 +37,12 @@ public final class Rules extends NodeWrapper {
         t.enter(lv, RULE);
         boolean r;
         t.consume(TokenType.NEWLINE);
-        r = parseSingleRuleList(t, lv);
+        r = parseSingleRules(t, lv);
         t.exit(r);
         return r;
     }
 
-    private static boolean parseSingleRuleList(ParseTree t, int lv) {
+    private static boolean parseSingleRules(ParseTree t, int lv) {
         t.enterCollection();
         var r = SingleRule.parse(t, lv + 1);
         if (r) while (true) {

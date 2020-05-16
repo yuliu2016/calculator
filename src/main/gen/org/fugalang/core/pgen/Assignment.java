@@ -24,11 +24,11 @@ public final class Assignment extends NodeWrapper {
     }
 
     public ExprlistStar exprlistStar() {
-        return ExprlistStar.of(get(1));
+        return get(1, ExprlistStar::of);
     }
 
     public Assignment3 assignment3() {
-        return Assignment3.of(get(2));
+        return get(2, Assignment3::of);
     }
 
     public boolean hasAssignment3() {
@@ -62,19 +62,19 @@ public final class Assignment extends NodeWrapper {
         }
 
         public Annassign annassign() {
-            return Annassign.of(get(0));
+            return get(0, Annassign::of);
         }
 
         public boolean hasAnnassign() {
             return has(0, Annassign.RULE);
         }
 
-        public List<Assignment32> exprlistStarList() {
+        public List<Assignment32> exprlistStars() {
             return getList(1, Assignment32::of);
         }
 
         public Assignment33 augassignExprlist() {
-            return Assignment33.of(get(2));
+            return get(2, Assignment33::of);
         }
 
         public boolean hasAugassignExprlist() {
@@ -86,13 +86,13 @@ public final class Assignment extends NodeWrapper {
             t.enter(lv, RULE);
             boolean r;
             r = Annassign.parse(t, lv + 1);
-            r = r || parseExprlistStarList(t, lv);
+            r = r || parseExprlistStars(t, lv);
             r = r || Assignment33.parse(t, lv + 1);
             t.exit(r);
             return r;
         }
 
-        private static boolean parseExprlistStarList(ParseTree t, int lv) {
+        private static boolean parseExprlistStars(ParseTree t, int lv) {
             t.enterCollection();
             var r = Assignment32.parse(t, lv + 1);
             if (r) while (true) {
@@ -120,7 +120,7 @@ public final class Assignment extends NodeWrapper {
         }
 
         public ExprlistStar exprlistStar() {
-            return ExprlistStar.of(get(1));
+            return get(1, ExprlistStar::of);
         }
 
         public static boolean parse(ParseTree t, int lv) {
@@ -150,11 +150,11 @@ public final class Assignment extends NodeWrapper {
         }
 
         public Augassign augassign() {
-            return Augassign.of(get(0));
+            return get(0, Augassign::of);
         }
 
         public Exprlist exprlist() {
-            return Exprlist.of(get(1));
+            return get(1, Exprlist::of);
         }
 
         public static boolean parse(ParseTree t, int lv) {

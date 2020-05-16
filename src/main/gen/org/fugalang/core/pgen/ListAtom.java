@@ -18,7 +18,7 @@ public final class ListAtom extends NodeWrapper {
     }
 
     public NamedExprList namedExprList() {
-        return NamedExprList.of(get(1));
+        return get(1, NamedExprList::of);
     }
 
     public boolean hasNamedExprList() {

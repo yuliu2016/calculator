@@ -19,12 +19,12 @@ public final class ExceptSuite extends NodeWrapper {
         super(RULE, node);
     }
 
-    public List<ExceptSuite1> exceptClauseSuiteList() {
+    public List<ExceptSuite1> exceptClauseSuites() {
         return getList(0, ExceptSuite1::of);
     }
 
     public ElseSuite elseSuite() {
-        return ElseSuite.of(get(1));
+        return get(1, ElseSuite::of);
     }
 
     public boolean hasElseSuite() {
@@ -32,7 +32,7 @@ public final class ExceptSuite extends NodeWrapper {
     }
 
     public FinallySuite finallySuite() {
-        return FinallySuite.of(get(2));
+        return get(2, FinallySuite::of);
     }
 
     public boolean hasFinallySuite() {
@@ -43,14 +43,14 @@ public final class ExceptSuite extends NodeWrapper {
         if (!ParserUtil.recursionGuard(lv, RULE)) return false;
         t.enter(lv, RULE);
         boolean r;
-        r = parseExceptClauseSuiteList(t, lv);
+        r = parseExceptClauseSuites(t, lv);
         if (r) ElseSuite.parse(t, lv + 1);
         if (r) FinallySuite.parse(t, lv + 1);
         t.exit(r);
         return r;
     }
 
-    private static boolean parseExceptClauseSuiteList(ParseTree t, int lv) {
+    private static boolean parseExceptClauseSuites(ParseTree t, int lv) {
         t.enterCollection();
         var r = ExceptSuite1.parse(t, lv + 1);
         if (r) while (true) {
@@ -77,11 +77,11 @@ public final class ExceptSuite extends NodeWrapper {
         }
 
         public ExceptClause exceptClause() {
-            return ExceptClause.of(get(0));
+            return get(0, ExceptClause::of);
         }
 
         public Suite suite() {
-            return Suite.of(get(1));
+            return get(1, Suite::of);
         }
 
         public static boolean parse(ParseTree t, int lv) {

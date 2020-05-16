@@ -18,15 +18,15 @@ public final class Conditional extends NodeWrapper {
     }
 
     public Disjunction disjunction() {
-        return Disjunction.of(get(1));
+        return get(1, Disjunction::of);
     }
 
     public Disjunction disjunction1() {
-        return Disjunction.of(get(3));
+        return get(3, Disjunction::of);
     }
 
     public Expr expr() {
-        return Expr.of(get(5));
+        return get(5, Expr::of);
     }
 
     public static boolean parse(ParseTree t, int lv) {

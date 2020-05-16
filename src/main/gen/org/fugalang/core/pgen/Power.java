@@ -18,11 +18,11 @@ public final class Power extends NodeWrapper {
     }
 
     public AtomExpr atomExpr() {
-        return AtomExpr.of(get(0));
+        return get(0, AtomExpr::of);
     }
 
     public Power2 factor() {
-        return Power2.of(get(1));
+        return get(1, Power2::of);
     }
 
     public boolean hasFactor() {
@@ -55,7 +55,7 @@ public final class Power extends NodeWrapper {
         }
 
         public Factor factor() {
-            return Factor.of(get(1));
+            return get(1, Factor::of);
         }
 
         public static boolean parse(ParseTree t, int lv) {

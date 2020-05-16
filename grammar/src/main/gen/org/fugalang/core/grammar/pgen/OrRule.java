@@ -20,10 +20,10 @@ public final class OrRule extends NodeWrapper {
     }
 
     public AndRule andRule() {
-        return AndRule.of(get(0));
+        return get(0, AndRule::of);
     }
 
-    public List<OrRule2> andRuleList() {
+    public List<OrRule2> andRules() {
         return getList(1, OrRule2::of);
     }
 
@@ -32,12 +32,12 @@ public final class OrRule extends NodeWrapper {
         t.enter(lv, RULE);
         boolean r;
         r = AndRule.parse(t, lv + 1);
-        if (r) parseAndRuleList(t, lv);
+        if (r) parseAndRules(t, lv);
         t.exit(r);
         return r;
     }
 
-    private static void parseAndRuleList(ParseTree t, int lv) {
+    private static void parseAndRules(ParseTree t, int lv) {
         t.enterCollection();
         while (true) {
             var p = t.position();
@@ -62,7 +62,7 @@ public final class OrRule extends NodeWrapper {
         }
 
         public AndRule andRule() {
-            return AndRule.of(get(1));
+            return get(1, AndRule::of);
         }
 
         public static boolean parse(ParseTree t, int lv) {

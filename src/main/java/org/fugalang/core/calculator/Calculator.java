@@ -14,7 +14,7 @@ public class Calculator {
     private static double evaluate0(Sum sumExpr) {
         var sum = evaluate0(sumExpr.term());
 
-        for (var opTerm : sumExpr.sum2List()) {
+        for (var opTerm : sumExpr.sum2s()) {
             var term = opTerm.term();
             var value = evaluate0(term);
 
@@ -31,7 +31,7 @@ public class Calculator {
     private static double evaluate0(Term term) {
         var product = evaluate0(term.factor());
 
-        for (var opFactor : term.term2List()) {
+        for (var opFactor : term.term2s()) {
             var factor = opFactor.factor();
             var value = evaluate0(factor);
 

@@ -50,15 +50,14 @@ public class ClassField {
         return switch (resultSource.getType()) {
             case Class -> {
                 if (isSingular()) {
-                    yield "        return " + className.getType() + ".of(get(" + index + "));\n";
+                    yield "        return get(" + index + ", " + className.getType() + "::of);\n";
                 }
                 yield "        return getList(" + index + ", " + className.getRealClassName() + "::of);\n";
             }
 
             case TokenType -> {
                 if (isSingular()) {
-                    yield "        return get(" + index + ", " +
-                            resultSource.getValue() + ");\n";
+                    yield "        return get(" + index + ", " + resultSource.getValue() + ");\n";
                 }
                 yield "        return getList(" + index + ", ParseTreeNode::asString);\n";
             }

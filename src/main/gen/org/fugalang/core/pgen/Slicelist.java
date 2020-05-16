@@ -20,10 +20,10 @@ public final class Slicelist extends NodeWrapper {
     }
 
     public Slice slice() {
-        return Slice.of(get(0));
+        return get(0, Slice::of);
     }
 
-    public List<Slicelist2> sliceList() {
+    public List<Slicelist2> slices() {
         return getList(1, Slicelist2::of);
     }
 
@@ -36,13 +36,13 @@ public final class Slicelist extends NodeWrapper {
         t.enter(lv, RULE);
         boolean r;
         r = Slice.parse(t, lv + 1);
-        if (r) parseSliceList(t, lv);
+        if (r) parseSlices(t, lv);
         if (r) t.consume(",");
         t.exit(r);
         return r;
     }
 
-    private static void parseSliceList(ParseTree t, int lv) {
+    private static void parseSlices(ParseTree t, int lv) {
         t.enterCollection();
         while (true) {
             var p = t.position();
@@ -67,7 +67,7 @@ public final class Slicelist extends NodeWrapper {
         }
 
         public Slice slice() {
-            return Slice.of(get(1));
+            return get(1, Slice::of);
         }
 
         public static boolean parse(ParseTree t, int lv) {

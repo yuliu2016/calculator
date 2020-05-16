@@ -18,7 +18,7 @@ public final class NamedExprStar extends NodeWrapper {
     }
 
     public StarExpr starExpr() {
-        return StarExpr.of(get(0));
+        return get(0, StarExpr::of);
     }
 
     public boolean hasStarExpr() {
@@ -26,7 +26,7 @@ public final class NamedExprStar extends NodeWrapper {
     }
 
     public NamedExpr namedExpr() {
-        return NamedExpr.of(get(1));
+        return get(1, NamedExpr::of);
     }
 
     public boolean hasNamedExpr() {

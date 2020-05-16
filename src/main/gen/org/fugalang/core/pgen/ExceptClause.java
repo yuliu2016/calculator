@@ -19,7 +19,7 @@ public final class ExceptClause extends NodeWrapper {
     }
 
     public ExceptClause2 exceptClause2() {
-        return ExceptClause2.of(get(1));
+        return get(1, ExceptClause2::of);
     }
 
     public boolean hasExceptClause2() {
@@ -52,11 +52,11 @@ public final class ExceptClause extends NodeWrapper {
         }
 
         public Expr expr() {
-            return Expr.of(get(0));
+            return get(0, Expr::of);
         }
 
         public ExceptClause22 asName() {
-            return ExceptClause22.of(get(1));
+            return get(1, ExceptClause22::of);
         }
 
         public boolean hasAsName() {

@@ -18,7 +18,7 @@ public final class SliceExpr extends NodeWrapper {
     }
 
     public Expr expr() {
-        return Expr.of(get(1));
+        return get(1, Expr::of);
     }
 
     public boolean hasExpr() {

@@ -18,7 +18,7 @@ public final class ImportName extends NodeWrapper {
     }
 
     public DottedAsNames dottedAsNames() {
-        return DottedAsNames.of(get(1));
+        return get(1, DottedAsNames::of);
     }
 
     public static boolean parse(ParseTree t, int lv) {

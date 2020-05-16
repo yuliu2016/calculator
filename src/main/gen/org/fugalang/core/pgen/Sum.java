@@ -20,10 +20,10 @@ public final class Sum extends NodeWrapper {
     }
 
     public Term term() {
-        return Term.of(get(0));
+        return get(0, Term::of);
     }
 
-    public List<Sum2> sumOpTermList() {
+    public List<Sum2> sumOpTerms() {
         return getList(1, Sum2::of);
     }
 
@@ -32,12 +32,12 @@ public final class Sum extends NodeWrapper {
         t.enter(lv, RULE);
         boolean r;
         r = Term.parse(t, lv + 1);
-        if (r) parseSumOpTermList(t, lv);
+        if (r) parseSumOpTerms(t, lv);
         t.exit(r);
         return r;
     }
 
-    private static void parseSumOpTermList(ParseTree t, int lv) {
+    private static void parseSumOpTerms(ParseTree t, int lv) {
         t.enterCollection();
         while (true) {
             var p = t.position();
@@ -62,11 +62,11 @@ public final class Sum extends NodeWrapper {
         }
 
         public SumOp sumOp() {
-            return SumOp.of(get(0));
+            return get(0, SumOp::of);
         }
 
         public Term term() {
-            return Term.of(get(1));
+            return get(1, Term::of);
         }
 
         public static boolean parse(ParseTree t, int lv) {

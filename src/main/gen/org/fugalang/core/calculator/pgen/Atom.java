@@ -19,7 +19,7 @@ public final class Atom extends NodeWrapper {
     }
 
     public Atom1 sum() {
-        return Atom1.of(get(0));
+        return get(0, Atom1::of);
     }
 
     public boolean hasSum() {
@@ -60,7 +60,7 @@ public final class Atom extends NodeWrapper {
         }
 
         public Sum sum() {
-            return Sum.of(get(1));
+            return get(1, Sum::of);
         }
 
         public static boolean parse(ParseTree t, int lv) {

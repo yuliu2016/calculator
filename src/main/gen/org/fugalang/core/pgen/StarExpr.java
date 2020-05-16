@@ -18,7 +18,7 @@ public final class StarExpr extends NodeWrapper {
     }
 
     public BitwiseOr bitwiseOr() {
-        return BitwiseOr.of(get(1));
+        return get(1, BitwiseOr::of);
     }
 
     public static boolean parse(ParseTree t, int lv) {

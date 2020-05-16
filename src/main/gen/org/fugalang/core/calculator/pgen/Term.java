@@ -20,10 +20,10 @@ public final class Term extends NodeWrapper {
     }
 
     public Factor factor() {
-        return Factor.of(get(0));
+        return get(0, Factor::of);
     }
 
-    public List<Term2> term2List() {
+    public List<Term2> term2s() {
         return getList(1, Term2::of);
     }
 
@@ -32,12 +32,12 @@ public final class Term extends NodeWrapper {
         t.enter(lv, RULE);
         boolean r;
         r = Factor.parse(t, lv + 1);
-        if (r) parseTerm2List(t, lv);
+        if (r) parseTerm2s(t, lv);
         t.exit(r);
         return r;
     }
 
-    private static void parseTerm2List(ParseTree t, int lv) {
+    private static void parseTerm2s(ParseTree t, int lv) {
         t.enterCollection();
         while (true) {
             var p = t.position();
@@ -62,11 +62,11 @@ public final class Term extends NodeWrapper {
         }
 
         public Term21 term21() {
-            return Term21.of(get(0));
+            return get(0, Term21::of);
         }
 
         public Factor factor() {
-            return Factor.of(get(1));
+            return get(1, Factor::of);
         }
 
         public static boolean parse(ParseTree t, int lv) {

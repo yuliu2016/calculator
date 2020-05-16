@@ -19,7 +19,7 @@ public final class Argument extends NodeWrapper {
     }
 
     public Argument1 nameExpr() {
-        return Argument1.of(get(0));
+        return get(0, Argument1::of);
     }
 
     public boolean hasNameExpr() {
@@ -27,7 +27,7 @@ public final class Argument extends NodeWrapper {
     }
 
     public Argument2 nameExpr1() {
-        return Argument2.of(get(1));
+        return get(1, Argument2::of);
     }
 
     public boolean hasNameExpr1() {
@@ -35,7 +35,7 @@ public final class Argument extends NodeWrapper {
     }
 
     public Argument3 expr() {
-        return Argument3.of(get(2));
+        return get(2, Argument3::of);
     }
 
     public boolean hasExpr() {
@@ -43,7 +43,7 @@ public final class Argument extends NodeWrapper {
     }
 
     public Argument4 expr1() {
-        return Argument4.of(get(3));
+        return get(3, Argument4::of);
     }
 
     public boolean hasExpr1() {
@@ -51,7 +51,7 @@ public final class Argument extends NodeWrapper {
     }
 
     public Expr expr2() {
-        return Expr.of(get(4));
+        return get(4, Expr::of);
     }
 
     public boolean hasExpr2() {
@@ -91,7 +91,7 @@ public final class Argument extends NodeWrapper {
         }
 
         public Expr expr() {
-            return Expr.of(get(2));
+            return get(2, Expr::of);
         }
 
         public static boolean parse(ParseTree t, int lv) {
@@ -126,7 +126,7 @@ public final class Argument extends NodeWrapper {
         }
 
         public Expr expr() {
-            return Expr.of(get(2));
+            return get(2, Expr::of);
         }
 
         public static boolean parse(ParseTree t, int lv) {
@@ -157,7 +157,7 @@ public final class Argument extends NodeWrapper {
         }
 
         public Expr expr() {
-            return Expr.of(get(1));
+            return get(1, Expr::of);
         }
 
         public static boolean parse(ParseTree t, int lv) {
@@ -187,7 +187,7 @@ public final class Argument extends NodeWrapper {
         }
 
         public Expr expr() {
-            return Expr.of(get(1));
+            return get(1, Expr::of);
         }
 
         public static boolean parse(ParseTree t, int lv) {

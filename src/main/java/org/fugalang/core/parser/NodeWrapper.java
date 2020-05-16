@@ -8,7 +8,7 @@ import java.util.function.Function;
 public abstract class NodeWrapper {
 
     private final ParseTreeNode node;
-    private Map<Integer, List<?>> list_cache;
+    private Map<Integer, Object> cache;
 
     public NodeWrapper(ParserRule rule, ParseTreeNode node) {
         // requires that the node matches the correct rule
@@ -16,9 +16,21 @@ public abstract class NodeWrapper {
         this.node = node;
     }
 
-
     protected ParseTreeNode get(int index) {
         return node.getItem(index);
+    }
+
+    @SuppressWarnings("unchecked")
+    protected <T extends NodeWrapper> T get(int index, Function<ParseTreeNode, T> converter) {
+        if (cache != null && cache.containsKey(index)) {
+            return (T) cache.get(index);
+        }
+        var result = converter.apply(node.getItem(index));
+        if (cache == null) {
+            cache = new HashMap<>();
+        }
+        cache.put(index, result);
+        return result;
     }
 
     protected String get(int index, ElementType type) {
@@ -42,9 +54,10 @@ public abstract class NodeWrapper {
         return e.asBoolean();
     }
 
+    @SuppressWarnings("unchecked")
     protected <T> List<T> getList(int index, Function<ParseTreeNode, T> converter) {
-        if (list_cache != null && list_cache.containsKey(index)) {
-            return uncheckedTypeCast(list_cache.get(index));
+        if (cache != null && cache.containsKey(index)) {
+            return (List<T>) cache.get(index);
         }
         List<T> resultOrNull = null;
         var e = node.getItem(index);
@@ -56,16 +69,11 @@ public abstract class NodeWrapper {
         }
 
         List<T> result = resultOrNull == null ? Collections.emptyList() : resultOrNull;
-        if (list_cache == null) {
-            list_cache = new HashMap<>();
+        if (cache == null) {
+            cache = new HashMap<>();
         }
-        list_cache.put(index, result);
+        cache.put(index, result);
         return result;
-    }
-
-    @SuppressWarnings("unchecked")
-    private static <T> List<T> uncheckedTypeCast(List<?> list) {
-        return (List<T>) list;
     }
 
     @Override

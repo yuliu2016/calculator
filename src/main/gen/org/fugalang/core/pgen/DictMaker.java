@@ -20,10 +20,10 @@ public final class DictMaker extends NodeWrapper {
     }
 
     public DictItem dictItem() {
-        return DictItem.of(get(0));
+        return get(0, DictItem::of);
     }
 
-    public List<DictMaker2> dictItemList() {
+    public List<DictMaker2> dictItems() {
         return getList(1, DictMaker2::of);
     }
 
@@ -36,13 +36,13 @@ public final class DictMaker extends NodeWrapper {
         t.enter(lv, RULE);
         boolean r;
         r = DictItem.parse(t, lv + 1);
-        if (r) parseDictItemList(t, lv);
+        if (r) parseDictItems(t, lv);
         if (r) t.consume(",");
         t.exit(r);
         return r;
     }
 
-    private static void parseDictItemList(ParseTree t, int lv) {
+    private static void parseDictItems(ParseTree t, int lv) {
         t.enterCollection();
         while (true) {
             var p = t.position();
@@ -67,7 +67,7 @@ public final class DictMaker extends NodeWrapper {
         }
 
         public DictItem dictItem() {
-            return DictItem.of(get(1));
+            return get(1, DictItem::of);
         }
 
         public static boolean parse(ParseTree t, int lv) {

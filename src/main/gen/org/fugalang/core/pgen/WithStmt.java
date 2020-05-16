@@ -20,15 +20,15 @@ public final class WithStmt extends NodeWrapper {
     }
 
     public WithItem withItem() {
-        return WithItem.of(get(1));
+        return get(1, WithItem::of);
     }
 
-    public List<WithStmt3> withItemList() {
+    public List<WithStmt3> withItems() {
         return getList(2, WithStmt3::of);
     }
 
     public Suite suite() {
-        return Suite.of(get(3));
+        return get(3, Suite::of);
     }
 
     public static boolean parse(ParseTree t, int lv) {
@@ -37,13 +37,13 @@ public final class WithStmt extends NodeWrapper {
         boolean r;
         r = t.consume("with");
         r = r && WithItem.parse(t, lv + 1);
-        if (r) parseWithItemList(t, lv);
+        if (r) parseWithItems(t, lv);
         r = r && Suite.parse(t, lv + 1);
         t.exit(r);
         return r;
     }
 
-    private static void parseWithItemList(ParseTree t, int lv) {
+    private static void parseWithItems(ParseTree t, int lv) {
         t.enterCollection();
         while (true) {
             var p = t.position();
@@ -68,7 +68,7 @@ public final class WithStmt extends NodeWrapper {
         }
 
         public WithItem withItem() {
-            return WithItem.of(get(1));
+            return get(1, WithItem::of);
         }
 
         public static boolean parse(ParseTree t, int lv) {

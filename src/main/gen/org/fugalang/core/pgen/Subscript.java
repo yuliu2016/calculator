@@ -18,7 +18,7 @@ public final class Subscript extends NodeWrapper {
     }
 
     public Slicelist slicelist() {
-        return Slicelist.of(get(1));
+        return get(1, Slicelist::of);
     }
 
     public static boolean parse(ParseTree t, int lv) {

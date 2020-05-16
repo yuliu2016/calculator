@@ -20,15 +20,15 @@ public final class FullArgList extends NodeWrapper {
     }
 
     public DefaultArg defaultArg() {
-        return DefaultArg.of(get(0));
+        return get(0, DefaultArg::of);
     }
 
-    public List<FullArgList2> defaultArgList() {
+    public List<FullArgList2> defaultArgs() {
         return getList(1, FullArgList2::of);
     }
 
     public FullArgList3 fullArgList3() {
-        return FullArgList3.of(get(2));
+        return get(2, FullArgList3::of);
     }
 
     public boolean hasFullArgList3() {
@@ -40,13 +40,13 @@ public final class FullArgList extends NodeWrapper {
         t.enter(lv, RULE);
         boolean r;
         r = DefaultArg.parse(t, lv + 1);
-        if (r) parseDefaultArgList(t, lv);
+        if (r) parseDefaultArgs(t, lv);
         if (r) FullArgList3.parse(t, lv + 1);
         t.exit(r);
         return r;
     }
 
-    private static void parseDefaultArgList(ParseTree t, int lv) {
+    private static void parseDefaultArgs(ParseTree t, int lv) {
         t.enterCollection();
         while (true) {
             var p = t.position();
@@ -71,7 +71,7 @@ public final class FullArgList extends NodeWrapper {
         }
 
         public DefaultArg defaultArg() {
-            return DefaultArg.of(get(1));
+            return get(1, DefaultArg::of);
         }
 
         public static boolean parse(ParseTree t, int lv) {
@@ -101,7 +101,7 @@ public final class FullArgList extends NodeWrapper {
         }
 
         public FullArgList32 kwargsOrArgsKwargs() {
-            return FullArgList32.of(get(1));
+            return get(1, FullArgList32::of);
         }
 
         public boolean hasKwargsOrArgsKwargs() {
@@ -135,7 +135,7 @@ public final class FullArgList extends NodeWrapper {
         }
 
         public Kwargs kwargs() {
-            return Kwargs.of(get(0));
+            return get(0, Kwargs::of);
         }
 
         public boolean hasKwargs() {
@@ -143,7 +143,7 @@ public final class FullArgList extends NodeWrapper {
         }
 
         public ArgsKwargs argsKwargs() {
-            return ArgsKwargs.of(get(1));
+            return get(1, ArgsKwargs::of);
         }
 
         public boolean hasArgsKwargs() {

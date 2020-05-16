@@ -20,10 +20,10 @@ public final class Arglist extends NodeWrapper {
     }
 
     public Argument argument() {
-        return Argument.of(get(0));
+        return get(0, Argument::of);
     }
 
-    public List<Arglist2> argumentList() {
+    public List<Arglist2> arguments() {
         return getList(1, Arglist2::of);
     }
 
@@ -36,13 +36,13 @@ public final class Arglist extends NodeWrapper {
         t.enter(lv, RULE);
         boolean r;
         r = Argument.parse(t, lv + 1);
-        if (r) parseArgumentList(t, lv);
+        if (r) parseArguments(t, lv);
         if (r) t.consume(",");
         t.exit(r);
         return r;
     }
 
-    private static void parseArgumentList(ParseTree t, int lv) {
+    private static void parseArguments(ParseTree t, int lv) {
         t.enterCollection();
         while (true) {
             var p = t.position();
@@ -67,7 +67,7 @@ public final class Arglist extends NodeWrapper {
         }
 
         public Argument argument() {
-            return Argument.of(get(1));
+            return get(1, Argument::of);
         }
 
         public static boolean parse(ParseTree t, int lv) {

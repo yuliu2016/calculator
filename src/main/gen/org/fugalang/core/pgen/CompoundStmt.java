@@ -18,7 +18,7 @@ public final class CompoundStmt extends NodeWrapper {
     }
 
     public IfStmt ifStmt() {
-        return IfStmt.of(get(0));
+        return get(0, IfStmt::of);
     }
 
     public boolean hasIfStmt() {
@@ -26,7 +26,7 @@ public final class CompoundStmt extends NodeWrapper {
     }
 
     public WhileStmt whileStmt() {
-        return WhileStmt.of(get(1));
+        return get(1, WhileStmt::of);
     }
 
     public boolean hasWhileStmt() {
@@ -34,7 +34,7 @@ public final class CompoundStmt extends NodeWrapper {
     }
 
     public ForStmt forStmt() {
-        return ForStmt.of(get(2));
+        return get(2, ForStmt::of);
     }
 
     public boolean hasForStmt() {
@@ -42,7 +42,7 @@ public final class CompoundStmt extends NodeWrapper {
     }
 
     public TryStmt tryStmt() {
-        return TryStmt.of(get(3));
+        return get(3, TryStmt::of);
     }
 
     public boolean hasTryStmt() {
@@ -50,7 +50,7 @@ public final class CompoundStmt extends NodeWrapper {
     }
 
     public WithStmt withStmt() {
-        return WithStmt.of(get(4));
+        return get(4, WithStmt::of);
     }
 
     public boolean hasWithStmt() {

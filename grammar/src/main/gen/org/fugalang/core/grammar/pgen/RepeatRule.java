@@ -18,11 +18,11 @@ public final class RepeatRule extends NodeWrapper {
     }
 
     public SubRule subRule() {
-        return SubRule.of(get(0));
+        return get(0, SubRule::of);
     }
 
     public RepeatRule2 timesOrPlus() {
-        return RepeatRule2.of(get(1));
+        return get(1, RepeatRule2::of);
     }
 
     public boolean hasTimesOrPlus() {

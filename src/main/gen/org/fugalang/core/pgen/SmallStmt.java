@@ -18,7 +18,7 @@ public final class SmallStmt extends NodeWrapper {
     }
 
     public DelStmt delStmt() {
-        return DelStmt.of(get(0));
+        return get(0, DelStmt::of);
     }
 
     public boolean hasDelStmt() {
@@ -26,7 +26,7 @@ public final class SmallStmt extends NodeWrapper {
     }
 
     public PassStmt passStmt() {
-        return PassStmt.of(get(1));
+        return get(1, PassStmt::of);
     }
 
     public boolean hasPassStmt() {
@@ -34,7 +34,7 @@ public final class SmallStmt extends NodeWrapper {
     }
 
     public FlowStmt flowStmt() {
-        return FlowStmt.of(get(2));
+        return get(2, FlowStmt::of);
     }
 
     public boolean hasFlowStmt() {
@@ -42,7 +42,7 @@ public final class SmallStmt extends NodeWrapper {
     }
 
     public ImportStmt importStmt() {
-        return ImportStmt.of(get(3));
+        return get(3, ImportStmt::of);
     }
 
     public boolean hasImportStmt() {
@@ -50,7 +50,7 @@ public final class SmallStmt extends NodeWrapper {
     }
 
     public AssertStmt assertStmt() {
-        return AssertStmt.of(get(4));
+        return get(4, AssertStmt::of);
     }
 
     public boolean hasAssertStmt() {
@@ -58,7 +58,7 @@ public final class SmallStmt extends NodeWrapper {
     }
 
     public Assignment assignment() {
-        return Assignment.of(get(5));
+        return get(5, Assignment::of);
     }
 
     public boolean hasAssignment() {

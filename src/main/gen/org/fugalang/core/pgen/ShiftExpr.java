@@ -20,10 +20,10 @@ public final class ShiftExpr extends NodeWrapper {
     }
 
     public Sum sum() {
-        return Sum.of(get(0));
+        return get(0, Sum::of);
     }
 
-    public List<ShiftExpr2> shiftOpSumList() {
+    public List<ShiftExpr2> shiftOpSums() {
         return getList(1, ShiftExpr2::of);
     }
 
@@ -32,12 +32,12 @@ public final class ShiftExpr extends NodeWrapper {
         t.enter(lv, RULE);
         boolean r;
         r = Sum.parse(t, lv + 1);
-        if (r) parseShiftOpSumList(t, lv);
+        if (r) parseShiftOpSums(t, lv);
         t.exit(r);
         return r;
     }
 
-    private static void parseShiftOpSumList(ParseTree t, int lv) {
+    private static void parseShiftOpSums(ParseTree t, int lv) {
         t.enterCollection();
         while (true) {
             var p = t.position();
@@ -62,11 +62,11 @@ public final class ShiftExpr extends NodeWrapper {
         }
 
         public ShiftOp shiftOp() {
-            return ShiftOp.of(get(0));
+            return get(0, ShiftOp::of);
         }
 
         public Sum sum() {
-            return Sum.of(get(1));
+            return get(1, Sum::of);
         }
 
         public static boolean parse(ParseTree t, int lv) {

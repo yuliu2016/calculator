@@ -20,14 +20,14 @@ public final class ImportFromNames extends NodeWrapper {
     }
 
     public ImportFromNames1 importFromNames1() {
-        return ImportFromNames1.of(get(0));
+        return get(0, ImportFromNames1::of);
     }
 
     public boolean hasImportFromNames1() {
         return has(0, ImportFromNames1.RULE);
     }
 
-    public List<Boolean> isDotList() {
+    public List<Boolean> isDots() {
         return getList(1, ParseTreeNode::asBoolean);
     }
 
@@ -36,12 +36,12 @@ public final class ImportFromNames extends NodeWrapper {
         t.enter(lv, RULE);
         boolean r;
         r = ImportFromNames1.parse(t, lv + 1);
-        r = r || parseIsDotList(t, lv);
+        r = r || parseIsDots(t, lv);
         t.exit(r);
         return r;
     }
 
-    private static boolean parseIsDotList(ParseTree t, int lv) {
+    private static boolean parseIsDots(ParseTree t, int lv) {
         t.enterCollection();
         var r = t.consume(".");
         if (r) while (true) {
@@ -67,25 +67,25 @@ public final class ImportFromNames extends NodeWrapper {
             super(RULE, node);
         }
 
-        public List<Boolean> isDotList() {
+        public List<Boolean> isDots() {
             return getList(0, ParseTreeNode::asBoolean);
         }
 
         public DottedName dottedName() {
-            return DottedName.of(get(1));
+            return get(1, DottedName::of);
         }
 
         public static boolean parse(ParseTree t, int lv) {
             if (!ParserUtil.recursionGuard(lv, RULE)) return false;
             t.enter(lv, RULE);
             boolean r;
-            parseIsDotList(t, lv);
+            parseIsDots(t, lv);
             r = DottedName.parse(t, lv + 1);
             t.exit(r);
             return r;
         }
 
-        private static void parseIsDotList(ParseTree t, int lv) {
+        private static void parseIsDots(ParseTree t, int lv) {
             t.enterCollection();
             while (true) {
                 var p = t.position();

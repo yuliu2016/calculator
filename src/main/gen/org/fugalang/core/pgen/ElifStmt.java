@@ -18,11 +18,11 @@ public final class ElifStmt extends NodeWrapper {
     }
 
     public NamedExpr namedExpr() {
-        return NamedExpr.of(get(1));
+        return get(1, NamedExpr::of);
     }
 
     public Suite suite() {
-        return Suite.of(get(2));
+        return get(2, Suite::of);
     }
 
     public static boolean parse(ParseTree t, int lv) {

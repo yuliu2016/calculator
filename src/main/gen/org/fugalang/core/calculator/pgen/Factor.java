@@ -18,7 +18,7 @@ public final class Factor extends NodeWrapper {
     }
 
     public Factor1 factor1() {
-        return Factor1.of(get(0));
+        return get(0, Factor1::of);
     }
 
     public boolean hasFactor1() {
@@ -26,7 +26,7 @@ public final class Factor extends NodeWrapper {
     }
 
     public Power power() {
-        return Power.of(get(1));
+        return get(1, Power::of);
     }
 
     public boolean hasPower() {
@@ -59,11 +59,11 @@ public final class Factor extends NodeWrapper {
         }
 
         public Factor11 factor11() {
-            return Factor11.of(get(0));
+            return get(0, Factor11::of);
         }
 
         public Factor factor() {
-            return Factor.of(get(1));
+            return get(1, Factor::of);
         }
 
         public static boolean parse(ParseTree t, int lv) {

@@ -18,11 +18,11 @@ public final class ImportFrom extends NodeWrapper {
     }
 
     public ImportFromNames importFromNames() {
-        return ImportFromNames.of(get(1));
+        return get(1, ImportFromNames::of);
     }
 
     public ImportFrom4 importFrom4() {
-        return ImportFrom4.of(get(3));
+        return get(3, ImportFrom4::of);
     }
 
     public static boolean parse(ParseTree t, int lv) {
@@ -57,7 +57,7 @@ public final class ImportFrom extends NodeWrapper {
         }
 
         public ImportFrom42 importFrom42() {
-            return ImportFrom42.of(get(1));
+            return get(1, ImportFrom42::of);
         }
 
         public boolean hasImportFrom42() {
@@ -65,7 +65,7 @@ public final class ImportFrom extends NodeWrapper {
         }
 
         public ImportAsNames importAsNames() {
-            return ImportAsNames.of(get(2));
+            return get(2, ImportAsNames::of);
         }
 
         public boolean hasImportAsNames() {
@@ -100,7 +100,7 @@ public final class ImportFrom extends NodeWrapper {
         }
 
         public ImportAsNames importAsNames() {
-            return ImportAsNames.of(get(1));
+            return get(1, ImportAsNames::of);
         }
 
         public boolean isComma() {

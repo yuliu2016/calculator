@@ -18,7 +18,7 @@ public final class DictItem extends NodeWrapper {
     }
 
     public DictItem1 exprExpr() {
-        return DictItem1.of(get(0));
+        return get(0, DictItem1::of);
     }
 
     public boolean hasExprExpr() {
@@ -26,7 +26,7 @@ public final class DictItem extends NodeWrapper {
     }
 
     public DictItem2 bitwiseOr() {
-        return DictItem2.of(get(1));
+        return get(1, DictItem2::of);
     }
 
     public boolean hasBitwiseOr() {
@@ -59,11 +59,11 @@ public final class DictItem extends NodeWrapper {
         }
 
         public Expr expr() {
-            return Expr.of(get(0));
+            return get(0, Expr::of);
         }
 
         public Expr expr1() {
-            return Expr.of(get(2));
+            return get(2, Expr::of);
         }
 
         public static boolean parse(ParseTree t, int lv) {
@@ -94,7 +94,7 @@ public final class DictItem extends NodeWrapper {
         }
 
         public BitwiseOr bitwiseOr() {
-            return BitwiseOr.of(get(1));
+            return get(1, BitwiseOr::of);
         }
 
         public static boolean parse(ParseTree t, int lv) {

@@ -29,7 +29,7 @@ public class PEGBuilder {
             String tokenTypeClass
     ) {
         ruleMap = new LinkedHashMap<>();
-        for (var rule : rules.singleRuleList()) {
+        for (var rule : rules.singleRules()) {
             ruleMap.put(rule.name(), rule.orRule());
         }
         this.converter = converter;
@@ -85,7 +85,7 @@ public class PEGBuilder {
     }
 
     private void addOrRule(ClassName className, ClassBuilder cb, OrRule rule) {
-        if (rule.andRuleList().isEmpty()) {
+        if (rule.andRules().isEmpty()) {
             // only one rule - can propagate fields of this class
             // but need to change the type here
             cb.setRuleType(RuleType.Conjunction);
@@ -105,7 +105,7 @@ public class PEGBuilder {
                 var newClassName = className.suffix(class_count);
                 class_count++;
 
-                if (andRule.repeatRuleList().isEmpty()) {
+                if (andRule.repeatRules().isEmpty()) {
                     // only one repeat rule - can propagate fields of this class
                     addAndRule(newClassName, cb, andRule, REQUIRED);
                 } else {
@@ -138,7 +138,7 @@ public class PEGBuilder {
             boolean isOptional
     ) {
 
-        if (rule.repeatRuleList().isEmpty()) {
+        if (rule.repeatRules().isEmpty()) {
             addRepeatedSubRule(className, cb, rule.repeatRule(), isOptional);
         } else {
             // don't need to check for component classes - every RepeatRule
@@ -241,7 +241,9 @@ public class PEGBuilder {
         } else {
             cb.addImport("java.util.List");
             var newClassName = className.asList();
-            var newFieldName = fieldName + "List";
+
+            // pluralize the field name
+            var newFieldName = fieldName + "s";
 
             var fieldType = repeatType == RepeatType.OnceOrMore ?
                     FieldType.RequiredList : FieldType.OptionalList;
@@ -261,7 +263,7 @@ public class PEGBuilder {
         // maybe this can just be added to this class
         // but maybe there needs to be a separate class
 
-        if (rule.andRuleList().isEmpty() && rule.andRule().repeatRuleList().isEmpty() &&
+        if (rule.andRules().isEmpty() && rule.andRule().repeatRules().isEmpty() &&
                 repeatType == RepeatType.Once) {
             // ^fix - single-char repeats
 

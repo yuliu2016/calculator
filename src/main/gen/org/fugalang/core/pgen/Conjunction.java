@@ -20,10 +20,10 @@ public final class Conjunction extends NodeWrapper {
     }
 
     public Inversion inversion() {
-        return Inversion.of(get(0));
+        return get(0, Inversion::of);
     }
 
-    public List<Conjunction2> andInversionList() {
+    public List<Conjunction2> andInversions() {
         return getList(1, Conjunction2::of);
     }
 
@@ -32,12 +32,12 @@ public final class Conjunction extends NodeWrapper {
         t.enter(lv, RULE);
         boolean r;
         r = Inversion.parse(t, lv + 1);
-        if (r) parseAndInversionList(t, lv);
+        if (r) parseAndInversions(t, lv);
         t.exit(r);
         return r;
     }
 
-    private static void parseAndInversionList(ParseTree t, int lv) {
+    private static void parseAndInversions(ParseTree t, int lv) {
         t.enterCollection();
         while (true) {
             var p = t.position();
@@ -62,7 +62,7 @@ public final class Conjunction extends NodeWrapper {
         }
 
         public Inversion inversion() {
-            return Inversion.of(get(1));
+            return get(1, Inversion::of);
         }
 
         public static boolean parse(ParseTree t, int lv) {

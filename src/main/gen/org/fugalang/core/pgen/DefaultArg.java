@@ -18,11 +18,11 @@ public final class DefaultArg extends NodeWrapper {
     }
 
     public TypedArg typedArg() {
-        return TypedArg.of(get(0));
+        return get(0, TypedArg::of);
     }
 
     public DefaultArg2 expr() {
-        return DefaultArg2.of(get(1));
+        return get(1, DefaultArg2::of);
     }
 
     public boolean hasExpr() {
@@ -55,7 +55,7 @@ public final class DefaultArg extends NodeWrapper {
         }
 
         public Expr expr() {
-            return Expr.of(get(1));
+            return get(1, Expr::of);
         }
 
         public static boolean parse(ParseTree t, int lv) {

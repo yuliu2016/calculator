@@ -20,10 +20,10 @@ public final class ImportAsNames extends NodeWrapper {
     }
 
     public ImportAsName importAsName() {
-        return ImportAsName.of(get(0));
+        return get(0, ImportAsName::of);
     }
 
-    public List<ImportAsNames2> importAsNameList() {
+    public List<ImportAsNames2> importAsNames() {
         return getList(1, ImportAsNames2::of);
     }
 
@@ -32,12 +32,12 @@ public final class ImportAsNames extends NodeWrapper {
         t.enter(lv, RULE);
         boolean r;
         r = ImportAsName.parse(t, lv + 1);
-        if (r) parseImportAsNameList(t, lv);
+        if (r) parseImportAsNames(t, lv);
         t.exit(r);
         return r;
     }
 
-    private static void parseImportAsNameList(ParseTree t, int lv) {
+    private static void parseImportAsNames(ParseTree t, int lv) {
         t.enterCollection();
         while (true) {
             var p = t.position();
@@ -62,7 +62,7 @@ public final class ImportAsNames extends NodeWrapper {
         }
 
         public ImportAsName importAsName() {
-            return ImportAsName.of(get(1));
+            return get(1, ImportAsName::of);
         }
 
         public static boolean parse(ParseTree t, int lv) {

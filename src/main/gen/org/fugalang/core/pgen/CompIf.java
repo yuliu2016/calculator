@@ -18,11 +18,11 @@ public final class CompIf extends NodeWrapper {
     }
 
     public NamedExpr namedExpr() {
-        return NamedExpr.of(get(1));
+        return get(1, NamedExpr::of);
     }
 
     public CompIter compIter() {
-        return CompIter.of(get(2));
+        return get(2, CompIter::of);
     }
 
     public boolean hasCompIter() {

@@ -19,7 +19,7 @@ public final class Trailer extends NodeWrapper {
     }
 
     public Trailer1 name() {
-        return Trailer1.of(get(0));
+        return get(0, Trailer1::of);
     }
 
     public boolean hasName() {
@@ -27,7 +27,7 @@ public final class Trailer extends NodeWrapper {
     }
 
     public Parameters parameters() {
-        return Parameters.of(get(1));
+        return get(1, Parameters::of);
     }
 
     public boolean hasParameters() {
@@ -35,7 +35,7 @@ public final class Trailer extends NodeWrapper {
     }
 
     public Subscript subscript() {
-        return Subscript.of(get(2));
+        return get(2, Subscript::of);
     }
 
     public boolean hasSubscript() {

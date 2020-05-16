@@ -23,7 +23,7 @@ public final class TypedArg extends NodeWrapper {
     }
 
     public TypedArg2 expr() {
-        return TypedArg2.of(get(1));
+        return get(1, TypedArg2::of);
     }
 
     public boolean hasExpr() {
@@ -56,7 +56,7 @@ public final class TypedArg extends NodeWrapper {
         }
 
         public Expr expr() {
-            return Expr.of(get(1));
+            return get(1, Expr::of);
         }
 
         public static boolean parse(ParseTree t, int lv) {

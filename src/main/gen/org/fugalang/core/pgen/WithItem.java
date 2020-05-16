@@ -19,11 +19,11 @@ public final class WithItem extends NodeWrapper {
     }
 
     public Expr expr() {
-        return Expr.of(get(0));
+        return get(0, Expr::of);
     }
 
     public WithItem2 asName() {
-        return WithItem2.of(get(1));
+        return get(1, WithItem2::of);
     }
 
     public boolean hasAsName() {

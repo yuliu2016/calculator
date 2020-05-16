@@ -18,7 +18,7 @@ public final class FinallySuite extends NodeWrapper {
     }
 
     public Suite suite() {
-        return Suite.of(get(1));
+        return get(1, Suite::of);
     }
 
     public static boolean parse(ParseTree t, int lv) {

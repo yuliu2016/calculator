@@ -18,7 +18,7 @@ public final class DelStmt extends NodeWrapper {
     }
 
     public Targetlist targetlist() {
-        return Targetlist.of(get(1));
+        return get(1, Targetlist::of);
     }
 
     public static boolean parse(ParseTree t, int lv) {

@@ -20,10 +20,10 @@ public final class SetMaker extends NodeWrapper {
     }
 
     public ExprOrStar exprOrStar() {
-        return ExprOrStar.of(get(0));
+        return get(0, ExprOrStar::of);
     }
 
-    public List<SetMaker2> exprOrStarList() {
+    public List<SetMaker2> exprOrStars() {
         return getList(1, SetMaker2::of);
     }
 
@@ -36,13 +36,13 @@ public final class SetMaker extends NodeWrapper {
         t.enter(lv, RULE);
         boolean r;
         r = ExprOrStar.parse(t, lv + 1);
-        if (r) parseExprOrStarList(t, lv);
+        if (r) parseExprOrStars(t, lv);
         if (r) t.consume(",");
         t.exit(r);
         return r;
     }
 
-    private static void parseExprOrStarList(ParseTree t, int lv) {
+    private static void parseExprOrStars(ParseTree t, int lv) {
         t.enterCollection();
         while (true) {
             var p = t.position();
@@ -67,7 +67,7 @@ public final class SetMaker extends NodeWrapper {
         }
 
         public ExprOrStar exprOrStar() {
-            return ExprOrStar.of(get(1));
+            return get(1, ExprOrStar::of);
         }
 
         public static boolean parse(ParseTree t, int lv) {

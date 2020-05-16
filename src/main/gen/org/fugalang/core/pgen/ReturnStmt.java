@@ -18,7 +18,7 @@ public final class ReturnStmt extends NodeWrapper {
     }
 
     public ExprlistStar exprlistStar() {
-        return ExprlistStar.of(get(1));
+        return get(1, ExprlistStar::of);
     }
 
     public boolean hasExprlistStar() {

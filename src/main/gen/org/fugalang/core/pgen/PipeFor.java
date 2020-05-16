@@ -18,7 +18,7 @@ public final class PipeFor extends NodeWrapper {
     }
 
     public CompFor compFor() {
-        return CompFor.of(get(0));
+        return get(0, CompFor::of);
     }
 
     public boolean hasCompFor() {
@@ -26,11 +26,11 @@ public final class PipeFor extends NodeWrapper {
     }
 
     public Targetlist targetlist() {
-        return Targetlist.of(get(2));
+        return get(2, Targetlist::of);
     }
 
     public PipeFor4 ifNamedExpr() {
-        return PipeFor4.of(get(3));
+        return get(3, PipeFor4::of);
     }
 
     public boolean hasIfNamedExpr() {
@@ -38,7 +38,7 @@ public final class PipeFor extends NodeWrapper {
     }
 
     public PipeFor5 parametersOrBlockSuite() {
-        return PipeFor5.of(get(4));
+        return get(4, PipeFor5::of);
     }
 
     public boolean hasParametersOrBlockSuite() {
@@ -74,7 +74,7 @@ public final class PipeFor extends NodeWrapper {
         }
 
         public NamedExpr namedExpr() {
-            return NamedExpr.of(get(1));
+            return get(1, NamedExpr::of);
         }
 
         public static boolean parse(ParseTree t, int lv) {
@@ -104,7 +104,7 @@ public final class PipeFor extends NodeWrapper {
         }
 
         public Parameters parameters() {
-            return Parameters.of(get(0));
+            return get(0, Parameters::of);
         }
 
         public boolean hasParameters() {
@@ -112,7 +112,7 @@ public final class PipeFor extends NodeWrapper {
         }
 
         public BlockSuite blockSuite() {
-            return BlockSuite.of(get(1));
+            return get(1, BlockSuite::of);
         }
 
         public boolean hasBlockSuite() {

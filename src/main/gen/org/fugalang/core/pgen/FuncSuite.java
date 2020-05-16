@@ -18,7 +18,7 @@ public final class FuncSuite extends NodeWrapper {
     }
 
     public FuncSuite1 expr() {
-        return FuncSuite1.of(get(0));
+        return get(0, FuncSuite1::of);
     }
 
     public boolean hasExpr() {
@@ -26,7 +26,7 @@ public final class FuncSuite extends NodeWrapper {
     }
 
     public BlockSuite blockSuite() {
-        return BlockSuite.of(get(1));
+        return get(1, BlockSuite::of);
     }
 
     public boolean hasBlockSuite() {
@@ -59,7 +59,7 @@ public final class FuncSuite extends NodeWrapper {
         }
 
         public Expr expr() {
-            return Expr.of(get(1));
+            return get(1, Expr::of);
         }
 
         public static boolean parse(ParseTree t, int lv) {

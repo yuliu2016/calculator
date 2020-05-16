@@ -18,7 +18,7 @@ public final class ImportStmt extends NodeWrapper {
     }
 
     public ImportName importName() {
-        return ImportName.of(get(0));
+        return get(0, ImportName::of);
     }
 
     public boolean hasImportName() {
@@ -26,7 +26,7 @@ public final class ImportStmt extends NodeWrapper {
     }
 
     public ImportFrom importFrom() {
-        return ImportFrom.of(get(1));
+        return get(1, ImportFrom::of);
     }
 
     public boolean hasImportFrom() {

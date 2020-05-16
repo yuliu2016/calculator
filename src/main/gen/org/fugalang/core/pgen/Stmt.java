@@ -19,7 +19,7 @@ public final class Stmt extends NodeWrapper {
     }
 
     public Stmt1 simpleStmtOrCompoundStmt() {
-        return Stmt1.of(get(0));
+        return get(0, Stmt1::of);
     }
 
     public String newline() {
@@ -52,7 +52,7 @@ public final class Stmt extends NodeWrapper {
         }
 
         public SimpleStmt simpleStmt() {
-            return SimpleStmt.of(get(0));
+            return get(0, SimpleStmt::of);
         }
 
         public boolean hasSimpleStmt() {
@@ -60,7 +60,7 @@ public final class Stmt extends NodeWrapper {
         }
 
         public CompoundStmt compoundStmt() {
-            return CompoundStmt.of(get(1));
+            return get(1, CompoundStmt::of);
         }
 
         public boolean hasCompoundStmt() {

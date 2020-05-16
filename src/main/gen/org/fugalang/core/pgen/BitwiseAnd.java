@@ -20,10 +20,10 @@ public final class BitwiseAnd extends NodeWrapper {
     }
 
     public ShiftExpr shiftExpr() {
-        return ShiftExpr.of(get(0));
+        return get(0, ShiftExpr::of);
     }
 
-    public List<BitwiseAnd2> shiftExprList() {
+    public List<BitwiseAnd2> shiftExprs() {
         return getList(1, BitwiseAnd2::of);
     }
 
@@ -32,12 +32,12 @@ public final class BitwiseAnd extends NodeWrapper {
         t.enter(lv, RULE);
         boolean r;
         r = ShiftExpr.parse(t, lv + 1);
-        if (r) parseShiftExprList(t, lv);
+        if (r) parseShiftExprs(t, lv);
         t.exit(r);
         return r;
     }
 
-    private static void parseShiftExprList(ParseTree t, int lv) {
+    private static void parseShiftExprs(ParseTree t, int lv) {
         t.enterCollection();
         while (true) {
             var p = t.position();
@@ -62,7 +62,7 @@ public final class BitwiseAnd extends NodeWrapper {
         }
 
         public ShiftExpr shiftExpr() {
-            return ShiftExpr.of(get(1));
+            return get(1, ShiftExpr::of);
         }
 
         public static boolean parse(ParseTree t, int lv) {

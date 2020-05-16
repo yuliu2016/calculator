@@ -18,15 +18,15 @@ public final class WhileStmt extends NodeWrapper {
     }
 
     public NamedExpr namedExpr() {
-        return NamedExpr.of(get(1));
+        return get(1, NamedExpr::of);
     }
 
     public Suite suite() {
-        return Suite.of(get(2));
+        return get(2, Suite::of);
     }
 
     public ElseSuite elseSuite() {
-        return ElseSuite.of(get(3));
+        return get(3, ElseSuite::of);
     }
 
     public boolean hasElseSuite() {

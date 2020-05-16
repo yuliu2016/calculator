@@ -18,11 +18,11 @@ public final class Annassign extends NodeWrapper {
     }
 
     public Expr expr() {
-        return Expr.of(get(1));
+        return get(1, Expr::of);
     }
 
     public Annassign3 exprlistStar() {
-        return Annassign3.of(get(2));
+        return get(2, Annassign3::of);
     }
 
     public boolean hasExprlistStar() {
@@ -56,7 +56,7 @@ public final class Annassign extends NodeWrapper {
         }
 
         public ExprlistStar exprlistStar() {
-            return ExprlistStar.of(get(1));
+            return get(1, ExprlistStar::of);
         }
 
         public static boolean parse(ParseTree t, int lv) {

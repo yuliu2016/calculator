@@ -23,7 +23,7 @@ public final class SingleRule extends NodeWrapper {
     }
 
     public OrRule orRule() {
-        return OrRule.of(get(2));
+        return get(2, OrRule::of);
     }
 
     public String newline() {

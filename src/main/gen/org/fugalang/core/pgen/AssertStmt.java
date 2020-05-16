@@ -18,11 +18,11 @@ public final class AssertStmt extends NodeWrapper {
     }
 
     public Expr expr() {
-        return Expr.of(get(1));
+        return get(1, Expr::of);
     }
 
     public AssertStmt3 expr1() {
-        return AssertStmt3.of(get(2));
+        return get(2, AssertStmt3::of);
     }
 
     public boolean hasExpr1() {
@@ -56,7 +56,7 @@ public final class AssertStmt extends NodeWrapper {
         }
 
         public Expr expr() {
-            return Expr.of(get(1));
+            return get(1, Expr::of);
         }
 
         public static boolean parse(ParseTree t, int lv) {

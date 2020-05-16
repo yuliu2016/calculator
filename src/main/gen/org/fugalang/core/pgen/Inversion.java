@@ -18,7 +18,7 @@ public final class Inversion extends NodeWrapper {
     }
 
     public Inversion1 notInversion() {
-        return Inversion1.of(get(0));
+        return get(0, Inversion1::of);
     }
 
     public boolean hasNotInversion() {
@@ -26,7 +26,7 @@ public final class Inversion extends NodeWrapper {
     }
 
     public Comparison comparison() {
-        return Comparison.of(get(1));
+        return get(1, Comparison::of);
     }
 
     public boolean hasComparison() {
@@ -59,7 +59,7 @@ public final class Inversion extends NodeWrapper {
         }
 
         public Inversion inversion() {
-            return Inversion.of(get(1));
+            return get(1, Inversion::of);
         }
 
         public static boolean parse(ParseTree t, int lv) {

@@ -18,7 +18,7 @@ public final class Funcdef extends NodeWrapper {
     }
 
     public FuncTypeHint funcTypeHint() {
-        return FuncTypeHint.of(get(1));
+        return get(1, FuncTypeHint::of);
     }
 
     public boolean hasFuncTypeHint() {
@@ -26,7 +26,7 @@ public final class Funcdef extends NodeWrapper {
     }
 
     public FuncArgs funcArgs() {
-        return FuncArgs.of(get(2));
+        return get(2, FuncArgs::of);
     }
 
     public boolean hasFuncArgs() {
@@ -34,7 +34,7 @@ public final class Funcdef extends NodeWrapper {
     }
 
     public FuncSuite funcSuite() {
-        return FuncSuite.of(get(3));
+        return get(3, FuncSuite::of);
     }
 
     public static boolean parse(ParseTree t, int lv) {

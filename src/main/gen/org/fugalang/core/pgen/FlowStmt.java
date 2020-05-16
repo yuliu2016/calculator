@@ -18,7 +18,7 @@ public final class FlowStmt extends NodeWrapper {
     }
 
     public BreakStmt breakStmt() {
-        return BreakStmt.of(get(0));
+        return get(0, BreakStmt::of);
     }
 
     public boolean hasBreakStmt() {
@@ -26,7 +26,7 @@ public final class FlowStmt extends NodeWrapper {
     }
 
     public ContinueStmt continueStmt() {
-        return ContinueStmt.of(get(1));
+        return get(1, ContinueStmt::of);
     }
 
     public boolean hasContinueStmt() {
@@ -34,7 +34,7 @@ public final class FlowStmt extends NodeWrapper {
     }
 
     public ReturnStmt returnStmt() {
-        return ReturnStmt.of(get(2));
+        return get(2, ReturnStmt::of);
     }
 
     public boolean hasReturnStmt() {
@@ -42,7 +42,7 @@ public final class FlowStmt extends NodeWrapper {
     }
 
     public RaiseStmt raiseStmt() {
-        return RaiseStmt.of(get(3));
+        return get(3, RaiseStmt::of);
     }
 
     public boolean hasRaiseStmt() {

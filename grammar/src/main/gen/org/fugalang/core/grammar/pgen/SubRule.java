@@ -19,7 +19,7 @@ public final class SubRule extends NodeWrapper {
     }
 
     public SubRule1 orRule() {
-        return SubRule1.of(get(0));
+        return get(0, SubRule1::of);
     }
 
     public boolean hasOrRule() {
@@ -27,7 +27,7 @@ public final class SubRule extends NodeWrapper {
     }
 
     public SubRule2 orRule1() {
-        return SubRule2.of(get(1));
+        return get(1, SubRule2::of);
     }
 
     public boolean hasOrRule1() {
@@ -78,7 +78,7 @@ public final class SubRule extends NodeWrapper {
         }
 
         public OrRule orRule() {
-            return OrRule.of(get(1));
+            return get(1, OrRule::of);
         }
 
         public static boolean parse(ParseTree t, int lv) {
@@ -109,7 +109,7 @@ public final class SubRule extends NodeWrapper {
         }
 
         public OrRule orRule() {
-            return OrRule.of(get(1));
+            return get(1, OrRule::of);
         }
 
         public static boolean parse(ParseTree t, int lv) {

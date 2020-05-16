@@ -18,7 +18,7 @@ public final class RaiseStmt extends NodeWrapper {
     }
 
     public RaiseStmt2 raiseStmt2() {
-        return RaiseStmt2.of(get(1));
+        return get(1, RaiseStmt2::of);
     }
 
     public boolean hasRaiseStmt2() {
@@ -51,11 +51,11 @@ public final class RaiseStmt extends NodeWrapper {
         }
 
         public Expr expr() {
-            return Expr.of(get(0));
+            return get(0, Expr::of);
         }
 
         public RaiseStmt22 fromExpr() {
-            return RaiseStmt22.of(get(1));
+            return get(1, RaiseStmt22::of);
         }
 
         public boolean hasFromExpr() {
@@ -89,7 +89,7 @@ public final class RaiseStmt extends NodeWrapper {
         }
 
         public Expr expr() {
-            return Expr.of(get(1));
+            return get(1, Expr::of);
         }
 
         public static boolean parse(ParseTree t, int lv) {

@@ -19,7 +19,7 @@ public final class NamedExpr extends NodeWrapper {
     }
 
     public NamedExpr1 nameExpr() {
-        return NamedExpr1.of(get(0));
+        return get(0, NamedExpr1::of);
     }
 
     public boolean hasNameExpr() {
@@ -27,7 +27,7 @@ public final class NamedExpr extends NodeWrapper {
     }
 
     public Expr expr() {
-        return Expr.of(get(1));
+        return get(1, Expr::of);
     }
 
     public boolean hasExpr() {
@@ -64,7 +64,7 @@ public final class NamedExpr extends NodeWrapper {
         }
 
         public Expr expr() {
-            return Expr.of(get(2));
+            return get(2, Expr::of);
         }
 
         public static boolean parse(ParseTree t, int lv) {

@@ -18,11 +18,11 @@ public final class TryStmt extends NodeWrapper {
     }
 
     public Suite suite() {
-        return Suite.of(get(1));
+        return get(1, Suite::of);
     }
 
     public TryStmt3 exceptSuiteOrFinallySuite() {
-        return TryStmt3.of(get(2));
+        return get(2, TryStmt3::of);
     }
 
     public static boolean parse(ParseTree t, int lv) {
@@ -52,7 +52,7 @@ public final class TryStmt extends NodeWrapper {
         }
 
         public ExceptSuite exceptSuite() {
-            return ExceptSuite.of(get(0));
+            return get(0, ExceptSuite::of);
         }
 
         public boolean hasExceptSuite() {
@@ -60,7 +60,7 @@ public final class TryStmt extends NodeWrapper {
         }
 
         public FinallySuite finallySuite() {
-            return FinallySuite.of(get(1));
+            return get(1, FinallySuite::of);
         }
 
         public boolean hasFinallySuite() {

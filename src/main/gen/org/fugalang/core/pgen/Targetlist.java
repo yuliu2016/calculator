@@ -20,10 +20,10 @@ public final class Targetlist extends NodeWrapper {
     }
 
     public Target target() {
-        return Target.of(get(0));
+        return get(0, Target::of);
     }
 
-    public List<Targetlist2> targetList() {
+    public List<Targetlist2> targets() {
         return getList(1, Targetlist2::of);
     }
 
@@ -36,13 +36,13 @@ public final class Targetlist extends NodeWrapper {
         t.enter(lv, RULE);
         boolean r;
         r = Target.parse(t, lv + 1);
-        if (r) parseTargetList(t, lv);
+        if (r) parseTargets(t, lv);
         if (r) t.consume(",");
         t.exit(r);
         return r;
     }
 
-    private static void parseTargetList(ParseTree t, int lv) {
+    private static void parseTargets(ParseTree t, int lv) {
         t.enterCollection();
         while (true) {
             var p = t.position();
@@ -67,7 +67,7 @@ public final class Targetlist extends NodeWrapper {
         }
 
         public Target target() {
-            return Target.of(get(1));
+            return get(1, Target::of);
         }
 
         public static boolean parse(ParseTree t, int lv) {
