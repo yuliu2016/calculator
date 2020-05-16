@@ -32,7 +32,7 @@ public final class ImportFromNames extends NodeWrapper {
     }
 
     public static boolean parse(ParseTree t, int lv) {
-        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        if (t.recursionGuard(lv)) return false;
         t.enter(lv, RULE);
         boolean r;
         r = ImportFromNames1.parse(t, lv + 1);
@@ -76,7 +76,7 @@ public final class ImportFromNames extends NodeWrapper {
         }
 
         public static boolean parse(ParseTree t, int lv) {
-            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            if (t.recursionGuard(lv)) return false;
             t.enter(lv, RULE);
             boolean r;
             parseIsDots(t, lv);

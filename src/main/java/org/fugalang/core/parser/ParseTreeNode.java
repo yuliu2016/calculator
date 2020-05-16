@@ -22,4 +22,6 @@ public interface ParseTreeNode extends TreeStringElem {
     String asString();
 
     boolean isLeaf();
+
+    int sizeOfChildren();
 }

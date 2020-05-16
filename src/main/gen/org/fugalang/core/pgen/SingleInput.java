@@ -43,7 +43,7 @@ public final class SingleInput extends NodeWrapper {
     }
 
     public static boolean parse(ParseTree t, int lv) {
-        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        if (t.recursionGuard(lv)) return false;
         t.enter(lv, RULE);
         boolean r;
         r = t.consume(TokenType.NEWLINE);
@@ -77,7 +77,7 @@ public final class SingleInput extends NodeWrapper {
         }
 
         public static boolean parse(ParseTree t, int lv) {
-            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            if (t.recursionGuard(lv)) return false;
             t.enter(lv, RULE);
             boolean r;
             r = CompoundStmt.parse(t, lv + 1);

@@ -59,7 +59,7 @@ public final class Argument extends NodeWrapper {
     }
 
     public static boolean parse(ParseTree t, int lv) {
-        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        if (t.recursionGuard(lv)) return false;
         t.enter(lv, RULE);
         boolean r;
         r = Argument1.parse(t, lv + 1);
@@ -95,7 +95,7 @@ public final class Argument extends NodeWrapper {
         }
 
         public static boolean parse(ParseTree t, int lv) {
-            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            if (t.recursionGuard(lv)) return false;
             t.enter(lv, RULE);
             boolean r;
             r = t.consume(TokenType.NAME);
@@ -130,7 +130,7 @@ public final class Argument extends NodeWrapper {
         }
 
         public static boolean parse(ParseTree t, int lv) {
-            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            if (t.recursionGuard(lv)) return false;
             t.enter(lv, RULE);
             boolean r;
             r = t.consume(TokenType.NAME);
@@ -161,7 +161,7 @@ public final class Argument extends NodeWrapper {
         }
 
         public static boolean parse(ParseTree t, int lv) {
-            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            if (t.recursionGuard(lv)) return false;
             t.enter(lv, RULE);
             boolean r;
             r = t.consume("**");
@@ -191,7 +191,7 @@ public final class Argument extends NodeWrapper {
         }
 
         public static boolean parse(ParseTree t, int lv) {
-            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            if (t.recursionGuard(lv)) return false;
             t.enter(lv, RULE);
             boolean r;
             r = t.consume("*");

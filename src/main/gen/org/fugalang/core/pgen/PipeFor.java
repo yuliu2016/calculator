@@ -46,7 +46,7 @@ public final class PipeFor extends NodeWrapper {
     }
 
     public static boolean parse(ParseTree t, int lv) {
-        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        if (t.recursionGuard(lv)) return false;
         t.enter(lv, RULE);
         boolean r;
         CompFor.parse(t, lv + 1);
@@ -78,7 +78,7 @@ public final class PipeFor extends NodeWrapper {
         }
 
         public static boolean parse(ParseTree t, int lv) {
-            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            if (t.recursionGuard(lv)) return false;
             t.enter(lv, RULE);
             boolean r;
             r = t.consume("if");
@@ -120,7 +120,7 @@ public final class PipeFor extends NodeWrapper {
         }
 
         public static boolean parse(ParseTree t, int lv) {
-            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            if (t.recursionGuard(lv)) return false;
             t.enter(lv, RULE);
             boolean r;
             r = Parameters.parse(t, lv + 1);

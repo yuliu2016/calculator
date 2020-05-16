@@ -40,7 +40,7 @@ public final class ExceptSuite extends NodeWrapper {
     }
 
     public static boolean parse(ParseTree t, int lv) {
-        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        if (t.recursionGuard(lv)) return false;
         t.enter(lv, RULE);
         boolean r;
         r = parseExceptClauseSuites(t, lv);
@@ -85,7 +85,7 @@ public final class ExceptSuite extends NodeWrapper {
         }
 
         public static boolean parse(ParseTree t, int lv) {
-            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            if (t.recursionGuard(lv)) return false;
             t.enter(lv, RULE);
             boolean r;
             r = ExceptClause.parse(t, lv + 1);

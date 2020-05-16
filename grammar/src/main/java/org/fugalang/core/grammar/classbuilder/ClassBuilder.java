@@ -188,7 +188,7 @@ public class ClassBuilder {
         sb.append("    public static boolean parse(ParseTree t, int lv) {\n");
 
         var mb = new StringBuilder();
-        mb.append("if (!ParserUtil.recursionGuard(lv, RULE)) return false;\n");
+        mb.append("if (t.recursionGuard(lv)) return false;\n");
         mb.append("t.enter(lv, RULE);\n");
         mb.append("boolean r;\n");
 

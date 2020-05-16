@@ -2,13 +2,16 @@ package org.fugalang.core.parser;
 
 import org.fugalang.core.pprint.ParseTreePPrint;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.function.Function;
 
 public abstract class NodeWrapper {
 
     private final ParseTreeNode node;
-    private Map<Integer, Object> cache;
+
+    private Object[] cache;
 
     public NodeWrapper(ParserRule rule, ParseTreeNode node) {
         // requires that the node matches the correct rule
@@ -22,14 +25,14 @@ public abstract class NodeWrapper {
 
     @SuppressWarnings("unchecked")
     protected <T extends NodeWrapper> T get(int index, Function<ParseTreeNode, T> converter) {
-        if (cache != null && cache.containsKey(index)) {
-            return (T) cache.get(index);
+        if (cache != null && cache[index] != null) {
+            return (T) cache[index];
         }
         var result = converter.apply(node.getItem(index));
         if (cache == null) {
-            cache = new HashMap<>();
+            cache = new Object[node.sizeOfChildren()];
         }
-        cache.put(index, result);
+        cache[index] = result;
         return result;
     }
 
@@ -56,8 +59,8 @@ public abstract class NodeWrapper {
 
     @SuppressWarnings("unchecked")
     protected <T> List<T> getList(int index, Function<ParseTreeNode, T> converter) {
-        if (cache != null && cache.containsKey(index)) {
-            return (List<T>) cache.get(index);
+        if (cache != null && cache[index] != null) {
+            return (List<T>) cache[index];
         }
         List<T> resultOrNull = null;
         var e = node.getItem(index);
@@ -67,12 +70,11 @@ public abstract class NodeWrapper {
             }
             resultOrNull.add(converter.apply(node));
         }
-
         List<T> result = resultOrNull == null ? Collections.emptyList() : resultOrNull;
         if (cache == null) {
-            cache = new HashMap<>();
+            cache = new Object[node.sizeOfChildren()];
         }
-        cache.put(index, result);
+        cache[index] = result;
         return result;
     }
 

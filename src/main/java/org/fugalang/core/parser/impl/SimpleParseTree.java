@@ -2,14 +2,13 @@ package org.fugalang.core.parser.impl;
 
 import org.fugalang.core.parser.*;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.List;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public class SimpleParseTree implements ParseTree {
+
+    public static final int MAX_RECURSION_LEVEL = 300;
 
     private ParserContext context;
     private ParseTreeNode result_node;
@@ -42,6 +41,18 @@ public class SimpleParseTree implements ParseTree {
         }
 
         return converter.apply(result_node);
+    }
+
+    @Override
+    public boolean recursionGuard(int level) {
+        if (level > MAX_RECURSION_LEVEL) {
+            if (!frame_deque.isEmpty()) {
+                System.err.println("Max recursion level of 300 reached inside rule " +
+                        frame_deque.peek().getRule());
+            }
+            return true;
+        }
+        return false;
     }
 
     @Override

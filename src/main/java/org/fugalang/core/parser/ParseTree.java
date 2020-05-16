@@ -3,6 +3,13 @@ package org.fugalang.core.parser;
 public interface ParseTree {
 
     /**
+     * Prevents recursion that are too deep
+     * @param level the current level
+     * @return true if recursion should end
+     */
+    boolean recursionGuard(int level);
+
+    /**
      * Enter a call frame in the parser
      *
      * @param level the recursion level

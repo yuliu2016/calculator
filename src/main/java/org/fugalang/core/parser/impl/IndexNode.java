@@ -87,6 +87,11 @@ class IndexNode implements ParseTreeNode {
     }
 
     @Override
+    public int sizeOfChildren() {
+        return children == null ? 0 : children.size();
+    }
+
+    @Override
     public boolean asBoolean() {
         if (rule != null) {
             throw new ParserException("Cannot be a rule and a boolean");

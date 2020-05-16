@@ -23,12 +23,12 @@ public final class Term extends NodeWrapper {
         return get(0, Pipeline::of);
     }
 
-    public List<Term2> termOpPipelineList() {
+    public List<Term2> termOpPipelines() {
         return getList(1, Term2::of);
     }
 
     public static boolean parse(ParseTree t, int lv) {
-        if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+        if (t.recursionGuard(lv)) return false;
         t.enter(lv, RULE);
         boolean r;
         r = Pipeline.parse(t, lv + 1);
@@ -70,7 +70,7 @@ public final class Term extends NodeWrapper {
         }
 
         public static boolean parse(ParseTree t, int lv) {
-            if (!ParserUtil.recursionGuard(lv, RULE)) return false;
+            if (t.recursionGuard(lv)) return false;
             t.enter(lv, RULE);
             boolean r;
             r = TermOp.parse(t, lv + 1);
