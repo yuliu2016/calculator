@@ -3,7 +3,7 @@ package org.fugalang.core.pgen;
 import org.fugalang.core.parser.*;
 
 /**
- * power: 'atom_expr' ['**' 'factor']
+ * power: 'primary' ['**' 'factor']
  */
 public final class Power extends NodeWrapper {
     public static final ParserRule RULE =
@@ -17,8 +17,8 @@ public final class Power extends NodeWrapper {
         super(RULE, node);
     }
 
-    public AtomExpr atomExpr() {
-        return get(0, AtomExpr::of);
+    public Primary primary() {
+        return get(0, Primary::of);
     }
 
     public Power2 factor() {
@@ -33,7 +33,7 @@ public final class Power extends NodeWrapper {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, RULE);
         boolean r;
-        r = AtomExpr.parse(t, lv + 1);
+        r = Primary.parse(t, lv + 1);
         if (r) Power2.parse(t, lv + 1);
         t.exit(r);
         return r;

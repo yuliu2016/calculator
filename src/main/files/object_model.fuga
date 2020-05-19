@@ -1,18 +1,8 @@
-class = def(classdef) {
-    if sys.has_feature("fast_class") {
-        return fast_class(classdef)
-    }
-    scope = classdef.__scope__()
-    scope.run()
-    for i in scope.locals() {
-        if
-    }
-
-    cls = def(*constructer_args, **constructer_kwargs) {
-        ob = object()
-        ob.__dict__
-    }
-}
+@builtin(alternative=_non_intrinsics.ClassMaker)
+class = def(classfunc) {
+    import _loader
+    return _loader.load("fast_class_maker")
+}()
 
 
 sum_odd_digits = def n {

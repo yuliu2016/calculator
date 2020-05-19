@@ -1,7 +1,7 @@
 # Meta Grammar
 
 rules:       [NEWLINE] single_rule+
-single_rule: NAME ':' or_rule NEWLINE
+single_rule: NAME ':' [NEWLINE '|'] or_rule NEWLINE
 or_rule:     and_rule ([NEWLINE] '|' and_rule)*
 and_rule:    repeat_rule (repeat_rule)*
 repeat_rule: sub_rule ['*' | '+']

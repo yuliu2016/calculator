@@ -5,17 +5,17 @@ import org.fugalang.core.parser.*;
 import java.util.List;
 
 /**
- * atom_expr: 'atom' 'trailer'* ['block_suite']
+ * primary: 'atom' 'trailer'* ['block_suite']
  */
-public final class AtomExpr extends NodeWrapper {
+public final class Primary extends NodeWrapper {
     public static final ParserRule RULE =
-            ParserRule.of("atom_expr", RuleType.Conjunction);
+            ParserRule.of("primary", RuleType.Conjunction);
 
-    public static AtomExpr of(ParseTreeNode node) {
-        return new AtomExpr(node);
+    public static Primary of(ParseTreeNode node) {
+        return new Primary(node);
     }
 
-    private AtomExpr(ParseTreeNode node) {
+    private Primary(ParseTreeNode node) {
         super(RULE, node);
     }
 

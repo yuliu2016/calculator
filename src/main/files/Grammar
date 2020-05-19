@@ -9,7 +9,8 @@ stmt: (simple_stmt | compound_stmt) NEWLINE
 simple_stmt: small_stmt (';' small_stmt)* [';']
 
 # Small Statements
-small_stmt: 'pass'
+small_stmt:
+    | 'pass'
     | 'break'
     | 'continue'
     | del_stmt
@@ -46,7 +47,8 @@ dotted_name: NAME ('.' NAME)*
 
 # Compound statements
 
-compound_stmt: if_stmt
+compound_stmt:
+    | if_stmt
     | while_stmt
     | for_stmt
     | try_stmt
@@ -113,12 +115,21 @@ comp_if: 'if' named_expr [comp_iter]
 comp_iter: comp_for | comp_if
 
 factor: ('+'|'-'|'~') factor | power
-power: atom_expr ['**' factor]
+power: primary ['**' factor]
 
 # Atoms
 
-atom_expr: atom trailer* [block_suite]
-atom: tuple_atom | list_atom | dict_or_set | NAME | NUMBER | STRING | 'None' | 'True' | 'False'
+primary: atom trailer* [block_suite]
+atom:
+    | tuple_atom
+    | list_atom
+    | dict_or_set
+    | NAME
+    | NUMBER
+    | STRING
+    | 'None'
+    | 'True'
+    | 'False'
 
 tuple_atom: '(' [named_expr_list] ')'
 list_atom: '[' [named_expr_list] ']'
@@ -127,14 +138,23 @@ dict_or_set: '{' [dict_maker | set_maker] '}'
 named_expr_star: star_expr | named_expr
 named_expr_list: named_expr_star (',' named_expr_star)* [',']
 
-trailer: '.' NAME | parameters | subscript
+trailer:
+    | '.' NAME
+    | parameters
+    | subscript
+
 subscript: '[' slicelist ']'
 slicelist: slice (',' slice)* [',']
 slice: [expr] slice_expr [slice_expr] | expr
 slice_expr: ':' [expr]
 parameters: '(' [arglist] ')'
 
-target: bitwise_or | star_expr
+target:
+    | NAME
+    | '(' targetlist ')'
+    | '*' target
+    | primary
+
 targetlist: target (',' target)* [',']
 exprlist: expr (',' expr)* [',']
 
@@ -143,4 +163,9 @@ dict_maker: dict_item (',' dict_item)* [',']
 set_maker: expr_or_star (',' expr_or_star)* [',']
 
 arglist: argument (',' argument)*  [',']
-argument: NAME ':=' expr | NAME '=' expr | '**' expr | '*' expr | expr
+argument:
+    | NAME ':=' expr
+    | NAME '=' expr
+    | '**' expr
+    | '*' expr
+    | expr
