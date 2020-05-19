@@ -46,7 +46,7 @@ public class FieldName {
     }
 
     public static String getSmartName(ClassName className, OrRule orRule, TokenConverter converter) {
-        var andList = orRule.andRules();
+        var andList = orRule.orRule2s();
         if (andList.isEmpty()) {
             return getSmartName(className, orRule.andRule(), converter);
         }

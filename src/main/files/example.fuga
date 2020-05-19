@@ -113,3 +113,41 @@ square = def<int> x: x * x
 -5 -> square()
 
 # precedence is lower than power and factor, but higher than addition and multiplication
+
+
+# Outer-scoped mutable names
+
+def x {
+    a = 0
+    def y {
+        a += 1 # this is an error
+
+        # option 1
+        nonlocal a
+        a += 1
+
+        # option 2
+        &a += 1
+
+        # option 3
+        ^a += 4
+        ^^*a = 5 # get two scopes up
+
+        # option 4 - option 3 but require for read access too
+    }
+}
+
+# decorators
+
+@static
+a = def x {
+}
+
+a = def x {
+    print("Hello")
+} -> static
+
+@static
+a = def x {
+    print("Hello")
+}

@@ -9,7 +9,23 @@ stmt: (simple_stmt | compound_stmt) NEWLINE
 simple_stmt: small_stmt (';' small_stmt)* [';']
 
 # Small Statements
-small_stmt: del_stmt | pass_stmt | flow_stmt | import_stmt | assert_stmt | assignment
+small_stmt: 'pass'
+    | 'break'
+    | 'continue'
+    | del_stmt
+    | return_stmt
+    | raise_stmt
+    | nonlocal_stmt
+    | assert_stmt
+    | import_name
+    | import_from
+    | assignment
+
+del_stmt: 'del' targetlist
+return_stmt: 'return' [exprlist_star]
+raise_stmt: 'raise' [expr ['from' expr]]
+nonlocal_stmt: 'nonlocal' NAME (',' NAME)*
+assert_stmt: 'assert' expr [',' expr]
 
 expr_or_star: star_expr | expr
 star_expr: '*' bitwise_or
@@ -19,16 +35,6 @@ assignment: ['/'] exprlist_star [annassign | ('=' exprlist_star)+ | augassign ex
 augassign: '+=' | '-=' | '*=' | '@=' | '/=' | '%=' | '&=' | '|=' | '^=' | '<<=' | '>>=' | '**=' | '//='
 annassign: ':' expr ['=' exprlist_star]
 
-del_stmt: 'del' targetlist
-pass_stmt: 'pass'
-
-flow_stmt: break_stmt | continue_stmt | return_stmt | raise_stmt
-break_stmt: 'break'
-continue_stmt: 'continue'
-return_stmt: 'return' [exprlist_star]
-raise_stmt: 'raise' [expr ['from' expr]]
-
-import_stmt: import_name | import_from
 import_name: 'import' dotted_as_names
 import_from: 'from' import_from_names 'import' ('*' | '(' import_as_names [','] ')' | import_as_names)
 import_from_names: '.'* dotted_name | '.'+
@@ -38,11 +44,14 @@ import_as_names: import_as_name (',' import_as_name)*
 dotted_as_names: dotted_as_name (',' dotted_as_name)*
 dotted_name: NAME ('.' NAME)*
 
-assert_stmt: 'assert' expr [',' expr]
-
 # Compound statements
 
-compound_stmt: if_stmt | while_stmt | for_stmt | try_stmt | with_stmt
+compound_stmt: if_stmt
+    | while_stmt
+    | for_stmt
+    | try_stmt
+    | with_stmt
+
 if_stmt: 'if' named_expr suite elif_stmt* [else_suite]
 elif_stmt: 'elif' named_expr suite
 while_stmt: 'while' named_expr suite [else_suite]

@@ -6,6 +6,7 @@ public class Keyword {
 
     public static final String KW_RETURN = "return";
     public static final String KW_DEF = "def";
+    public static final String KW_NONLOCAL = "nonlocal";
     public static final String KW_IF = "if";
     public static final String KW_ELIF = "elif";
     public static final String KW_ELSE = "else";
@@ -37,7 +38,7 @@ public class Keyword {
 
     public static final List<String> ALL_KEYWORDS = List.of(
             // Functional keywords
-            KW_RETURN, KW_DEF,
+            KW_RETURN, KW_DEF, KW_NONLOCAL,
             // Condition keywords
             KW_IF, KW_ELIF, KW_ELSE,
             // Boolean comparisons

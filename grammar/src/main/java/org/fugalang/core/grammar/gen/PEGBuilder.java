@@ -85,7 +85,7 @@ public class PEGBuilder {
     }
 
     private void addOrRule(ClassName className, ClassBuilder cb, OrRule rule) {
-        if (rule.andRules().isEmpty()) {
+        if (rule.orRule2s().isEmpty()) {
             // only one rule - can propagate fields of this class
             // but need to change the type here
             cb.setRuleType(RuleType.Conjunction);
@@ -263,7 +263,7 @@ public class PEGBuilder {
         // maybe this can just be added to this class
         // but maybe there needs to be a separate class
 
-        if (rule.andRules().isEmpty() && rule.andRule().repeatRules().isEmpty() &&
+        if (rule.orRule2s().isEmpty() && rule.andRule().repeatRules().isEmpty() &&
                 repeatType == RepeatType.Once) {
             // ^fix - single-char repeats
 
