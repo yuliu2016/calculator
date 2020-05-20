@@ -1,26 +1,25 @@
 package org.fugalang.core.grammar.classbuilder;
 
+import org.fugalang.core.grammar.gen.PackageOutput;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ClassSet {
 
-    private final Path path;
-    private final String packageName;
+    private final PackageOutput packageOutput;
 
     private final List<ClassComponents> classes;
 
     // represents the working top-level class
     private ClassComponents currentClass;
 
-    public ClassSet(Path path, String packageName) {
-        this.path = path;
-        this.packageName = packageName;
+    public ClassSet(PackageOutput packageOutput) {
+        this.packageOutput = packageOutput;
         classes = new ArrayList<>();
     }
 
@@ -44,7 +43,7 @@ public class ClassSet {
             throw new IllegalArgumentException("Duplicate class: " + className);
         }
 
-        var rootClassBuilder = new ClassBuilder(packageName,
+        var rootClassBuilder = new ClassBuilder(packageOutput.getPackageName(),
                 className.getType(), className.getRuleName());
 
         currentClass = new ClassComponents(rootClassBuilder);
@@ -83,7 +82,8 @@ public class ClassSet {
             throw new IllegalArgumentException("Duplicate inner class: " + className);
         }
 
-        var builder = new ClassBuilder(packageName, className.getType(), className.getRuleName());
+        var builder = new ClassBuilder(packageOutput.getPackageName(),
+                className.getType(), className.getRuleName());
 
         current.componentClasses.add(builder);
 
@@ -93,13 +93,13 @@ public class ClassSet {
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public void writeToFiles() {
         try {
-            var rootFile = path.toFile();
+            var rootFile = packageOutput.getFilePath().toFile();
 
             if (!rootFile.isDirectory()) {
                 rootFile.mkdirs();
             }
 
-            var fileList = path.toFile().listFiles();
+            var fileList = rootFile.listFiles();
             if (fileList != null) {
                 for (File file : fileList) {
                     file.delete();
@@ -110,7 +110,7 @@ public class ClassSet {
                 var code = aClass.generateClassCode()
                         .replace("\n", System.lineSeparator());
 
-                Files.writeString(Paths.get(path.toString(),
+                Files.writeString(Paths.get(packageOutput.getFilePath().toString(),
                         aClass.getClassName() + ".java"), code);
             }
         } catch (IOException e) {

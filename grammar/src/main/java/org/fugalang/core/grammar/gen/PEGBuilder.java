@@ -5,7 +5,6 @@ import org.fugalang.core.grammar.pgen.*;
 import org.fugalang.core.grammar.util.ParserStringUtil;
 import org.fugalang.core.parser.RuleType;
 
-import java.nio.file.Path;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -24,8 +23,7 @@ public class PEGBuilder {
     public PEGBuilder(
             Rules rules,
             TokenConverter converter,
-            Path path,
-            String packageName,
+            PackageOutput packageOutput,
             String tokenTypeClass
     ) {
         ruleMap = new LinkedHashMap<>();
@@ -34,7 +32,7 @@ public class PEGBuilder {
         }
         this.converter = converter;
 
-        classSet = new ClassSet(path, packageName);
+        classSet = new ClassSet(packageOutput);
 
         this.tokenTypeClass = tokenTypeClass;
 
