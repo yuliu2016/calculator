@@ -7,7 +7,7 @@ import org.fugalang.core.token.TokenType;
 
 import java.util.Optional;
 
-public class ConverterImpl implements TokenConverter {
+public class SimpleConverter implements TokenConverter {
     @Override
     public Optional<ConvertedValue> checkToken(String s) {
 

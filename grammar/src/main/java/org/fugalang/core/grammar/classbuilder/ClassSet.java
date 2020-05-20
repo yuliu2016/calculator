@@ -10,39 +10,13 @@ import java.util.List;
 
 public class ClassSet {
 
-    public static class ClassWithComponents {
-        public final ClassBuilder rootClass;
-        public final List<ClassBuilder> componentClasses;
-
-        public ClassWithComponents(ClassBuilder rootClass) {
-            this.rootClass = rootClass;
-            componentClasses = new ArrayList<>();
-        }
-
-        public String generateClassCode() {
-            return rootClass.generateClassCode(componentClasses);
-        }
-
-        public String getClassName() {
-            return rootClass.getClassName();
-        }
-
-        @Override
-        public String toString() {
-            return "ClassWithComponents{" +
-                    "rootClass=" + rootClass +
-                    ", componentClasses=" + componentClasses +
-                    '}';
-        }
-    }
-
     private final Path path;
     private final String packageName;
 
-    private final List<ClassWithComponents> classes;
+    private final List<ClassComponents> classes;
 
     // represents the working top-level class
-    private ClassWithComponents currentClassWithComp;
+    private ClassComponents currentClass;
 
     public ClassSet(Path path, String packageName) {
         this.path = path;
@@ -50,7 +24,7 @@ public class ClassSet {
         classes = new ArrayList<>();
     }
 
-    public List<ClassWithComponents> getClasses() {
+    public List<ClassComponents> getClasses() {
         return classes;
     }
 
@@ -73,26 +47,26 @@ public class ClassSet {
         var rootClassBuilder = new ClassBuilder(packageName,
                 className.getType(), className.getRuleName());
 
-        currentClassWithComp = new ClassWithComponents(rootClassBuilder);
-        classes.add(currentClassWithComp);
+        currentClass = new ClassComponents(rootClassBuilder);
+        classes.add(currentClass);
 
         return rootClassBuilder;
     }
 
     public void markRootClassDone() {
-        if (currentClassWithComp == null) {
+        if (currentClass == null) {
             throw new IllegalStateException("No root class being worked on");
         }
-        currentClassWithComp = null;
+        currentClass = null;
     }
 
     public ClassBuilder createComponentClass(ClassName className) {
 
-        if (currentClassWithComp == null) {
+        if (currentClass == null) {
             throw new IllegalStateException("No root class to add component to");
         }
 
-        var current = currentClassWithComp;
+        var current = currentClass;
 
         var dupError = false;
         for (var builder : current.componentClasses) {
