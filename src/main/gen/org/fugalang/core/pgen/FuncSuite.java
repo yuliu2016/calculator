@@ -2,7 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.FugaRules;
 
 /**
  * func_suite: ':' 'expr' | 'block_suite'
@@ -10,7 +9,7 @@ import org.fugalang.core.pgen.parser.FugaRules;
 public final class FuncSuite extends NodeWrapper {
 
     public FuncSuite(ParseTreeNode node) {
-        super(FugaRules.FUNC_SUITE, node);
+        super(node);
     }
 
     public FuncSuite1 expr() {
@@ -35,7 +34,7 @@ public final class FuncSuite extends NodeWrapper {
     public static final class FuncSuite1 extends NodeWrapper {
 
         public FuncSuite1(ParseTreeNode node) {
-            super(FugaRules.FUNC_SUITE_1, node);
+            super(node);
         }
 
         public Expr expr() {

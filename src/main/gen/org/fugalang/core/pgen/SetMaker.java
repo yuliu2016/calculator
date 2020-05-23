@@ -2,7 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.FugaRules;
 
 import java.util.List;
 
@@ -12,7 +11,7 @@ import java.util.List;
 public final class SetMaker extends NodeWrapper {
 
     public SetMaker(ParseTreeNode node) {
-        super(FugaRules.SET_MAKER, node);
+        super(node);
     }
 
     public ExprOrStar exprOrStar() {
@@ -33,7 +32,7 @@ public final class SetMaker extends NodeWrapper {
     public static final class SetMaker2 extends NodeWrapper {
 
         public SetMaker2(ParseTreeNode node) {
-            super(FugaRules.SET_MAKER_2, node);
+            super(node);
         }
 
         public ExprOrStar exprOrStar() {

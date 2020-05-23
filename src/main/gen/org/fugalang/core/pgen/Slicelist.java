@@ -2,7 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.FugaRules;
 
 import java.util.List;
 
@@ -12,7 +11,7 @@ import java.util.List;
 public final class Slicelist extends NodeWrapper {
 
     public Slicelist(ParseTreeNode node) {
-        super(FugaRules.SLICELIST, node);
+        super(node);
     }
 
     public Slice slice() {
@@ -33,7 +32,7 @@ public final class Slicelist extends NodeWrapper {
     public static final class Slicelist2 extends NodeWrapper {
 
         public Slicelist2(ParseTreeNode node) {
-            super(FugaRules.SLICELIST_2, node);
+            super(node);
         }
 
         public Slice slice() {

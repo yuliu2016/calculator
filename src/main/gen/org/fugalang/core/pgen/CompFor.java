@@ -2,7 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.FugaRules;
 
 /**
  * comp_for: 'for' 'targetlist' 'in' 'disjunction' ['comp_iter']
@@ -10,7 +9,7 @@ import org.fugalang.core.pgen.parser.FugaRules;
 public final class CompFor extends NodeWrapper {
 
     public CompFor(ParseTreeNode node) {
-        super(FugaRules.COMP_FOR, node);
+        super(node);
     }
 
     public Targetlist targetlist() {

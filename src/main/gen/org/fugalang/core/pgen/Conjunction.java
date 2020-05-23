@@ -2,7 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.FugaRules;
 
 import java.util.List;
 
@@ -12,7 +11,7 @@ import java.util.List;
 public final class Conjunction extends NodeWrapper {
 
     public Conjunction(ParseTreeNode node) {
-        super(FugaRules.CONJUNCTION, node);
+        super(node);
     }
 
     public Inversion inversion() {
@@ -29,7 +28,7 @@ public final class Conjunction extends NodeWrapper {
     public static final class Conjunction2 extends NodeWrapper {
 
         public Conjunction2(ParseTreeNode node) {
-            super(FugaRules.CONJUNCTION_2, node);
+            super(node);
         }
 
         public Inversion inversion() {

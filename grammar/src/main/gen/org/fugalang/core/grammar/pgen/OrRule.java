@@ -1,6 +1,5 @@
 package org.fugalang.core.grammar.pgen;
 
-import org.fugalang.core.grammar.pgen.parser.MetaRules;
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 import org.fugalang.core.token.TokenType;
@@ -13,7 +12,7 @@ import java.util.List;
 public final class OrRule extends NodeWrapper {
 
     public OrRule(ParseTreeNode node) {
-        super(MetaRules.OR_RULE, node);
+        super(node);
     }
 
     public AndRule andRule() {
@@ -30,7 +29,7 @@ public final class OrRule extends NodeWrapper {
     public static final class OrRule2 extends NodeWrapper {
 
         public OrRule2(ParseTreeNode node) {
-            super(MetaRules.OR_RULE_2, node);
+            super(node);
         }
 
         public String newline() {

@@ -14,9 +14,8 @@ public abstract class NodeWrapper {
 
     private Object[] cache;
 
-    public NodeWrapper(ParserRule rule, ParseTreeNode node) {
-        // requires that the node matches the correct rule
-        node.failIfAbsent(rule);
+
+    public NodeWrapper(ParseTreeNode node) {
         this.node = node;
     }
 

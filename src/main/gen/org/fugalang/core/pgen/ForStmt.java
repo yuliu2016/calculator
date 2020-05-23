@@ -2,7 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.FugaRules;
 
 /**
  * for_stmt: 'for' 'targetlist' 'in' 'exprlist' 'suite' ['else_suite']
@@ -10,7 +9,7 @@ import org.fugalang.core.pgen.parser.FugaRules;
 public final class ForStmt extends NodeWrapper {
 
     public ForStmt(ParseTreeNode node) {
-        super(FugaRules.FOR_STMT, node);
+        super(node);
     }
 
     public Targetlist targetlist() {

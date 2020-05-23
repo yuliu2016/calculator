@@ -1,6 +1,5 @@
 package org.fugalang.core.grammar.pgen;
 
-import org.fugalang.core.grammar.pgen.parser.MetaRules;
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 import org.fugalang.core.token.TokenType;
@@ -11,7 +10,7 @@ import org.fugalang.core.token.TokenType;
 public final class SingleRule extends NodeWrapper {
 
     public SingleRule(ParseTreeNode node) {
-        super(MetaRules.SINGLE_RULE, node);
+        super(node);
     }
 
     public String name() {
@@ -40,7 +39,7 @@ public final class SingleRule extends NodeWrapper {
     public static final class SingleRule3 extends NodeWrapper {
 
         public SingleRule3(ParseTreeNode node) {
-            super(MetaRules.SINGLE_RULE_3, node);
+            super(node);
         }
 
         public String newline() {

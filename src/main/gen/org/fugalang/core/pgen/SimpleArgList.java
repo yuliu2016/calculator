@@ -2,7 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.FugaRules;
 
 import java.util.List;
 
@@ -12,7 +11,7 @@ import java.util.List;
 public final class SimpleArgList extends NodeWrapper {
 
     public SimpleArgList(ParseTreeNode node) {
-        super(FugaRules.SIMPLE_ARG_LIST, node);
+        super(node);
     }
 
     public SimpleArg simpleArg() {
@@ -29,7 +28,7 @@ public final class SimpleArgList extends NodeWrapper {
     public static final class SimpleArgList2 extends NodeWrapper {
 
         public SimpleArgList2(ParseTreeNode node) {
-            super(FugaRules.SIMPLE_ARG_LIST_2, node);
+            super(node);
         }
 
         public SimpleArg simpleArg() {

@@ -2,7 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.FugaRules;
 import org.fugalang.core.token.TokenType;
 
 /**
@@ -11,7 +10,7 @@ import org.fugalang.core.token.TokenType;
 public final class Atom extends NodeWrapper {
 
     public Atom(ParseTreeNode node) {
-        super(FugaRules.ATOM, node);
+        super(node);
     }
 
     public TupleAtom tupleAtom() {

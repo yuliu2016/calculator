@@ -2,7 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.FugaRules;
 
 import java.util.List;
 
@@ -12,7 +11,7 @@ import java.util.List;
 public final class ArgsKwargs extends NodeWrapper {
 
     public ArgsKwargs(ParseTreeNode node) {
-        super(FugaRules.ARGS_KWARGS, node);
+        super(node);
     }
 
     public TypedArg typedArg() {
@@ -41,7 +40,7 @@ public final class ArgsKwargs extends NodeWrapper {
     public static final class ArgsKwargs3 extends NodeWrapper {
 
         public ArgsKwargs3(ParseTreeNode node) {
-            super(FugaRules.ARGS_KWARGS_3, node);
+            super(node);
         }
 
         public DefaultArg defaultArg() {
@@ -55,7 +54,7 @@ public final class ArgsKwargs extends NodeWrapper {
     public static final class ArgsKwargs4 extends NodeWrapper {
 
         public ArgsKwargs4(ParseTreeNode node) {
-            super(FugaRules.ARGS_KWARGS_4, node);
+            super(node);
         }
 
         public Kwargs kwargs() {

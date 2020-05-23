@@ -1,11 +1,11 @@
 package org.fugalang.core;
 
 import org.fugalang.core.parser.SyntaxError;
-import org.fugalang.core.parser.impl.SimpleParseTree;
 import org.fugalang.core.parser.impl.LazyParserContext;
 import org.fugalang.core.parser.impl.LexingVisitor;
+import org.fugalang.core.parser.impl.SimpleParseTree;
 import org.fugalang.core.pgen.SingleInput;
-import org.fugalang.core.pgen.parser.Parser;
+import org.fugalang.core.pgen.parser.FugaParser;
 import org.fugalang.core.pprint.ConsoleColor;
 import org.fugalang.core.pprint.ParseTreePPrint;
 import org.fugalang.core.token.SimpleLexer;
@@ -26,7 +26,7 @@ public class ParserRepl {
                 var visitor = LexingVisitor.of(s);
                 var lexer = SimpleLexer.of(visitor);
                 var context = LazyParserContext.of(lexer, visitor, false);
-                var tree = SimpleParseTree.parse(context, Parser::single_input, SingleInput::new);
+                var tree = SimpleParseTree.parse(context, FugaParser::single_input, SingleInput::new);
 
                 System.out.println(ParseTreePPrint.format(tree.getNode(), 2));
             } catch (SyntaxError e) {

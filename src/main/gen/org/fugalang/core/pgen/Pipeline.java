@@ -2,7 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.FugaRules;
 
 import java.util.List;
 
@@ -12,7 +11,7 @@ import java.util.List;
 public final class Pipeline extends NodeWrapper {
 
     public Pipeline(ParseTreeNode node) {
-        super(FugaRules.PIPELINE, node);
+        super(node);
     }
 
     public Factor factor() {
@@ -29,7 +28,7 @@ public final class Pipeline extends NodeWrapper {
     public static final class Pipeline2 extends NodeWrapper {
 
         public Pipeline2(ParseTreeNode node) {
-            super(FugaRules.PIPELINE_2, node);
+            super(node);
         }
 
         public PipeExpr pipeExpr() {

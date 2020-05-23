@@ -2,7 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.FugaRules;
 
 import java.util.List;
 
@@ -12,7 +11,7 @@ import java.util.List;
 public final class ImportFromNames extends NodeWrapper {
 
     public ImportFromNames(ParseTreeNode node) {
-        super(FugaRules.IMPORT_FROM_NAMES, node);
+        super(node);
     }
 
     public ImportFromNames1 importFromNames1() {
@@ -33,7 +32,7 @@ public final class ImportFromNames extends NodeWrapper {
     public static final class ImportFromNames1 extends NodeWrapper {
 
         public ImportFromNames1(ParseTreeNode node) {
-            super(FugaRules.IMPORT_FROM_NAMES_1, node);
+            super(node);
         }
 
         public List<Boolean> isDots() {

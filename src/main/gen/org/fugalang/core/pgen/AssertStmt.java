@@ -2,7 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.FugaRules;
 
 /**
  * assert_stmt: 'assert' 'expr' [',' 'expr']
@@ -10,7 +9,7 @@ import org.fugalang.core.pgen.parser.FugaRules;
 public final class AssertStmt extends NodeWrapper {
 
     public AssertStmt(ParseTreeNode node) {
-        super(FugaRules.ASSERT_STMT, node);
+        super(node);
     }
 
     public Expr expr() {
@@ -31,7 +30,7 @@ public final class AssertStmt extends NodeWrapper {
     public static final class AssertStmt3 extends NodeWrapper {
 
         public AssertStmt3(ParseTreeNode node) {
-            super(FugaRules.ASSERT_STMT_3, node);
+            super(node);
         }
 
         public Expr expr() {

@@ -2,7 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.FugaRules;
 
 /**
  * slice: ['expr'] 'slice_expr' ['slice_expr'] | 'expr'
@@ -10,7 +9,7 @@ import org.fugalang.core.pgen.parser.FugaRules;
 public final class Slice extends NodeWrapper {
 
     public Slice(ParseTreeNode node) {
-        super(FugaRules.SLICE, node);
+        super(node);
     }
 
     public Slice1 slice1() {
@@ -35,7 +34,7 @@ public final class Slice extends NodeWrapper {
     public static final class Slice1 extends NodeWrapper {
 
         public Slice1(ParseTreeNode node) {
-            super(FugaRules.SLICE_1, node);
+            super(node);
         }
 
         public Expr expr() {

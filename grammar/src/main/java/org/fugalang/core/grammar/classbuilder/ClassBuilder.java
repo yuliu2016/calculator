@@ -9,8 +9,7 @@ import java.util.*;
 
 public class ClassBuilder {
     private final PackageOutput packageOutput;
-    private final String className;
-    private final String ruleName;
+    private final ClassName className;
 
     private final List<ClassField> fields = new ArrayList<>();
     private final Map<String, Integer> fieldNameCounter = new HashMap<>();
@@ -21,10 +20,9 @@ public class ClassBuilder {
 
     private RuleType ruleType = null;
 
-    public ClassBuilder(PackageOutput packageOutput, String className, String ruleName) {
+    public ClassBuilder(PackageOutput packageOutput, ClassName className) {
         this.packageOutput = packageOutput;
         this.className = className;
-        this.ruleName = ruleName;
 
         resolvePrelude();
     }
@@ -32,16 +30,14 @@ public class ClassBuilder {
     private void resolvePrelude() {
         addImport("org.fugalang.core.parser.NodeWrapper");
         addImport("org.fugalang.core.parser.ParseTreeNode");
-        addImport(packageOutput.getPackageName() + ".parser."
-                + packageOutput.getLanguage() + "Rules");
     }
 
     public String getClassName() {
-        return className;
+        return className.getType();
     }
 
     public String getRuleName() {
-        return ruleName;
+        return className.getRuleName();
     }
 
     public String generateClassCode() {
@@ -143,10 +139,7 @@ public class ClassBuilder {
         sb.append("    public ")
                 .append(className);
 
-        var rule = ruleName.replace(":", "_").toUpperCase();
-        sb.append("(ParseTreeNode node) {\n" + "        super(")
-                .append(packageOutput.getLanguage()).append("Rules.").append(rule)
-                .append(", node);\n    }\n");
+        sb.append("(ParseTreeNode node) {\n" + "        super(node);\n    }\n");
 
         for (int i = 0; i < fields.size(); i++) {
             ClassField field = fields.get(i);
@@ -172,7 +165,7 @@ public class ClassBuilder {
     }
 
     public void generateRuleDeclaration(StringBuilder sb) {
-        var small_name = ruleName.replace(":", "_");
+        var small_name = getRuleName().replace(":", "_");
         var cap_name = small_name.toUpperCase();
         sb.append("    public static final ParserRule ")
                 .append(cap_name)
@@ -182,12 +175,12 @@ public class ClassBuilder {
                     case Disjunction -> "or_rule";
                 })
                 .append("(\"")
-                .append(ruleName)
+                .append(getRuleName())
                 .append("\");\n");
     }
 
     public void generateParsingFunction(StringBuilder sb) {
-        var small_name = ruleName.replace(":", "_");
+        var small_name = getRuleName().replace(":", "_");
         var cap_name = small_name.toUpperCase();
         sb.append("\n");
 

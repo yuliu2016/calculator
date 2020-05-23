@@ -2,7 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.FugaRules;
 
 /**
  * inversion: 'not' 'inversion' | 'comparison'
@@ -10,7 +9,7 @@ import org.fugalang.core.pgen.parser.FugaRules;
 public final class Inversion extends NodeWrapper {
 
     public Inversion(ParseTreeNode node) {
-        super(FugaRules.INVERSION, node);
+        super(node);
     }
 
     public Inversion1 notInversion() {
@@ -35,7 +34,7 @@ public final class Inversion extends NodeWrapper {
     public static final class Inversion1 extends NodeWrapper {
 
         public Inversion1(ParseTreeNode node) {
-            super(FugaRules.INVERSION_1, node);
+            super(node);
         }
 
         public Inversion inversion() {

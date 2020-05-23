@@ -2,7 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.FugaRules;
 import org.fugalang.core.token.TokenType;
 
 /**
@@ -11,7 +10,7 @@ import org.fugalang.core.token.TokenType;
 public final class Trailer extends NodeWrapper {
 
     public Trailer(ParseTreeNode node) {
-        super(FugaRules.TRAILER, node);
+        super(node);
     }
 
     public Trailer1 name() {
@@ -44,7 +43,7 @@ public final class Trailer extends NodeWrapper {
     public static final class Trailer1 extends NodeWrapper {
 
         public Trailer1(ParseTreeNode node) {
-            super(FugaRules.TRAILER_1, node);
+            super(node);
         }
 
         public String name() {

@@ -4,7 +4,7 @@ import org.fugalang.core.parser.impl.LazyParserContext;
 import org.fugalang.core.parser.impl.LexingVisitor;
 import org.fugalang.core.parser.impl.SimpleParseTree;
 import org.fugalang.core.pgen.SingleInput;
-import org.fugalang.core.pgen.parser.Parser;
+import org.fugalang.core.pgen.parser.FugaParser;
 import org.fugalang.core.token.SimpleLexer;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -23,6 +23,6 @@ public class ParserTests {
         var visitor = LexingVisitor.of(s);
         var lexer = SimpleLexer.of(visitor);
         var context = LazyParserContext.of(lexer, visitor, false);
-        SimpleParseTree.parse(context, Parser::single_input, SingleInput::new);
+        SimpleParseTree.parse(context, FugaParser::single_input, SingleInput::new);
     }
 }

@@ -2,7 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.FugaRules;
 
 /**
  * import_from: 'from' 'import_from_names' 'import' ('*' | '(' 'import_as_names' [','] ')' | 'import_as_names')
@@ -10,7 +9,7 @@ import org.fugalang.core.pgen.parser.FugaRules;
 public final class ImportFrom extends NodeWrapper {
 
     public ImportFrom(ParseTreeNode node) {
-        super(FugaRules.IMPORT_FROM, node);
+        super(node);
     }
 
     public ImportFromNames importFromNames() {
@@ -27,7 +26,7 @@ public final class ImportFrom extends NodeWrapper {
     public static final class ImportFrom4 extends NodeWrapper {
 
         public ImportFrom4(ParseTreeNode node) {
-            super(FugaRules.IMPORT_FROM_4, node);
+            super(node);
         }
 
         public boolean isTimes() {
@@ -57,7 +56,7 @@ public final class ImportFrom extends NodeWrapper {
     public static final class ImportFrom42 extends NodeWrapper {
 
         public ImportFrom42(ParseTreeNode node) {
-            super(FugaRules.IMPORT_FROM_4_2, node);
+            super(node);
         }
 
         public ImportAsNames importAsNames() {

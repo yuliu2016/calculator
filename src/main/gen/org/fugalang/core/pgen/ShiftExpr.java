@@ -2,7 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.FugaRules;
 
 import java.util.List;
 
@@ -12,7 +11,7 @@ import java.util.List;
 public final class ShiftExpr extends NodeWrapper {
 
     public ShiftExpr(ParseTreeNode node) {
-        super(FugaRules.SHIFT_EXPR, node);
+        super(node);
     }
 
     public Sum sum() {
@@ -29,7 +28,7 @@ public final class ShiftExpr extends NodeWrapper {
     public static final class ShiftExpr2 extends NodeWrapper {
 
         public ShiftExpr2(ParseTreeNode node) {
-            super(FugaRules.SHIFT_EXPR_2, node);
+            super(node);
         }
 
         public ShiftOp shiftOp() {

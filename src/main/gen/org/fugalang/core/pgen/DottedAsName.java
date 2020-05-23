@@ -2,7 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.FugaRules;
 import org.fugalang.core.token.TokenType;
 
 /**
@@ -11,7 +10,7 @@ import org.fugalang.core.token.TokenType;
 public final class DottedAsName extends NodeWrapper {
 
     public DottedAsName(ParseTreeNode node) {
-        super(FugaRules.DOTTED_AS_NAME, node);
+        super(node);
     }
 
     public DottedName dottedName() {
@@ -32,7 +31,7 @@ public final class DottedAsName extends NodeWrapper {
     public static final class DottedAsName2 extends NodeWrapper {
 
         public DottedAsName2(ParseTreeNode node) {
-            super(FugaRules.DOTTED_AS_NAME_2, node);
+            super(node);
         }
 
         public String name() {

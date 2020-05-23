@@ -44,24 +44,10 @@ class IndexNode implements ParseTreeNode {
     }
 
     @Override
-    public void failIfAbsent() {
+    public void failIfAbsent(ElementType type) {
         if (!isPresent) {
             throw new ParserException("This node does not contain a value");
         }
-    }
-
-    @Override
-    public void failIfAbsent(ParserRule rule) {
-        failIfAbsent();
-        if (this.rule != rule) {
-            throw new ParserException("Expecting rule " + rule +
-                    ", but the rule of this node is " + this.rule);
-        }
-    }
-
-    @Override
-    public void failIfAbsent(ElementType type) {
-        failIfAbsent();
         if (element.getType() != type) {
             throw new ParserException("Expecting type " + type +
                     ", but the type of this node is " + element.getType());

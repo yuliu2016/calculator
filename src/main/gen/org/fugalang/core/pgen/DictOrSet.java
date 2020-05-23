@@ -2,7 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.FugaRules;
 
 /**
  * dict_or_set: '{' ['dict_maker' | 'set_maker'] '}'
@@ -10,7 +9,7 @@ import org.fugalang.core.pgen.parser.FugaRules;
 public final class DictOrSet extends NodeWrapper {
 
     public DictOrSet(ParseTreeNode node) {
-        super(FugaRules.DICT_OR_SET, node);
+        super(node);
     }
 
     public DictOrSet2 dictMakerOrSetMaker() {
@@ -27,7 +26,7 @@ public final class DictOrSet extends NodeWrapper {
     public static final class DictOrSet2 extends NodeWrapper {
 
         public DictOrSet2(ParseTreeNode node) {
-            super(FugaRules.DICT_OR_SET_2, node);
+            super(node);
         }
 
         public DictMaker dictMaker() {

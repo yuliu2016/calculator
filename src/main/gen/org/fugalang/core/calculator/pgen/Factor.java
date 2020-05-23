@@ -1,6 +1,5 @@
 package org.fugalang.core.calculator.pgen;
 
-import org.fugalang.core.calculator.pgen.parser.CalculatorRules;
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
@@ -10,7 +9,7 @@ import org.fugalang.core.parser.ParseTreeNode;
 public final class Factor extends NodeWrapper {
 
     public Factor(ParseTreeNode node) {
-        super(CalculatorRules.FACTOR, node);
+        super(node);
     }
 
     public Factor1 factor1() {
@@ -35,7 +34,7 @@ public final class Factor extends NodeWrapper {
     public static final class Factor1 extends NodeWrapper {
 
         public Factor1(ParseTreeNode node) {
-            super(CalculatorRules.FACTOR_1, node);
+            super(node);
         }
 
         public Factor11 factor11() {
@@ -53,7 +52,7 @@ public final class Factor extends NodeWrapper {
     public static final class Factor11 extends NodeWrapper {
 
         public Factor11(ParseTreeNode node) {
-            super(CalculatorRules.FACTOR_1_1, node);
+            super(node);
         }
 
         public boolean isPlus() {

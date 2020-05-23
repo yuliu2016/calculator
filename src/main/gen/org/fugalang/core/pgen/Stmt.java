@@ -2,7 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.FugaRules;
 import org.fugalang.core.token.TokenType;
 
 /**
@@ -11,7 +10,7 @@ import org.fugalang.core.token.TokenType;
 public final class Stmt extends NodeWrapper {
 
     public Stmt(ParseTreeNode node) {
-        super(FugaRules.STMT, node);
+        super(node);
     }
 
     public Stmt1 simpleStmtOrCompoundStmt() {
@@ -28,7 +27,7 @@ public final class Stmt extends NodeWrapper {
     public static final class Stmt1 extends NodeWrapper {
 
         public Stmt1(ParseTreeNode node) {
-            super(FugaRules.STMT_1, node);
+            super(node);
         }
 
         public SimpleStmt simpleStmt() {

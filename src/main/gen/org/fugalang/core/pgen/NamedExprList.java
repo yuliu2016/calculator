@@ -2,7 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.FugaRules;
 
 import java.util.List;
 
@@ -12,7 +11,7 @@ import java.util.List;
 public final class NamedExprList extends NodeWrapper {
 
     public NamedExprList(ParseTreeNode node) {
-        super(FugaRules.NAMED_EXPR_LIST, node);
+        super(node);
     }
 
     public NamedExprStar namedExprStar() {
@@ -33,7 +32,7 @@ public final class NamedExprList extends NodeWrapper {
     public static final class NamedExprList2 extends NodeWrapper {
 
         public NamedExprList2(ParseTreeNode node) {
-            super(FugaRules.NAMED_EXPR_LIST_2, node);
+            super(node);
         }
 
         public NamedExprStar namedExprStar() {

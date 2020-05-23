@@ -2,7 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.FugaRules;
 
 /**
  * raise_stmt: 'raise' ['expr' ['from' 'expr']]
@@ -10,7 +9,7 @@ import org.fugalang.core.pgen.parser.FugaRules;
 public final class RaiseStmt extends NodeWrapper {
 
     public RaiseStmt(ParseTreeNode node) {
-        super(FugaRules.RAISE_STMT, node);
+        super(node);
     }
 
     public RaiseStmt2 raiseStmt2() {
@@ -27,7 +26,7 @@ public final class RaiseStmt extends NodeWrapper {
     public static final class RaiseStmt2 extends NodeWrapper {
 
         public RaiseStmt2(ParseTreeNode node) {
-            super(FugaRules.RAISE_STMT_2, node);
+            super(node);
         }
 
         public Expr expr() {
@@ -49,7 +48,7 @@ public final class RaiseStmt extends NodeWrapper {
     public static final class RaiseStmt22 extends NodeWrapper {
 
         public RaiseStmt22(ParseTreeNode node) {
-            super(FugaRules.RAISE_STMT_2_2, node);
+            super(node);
         }
 
         public Expr expr() {

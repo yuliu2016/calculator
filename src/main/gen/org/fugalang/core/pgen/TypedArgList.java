@@ -2,7 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.FugaRules;
 
 /**
  * typed_arg_list: 'kwargs' | 'args_kwargs' | 'full_arg_list'
@@ -10,7 +9,7 @@ import org.fugalang.core.pgen.parser.FugaRules;
 public final class TypedArgList extends NodeWrapper {
 
     public TypedArgList(ParseTreeNode node) {
-        super(FugaRules.TYPED_ARG_LIST, node);
+        super(node);
     }
 
     public Kwargs kwargs() {

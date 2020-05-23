@@ -1,6 +1,5 @@
 package org.fugalang.core.grammar.pgen;
 
-import org.fugalang.core.grammar.pgen.parser.MetaRules;
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
@@ -10,7 +9,7 @@ import org.fugalang.core.parser.ParseTreeNode;
 public final class RepeatRule extends NodeWrapper {
 
     public RepeatRule(ParseTreeNode node) {
-        super(MetaRules.REPEAT_RULE, node);
+        super(node);
     }
 
     public SubRule subRule() {
@@ -31,7 +30,7 @@ public final class RepeatRule extends NodeWrapper {
     public static final class RepeatRule2 extends NodeWrapper {
 
         public RepeatRule2(ParseTreeNode node) {
-            super(MetaRules.REPEAT_RULE_2, node);
+            super(node);
         }
 
         public boolean isTimes() {

@@ -2,7 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.FugaRules;
 import org.fugalang.core.token.TokenType;
 
 import java.util.List;
@@ -13,7 +12,7 @@ import java.util.List;
 public final class BlockSuite extends NodeWrapper {
 
     public BlockSuite(ParseTreeNode node) {
-        super(FugaRules.BLOCK_SUITE, node);
+        super(node);
     }
 
     public BlockSuite1 simpleStmt() {
@@ -38,7 +37,7 @@ public final class BlockSuite extends NodeWrapper {
     public static final class BlockSuite1 extends NodeWrapper {
 
         public BlockSuite1(ParseTreeNode node) {
-            super(FugaRules.BLOCK_SUITE_1, node);
+            super(node);
         }
 
         public SimpleStmt simpleStmt() {
@@ -52,7 +51,7 @@ public final class BlockSuite extends NodeWrapper {
     public static final class BlockSuite2 extends NodeWrapper {
 
         public BlockSuite2(ParseTreeNode node) {
-            super(FugaRules.BLOCK_SUITE_2, node);
+            super(node);
         }
 
         public String newline() {

@@ -2,7 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.FugaRules;
 
 /**
  * elif_stmt: 'elif' 'named_expr' 'suite'
@@ -10,7 +9,7 @@ import org.fugalang.core.pgen.parser.FugaRules;
 public final class ElifStmt extends NodeWrapper {
 
     public ElifStmt(ParseTreeNode node) {
-        super(FugaRules.ELIF_STMT, node);
+        super(node);
     }
 
     public NamedExpr namedExpr() {

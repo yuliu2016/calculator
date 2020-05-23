@@ -44,8 +44,7 @@ public class ClassSet {
             throw new IllegalArgumentException("Duplicate class: " + className);
         }
 
-        var rootClassBuilder = new ClassBuilder(packageOutput,
-                className.getType(), className.getRuleName());
+        var rootClassBuilder = new ClassBuilder(packageOutput, className);
 
         currentClass = new NamedClass(rootClassBuilder);
         classes.add(currentClass);
@@ -83,8 +82,7 @@ public class ClassSet {
             throw new IllegalArgumentException("Duplicate inner class: " + className);
         }
 
-        var builder = new ClassBuilder(packageOutput,
-                className.getType(), className.getRuleName());
+        var builder = new ClassBuilder(packageOutput, className);
 
         current.components.add(builder);
 

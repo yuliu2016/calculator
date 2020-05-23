@@ -2,7 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.FugaRules;
 
 import java.util.List;
 
@@ -12,7 +11,7 @@ import java.util.List;
 public final class BitwiseAnd extends NodeWrapper {
 
     public BitwiseAnd(ParseTreeNode node) {
-        super(FugaRules.BITWISE_AND, node);
+        super(node);
     }
 
     public ShiftExpr shiftExpr() {
@@ -29,7 +28,7 @@ public final class BitwiseAnd extends NodeWrapper {
     public static final class BitwiseAnd2 extends NodeWrapper {
 
         public BitwiseAnd2(ParseTreeNode node) {
-            super(FugaRules.BITWISE_AND_2, node);
+            super(node);
         }
 
         public ShiftExpr shiftExpr() {

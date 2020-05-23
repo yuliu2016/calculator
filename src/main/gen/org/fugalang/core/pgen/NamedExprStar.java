@@ -2,7 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.FugaRules;
 
 /**
  * named_expr_star: 'star_expr' | 'named_expr'
@@ -10,7 +9,7 @@ import org.fugalang.core.pgen.parser.FugaRules;
 public final class NamedExprStar extends NodeWrapper {
 
     public NamedExprStar(ParseTreeNode node) {
-        super(FugaRules.NAMED_EXPR_STAR, node);
+        super(node);
     }
 
     public StarExpr starExpr() {

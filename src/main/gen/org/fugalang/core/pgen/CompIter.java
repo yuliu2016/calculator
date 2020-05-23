@@ -2,7 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.FugaRules;
 
 /**
  * comp_iter: 'comp_for' | 'comp_if'
@@ -10,7 +9,7 @@ import org.fugalang.core.pgen.parser.FugaRules;
 public final class CompIter extends NodeWrapper {
 
     public CompIter(ParseTreeNode node) {
-        super(FugaRules.COMP_ITER, node);
+        super(node);
     }
 
     public CompFor compFor() {

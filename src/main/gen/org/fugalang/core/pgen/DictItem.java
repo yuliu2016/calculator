@@ -2,7 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.FugaRules;
 
 /**
  * dict_item: 'expr' ':' 'expr' | '**' 'bitwise_or'
@@ -10,7 +9,7 @@ import org.fugalang.core.pgen.parser.FugaRules;
 public final class DictItem extends NodeWrapper {
 
     public DictItem(ParseTreeNode node) {
-        super(FugaRules.DICT_ITEM, node);
+        super(node);
     }
 
     public DictItem1 exprExpr() {
@@ -35,7 +34,7 @@ public final class DictItem extends NodeWrapper {
     public static final class DictItem1 extends NodeWrapper {
 
         public DictItem1(ParseTreeNode node) {
-            super(FugaRules.DICT_ITEM_1, node);
+            super(node);
         }
 
         public Expr expr() {
@@ -53,7 +52,7 @@ public final class DictItem extends NodeWrapper {
     public static final class DictItem2 extends NodeWrapper {
 
         public DictItem2(ParseTreeNode node) {
-            super(FugaRules.DICT_ITEM_2, node);
+            super(node);
         }
 
         public BitwiseOr bitwiseOr() {

@@ -2,7 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.FugaRules;
 
 import java.util.List;
 
@@ -12,7 +11,7 @@ import java.util.List;
 public final class Assignment extends NodeWrapper {
 
     public Assignment(ParseTreeNode node) {
-        super(FugaRules.ASSIGNMENT, node);
+        super(node);
     }
 
     public boolean isDiv() {
@@ -37,7 +36,7 @@ public final class Assignment extends NodeWrapper {
     public static final class Assignment3 extends NodeWrapper {
 
         public Assignment3(ParseTreeNode node) {
-            super(FugaRules.ASSIGNMENT_3, node);
+            super(node);
         }
 
         public Annassign annassign() {
@@ -67,7 +66,7 @@ public final class Assignment extends NodeWrapper {
     public static final class Assignment32 extends NodeWrapper {
 
         public Assignment32(ParseTreeNode node) {
-            super(FugaRules.ASSIGNMENT_3_2, node);
+            super(node);
         }
 
         public ExprlistStar exprlistStar() {
@@ -81,7 +80,7 @@ public final class Assignment extends NodeWrapper {
     public static final class Assignment33 extends NodeWrapper {
 
         public Assignment33(ParseTreeNode node) {
-            super(FugaRules.ASSIGNMENT_3_3, node);
+            super(node);
         }
 
         public Augassign augassign() {

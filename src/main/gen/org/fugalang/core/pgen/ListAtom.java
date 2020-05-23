@@ -2,7 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.FugaRules;
 
 /**
  * list_atom: '[' ['named_expr_list'] ']'
@@ -10,7 +9,7 @@ import org.fugalang.core.pgen.parser.FugaRules;
 public final class ListAtom extends NodeWrapper {
 
     public ListAtom(ParseTreeNode node) {
-        super(FugaRules.LIST_ATOM, node);
+        super(node);
     }
 
     public NamedExprList namedExprList() {

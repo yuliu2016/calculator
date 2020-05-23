@@ -2,7 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.FugaRules;
 
 /**
  * comp_op: '<' | '>' | '==' | '>=' | '<=' | '!=' | 'in' | 'not' 'in' | 'is' | 'is' 'not'
@@ -10,7 +9,7 @@ import org.fugalang.core.pgen.parser.FugaRules;
 public final class CompOp extends NodeWrapper {
 
     public CompOp(ParseTreeNode node) {
-        super(FugaRules.COMP_OP, node);
+        super(node);
     }
 
     public boolean isLess() {
@@ -67,7 +66,7 @@ public final class CompOp extends NodeWrapper {
     public static final class CompOp8 extends NodeWrapper {
 
         public CompOp8(ParseTreeNode node) {
-            super(FugaRules.COMP_OP_8, node);
+            super(node);
         }
     }
 
@@ -77,7 +76,7 @@ public final class CompOp extends NodeWrapper {
     public static final class CompOp10 extends NodeWrapper {
 
         public CompOp10(ParseTreeNode node) {
-            super(FugaRules.COMP_OP_10, node);
+            super(node);
         }
     }
 }

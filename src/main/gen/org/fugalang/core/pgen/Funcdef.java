@@ -2,7 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.FugaRules;
 
 /**
  * funcdef: 'def' ['func_type_hint'] ['func_args'] 'func_suite'
@@ -10,7 +9,7 @@ import org.fugalang.core.pgen.parser.FugaRules;
 public final class Funcdef extends NodeWrapper {
 
     public Funcdef(ParseTreeNode node) {
-        super(FugaRules.FUNCDEF, node);
+        super(node);
     }
 
     public FuncTypeHint funcTypeHint() {

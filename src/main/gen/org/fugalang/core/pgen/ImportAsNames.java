@@ -2,7 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.FugaRules;
 
 import java.util.List;
 
@@ -12,7 +11,7 @@ import java.util.List;
 public final class ImportAsNames extends NodeWrapper {
 
     public ImportAsNames(ParseTreeNode node) {
-        super(FugaRules.IMPORT_AS_NAMES, node);
+        super(node);
     }
 
     public ImportAsName importAsName() {
@@ -29,7 +28,7 @@ public final class ImportAsNames extends NodeWrapper {
     public static final class ImportAsNames2 extends NodeWrapper {
 
         public ImportAsNames2(ParseTreeNode node) {
-            super(FugaRules.IMPORT_AS_NAMES_2, node);
+            super(node);
         }
 
         public ImportAsName importAsName() {

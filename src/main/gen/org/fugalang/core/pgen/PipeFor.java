@@ -2,7 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.FugaRules;
 
 /**
  * pipe_for: ['comp_for'] 'for' 'targetlist' ['if' 'named_expr'] ['parameters' | 'block_suite']
@@ -10,7 +9,7 @@ import org.fugalang.core.pgen.parser.FugaRules;
 public final class PipeFor extends NodeWrapper {
 
     public PipeFor(ParseTreeNode node) {
-        super(FugaRules.PIPE_FOR, node);
+        super(node);
     }
 
     public CompFor compFor() {
@@ -47,7 +46,7 @@ public final class PipeFor extends NodeWrapper {
     public static final class PipeFor4 extends NodeWrapper {
 
         public PipeFor4(ParseTreeNode node) {
-            super(FugaRules.PIPE_FOR_4, node);
+            super(node);
         }
 
         public NamedExpr namedExpr() {
@@ -61,7 +60,7 @@ public final class PipeFor extends NodeWrapper {
     public static final class PipeFor5 extends NodeWrapper {
 
         public PipeFor5(ParseTreeNode node) {
-            super(FugaRules.PIPE_FOR_5, node);
+            super(node);
         }
 
         public Parameters parameters() {

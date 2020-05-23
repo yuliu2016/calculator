@@ -2,7 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.FugaRules;
 
 /**
  * del_stmt: 'del' 'targetlist'
@@ -10,7 +9,7 @@ import org.fugalang.core.pgen.parser.FugaRules;
 public final class DelStmt extends NodeWrapper {
 
     public DelStmt(ParseTreeNode node) {
-        super(FugaRules.DEL_STMT, node);
+        super(node);
     }
 
     public Targetlist targetlist() {

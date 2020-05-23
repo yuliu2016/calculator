@@ -2,7 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.FugaRules;
 
 import java.util.List;
 
@@ -12,7 +11,7 @@ import java.util.List;
 public final class DictMaker extends NodeWrapper {
 
     public DictMaker(ParseTreeNode node) {
-        super(FugaRules.DICT_MAKER, node);
+        super(node);
     }
 
     public DictItem dictItem() {
@@ -33,7 +32,7 @@ public final class DictMaker extends NodeWrapper {
     public static final class DictMaker2 extends NodeWrapper {
 
         public DictMaker2(ParseTreeNode node) {
-            super(FugaRules.DICT_MAKER_2, node);
+            super(node);
         }
 
         public DictItem dictItem() {

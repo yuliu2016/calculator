@@ -1,6 +1,5 @@
 package org.fugalang.core.calculator.pgen;
 
-import org.fugalang.core.calculator.pgen.parser.CalculatorRules;
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 import org.fugalang.core.token.TokenType;
@@ -11,7 +10,7 @@ import org.fugalang.core.token.TokenType;
 public final class Atom extends NodeWrapper {
 
     public Atom(ParseTreeNode node) {
-        super(CalculatorRules.ATOM, node);
+        super(node);
     }
 
     public Atom1 sum() {
@@ -36,7 +35,7 @@ public final class Atom extends NodeWrapper {
     public static final class Atom1 extends NodeWrapper {
 
         public Atom1(ParseTreeNode node) {
-            super(CalculatorRules.ATOM_1, node);
+            super(node);
         }
 
         public Sum sum() {

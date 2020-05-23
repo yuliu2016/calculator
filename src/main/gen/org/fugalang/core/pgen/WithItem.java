@@ -2,7 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.FugaRules;
 import org.fugalang.core.token.TokenType;
 
 /**
@@ -11,7 +10,7 @@ import org.fugalang.core.token.TokenType;
 public final class WithItem extends NodeWrapper {
 
     public WithItem(ParseTreeNode node) {
-        super(FugaRules.WITH_ITEM, node);
+        super(node);
     }
 
     public Expr expr() {
@@ -32,7 +31,7 @@ public final class WithItem extends NodeWrapper {
     public static final class WithItem2 extends NodeWrapper {
 
         public WithItem2(ParseTreeNode node) {
-            super(FugaRules.WITH_ITEM_2, node);
+            super(node);
         }
 
         public String name() {

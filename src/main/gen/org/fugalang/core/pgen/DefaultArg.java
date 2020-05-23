@@ -2,7 +2,6 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.FugaRules;
 
 /**
  * default_arg: 'typed_arg' ['=' 'expr']
@@ -10,7 +9,7 @@ import org.fugalang.core.pgen.parser.FugaRules;
 public final class DefaultArg extends NodeWrapper {
 
     public DefaultArg(ParseTreeNode node) {
-        super(FugaRules.DEFAULT_ARG, node);
+        super(node);
     }
 
     public TypedArg typedArg() {
@@ -31,7 +30,7 @@ public final class DefaultArg extends NodeWrapper {
     public static final class DefaultArg2 extends NodeWrapper {
 
         public DefaultArg2(ParseTreeNode node) {
-            super(FugaRules.DEFAULT_ARG_2, node);
+            super(node);
         }
 
         public Expr expr() {
