@@ -6,7 +6,7 @@ import org.fugalang.core.parser.ParseTreeNode;
 import java.util.List;
 
 /**
- * import_from_names: '.'* 'dotted_name' | '.'+
+ * import_from_names: 'dotted_name' | '.'+ ['dotted_name']
  */
 public final class ImportFromNames extends NodeWrapper {
 
@@ -14,24 +14,28 @@ public final class ImportFromNames extends NodeWrapper {
         super(node);
     }
 
-    public ImportFromNames1 importFromNames1() {
-        return get(0, ImportFromNames1.class);
+    public DottedName dottedName() {
+        return get(0, DottedName.class);
     }
 
-    public boolean hasImportFromNames1() {
+    public boolean hasDottedName() {
         return has(0);
     }
 
-    public List<Boolean> isDots() {
-        return getList(1, ParseTreeNode::asBoolean);
+    public ImportFromNames2 importFromNames2() {
+        return get(1, ImportFromNames2.class);
+    }
+
+    public boolean hasImportFromNames2() {
+        return has(1);
     }
 
     /**
-     * '.'* 'dotted_name'
+     * '.'+ ['dotted_name']
      */
-    public static final class ImportFromNames1 extends NodeWrapper {
+    public static final class ImportFromNames2 extends NodeWrapper {
 
-        public ImportFromNames1(ParseTreeNode node) {
+        public ImportFromNames2(ParseTreeNode node) {
             super(node);
         }
 
@@ -41,6 +45,10 @@ public final class ImportFromNames extends NodeWrapper {
 
         public DottedName dottedName() {
             return get(1, DottedName.class);
+        }
+
+        public boolean hasDottedName() {
+            return has(1);
         }
     }
 }

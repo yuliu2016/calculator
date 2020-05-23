@@ -111,7 +111,8 @@ public class ClassField {
 
     private String getLoopExpr() {
         var rule_name = className.getRuleName().replace(":", "_");
-        return rule_name + "_loop(t, lv)";
+        var rule_suffix = resultSource.getType() == SourceType.Class ? "_loop(t, lv)" : "_loop(t)";
+        return rule_name + rule_suffix;
     }
 
     private String getOptionalStmt(String resultExpr, RuleType ruleType, boolean isFirst) {
@@ -150,7 +151,8 @@ public class ClassField {
     private String getRequiredLoopParser() {
         var resultExpr = getResultExpr();
         var rule_name = className.getRuleName().replace(":", "_");
-        return "\n    private static boolean " + rule_name + "_loop(ParseTree t, int lv) {\n" +
+        var maybeLevel = resultSource.getType() == SourceType.Class ? ", int lv" : "";
+        return "\n    private static boolean " + rule_name + "_loop(ParseTree t" + maybeLevel + ") {\n" +
                 "        t.enterCollection();\n" +
                 "        var r = " + resultExpr + ";\n" +
                 "        if (r) while (true) {\n" +
@@ -165,7 +167,8 @@ public class ClassField {
     private String getOptionalLoopParser() {
         var resultExpr = getResultExpr();
         var rule_name = className.getRuleName().replace(":", "_");
-        return "\n    private static void " + rule_name + "_loop(ParseTree t, int lv) {\n" +
+        var maybeLevel = resultSource.getType() == SourceType.Class ? ", int lv" : "";
+        return "\n    private static void " + rule_name + "_loop(ParseTree t" + maybeLevel + ") {\n" +
                 "        t.enterCollection();\n" +
                 "        while (true) {\n" +
                 "            var p = t.position();\n" +

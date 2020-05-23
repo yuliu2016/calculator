@@ -78,13 +78,13 @@ public class FugaParser {
         t.enter(lv, EVAL_INPUT);
         boolean r;
         r = exprlist(t, lv + 1);
-        if (r) eval_input_newline_loop(t, lv);
+        if (r) eval_input_newline_loop(t);
         r = r && t.consume(TokenType.ENDMARKER);
         t.exit(r);
         return r;
     }
 
-    private static void eval_input_newline_loop(ParseTree t, int lv) {
+    private static void eval_input_newline_loop(ParseTree t) {
         t.enterCollection();
         while (true) {
             var p = t.position();
@@ -156,23 +156,35 @@ public class FugaParser {
     }
 
     /**
-     * small_stmt: 'pass' | 'break' | 'continue' | 'del_stmt' | 'return_stmt' | 'raise_stmt' | 'nonlocal_stmt' | 'assert_stmt' | 'import_name' | 'import_from' | 'assignment'
+     * small_stmt: 'flow_stmt' | 'del_stmt' | 'nonlocal_stmt' | 'assert_stmt' | 'import_name' | 'import_from' | 'assignment'
      */
     public static boolean small_stmt(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, SMALL_STMT);
         boolean r;
-        r = t.consume("pass");
-        r = r || t.consume("break");
-        r = r || t.consume("continue");
+        r = flow_stmt(t, lv + 1);
         r = r || del_stmt(t, lv + 1);
-        r = r || return_stmt(t, lv + 1);
-        r = r || raise_stmt(t, lv + 1);
         r = r || nonlocal_stmt(t, lv + 1);
         r = r || assert_stmt(t, lv + 1);
         r = r || import_name(t, lv + 1);
         r = r || import_from(t, lv + 1);
         r = r || assignment(t, lv + 1);
+        t.exit(r);
+        return r;
+    }
+
+    /**
+     * flow_stmt: 'pass' | 'break' | 'continue' | 'return_stmt' | 'raise_stmt'
+     */
+    public static boolean flow_stmt(ParseTree t, int lv) {
+        if (t.recursionGuard(lv)) return false;
+        t.enter(lv, FLOW_STMT);
+        boolean r;
+        r = t.consume("pass");
+        r = r || t.consume("break");
+        r = r || t.consume("continue");
+        r = r || return_stmt(t, lv + 1);
+        r = r || raise_stmt(t, lv + 1);
         t.exit(r);
         return r;
     }
@@ -541,19 +553,32 @@ public class FugaParser {
     }
 
     /**
-     * import_from_names: '.'* 'dotted_name' | '.'+
+     * import_from_names: 'dotted_name' | '.'+ ['dotted_name']
      */
     public static boolean import_from_names(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, IMPORT_FROM_NAMES);
         boolean r;
-        r = import_from_names_1(t, lv + 1);
-        r = r || import_from_names_dot_loop(t, lv);
+        r = dotted_name(t, lv + 1);
+        r = r || import_from_names_2(t, lv + 1);
         t.exit(r);
         return r;
     }
 
-    private static boolean import_from_names_dot_loop(ParseTree t, int lv) {
+    /**
+     * '.'+ ['dotted_name']
+     */
+    public static boolean import_from_names_2(ParseTree t, int lv) {
+        if (t.recursionGuard(lv)) return false;
+        t.enter(lv, IMPORT_FROM_NAMES_2);
+        boolean r;
+        r = import_from_names_2_dot_loop(t);
+        if (r) dotted_name(t, lv + 1);
+        t.exit(r);
+        return r;
+    }
+
+    private static boolean import_from_names_2_dot_loop(ParseTree t) {
         t.enterCollection();
         var r = t.consume(".");
         if (r) while (true) {
@@ -562,28 +587,6 @@ public class FugaParser {
         }
         t.exitCollection();
         return r;
-    }
-
-    /**
-     * '.'* 'dotted_name'
-     */
-    public static boolean import_from_names_1(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, IMPORT_FROM_NAMES_1);
-        boolean r;
-        import_from_names_1_dot_loop(t, lv);
-        r = dotted_name(t, lv + 1);
-        t.exit(r);
-        return r;
-    }
-
-    private static void import_from_names_1_dot_loop(ParseTree t, int lv) {
-        t.enterCollection();
-        while (true) {
-            var p = t.position();
-            if (!t.consume(".") || t.loopGuard(p)) break;
-        }
-        t.exitCollection();
     }
 
     /**

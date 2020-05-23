@@ -16,6 +16,7 @@ public class FugaRules {
     public static final ParserRule SIMPLE_STMT = and_rule("simple_stmt");
     public static final ParserRule SIMPLE_STMT_2 = and_rule("simple_stmt:2");
     public static final ParserRule SMALL_STMT = or_rule("small_stmt");
+    public static final ParserRule FLOW_STMT = or_rule("flow_stmt");
     public static final ParserRule DEL_STMT = and_rule("del_stmt");
     public static final ParserRule RETURN_STMT = and_rule("return_stmt");
     public static final ParserRule RAISE_STMT = and_rule("raise_stmt");
@@ -41,7 +42,7 @@ public class FugaRules {
     public static final ParserRule IMPORT_FROM_4 = or_rule("import_from:4");
     public static final ParserRule IMPORT_FROM_4_2 = and_rule("import_from:4:2");
     public static final ParserRule IMPORT_FROM_NAMES = or_rule("import_from_names");
-    public static final ParserRule IMPORT_FROM_NAMES_1 = and_rule("import_from_names:1");
+    public static final ParserRule IMPORT_FROM_NAMES_2 = and_rule("import_from_names:2");
     public static final ParserRule IMPORT_AS_NAME = and_rule("import_as_name");
     public static final ParserRule IMPORT_AS_NAME_2 = and_rule("import_as_name:2");
     public static final ParserRule DOTTED_AS_NAME = and_rule("dotted_as_name");

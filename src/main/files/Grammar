@@ -10,17 +10,20 @@ simple_stmt: small_stmt (';' small_stmt)* [';']
 
 # Small Statements
 small_stmt:
-    | 'pass'
-    | 'break'
-    | 'continue'
+    | flow_stmt
     | del_stmt
-    | return_stmt
-    | raise_stmt
     | nonlocal_stmt
     | assert_stmt
     | import_name
     | import_from
     | assignment
+
+flow_stmt:
+    | 'pass'
+    | 'break'
+    | 'continue'
+    | return_stmt
+    | raise_stmt
 
 del_stmt: 'del' targetlist
 return_stmt: 'return' [exprlist_star]
@@ -38,7 +41,7 @@ annassign: ':' expr ['=' exprlist_star]
 
 import_name: 'import' dotted_as_names
 import_from: 'from' import_from_names 'import' ('*' | '(' import_as_names [','] ')' | import_as_names)
-import_from_names: '.'* dotted_name | '.'+
+import_from_names: dotted_name | '.'+ [dotted_name]
 import_as_name: NAME ['as' NAME]
 dotted_as_name: dotted_name ['as' NAME]
 import_as_names: import_as_name (',' import_as_name)*
