@@ -2,7 +2,7 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.ParserRules;
+import org.fugalang.core.pgen.parser.FugaRules;
 
 /**
  * sum_op: '+' | '-'
@@ -10,7 +10,7 @@ import org.fugalang.core.pgen.parser.ParserRules;
 public final class SumOp extends NodeWrapper {
 
     public SumOp(ParseTreeNode node) {
-        super(ParserRules.SUM_OP, node);
+        super(FugaRules.SUM_OP, node);
     }
 
     public boolean isPlus() {

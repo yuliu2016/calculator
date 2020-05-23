@@ -2,7 +2,7 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.ParserRules;
+import org.fugalang.core.pgen.parser.FugaRules;
 
 /**
  * expr: 'conditional' | 'funcdef' | 'disjunction'
@@ -10,7 +10,7 @@ import org.fugalang.core.pgen.parser.ParserRules;
 public final class Expr extends NodeWrapper {
 
     public Expr(ParseTreeNode node) {
-        super(ParserRules.EXPR, node);
+        super(FugaRules.EXPR, node);
     }
 
     public Conditional conditional() {

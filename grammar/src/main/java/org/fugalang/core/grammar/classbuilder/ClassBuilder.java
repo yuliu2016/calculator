@@ -1,5 +1,6 @@
 package org.fugalang.core.grammar.classbuilder;
 
+import org.fugalang.core.grammar.gen.PackageOutput;
 import org.fugalang.core.grammar.util.FirstAndMore;
 import org.fugalang.core.grammar.util.ParserStringUtil;
 import org.fugalang.core.parser.RuleType;
@@ -7,7 +8,7 @@ import org.fugalang.core.parser.RuleType;
 import java.util.*;
 
 public class ClassBuilder {
-    private final String packageName;
+    private final PackageOutput packageOutput;
     private final String className;
     private final String ruleName;
 
@@ -20,8 +21,8 @@ public class ClassBuilder {
 
     private RuleType ruleType = null;
 
-    public ClassBuilder(String packageName, String className, String ruleName) {
-        this.packageName = packageName;
+    public ClassBuilder(PackageOutput packageOutput, String className, String ruleName) {
+        this.packageOutput = packageOutput;
         this.className = className;
         this.ruleName = ruleName;
 
@@ -31,7 +32,8 @@ public class ClassBuilder {
     private void resolvePrelude() {
         addImport("org.fugalang.core.parser.NodeWrapper");
         addImport("org.fugalang.core.parser.ParseTreeNode");
-        addImport(packageName + ".parser.ParserRules");
+        addImport(packageOutput.getPackageName() + ".parser."
+                + packageOutput.getLanguage() + "Rules");
     }
 
     public String getClassName() {
@@ -55,7 +57,7 @@ public class ClassBuilder {
 
         sb
                 .append("package ")
-                .append(packageName)
+                .append(packageOutput.getPackageName())
                 .append(";\n\n");
 
         Set<String> userImports = new TreeSet<>();
@@ -142,7 +144,8 @@ public class ClassBuilder {
                 .append(className);
 
         var rule = ruleName.replace(":", "_").toUpperCase();
-        sb.append("(ParseTreeNode node) {\n" + "        super(ParserRules.").append(rule)
+        sb.append("(ParseTreeNode node) {\n" + "        super(")
+                .append(packageOutput.getLanguage()).append("Rules.").append(rule)
                 .append(", node);\n    }\n");
 
         for (int i = 0; i < fields.size(); i++) {

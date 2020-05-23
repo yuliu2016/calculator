@@ -6,11 +6,17 @@ import java.nio.file.Paths;
 public class PackageOutput {
     private final Path filePath;
     private final String packageName;
+    private final String language;
 
-    public PackageOutput(String basePath, String relPath, String packageName) {
+    public PackageOutput(String basePath, String relPath, String packageName, String language) {
         this.packageName = packageName;
         this.filePath = Paths.get(basePath, relPath,
                 packageName.replace(".", "/"));
+        this.language = language;
+    }
+
+    public String getLanguage() {
+        return language;
     }
 
     public String getPackageName() {

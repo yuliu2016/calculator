@@ -1,6 +1,6 @@
 package org.fugalang.core.grammar.pgen;
 
-import org.fugalang.core.grammar.pgen.parser.ParserRules;
+import org.fugalang.core.grammar.pgen.parser.MetaRules;
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 import org.fugalang.core.token.TokenType;
@@ -13,7 +13,7 @@ import java.util.List;
 public final class Rules extends NodeWrapper {
 
     public Rules(ParseTreeNode node) {
-        super(ParserRules.RULES, node);
+        super(MetaRules.RULES, node);
     }
 
     public String newline() {

@@ -3,10 +3,10 @@ package org.fugalang.core.grammar.pgen.parser;
 import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.token.TokenType;
 
-import static org.fugalang.core.grammar.pgen.parser.ParserRules.*;
+import static org.fugalang.core.grammar.pgen.parser.MetaRules.*;
 
 @SuppressWarnings("UnusedReturnValue")
-public class Parser {
+public class MetaParser {
 
     /**
      * rules: ['NEWLINE'] 'single_rule'+

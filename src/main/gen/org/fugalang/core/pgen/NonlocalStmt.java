@@ -2,7 +2,7 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.ParserRules;
+import org.fugalang.core.pgen.parser.FugaRules;
 import org.fugalang.core.token.TokenType;
 
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.List;
 public final class NonlocalStmt extends NodeWrapper {
 
     public NonlocalStmt(ParseTreeNode node) {
-        super(ParserRules.NONLOCAL_STMT, node);
+        super(FugaRules.NONLOCAL_STMT, node);
     }
 
     public String name() {
@@ -30,7 +30,7 @@ public final class NonlocalStmt extends NodeWrapper {
     public static final class NonlocalStmt3 extends NodeWrapper {
 
         public NonlocalStmt3(ParseTreeNode node) {
-            super(ParserRules.NONLOCAL_STMT_3, node);
+            super(FugaRules.NONLOCAL_STMT_3, node);
         }
 
         public String name() {

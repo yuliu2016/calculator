@@ -2,7 +2,7 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.ParserRules;
+import org.fugalang.core.pgen.parser.FugaRules;
 
 /**
  * try_stmt: 'try' 'suite' ('except_suite' | 'finally_suite')
@@ -10,7 +10,7 @@ import org.fugalang.core.pgen.parser.ParserRules;
 public final class TryStmt extends NodeWrapper {
 
     public TryStmt(ParseTreeNode node) {
-        super(ParserRules.TRY_STMT, node);
+        super(FugaRules.TRY_STMT, node);
     }
 
     public Suite suite() {
@@ -27,7 +27,7 @@ public final class TryStmt extends NodeWrapper {
     public static final class TryStmt3 extends NodeWrapper {
 
         public TryStmt3(ParseTreeNode node) {
-            super(ParserRules.TRY_STMT_3, node);
+            super(FugaRules.TRY_STMT_3, node);
         }
 
         public ExceptSuite exceptSuite() {

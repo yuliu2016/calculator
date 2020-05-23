@@ -2,7 +2,7 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.ParserRules;
+import org.fugalang.core.pgen.parser.FugaRules;
 import org.fugalang.core.token.TokenType;
 
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.List;
 public final class EvalInput extends NodeWrapper {
 
     public EvalInput(ParseTreeNode node) {
-        super(ParserRules.EVAL_INPUT, node);
+        super(FugaRules.EVAL_INPUT, node);
     }
 
     public Exprlist exprlist() {

@@ -5,7 +5,7 @@ import org.fugalang.core.parser.ParserRule;
 import static org.fugalang.core.parser.ParserRule.and_rule;
 import static org.fugalang.core.parser.ParserRule.or_rule;
 
-public class ParserRules {
+public class FugaRules {
     public static final ParserRule SINGLE_INPUT = or_rule("single_input");
     public static final ParserRule SINGLE_INPUT_3 = and_rule("single_input:3");
     public static final ParserRule FILE_INPUT = and_rule("file_input");

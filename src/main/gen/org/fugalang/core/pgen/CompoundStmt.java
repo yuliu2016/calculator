@@ -2,7 +2,7 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.ParserRules;
+import org.fugalang.core.pgen.parser.FugaRules;
 
 /**
  * compound_stmt: 'if_stmt' | 'while_stmt' | 'for_stmt' | 'try_stmt' | 'with_stmt'
@@ -10,7 +10,7 @@ import org.fugalang.core.pgen.parser.ParserRules;
 public final class CompoundStmt extends NodeWrapper {
 
     public CompoundStmt(ParseTreeNode node) {
-        super(ParserRules.COMPOUND_STMT, node);
+        super(FugaRules.COMPOUND_STMT, node);
     }
 
     public IfStmt ifStmt() {

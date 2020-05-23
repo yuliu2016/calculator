@@ -2,7 +2,7 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.ParserRules;
+import org.fugalang.core.pgen.parser.FugaRules;
 
 /**
  * comp_if: 'if' 'named_expr' ['comp_iter']
@@ -10,7 +10,7 @@ import org.fugalang.core.pgen.parser.ParserRules;
 public final class CompIf extends NodeWrapper {
 
     public CompIf(ParseTreeNode node) {
-        super(ParserRules.COMP_IF, node);
+        super(FugaRules.COMP_IF, node);
     }
 
     public NamedExpr namedExpr() {

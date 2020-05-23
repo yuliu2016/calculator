@@ -2,7 +2,7 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.ParserRules;
+import org.fugalang.core.pgen.parser.FugaRules;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import java.util.List;
 public final class IfStmt extends NodeWrapper {
 
     public IfStmt(ParseTreeNode node) {
-        super(ParserRules.IF_STMT, node);
+        super(FugaRules.IF_STMT, node);
     }
 
     public NamedExpr namedExpr() {

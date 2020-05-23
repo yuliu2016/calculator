@@ -1,7 +1,7 @@
 package org.fugalang.core.grammar.gen;
 
 import org.fugalang.core.grammar.pgen.Rules;
-import org.fugalang.core.grammar.pgen.parser.Parser;
+import org.fugalang.core.grammar.pgen.parser.MetaParser;
 import org.fugalang.core.parser.impl.LazyParserContext;
 import org.fugalang.core.parser.impl.LexingVisitor;
 import org.fugalang.core.parser.impl.SimpleParseTree;
@@ -18,7 +18,7 @@ public class GeneratorUtil {
         var visitor = LexingVisitor.of(data);
         var lexer = SimpleLexer.of(visitor);
         var context = LazyParserContext.of(lexer, visitor, false);
-        return SimpleParseTree.parse(context, Parser::rules, Rules::new);
+        return SimpleParseTree.parse(context, MetaParser::rules, Rules::new);
     }
 
     public static TokenConverter simpleConverter() {

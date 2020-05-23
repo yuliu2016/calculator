@@ -2,7 +2,7 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.ParserRules;
+import org.fugalang.core.pgen.parser.FugaRules;
 
 /**
  * power: 'primary' ['**' 'factor']
@@ -10,7 +10,7 @@ import org.fugalang.core.pgen.parser.ParserRules;
 public final class Power extends NodeWrapper {
 
     public Power(ParseTreeNode node) {
-        super(ParserRules.POWER, node);
+        super(FugaRules.POWER, node);
     }
 
     public Primary primary() {
@@ -31,7 +31,7 @@ public final class Power extends NodeWrapper {
     public static final class Power2 extends NodeWrapper {
 
         public Power2(ParseTreeNode node) {
-            super(ParserRules.POWER_2, node);
+            super(FugaRules.POWER_2, node);
         }
 
         public Factor factor() {

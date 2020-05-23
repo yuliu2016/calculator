@@ -2,7 +2,7 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.ParserRules;
+import org.fugalang.core.pgen.parser.FugaRules;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import java.util.List;
 public final class SimpleStmt extends NodeWrapper {
 
     public SimpleStmt(ParseTreeNode node) {
-        super(ParserRules.SIMPLE_STMT, node);
+        super(FugaRules.SIMPLE_STMT, node);
     }
 
     public SmallStmt smallStmt() {
@@ -33,7 +33,7 @@ public final class SimpleStmt extends NodeWrapper {
     public static final class SimpleStmt2 extends NodeWrapper {
 
         public SimpleStmt2(ParseTreeNode node) {
-            super(ParserRules.SIMPLE_STMT_2, node);
+            super(FugaRules.SIMPLE_STMT_2, node);
         }
 
         public SmallStmt smallStmt() {

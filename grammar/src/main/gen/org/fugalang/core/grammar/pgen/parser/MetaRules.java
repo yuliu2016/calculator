@@ -5,7 +5,7 @@ import org.fugalang.core.parser.ParserRule;
 import static org.fugalang.core.parser.ParserRule.and_rule;
 import static org.fugalang.core.parser.ParserRule.or_rule;
 
-public class ParserRules {
+public class MetaRules {
     public static final ParserRule RULES = and_rule("rules");
     public static final ParserRule SINGLE_RULE = and_rule("single_rule");
     public static final ParserRule SINGLE_RULE_3 = and_rule("single_rule:3");

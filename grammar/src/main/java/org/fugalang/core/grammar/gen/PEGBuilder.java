@@ -14,8 +14,6 @@ public class PEGBuilder {
     private final TokenConverter converter;
     private final Map<String, String> classNameMap = new LinkedHashMap<>();
     private final ClassSet classSet;
-    private final String tokenTypeClass;
-    private final String tokenTypeClassShort;
 
     private static final boolean REQUIRED = false;
     private static final boolean OPTIONAL = true;
@@ -23,21 +21,14 @@ public class PEGBuilder {
     public PEGBuilder(
             Rules rules,
             TokenConverter converter,
-            PackageOutput packageOutput,
-            String tokenTypeClass
+            PackageOutput packageOutput
     ) {
         ruleMap = new LinkedHashMap<>();
         for (var rule : rules.singleRules()) {
             ruleMap.put(rule.name(), rule.orRule());
         }
         this.converter = converter;
-
         classSet = new ClassSet(packageOutput);
-
-        this.tokenTypeClass = tokenTypeClass;
-
-        var split = tokenTypeClass.split("\\.");
-        tokenTypeClassShort = split[split.length - 1];
     }
 
     public void generate(boolean toFiles) {
@@ -217,8 +208,8 @@ public class PEGBuilder {
                 addRepeatField(className, cb, fieldName, repeatType, isOptional, resultSource);
             } else {
                 var fieldName = convertedValue.getFieldName();
-                cb.addImport(tokenTypeClass);
-                var resultSource = ResultSource.ofTokenType(tokenTypeClassShort +
+                cb.addImport(converter.getTokenTypeClass());
+                var resultSource = ResultSource.ofTokenType(converter.getTokenTypeShort() +
                         "." + convertedValue.getSourceLiteral());
 
                 addRepeatField(className, cb, fieldName, repeatType, isOptional, resultSource);

@@ -2,7 +2,7 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.ParserRules;
+import org.fugalang.core.pgen.parser.FugaRules;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import java.util.List;
 public final class Targetlist extends NodeWrapper {
 
     public Targetlist(ParseTreeNode node) {
-        super(ParserRules.TARGETLIST, node);
+        super(FugaRules.TARGETLIST, node);
     }
 
     public Target target() {
@@ -33,7 +33,7 @@ public final class Targetlist extends NodeWrapper {
     public static final class Targetlist2 extends NodeWrapper {
 
         public Targetlist2(ParseTreeNode node) {
-            super(ParserRules.TARGETLIST_2, node);
+            super(FugaRules.TARGETLIST_2, node);
         }
 
         public Target target() {

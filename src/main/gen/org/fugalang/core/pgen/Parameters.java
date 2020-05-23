@@ -2,7 +2,7 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.ParserRules;
+import org.fugalang.core.pgen.parser.FugaRules;
 
 /**
  * parameters: '(' ['arglist'] ')'
@@ -10,7 +10,7 @@ import org.fugalang.core.pgen.parser.ParserRules;
 public final class Parameters extends NodeWrapper {
 
     public Parameters(ParseTreeNode node) {
-        super(ParserRules.PARAMETERS, node);
+        super(FugaRules.PARAMETERS, node);
     }
 
     public Arglist arglist() {

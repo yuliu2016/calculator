@@ -2,7 +2,7 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.ParserRules;
+import org.fugalang.core.pgen.parser.FugaRules;
 
 /**
  * expr_or_star: 'star_expr' | 'expr'
@@ -10,7 +10,7 @@ import org.fugalang.core.pgen.parser.ParserRules;
 public final class ExprOrStar extends NodeWrapper {
 
     public ExprOrStar(ParseTreeNode node) {
-        super(ParserRules.EXPR_OR_STAR, node);
+        super(FugaRules.EXPR_OR_STAR, node);
     }
 
     public StarExpr starExpr() {

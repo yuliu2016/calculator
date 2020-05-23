@@ -3,10 +3,10 @@ package org.fugalang.core.pgen.parser;
 import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.token.TokenType;
 
-import static org.fugalang.core.pgen.parser.ParserRules.*;
+import static org.fugalang.core.pgen.parser.FugaRules.*;
 
 @SuppressWarnings("UnusedReturnValue")
-public class Parser {
+public class FugaParser {
 
     /**
      * single_input: 'NEWLINE' | 'simple_stmt' | 'compound_stmt' 'NEWLINE'

@@ -2,7 +2,7 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.ParserRules;
+import org.fugalang.core.pgen.parser.FugaRules;
 
 /**
  * shift_op: '<<' | '>>'
@@ -10,7 +10,7 @@ import org.fugalang.core.pgen.parser.ParserRules;
 public final class ShiftOp extends NodeWrapper {
 
     public ShiftOp(ParseTreeNode node) {
-        super(ParserRules.SHIFT_OP, node);
+        super(FugaRules.SHIFT_OP, node);
     }
 
     public boolean isLshift() {

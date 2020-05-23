@@ -2,7 +2,7 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.ParserRules;
+import org.fugalang.core.pgen.parser.FugaRules;
 import org.fugalang.core.token.TokenType;
 
 /**
@@ -11,7 +11,7 @@ import org.fugalang.core.token.TokenType;
 public final class SimpleArg extends NodeWrapper {
 
     public SimpleArg(ParseTreeNode node) {
-        super(ParserRules.SIMPLE_ARG, node);
+        super(FugaRules.SIMPLE_ARG, node);
     }
 
     public String name() {
@@ -32,7 +32,7 @@ public final class SimpleArg extends NodeWrapper {
     public static final class SimpleArg2 extends NodeWrapper {
 
         public SimpleArg2(ParseTreeNode node) {
-            super(ParserRules.SIMPLE_ARG_2, node);
+            super(FugaRules.SIMPLE_ARG_2, node);
         }
 
         public Expr expr() {

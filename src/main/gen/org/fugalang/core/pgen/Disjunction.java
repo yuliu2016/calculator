@@ -2,7 +2,7 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.ParserRules;
+import org.fugalang.core.pgen.parser.FugaRules;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import java.util.List;
 public final class Disjunction extends NodeWrapper {
 
     public Disjunction(ParseTreeNode node) {
-        super(ParserRules.DISJUNCTION, node);
+        super(FugaRules.DISJUNCTION, node);
     }
 
     public Conjunction conjunction() {
@@ -29,7 +29,7 @@ public final class Disjunction extends NodeWrapper {
     public static final class Disjunction2 extends NodeWrapper {
 
         public Disjunction2(ParseTreeNode node) {
-            super(ParserRules.DISJUNCTION_2, node);
+            super(FugaRules.DISJUNCTION_2, node);
         }
 
         public Conjunction conjunction() {

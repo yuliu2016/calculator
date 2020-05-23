@@ -2,7 +2,7 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.ParserRules;
+import org.fugalang.core.pgen.parser.FugaRules;
 import org.fugalang.core.token.TokenType;
 
 /**
@@ -11,7 +11,7 @@ import org.fugalang.core.token.TokenType;
 public final class SingleInput extends NodeWrapper {
 
     public SingleInput(ParseTreeNode node) {
-        super(ParserRules.SINGLE_INPUT, node);
+        super(FugaRules.SINGLE_INPUT, node);
     }
 
     public String newline() {
@@ -44,7 +44,7 @@ public final class SingleInput extends NodeWrapper {
     public static final class SingleInput3 extends NodeWrapper {
 
         public SingleInput3(ParseTreeNode node) {
-            super(ParserRules.SINGLE_INPUT_3, node);
+            super(FugaRules.SINGLE_INPUT_3, node);
         }
 
         public CompoundStmt compoundStmt() {

@@ -2,7 +2,7 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.ParserRules;
+import org.fugalang.core.pgen.parser.FugaRules;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import java.util.List;
 public final class Comparison extends NodeWrapper {
 
     public Comparison(ParseTreeNode node) {
-        super(ParserRules.COMPARISON, node);
+        super(FugaRules.COMPARISON, node);
     }
 
     public BitwiseOr bitwiseOr() {
@@ -29,7 +29,7 @@ public final class Comparison extends NodeWrapper {
     public static final class Comparison2 extends NodeWrapper {
 
         public Comparison2(ParseTreeNode node) {
-            super(ParserRules.COMPARISON_2, node);
+            super(FugaRules.COMPARISON_2, node);
         }
 
         public CompOp compOp() {

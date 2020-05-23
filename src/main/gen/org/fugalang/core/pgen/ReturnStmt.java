@@ -2,7 +2,7 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.ParserRules;
+import org.fugalang.core.pgen.parser.FugaRules;
 
 /**
  * return_stmt: 'return' ['exprlist_star']
@@ -10,7 +10,7 @@ import org.fugalang.core.pgen.parser.ParserRules;
 public final class ReturnStmt extends NodeWrapper {
 
     public ReturnStmt(ParseTreeNode node) {
-        super(ParserRules.RETURN_STMT, node);
+        super(FugaRules.RETURN_STMT, node);
     }
 
     public ExprlistStar exprlistStar() {

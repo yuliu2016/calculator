@@ -2,7 +2,7 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.ParserRules;
+import org.fugalang.core.pgen.parser.FugaRules;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import java.util.List;
 public final class Primary extends NodeWrapper {
 
     public Primary(ParseTreeNode node) {
-        super(ParserRules.PRIMARY, node);
+        super(FugaRules.PRIMARY, node);
     }
 
     public Atom atom() {

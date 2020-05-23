@@ -2,7 +2,7 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.ParserRules;
+import org.fugalang.core.pgen.parser.FugaRules;
 
 /**
  * suite: ':' 'simple_stmt' | 'block_suite'
@@ -10,7 +10,7 @@ import org.fugalang.core.pgen.parser.ParserRules;
 public final class Suite extends NodeWrapper {
 
     public Suite(ParseTreeNode node) {
-        super(ParserRules.SUITE, node);
+        super(FugaRules.SUITE, node);
     }
 
     public Suite1 simpleStmt() {
@@ -35,7 +35,7 @@ public final class Suite extends NodeWrapper {
     public static final class Suite1 extends NodeWrapper {
 
         public Suite1(ParseTreeNode node) {
-            super(ParserRules.SUITE_1, node);
+            super(FugaRules.SUITE_1, node);
         }
 
         public SimpleStmt simpleStmt() {

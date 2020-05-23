@@ -1,6 +1,6 @@
 package org.fugalang.core.calculator.pgen;
 
-import org.fugalang.core.calculator.pgen.parser.ParserRules;
+import org.fugalang.core.calculator.pgen.parser.CalculatorRules;
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
@@ -12,7 +12,7 @@ import java.util.List;
 public final class Sum extends NodeWrapper {
 
     public Sum(ParseTreeNode node) {
-        super(ParserRules.SUM, node);
+        super(CalculatorRules.SUM, node);
     }
 
     public Term term() {
@@ -29,7 +29,7 @@ public final class Sum extends NodeWrapper {
     public static final class Sum2 extends NodeWrapper {
 
         public Sum2(ParseTreeNode node) {
-            super(ParserRules.SUM_2, node);
+            super(CalculatorRules.SUM_2, node);
         }
 
         public Sum21 plusOrMinus() {
@@ -47,7 +47,7 @@ public final class Sum extends NodeWrapper {
     public static final class Sum21 extends NodeWrapper {
 
         public Sum21(ParseTreeNode node) {
-            super(ParserRules.SUM_2_1, node);
+            super(CalculatorRules.SUM_2_1, node);
         }
 
         public boolean isPlus() {

@@ -5,7 +5,6 @@ import org.fugalang.core.grammar.psi.*;
 import org.fugalang.core.grammar.util.ParserStringUtil;
 import org.fugalang.core.parser.RuleType;
 
-import java.nio.file.Path;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -93,7 +92,7 @@ public class ParserGenerator {
         } else if (rule.optionalOrRule != null) {
             validateOrRule(rule.optionalOrRule);
         } else {
-            if (!ruleMap.containsKey(rule.token) && !converter.didResolveToken(rule.token)) {
+            if (!ruleMap.containsKey(rule.token) && converter.checkToken(rule.token).isEmpty()) {
                 throw new IllegalStateException("'" + rule.token + "' doesn't exist!!!");
             }
         }

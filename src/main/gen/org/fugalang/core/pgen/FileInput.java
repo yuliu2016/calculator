@@ -2,7 +2,7 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.ParserRules;
+import org.fugalang.core.pgen.parser.FugaRules;
 import org.fugalang.core.token.TokenType;
 
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.List;
 public final class FileInput extends NodeWrapper {
 
     public FileInput(ParseTreeNode node) {
-        super(ParserRules.FILE_INPUT, node);
+        super(FugaRules.FILE_INPUT, node);
     }
 
     public List<FileInput1> newlineOrStmts() {
@@ -30,7 +30,7 @@ public final class FileInput extends NodeWrapper {
     public static final class FileInput1 extends NodeWrapper {
 
         public FileInput1(ParseTreeNode node) {
-            super(ParserRules.FILE_INPUT_1, node);
+            super(FugaRules.FILE_INPUT_1, node);
         }
 
         public String newline() {

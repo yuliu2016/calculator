@@ -2,7 +2,7 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.ParserRules;
+import org.fugalang.core.pgen.parser.FugaRules;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import java.util.List;
 public final class Term extends NodeWrapper {
 
     public Term(ParseTreeNode node) {
-        super(ParserRules.TERM, node);
+        super(FugaRules.TERM, node);
     }
 
     public Pipeline pipeline() {
@@ -29,7 +29,7 @@ public final class Term extends NodeWrapper {
     public static final class Term2 extends NodeWrapper {
 
         public Term2(ParseTreeNode node) {
-            super(ParserRules.TERM_2, node);
+            super(FugaRules.TERM_2, node);
         }
 
         public TermOp termOp() {

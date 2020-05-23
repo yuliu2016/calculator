@@ -2,7 +2,7 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.ParserRules;
+import org.fugalang.core.pgen.parser.FugaRules;
 
 /**
  * subscript: '[' 'slicelist' ']'
@@ -10,7 +10,7 @@ import org.fugalang.core.pgen.parser.ParserRules;
 public final class Subscript extends NodeWrapper {
 
     public Subscript(ParseTreeNode node) {
-        super(ParserRules.SUBSCRIPT, node);
+        super(FugaRules.SUBSCRIPT, node);
     }
 
     public Slicelist slicelist() {

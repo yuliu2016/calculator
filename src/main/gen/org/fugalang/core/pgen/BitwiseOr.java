@@ -2,7 +2,7 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.ParserRules;
+import org.fugalang.core.pgen.parser.FugaRules;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import java.util.List;
 public final class BitwiseOr extends NodeWrapper {
 
     public BitwiseOr(ParseTreeNode node) {
-        super(ParserRules.BITWISE_OR, node);
+        super(FugaRules.BITWISE_OR, node);
     }
 
     public BitwiseXor bitwiseXor() {
@@ -29,7 +29,7 @@ public final class BitwiseOr extends NodeWrapper {
     public static final class BitwiseOr2 extends NodeWrapper {
 
         public BitwiseOr2(ParseTreeNode node) {
-            super(ParserRules.BITWISE_OR_2, node);
+            super(FugaRules.BITWISE_OR_2, node);
         }
 
         public BitwiseXor bitwiseXor() {

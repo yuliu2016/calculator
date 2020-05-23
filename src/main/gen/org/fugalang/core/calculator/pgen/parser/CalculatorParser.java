@@ -3,10 +3,10 @@ package org.fugalang.core.calculator.pgen.parser;
 import org.fugalang.core.parser.ParseTree;
 import org.fugalang.core.token.TokenType;
 
-import static org.fugalang.core.calculator.pgen.parser.ParserRules.*;
+import static org.fugalang.core.calculator.pgen.parser.CalculatorRules.*;
 
 @SuppressWarnings("UnusedReturnValue")
-public class Parser {
+public class CalculatorParser {
 
     /**
      * sum: 'term' (('+' | '-') 'term')*

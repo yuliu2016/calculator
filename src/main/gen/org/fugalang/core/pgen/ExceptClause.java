@@ -2,7 +2,7 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.ParserRules;
+import org.fugalang.core.pgen.parser.FugaRules;
 import org.fugalang.core.token.TokenType;
 
 /**
@@ -11,7 +11,7 @@ import org.fugalang.core.token.TokenType;
 public final class ExceptClause extends NodeWrapper {
 
     public ExceptClause(ParseTreeNode node) {
-        super(ParserRules.EXCEPT_CLAUSE, node);
+        super(FugaRules.EXCEPT_CLAUSE, node);
     }
 
     public ExceptClause2 exceptClause2() {
@@ -28,7 +28,7 @@ public final class ExceptClause extends NodeWrapper {
     public static final class ExceptClause2 extends NodeWrapper {
 
         public ExceptClause2(ParseTreeNode node) {
-            super(ParserRules.EXCEPT_CLAUSE_2, node);
+            super(FugaRules.EXCEPT_CLAUSE_2, node);
         }
 
         public Expr expr() {
@@ -50,7 +50,7 @@ public final class ExceptClause extends NodeWrapper {
     public static final class ExceptClause22 extends NodeWrapper {
 
         public ExceptClause22(ParseTreeNode node) {
-            super(ParserRules.EXCEPT_CLAUSE_2_2, node);
+            super(FugaRules.EXCEPT_CLAUSE_2_2, node);
         }
 
         public String name() {

@@ -5,7 +5,7 @@ import org.fugalang.core.parser.ParserRule;
 import static org.fugalang.core.parser.ParserRule.and_rule;
 import static org.fugalang.core.parser.ParserRule.or_rule;
 
-public class ParserRules {
+public class CalculatorRules {
     public static final ParserRule SUM = and_rule("sum");
     public static final ParserRule SUM_2 = and_rule("sum:2");
     public static final ParserRule SUM_2_1 = or_rule("sum:2:1");

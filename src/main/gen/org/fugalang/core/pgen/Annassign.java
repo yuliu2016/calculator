@@ -2,7 +2,7 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.ParserRules;
+import org.fugalang.core.pgen.parser.FugaRules;
 
 /**
  * annassign: ':' 'expr' ['=' 'exprlist_star']
@@ -10,7 +10,7 @@ import org.fugalang.core.pgen.parser.ParserRules;
 public final class Annassign extends NodeWrapper {
 
     public Annassign(ParseTreeNode node) {
-        super(ParserRules.ANNASSIGN, node);
+        super(FugaRules.ANNASSIGN, node);
     }
 
     public Expr expr() {
@@ -31,7 +31,7 @@ public final class Annassign extends NodeWrapper {
     public static final class Annassign3 extends NodeWrapper {
 
         public Annassign3(ParseTreeNode node) {
-            super(ParserRules.ANNASSIGN_3, node);
+            super(FugaRules.ANNASSIGN_3, node);
         }
 
         public ExprlistStar exprlistStar() {

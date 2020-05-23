@@ -2,7 +2,7 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.ParserRules;
+import org.fugalang.core.pgen.parser.FugaRules;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import java.util.List;
 public final class Sum extends NodeWrapper {
 
     public Sum(ParseTreeNode node) {
-        super(ParserRules.SUM, node);
+        super(FugaRules.SUM, node);
     }
 
     public Term term() {
@@ -29,7 +29,7 @@ public final class Sum extends NodeWrapper {
     public static final class Sum2 extends NodeWrapper {
 
         public Sum2(ParseTreeNode node) {
-            super(ParserRules.SUM_2, node);
+            super(FugaRules.SUM_2, node);
         }
 
         public SumOp sumOp() {

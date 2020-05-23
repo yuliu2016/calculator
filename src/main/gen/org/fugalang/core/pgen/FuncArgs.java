@@ -2,7 +2,7 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.ParserRules;
+import org.fugalang.core.pgen.parser.FugaRules;
 
 /**
  * func_args: 'simple_arg_list' | '(' ['typed_arg_list'] ')'
@@ -10,7 +10,7 @@ import org.fugalang.core.pgen.parser.ParserRules;
 public final class FuncArgs extends NodeWrapper {
 
     public FuncArgs(ParseTreeNode node) {
-        super(ParserRules.FUNC_ARGS, node);
+        super(FugaRules.FUNC_ARGS, node);
     }
 
     public SimpleArgList simpleArgList() {
@@ -35,7 +35,7 @@ public final class FuncArgs extends NodeWrapper {
     public static final class FuncArgs2 extends NodeWrapper {
 
         public FuncArgs2(ParseTreeNode node) {
-            super(ParserRules.FUNC_ARGS_2, node);
+            super(FugaRules.FUNC_ARGS_2, node);
         }
 
         public TypedArgList typedArgList() {

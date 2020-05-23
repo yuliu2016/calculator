@@ -2,7 +2,7 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.ParserRules;
+import org.fugalang.core.pgen.parser.FugaRules;
 
 /**
  * while_stmt: 'while' 'named_expr' 'suite' ['else_suite']
@@ -10,7 +10,7 @@ import org.fugalang.core.pgen.parser.ParserRules;
 public final class WhileStmt extends NodeWrapper {
 
     public WhileStmt(ParseTreeNode node) {
-        super(ParserRules.WHILE_STMT, node);
+        super(FugaRules.WHILE_STMT, node);
     }
 
     public NamedExpr namedExpr() {

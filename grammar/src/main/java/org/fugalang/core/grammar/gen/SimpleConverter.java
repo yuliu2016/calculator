@@ -26,4 +26,14 @@ public class SimpleConverter implements TokenConverter {
         return Optional.empty();
 
     }
+
+    @Override
+    public String getTokenTypeClass() {
+        return "org.fugalang.core.token.TokenType";
+    }
+
+    @Override
+    public String getTokenTypeShort() {
+        return "TokenType";
+    }
 }

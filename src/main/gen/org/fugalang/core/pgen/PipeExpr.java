@@ -2,7 +2,7 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.ParserRules;
+import org.fugalang.core.pgen.parser.FugaRules;
 
 /**
  * pipe_expr: 'pipe_for' | 'factor'
@@ -10,7 +10,7 @@ import org.fugalang.core.pgen.parser.ParserRules;
 public final class PipeExpr extends NodeWrapper {
 
     public PipeExpr(ParseTreeNode node) {
-        super(ParserRules.PIPE_EXPR, node);
+        super(FugaRules.PIPE_EXPR, node);
     }
 
     public PipeFor pipeFor() {

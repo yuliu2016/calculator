@@ -2,7 +2,7 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.ParserRules;
+import org.fugalang.core.pgen.parser.FugaRules;
 import org.fugalang.core.token.TokenType;
 
 /**
@@ -11,7 +11,7 @@ import org.fugalang.core.token.TokenType;
 public final class Target extends NodeWrapper {
 
     public Target(ParseTreeNode node) {
-        super(ParserRules.TARGET, node);
+        super(FugaRules.TARGET, node);
     }
 
     public String name() {
@@ -52,7 +52,7 @@ public final class Target extends NodeWrapper {
     public static final class Target2 extends NodeWrapper {
 
         public Target2(ParseTreeNode node) {
-            super(ParserRules.TARGET_2, node);
+            super(FugaRules.TARGET_2, node);
         }
 
         public Targetlist targetlist() {
@@ -66,7 +66,7 @@ public final class Target extends NodeWrapper {
     public static final class Target3 extends NodeWrapper {
 
         public Target3(ParseTreeNode node) {
-            super(ParserRules.TARGET_3, node);
+            super(FugaRules.TARGET_3, node);
         }
 
         public Target target() {

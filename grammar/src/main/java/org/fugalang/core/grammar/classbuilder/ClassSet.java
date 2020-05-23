@@ -5,6 +5,7 @@ import org.fugalang.core.grammar.gen.PackageOutput;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +44,7 @@ public class ClassSet {
             throw new IllegalArgumentException("Duplicate class: " + className);
         }
 
-        var rootClassBuilder = new ClassBuilder(packageOutput.getPackageName(),
+        var rootClassBuilder = new ClassBuilder(packageOutput,
                 className.getType(), className.getRuleName());
 
         currentClass = new NamedClass(rootClassBuilder);
@@ -82,7 +83,7 @@ public class ClassSet {
             throw new IllegalArgumentException("Duplicate inner class: " + className);
         }
 
-        var builder = new ClassBuilder(packageOutput.getPackageName(),
+        var builder = new ClassBuilder(packageOutput,
                 className.getType(), className.getRuleName());
 
         current.components.add(builder);
@@ -91,20 +92,24 @@ public class ClassSet {
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
+    private static void setupDir(Path path) {
+        var rootFile = path.toFile();
+
+        if (!rootFile.isDirectory()) {
+            rootFile.mkdirs();
+        }
+
+        var fileList = rootFile.listFiles();
+        if (fileList != null) {
+            for (File file : fileList) {
+                file.delete();
+            }
+        }
+    }
+
     public void writeToFiles() {
         try {
-            var rootFile = packageOutput.getFilePath().toFile();
-
-            if (!rootFile.isDirectory()) {
-                rootFile.mkdirs();
-            }
-
-            var fileList = rootFile.listFiles();
-            if (fileList != null) {
-                for (File file : fileList) {
-                    file.delete();
-                }
-            }
+            setupDir(packageOutput.getFilePath());
 
             for (var aClass : classes) {
                 var code = aClass.generateClassCode()
@@ -114,18 +119,14 @@ public class ClassSet {
                         aClass.getClassName() + ".java"), code);
             }
 
+            setupDir(packageOutput.getParserPath());
+
             var parserBase = packageOutput.getParserPath().toString();
-
-            var parserBaseFile = packageOutput.getParserPath().toFile();
-            if (!parserBaseFile.isDirectory()) {
-                parserBaseFile.mkdirs();
-            }
-
-            var parserPath = Paths.get(parserBase, "Parser.java");
+            var parserPath = Paths.get(parserBase, packageOutput.getLanguage() + "Parser.java");
             var pcls = generateParserClass();
             Files.writeString(parserPath, pcls);
 
-            var parserRulePath = Paths.get(parserBase, "ParserRules.java");
+            var parserRulePath = Paths.get(parserBase, packageOutput.getLanguage() + "Rules.java");
             var ruleClass = generateRuleClass();
             Files.writeString(parserRulePath, ruleClass);
 
@@ -140,9 +141,13 @@ public class ClassSet {
         sb.append("import org.fugalang.core.parser.ParseTree;\n");
         sb.append("import org.fugalang.core.token.TokenType;\n\n" + "import static ")
                 .append(packageOutput.getParserPackage());
-        sb.append(".ParserRules.*;\n\n" +
+        sb.append(".");
+        sb.append(packageOutput.getLanguage());
+        sb.append("Rules.*;\n\n" +
                 "@SuppressWarnings(\"UnusedReturnValue\")\n" +
-                "public class Parser {\n");
+                "public class ");
+        sb.append(packageOutput.getLanguage());
+        sb.append("Parser {\n");
         for (NamedClass namedClass : classes) {
             namedClass.generateParser(sb);
         }
@@ -156,7 +161,9 @@ public class ClassSet {
         sb.append("import org.fugalang.core.parser.ParserRule;\n\n");
         sb.append("import static org.fugalang.core.parser.ParserRule.and_rule;\n" +
                 "import static org.fugalang.core.parser.ParserRule.or_rule;\n\n" +
-                "public class ParserRules {\n");
+                "public class ");
+        sb.append(packageOutput.getLanguage());
+        sb.append("Rules {\n");
         for (NamedClass namedClass : classes) {
             namedClass.generateRules(sb);
         }

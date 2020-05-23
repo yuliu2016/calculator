@@ -2,7 +2,7 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.ParserRules;
+import org.fugalang.core.pgen.parser.FugaRules;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import java.util.List;
 public final class ExceptSuite extends NodeWrapper {
 
     public ExceptSuite(ParseTreeNode node) {
-        super(ParserRules.EXCEPT_SUITE, node);
+        super(FugaRules.EXCEPT_SUITE, node);
     }
 
     public List<ExceptSuite1> exceptClauseSuites() {
@@ -41,7 +41,7 @@ public final class ExceptSuite extends NodeWrapper {
     public static final class ExceptSuite1 extends NodeWrapper {
 
         public ExceptSuite1(ParseTreeNode node) {
-            super(ParserRules.EXCEPT_SUITE_1, node);
+            super(FugaRules.EXCEPT_SUITE_1, node);
         }
 
         public ExceptClause exceptClause() {

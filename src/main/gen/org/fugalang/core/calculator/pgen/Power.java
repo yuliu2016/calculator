@@ -1,6 +1,6 @@
 package org.fugalang.core.calculator.pgen;
 
-import org.fugalang.core.calculator.pgen.parser.ParserRules;
+import org.fugalang.core.calculator.pgen.parser.CalculatorRules;
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
@@ -10,7 +10,7 @@ import org.fugalang.core.parser.ParseTreeNode;
 public final class Power extends NodeWrapper {
 
     public Power(ParseTreeNode node) {
-        super(ParserRules.POWER, node);
+        super(CalculatorRules.POWER, node);
     }
 
     public Atom atom() {
@@ -31,7 +31,7 @@ public final class Power extends NodeWrapper {
     public static final class Power2 extends NodeWrapper {
 
         public Power2(ParseTreeNode node) {
-            super(ParserRules.POWER_2, node);
+            super(CalculatorRules.POWER_2, node);
         }
 
         public Factor factor() {

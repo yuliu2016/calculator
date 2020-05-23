@@ -2,7 +2,7 @@ package org.fugalang.core.pgen;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.pgen.parser.ParserRules;
+import org.fugalang.core.pgen.parser.FugaRules;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import java.util.List;
 public final class FullArgList extends NodeWrapper {
 
     public FullArgList(ParseTreeNode node) {
-        super(ParserRules.FULL_ARG_LIST, node);
+        super(FugaRules.FULL_ARG_LIST, node);
     }
 
     public DefaultArg defaultArg() {
@@ -37,7 +37,7 @@ public final class FullArgList extends NodeWrapper {
     public static final class FullArgList2 extends NodeWrapper {
 
         public FullArgList2(ParseTreeNode node) {
-            super(ParserRules.FULL_ARG_LIST_2, node);
+            super(FugaRules.FULL_ARG_LIST_2, node);
         }
 
         public DefaultArg defaultArg() {
@@ -51,7 +51,7 @@ public final class FullArgList extends NodeWrapper {
     public static final class FullArgList3 extends NodeWrapper {
 
         public FullArgList3(ParseTreeNode node) {
-            super(ParserRules.FULL_ARG_LIST_3, node);
+            super(FugaRules.FULL_ARG_LIST_3, node);
         }
 
         public FullArgList32 kwargsOrArgsKwargs() {
@@ -69,7 +69,7 @@ public final class FullArgList extends NodeWrapper {
     public static final class FullArgList32 extends NodeWrapper {
 
         public FullArgList32(ParseTreeNode node) {
-            super(ParserRules.FULL_ARG_LIST_3_2, node);
+            super(FugaRules.FULL_ARG_LIST_3_2, node);
         }
 
         public Kwargs kwargs() {
