@@ -14,11 +14,11 @@ public final class Annassign extends NodeWrapper {
     }
 
     public Expr expr() {
-        return get(1, Expr::new);
+        return get(1, Expr.class);
     }
 
     public Annassign3 exprlistStar() {
-        return get(2, Annassign3::new);
+        return get(2, Annassign3.class);
     }
 
     public boolean hasExprlistStar() {
@@ -35,7 +35,7 @@ public final class Annassign extends NodeWrapper {
         }
 
         public ExprlistStar exprlistStar() {
-            return get(1, ExprlistStar::new);
+            return get(1, ExprlistStar.class);
         }
     }
 }

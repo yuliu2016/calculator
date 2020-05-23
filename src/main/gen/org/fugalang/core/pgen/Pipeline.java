@@ -16,11 +16,11 @@ public final class Pipeline extends NodeWrapper {
     }
 
     public Factor factor() {
-        return get(0, Factor::new);
+        return get(0, Factor.class);
     }
 
     public List<Pipeline2> pipeExprs() {
-        return getList(1, Pipeline2::new);
+        return getList(1, Pipeline2.class);
     }
 
     /**
@@ -33,7 +33,7 @@ public final class Pipeline extends NodeWrapper {
         }
 
         public PipeExpr pipeExpr() {
-            return get(1, PipeExpr::new);
+            return get(1, PipeExpr.class);
         }
     }
 }

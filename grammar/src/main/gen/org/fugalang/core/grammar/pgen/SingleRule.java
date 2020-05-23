@@ -19,7 +19,7 @@ public final class SingleRule extends NodeWrapper {
     }
 
     public SingleRule3 newline() {
-        return get(2, SingleRule3::new);
+        return get(2, SingleRule3.class);
     }
 
     public boolean hasNewline() {
@@ -27,7 +27,7 @@ public final class SingleRule extends NodeWrapper {
     }
 
     public OrRule orRule() {
-        return get(3, OrRule::new);
+        return get(3, OrRule.class);
     }
 
     public String newline1() {

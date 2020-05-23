@@ -16,11 +16,11 @@ public final class Arglist extends NodeWrapper {
     }
 
     public Argument argument() {
-        return get(0, Argument::new);
+        return get(0, Argument.class);
     }
 
     public List<Arglist2> arguments() {
-        return getList(1, Arglist2::new);
+        return getList(1, Arglist2.class);
     }
 
     public boolean isComma() {
@@ -37,7 +37,7 @@ public final class Arglist extends NodeWrapper {
         }
 
         public Argument argument() {
-            return get(1, Argument::new);
+            return get(1, Argument.class);
         }
     }
 }

@@ -14,11 +14,11 @@ public final class Power extends NodeWrapper {
     }
 
     public Primary primary() {
-        return get(0, Primary::new);
+        return get(0, Primary.class);
     }
 
     public Power2 factor() {
-        return get(1, Power2::new);
+        return get(1, Power2.class);
     }
 
     public boolean hasFactor() {
@@ -35,7 +35,7 @@ public final class Power extends NodeWrapper {
         }
 
         public Factor factor() {
-            return get(1, Factor::new);
+            return get(1, Factor.class);
         }
     }
 }

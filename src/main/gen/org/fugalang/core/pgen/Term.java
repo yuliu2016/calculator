@@ -16,11 +16,11 @@ public final class Term extends NodeWrapper {
     }
 
     public Pipeline pipeline() {
-        return get(0, Pipeline::new);
+        return get(0, Pipeline.class);
     }
 
     public List<Term2> termOpPipelines() {
-        return getList(1, Term2::new);
+        return getList(1, Term2.class);
     }
 
     /**
@@ -33,11 +33,11 @@ public final class Term extends NodeWrapper {
         }
 
         public TermOp termOp() {
-            return get(0, TermOp::new);
+            return get(0, TermOp.class);
         }
 
         public Pipeline pipeline() {
-            return get(1, Pipeline::new);
+            return get(1, Pipeline.class);
         }
     }
 }

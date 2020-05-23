@@ -16,11 +16,11 @@ public final class ShiftExpr extends NodeWrapper {
     }
 
     public Sum sum() {
-        return get(0, Sum::new);
+        return get(0, Sum.class);
     }
 
     public List<ShiftExpr2> shiftOpSums() {
-        return getList(1, ShiftExpr2::new);
+        return getList(1, ShiftExpr2.class);
     }
 
     /**
@@ -33,11 +33,11 @@ public final class ShiftExpr extends NodeWrapper {
         }
 
         public ShiftOp shiftOp() {
-            return get(0, ShiftOp::new);
+            return get(0, ShiftOp.class);
         }
 
         public Sum sum() {
-            return get(1, Sum::new);
+            return get(1, Sum.class);
         }
     }
 }

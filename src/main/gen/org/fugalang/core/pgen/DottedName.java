@@ -21,7 +21,7 @@ public final class DottedName extends NodeWrapper {
     }
 
     public List<DottedName2> names() {
-        return getList(1, DottedName2::new);
+        return getList(1, DottedName2.class);
     }
 
     /**

@@ -16,11 +16,11 @@ public final class SimpleArgList extends NodeWrapper {
     }
 
     public SimpleArg simpleArg() {
-        return get(0, SimpleArg::new);
+        return get(0, SimpleArg.class);
     }
 
     public List<SimpleArgList2> simpleArgs() {
-        return getList(1, SimpleArgList2::new);
+        return getList(1, SimpleArgList2.class);
     }
 
     /**
@@ -33,7 +33,7 @@ public final class SimpleArgList extends NodeWrapper {
         }
 
         public SimpleArg simpleArg() {
-            return get(0, SimpleArg::new);
+            return get(0, SimpleArg.class);
         }
     }
 }

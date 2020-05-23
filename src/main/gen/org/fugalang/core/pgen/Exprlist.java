@@ -16,11 +16,11 @@ public final class Exprlist extends NodeWrapper {
     }
 
     public Expr expr() {
-        return get(0, Expr::new);
+        return get(0, Expr.class);
     }
 
     public List<Exprlist2> exprs() {
-        return getList(1, Exprlist2::new);
+        return getList(1, Exprlist2.class);
     }
 
     public boolean isComma() {
@@ -37,7 +37,7 @@ public final class Exprlist extends NodeWrapper {
         }
 
         public Expr expr() {
-            return get(1, Expr::new);
+            return get(1, Expr.class);
         }
     }
 }

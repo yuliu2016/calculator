@@ -25,6 +25,6 @@ public final class Rules extends NodeWrapper {
     }
 
     public List<SingleRule> singleRules() {
-        return getList(1, SingleRule::new);
+        return getList(1, SingleRule.class);
     }
 }

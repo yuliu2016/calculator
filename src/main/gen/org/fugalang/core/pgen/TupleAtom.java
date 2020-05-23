@@ -14,7 +14,7 @@ public final class TupleAtom extends NodeWrapper {
     }
 
     public NamedExprList namedExprList() {
-        return get(1, NamedExprList::new);
+        return get(1, NamedExprList.class);
     }
 
     public boolean hasNamedExprList() {

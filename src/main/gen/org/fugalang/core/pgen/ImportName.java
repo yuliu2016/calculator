@@ -14,6 +14,6 @@ public final class ImportName extends NodeWrapper {
     }
 
     public DottedAsNames dottedAsNames() {
-        return get(1, DottedAsNames::new);
+        return get(1, DottedAsNames.class);
     }
 }

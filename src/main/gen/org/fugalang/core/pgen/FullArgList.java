@@ -16,15 +16,15 @@ public final class FullArgList extends NodeWrapper {
     }
 
     public DefaultArg defaultArg() {
-        return get(0, DefaultArg::new);
+        return get(0, DefaultArg.class);
     }
 
     public List<FullArgList2> defaultArgs() {
-        return getList(1, FullArgList2::new);
+        return getList(1, FullArgList2.class);
     }
 
     public FullArgList3 fullArgList3() {
-        return get(2, FullArgList3::new);
+        return get(2, FullArgList3.class);
     }
 
     public boolean hasFullArgList3() {
@@ -41,7 +41,7 @@ public final class FullArgList extends NodeWrapper {
         }
 
         public DefaultArg defaultArg() {
-            return get(1, DefaultArg::new);
+            return get(1, DefaultArg.class);
         }
     }
 
@@ -55,7 +55,7 @@ public final class FullArgList extends NodeWrapper {
         }
 
         public FullArgList32 kwargsOrArgsKwargs() {
-            return get(1, FullArgList32::new);
+            return get(1, FullArgList32.class);
         }
 
         public boolean hasKwargsOrArgsKwargs() {
@@ -73,7 +73,7 @@ public final class FullArgList extends NodeWrapper {
         }
 
         public Kwargs kwargs() {
-            return get(0, Kwargs::new);
+            return get(0, Kwargs.class);
         }
 
         public boolean hasKwargs() {
@@ -81,7 +81,7 @@ public final class FullArgList extends NodeWrapper {
         }
 
         public ArgsKwargs argsKwargs() {
-            return get(1, ArgsKwargs::new);
+            return get(1, ArgsKwargs.class);
         }
 
         public boolean hasArgsKwargs() {

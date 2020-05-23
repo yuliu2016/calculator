@@ -14,7 +14,7 @@ public final class PipeExpr extends NodeWrapper {
     }
 
     public PipeFor pipeFor() {
-        return get(0, PipeFor::new);
+        return get(0, PipeFor.class);
     }
 
     public boolean hasPipeFor() {
@@ -22,7 +22,7 @@ public final class PipeExpr extends NodeWrapper {
     }
 
     public Factor factor() {
-        return get(1, Factor::new);
+        return get(1, Factor.class);
     }
 
     public boolean hasFactor() {

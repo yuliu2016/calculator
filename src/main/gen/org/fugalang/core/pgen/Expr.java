@@ -14,7 +14,7 @@ public final class Expr extends NodeWrapper {
     }
 
     public Conditional conditional() {
-        return get(0, Conditional::new);
+        return get(0, Conditional.class);
     }
 
     public boolean hasConditional() {
@@ -22,7 +22,7 @@ public final class Expr extends NodeWrapper {
     }
 
     public Funcdef funcdef() {
-        return get(1, Funcdef::new);
+        return get(1, Funcdef.class);
     }
 
     public boolean hasFuncdef() {
@@ -30,7 +30,7 @@ public final class Expr extends NodeWrapper {
     }
 
     public Disjunction disjunction() {
-        return get(2, Disjunction::new);
+        return get(2, Disjunction.class);
     }
 
     public boolean hasDisjunction() {

@@ -16,11 +16,11 @@ public final class Term extends NodeWrapper {
     }
 
     public Factor factor() {
-        return get(0, Factor::new);
+        return get(0, Factor.class);
     }
 
     public List<Term2> term2s() {
-        return getList(1, Term2::new);
+        return getList(1, Term2.class);
     }
 
     /**
@@ -33,11 +33,11 @@ public final class Term extends NodeWrapper {
         }
 
         public Term21 term21() {
-            return get(0, Term21::new);
+            return get(0, Term21.class);
         }
 
         public Factor factor() {
-            return get(1, Factor::new);
+            return get(1, Factor.class);
         }
     }
 

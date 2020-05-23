@@ -16,7 +16,7 @@ public final class ImportFromNames extends NodeWrapper {
     }
 
     public ImportFromNames1 importFromNames1() {
-        return get(0, ImportFromNames1::new);
+        return get(0, ImportFromNames1.class);
     }
 
     public boolean hasImportFromNames1() {
@@ -41,7 +41,7 @@ public final class ImportFromNames extends NodeWrapper {
         }
 
         public DottedName dottedName() {
-            return get(1, DottedName::new);
+            return get(1, DottedName.class);
         }
     }
 }

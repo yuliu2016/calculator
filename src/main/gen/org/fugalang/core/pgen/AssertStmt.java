@@ -14,11 +14,11 @@ public final class AssertStmt extends NodeWrapper {
     }
 
     public Expr expr() {
-        return get(1, Expr::new);
+        return get(1, Expr.class);
     }
 
     public AssertStmt3 expr1() {
-        return get(2, AssertStmt3::new);
+        return get(2, AssertStmt3.class);
     }
 
     public boolean hasExpr1() {
@@ -35,7 +35,7 @@ public final class AssertStmt extends NodeWrapper {
         }
 
         public Expr expr() {
-            return get(1, Expr::new);
+            return get(1, Expr.class);
         }
     }
 }

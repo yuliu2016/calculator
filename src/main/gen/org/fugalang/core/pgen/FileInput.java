@@ -17,7 +17,7 @@ public final class FileInput extends NodeWrapper {
     }
 
     public List<FileInput1> newlineOrStmts() {
-        return getList(0, FileInput1::new);
+        return getList(0, FileInput1.class);
     }
 
     public String endmarker() {
@@ -42,7 +42,7 @@ public final class FileInput extends NodeWrapper {
         }
 
         public Stmt stmt() {
-            return get(1, Stmt::new);
+            return get(1, Stmt.class);
         }
 
         public boolean hasStmt() {

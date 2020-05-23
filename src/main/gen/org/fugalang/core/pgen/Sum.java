@@ -16,11 +16,11 @@ public final class Sum extends NodeWrapper {
     }
 
     public Term term() {
-        return get(0, Term::new);
+        return get(0, Term.class);
     }
 
     public List<Sum2> sumOpTerms() {
-        return getList(1, Sum2::new);
+        return getList(1, Sum2.class);
     }
 
     /**
@@ -33,11 +33,11 @@ public final class Sum extends NodeWrapper {
         }
 
         public SumOp sumOp() {
-            return get(0, SumOp::new);
+            return get(0, SumOp.class);
         }
 
         public Term term() {
-            return get(1, Term::new);
+            return get(1, Term.class);
         }
     }
 }

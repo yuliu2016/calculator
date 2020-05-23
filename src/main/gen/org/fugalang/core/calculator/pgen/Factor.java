@@ -14,7 +14,7 @@ public final class Factor extends NodeWrapper {
     }
 
     public Factor1 factor1() {
-        return get(0, Factor1::new);
+        return get(0, Factor1.class);
     }
 
     public boolean hasFactor1() {
@@ -22,7 +22,7 @@ public final class Factor extends NodeWrapper {
     }
 
     public Power power() {
-        return get(1, Power::new);
+        return get(1, Power.class);
     }
 
     public boolean hasPower() {
@@ -39,11 +39,11 @@ public final class Factor extends NodeWrapper {
         }
 
         public Factor11 factor11() {
-            return get(0, Factor11::new);
+            return get(0, Factor11.class);
         }
 
         public Factor factor() {
-            return get(1, Factor::new);
+            return get(1, Factor.class);
         }
     }
 

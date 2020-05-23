@@ -14,6 +14,6 @@ public final class Subscript extends NodeWrapper {
     }
 
     public Slicelist slicelist() {
-        return get(1, Slicelist::new);
+        return get(1, Slicelist.class);
     }
 }

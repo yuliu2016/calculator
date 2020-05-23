@@ -16,11 +16,11 @@ public final class BitwiseAnd extends NodeWrapper {
     }
 
     public ShiftExpr shiftExpr() {
-        return get(0, ShiftExpr::new);
+        return get(0, ShiftExpr.class);
     }
 
     public List<BitwiseAnd2> shiftExprs() {
-        return getList(1, BitwiseAnd2::new);
+        return getList(1, BitwiseAnd2.class);
     }
 
     /**
@@ -33,7 +33,7 @@ public final class BitwiseAnd extends NodeWrapper {
         }
 
         public ShiftExpr shiftExpr() {
-            return get(1, ShiftExpr::new);
+            return get(1, ShiftExpr.class);
         }
     }
 }

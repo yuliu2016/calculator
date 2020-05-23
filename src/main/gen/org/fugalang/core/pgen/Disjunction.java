@@ -16,11 +16,11 @@ public final class Disjunction extends NodeWrapper {
     }
 
     public Conjunction conjunction() {
-        return get(0, Conjunction::new);
+        return get(0, Conjunction.class);
     }
 
     public List<Disjunction2> orConjunctions() {
-        return getList(1, Disjunction2::new);
+        return getList(1, Disjunction2.class);
     }
 
     /**
@@ -33,7 +33,7 @@ public final class Disjunction extends NodeWrapper {
         }
 
         public Conjunction conjunction() {
-            return get(1, Conjunction::new);
+            return get(1, Conjunction.class);
         }
     }
 }

@@ -26,7 +26,7 @@ public final class SmallStmt extends NodeWrapper {
     }
 
     public DelStmt delStmt() {
-        return get(3, DelStmt::new);
+        return get(3, DelStmt.class);
     }
 
     public boolean hasDelStmt() {
@@ -34,7 +34,7 @@ public final class SmallStmt extends NodeWrapper {
     }
 
     public ReturnStmt returnStmt() {
-        return get(4, ReturnStmt::new);
+        return get(4, ReturnStmt.class);
     }
 
     public boolean hasReturnStmt() {
@@ -42,7 +42,7 @@ public final class SmallStmt extends NodeWrapper {
     }
 
     public RaiseStmt raiseStmt() {
-        return get(5, RaiseStmt::new);
+        return get(5, RaiseStmt.class);
     }
 
     public boolean hasRaiseStmt() {
@@ -50,7 +50,7 @@ public final class SmallStmt extends NodeWrapper {
     }
 
     public NonlocalStmt nonlocalStmt() {
-        return get(6, NonlocalStmt::new);
+        return get(6, NonlocalStmt.class);
     }
 
     public boolean hasNonlocalStmt() {
@@ -58,7 +58,7 @@ public final class SmallStmt extends NodeWrapper {
     }
 
     public AssertStmt assertStmt() {
-        return get(7, AssertStmt::new);
+        return get(7, AssertStmt.class);
     }
 
     public boolean hasAssertStmt() {
@@ -66,7 +66,7 @@ public final class SmallStmt extends NodeWrapper {
     }
 
     public ImportName importName() {
-        return get(8, ImportName::new);
+        return get(8, ImportName.class);
     }
 
     public boolean hasImportName() {
@@ -74,7 +74,7 @@ public final class SmallStmt extends NodeWrapper {
     }
 
     public ImportFrom importFrom() {
-        return get(9, ImportFrom::new);
+        return get(9, ImportFrom.class);
     }
 
     public boolean hasImportFrom() {
@@ -82,7 +82,7 @@ public final class SmallStmt extends NodeWrapper {
     }
 
     public Assignment assignment() {
-        return get(10, Assignment::new);
+        return get(10, Assignment.class);
     }
 
     public boolean hasAssignment() {

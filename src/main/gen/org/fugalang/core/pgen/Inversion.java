@@ -14,7 +14,7 @@ public final class Inversion extends NodeWrapper {
     }
 
     public Inversion1 notInversion() {
-        return get(0, Inversion1::new);
+        return get(0, Inversion1.class);
     }
 
     public boolean hasNotInversion() {
@@ -22,7 +22,7 @@ public final class Inversion extends NodeWrapper {
     }
 
     public Comparison comparison() {
-        return get(1, Comparison::new);
+        return get(1, Comparison.class);
     }
 
     public boolean hasComparison() {
@@ -39,7 +39,7 @@ public final class Inversion extends NodeWrapper {
         }
 
         public Inversion inversion() {
-            return get(1, Inversion::new);
+            return get(1, Inversion.class);
         }
     }
 }

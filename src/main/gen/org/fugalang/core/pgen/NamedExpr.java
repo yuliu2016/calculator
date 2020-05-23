@@ -15,7 +15,7 @@ public final class NamedExpr extends NodeWrapper {
     }
 
     public NamedExpr1 nameExpr() {
-        return get(0, NamedExpr1::new);
+        return get(0, NamedExpr1.class);
     }
 
     public boolean hasNameExpr() {
@@ -23,7 +23,7 @@ public final class NamedExpr extends NodeWrapper {
     }
 
     public Expr expr() {
-        return get(1, Expr::new);
+        return get(1, Expr.class);
     }
 
     public boolean hasExpr() {
@@ -44,7 +44,7 @@ public final class NamedExpr extends NodeWrapper {
         }
 
         public Expr expr() {
-            return get(2, Expr::new);
+            return get(2, Expr.class);
         }
     }
 }

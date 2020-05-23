@@ -14,7 +14,7 @@ public final class FuncArgs extends NodeWrapper {
     }
 
     public SimpleArgList simpleArgList() {
-        return get(0, SimpleArgList::new);
+        return get(0, SimpleArgList.class);
     }
 
     public boolean hasSimpleArgList() {
@@ -22,7 +22,7 @@ public final class FuncArgs extends NodeWrapper {
     }
 
     public FuncArgs2 funcArgs2() {
-        return get(1, FuncArgs2::new);
+        return get(1, FuncArgs2.class);
     }
 
     public boolean hasFuncArgs2() {
@@ -39,7 +39,7 @@ public final class FuncArgs extends NodeWrapper {
         }
 
         public TypedArgList typedArgList() {
-            return get(1, TypedArgList::new);
+            return get(1, TypedArgList.class);
         }
 
         public boolean hasTypedArgList() {

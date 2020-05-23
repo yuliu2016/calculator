@@ -14,7 +14,7 @@ public final class Funcdef extends NodeWrapper {
     }
 
     public FuncTypeHint funcTypeHint() {
-        return get(1, FuncTypeHint::new);
+        return get(1, FuncTypeHint.class);
     }
 
     public boolean hasFuncTypeHint() {
@@ -22,7 +22,7 @@ public final class Funcdef extends NodeWrapper {
     }
 
     public FuncArgs funcArgs() {
-        return get(2, FuncArgs::new);
+        return get(2, FuncArgs.class);
     }
 
     public boolean hasFuncArgs() {
@@ -30,6 +30,6 @@ public final class Funcdef extends NodeWrapper {
     }
 
     public FuncSuite funcSuite() {
-        return get(3, FuncSuite::new);
+        return get(3, FuncSuite.class);
     }
 }

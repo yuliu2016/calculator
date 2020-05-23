@@ -17,7 +17,7 @@ public final class EvalInput extends NodeWrapper {
     }
 
     public Exprlist exprlist() {
-        return get(0, Exprlist::new);
+        return get(0, Exprlist.class);
     }
 
     public List<String> newlines() {

@@ -21,7 +21,7 @@ public final class NonlocalStmt extends NodeWrapper {
     }
 
     public List<NonlocalStmt3> names() {
-        return getList(2, NonlocalStmt3::new);
+        return getList(2, NonlocalStmt3.class);
     }
 
     /**

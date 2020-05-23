@@ -16,11 +16,11 @@ public final class SimpleStmt extends NodeWrapper {
     }
 
     public SmallStmt smallStmt() {
-        return get(0, SmallStmt::new);
+        return get(0, SmallStmt.class);
     }
 
     public List<SimpleStmt2> smallStmts() {
-        return getList(1, SimpleStmt2::new);
+        return getList(1, SimpleStmt2.class);
     }
 
     public boolean isSemicolon() {
@@ -37,7 +37,7 @@ public final class SimpleStmt extends NodeWrapper {
         }
 
         public SmallStmt smallStmt() {
-            return get(1, SmallStmt::new);
+            return get(1, SmallStmt.class);
         }
     }
 }

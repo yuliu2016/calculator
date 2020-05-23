@@ -16,15 +16,15 @@ public final class Primary extends NodeWrapper {
     }
 
     public Atom atom() {
-        return get(0, Atom::new);
+        return get(0, Atom.class);
     }
 
     public List<Trailer> trailers() {
-        return getList(1, Trailer::new);
+        return getList(1, Trailer.class);
     }
 
     public BlockSuite blockSuite() {
-        return get(2, BlockSuite::new);
+        return get(2, BlockSuite.class);
     }
 
     public boolean hasBlockSuite() {

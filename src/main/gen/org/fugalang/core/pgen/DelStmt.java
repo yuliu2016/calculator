@@ -14,6 +14,6 @@ public final class DelStmt extends NodeWrapper {
     }
 
     public Targetlist targetlist() {
-        return get(1, Targetlist::new);
+        return get(1, Targetlist.class);
     }
 }

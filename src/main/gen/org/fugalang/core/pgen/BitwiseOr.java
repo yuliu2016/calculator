@@ -16,11 +16,11 @@ public final class BitwiseOr extends NodeWrapper {
     }
 
     public BitwiseXor bitwiseXor() {
-        return get(0, BitwiseXor::new);
+        return get(0, BitwiseXor.class);
     }
 
     public List<BitwiseOr2> bitwiseXors() {
-        return getList(1, BitwiseOr2::new);
+        return getList(1, BitwiseOr2.class);
     }
 
     /**
@@ -33,7 +33,7 @@ public final class BitwiseOr extends NodeWrapper {
         }
 
         public BitwiseXor bitwiseXor() {
-            return get(1, BitwiseXor::new);
+            return get(1, BitwiseXor.class);
         }
     }
 }

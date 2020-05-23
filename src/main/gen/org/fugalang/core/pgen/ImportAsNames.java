@@ -16,11 +16,11 @@ public final class ImportAsNames extends NodeWrapper {
     }
 
     public ImportAsName importAsName() {
-        return get(0, ImportAsName::new);
+        return get(0, ImportAsName.class);
     }
 
     public List<ImportAsNames2> importAsNames() {
-        return getList(1, ImportAsNames2::new);
+        return getList(1, ImportAsNames2.class);
     }
 
     /**
@@ -33,7 +33,7 @@ public final class ImportAsNames extends NodeWrapper {
         }
 
         public ImportAsName importAsName() {
-            return get(1, ImportAsName::new);
+            return get(1, ImportAsName.class);
         }
     }
 }

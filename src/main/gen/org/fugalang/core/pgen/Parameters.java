@@ -14,7 +14,7 @@ public final class Parameters extends NodeWrapper {
     }
 
     public Arglist arglist() {
-        return get(1, Arglist::new);
+        return get(1, Arglist.class);
     }
 
     public boolean hasArglist() {

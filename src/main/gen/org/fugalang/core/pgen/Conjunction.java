@@ -16,11 +16,11 @@ public final class Conjunction extends NodeWrapper {
     }
 
     public Inversion inversion() {
-        return get(0, Inversion::new);
+        return get(0, Inversion.class);
     }
 
     public List<Conjunction2> andInversions() {
-        return getList(1, Conjunction2::new);
+        return getList(1, Conjunction2.class);
     }
 
     /**
@@ -33,7 +33,7 @@ public final class Conjunction extends NodeWrapper {
         }
 
         public Inversion inversion() {
-            return get(1, Inversion::new);
+            return get(1, Inversion.class);
         }
     }
 }

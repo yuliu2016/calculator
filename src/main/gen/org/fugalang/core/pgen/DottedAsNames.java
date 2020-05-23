@@ -16,11 +16,11 @@ public final class DottedAsNames extends NodeWrapper {
     }
 
     public DottedAsName dottedAsName() {
-        return get(0, DottedAsName::new);
+        return get(0, DottedAsName.class);
     }
 
     public List<DottedAsNames2> dottedAsNames() {
-        return getList(1, DottedAsNames2::new);
+        return getList(1, DottedAsNames2.class);
     }
 
     /**
@@ -33,7 +33,7 @@ public final class DottedAsNames extends NodeWrapper {
         }
 
         public DottedAsName dottedAsName() {
-            return get(1, DottedAsName::new);
+            return get(1, DottedAsName.class);
         }
     }
 }

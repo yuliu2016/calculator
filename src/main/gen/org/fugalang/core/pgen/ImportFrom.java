@@ -14,11 +14,11 @@ public final class ImportFrom extends NodeWrapper {
     }
 
     public ImportFromNames importFromNames() {
-        return get(1, ImportFromNames::new);
+        return get(1, ImportFromNames.class);
     }
 
     public ImportFrom4 importFrom4() {
-        return get(3, ImportFrom4::new);
+        return get(3, ImportFrom4.class);
     }
 
     /**
@@ -35,7 +35,7 @@ public final class ImportFrom extends NodeWrapper {
         }
 
         public ImportFrom42 importFrom42() {
-            return get(1, ImportFrom42::new);
+            return get(1, ImportFrom42.class);
         }
 
         public boolean hasImportFrom42() {
@@ -43,7 +43,7 @@ public final class ImportFrom extends NodeWrapper {
         }
 
         public ImportAsNames importAsNames() {
-            return get(2, ImportAsNames::new);
+            return get(2, ImportAsNames.class);
         }
 
         public boolean hasImportAsNames() {
@@ -61,7 +61,7 @@ public final class ImportFrom extends NodeWrapper {
         }
 
         public ImportAsNames importAsNames() {
-            return get(1, ImportAsNames::new);
+            return get(1, ImportAsNames.class);
         }
 
         public boolean isComma() {

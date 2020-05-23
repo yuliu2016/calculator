@@ -16,11 +16,11 @@ public final class DictMaker extends NodeWrapper {
     }
 
     public DictItem dictItem() {
-        return get(0, DictItem::new);
+        return get(0, DictItem.class);
     }
 
     public List<DictMaker2> dictItems() {
-        return getList(1, DictMaker2::new);
+        return getList(1, DictMaker2.class);
     }
 
     public boolean isComma() {
@@ -37,7 +37,7 @@ public final class DictMaker extends NodeWrapper {
         }
 
         public DictItem dictItem() {
-            return get(1, DictItem::new);
+            return get(1, DictItem.class);
         }
     }
 }

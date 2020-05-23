@@ -16,11 +16,11 @@ public final class Comparison extends NodeWrapper {
     }
 
     public BitwiseOr bitwiseOr() {
-        return get(0, BitwiseOr::new);
+        return get(0, BitwiseOr.class);
     }
 
     public List<Comparison2> compOpBitwiseOrs() {
-        return getList(1, Comparison2::new);
+        return getList(1, Comparison2.class);
     }
 
     /**
@@ -33,11 +33,11 @@ public final class Comparison extends NodeWrapper {
         }
 
         public CompOp compOp() {
-            return get(0, CompOp::new);
+            return get(0, CompOp.class);
         }
 
         public BitwiseOr bitwiseOr() {
-            return get(1, BitwiseOr::new);
+            return get(1, BitwiseOr.class);
         }
     }
 }

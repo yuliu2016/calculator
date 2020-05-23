@@ -14,7 +14,7 @@ public final class Suite extends NodeWrapper {
     }
 
     public Suite1 simpleStmt() {
-        return get(0, Suite1::new);
+        return get(0, Suite1.class);
     }
 
     public boolean hasSimpleStmt() {
@@ -22,7 +22,7 @@ public final class Suite extends NodeWrapper {
     }
 
     public BlockSuite blockSuite() {
-        return get(1, BlockSuite::new);
+        return get(1, BlockSuite.class);
     }
 
     public boolean hasBlockSuite() {
@@ -39,7 +39,7 @@ public final class Suite extends NodeWrapper {
         }
 
         public SimpleStmt simpleStmt() {
-            return get(1, SimpleStmt::new);
+            return get(1, SimpleStmt.class);
         }
     }
 }

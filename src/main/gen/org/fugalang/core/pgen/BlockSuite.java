@@ -17,7 +17,7 @@ public final class BlockSuite extends NodeWrapper {
     }
 
     public BlockSuite1 simpleStmt() {
-        return get(0, BlockSuite1::new);
+        return get(0, BlockSuite1.class);
     }
 
     public boolean hasSimpleStmt() {
@@ -25,7 +25,7 @@ public final class BlockSuite extends NodeWrapper {
     }
 
     public BlockSuite2 blockSuite2() {
-        return get(1, BlockSuite2::new);
+        return get(1, BlockSuite2.class);
     }
 
     public boolean hasBlockSuite2() {
@@ -42,7 +42,7 @@ public final class BlockSuite extends NodeWrapper {
         }
 
         public SimpleStmt simpleStmt() {
-            return get(1, SimpleStmt::new);
+            return get(1, SimpleStmt.class);
         }
     }
 
@@ -60,7 +60,7 @@ public final class BlockSuite extends NodeWrapper {
         }
 
         public List<Stmt> stmts() {
-            return getList(2, Stmt::new);
+            return getList(2, Stmt.class);
         }
     }
 }

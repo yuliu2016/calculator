@@ -14,6 +14,6 @@ public final class StarExpr extends NodeWrapper {
     }
 
     public BitwiseOr bitwiseOr() {
-        return get(1, BitwiseOr::new);
+        return get(1, BitwiseOr.class);
     }
 }

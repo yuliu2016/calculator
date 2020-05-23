@@ -14,11 +14,11 @@ public final class DefaultArg extends NodeWrapper {
     }
 
     public TypedArg typedArg() {
-        return get(0, TypedArg::new);
+        return get(0, TypedArg.class);
     }
 
     public DefaultArg2 expr() {
-        return get(1, DefaultArg2::new);
+        return get(1, DefaultArg2.class);
     }
 
     public boolean hasExpr() {
@@ -35,7 +35,7 @@ public final class DefaultArg extends NodeWrapper {
         }
 
         public Expr expr() {
-            return get(1, Expr::new);
+            return get(1, Expr.class);
         }
     }
 }

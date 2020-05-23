@@ -19,7 +19,7 @@ public final class SimpleArg extends NodeWrapper {
     }
 
     public SimpleArg2 expr() {
-        return get(1, SimpleArg2::new);
+        return get(1, SimpleArg2.class);
     }
 
     public boolean hasExpr() {
@@ -36,7 +36,7 @@ public final class SimpleArg extends NodeWrapper {
         }
 
         public Expr expr() {
-            return get(1, Expr::new);
+            return get(1, Expr.class);
         }
     }
 }

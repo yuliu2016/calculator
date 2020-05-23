@@ -14,15 +14,15 @@ public final class CompFor extends NodeWrapper {
     }
 
     public Targetlist targetlist() {
-        return get(1, Targetlist::new);
+        return get(1, Targetlist.class);
     }
 
     public Disjunction disjunction() {
-        return get(3, Disjunction::new);
+        return get(3, Disjunction.class);
     }
 
     public CompIter compIter() {
-        return get(4, CompIter::new);
+        return get(4, CompIter.class);
     }
 
     public boolean hasCompIter() {

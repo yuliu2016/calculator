@@ -15,7 +15,7 @@ public final class Argument extends NodeWrapper {
     }
 
     public Argument1 nameExpr() {
-        return get(0, Argument1::new);
+        return get(0, Argument1.class);
     }
 
     public boolean hasNameExpr() {
@@ -23,7 +23,7 @@ public final class Argument extends NodeWrapper {
     }
 
     public Argument2 nameExpr1() {
-        return get(1, Argument2::new);
+        return get(1, Argument2.class);
     }
 
     public boolean hasNameExpr1() {
@@ -31,7 +31,7 @@ public final class Argument extends NodeWrapper {
     }
 
     public Argument3 expr() {
-        return get(2, Argument3::new);
+        return get(2, Argument3.class);
     }
 
     public boolean hasExpr() {
@@ -39,7 +39,7 @@ public final class Argument extends NodeWrapper {
     }
 
     public Argument4 expr1() {
-        return get(3, Argument4::new);
+        return get(3, Argument4.class);
     }
 
     public boolean hasExpr1() {
@@ -47,7 +47,7 @@ public final class Argument extends NodeWrapper {
     }
 
     public Expr expr2() {
-        return get(4, Expr::new);
+        return get(4, Expr.class);
     }
 
     public boolean hasExpr2() {
@@ -68,7 +68,7 @@ public final class Argument extends NodeWrapper {
         }
 
         public Expr expr() {
-            return get(2, Expr::new);
+            return get(2, Expr.class);
         }
     }
 
@@ -86,7 +86,7 @@ public final class Argument extends NodeWrapper {
         }
 
         public Expr expr() {
-            return get(2, Expr::new);
+            return get(2, Expr.class);
         }
     }
 
@@ -100,7 +100,7 @@ public final class Argument extends NodeWrapper {
         }
 
         public Expr expr() {
-            return get(1, Expr::new);
+            return get(1, Expr.class);
         }
     }
 
@@ -114,7 +114,7 @@ public final class Argument extends NodeWrapper {
         }
 
         public Expr expr() {
-            return get(1, Expr::new);
+            return get(1, Expr.class);
         }
     }
 }

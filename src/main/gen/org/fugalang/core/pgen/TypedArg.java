@@ -19,7 +19,7 @@ public final class TypedArg extends NodeWrapper {
     }
 
     public TypedArg2 expr() {
-        return get(1, TypedArg2::new);
+        return get(1, TypedArg2.class);
     }
 
     public boolean hasExpr() {
@@ -36,7 +36,7 @@ public final class TypedArg extends NodeWrapper {
         }
 
         public Expr expr() {
-            return get(1, Expr::new);
+            return get(1, Expr.class);
         }
     }
 }

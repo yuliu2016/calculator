@@ -16,11 +16,11 @@ public final class NamedExprList extends NodeWrapper {
     }
 
     public NamedExprStar namedExprStar() {
-        return get(0, NamedExprStar::new);
+        return get(0, NamedExprStar.class);
     }
 
     public List<NamedExprList2> namedExprStars() {
-        return getList(1, NamedExprList2::new);
+        return getList(1, NamedExprList2.class);
     }
 
     public boolean isComma() {
@@ -37,7 +37,7 @@ public final class NamedExprList extends NodeWrapper {
         }
 
         public NamedExprStar namedExprStar() {
-            return get(1, NamedExprStar::new);
+            return get(1, NamedExprStar.class);
         }
     }
 }

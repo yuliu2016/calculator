@@ -16,15 +16,15 @@ public final class WithStmt extends NodeWrapper {
     }
 
     public WithItem withItem() {
-        return get(1, WithItem::new);
+        return get(1, WithItem.class);
     }
 
     public List<WithStmt3> withItems() {
-        return getList(2, WithStmt3::new);
+        return getList(2, WithStmt3.class);
     }
 
     public Suite suite() {
-        return get(3, Suite::new);
+        return get(3, Suite.class);
     }
 
     /**
@@ -37,7 +37,7 @@ public final class WithStmt extends NodeWrapper {
         }
 
         public WithItem withItem() {
-            return get(1, WithItem::new);
+            return get(1, WithItem.class);
         }
     }
 }

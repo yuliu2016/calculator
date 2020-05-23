@@ -16,11 +16,11 @@ public final class ExprlistStar extends NodeWrapper {
     }
 
     public ExprOrStar exprOrStar() {
-        return get(0, ExprOrStar::new);
+        return get(0, ExprOrStar.class);
     }
 
     public List<ExprlistStar2> exprOrStars() {
-        return getList(1, ExprlistStar2::new);
+        return getList(1, ExprlistStar2.class);
     }
 
     public boolean isComma() {
@@ -37,7 +37,7 @@ public final class ExprlistStar extends NodeWrapper {
         }
 
         public ExprOrStar exprOrStar() {
-            return get(1, ExprOrStar::new);
+            return get(1, ExprOrStar.class);
         }
     }
 }

@@ -23,7 +23,7 @@ public final class Target extends NodeWrapper {
     }
 
     public Target2 targetlist() {
-        return get(1, Target2::new);
+        return get(1, Target2.class);
     }
 
     public boolean hasTargetlist() {
@@ -31,7 +31,7 @@ public final class Target extends NodeWrapper {
     }
 
     public Target3 target() {
-        return get(2, Target3::new);
+        return get(2, Target3.class);
     }
 
     public boolean hasTarget() {
@@ -39,7 +39,7 @@ public final class Target extends NodeWrapper {
     }
 
     public Primary primary() {
-        return get(3, Primary::new);
+        return get(3, Primary.class);
     }
 
     public boolean hasPrimary() {
@@ -56,7 +56,7 @@ public final class Target extends NodeWrapper {
         }
 
         public Targetlist targetlist() {
-            return get(1, Targetlist::new);
+            return get(1, Targetlist.class);
         }
     }
 
@@ -70,7 +70,7 @@ public final class Target extends NodeWrapper {
         }
 
         public Target target() {
-            return get(1, Target::new);
+            return get(1, Target.class);
         }
     }
 }

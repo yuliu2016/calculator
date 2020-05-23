@@ -14,7 +14,7 @@ public final class FuncSuite extends NodeWrapper {
     }
 
     public FuncSuite1 expr() {
-        return get(0, FuncSuite1::new);
+        return get(0, FuncSuite1.class);
     }
 
     public boolean hasExpr() {
@@ -22,7 +22,7 @@ public final class FuncSuite extends NodeWrapper {
     }
 
     public BlockSuite blockSuite() {
-        return get(1, BlockSuite::new);
+        return get(1, BlockSuite.class);
     }
 
     public boolean hasBlockSuite() {
@@ -39,7 +39,7 @@ public final class FuncSuite extends NodeWrapper {
         }
 
         public Expr expr() {
-            return get(1, Expr::new);
+            return get(1, Expr.class);
         }
     }
 }

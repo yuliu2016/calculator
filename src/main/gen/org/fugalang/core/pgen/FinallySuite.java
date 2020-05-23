@@ -14,6 +14,6 @@ public final class FinallySuite extends NodeWrapper {
     }
 
     public Suite suite() {
-        return get(1, Suite::new);
+        return get(1, Suite.class);
     }
 }

@@ -15,7 +15,7 @@ public final class SubRule extends NodeWrapper {
     }
 
     public SubRule1 orRule() {
-        return get(0, SubRule1::new);
+        return get(0, SubRule1.class);
     }
 
     public boolean hasOrRule() {
@@ -23,7 +23,7 @@ public final class SubRule extends NodeWrapper {
     }
 
     public SubRule2 orRule1() {
-        return get(1, SubRule2::new);
+        return get(1, SubRule2.class);
     }
 
     public boolean hasOrRule1() {
@@ -56,7 +56,7 @@ public final class SubRule extends NodeWrapper {
         }
 
         public OrRule orRule() {
-            return get(1, OrRule::new);
+            return get(1, OrRule.class);
         }
     }
 
@@ -70,7 +70,7 @@ public final class SubRule extends NodeWrapper {
         }
 
         public OrRule orRule() {
-            return get(1, OrRule::new);
+            return get(1, OrRule.class);
         }
     }
 }

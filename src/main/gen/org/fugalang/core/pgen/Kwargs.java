@@ -14,7 +14,7 @@ public final class Kwargs extends NodeWrapper {
     }
 
     public TypedArg typedArg() {
-        return get(1, TypedArg::new);
+        return get(1, TypedArg.class);
     }
 
     public boolean isComma() {

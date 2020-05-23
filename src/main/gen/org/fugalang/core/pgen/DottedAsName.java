@@ -15,11 +15,11 @@ public final class DottedAsName extends NodeWrapper {
     }
 
     public DottedName dottedName() {
-        return get(0, DottedName::new);
+        return get(0, DottedName.class);
     }
 
     public DottedAsName2 asName() {
-        return get(1, DottedAsName2::new);
+        return get(1, DottedAsName2.class);
     }
 
     public boolean hasAsName() {

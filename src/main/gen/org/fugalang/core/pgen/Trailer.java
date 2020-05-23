@@ -15,7 +15,7 @@ public final class Trailer extends NodeWrapper {
     }
 
     public Trailer1 name() {
-        return get(0, Trailer1::new);
+        return get(0, Trailer1.class);
     }
 
     public boolean hasName() {
@@ -23,7 +23,7 @@ public final class Trailer extends NodeWrapper {
     }
 
     public Parameters parameters() {
-        return get(1, Parameters::new);
+        return get(1, Parameters.class);
     }
 
     public boolean hasParameters() {
@@ -31,7 +31,7 @@ public final class Trailer extends NodeWrapper {
     }
 
     public Subscript subscript() {
-        return get(2, Subscript::new);
+        return get(2, Subscript.class);
     }
 
     public boolean hasSubscript() {

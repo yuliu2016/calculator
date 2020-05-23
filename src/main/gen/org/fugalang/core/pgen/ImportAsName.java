@@ -19,7 +19,7 @@ public final class ImportAsName extends NodeWrapper {
     }
 
     public ImportAsName2 asName() {
-        return get(1, ImportAsName2::new);
+        return get(1, ImportAsName2.class);
     }
 
     public boolean hasAsName() {

@@ -16,7 +16,7 @@ public final class ArgsKwargs extends NodeWrapper {
     }
 
     public TypedArg typedArg() {
-        return get(1, TypedArg::new);
+        return get(1, TypedArg.class);
     }
 
     public boolean hasTypedArg() {
@@ -24,11 +24,11 @@ public final class ArgsKwargs extends NodeWrapper {
     }
 
     public List<ArgsKwargs3> defaultArgs() {
-        return getList(2, ArgsKwargs3::new);
+        return getList(2, ArgsKwargs3.class);
     }
 
     public ArgsKwargs4 argsKwargs4() {
-        return get(3, ArgsKwargs4::new);
+        return get(3, ArgsKwargs4.class);
     }
 
     public boolean hasArgsKwargs4() {
@@ -45,7 +45,7 @@ public final class ArgsKwargs extends NodeWrapper {
         }
 
         public DefaultArg defaultArg() {
-            return get(1, DefaultArg::new);
+            return get(1, DefaultArg.class);
         }
     }
 
@@ -59,7 +59,7 @@ public final class ArgsKwargs extends NodeWrapper {
         }
 
         public Kwargs kwargs() {
-            return get(1, Kwargs::new);
+            return get(1, Kwargs.class);
         }
 
         public boolean hasKwargs() {

@@ -16,11 +16,11 @@ public final class Slicelist extends NodeWrapper {
     }
 
     public Slice slice() {
-        return get(0, Slice::new);
+        return get(0, Slice.class);
     }
 
     public List<Slicelist2> slices() {
-        return getList(1, Slicelist2::new);
+        return getList(1, Slicelist2.class);
     }
 
     public boolean isComma() {
@@ -37,7 +37,7 @@ public final class Slicelist extends NodeWrapper {
         }
 
         public Slice slice() {
-            return get(1, Slice::new);
+            return get(1, Slice.class);
         }
     }
 }

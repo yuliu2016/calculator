@@ -42,7 +42,7 @@ public final class CompOp extends NodeWrapper {
     }
 
     public CompOp8 notIn() {
-        return get(7, CompOp8::new);
+        return get(7, CompOp8.class);
     }
 
     public boolean hasNotIn() {
@@ -54,7 +54,7 @@ public final class CompOp extends NodeWrapper {
     }
 
     public CompOp10 isNot() {
-        return get(9, CompOp10::new);
+        return get(9, CompOp10.class);
     }
 
     public boolean hasIsNot() {

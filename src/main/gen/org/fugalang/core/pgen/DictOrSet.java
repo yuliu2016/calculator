@@ -14,7 +14,7 @@ public final class DictOrSet extends NodeWrapper {
     }
 
     public DictOrSet2 dictMakerOrSetMaker() {
-        return get(1, DictOrSet2::new);
+        return get(1, DictOrSet2.class);
     }
 
     public boolean hasDictMakerOrSetMaker() {
@@ -31,7 +31,7 @@ public final class DictOrSet extends NodeWrapper {
         }
 
         public DictMaker dictMaker() {
-            return get(0, DictMaker::new);
+            return get(0, DictMaker.class);
         }
 
         public boolean hasDictMaker() {
@@ -39,7 +39,7 @@ public final class DictOrSet extends NodeWrapper {
         }
 
         public SetMaker setMaker() {
-            return get(1, SetMaker::new);
+            return get(1, SetMaker.class);
         }
 
         public boolean hasSetMaker() {

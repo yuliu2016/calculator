@@ -14,7 +14,7 @@ public final class Slice extends NodeWrapper {
     }
 
     public Slice1 slice1() {
-        return get(0, Slice1::new);
+        return get(0, Slice1.class);
     }
 
     public boolean hasSlice1() {
@@ -22,7 +22,7 @@ public final class Slice extends NodeWrapper {
     }
 
     public Expr expr() {
-        return get(1, Expr::new);
+        return get(1, Expr.class);
     }
 
     public boolean hasExpr() {
@@ -39,7 +39,7 @@ public final class Slice extends NodeWrapper {
         }
 
         public Expr expr() {
-            return get(0, Expr::new);
+            return get(0, Expr.class);
         }
 
         public boolean hasExpr() {
@@ -47,11 +47,11 @@ public final class Slice extends NodeWrapper {
         }
 
         public SliceExpr sliceExpr() {
-            return get(1, SliceExpr::new);
+            return get(1, SliceExpr.class);
         }
 
         public SliceExpr sliceExpr1() {
-            return get(2, SliceExpr::new);
+            return get(2, SliceExpr.class);
         }
 
         public boolean hasSliceExpr1() {

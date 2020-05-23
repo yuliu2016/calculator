@@ -23,7 +23,7 @@ public final class SingleInput extends NodeWrapper {
     }
 
     public SimpleStmt simpleStmt() {
-        return get(1, SimpleStmt::new);
+        return get(1, SimpleStmt.class);
     }
 
     public boolean hasSimpleStmt() {
@@ -31,7 +31,7 @@ public final class SingleInput extends NodeWrapper {
     }
 
     public SingleInput3 compoundStmtNewline() {
-        return get(2, SingleInput3::new);
+        return get(2, SingleInput3.class);
     }
 
     public boolean hasCompoundStmtNewline() {
@@ -48,7 +48,7 @@ public final class SingleInput extends NodeWrapper {
         }
 
         public CompoundStmt compoundStmt() {
-            return get(0, CompoundStmt::new);
+            return get(0, CompoundStmt.class);
         }
 
         public String newline() {

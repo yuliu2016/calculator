@@ -14,10 +14,10 @@ public final class ElifStmt extends NodeWrapper {
     }
 
     public NamedExpr namedExpr() {
-        return get(1, NamedExpr::new);
+        return get(1, NamedExpr.class);
     }
 
     public Suite suite() {
-        return get(2, Suite::new);
+        return get(2, Suite.class);
     }
 }

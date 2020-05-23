@@ -15,7 +15,7 @@ public final class Atom extends NodeWrapper {
     }
 
     public Atom1 sum() {
-        return get(0, Atom1::new);
+        return get(0, Atom1.class);
     }
 
     public boolean hasSum() {
@@ -40,7 +40,7 @@ public final class Atom extends NodeWrapper {
         }
 
         public Sum sum() {
-            return get(1, Sum::new);
+            return get(1, Sum.class);
         }
     }
 }

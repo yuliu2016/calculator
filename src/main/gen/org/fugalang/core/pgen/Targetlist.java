@@ -16,11 +16,11 @@ public final class Targetlist extends NodeWrapper {
     }
 
     public Target target() {
-        return get(0, Target::new);
+        return get(0, Target.class);
     }
 
     public List<Targetlist2> targets() {
-        return getList(1, Targetlist2::new);
+        return getList(1, Targetlist2.class);
     }
 
     public boolean isComma() {
@@ -37,7 +37,7 @@ public final class Targetlist extends NodeWrapper {
         }
 
         public Target target() {
-            return get(1, Target::new);
+            return get(1, Target.class);
         }
     }
 }

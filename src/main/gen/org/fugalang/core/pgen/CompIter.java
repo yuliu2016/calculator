@@ -14,7 +14,7 @@ public final class CompIter extends NodeWrapper {
     }
 
     public CompFor compFor() {
-        return get(0, CompFor::new);
+        return get(0, CompFor.class);
     }
 
     public boolean hasCompFor() {
@@ -22,7 +22,7 @@ public final class CompIter extends NodeWrapper {
     }
 
     public CompIf compIf() {
-        return get(1, CompIf::new);
+        return get(1, CompIf.class);
     }
 
     public boolean hasCompIf() {

@@ -16,11 +16,11 @@ public final class AndRule extends NodeWrapper {
     }
 
     public RepeatRule repeatRule() {
-        return get(0, RepeatRule::new);
+        return get(0, RepeatRule.class);
     }
 
     public List<AndRule2> repeatRules() {
-        return getList(1, AndRule2::new);
+        return getList(1, AndRule2.class);
     }
 
     /**
@@ -33,7 +33,7 @@ public final class AndRule extends NodeWrapper {
         }
 
         public RepeatRule repeatRule() {
-            return get(0, RepeatRule::new);
+            return get(0, RepeatRule.class);
         }
     }
 }
