@@ -5,7 +5,7 @@ import org.fugalang.core.parser.ParseTreeNode;
 import org.fugalang.core.token.TokenType;
 
 /**
- * stmt: ('simple_stmt' | 'compound_stmt') 'NEWLINE'
+ * stmt: (simple_stmt | compound_stmt) NEWLINE
  */
 public final class Stmt extends NodeWrapper {
 
@@ -22,7 +22,7 @@ public final class Stmt extends NodeWrapper {
     }
 
     /**
-     * 'simple_stmt' | 'compound_stmt'
+     * simple_stmt | compound_stmt
      */
     public static final class Stmt1 extends NodeWrapper {
 

@@ -6,7 +6,7 @@ import org.fugalang.core.parser.ParseTreeNode;
 import java.util.List;
 
 /**
- * with_stmt: 'with' 'with_item' (',' 'with_item')* 'suite'
+ * with_stmt: 'with' with_item (',' with_item)* suite
  */
 public final class WithStmt extends NodeWrapper {
 
@@ -27,7 +27,7 @@ public final class WithStmt extends NodeWrapper {
     }
 
     /**
-     * ',' 'with_item'
+     * ',' with_item
      */
     public static final class WithStmt3 extends NodeWrapper {
 

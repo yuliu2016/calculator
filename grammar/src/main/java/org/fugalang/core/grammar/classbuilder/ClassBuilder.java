@@ -179,7 +179,7 @@ public class ClassBuilder {
                 .append("\");\n");
     }
 
-    public void generateParsingFunction(StringBuilder sb) {
+    public void generateParsingFunction(StringBuilder sb, boolean isNamedRule) {
         var small_name = getRuleName().replace(":", "_");
         var cap_name = small_name.toUpperCase();
         sb.append("\n");
@@ -192,7 +192,8 @@ public class ClassBuilder {
                     .append("\n     */\n");
         }
 
-        sb.append("    public static boolean ")
+        var visibility = isNamedRule ? "public" : "private";
+        sb.append("    ").append(visibility).append(" static boolean ")
                 .append(small_name)
                 .append("(ParseTree t, int lv) {\n");
 

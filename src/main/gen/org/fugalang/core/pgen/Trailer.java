@@ -5,7 +5,7 @@ import org.fugalang.core.parser.ParseTreeNode;
 import org.fugalang.core.token.TokenType;
 
 /**
- * trailer: '.' 'NAME' | 'parameters' | 'subscript'
+ * trailer: '.' NAME | parameters | subscript
  */
 public final class Trailer extends NodeWrapper {
 
@@ -38,7 +38,7 @@ public final class Trailer extends NodeWrapper {
     }
 
     /**
-     * '.' 'NAME'
+     * '.' NAME
      */
     public static final class Trailer1 extends NodeWrapper {
 

@@ -4,7 +4,7 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * elif_stmt: 'elif' 'named_expr' 'suite'
+ * elif_stmt: 'elif' named_expr suite
  */
 public final class ElifStmt extends NodeWrapper {
 

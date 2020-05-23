@@ -4,7 +4,7 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * power: 'atom' ['**' 'factor']
+ * power: atom ['**' factor]
  */
 public final class Power extends NodeWrapper {
 
@@ -25,7 +25,7 @@ public final class Power extends NodeWrapper {
     }
 
     /**
-     * '**' 'factor'
+     * '**' factor
      */
     public static final class Power2 extends NodeWrapper {
 

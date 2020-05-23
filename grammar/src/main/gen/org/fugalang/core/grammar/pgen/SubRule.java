@@ -5,7 +5,7 @@ import org.fugalang.core.parser.ParseTreeNode;
 import org.fugalang.core.token.TokenType;
 
 /**
- * sub_rule: '(' 'or_rule' ')' | '[' 'or_rule' ']' | 'NAME' | 'STRING'
+ * sub_rule: '(' or_rule ')' | '[' or_rule ']' | NAME | STRING
  */
 public final class SubRule extends NodeWrapper {
 
@@ -46,7 +46,7 @@ public final class SubRule extends NodeWrapper {
     }
 
     /**
-     * '(' 'or_rule' ')'
+     * '(' or_rule ')'
      */
     public static final class SubRule1 extends NodeWrapper {
 
@@ -60,7 +60,7 @@ public final class SubRule extends NodeWrapper {
     }
 
     /**
-     * '[' 'or_rule' ']'
+     * '[' or_rule ']'
      */
     public static final class SubRule2 extends NodeWrapper {
 

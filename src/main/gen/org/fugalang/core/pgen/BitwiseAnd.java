@@ -6,7 +6,7 @@ import org.fugalang.core.parser.ParseTreeNode;
 import java.util.List;
 
 /**
- * bitwise_and: 'shift_expr' ('&' 'shift_expr')*
+ * bitwise_and: shift_expr ('&' shift_expr)*
  */
 public final class BitwiseAnd extends NodeWrapper {
 
@@ -23,7 +23,7 @@ public final class BitwiseAnd extends NodeWrapper {
     }
 
     /**
-     * '&' 'shift_expr'
+     * '&' shift_expr
      */
     public static final class BitwiseAnd2 extends NodeWrapper {
 

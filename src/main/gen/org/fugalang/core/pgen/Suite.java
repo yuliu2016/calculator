@@ -4,7 +4,7 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * suite: ':' 'simple_stmt' | 'block_suite'
+ * suite: ':' simple_stmt | block_suite
  */
 public final class Suite extends NodeWrapper {
 
@@ -29,7 +29,7 @@ public final class Suite extends NodeWrapper {
     }
 
     /**
-     * ':' 'simple_stmt'
+     * ':' simple_stmt
      */
     public static final class Suite1 extends NodeWrapper {
 

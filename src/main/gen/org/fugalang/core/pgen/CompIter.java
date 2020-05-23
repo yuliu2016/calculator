@@ -4,7 +4,7 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * comp_iter: 'comp_for' | 'comp_if'
+ * comp_iter: comp_for | comp_if
  */
 public final class CompIter extends NodeWrapper {
 

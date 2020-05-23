@@ -4,7 +4,7 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * pipe_for: ['comp_for'] 'for' 'targetlist' ['if' 'named_expr'] ['parameters' | 'block_suite']
+ * pipe_for: [comp_for] 'for' targetlist ['if' named_expr] [parameters | block_suite]
  */
 public final class PipeFor extends NodeWrapper {
 
@@ -41,7 +41,7 @@ public final class PipeFor extends NodeWrapper {
     }
 
     /**
-     * 'if' 'named_expr'
+     * 'if' named_expr
      */
     public static final class PipeFor4 extends NodeWrapper {
 
@@ -55,7 +55,7 @@ public final class PipeFor extends NodeWrapper {
     }
 
     /**
-     * 'parameters' | 'block_suite'
+     * parameters | block_suite
      */
     public static final class PipeFor5 extends NodeWrapper {
 

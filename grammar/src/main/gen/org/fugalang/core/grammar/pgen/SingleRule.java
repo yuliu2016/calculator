@@ -5,7 +5,7 @@ import org.fugalang.core.parser.ParseTreeNode;
 import org.fugalang.core.token.TokenType;
 
 /**
- * single_rule: 'NAME' ':' ['NEWLINE' '|'] 'or_rule' 'NEWLINE'
+ * single_rule: NAME ':' [NEWLINE '|'] or_rule NEWLINE
  */
 public final class SingleRule extends NodeWrapper {
 
@@ -34,7 +34,7 @@ public final class SingleRule extends NodeWrapper {
     }
 
     /**
-     * 'NEWLINE' '|'
+     * NEWLINE '|'
      */
     public static final class SingleRule3 extends NodeWrapper {
 

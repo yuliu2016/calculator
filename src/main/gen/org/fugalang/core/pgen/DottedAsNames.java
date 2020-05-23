@@ -6,7 +6,7 @@ import org.fugalang.core.parser.ParseTreeNode;
 import java.util.List;
 
 /**
- * dotted_as_names: 'dotted_as_name' (',' 'dotted_as_name')*
+ * dotted_as_names: dotted_as_name (',' dotted_as_name)*
  */
 public final class DottedAsNames extends NodeWrapper {
 
@@ -23,7 +23,7 @@ public final class DottedAsNames extends NodeWrapper {
     }
 
     /**
-     * ',' 'dotted_as_name'
+     * ',' dotted_as_name
      */
     public static final class DottedAsNames2 extends NodeWrapper {
 

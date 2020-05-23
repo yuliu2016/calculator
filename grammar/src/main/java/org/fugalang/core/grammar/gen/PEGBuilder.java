@@ -60,7 +60,8 @@ public class PEGBuilder {
             // use a root class to reduce files
             ClassBuilder cb = classSet.createRootClass(className);
 
-            cb.setHeaderComments(entry.getKey() + ": " + PEGCompat.constructString(entry.getValue()));
+            var rule_repr = entry.getKey() + ": " + PEGCompat.constructString(entry.getValue());
+            cb.setHeaderComments(rule_repr);
             cb.setRuleType(RuleType.Disjunction);
 
             addOrRule(className, cb, entry.getValue());

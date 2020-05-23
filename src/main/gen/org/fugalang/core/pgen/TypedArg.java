@@ -5,7 +5,7 @@ import org.fugalang.core.parser.ParseTreeNode;
 import org.fugalang.core.token.TokenType;
 
 /**
- * typed_arg: 'NAME' [':' 'expr']
+ * typed_arg: NAME [':' expr]
  */
 public final class TypedArg extends NodeWrapper {
 
@@ -26,7 +26,7 @@ public final class TypedArg extends NodeWrapper {
     }
 
     /**
-     * ':' 'expr'
+     * ':' expr
      */
     public static final class TypedArg2 extends NodeWrapper {
 

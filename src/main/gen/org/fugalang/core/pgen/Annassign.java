@@ -4,7 +4,7 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * annassign: ':' 'expr' ['=' 'exprlist_star']
+ * annassign: ':' expr ['=' exprlist_star]
  */
 public final class Annassign extends NodeWrapper {
 
@@ -25,7 +25,7 @@ public final class Annassign extends NodeWrapper {
     }
 
     /**
-     * '=' 'exprlist_star'
+     * '=' exprlist_star
      */
     public static final class Annassign3 extends NodeWrapper {
 

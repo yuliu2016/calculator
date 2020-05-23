@@ -35,7 +35,7 @@ public class PEGCompat {
     public static String constructString(SubRule subRule) {
         return subRule.hasOrRule() ? "(" + constructString(subRule.orRule().orRule()) + ")" :
                 subRule.hasOrRule1() ? "[" + constructString(subRule.orRule1().orRule()) + "]" :
-                        "'" + getSubruleString(subRule) + "'";
+                        subRule.hasName() ? subRule.name() : "'" + subRule.string() + "'";
     }
 
     public static Iterable<AndRule> allAndRules(OrRule orRule) {

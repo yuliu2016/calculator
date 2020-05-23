@@ -4,7 +4,7 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * default_arg: 'typed_arg' ['=' 'expr']
+ * default_arg: typed_arg ['=' expr]
  */
 public final class DefaultArg extends NodeWrapper {
 
@@ -25,7 +25,7 @@ public final class DefaultArg extends NodeWrapper {
     }
 
     /**
-     * '=' 'expr'
+     * '=' expr
      */
     public static final class DefaultArg2 extends NodeWrapper {
 

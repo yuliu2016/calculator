@@ -6,7 +6,7 @@ import org.fugalang.core.parser.ParseTreeNode;
 import java.util.List;
 
 /**
- * exprlist: 'expr' (',' 'expr')* [',']
+ * exprlist: expr (',' expr)* [',']
  */
 public final class Exprlist extends NodeWrapper {
 
@@ -27,7 +27,7 @@ public final class Exprlist extends NodeWrapper {
     }
 
     /**
-     * ',' 'expr'
+     * ',' expr
      */
     public static final class Exprlist2 extends NodeWrapper {
 

@@ -7,7 +7,7 @@ import org.fugalang.core.token.TokenType;
 import java.util.List;
 
 /**
- * nonlocal_stmt: 'nonlocal' 'NAME' (',' 'NAME')*
+ * nonlocal_stmt: 'nonlocal' NAME (',' NAME)*
  */
 public final class NonlocalStmt extends NodeWrapper {
 
@@ -24,7 +24,7 @@ public final class NonlocalStmt extends NodeWrapper {
     }
 
     /**
-     * ',' 'NAME'
+     * ',' NAME
      */
     public static final class NonlocalStmt3 extends NodeWrapper {
 

@@ -4,7 +4,7 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * funcdef: 'def' ['func_type_hint'] ['func_args'] 'func_suite'
+ * funcdef: 'def' [func_type_hint] [func_args] func_suite
  */
 public final class Funcdef extends NodeWrapper {
 

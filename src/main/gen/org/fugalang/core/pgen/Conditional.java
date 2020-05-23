@@ -4,7 +4,7 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * conditional: 'if' 'disjunction' '?' 'disjunction' 'else' 'expr'
+ * conditional: 'if' disjunction '?' disjunction 'else' expr
  */
 public final class Conditional extends NodeWrapper {
 

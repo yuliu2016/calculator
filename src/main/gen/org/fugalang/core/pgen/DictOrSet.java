@@ -4,7 +4,7 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * dict_or_set: '{' ['dict_maker' | 'set_maker'] '}'
+ * dict_or_set: '{' [dict_maker | set_maker] '}'
  */
 public final class DictOrSet extends NodeWrapper {
 
@@ -21,7 +21,7 @@ public final class DictOrSet extends NodeWrapper {
     }
 
     /**
-     * 'dict_maker' | 'set_maker'
+     * dict_maker | set_maker
      */
     public static final class DictOrSet2 extends NodeWrapper {
 

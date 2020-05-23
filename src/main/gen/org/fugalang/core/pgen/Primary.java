@@ -6,7 +6,7 @@ import org.fugalang.core.parser.ParseTreeNode;
 import java.util.List;
 
 /**
- * primary: 'atom' 'trailer'* ['block_suite']
+ * primary: atom trailer* [block_suite]
  */
 public final class Primary extends NodeWrapper {
 

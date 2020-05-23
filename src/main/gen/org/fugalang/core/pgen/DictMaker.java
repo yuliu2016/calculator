@@ -6,7 +6,7 @@ import org.fugalang.core.parser.ParseTreeNode;
 import java.util.List;
 
 /**
- * dict_maker: 'dict_item' (',' 'dict_item')* [',']
+ * dict_maker: dict_item (',' dict_item)* [',']
  */
 public final class DictMaker extends NodeWrapper {
 
@@ -27,7 +27,7 @@ public final class DictMaker extends NodeWrapper {
     }
 
     /**
-     * ',' 'dict_item'
+     * ',' dict_item
      */
     public static final class DictMaker2 extends NodeWrapper {
 

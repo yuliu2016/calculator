@@ -6,7 +6,7 @@ import org.fugalang.core.parser.ParseTreeNode;
 import java.util.List;
 
 /**
- * conjunction: 'inversion' ('and' 'inversion')*
+ * conjunction: inversion ('and' inversion)*
  */
 public final class Conjunction extends NodeWrapper {
 
@@ -23,7 +23,7 @@ public final class Conjunction extends NodeWrapper {
     }
 
     /**
-     * 'and' 'inversion'
+     * 'and' inversion
      */
     public static final class Conjunction2 extends NodeWrapper {
 

@@ -21,9 +21,9 @@ public class NamedClass {
     }
 
     public void generateParser(StringBuilder sb) {
-        rootClass.generateParsingFunction(sb);
+        rootClass.generateParsingFunction(sb, true);
         for (ClassBuilder component : components) {
-            component.generateParsingFunction(sb);
+            component.generateParsingFunction(sb, false);
         }
     }
 

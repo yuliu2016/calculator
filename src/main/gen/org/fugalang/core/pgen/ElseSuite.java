@@ -4,7 +4,7 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * else_suite: 'else' 'suite'
+ * else_suite: 'else' suite
  */
 public final class ElseSuite extends NodeWrapper {
 

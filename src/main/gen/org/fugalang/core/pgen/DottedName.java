@@ -7,7 +7,7 @@ import org.fugalang.core.token.TokenType;
 import java.util.List;
 
 /**
- * dotted_name: 'NAME' ('.' 'NAME')*
+ * dotted_name: NAME ('.' NAME)*
  */
 public final class DottedName extends NodeWrapper {
 
@@ -24,7 +24,7 @@ public final class DottedName extends NodeWrapper {
     }
 
     /**
-     * '.' 'NAME'
+     * '.' NAME
      */
     public static final class DottedName2 extends NodeWrapper {
 

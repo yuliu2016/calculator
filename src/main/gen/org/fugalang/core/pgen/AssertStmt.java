@@ -4,7 +4,7 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * assert_stmt: 'assert' 'expr' [',' 'expr']
+ * assert_stmt: 'assert' expr [',' expr]
  */
 public final class AssertStmt extends NodeWrapper {
 
@@ -25,7 +25,7 @@ public final class AssertStmt extends NodeWrapper {
     }
 
     /**
-     * ',' 'expr'
+     * ',' expr
      */
     public static final class AssertStmt3 extends NodeWrapper {
 

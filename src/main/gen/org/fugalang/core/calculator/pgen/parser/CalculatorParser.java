@@ -9,7 +9,7 @@ import static org.fugalang.core.calculator.pgen.parser.CalculatorRules.*;
 public class CalculatorParser {
 
     /**
-     * sum: 'term' (('+' | '-') 'term')*
+     * sum: term (('+' | '-') term)*
      */
     public static boolean sum(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -31,9 +31,9 @@ public class CalculatorParser {
     }
 
     /**
-     * ('+' | '-') 'term'
+     * ('+' | '-') term
      */
-    public static boolean sum_2(ParseTree t, int lv) {
+    private static boolean sum_2(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, SUM_2);
         boolean r;
@@ -46,7 +46,7 @@ public class CalculatorParser {
     /**
      * '+' | '-'
      */
-    public static boolean sum_2_1(ParseTree t, int lv) {
+    private static boolean sum_2_1(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, SUM_2_1);
         boolean r;
@@ -57,7 +57,7 @@ public class CalculatorParser {
     }
 
     /**
-     * term: 'factor' (('*' | '/' | '%') 'factor')*
+     * term: factor (('*' | '/' | '%') factor)*
      */
     public static boolean term(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -79,9 +79,9 @@ public class CalculatorParser {
     }
 
     /**
-     * ('*' | '/' | '%') 'factor'
+     * ('*' | '/' | '%') factor
      */
-    public static boolean term_2(ParseTree t, int lv) {
+    private static boolean term_2(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, TERM_2);
         boolean r;
@@ -94,7 +94,7 @@ public class CalculatorParser {
     /**
      * '*' | '/' | '%'
      */
-    public static boolean term_2_1(ParseTree t, int lv) {
+    private static boolean term_2_1(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, TERM_2_1);
         boolean r;
@@ -106,7 +106,7 @@ public class CalculatorParser {
     }
 
     /**
-     * factor: ('+' | '-' | '~') 'factor' | 'power'
+     * factor: ('+' | '-' | '~') factor | power
      */
     public static boolean factor(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -119,9 +119,9 @@ public class CalculatorParser {
     }
 
     /**
-     * ('+' | '-' | '~') 'factor'
+     * ('+' | '-' | '~') factor
      */
-    public static boolean factor_1(ParseTree t, int lv) {
+    private static boolean factor_1(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, FACTOR_1);
         boolean r;
@@ -134,7 +134,7 @@ public class CalculatorParser {
     /**
      * '+' | '-' | '~'
      */
-    public static boolean factor_1_1(ParseTree t, int lv) {
+    private static boolean factor_1_1(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, FACTOR_1_1);
         boolean r;
@@ -146,7 +146,7 @@ public class CalculatorParser {
     }
 
     /**
-     * power: 'atom' ['**' 'factor']
+     * power: atom ['**' factor]
      */
     public static boolean power(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -159,9 +159,9 @@ public class CalculatorParser {
     }
 
     /**
-     * '**' 'factor'
+     * '**' factor
      */
-    public static boolean power_2(ParseTree t, int lv) {
+    private static boolean power_2(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, POWER_2);
         boolean r;
@@ -172,7 +172,7 @@ public class CalculatorParser {
     }
 
     /**
-     * atom: '(' 'sum' ')' | 'NUMBER'
+     * atom: '(' sum ')' | NUMBER
      */
     public static boolean atom(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -185,9 +185,9 @@ public class CalculatorParser {
     }
 
     /**
-     * '(' 'sum' ')'
+     * '(' sum ')'
      */
-    public static boolean atom_1(ParseTree t, int lv) {
+    private static boolean atom_1(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, ATOM_1);
         boolean r;

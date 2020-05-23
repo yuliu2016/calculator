@@ -6,7 +6,7 @@ import org.fugalang.core.parser.ParseTreeNode;
 import java.util.List;
 
 /**
- * disjunction: 'conjunction' ('or' 'conjunction')*
+ * disjunction: conjunction ('or' conjunction)*
  */
 public final class Disjunction extends NodeWrapper {
 
@@ -23,7 +23,7 @@ public final class Disjunction extends NodeWrapper {
     }
 
     /**
-     * 'or' 'conjunction'
+     * 'or' conjunction
      */
     public static final class Disjunction2 extends NodeWrapper {
 

@@ -4,7 +4,7 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * return_stmt: 'return' ['exprlist_star']
+ * return_stmt: 'return' [exprlist_star]
  */
 public final class ReturnStmt extends NodeWrapper {
 

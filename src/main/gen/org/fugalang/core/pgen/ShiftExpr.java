@@ -6,7 +6,7 @@ import org.fugalang.core.parser.ParseTreeNode;
 import java.util.List;
 
 /**
- * shift_expr: 'sum' ('shift_op' 'sum')*
+ * shift_expr: sum (shift_op sum)*
  */
 public final class ShiftExpr extends NodeWrapper {
 
@@ -23,7 +23,7 @@ public final class ShiftExpr extends NodeWrapper {
     }
 
     /**
-     * 'shift_op' 'sum'
+     * shift_op sum
      */
     public static final class ShiftExpr2 extends NodeWrapper {
 

@@ -6,7 +6,7 @@ import org.fugalang.core.parser.ParseTreeNode;
 import java.util.List;
 
 /**
- * simple_arg_list: 'simple_arg' ('simple_arg')*
+ * simple_arg_list: simple_arg (simple_arg)*
  */
 public final class SimpleArgList extends NodeWrapper {
 
@@ -23,7 +23,7 @@ public final class SimpleArgList extends NodeWrapper {
     }
 
     /**
-     * 'simple_arg'
+     * simple_arg
      */
     public static final class SimpleArgList2 extends NodeWrapper {
 

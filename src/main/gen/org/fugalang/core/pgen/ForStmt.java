@@ -4,7 +4,7 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * for_stmt: 'for' 'targetlist' 'in' 'exprlist' 'suite' ['else_suite']
+ * for_stmt: 'for' targetlist 'in' exprlist suite [else_suite]
  */
 public final class ForStmt extends NodeWrapper {
 

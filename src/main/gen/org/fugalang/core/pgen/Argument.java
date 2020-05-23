@@ -5,7 +5,7 @@ import org.fugalang.core.parser.ParseTreeNode;
 import org.fugalang.core.token.TokenType;
 
 /**
- * argument: 'NAME' ':=' 'expr' | 'NAME' '=' 'expr' | '**' 'expr' | '*' 'expr' | 'expr'
+ * argument: NAME ':=' expr | NAME '=' expr | '**' expr | '*' expr | expr
  */
 public final class Argument extends NodeWrapper {
 
@@ -54,7 +54,7 @@ public final class Argument extends NodeWrapper {
     }
 
     /**
-     * 'NAME' ':=' 'expr'
+     * NAME ':=' expr
      */
     public static final class Argument1 extends NodeWrapper {
 
@@ -72,7 +72,7 @@ public final class Argument extends NodeWrapper {
     }
 
     /**
-     * 'NAME' '=' 'expr'
+     * NAME '=' expr
      */
     public static final class Argument2 extends NodeWrapper {
 
@@ -90,7 +90,7 @@ public final class Argument extends NodeWrapper {
     }
 
     /**
-     * '**' 'expr'
+     * '**' expr
      */
     public static final class Argument3 extends NodeWrapper {
 
@@ -104,7 +104,7 @@ public final class Argument extends NodeWrapper {
     }
 
     /**
-     * '*' 'expr'
+     * '*' expr
      */
     public static final class Argument4 extends NodeWrapper {
 

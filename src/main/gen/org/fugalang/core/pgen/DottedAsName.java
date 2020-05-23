@@ -5,7 +5,7 @@ import org.fugalang.core.parser.ParseTreeNode;
 import org.fugalang.core.token.TokenType;
 
 /**
- * dotted_as_name: 'dotted_name' ['as' 'NAME']
+ * dotted_as_name: dotted_name ['as' NAME]
  */
 public final class DottedAsName extends NodeWrapper {
 
@@ -26,7 +26,7 @@ public final class DottedAsName extends NodeWrapper {
     }
 
     /**
-     * 'as' 'NAME'
+     * 'as' NAME
      */
     public static final class DottedAsName2 extends NodeWrapper {
 

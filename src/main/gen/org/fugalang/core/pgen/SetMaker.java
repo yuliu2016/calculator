@@ -6,7 +6,7 @@ import org.fugalang.core.parser.ParseTreeNode;
 import java.util.List;
 
 /**
- * set_maker: 'expr_or_star' (',' 'expr_or_star')* [',']
+ * set_maker: expr_or_star (',' expr_or_star)* [',']
  */
 public final class SetMaker extends NodeWrapper {
 
@@ -27,7 +27,7 @@ public final class SetMaker extends NodeWrapper {
     }
 
     /**
-     * ',' 'expr_or_star'
+     * ',' expr_or_star
      */
     public static final class SetMaker2 extends NodeWrapper {
 

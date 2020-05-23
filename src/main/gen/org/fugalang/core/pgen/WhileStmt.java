@@ -4,7 +4,7 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * while_stmt: 'while' 'named_expr' 'suite' ['else_suite']
+ * while_stmt: 'while' named_expr suite [else_suite]
  */
 public final class WhileStmt extends NodeWrapper {
 

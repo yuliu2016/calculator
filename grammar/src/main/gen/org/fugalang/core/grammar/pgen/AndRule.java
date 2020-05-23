@@ -6,7 +6,7 @@ import org.fugalang.core.parser.ParseTreeNode;
 import java.util.List;
 
 /**
- * and_rule: 'repeat_rule' ('repeat_rule')*
+ * and_rule: repeat_rule (repeat_rule)*
  */
 public final class AndRule extends NodeWrapper {
 
@@ -23,7 +23,7 @@ public final class AndRule extends NodeWrapper {
     }
 
     /**
-     * 'repeat_rule'
+     * repeat_rule
      */
     public static final class AndRule2 extends NodeWrapper {
 

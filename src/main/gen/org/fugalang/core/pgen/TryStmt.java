@@ -4,7 +4,7 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * try_stmt: 'try' 'suite' ('except_suite' | 'finally_suite')
+ * try_stmt: 'try' suite (except_suite | finally_suite)
  */
 public final class TryStmt extends NodeWrapper {
 
@@ -21,7 +21,7 @@ public final class TryStmt extends NodeWrapper {
     }
 
     /**
-     * 'except_suite' | 'finally_suite'
+     * except_suite | finally_suite
      */
     public static final class TryStmt3 extends NodeWrapper {
 

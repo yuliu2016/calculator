@@ -6,7 +6,7 @@ import org.fugalang.core.parser.ParseTreeNode;
 import java.util.List;
 
 /**
- * term: 'factor' (('*' | '/' | '%') 'factor')*
+ * term: factor (('*' | '/' | '%') factor)*
  */
 public final class Term extends NodeWrapper {
 
@@ -23,7 +23,7 @@ public final class Term extends NodeWrapper {
     }
 
     /**
-     * ('*' | '/' | '%') 'factor'
+     * ('*' | '/' | '%') factor
      */
     public static final class Term2 extends NodeWrapper {
 

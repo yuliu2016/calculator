@@ -7,7 +7,7 @@ import org.fugalang.core.token.TokenType;
 import java.util.List;
 
 /**
- * or_rule: 'and_rule' (['NEWLINE'] '|' 'and_rule')*
+ * or_rule: and_rule ([NEWLINE] '|' and_rule)*
  */
 public final class OrRule extends NodeWrapper {
 
@@ -24,7 +24,7 @@ public final class OrRule extends NodeWrapper {
     }
 
     /**
-     * ['NEWLINE'] '|' 'and_rule'
+     * [NEWLINE] '|' and_rule
      */
     public static final class OrRule2 extends NodeWrapper {
 

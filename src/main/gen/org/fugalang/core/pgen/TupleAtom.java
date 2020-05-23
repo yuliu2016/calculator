@@ -4,7 +4,7 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * tuple_atom: '(' ['named_expr_list'] ')'
+ * tuple_atom: '(' [named_expr_list] ')'
  */
 public final class TupleAtom extends NodeWrapper {
 

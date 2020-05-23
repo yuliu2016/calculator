@@ -9,7 +9,7 @@ import static org.fugalang.core.pgen.parser.FugaRules.*;
 public class FugaParser {
 
     /**
-     * single_input: 'NEWLINE' | 'simple_stmt' | 'compound_stmt' 'NEWLINE'
+     * single_input: NEWLINE | simple_stmt | compound_stmt NEWLINE
      */
     public static boolean single_input(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -23,9 +23,9 @@ public class FugaParser {
     }
 
     /**
-     * 'compound_stmt' 'NEWLINE'
+     * compound_stmt NEWLINE
      */
-    public static boolean single_input_3(ParseTree t, int lv) {
+    private static boolean single_input_3(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, SINGLE_INPUT_3);
         boolean r;
@@ -36,7 +36,7 @@ public class FugaParser {
     }
 
     /**
-     * file_input: ('NEWLINE' | 'stmt')* 'ENDMARKER'
+     * file_input: (NEWLINE | stmt)* ENDMARKER
      */
     public static boolean file_input(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -58,9 +58,9 @@ public class FugaParser {
     }
 
     /**
-     * 'NEWLINE' | 'stmt'
+     * NEWLINE | stmt
      */
-    public static boolean file_input_1(ParseTree t, int lv) {
+    private static boolean file_input_1(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, FILE_INPUT_1);
         boolean r;
@@ -71,7 +71,7 @@ public class FugaParser {
     }
 
     /**
-     * eval_input: 'exprlist' 'NEWLINE'* 'ENDMARKER'
+     * eval_input: exprlist NEWLINE* ENDMARKER
      */
     public static boolean eval_input(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -94,7 +94,7 @@ public class FugaParser {
     }
 
     /**
-     * stmt: ('simple_stmt' | 'compound_stmt') 'NEWLINE'
+     * stmt: (simple_stmt | compound_stmt) NEWLINE
      */
     public static boolean stmt(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -107,9 +107,9 @@ public class FugaParser {
     }
 
     /**
-     * 'simple_stmt' | 'compound_stmt'
+     * simple_stmt | compound_stmt
      */
-    public static boolean stmt_1(ParseTree t, int lv) {
+    private static boolean stmt_1(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, STMT_1);
         boolean r;
@@ -120,7 +120,7 @@ public class FugaParser {
     }
 
     /**
-     * simple_stmt: 'small_stmt' (';' 'small_stmt')* [';']
+     * simple_stmt: small_stmt (';' small_stmt)* [';']
      */
     public static boolean simple_stmt(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -143,9 +143,9 @@ public class FugaParser {
     }
 
     /**
-     * ';' 'small_stmt'
+     * ';' small_stmt
      */
-    public static boolean simple_stmt_2(ParseTree t, int lv) {
+    private static boolean simple_stmt_2(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, SIMPLE_STMT_2);
         boolean r;
@@ -156,7 +156,7 @@ public class FugaParser {
     }
 
     /**
-     * small_stmt: 'flow_stmt' | 'del_stmt' | 'nonlocal_stmt' | 'assert_stmt' | 'import_name' | 'import_from' | 'assignment'
+     * small_stmt: flow_stmt | del_stmt | nonlocal_stmt | assert_stmt | import_name | import_from | assignment
      */
     public static boolean small_stmt(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -174,7 +174,7 @@ public class FugaParser {
     }
 
     /**
-     * flow_stmt: 'pass' | 'break' | 'continue' | 'return_stmt' | 'raise_stmt'
+     * flow_stmt: 'pass' | 'break' | 'continue' | return_stmt | raise_stmt
      */
     public static boolean flow_stmt(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -190,7 +190,7 @@ public class FugaParser {
     }
 
     /**
-     * del_stmt: 'del' 'targetlist'
+     * del_stmt: 'del' targetlist
      */
     public static boolean del_stmt(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -203,7 +203,7 @@ public class FugaParser {
     }
 
     /**
-     * return_stmt: 'return' ['exprlist_star']
+     * return_stmt: 'return' [exprlist_star]
      */
     public static boolean return_stmt(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -216,7 +216,7 @@ public class FugaParser {
     }
 
     /**
-     * raise_stmt: 'raise' ['expr' ['from' 'expr']]
+     * raise_stmt: 'raise' [expr ['from' expr]]
      */
     public static boolean raise_stmt(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -229,9 +229,9 @@ public class FugaParser {
     }
 
     /**
-     * 'expr' ['from' 'expr']
+     * expr ['from' expr]
      */
-    public static boolean raise_stmt_2(ParseTree t, int lv) {
+    private static boolean raise_stmt_2(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, RAISE_STMT_2);
         boolean r;
@@ -242,9 +242,9 @@ public class FugaParser {
     }
 
     /**
-     * 'from' 'expr'
+     * 'from' expr
      */
-    public static boolean raise_stmt_2_2(ParseTree t, int lv) {
+    private static boolean raise_stmt_2_2(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, RAISE_STMT_2_2);
         boolean r;
@@ -255,7 +255,7 @@ public class FugaParser {
     }
 
     /**
-     * nonlocal_stmt: 'nonlocal' 'NAME' (',' 'NAME')*
+     * nonlocal_stmt: 'nonlocal' NAME (',' NAME)*
      */
     public static boolean nonlocal_stmt(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -278,9 +278,9 @@ public class FugaParser {
     }
 
     /**
-     * ',' 'NAME'
+     * ',' NAME
      */
-    public static boolean nonlocal_stmt_3(ParseTree t, int lv) {
+    private static boolean nonlocal_stmt_3(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, NONLOCAL_STMT_3);
         boolean r;
@@ -291,7 +291,7 @@ public class FugaParser {
     }
 
     /**
-     * assert_stmt: 'assert' 'expr' [',' 'expr']
+     * assert_stmt: 'assert' expr [',' expr]
      */
     public static boolean assert_stmt(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -305,9 +305,9 @@ public class FugaParser {
     }
 
     /**
-     * ',' 'expr'
+     * ',' expr
      */
-    public static boolean assert_stmt_3(ParseTree t, int lv) {
+    private static boolean assert_stmt_3(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, ASSERT_STMT_3);
         boolean r;
@@ -318,7 +318,7 @@ public class FugaParser {
     }
 
     /**
-     * expr_or_star: 'star_expr' | 'expr'
+     * expr_or_star: star_expr | expr
      */
     public static boolean expr_or_star(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -331,7 +331,7 @@ public class FugaParser {
     }
 
     /**
-     * star_expr: '*' 'bitwise_or'
+     * star_expr: '*' bitwise_or
      */
     public static boolean star_expr(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -344,7 +344,7 @@ public class FugaParser {
     }
 
     /**
-     * exprlist_star: 'expr_or_star' (',' 'expr_or_star')* [',']
+     * exprlist_star: expr_or_star (',' expr_or_star)* [',']
      */
     public static boolean exprlist_star(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -367,9 +367,9 @@ public class FugaParser {
     }
 
     /**
-     * ',' 'expr_or_star'
+     * ',' expr_or_star
      */
-    public static boolean exprlist_star_2(ParseTree t, int lv) {
+    private static boolean exprlist_star_2(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, EXPRLIST_STAR_2);
         boolean r;
@@ -380,7 +380,7 @@ public class FugaParser {
     }
 
     /**
-     * assignment: ['/'] 'exprlist_star' ['annassign' | ('=' 'exprlist_star')+ | 'augassign' 'exprlist']
+     * assignment: ['/'] exprlist_star [annassign | ('=' exprlist_star)+ | augassign exprlist]
      */
     public static boolean assignment(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -394,9 +394,9 @@ public class FugaParser {
     }
 
     /**
-     * 'annassign' | ('=' 'exprlist_star')+ | 'augassign' 'exprlist'
+     * annassign | ('=' exprlist_star)+ | augassign exprlist
      */
-    public static boolean assignment_3(ParseTree t, int lv) {
+    private static boolean assignment_3(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, ASSIGNMENT_3);
         boolean r;
@@ -419,9 +419,9 @@ public class FugaParser {
     }
 
     /**
-     * '=' 'exprlist_star'
+     * '=' exprlist_star
      */
-    public static boolean assignment_3_2(ParseTree t, int lv) {
+    private static boolean assignment_3_2(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, ASSIGNMENT_3_2);
         boolean r;
@@ -432,9 +432,9 @@ public class FugaParser {
     }
 
     /**
-     * 'augassign' 'exprlist'
+     * augassign exprlist
      */
-    public static boolean assignment_3_3(ParseTree t, int lv) {
+    private static boolean assignment_3_3(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, ASSIGNMENT_3_3);
         boolean r;
@@ -469,7 +469,7 @@ public class FugaParser {
     }
 
     /**
-     * annassign: ':' 'expr' ['=' 'exprlist_star']
+     * annassign: ':' expr ['=' exprlist_star]
      */
     public static boolean annassign(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -483,9 +483,9 @@ public class FugaParser {
     }
 
     /**
-     * '=' 'exprlist_star'
+     * '=' exprlist_star
      */
-    public static boolean annassign_3(ParseTree t, int lv) {
+    private static boolean annassign_3(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, ANNASSIGN_3);
         boolean r;
@@ -496,7 +496,7 @@ public class FugaParser {
     }
 
     /**
-     * import_name: 'import' 'dotted_as_names'
+     * import_name: 'import' dotted_as_names
      */
     public static boolean import_name(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -509,7 +509,7 @@ public class FugaParser {
     }
 
     /**
-     * import_from: 'from' 'import_from_names' 'import' ('*' | '(' 'import_as_names' [','] ')' | 'import_as_names')
+     * import_from: 'from' import_from_names 'import' ('*' | '(' import_as_names [','] ')' | import_as_names)
      */
     public static boolean import_from(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -524,9 +524,9 @@ public class FugaParser {
     }
 
     /**
-     * '*' | '(' 'import_as_names' [','] ')' | 'import_as_names'
+     * '*' | '(' import_as_names [','] ')' | import_as_names
      */
-    public static boolean import_from_4(ParseTree t, int lv) {
+    private static boolean import_from_4(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, IMPORT_FROM_4);
         boolean r;
@@ -538,9 +538,9 @@ public class FugaParser {
     }
 
     /**
-     * '(' 'import_as_names' [','] ')'
+     * '(' import_as_names [','] ')'
      */
-    public static boolean import_from_4_2(ParseTree t, int lv) {
+    private static boolean import_from_4_2(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, IMPORT_FROM_4_2);
         boolean r;
@@ -553,7 +553,7 @@ public class FugaParser {
     }
 
     /**
-     * import_from_names: 'dotted_name' | '.'+ ['dotted_name']
+     * import_from_names: dotted_name | '.'+ [dotted_name]
      */
     public static boolean import_from_names(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -566,9 +566,9 @@ public class FugaParser {
     }
 
     /**
-     * '.'+ ['dotted_name']
+     * '.'+ [dotted_name]
      */
-    public static boolean import_from_names_2(ParseTree t, int lv) {
+    private static boolean import_from_names_2(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, IMPORT_FROM_NAMES_2);
         boolean r;
@@ -590,7 +590,7 @@ public class FugaParser {
     }
 
     /**
-     * import_as_name: 'NAME' ['as' 'NAME']
+     * import_as_name: NAME ['as' NAME]
      */
     public static boolean import_as_name(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -603,9 +603,9 @@ public class FugaParser {
     }
 
     /**
-     * 'as' 'NAME'
+     * 'as' NAME
      */
-    public static boolean import_as_name_2(ParseTree t, int lv) {
+    private static boolean import_as_name_2(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, IMPORT_AS_NAME_2);
         boolean r;
@@ -616,7 +616,7 @@ public class FugaParser {
     }
 
     /**
-     * dotted_as_name: 'dotted_name' ['as' 'NAME']
+     * dotted_as_name: dotted_name ['as' NAME]
      */
     public static boolean dotted_as_name(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -629,9 +629,9 @@ public class FugaParser {
     }
 
     /**
-     * 'as' 'NAME'
+     * 'as' NAME
      */
-    public static boolean dotted_as_name_2(ParseTree t, int lv) {
+    private static boolean dotted_as_name_2(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, DOTTED_AS_NAME_2);
         boolean r;
@@ -642,7 +642,7 @@ public class FugaParser {
     }
 
     /**
-     * import_as_names: 'import_as_name' (',' 'import_as_name')*
+     * import_as_names: import_as_name (',' import_as_name)*
      */
     public static boolean import_as_names(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -664,9 +664,9 @@ public class FugaParser {
     }
 
     /**
-     * ',' 'import_as_name'
+     * ',' import_as_name
      */
-    public static boolean import_as_names_2(ParseTree t, int lv) {
+    private static boolean import_as_names_2(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, IMPORT_AS_NAMES_2);
         boolean r;
@@ -677,7 +677,7 @@ public class FugaParser {
     }
 
     /**
-     * dotted_as_names: 'dotted_as_name' (',' 'dotted_as_name')*
+     * dotted_as_names: dotted_as_name (',' dotted_as_name)*
      */
     public static boolean dotted_as_names(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -699,9 +699,9 @@ public class FugaParser {
     }
 
     /**
-     * ',' 'dotted_as_name'
+     * ',' dotted_as_name
      */
-    public static boolean dotted_as_names_2(ParseTree t, int lv) {
+    private static boolean dotted_as_names_2(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, DOTTED_AS_NAMES_2);
         boolean r;
@@ -712,7 +712,7 @@ public class FugaParser {
     }
 
     /**
-     * dotted_name: 'NAME' ('.' 'NAME')*
+     * dotted_name: NAME ('.' NAME)*
      */
     public static boolean dotted_name(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -734,9 +734,9 @@ public class FugaParser {
     }
 
     /**
-     * '.' 'NAME'
+     * '.' NAME
      */
-    public static boolean dotted_name_2(ParseTree t, int lv) {
+    private static boolean dotted_name_2(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, DOTTED_NAME_2);
         boolean r;
@@ -747,7 +747,7 @@ public class FugaParser {
     }
 
     /**
-     * compound_stmt: 'if_stmt' | 'while_stmt' | 'for_stmt' | 'try_stmt' | 'with_stmt'
+     * compound_stmt: if_stmt | while_stmt | for_stmt | try_stmt | with_stmt
      */
     public static boolean compound_stmt(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -763,7 +763,7 @@ public class FugaParser {
     }
 
     /**
-     * if_stmt: 'if' 'named_expr' 'suite' 'elif_stmt'* ['else_suite']
+     * if_stmt: 'if' named_expr suite elif_stmt* [else_suite]
      */
     public static boolean if_stmt(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -788,7 +788,7 @@ public class FugaParser {
     }
 
     /**
-     * elif_stmt: 'elif' 'named_expr' 'suite'
+     * elif_stmt: 'elif' named_expr suite
      */
     public static boolean elif_stmt(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -802,7 +802,7 @@ public class FugaParser {
     }
 
     /**
-     * while_stmt: 'while' 'named_expr' 'suite' ['else_suite']
+     * while_stmt: 'while' named_expr suite [else_suite]
      */
     public static boolean while_stmt(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -817,7 +817,7 @@ public class FugaParser {
     }
 
     /**
-     * for_stmt: 'for' 'targetlist' 'in' 'exprlist' 'suite' ['else_suite']
+     * for_stmt: 'for' targetlist 'in' exprlist suite [else_suite]
      */
     public static boolean for_stmt(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -834,7 +834,7 @@ public class FugaParser {
     }
 
     /**
-     * try_stmt: 'try' 'suite' ('except_suite' | 'finally_suite')
+     * try_stmt: 'try' suite (except_suite | finally_suite)
      */
     public static boolean try_stmt(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -848,9 +848,9 @@ public class FugaParser {
     }
 
     /**
-     * 'except_suite' | 'finally_suite'
+     * except_suite | finally_suite
      */
-    public static boolean try_stmt_3(ParseTree t, int lv) {
+    private static boolean try_stmt_3(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, TRY_STMT_3);
         boolean r;
@@ -861,7 +861,7 @@ public class FugaParser {
     }
 
     /**
-     * with_stmt: 'with' 'with_item' (',' 'with_item')* 'suite'
+     * with_stmt: 'with' with_item (',' with_item)* suite
      */
     public static boolean with_stmt(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -885,9 +885,9 @@ public class FugaParser {
     }
 
     /**
-     * ',' 'with_item'
+     * ',' with_item
      */
-    public static boolean with_stmt_3(ParseTree t, int lv) {
+    private static boolean with_stmt_3(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, WITH_STMT_3);
         boolean r;
@@ -898,7 +898,7 @@ public class FugaParser {
     }
 
     /**
-     * with_item: 'expr' ['as' 'NAME']
+     * with_item: expr ['as' NAME]
      */
     public static boolean with_item(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -911,9 +911,9 @@ public class FugaParser {
     }
 
     /**
-     * 'as' 'NAME'
+     * 'as' NAME
      */
-    public static boolean with_item_2(ParseTree t, int lv) {
+    private static boolean with_item_2(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, WITH_ITEM_2);
         boolean r;
@@ -924,7 +924,7 @@ public class FugaParser {
     }
 
     /**
-     * except_clause: 'except' ['expr' ['as' 'NAME']]
+     * except_clause: 'except' [expr ['as' NAME]]
      */
     public static boolean except_clause(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -937,9 +937,9 @@ public class FugaParser {
     }
 
     /**
-     * 'expr' ['as' 'NAME']
+     * expr ['as' NAME]
      */
-    public static boolean except_clause_2(ParseTree t, int lv) {
+    private static boolean except_clause_2(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, EXCEPT_CLAUSE_2);
         boolean r;
@@ -950,9 +950,9 @@ public class FugaParser {
     }
 
     /**
-     * 'as' 'NAME'
+     * 'as' NAME
      */
-    public static boolean except_clause_2_2(ParseTree t, int lv) {
+    private static boolean except_clause_2_2(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, EXCEPT_CLAUSE_2_2);
         boolean r;
@@ -963,7 +963,7 @@ public class FugaParser {
     }
 
     /**
-     * block_suite: '{' 'simple_stmt' '}' | '{' 'NEWLINE' 'stmt'+ '}'
+     * block_suite: '{' simple_stmt '}' | '{' NEWLINE stmt+ '}'
      */
     public static boolean block_suite(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -976,9 +976,9 @@ public class FugaParser {
     }
 
     /**
-     * '{' 'simple_stmt' '}'
+     * '{' simple_stmt '}'
      */
-    public static boolean block_suite_1(ParseTree t, int lv) {
+    private static boolean block_suite_1(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, BLOCK_SUITE_1);
         boolean r;
@@ -990,9 +990,9 @@ public class FugaParser {
     }
 
     /**
-     * '{' 'NEWLINE' 'stmt'+ '}'
+     * '{' NEWLINE stmt+ '}'
      */
-    public static boolean block_suite_2(ParseTree t, int lv) {
+    private static boolean block_suite_2(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, BLOCK_SUITE_2);
         boolean r;
@@ -1016,7 +1016,7 @@ public class FugaParser {
     }
 
     /**
-     * suite: ':' 'simple_stmt' | 'block_suite'
+     * suite: ':' simple_stmt | block_suite
      */
     public static boolean suite(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -1029,9 +1029,9 @@ public class FugaParser {
     }
 
     /**
-     * ':' 'simple_stmt'
+     * ':' simple_stmt
      */
-    public static boolean suite_1(ParseTree t, int lv) {
+    private static boolean suite_1(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, SUITE_1);
         boolean r;
@@ -1042,7 +1042,7 @@ public class FugaParser {
     }
 
     /**
-     * else_suite: 'else' 'suite'
+     * else_suite: 'else' suite
      */
     public static boolean else_suite(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -1055,7 +1055,7 @@ public class FugaParser {
     }
 
     /**
-     * finally_suite: 'finally' 'suite'
+     * finally_suite: 'finally' suite
      */
     public static boolean finally_suite(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -1068,7 +1068,7 @@ public class FugaParser {
     }
 
     /**
-     * func_suite: ':' 'expr' | 'block_suite'
+     * func_suite: ':' expr | block_suite
      */
     public static boolean func_suite(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -1081,9 +1081,9 @@ public class FugaParser {
     }
 
     /**
-     * ':' 'expr'
+     * ':' expr
      */
-    public static boolean func_suite_1(ParseTree t, int lv) {
+    private static boolean func_suite_1(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, FUNC_SUITE_1);
         boolean r;
@@ -1094,7 +1094,7 @@ public class FugaParser {
     }
 
     /**
-     * except_suite: ('except_clause' 'suite')+ ['else_suite'] ['finally_suite']
+     * except_suite: (except_clause suite)+ [else_suite] [finally_suite]
      */
     public static boolean except_suite(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -1119,9 +1119,9 @@ public class FugaParser {
     }
 
     /**
-     * 'except_clause' 'suite'
+     * except_clause suite
      */
-    public static boolean except_suite_1(ParseTree t, int lv) {
+    private static boolean except_suite_1(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, EXCEPT_SUITE_1);
         boolean r;
@@ -1132,7 +1132,7 @@ public class FugaParser {
     }
 
     /**
-     * typed_arg_list: 'kwargs' | 'args_kwargs' | 'full_arg_list'
+     * typed_arg_list: kwargs | args_kwargs | full_arg_list
      */
     public static boolean typed_arg_list(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -1146,7 +1146,7 @@ public class FugaParser {
     }
 
     /**
-     * full_arg_list: 'default_arg' (',' 'default_arg')* [',' ['kwargs' | 'args_kwargs']]
+     * full_arg_list: default_arg (',' default_arg)* [',' [kwargs | args_kwargs]]
      */
     public static boolean full_arg_list(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -1169,9 +1169,9 @@ public class FugaParser {
     }
 
     /**
-     * ',' 'default_arg'
+     * ',' default_arg
      */
-    public static boolean full_arg_list_2(ParseTree t, int lv) {
+    private static boolean full_arg_list_2(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, FULL_ARG_LIST_2);
         boolean r;
@@ -1182,9 +1182,9 @@ public class FugaParser {
     }
 
     /**
-     * ',' ['kwargs' | 'args_kwargs']
+     * ',' [kwargs | args_kwargs]
      */
-    public static boolean full_arg_list_3(ParseTree t, int lv) {
+    private static boolean full_arg_list_3(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, FULL_ARG_LIST_3);
         boolean r;
@@ -1195,9 +1195,9 @@ public class FugaParser {
     }
 
     /**
-     * 'kwargs' | 'args_kwargs'
+     * kwargs | args_kwargs
      */
-    public static boolean full_arg_list_3_2(ParseTree t, int lv) {
+    private static boolean full_arg_list_3_2(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, FULL_ARG_LIST_3_2);
         boolean r;
@@ -1208,7 +1208,7 @@ public class FugaParser {
     }
 
     /**
-     * args_kwargs: '*' ['typed_arg'] (',' 'default_arg')* [',' ['kwargs']]
+     * args_kwargs: '*' [typed_arg] (',' default_arg)* [',' [kwargs]]
      */
     public static boolean args_kwargs(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -1232,9 +1232,9 @@ public class FugaParser {
     }
 
     /**
-     * ',' 'default_arg'
+     * ',' default_arg
      */
-    public static boolean args_kwargs_3(ParseTree t, int lv) {
+    private static boolean args_kwargs_3(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, ARGS_KWARGS_3);
         boolean r;
@@ -1245,9 +1245,9 @@ public class FugaParser {
     }
 
     /**
-     * ',' ['kwargs']
+     * ',' [kwargs]
      */
-    public static boolean args_kwargs_4(ParseTree t, int lv) {
+    private static boolean args_kwargs_4(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, ARGS_KWARGS_4);
         boolean r;
@@ -1258,7 +1258,7 @@ public class FugaParser {
     }
 
     /**
-     * kwargs: '**' 'typed_arg' [',']
+     * kwargs: '**' typed_arg [',']
      */
     public static boolean kwargs(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -1272,7 +1272,7 @@ public class FugaParser {
     }
 
     /**
-     * default_arg: 'typed_arg' ['=' 'expr']
+     * default_arg: typed_arg ['=' expr]
      */
     public static boolean default_arg(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -1285,9 +1285,9 @@ public class FugaParser {
     }
 
     /**
-     * '=' 'expr'
+     * '=' expr
      */
-    public static boolean default_arg_2(ParseTree t, int lv) {
+    private static boolean default_arg_2(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, DEFAULT_ARG_2);
         boolean r;
@@ -1298,7 +1298,7 @@ public class FugaParser {
     }
 
     /**
-     * typed_arg: 'NAME' [':' 'expr']
+     * typed_arg: NAME [':' expr]
      */
     public static boolean typed_arg(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -1311,9 +1311,9 @@ public class FugaParser {
     }
 
     /**
-     * ':' 'expr'
+     * ':' expr
      */
-    public static boolean typed_arg_2(ParseTree t, int lv) {
+    private static boolean typed_arg_2(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, TYPED_ARG_2);
         boolean r;
@@ -1324,7 +1324,7 @@ public class FugaParser {
     }
 
     /**
-     * simple_arg_list: 'simple_arg' ('simple_arg')*
+     * simple_arg_list: simple_arg (simple_arg)*
      */
     public static boolean simple_arg_list(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -1346,9 +1346,9 @@ public class FugaParser {
     }
 
     /**
-     * 'simple_arg'
+     * simple_arg
      */
-    public static boolean simple_arg_list_2(ParseTree t, int lv) {
+    private static boolean simple_arg_list_2(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, SIMPLE_ARG_LIST_2);
         boolean r;
@@ -1358,7 +1358,7 @@ public class FugaParser {
     }
 
     /**
-     * simple_arg: 'NAME' ['=' 'expr']
+     * simple_arg: NAME ['=' expr]
      */
     public static boolean simple_arg(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -1371,9 +1371,9 @@ public class FugaParser {
     }
 
     /**
-     * '=' 'expr'
+     * '=' expr
      */
-    public static boolean simple_arg_2(ParseTree t, int lv) {
+    private static boolean simple_arg_2(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, SIMPLE_ARG_2);
         boolean r;
@@ -1384,7 +1384,7 @@ public class FugaParser {
     }
 
     /**
-     * func_type_hint: '<' 'expr' '>'
+     * func_type_hint: '<' expr '>'
      */
     public static boolean func_type_hint(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -1398,7 +1398,7 @@ public class FugaParser {
     }
 
     /**
-     * func_args: 'simple_arg_list' | '(' ['typed_arg_list'] ')'
+     * func_args: simple_arg_list | '(' [typed_arg_list] ')'
      */
     public static boolean func_args(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -1411,9 +1411,9 @@ public class FugaParser {
     }
 
     /**
-     * '(' ['typed_arg_list'] ')'
+     * '(' [typed_arg_list] ')'
      */
-    public static boolean func_args_2(ParseTree t, int lv) {
+    private static boolean func_args_2(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, FUNC_ARGS_2);
         boolean r;
@@ -1425,7 +1425,7 @@ public class FugaParser {
     }
 
     /**
-     * funcdef: 'def' ['func_type_hint'] ['func_args'] 'func_suite'
+     * funcdef: 'def' [func_type_hint] [func_args] func_suite
      */
     public static boolean funcdef(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -1440,7 +1440,7 @@ public class FugaParser {
     }
 
     /**
-     * named_expr: 'NAME' ':=' 'expr' | 'expr'
+     * named_expr: NAME ':=' expr | expr
      */
     public static boolean named_expr(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -1453,9 +1453,9 @@ public class FugaParser {
     }
 
     /**
-     * 'NAME' ':=' 'expr'
+     * NAME ':=' expr
      */
-    public static boolean named_expr_1(ParseTree t, int lv) {
+    private static boolean named_expr_1(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, NAMED_EXPR_1);
         boolean r;
@@ -1467,7 +1467,7 @@ public class FugaParser {
     }
 
     /**
-     * conditional: 'if' 'disjunction' '?' 'disjunction' 'else' 'expr'
+     * conditional: 'if' disjunction '?' disjunction 'else' expr
      */
     public static boolean conditional(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -1484,7 +1484,7 @@ public class FugaParser {
     }
 
     /**
-     * expr: 'conditional' | 'funcdef' | 'disjunction'
+     * expr: conditional | funcdef | disjunction
      */
     public static boolean expr(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -1498,7 +1498,7 @@ public class FugaParser {
     }
 
     /**
-     * disjunction: 'conjunction' ('or' 'conjunction')*
+     * disjunction: conjunction ('or' conjunction)*
      */
     public static boolean disjunction(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -1520,9 +1520,9 @@ public class FugaParser {
     }
 
     /**
-     * 'or' 'conjunction'
+     * 'or' conjunction
      */
-    public static boolean disjunction_2(ParseTree t, int lv) {
+    private static boolean disjunction_2(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, DISJUNCTION_2);
         boolean r;
@@ -1533,7 +1533,7 @@ public class FugaParser {
     }
 
     /**
-     * conjunction: 'inversion' ('and' 'inversion')*
+     * conjunction: inversion ('and' inversion)*
      */
     public static boolean conjunction(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -1555,9 +1555,9 @@ public class FugaParser {
     }
 
     /**
-     * 'and' 'inversion'
+     * 'and' inversion
      */
-    public static boolean conjunction_2(ParseTree t, int lv) {
+    private static boolean conjunction_2(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, CONJUNCTION_2);
         boolean r;
@@ -1568,7 +1568,7 @@ public class FugaParser {
     }
 
     /**
-     * inversion: 'not' 'inversion' | 'comparison'
+     * inversion: 'not' inversion | comparison
      */
     public static boolean inversion(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -1581,9 +1581,9 @@ public class FugaParser {
     }
 
     /**
-     * 'not' 'inversion'
+     * 'not' inversion
      */
-    public static boolean inversion_1(ParseTree t, int lv) {
+    private static boolean inversion_1(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, INVERSION_1);
         boolean r;
@@ -1594,7 +1594,7 @@ public class FugaParser {
     }
 
     /**
-     * comparison: 'bitwise_or' ('comp_op' 'bitwise_or')*
+     * comparison: bitwise_or (comp_op bitwise_or)*
      */
     public static boolean comparison(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -1616,9 +1616,9 @@ public class FugaParser {
     }
 
     /**
-     * 'comp_op' 'bitwise_or'
+     * comp_op bitwise_or
      */
-    public static boolean comparison_2(ParseTree t, int lv) {
+    private static boolean comparison_2(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, COMPARISON_2);
         boolean r;
@@ -1652,7 +1652,7 @@ public class FugaParser {
     /**
      * 'not' 'in'
      */
-    public static boolean comp_op_8(ParseTree t, int lv) {
+    private static boolean comp_op_8(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, COMP_OP_8);
         boolean r;
@@ -1665,7 +1665,7 @@ public class FugaParser {
     /**
      * 'is' 'not'
      */
-    public static boolean comp_op_10(ParseTree t, int lv) {
+    private static boolean comp_op_10(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, COMP_OP_10);
         boolean r;
@@ -1676,7 +1676,7 @@ public class FugaParser {
     }
 
     /**
-     * bitwise_or: 'bitwise_xor' ('|' 'bitwise_xor')*
+     * bitwise_or: bitwise_xor ('|' bitwise_xor)*
      */
     public static boolean bitwise_or(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -1698,9 +1698,9 @@ public class FugaParser {
     }
 
     /**
-     * '|' 'bitwise_xor'
+     * '|' bitwise_xor
      */
-    public static boolean bitwise_or_2(ParseTree t, int lv) {
+    private static boolean bitwise_or_2(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, BITWISE_OR_2);
         boolean r;
@@ -1711,7 +1711,7 @@ public class FugaParser {
     }
 
     /**
-     * bitwise_xor: 'bitwise_and' ('^' 'bitwise_and')*
+     * bitwise_xor: bitwise_and ('^' bitwise_and)*
      */
     public static boolean bitwise_xor(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -1733,9 +1733,9 @@ public class FugaParser {
     }
 
     /**
-     * '^' 'bitwise_and'
+     * '^' bitwise_and
      */
-    public static boolean bitwise_xor_2(ParseTree t, int lv) {
+    private static boolean bitwise_xor_2(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, BITWISE_XOR_2);
         boolean r;
@@ -1746,7 +1746,7 @@ public class FugaParser {
     }
 
     /**
-     * bitwise_and: 'shift_expr' ('&' 'shift_expr')*
+     * bitwise_and: shift_expr ('&' shift_expr)*
      */
     public static boolean bitwise_and(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -1768,9 +1768,9 @@ public class FugaParser {
     }
 
     /**
-     * '&' 'shift_expr'
+     * '&' shift_expr
      */
-    public static boolean bitwise_and_2(ParseTree t, int lv) {
+    private static boolean bitwise_and_2(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, BITWISE_AND_2);
         boolean r;
@@ -1794,7 +1794,7 @@ public class FugaParser {
     }
 
     /**
-     * shift_expr: 'sum' ('shift_op' 'sum')*
+     * shift_expr: sum (shift_op sum)*
      */
     public static boolean shift_expr(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -1816,9 +1816,9 @@ public class FugaParser {
     }
 
     /**
-     * 'shift_op' 'sum'
+     * shift_op sum
      */
-    public static boolean shift_expr_2(ParseTree t, int lv) {
+    private static boolean shift_expr_2(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, SHIFT_EXPR_2);
         boolean r;
@@ -1842,7 +1842,7 @@ public class FugaParser {
     }
 
     /**
-     * sum: 'term' ('sum_op' 'term')*
+     * sum: term (sum_op term)*
      */
     public static boolean sum(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -1864,9 +1864,9 @@ public class FugaParser {
     }
 
     /**
-     * 'sum_op' 'term'
+     * sum_op term
      */
-    public static boolean sum_2(ParseTree t, int lv) {
+    private static boolean sum_2(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, SUM_2);
         boolean r;
@@ -1893,7 +1893,7 @@ public class FugaParser {
     }
 
     /**
-     * term: 'pipeline' ('term_op' 'pipeline')*
+     * term: pipeline (term_op pipeline)*
      */
     public static boolean term(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -1915,9 +1915,9 @@ public class FugaParser {
     }
 
     /**
-     * 'term_op' 'pipeline'
+     * term_op pipeline
      */
-    public static boolean term_2(ParseTree t, int lv) {
+    private static boolean term_2(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, TERM_2);
         boolean r;
@@ -1928,7 +1928,7 @@ public class FugaParser {
     }
 
     /**
-     * pipeline: 'factor' ('->' 'pipe_expr')*
+     * pipeline: factor ('->' pipe_expr)*
      */
     public static boolean pipeline(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -1950,9 +1950,9 @@ public class FugaParser {
     }
 
     /**
-     * '->' 'pipe_expr'
+     * '->' pipe_expr
      */
-    public static boolean pipeline_2(ParseTree t, int lv) {
+    private static boolean pipeline_2(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, PIPELINE_2);
         boolean r;
@@ -1963,7 +1963,7 @@ public class FugaParser {
     }
 
     /**
-     * pipe_expr: 'pipe_for' | 'factor'
+     * pipe_expr: pipe_for | factor
      */
     public static boolean pipe_expr(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -1976,7 +1976,7 @@ public class FugaParser {
     }
 
     /**
-     * pipe_for: ['comp_for'] 'for' 'targetlist' ['if' 'named_expr'] ['parameters' | 'block_suite']
+     * pipe_for: [comp_for] 'for' targetlist ['if' named_expr] [parameters | block_suite]
      */
     public static boolean pipe_for(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -1992,9 +1992,9 @@ public class FugaParser {
     }
 
     /**
-     * 'if' 'named_expr'
+     * 'if' named_expr
      */
-    public static boolean pipe_for_4(ParseTree t, int lv) {
+    private static boolean pipe_for_4(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, PIPE_FOR_4);
         boolean r;
@@ -2005,9 +2005,9 @@ public class FugaParser {
     }
 
     /**
-     * 'parameters' | 'block_suite'
+     * parameters | block_suite
      */
-    public static boolean pipe_for_5(ParseTree t, int lv) {
+    private static boolean pipe_for_5(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, PIPE_FOR_5);
         boolean r;
@@ -2018,7 +2018,7 @@ public class FugaParser {
     }
 
     /**
-     * comp_for: 'for' 'targetlist' 'in' 'disjunction' ['comp_iter']
+     * comp_for: 'for' targetlist 'in' disjunction [comp_iter]
      */
     public static boolean comp_for(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -2034,7 +2034,7 @@ public class FugaParser {
     }
 
     /**
-     * comp_if: 'if' 'named_expr' ['comp_iter']
+     * comp_if: 'if' named_expr [comp_iter]
      */
     public static boolean comp_if(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -2048,7 +2048,7 @@ public class FugaParser {
     }
 
     /**
-     * comp_iter: 'comp_for' | 'comp_if'
+     * comp_iter: comp_for | comp_if
      */
     public static boolean comp_iter(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -2061,7 +2061,7 @@ public class FugaParser {
     }
 
     /**
-     * factor: ('+' | '-' | '~') 'factor' | 'power'
+     * factor: ('+' | '-' | '~') factor | power
      */
     public static boolean factor(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -2074,9 +2074,9 @@ public class FugaParser {
     }
 
     /**
-     * ('+' | '-' | '~') 'factor'
+     * ('+' | '-' | '~') factor
      */
-    public static boolean factor_1(ParseTree t, int lv) {
+    private static boolean factor_1(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, FACTOR_1);
         boolean r;
@@ -2089,7 +2089,7 @@ public class FugaParser {
     /**
      * '+' | '-' | '~'
      */
-    public static boolean factor_1_1(ParseTree t, int lv) {
+    private static boolean factor_1_1(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, FACTOR_1_1);
         boolean r;
@@ -2101,7 +2101,7 @@ public class FugaParser {
     }
 
     /**
-     * power: 'primary' ['**' 'factor']
+     * power: primary ['**' factor]
      */
     public static boolean power(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -2114,9 +2114,9 @@ public class FugaParser {
     }
 
     /**
-     * '**' 'factor'
+     * '**' factor
      */
-    public static boolean power_2(ParseTree t, int lv) {
+    private static boolean power_2(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, POWER_2);
         boolean r;
@@ -2127,7 +2127,7 @@ public class FugaParser {
     }
 
     /**
-     * primary: 'atom' 'trailer'* ['block_suite']
+     * primary: atom trailer* [block_suite]
      */
     public static boolean primary(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -2150,7 +2150,7 @@ public class FugaParser {
     }
 
     /**
-     * atom: 'tuple_atom' | 'list_atom' | 'dict_or_set' | 'NAME' | 'NUMBER' | 'STRING' | 'None' | 'True' | 'False'
+     * atom: tuple_atom | list_atom | dict_or_set | NAME | NUMBER | STRING | 'None' | 'True' | 'False'
      */
     public static boolean atom(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -2170,7 +2170,7 @@ public class FugaParser {
     }
 
     /**
-     * tuple_atom: '(' ['named_expr_list'] ')'
+     * tuple_atom: '(' [named_expr_list] ')'
      */
     public static boolean tuple_atom(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -2184,7 +2184,7 @@ public class FugaParser {
     }
 
     /**
-     * list_atom: '[' ['named_expr_list'] ']'
+     * list_atom: '[' [named_expr_list] ']'
      */
     public static boolean list_atom(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -2198,7 +2198,7 @@ public class FugaParser {
     }
 
     /**
-     * dict_or_set: '{' ['dict_maker' | 'set_maker'] '}'
+     * dict_or_set: '{' [dict_maker | set_maker] '}'
      */
     public static boolean dict_or_set(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -2212,9 +2212,9 @@ public class FugaParser {
     }
 
     /**
-     * 'dict_maker' | 'set_maker'
+     * dict_maker | set_maker
      */
-    public static boolean dict_or_set_2(ParseTree t, int lv) {
+    private static boolean dict_or_set_2(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, DICT_OR_SET_2);
         boolean r;
@@ -2225,7 +2225,7 @@ public class FugaParser {
     }
 
     /**
-     * named_expr_star: 'star_expr' | 'named_expr'
+     * named_expr_star: star_expr | named_expr
      */
     public static boolean named_expr_star(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -2238,7 +2238,7 @@ public class FugaParser {
     }
 
     /**
-     * named_expr_list: 'named_expr_star' (',' 'named_expr_star')* [',']
+     * named_expr_list: named_expr_star (',' named_expr_star)* [',']
      */
     public static boolean named_expr_list(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -2261,9 +2261,9 @@ public class FugaParser {
     }
 
     /**
-     * ',' 'named_expr_star'
+     * ',' named_expr_star
      */
-    public static boolean named_expr_list_2(ParseTree t, int lv) {
+    private static boolean named_expr_list_2(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, NAMED_EXPR_LIST_2);
         boolean r;
@@ -2274,7 +2274,7 @@ public class FugaParser {
     }
 
     /**
-     * trailer: '.' 'NAME' | 'parameters' | 'subscript'
+     * trailer: '.' NAME | parameters | subscript
      */
     public static boolean trailer(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -2288,9 +2288,9 @@ public class FugaParser {
     }
 
     /**
-     * '.' 'NAME'
+     * '.' NAME
      */
-    public static boolean trailer_1(ParseTree t, int lv) {
+    private static boolean trailer_1(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, TRAILER_1);
         boolean r;
@@ -2301,7 +2301,7 @@ public class FugaParser {
     }
 
     /**
-     * subscript: '[' 'slicelist' ']'
+     * subscript: '[' slicelist ']'
      */
     public static boolean subscript(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -2315,7 +2315,7 @@ public class FugaParser {
     }
 
     /**
-     * slicelist: 'slice' (',' 'slice')* [',']
+     * slicelist: slice (',' slice)* [',']
      */
     public static boolean slicelist(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -2338,9 +2338,9 @@ public class FugaParser {
     }
 
     /**
-     * ',' 'slice'
+     * ',' slice
      */
-    public static boolean slicelist_2(ParseTree t, int lv) {
+    private static boolean slicelist_2(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, SLICELIST_2);
         boolean r;
@@ -2351,7 +2351,7 @@ public class FugaParser {
     }
 
     /**
-     * slice: ['expr'] 'slice_expr' ['slice_expr'] | 'expr'
+     * slice: [expr] slice_expr [slice_expr] | expr
      */
     public static boolean slice(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -2364,9 +2364,9 @@ public class FugaParser {
     }
 
     /**
-     * ['expr'] 'slice_expr' ['slice_expr']
+     * [expr] slice_expr [slice_expr]
      */
-    public static boolean slice_1(ParseTree t, int lv) {
+    private static boolean slice_1(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, SLICE_1);
         boolean r;
@@ -2378,7 +2378,7 @@ public class FugaParser {
     }
 
     /**
-     * slice_expr: ':' ['expr']
+     * slice_expr: ':' [expr]
      */
     public static boolean slice_expr(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -2391,7 +2391,7 @@ public class FugaParser {
     }
 
     /**
-     * parameters: '(' ['arglist'] ')'
+     * parameters: '(' [arglist] ')'
      */
     public static boolean parameters(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -2405,7 +2405,7 @@ public class FugaParser {
     }
 
     /**
-     * target: 'NAME' | '(' 'targetlist' ')' | '*' 'target' | 'primary'
+     * target: NAME | '(' targetlist ')' | '*' target | primary
      */
     public static boolean target(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -2420,9 +2420,9 @@ public class FugaParser {
     }
 
     /**
-     * '(' 'targetlist' ')'
+     * '(' targetlist ')'
      */
-    public static boolean target_2(ParseTree t, int lv) {
+    private static boolean target_2(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, TARGET_2);
         boolean r;
@@ -2434,9 +2434,9 @@ public class FugaParser {
     }
 
     /**
-     * '*' 'target'
+     * '*' target
      */
-    public static boolean target_3(ParseTree t, int lv) {
+    private static boolean target_3(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, TARGET_3);
         boolean r;
@@ -2447,7 +2447,7 @@ public class FugaParser {
     }
 
     /**
-     * targetlist: 'target' (',' 'target')* [',']
+     * targetlist: target (',' target)* [',']
      */
     public static boolean targetlist(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -2470,9 +2470,9 @@ public class FugaParser {
     }
 
     /**
-     * ',' 'target'
+     * ',' target
      */
-    public static boolean targetlist_2(ParseTree t, int lv) {
+    private static boolean targetlist_2(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, TARGETLIST_2);
         boolean r;
@@ -2483,7 +2483,7 @@ public class FugaParser {
     }
 
     /**
-     * exprlist: 'expr' (',' 'expr')* [',']
+     * exprlist: expr (',' expr)* [',']
      */
     public static boolean exprlist(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -2506,9 +2506,9 @@ public class FugaParser {
     }
 
     /**
-     * ',' 'expr'
+     * ',' expr
      */
-    public static boolean exprlist_2(ParseTree t, int lv) {
+    private static boolean exprlist_2(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, EXPRLIST_2);
         boolean r;
@@ -2519,7 +2519,7 @@ public class FugaParser {
     }
 
     /**
-     * dict_item: 'expr' ':' 'expr' | '**' 'bitwise_or'
+     * dict_item: expr ':' expr | '**' bitwise_or
      */
     public static boolean dict_item(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -2532,9 +2532,9 @@ public class FugaParser {
     }
 
     /**
-     * 'expr' ':' 'expr'
+     * expr ':' expr
      */
-    public static boolean dict_item_1(ParseTree t, int lv) {
+    private static boolean dict_item_1(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, DICT_ITEM_1);
         boolean r;
@@ -2546,9 +2546,9 @@ public class FugaParser {
     }
 
     /**
-     * '**' 'bitwise_or'
+     * '**' bitwise_or
      */
-    public static boolean dict_item_2(ParseTree t, int lv) {
+    private static boolean dict_item_2(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, DICT_ITEM_2);
         boolean r;
@@ -2559,7 +2559,7 @@ public class FugaParser {
     }
 
     /**
-     * dict_maker: 'dict_item' (',' 'dict_item')* [',']
+     * dict_maker: dict_item (',' dict_item)* [',']
      */
     public static boolean dict_maker(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -2582,9 +2582,9 @@ public class FugaParser {
     }
 
     /**
-     * ',' 'dict_item'
+     * ',' dict_item
      */
-    public static boolean dict_maker_2(ParseTree t, int lv) {
+    private static boolean dict_maker_2(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, DICT_MAKER_2);
         boolean r;
@@ -2595,7 +2595,7 @@ public class FugaParser {
     }
 
     /**
-     * set_maker: 'expr_or_star' (',' 'expr_or_star')* [',']
+     * set_maker: expr_or_star (',' expr_or_star)* [',']
      */
     public static boolean set_maker(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -2618,9 +2618,9 @@ public class FugaParser {
     }
 
     /**
-     * ',' 'expr_or_star'
+     * ',' expr_or_star
      */
-    public static boolean set_maker_2(ParseTree t, int lv) {
+    private static boolean set_maker_2(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, SET_MAKER_2);
         boolean r;
@@ -2631,7 +2631,7 @@ public class FugaParser {
     }
 
     /**
-     * arglist: 'argument' (',' 'argument')* [',']
+     * arglist: argument (',' argument)* [',']
      */
     public static boolean arglist(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -2654,9 +2654,9 @@ public class FugaParser {
     }
 
     /**
-     * ',' 'argument'
+     * ',' argument
      */
-    public static boolean arglist_2(ParseTree t, int lv) {
+    private static boolean arglist_2(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, ARGLIST_2);
         boolean r;
@@ -2667,7 +2667,7 @@ public class FugaParser {
     }
 
     /**
-     * argument: 'NAME' ':=' 'expr' | 'NAME' '=' 'expr' | '**' 'expr' | '*' 'expr' | 'expr'
+     * argument: NAME ':=' expr | NAME '=' expr | '**' expr | '*' expr | expr
      */
     public static boolean argument(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -2683,9 +2683,9 @@ public class FugaParser {
     }
 
     /**
-     * 'NAME' ':=' 'expr'
+     * NAME ':=' expr
      */
-    public static boolean argument_1(ParseTree t, int lv) {
+    private static boolean argument_1(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, ARGUMENT_1);
         boolean r;
@@ -2697,9 +2697,9 @@ public class FugaParser {
     }
 
     /**
-     * 'NAME' '=' 'expr'
+     * NAME '=' expr
      */
-    public static boolean argument_2(ParseTree t, int lv) {
+    private static boolean argument_2(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, ARGUMENT_2);
         boolean r;
@@ -2711,9 +2711,9 @@ public class FugaParser {
     }
 
     /**
-     * '**' 'expr'
+     * '**' expr
      */
-    public static boolean argument_3(ParseTree t, int lv) {
+    private static boolean argument_3(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, ARGUMENT_3);
         boolean r;
@@ -2724,9 +2724,9 @@ public class FugaParser {
     }
 
     /**
-     * '*' 'expr'
+     * '*' expr
      */
-    public static boolean argument_4(ParseTree t, int lv) {
+    private static boolean argument_4(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, ARGUMENT_4);
         boolean r;

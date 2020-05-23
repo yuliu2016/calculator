@@ -4,7 +4,7 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * repeat_rule: 'sub_rule' ['*' | '+']
+ * repeat_rule: sub_rule ['*' | '+']
  */
 public final class RepeatRule extends NodeWrapper {
 

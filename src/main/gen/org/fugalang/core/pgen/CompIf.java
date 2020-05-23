@@ -4,7 +4,7 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * comp_if: 'if' 'named_expr' ['comp_iter']
+ * comp_if: 'if' named_expr [comp_iter]
  */
 public final class CompIf extends NodeWrapper {
 

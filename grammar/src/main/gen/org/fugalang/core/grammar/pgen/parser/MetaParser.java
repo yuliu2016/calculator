@@ -9,7 +9,7 @@ import static org.fugalang.core.grammar.pgen.parser.MetaRules.*;
 public class MetaParser {
 
     /**
-     * rules: ['NEWLINE'] 'single_rule'+
+     * rules: [NEWLINE] single_rule+
      */
     public static boolean rules(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -33,7 +33,7 @@ public class MetaParser {
     }
 
     /**
-     * single_rule: 'NAME' ':' ['NEWLINE' '|'] 'or_rule' 'NEWLINE'
+     * single_rule: NAME ':' [NEWLINE '|'] or_rule NEWLINE
      */
     public static boolean single_rule(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -49,9 +49,9 @@ public class MetaParser {
     }
 
     /**
-     * 'NEWLINE' '|'
+     * NEWLINE '|'
      */
-    public static boolean single_rule_3(ParseTree t, int lv) {
+    private static boolean single_rule_3(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, SINGLE_RULE_3);
         boolean r;
@@ -62,7 +62,7 @@ public class MetaParser {
     }
 
     /**
-     * or_rule: 'and_rule' (['NEWLINE'] '|' 'and_rule')*
+     * or_rule: and_rule ([NEWLINE] '|' and_rule)*
      */
     public static boolean or_rule(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -84,9 +84,9 @@ public class MetaParser {
     }
 
     /**
-     * ['NEWLINE'] '|' 'and_rule'
+     * [NEWLINE] '|' and_rule
      */
-    public static boolean or_rule_2(ParseTree t, int lv) {
+    private static boolean or_rule_2(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, OR_RULE_2);
         boolean r;
@@ -98,7 +98,7 @@ public class MetaParser {
     }
 
     /**
-     * and_rule: 'repeat_rule' ('repeat_rule')*
+     * and_rule: repeat_rule (repeat_rule)*
      */
     public static boolean and_rule(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -120,9 +120,9 @@ public class MetaParser {
     }
 
     /**
-     * 'repeat_rule'
+     * repeat_rule
      */
-    public static boolean and_rule_2(ParseTree t, int lv) {
+    private static boolean and_rule_2(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, AND_RULE_2);
         boolean r;
@@ -132,7 +132,7 @@ public class MetaParser {
     }
 
     /**
-     * repeat_rule: 'sub_rule' ['*' | '+']
+     * repeat_rule: sub_rule ['*' | '+']
      */
     public static boolean repeat_rule(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -147,7 +147,7 @@ public class MetaParser {
     /**
      * '*' | '+'
      */
-    public static boolean repeat_rule_2(ParseTree t, int lv) {
+    private static boolean repeat_rule_2(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, REPEAT_RULE_2);
         boolean r;
@@ -158,7 +158,7 @@ public class MetaParser {
     }
 
     /**
-     * sub_rule: '(' 'or_rule' ')' | '[' 'or_rule' ']' | 'NAME' | 'STRING'
+     * sub_rule: '(' or_rule ')' | '[' or_rule ']' | NAME | STRING
      */
     public static boolean sub_rule(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
@@ -173,9 +173,9 @@ public class MetaParser {
     }
 
     /**
-     * '(' 'or_rule' ')'
+     * '(' or_rule ')'
      */
-    public static boolean sub_rule_1(ParseTree t, int lv) {
+    private static boolean sub_rule_1(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, SUB_RULE_1);
         boolean r;
@@ -187,9 +187,9 @@ public class MetaParser {
     }
 
     /**
-     * '[' 'or_rule' ']'
+     * '[' or_rule ']'
      */
-    public static boolean sub_rule_2(ParseTree t, int lv) {
+    private static boolean sub_rule_2(ParseTree t, int lv) {
         if (t.recursionGuard(lv)) return false;
         t.enter(lv, SUB_RULE_2);
         boolean r;

@@ -4,7 +4,7 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * named_expr_star: 'star_expr' | 'named_expr'
+ * named_expr_star: star_expr | named_expr
  */
 public final class NamedExprStar extends NodeWrapper {
 

@@ -4,7 +4,7 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * import_from: 'from' 'import_from_names' 'import' ('*' | '(' 'import_as_names' [','] ')' | 'import_as_names')
+ * import_from: 'from' import_from_names 'import' ('*' | '(' import_as_names [','] ')' | import_as_names)
  */
 public final class ImportFrom extends NodeWrapper {
 
@@ -21,7 +21,7 @@ public final class ImportFrom extends NodeWrapper {
     }
 
     /**
-     * '*' | '(' 'import_as_names' [','] ')' | 'import_as_names'
+     * '*' | '(' import_as_names [','] ')' | import_as_names
      */
     public static final class ImportFrom4 extends NodeWrapper {
 
@@ -51,7 +51,7 @@ public final class ImportFrom extends NodeWrapper {
     }
 
     /**
-     * '(' 'import_as_names' [','] ')'
+     * '(' import_as_names [','] ')'
      */
     public static final class ImportFrom42 extends NodeWrapper {
 

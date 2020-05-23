@@ -6,7 +6,7 @@ import org.fugalang.core.parser.ParseTreeNode;
 import java.util.List;
 
 /**
- * sum: 'term' ('sum_op' 'term')*
+ * sum: term (sum_op term)*
  */
 public final class Sum extends NodeWrapper {
 
@@ -23,7 +23,7 @@ public final class Sum extends NodeWrapper {
     }
 
     /**
-     * 'sum_op' 'term'
+     * sum_op term
      */
     public static final class Sum2 extends NodeWrapper {
 

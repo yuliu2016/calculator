@@ -5,7 +5,7 @@ import org.fugalang.core.parser.ParseTreeNode;
 import org.fugalang.core.token.TokenType;
 
 /**
- * except_clause: 'except' ['expr' ['as' 'NAME']]
+ * except_clause: 'except' [expr ['as' NAME]]
  */
 public final class ExceptClause extends NodeWrapper {
 
@@ -22,7 +22,7 @@ public final class ExceptClause extends NodeWrapper {
     }
 
     /**
-     * 'expr' ['as' 'NAME']
+     * expr ['as' NAME]
      */
     public static final class ExceptClause2 extends NodeWrapper {
 
@@ -44,7 +44,7 @@ public final class ExceptClause extends NodeWrapper {
     }
 
     /**
-     * 'as' 'NAME'
+     * 'as' NAME
      */
     public static final class ExceptClause22 extends NodeWrapper {
 

@@ -6,7 +6,7 @@ import org.fugalang.core.parser.ParseTreeNode;
 import java.util.List;
 
 /**
- * term: 'pipeline' ('term_op' 'pipeline')*
+ * term: pipeline (term_op pipeline)*
  */
 public final class Term extends NodeWrapper {
 
@@ -23,7 +23,7 @@ public final class Term extends NodeWrapper {
     }
 
     /**
-     * 'term_op' 'pipeline'
+     * term_op pipeline
      */
     public static final class Term2 extends NodeWrapper {
 

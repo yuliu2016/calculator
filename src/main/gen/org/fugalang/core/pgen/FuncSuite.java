@@ -4,7 +4,7 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * func_suite: ':' 'expr' | 'block_suite'
+ * func_suite: ':' expr | block_suite
  */
 public final class FuncSuite extends NodeWrapper {
 
@@ -29,7 +29,7 @@ public final class FuncSuite extends NodeWrapper {
     }
 
     /**
-     * ':' 'expr'
+     * ':' expr
      */
     public static final class FuncSuite1 extends NodeWrapper {
 

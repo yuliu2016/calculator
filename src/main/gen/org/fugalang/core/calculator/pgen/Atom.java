@@ -5,7 +5,7 @@ import org.fugalang.core.parser.ParseTreeNode;
 import org.fugalang.core.token.TokenType;
 
 /**
- * atom: '(' 'sum' ')' | 'NUMBER'
+ * atom: '(' sum ')' | NUMBER
  */
 public final class Atom extends NodeWrapper {
 
@@ -30,7 +30,7 @@ public final class Atom extends NodeWrapper {
     }
 
     /**
-     * '(' 'sum' ')'
+     * '(' sum ')'
      */
     public static final class Atom1 extends NodeWrapper {
 

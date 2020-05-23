@@ -5,7 +5,7 @@ import org.fugalang.core.parser.ParseTreeNode;
 import org.fugalang.core.token.TokenType;
 
 /**
- * with_item: 'expr' ['as' 'NAME']
+ * with_item: expr ['as' NAME]
  */
 public final class WithItem extends NodeWrapper {
 
@@ -26,7 +26,7 @@ public final class WithItem extends NodeWrapper {
     }
 
     /**
-     * 'as' 'NAME'
+     * 'as' NAME
      */
     public static final class WithItem2 extends NodeWrapper {
 

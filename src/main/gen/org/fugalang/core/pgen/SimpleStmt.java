@@ -6,7 +6,7 @@ import org.fugalang.core.parser.ParseTreeNode;
 import java.util.List;
 
 /**
- * simple_stmt: 'small_stmt' (';' 'small_stmt')* [';']
+ * simple_stmt: small_stmt (';' small_stmt)* [';']
  */
 public final class SimpleStmt extends NodeWrapper {
 
@@ -27,7 +27,7 @@ public final class SimpleStmt extends NodeWrapper {
     }
 
     /**
-     * ';' 'small_stmt'
+     * ';' small_stmt
      */
     public static final class SimpleStmt2 extends NodeWrapper {
 

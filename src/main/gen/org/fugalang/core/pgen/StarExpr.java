@@ -4,7 +4,7 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * star_expr: '*' 'bitwise_or'
+ * star_expr: '*' bitwise_or
  */
 public final class StarExpr extends NodeWrapper {
 

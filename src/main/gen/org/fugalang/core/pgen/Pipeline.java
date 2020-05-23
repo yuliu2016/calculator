@@ -6,7 +6,7 @@ import org.fugalang.core.parser.ParseTreeNode;
 import java.util.List;
 
 /**
- * pipeline: 'factor' ('->' 'pipe_expr')*
+ * pipeline: factor ('->' pipe_expr)*
  */
 public final class Pipeline extends NodeWrapper {
 
@@ -23,7 +23,7 @@ public final class Pipeline extends NodeWrapper {
     }
 
     /**
-     * '->' 'pipe_expr'
+     * '->' pipe_expr
      */
     public static final class Pipeline2 extends NodeWrapper {
 

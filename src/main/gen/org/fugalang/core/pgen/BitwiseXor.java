@@ -6,7 +6,7 @@ import org.fugalang.core.parser.ParseTreeNode;
 import java.util.List;
 
 /**
- * bitwise_xor: 'bitwise_and' ('^' 'bitwise_and')*
+ * bitwise_xor: bitwise_and ('^' bitwise_and)*
  */
 public final class BitwiseXor extends NodeWrapper {
 
@@ -23,7 +23,7 @@ public final class BitwiseXor extends NodeWrapper {
     }
 
     /**
-     * '^' 'bitwise_and'
+     * '^' bitwise_and
      */
     public static final class BitwiseXor2 extends NodeWrapper {
 
