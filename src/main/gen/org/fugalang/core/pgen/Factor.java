@@ -18,7 +18,7 @@ public final class Factor extends NodeWrapper {
     }
 
     public boolean hasFactor1() {
-        return has(0, ParserRules.FACTOR_1);
+        return has(0);
     }
 
     public Power power() {
@@ -26,7 +26,7 @@ public final class Factor extends NodeWrapper {
     }
 
     public boolean hasPower() {
-        return has(1, ParserRules.POWER);
+        return has(1);
     }
 
     /**

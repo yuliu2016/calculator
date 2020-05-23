@@ -19,7 +19,7 @@ public final class Atom extends NodeWrapper {
     }
 
     public boolean hasTupleAtom() {
-        return has(0, ParserRules.TUPLE_ATOM);
+        return has(0);
     }
 
     public ListAtom listAtom() {
@@ -27,7 +27,7 @@ public final class Atom extends NodeWrapper {
     }
 
     public boolean hasListAtom() {
-        return has(1, ParserRules.LIST_ATOM);
+        return has(1);
     }
 
     public DictOrSet dictOrSet() {
@@ -35,7 +35,7 @@ public final class Atom extends NodeWrapper {
     }
 
     public boolean hasDictOrSet() {
-        return has(2, ParserRules.DICT_OR_SET);
+        return has(2);
     }
 
     public String name() {
@@ -43,7 +43,7 @@ public final class Atom extends NodeWrapper {
     }
 
     public boolean hasName() {
-        return has(3, TokenType.NAME);
+        return has(3);
     }
 
     public String number() {
@@ -51,7 +51,7 @@ public final class Atom extends NodeWrapper {
     }
 
     public boolean hasNumber() {
-        return has(4, TokenType.NUMBER);
+        return has(4);
     }
 
     public String string() {
@@ -59,7 +59,7 @@ public final class Atom extends NodeWrapper {
     }
 
     public boolean hasString() {
-        return has(5, TokenType.STRING);
+        return has(5);
     }
 
     public boolean isNone() {

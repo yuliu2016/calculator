@@ -19,7 +19,7 @@ public final class Atom extends NodeWrapper {
     }
 
     public boolean hasSum() {
-        return has(0, ParserRules.ATOM_1);
+        return has(0);
     }
 
     public String number() {
@@ -27,7 +27,7 @@ public final class Atom extends NodeWrapper {
     }
 
     public boolean hasNumber() {
-        return has(1, TokenType.NUMBER);
+        return has(1);
     }
 
     /**

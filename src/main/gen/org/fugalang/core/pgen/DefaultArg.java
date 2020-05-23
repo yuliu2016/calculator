@@ -22,7 +22,7 @@ public final class DefaultArg extends NodeWrapper {
     }
 
     public boolean hasExpr() {
-        return has(1, ParserRules.DEFAULT_ARG_2);
+        return has(1);
     }
 
     /**

@@ -22,7 +22,7 @@ public final class AssertStmt extends NodeWrapper {
     }
 
     public boolean hasExpr1() {
-        return has(2, ParserRules.ASSERT_STMT_3);
+        return has(2);
     }
 
     /**

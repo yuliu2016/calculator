@@ -46,7 +46,7 @@ public final class CompOp extends NodeWrapper {
     }
 
     public boolean hasNotIn() {
-        return has(7, ParserRules.COMP_OP_8);
+        return has(7);
     }
 
     public boolean isIs() {
@@ -58,7 +58,7 @@ public final class CompOp extends NodeWrapper {
     }
 
     public boolean hasIsNot() {
-        return has(9, ParserRules.COMP_OP_10);
+        return has(9);
     }
 
     /**

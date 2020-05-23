@@ -18,6 +18,6 @@ public final class ReturnStmt extends NodeWrapper {
     }
 
     public boolean hasExprlistStar() {
-        return has(1, ParserRules.EXPRLIST_STAR);
+        return has(1);
     }
 }

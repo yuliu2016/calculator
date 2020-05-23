@@ -20,7 +20,7 @@ public final class ImportFromNames extends NodeWrapper {
     }
 
     public boolean hasImportFromNames1() {
-        return has(0, ParserRules.IMPORT_FROM_NAMES_1);
+        return has(0);
     }
 
     public List<Boolean> isDots() {

@@ -18,7 +18,7 @@ public final class Expr extends NodeWrapper {
     }
 
     public boolean hasConditional() {
-        return has(0, ParserRules.CONDITIONAL);
+        return has(0);
     }
 
     public Funcdef funcdef() {
@@ -26,7 +26,7 @@ public final class Expr extends NodeWrapper {
     }
 
     public boolean hasFuncdef() {
-        return has(1, ParserRules.FUNCDEF);
+        return has(1);
     }
 
     public Disjunction disjunction() {
@@ -34,6 +34,6 @@ public final class Expr extends NodeWrapper {
     }
 
     public boolean hasDisjunction() {
-        return has(2, ParserRules.DISJUNCTION);
+        return has(2);
     }
 }

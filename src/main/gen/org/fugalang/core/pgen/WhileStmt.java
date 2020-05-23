@@ -26,6 +26,6 @@ public final class WhileStmt extends NodeWrapper {
     }
 
     public boolean hasElseSuite() {
-        return has(3, ParserRules.ELSE_SUITE);
+        return has(3);
     }
 }

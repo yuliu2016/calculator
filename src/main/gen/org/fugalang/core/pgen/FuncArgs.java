@@ -18,7 +18,7 @@ public final class FuncArgs extends NodeWrapper {
     }
 
     public boolean hasSimpleArgList() {
-        return has(0, ParserRules.SIMPLE_ARG_LIST);
+        return has(0);
     }
 
     public FuncArgs2 funcArgs2() {
@@ -26,7 +26,7 @@ public final class FuncArgs extends NodeWrapper {
     }
 
     public boolean hasFuncArgs2() {
-        return has(1, ParserRules.FUNC_ARGS_2);
+        return has(1);
     }
 
     /**
@@ -43,7 +43,7 @@ public final class FuncArgs extends NodeWrapper {
         }
 
         public boolean hasTypedArgList() {
-            return has(1, ParserRules.TYPED_ARG_LIST);
+            return has(1);
         }
     }
 }

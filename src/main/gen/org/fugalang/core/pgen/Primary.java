@@ -28,6 +28,6 @@ public final class Primary extends NodeWrapper {
     }
 
     public boolean hasBlockSuite() {
-        return has(2, ParserRules.BLOCK_SUITE);
+        return has(2);
     }
 }

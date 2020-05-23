@@ -18,7 +18,7 @@ public final class PipeFor extends NodeWrapper {
     }
 
     public boolean hasCompFor() {
-        return has(0, ParserRules.COMP_FOR);
+        return has(0);
     }
 
     public Targetlist targetlist() {
@@ -30,7 +30,7 @@ public final class PipeFor extends NodeWrapper {
     }
 
     public boolean hasIfNamedExpr() {
-        return has(3, ParserRules.PIPE_FOR_4);
+        return has(3);
     }
 
     public PipeFor5 parametersOrBlockSuite() {
@@ -38,7 +38,7 @@ public final class PipeFor extends NodeWrapper {
     }
 
     public boolean hasParametersOrBlockSuite() {
-        return has(4, ParserRules.PIPE_FOR_5);
+        return has(4);
     }
 
     /**
@@ -69,7 +69,7 @@ public final class PipeFor extends NodeWrapper {
         }
 
         public boolean hasParameters() {
-            return has(0, ParserRules.PARAMETERS);
+            return has(0);
         }
 
         public BlockSuite blockSuite() {
@@ -77,7 +77,7 @@ public final class PipeFor extends NodeWrapper {
         }
 
         public boolean hasBlockSuite() {
-            return has(1, ParserRules.BLOCK_SUITE);
+            return has(1);
         }
     }
 }

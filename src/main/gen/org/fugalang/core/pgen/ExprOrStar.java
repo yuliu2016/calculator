@@ -18,7 +18,7 @@ public final class ExprOrStar extends NodeWrapper {
     }
 
     public boolean hasStarExpr() {
-        return has(0, ParserRules.STAR_EXPR);
+        return has(0);
     }
 
     public Expr expr() {
@@ -26,6 +26,6 @@ public final class ExprOrStar extends NodeWrapper {
     }
 
     public boolean hasExpr() {
-        return has(1, ParserRules.EXPR);
+        return has(1);
     }
 }

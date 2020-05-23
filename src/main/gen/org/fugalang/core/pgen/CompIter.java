@@ -18,7 +18,7 @@ public final class CompIter extends NodeWrapper {
     }
 
     public boolean hasCompFor() {
-        return has(0, ParserRules.COMP_FOR);
+        return has(0);
     }
 
     public CompIf compIf() {
@@ -26,6 +26,6 @@ public final class CompIter extends NodeWrapper {
     }
 
     public boolean hasCompIf() {
-        return has(1, ParserRules.COMP_IF);
+        return has(1);
     }
 }

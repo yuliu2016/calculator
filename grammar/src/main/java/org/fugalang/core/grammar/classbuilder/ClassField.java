@@ -85,25 +85,12 @@ public class ClassField {
 
     private String absentCheckBody(RuleType ruleType, int index) {
         return switch (resultSource.getType()) {
-            case Class -> {
+            case Class, TokenType -> {
                 if (ruleType == RuleType.Conjunction && fieldType == FieldType.Required) {
                     yield null;
                 }
                 if (isSingular()) {
-                    var rule = className.getRuleName().replace(":", "_").toUpperCase();
-                    yield "        return has(" + index + ", " +
-                            "ParserRules." + rule + ");\n";
-                }
-                yield null;
-            }
-
-            case TokenType -> {
-                if (ruleType == RuleType.Conjunction && fieldType == FieldType.Required) {
-                    yield null;
-                }
-                if (isSingular()) {
-                    yield "        return has(" + index + ", " +
-                            resultSource.getValue() + ");\n";
+                    yield "        return has(" + index + ");\n";
                 }
                 yield null;
             }

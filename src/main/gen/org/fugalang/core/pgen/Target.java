@@ -19,7 +19,7 @@ public final class Target extends NodeWrapper {
     }
 
     public boolean hasName() {
-        return has(0, TokenType.NAME);
+        return has(0);
     }
 
     public Target2 targetlist() {
@@ -27,7 +27,7 @@ public final class Target extends NodeWrapper {
     }
 
     public boolean hasTargetlist() {
-        return has(1, ParserRules.TARGET_2);
+        return has(1);
     }
 
     public Target3 target() {
@@ -35,7 +35,7 @@ public final class Target extends NodeWrapper {
     }
 
     public boolean hasTarget() {
-        return has(2, ParserRules.TARGET_3);
+        return has(2);
     }
 
     public Primary primary() {
@@ -43,7 +43,7 @@ public final class Target extends NodeWrapper {
     }
 
     public boolean hasPrimary() {
-        return has(3, ParserRules.PRIMARY);
+        return has(3);
     }
 
     /**

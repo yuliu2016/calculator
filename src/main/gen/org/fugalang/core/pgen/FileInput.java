@@ -38,7 +38,7 @@ public final class FileInput extends NodeWrapper {
         }
 
         public boolean hasNewline() {
-            return has(0, TokenType.NEWLINE);
+            return has(0);
         }
 
         public Stmt stmt() {
@@ -46,7 +46,7 @@ public final class FileInput extends NodeWrapper {
         }
 
         public boolean hasStmt() {
-            return has(1, ParserRules.STMT);
+            return has(1);
         }
     }
 }

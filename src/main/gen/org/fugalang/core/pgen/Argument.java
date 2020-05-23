@@ -19,7 +19,7 @@ public final class Argument extends NodeWrapper {
     }
 
     public boolean hasNameExpr() {
-        return has(0, ParserRules.ARGUMENT_1);
+        return has(0);
     }
 
     public Argument2 nameExpr1() {
@@ -27,7 +27,7 @@ public final class Argument extends NodeWrapper {
     }
 
     public boolean hasNameExpr1() {
-        return has(1, ParserRules.ARGUMENT_2);
+        return has(1);
     }
 
     public Argument3 expr() {
@@ -35,7 +35,7 @@ public final class Argument extends NodeWrapper {
     }
 
     public boolean hasExpr() {
-        return has(2, ParserRules.ARGUMENT_3);
+        return has(2);
     }
 
     public Argument4 expr1() {
@@ -43,7 +43,7 @@ public final class Argument extends NodeWrapper {
     }
 
     public boolean hasExpr1() {
-        return has(3, ParserRules.ARGUMENT_4);
+        return has(3);
     }
 
     public Expr expr2() {
@@ -51,7 +51,7 @@ public final class Argument extends NodeWrapper {
     }
 
     public boolean hasExpr2() {
-        return has(4, ParserRules.EXPR);
+        return has(4);
     }
 
     /**

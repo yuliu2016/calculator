@@ -18,7 +18,7 @@ public final class TypedArgList extends NodeWrapper {
     }
 
     public boolean hasKwargs() {
-        return has(0, ParserRules.KWARGS);
+        return has(0);
     }
 
     public ArgsKwargs argsKwargs() {
@@ -26,7 +26,7 @@ public final class TypedArgList extends NodeWrapper {
     }
 
     public boolean hasArgsKwargs() {
-        return has(1, ParserRules.ARGS_KWARGS);
+        return has(1);
     }
 
     public FullArgList fullArgList() {
@@ -34,6 +34,6 @@ public final class TypedArgList extends NodeWrapper {
     }
 
     public boolean hasFullArgList() {
-        return has(2, ParserRules.FULL_ARG_LIST);
+        return has(2);
     }
 }

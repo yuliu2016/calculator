@@ -36,7 +36,7 @@ public final class Stmt extends NodeWrapper {
         }
 
         public boolean hasSimpleStmt() {
-            return has(0, ParserRules.SIMPLE_STMT);
+            return has(0);
         }
 
         public CompoundStmt compoundStmt() {
@@ -44,7 +44,7 @@ public final class Stmt extends NodeWrapper {
         }
 
         public boolean hasCompoundStmt() {
-            return has(1, ParserRules.COMPOUND_STMT);
+            return has(1);
         }
     }
 }

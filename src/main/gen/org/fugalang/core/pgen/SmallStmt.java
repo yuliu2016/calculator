@@ -30,7 +30,7 @@ public final class SmallStmt extends NodeWrapper {
     }
 
     public boolean hasDelStmt() {
-        return has(3, ParserRules.DEL_STMT);
+        return has(3);
     }
 
     public ReturnStmt returnStmt() {
@@ -38,7 +38,7 @@ public final class SmallStmt extends NodeWrapper {
     }
 
     public boolean hasReturnStmt() {
-        return has(4, ParserRules.RETURN_STMT);
+        return has(4);
     }
 
     public RaiseStmt raiseStmt() {
@@ -46,7 +46,7 @@ public final class SmallStmt extends NodeWrapper {
     }
 
     public boolean hasRaiseStmt() {
-        return has(5, ParserRules.RAISE_STMT);
+        return has(5);
     }
 
     public NonlocalStmt nonlocalStmt() {
@@ -54,7 +54,7 @@ public final class SmallStmt extends NodeWrapper {
     }
 
     public boolean hasNonlocalStmt() {
-        return has(6, ParserRules.NONLOCAL_STMT);
+        return has(6);
     }
 
     public AssertStmt assertStmt() {
@@ -62,7 +62,7 @@ public final class SmallStmt extends NodeWrapper {
     }
 
     public boolean hasAssertStmt() {
-        return has(7, ParserRules.ASSERT_STMT);
+        return has(7);
     }
 
     public ImportName importName() {
@@ -70,7 +70,7 @@ public final class SmallStmt extends NodeWrapper {
     }
 
     public boolean hasImportName() {
-        return has(8, ParserRules.IMPORT_NAME);
+        return has(8);
     }
 
     public ImportFrom importFrom() {
@@ -78,7 +78,7 @@ public final class SmallStmt extends NodeWrapper {
     }
 
     public boolean hasImportFrom() {
-        return has(9, ParserRules.IMPORT_FROM);
+        return has(9);
     }
 
     public Assignment assignment() {
@@ -86,6 +86,6 @@ public final class SmallStmt extends NodeWrapper {
     }
 
     public boolean hasAssignment() {
-        return has(10, ParserRules.ASSIGNMENT);
+        return has(10);
     }
 }

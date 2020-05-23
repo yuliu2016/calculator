@@ -22,7 +22,7 @@ public final class Power extends NodeWrapper {
     }
 
     public boolean hasFactor() {
-        return has(1, ParserRules.POWER_2);
+        return has(1);
     }
 
     /**

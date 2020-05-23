@@ -18,6 +18,6 @@ public final class Parameters extends NodeWrapper {
     }
 
     public boolean hasArglist() {
-        return has(1, ParserRules.ARGLIST);
+        return has(1);
     }
 }

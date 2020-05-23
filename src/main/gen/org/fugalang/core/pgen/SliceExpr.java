@@ -18,6 +18,6 @@ public final class SliceExpr extends NodeWrapper {
     }
 
     public boolean hasExpr() {
-        return has(1, ParserRules.EXPR);
+        return has(1);
     }
 }

@@ -28,7 +28,7 @@ public final class Assignment extends NodeWrapper {
     }
 
     public boolean hasAssignment3() {
-        return has(2, ParserRules.ASSIGNMENT_3);
+        return has(2);
     }
 
     /**
@@ -45,7 +45,7 @@ public final class Assignment extends NodeWrapper {
         }
 
         public boolean hasAnnassign() {
-            return has(0, ParserRules.ANNASSIGN);
+            return has(0);
         }
 
         public List<Assignment32> exprlistStars() {
@@ -57,7 +57,7 @@ public final class Assignment extends NodeWrapper {
         }
 
         public boolean hasAugassignExprlist() {
-            return has(2, ParserRules.ASSIGNMENT_3_3);
+            return has(2);
         }
     }
 

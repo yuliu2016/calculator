@@ -30,6 +30,6 @@ public final class ForStmt extends NodeWrapper {
     }
 
     public boolean hasElseSuite() {
-        return has(5, ParserRules.ELSE_SUITE);
+        return has(5);
     }
 }

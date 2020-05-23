@@ -18,7 +18,7 @@ public final class PipeExpr extends NodeWrapper {
     }
 
     public boolean hasPipeFor() {
-        return has(0, ParserRules.PIPE_FOR);
+        return has(0);
     }
 
     public Factor factor() {
@@ -26,6 +26,6 @@ public final class PipeExpr extends NodeWrapper {
     }
 
     public boolean hasFactor() {
-        return has(1, ParserRules.FACTOR);
+        return has(1);
     }
 }

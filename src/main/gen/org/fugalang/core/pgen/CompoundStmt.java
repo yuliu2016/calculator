@@ -18,7 +18,7 @@ public final class CompoundStmt extends NodeWrapper {
     }
 
     public boolean hasIfStmt() {
-        return has(0, ParserRules.IF_STMT);
+        return has(0);
     }
 
     public WhileStmt whileStmt() {
@@ -26,7 +26,7 @@ public final class CompoundStmt extends NodeWrapper {
     }
 
     public boolean hasWhileStmt() {
-        return has(1, ParserRules.WHILE_STMT);
+        return has(1);
     }
 
     public ForStmt forStmt() {
@@ -34,7 +34,7 @@ public final class CompoundStmt extends NodeWrapper {
     }
 
     public boolean hasForStmt() {
-        return has(2, ParserRules.FOR_STMT);
+        return has(2);
     }
 
     public TryStmt tryStmt() {
@@ -42,7 +42,7 @@ public final class CompoundStmt extends NodeWrapper {
     }
 
     public boolean hasTryStmt() {
-        return has(3, ParserRules.TRY_STMT);
+        return has(3);
     }
 
     public WithStmt withStmt() {
@@ -50,6 +50,6 @@ public final class CompoundStmt extends NodeWrapper {
     }
 
     public boolean hasWithStmt() {
-        return has(4, ParserRules.WITH_STMT);
+        return has(4);
     }
 }

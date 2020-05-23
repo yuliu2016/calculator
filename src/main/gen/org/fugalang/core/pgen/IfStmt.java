@@ -32,6 +32,6 @@ public final class IfStmt extends NodeWrapper {
     }
 
     public boolean hasElseSuite() {
-        return has(4, ParserRules.ELSE_SUITE);
+        return has(4);
     }
 }

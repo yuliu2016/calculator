@@ -18,7 +18,7 @@ public final class Inversion extends NodeWrapper {
     }
 
     public boolean hasNotInversion() {
-        return has(0, ParserRules.INVERSION_1);
+        return has(0);
     }
 
     public Comparison comparison() {
@@ -26,7 +26,7 @@ public final class Inversion extends NodeWrapper {
     }
 
     public boolean hasComparison() {
-        return has(1, ParserRules.COMPARISON);
+        return has(1);
     }
 
     /**

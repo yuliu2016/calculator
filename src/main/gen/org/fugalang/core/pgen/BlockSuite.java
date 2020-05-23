@@ -21,7 +21,7 @@ public final class BlockSuite extends NodeWrapper {
     }
 
     public boolean hasSimpleStmt() {
-        return has(0, ParserRules.BLOCK_SUITE_1);
+        return has(0);
     }
 
     public BlockSuite2 blockSuite2() {
@@ -29,7 +29,7 @@ public final class BlockSuite extends NodeWrapper {
     }
 
     public boolean hasBlockSuite2() {
-        return has(1, ParserRules.BLOCK_SUITE_2);
+        return has(1);
     }
 
     /**

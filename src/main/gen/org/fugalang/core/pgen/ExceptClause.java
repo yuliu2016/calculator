@@ -19,7 +19,7 @@ public final class ExceptClause extends NodeWrapper {
     }
 
     public boolean hasExceptClause2() {
-        return has(1, ParserRules.EXCEPT_CLAUSE_2);
+        return has(1);
     }
 
     /**
@@ -40,7 +40,7 @@ public final class ExceptClause extends NodeWrapper {
         }
 
         public boolean hasAsName() {
-            return has(1, ParserRules.EXCEPT_CLAUSE_2_2);
+            return has(1);
         }
     }
 

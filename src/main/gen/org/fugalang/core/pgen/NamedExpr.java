@@ -19,7 +19,7 @@ public final class NamedExpr extends NodeWrapper {
     }
 
     public boolean hasNameExpr() {
-        return has(0, ParserRules.NAMED_EXPR_1);
+        return has(0);
     }
 
     public Expr expr() {
@@ -27,7 +27,7 @@ public final class NamedExpr extends NodeWrapper {
     }
 
     public boolean hasExpr() {
-        return has(1, ParserRules.EXPR);
+        return has(1);
     }
 
     /**

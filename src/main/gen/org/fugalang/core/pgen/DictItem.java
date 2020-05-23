@@ -18,7 +18,7 @@ public final class DictItem extends NodeWrapper {
     }
 
     public boolean hasExprExpr() {
-        return has(0, ParserRules.DICT_ITEM_1);
+        return has(0);
     }
 
     public DictItem2 bitwiseOr() {
@@ -26,7 +26,7 @@ public final class DictItem extends NodeWrapper {
     }
 
     public boolean hasBitwiseOr() {
-        return has(1, ParserRules.DICT_ITEM_2);
+        return has(1);
     }
 
     /**

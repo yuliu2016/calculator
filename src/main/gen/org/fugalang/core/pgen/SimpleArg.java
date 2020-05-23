@@ -23,7 +23,7 @@ public final class SimpleArg extends NodeWrapper {
     }
 
     public boolean hasExpr() {
-        return has(1, ParserRules.SIMPLE_ARG_2);
+        return has(1);
     }
 
     /**

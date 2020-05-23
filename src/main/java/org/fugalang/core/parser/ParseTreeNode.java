@@ -5,10 +5,6 @@ public interface ParseTreeNode extends TreeStringElem {
 
     boolean isPresent();
 
-    boolean isPresent(ParserRule rule);
-
-    boolean isPresent(ElementType type);
-
     void failIfAbsent();
 
     void failIfAbsent(ParserRule rule);

@@ -18,7 +18,7 @@ public final class DictOrSet extends NodeWrapper {
     }
 
     public boolean hasDictMakerOrSetMaker() {
-        return has(1, ParserRules.DICT_OR_SET_2);
+        return has(1);
     }
 
     /**
@@ -35,7 +35,7 @@ public final class DictOrSet extends NodeWrapper {
         }
 
         public boolean hasDictMaker() {
-            return has(0, ParserRules.DICT_MAKER);
+            return has(0);
         }
 
         public SetMaker setMaker() {
@@ -43,7 +43,7 @@ public final class DictOrSet extends NodeWrapper {
         }
 
         public boolean hasSetMaker() {
-            return has(1, ParserRules.SET_MAKER);
+            return has(1);
         }
     }
 }

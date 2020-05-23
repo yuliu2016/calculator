@@ -19,7 +19,7 @@ public final class SingleInput extends NodeWrapper {
     }
 
     public boolean hasNewline() {
-        return has(0, TokenType.NEWLINE);
+        return has(0);
     }
 
     public SimpleStmt simpleStmt() {
@@ -27,7 +27,7 @@ public final class SingleInput extends NodeWrapper {
     }
 
     public boolean hasSimpleStmt() {
-        return has(1, ParserRules.SIMPLE_STMT);
+        return has(1);
     }
 
     public SingleInput3 compoundStmtNewline() {
@@ -35,7 +35,7 @@ public final class SingleInput extends NodeWrapper {
     }
 
     public boolean hasCompoundStmtNewline() {
-        return has(2, ParserRules.SINGLE_INPUT_3);
+        return has(2);
     }
 
     /**

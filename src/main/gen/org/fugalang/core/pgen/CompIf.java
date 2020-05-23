@@ -22,6 +22,6 @@ public final class CompIf extends NodeWrapper {
     }
 
     public boolean hasCompIter() {
-        return has(2, ParserRules.COMP_ITER);
+        return has(2);
     }
 }

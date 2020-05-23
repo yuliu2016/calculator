@@ -18,7 +18,7 @@ public final class Slice extends NodeWrapper {
     }
 
     public boolean hasSlice1() {
-        return has(0, ParserRules.SLICE_1);
+        return has(0);
     }
 
     public Expr expr() {
@@ -26,7 +26,7 @@ public final class Slice extends NodeWrapper {
     }
 
     public boolean hasExpr() {
-        return has(1, ParserRules.EXPR);
+        return has(1);
     }
 
     /**
@@ -43,7 +43,7 @@ public final class Slice extends NodeWrapper {
         }
 
         public boolean hasExpr() {
-            return has(0, ParserRules.EXPR);
+            return has(0);
         }
 
         public SliceExpr sliceExpr() {
@@ -55,7 +55,7 @@ public final class Slice extends NodeWrapper {
         }
 
         public boolean hasSliceExpr1() {
-            return has(2, ParserRules.SLICE_EXPR);
+            return has(2);
         }
     }
 }

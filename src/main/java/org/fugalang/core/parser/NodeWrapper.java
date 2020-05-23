@@ -42,14 +42,9 @@ public abstract class NodeWrapper {
         return e.asString();
     }
 
-    protected boolean has(int index, ParserRule rule) {
+    protected boolean has(int index) {
         var e = node.getItem(index);
-        return e.isPresent(rule);
-    }
-
-    protected boolean has(int index, ElementType type) {
-        var e = node.getItem(index);
-        return e.isPresent(type);
+        return e.isPresent();
     }
 
     protected boolean is(int index) {

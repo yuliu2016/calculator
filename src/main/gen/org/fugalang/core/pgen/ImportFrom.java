@@ -39,7 +39,7 @@ public final class ImportFrom extends NodeWrapper {
         }
 
         public boolean hasImportFrom42() {
-            return has(1, ParserRules.IMPORT_FROM_4_2);
+            return has(1);
         }
 
         public ImportAsNames importAsNames() {
@@ -47,7 +47,7 @@ public final class ImportFrom extends NodeWrapper {
         }
 
         public boolean hasImportAsNames() {
-            return has(2, ParserRules.IMPORT_AS_NAMES);
+            return has(2);
         }
     }
 

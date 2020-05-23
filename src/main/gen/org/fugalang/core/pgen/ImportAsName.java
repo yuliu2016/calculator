@@ -23,7 +23,7 @@ public final class ImportAsName extends NodeWrapper {
     }
 
     public boolean hasAsName() {
-        return has(1, ParserRules.IMPORT_AS_NAME_2);
+        return has(1);
     }
 
     /**

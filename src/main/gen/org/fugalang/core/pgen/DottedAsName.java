@@ -23,7 +23,7 @@ public final class DottedAsName extends NodeWrapper {
     }
 
     public boolean hasAsName() {
-        return has(1, ParserRules.DOTTED_AS_NAME_2);
+        return has(1);
     }
 
     /**

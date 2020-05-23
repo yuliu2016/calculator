@@ -18,7 +18,7 @@ public final class NamedExprStar extends NodeWrapper {
     }
 
     public boolean hasStarExpr() {
-        return has(0, ParserRules.STAR_EXPR);
+        return has(0);
     }
 
     public NamedExpr namedExpr() {
@@ -26,6 +26,6 @@ public final class NamedExprStar extends NodeWrapper {
     }
 
     public boolean hasNamedExpr() {
-        return has(1, ParserRules.NAMED_EXPR);
+        return has(1);
     }
 }

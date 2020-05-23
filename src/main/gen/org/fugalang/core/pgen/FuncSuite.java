@@ -18,7 +18,7 @@ public final class FuncSuite extends NodeWrapper {
     }
 
     public boolean hasExpr() {
-        return has(0, ParserRules.FUNC_SUITE_1);
+        return has(0);
     }
 
     public BlockSuite blockSuite() {
@@ -26,7 +26,7 @@ public final class FuncSuite extends NodeWrapper {
     }
 
     public boolean hasBlockSuite() {
-        return has(1, ParserRules.BLOCK_SUITE);
+        return has(1);
     }
 
     /**

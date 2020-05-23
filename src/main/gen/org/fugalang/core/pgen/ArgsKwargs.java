@@ -20,7 +20,7 @@ public final class ArgsKwargs extends NodeWrapper {
     }
 
     public boolean hasTypedArg() {
-        return has(1, ParserRules.TYPED_ARG);
+        return has(1);
     }
 
     public List<ArgsKwargs3> defaultArgs() {
@@ -32,7 +32,7 @@ public final class ArgsKwargs extends NodeWrapper {
     }
 
     public boolean hasArgsKwargs4() {
-        return has(3, ParserRules.ARGS_KWARGS_4);
+        return has(3);
     }
 
     /**
@@ -63,7 +63,7 @@ public final class ArgsKwargs extends NodeWrapper {
         }
 
         public boolean hasKwargs() {
-            return has(1, ParserRules.KWARGS);
+            return has(1);
         }
     }
 }

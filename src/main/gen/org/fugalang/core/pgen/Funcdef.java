@@ -18,7 +18,7 @@ public final class Funcdef extends NodeWrapper {
     }
 
     public boolean hasFuncTypeHint() {
-        return has(1, ParserRules.FUNC_TYPE_HINT);
+        return has(1);
     }
 
     public FuncArgs funcArgs() {
@@ -26,7 +26,7 @@ public final class Funcdef extends NodeWrapper {
     }
 
     public boolean hasFuncArgs() {
-        return has(2, ParserRules.FUNC_ARGS);
+        return has(2);
     }
 
     public FuncSuite funcSuite() {

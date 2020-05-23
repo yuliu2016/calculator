@@ -19,7 +19,7 @@ public final class Trailer extends NodeWrapper {
     }
 
     public boolean hasName() {
-        return has(0, ParserRules.TRAILER_1);
+        return has(0);
     }
 
     public Parameters parameters() {
@@ -27,7 +27,7 @@ public final class Trailer extends NodeWrapper {
     }
 
     public boolean hasParameters() {
-        return has(1, ParserRules.PARAMETERS);
+        return has(1);
     }
 
     public Subscript subscript() {
@@ -35,7 +35,7 @@ public final class Trailer extends NodeWrapper {
     }
 
     public boolean hasSubscript() {
-        return has(2, ParserRules.SUBSCRIPT);
+        return has(2);
     }
 
     /**

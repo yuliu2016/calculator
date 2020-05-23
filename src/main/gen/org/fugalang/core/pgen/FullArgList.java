@@ -28,7 +28,7 @@ public final class FullArgList extends NodeWrapper {
     }
 
     public boolean hasFullArgList3() {
-        return has(2, ParserRules.FULL_ARG_LIST_3);
+        return has(2);
     }
 
     /**
@@ -59,7 +59,7 @@ public final class FullArgList extends NodeWrapper {
         }
 
         public boolean hasKwargsOrArgsKwargs() {
-            return has(1, ParserRules.FULL_ARG_LIST_3_2);
+            return has(1);
         }
     }
 
@@ -77,7 +77,7 @@ public final class FullArgList extends NodeWrapper {
         }
 
         public boolean hasKwargs() {
-            return has(0, ParserRules.KWARGS);
+            return has(0);
         }
 
         public ArgsKwargs argsKwargs() {
@@ -85,7 +85,7 @@ public final class FullArgList extends NodeWrapper {
         }
 
         public boolean hasArgsKwargs() {
-            return has(1, ParserRules.ARGS_KWARGS);
+            return has(1);
         }
     }
 }

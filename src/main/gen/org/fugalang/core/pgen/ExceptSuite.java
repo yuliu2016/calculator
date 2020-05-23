@@ -24,7 +24,7 @@ public final class ExceptSuite extends NodeWrapper {
     }
 
     public boolean hasElseSuite() {
-        return has(1, ParserRules.ELSE_SUITE);
+        return has(1);
     }
 
     public FinallySuite finallySuite() {
@@ -32,7 +32,7 @@ public final class ExceptSuite extends NodeWrapper {
     }
 
     public boolean hasFinallySuite() {
-        return has(2, ParserRules.FINALLY_SUITE);
+        return has(2);
     }
 
     /**

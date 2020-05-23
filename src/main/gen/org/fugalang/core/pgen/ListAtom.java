@@ -18,6 +18,6 @@ public final class ListAtom extends NodeWrapper {
     }
 
     public boolean hasNamedExprList() {
-        return has(1, ParserRules.NAMED_EXPR_LIST);
+        return has(1);
     }
 }

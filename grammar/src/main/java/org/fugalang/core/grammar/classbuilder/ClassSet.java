@@ -115,6 +115,12 @@ public class ClassSet {
             }
 
             var parserBase = packageOutput.getParserPath().toString();
+
+            var parserBaseFile = packageOutput.getParserPath().toFile();
+            if (!parserBaseFile.isDirectory()) {
+                parserBaseFile.mkdirs();
+            }
+
             var parserPath = Paths.get(parserBase, "Parser.java");
             var pcls = generateParserClass();
             Files.writeString(parserPath, pcls);

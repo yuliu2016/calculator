@@ -18,7 +18,7 @@ public final class RaiseStmt extends NodeWrapper {
     }
 
     public boolean hasRaiseStmt2() {
-        return has(1, ParserRules.RAISE_STMT_2);
+        return has(1);
     }
 
     /**
@@ -39,7 +39,7 @@ public final class RaiseStmt extends NodeWrapper {
         }
 
         public boolean hasFromExpr() {
-            return has(1, ParserRules.RAISE_STMT_2_2);
+            return has(1);
         }
     }
 

@@ -23,7 +23,7 @@ public final class WithItem extends NodeWrapper {
     }
 
     public boolean hasAsName() {
-        return has(1, ParserRules.WITH_ITEM_2);
+        return has(1);
     }
 
     /**

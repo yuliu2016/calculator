@@ -22,7 +22,7 @@ public final class Annassign extends NodeWrapper {
     }
 
     public boolean hasExprlistStar() {
-        return has(2, ParserRules.ANNASSIGN_3);
+        return has(2);
     }
 
     /**

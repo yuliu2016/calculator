@@ -44,16 +44,6 @@ class IndexNode implements ParseTreeNode {
     }
 
     @Override
-    public boolean isPresent(ParserRule rule) {
-        return isPresent && this.rule == rule;
-    }
-
-    @Override
-    public boolean isPresent(ElementType type) {
-        return isPresent && element != null && element.getType() == type;
-    }
-
-    @Override
     public void failIfAbsent() {
         if (!isPresent) {
             throw new ParserException("This node does not contain a value");

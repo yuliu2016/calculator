@@ -35,7 +35,7 @@ public final class TryStmt extends NodeWrapper {
         }
 
         public boolean hasExceptSuite() {
-            return has(0, ParserRules.EXCEPT_SUITE);
+            return has(0);
         }
 
         public FinallySuite finallySuite() {
@@ -43,7 +43,7 @@ public final class TryStmt extends NodeWrapper {
         }
 
         public boolean hasFinallySuite() {
-            return has(1, ParserRules.FINALLY_SUITE);
+            return has(1);
         }
     }
 }
