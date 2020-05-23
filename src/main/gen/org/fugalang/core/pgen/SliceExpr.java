@@ -24,14 +24,4 @@ public final class SliceExpr extends NodeWrapper {
     public boolean hasExpr() {
         return has(1, Expr.RULE);
     }
-
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = t.consume(":");
-        if (r) Expr.parse(t, lv + 1);
-        t.exit(r);
-        return r;
-    }
 }

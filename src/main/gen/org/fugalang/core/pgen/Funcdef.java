@@ -36,16 +36,4 @@ public final class Funcdef extends NodeWrapper {
     public FuncSuite funcSuite() {
         return get(3, FuncSuite::of);
     }
-
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = t.consume("def");
-        if (r) FuncTypeHint.parse(t, lv + 1);
-        if (r) FuncArgs.parse(t, lv + 1);
-        r = r && FuncSuite.parse(t, lv + 1);
-        t.exit(r);
-        return r;
-    }
 }

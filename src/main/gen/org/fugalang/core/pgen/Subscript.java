@@ -20,15 +20,4 @@ public final class Subscript extends NodeWrapper {
     public Slicelist slicelist() {
         return get(1, Slicelist::of);
     }
-
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = t.consume("[");
-        r = r && Slicelist.parse(t, lv + 1);
-        r = r && t.consume("]");
-        t.exit(r);
-        return r;
-    }
 }

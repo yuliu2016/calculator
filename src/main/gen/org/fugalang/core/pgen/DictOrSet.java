@@ -25,17 +25,6 @@ public final class DictOrSet extends NodeWrapper {
         return has(1, DictOrSet2.RULE);
     }
 
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = t.consume("{");
-        if (r) DictOrSet2.parse(t, lv + 1);
-        r = r && t.consume("}");
-        t.exit(r);
-        return r;
-    }
-
     /**
      * 'dict_maker' | 'set_maker'
      */
@@ -65,16 +54,6 @@ public final class DictOrSet extends NodeWrapper {
 
         public boolean hasSetMaker() {
             return has(1, SetMaker.RULE);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = DictMaker.parse(t, lv + 1);
-            r = r || SetMaker.parse(t, lv + 1);
-            t.exit(r);
-            return r;
         }
     }
 }

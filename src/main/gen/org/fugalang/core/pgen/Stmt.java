@@ -26,16 +26,6 @@ public final class Stmt extends NodeWrapper {
         return get(1, TokenType.NEWLINE);
     }
 
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = Stmt1.parse(t, lv + 1);
-        r = r && t.consume(TokenType.NEWLINE);
-        t.exit(r);
-        return r;
-    }
-
     /**
      * 'simple_stmt' | 'compound_stmt'
      */
@@ -65,16 +55,6 @@ public final class Stmt extends NodeWrapper {
 
         public boolean hasCompoundStmt() {
             return has(1, CompoundStmt.RULE);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = SimpleStmt.parse(t, lv + 1);
-            r = r || CompoundStmt.parse(t, lv + 1);
-            t.exit(r);
-            return r;
         }
     }
 }

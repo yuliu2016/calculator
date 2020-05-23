@@ -27,25 +27,6 @@ public final class Conjunction extends NodeWrapper {
         return getList(1, Conjunction2::of);
     }
 
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = Inversion.parse(t, lv + 1);
-        if (r) parseAndInversions(t, lv);
-        t.exit(r);
-        return r;
-    }
-
-    private static void parseAndInversions(ParseTree t, int lv) {
-        t.enterCollection();
-        while (true) {
-            var p = t.position();
-            if (!Conjunction2.parse(t, lv + 1) || t.loopGuard(p)) break;
-        }
-        t.exitCollection();
-    }
-
     /**
      * 'and' 'inversion'
      */
@@ -63,16 +44,6 @@ public final class Conjunction extends NodeWrapper {
 
         public Inversion inversion() {
             return get(1, Inversion::of);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = t.consume("and");
-            r = r && Inversion.parse(t, lv + 1);
-            t.exit(r);
-            return r;
         }
     }
 }

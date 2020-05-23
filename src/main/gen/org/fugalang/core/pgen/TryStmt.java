@@ -25,17 +25,6 @@ public final class TryStmt extends NodeWrapper {
         return get(2, TryStmt3::of);
     }
 
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = t.consume("try");
-        r = r && Suite.parse(t, lv + 1);
-        r = r && TryStmt3.parse(t, lv + 1);
-        t.exit(r);
-        return r;
-    }
-
     /**
      * 'except_suite' | 'finally_suite'
      */
@@ -65,16 +54,6 @@ public final class TryStmt extends NodeWrapper {
 
         public boolean hasFinallySuite() {
             return has(1, FinallySuite.RULE);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = ExceptSuite.parse(t, lv + 1);
-            r = r || FinallySuite.parse(t, lv + 1);
-            t.exit(r);
-            return r;
         }
     }
 }

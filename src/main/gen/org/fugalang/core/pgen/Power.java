@@ -29,16 +29,6 @@ public final class Power extends NodeWrapper {
         return has(1, Power2.RULE);
     }
 
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = Primary.parse(t, lv + 1);
-        if (r) Power2.parse(t, lv + 1);
-        t.exit(r);
-        return r;
-    }
-
     /**
      * '**' 'factor'
      */
@@ -56,16 +46,6 @@ public final class Power extends NodeWrapper {
 
         public Factor factor() {
             return get(1, Factor::of);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = t.consume("**");
-            r = r && Factor.parse(t, lv + 1);
-            t.exit(r);
-            return r;
         }
     }
 }

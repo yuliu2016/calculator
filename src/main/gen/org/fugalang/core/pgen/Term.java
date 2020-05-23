@@ -27,25 +27,6 @@ public final class Term extends NodeWrapper {
         return getList(1, Term2::of);
     }
 
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = Pipeline.parse(t, lv + 1);
-        if (r) parseTermOpPipelines(t, lv);
-        t.exit(r);
-        return r;
-    }
-
-    private static void parseTermOpPipelines(ParseTree t, int lv) {
-        t.enterCollection();
-        while (true) {
-            var p = t.position();
-            if (!Term2.parse(t, lv + 1) || t.loopGuard(p)) break;
-        }
-        t.exitCollection();
-    }
-
     /**
      * 'term_op' 'pipeline'
      */
@@ -67,16 +48,6 @@ public final class Term extends NodeWrapper {
 
         public Pipeline pipeline() {
             return get(1, Pipeline::of);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = TermOp.parse(t, lv + 1);
-            r = r && Pipeline.parse(t, lv + 1);
-            t.exit(r);
-            return r;
         }
     }
 }

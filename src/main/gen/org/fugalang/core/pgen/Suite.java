@@ -33,16 +33,6 @@ public final class Suite extends NodeWrapper {
         return has(1, BlockSuite.RULE);
     }
 
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = Suite1.parse(t, lv + 1);
-        r = r || BlockSuite.parse(t, lv + 1);
-        t.exit(r);
-        return r;
-    }
-
     /**
      * ':' 'simple_stmt'
      */
@@ -60,16 +50,6 @@ public final class Suite extends NodeWrapper {
 
         public SimpleStmt simpleStmt() {
             return get(1, SimpleStmt::of);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = t.consume(":");
-            r = r && SimpleStmt.parse(t, lv + 1);
-            t.exit(r);
-            return r;
         }
     }
 }

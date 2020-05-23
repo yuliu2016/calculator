@@ -32,14 +32,4 @@ public final class CompIter extends NodeWrapper {
     public boolean hasCompIf() {
         return has(1, CompIf.RULE);
     }
-
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = CompFor.parse(t, lv + 1);
-        r = r || CompIf.parse(t, lv + 1);
-        t.exit(r);
-        return r;
-    }
 }

@@ -27,25 +27,6 @@ public final class SimpleArgList extends NodeWrapper {
         return getList(1, SimpleArgList2::of);
     }
 
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = SimpleArg.parse(t, lv + 1);
-        if (r) parseSimpleArgs(t, lv);
-        t.exit(r);
-        return r;
-    }
-
-    private static void parseSimpleArgs(ParseTree t, int lv) {
-        t.enterCollection();
-        while (true) {
-            var p = t.position();
-            if (!SimpleArgList2.parse(t, lv + 1) || t.loopGuard(p)) break;
-        }
-        t.exitCollection();
-    }
-
     /**
      * 'simple_arg'
      */
@@ -63,15 +44,6 @@ public final class SimpleArgList extends NodeWrapper {
 
         public SimpleArg simpleArg() {
             return get(0, SimpleArg::of);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = SimpleArg.parse(t, lv + 1);
-            t.exit(r);
-            return r;
         }
     }
 }

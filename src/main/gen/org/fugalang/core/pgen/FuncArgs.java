@@ -33,16 +33,6 @@ public final class FuncArgs extends NodeWrapper {
         return has(1, FuncArgs2.RULE);
     }
 
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = SimpleArgList.parse(t, lv + 1);
-        r = r || FuncArgs2.parse(t, lv + 1);
-        t.exit(r);
-        return r;
-    }
-
     /**
      * '(' ['typed_arg_list'] ')'
      */
@@ -64,17 +54,6 @@ public final class FuncArgs extends NodeWrapper {
 
         public boolean hasTypedArgList() {
             return has(1, TypedArgList.RULE);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = t.consume("(");
-            if (r) TypedArgList.parse(t, lv + 1);
-            r = r && t.consume(")");
-            t.exit(r);
-            return r;
         }
     }
 }

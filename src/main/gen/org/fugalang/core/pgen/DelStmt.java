@@ -20,14 +20,4 @@ public final class DelStmt extends NodeWrapper {
     public Targetlist targetlist() {
         return get(1, Targetlist::of);
     }
-
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = t.consume("del");
-        r = r && Targetlist.parse(t, lv + 1);
-        t.exit(r);
-        return r;
-    }
 }

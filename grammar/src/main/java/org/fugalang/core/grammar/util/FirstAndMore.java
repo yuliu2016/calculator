@@ -1,25 +1,28 @@
 package org.fugalang.core.grammar.util;
 
 import java.util.Iterator;
+import java.util.function.Function;
 
-public class FirstAndMore<E> implements Iterable<E> {
+public class FirstAndMore<I, O> implements Iterable<O> {
 
-    private final E first;
-    private final Iterator<E> more;
-    private final Iterator<E> iterator;
+    private final O first;
+    private final Iterator<I> more;
+    private final Function<I, O> converter;
+    private final Iterator<O> iterator;
 
-    private FirstAndMore(E first, Iterator<E> more) {
+    private FirstAndMore(O first, Iterator<I> more, Function<I, O> converter) {
         this.first = first;
         this.more = more;
+        this.converter = converter;
         iterator = new FAMIterator();
     }
 
     @Override
-    public Iterator<E> iterator() {
+    public Iterator<O> iterator() {
         return iterator;
     }
 
-    private class FAMIterator implements Iterator<E> {
+    private class FAMIterator implements Iterator<O> {
 
         private boolean didEmitFirst = false;
 
@@ -33,9 +36,10 @@ public class FirstAndMore<E> implements Iterable<E> {
         }
 
         @Override
-        public E next() {
+        public O next() {
             if (didEmitFirst) {
-                return more.next();
+                I next = more.next();
+                return converter.apply(next);
             } else {
                 didEmitFirst = true;
                 return first;
@@ -43,11 +47,19 @@ public class FirstAndMore<E> implements Iterable<E> {
         }
     }
 
-    public static <E> FirstAndMore<E> of(E first, Iterable<E> more) {
-        return of(first, more.iterator());
+    public static <E> Iterable<E> of(E first, Iterable<E> more) {
+        return of(first, more, e -> e);
     }
 
-    public static <E> FirstAndMore<E> of(E first, Iterator<E> more) {
-        return new FirstAndMore<>(first, more);
+    public static <E> Iterable<E> of(E first, Iterator<E> more) {
+        return of(first, more, e -> e);
+    }
+
+    public static <I, O> Iterable<O> of(O first, Iterable<I> more, Function<I, O> converter) {
+        return of(first, more.iterator(), converter);
+    }
+
+    public static <I, O> Iterable<O> of(O first, Iterator<I> more, Function<I, O> converter) {
+        return new FirstAndMore<>(first, more, converter);
     }
 }

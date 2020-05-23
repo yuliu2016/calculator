@@ -31,26 +31,6 @@ public final class DictMaker extends NodeWrapper {
         return is(2);
     }
 
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = DictItem.parse(t, lv + 1);
-        if (r) parseDictItems(t, lv);
-        if (r) t.consume(",");
-        t.exit(r);
-        return r;
-    }
-
-    private static void parseDictItems(ParseTree t, int lv) {
-        t.enterCollection();
-        while (true) {
-            var p = t.position();
-            if (!DictMaker2.parse(t, lv + 1) || t.loopGuard(p)) break;
-        }
-        t.exitCollection();
-    }
-
     /**
      * ',' 'dict_item'
      */
@@ -68,16 +48,6 @@ public final class DictMaker extends NodeWrapper {
 
         public DictItem dictItem() {
             return get(1, DictItem::of);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = t.consume(",");
-            r = r && DictItem.parse(t, lv + 1);
-            t.exit(r);
-            return r;
         }
     }
 }

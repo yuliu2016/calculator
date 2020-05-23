@@ -42,17 +42,6 @@ public final class SingleInput extends NodeWrapper {
         return has(2, SingleInput3.RULE);
     }
 
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = t.consume(TokenType.NEWLINE);
-        r = r || SimpleStmt.parse(t, lv + 1);
-        r = r || SingleInput3.parse(t, lv + 1);
-        t.exit(r);
-        return r;
-    }
-
     /**
      * 'compound_stmt' 'NEWLINE'
      */
@@ -74,16 +63,6 @@ public final class SingleInput extends NodeWrapper {
 
         public String newline() {
             return get(1, TokenType.NEWLINE);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = CompoundStmt.parse(t, lv + 1);
-            r = r && t.consume(TokenType.NEWLINE);
-            t.exit(r);
-            return r;
         }
     }
 }

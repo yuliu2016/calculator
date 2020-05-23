@@ -25,18 +25,6 @@ public final class ImportFrom extends NodeWrapper {
         return get(3, ImportFrom4::of);
     }
 
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = t.consume("from");
-        r = r && ImportFromNames.parse(t, lv + 1);
-        r = r && t.consume("import");
-        r = r && ImportFrom4.parse(t, lv + 1);
-        t.exit(r);
-        return r;
-    }
-
     /**
      * '*' | '(' 'import_as_names' [','] ')' | 'import_as_names'
      */
@@ -71,17 +59,6 @@ public final class ImportFrom extends NodeWrapper {
         public boolean hasImportAsNames() {
             return has(2, ImportAsNames.RULE);
         }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = t.consume("*");
-            r = r || ImportFrom42.parse(t, lv + 1);
-            r = r || ImportAsNames.parse(t, lv + 1);
-            t.exit(r);
-            return r;
-        }
     }
 
     /**
@@ -105,18 +82,6 @@ public final class ImportFrom extends NodeWrapper {
 
         public boolean isComma() {
             return is(2);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = t.consume("(");
-            r = r && ImportAsNames.parse(t, lv + 1);
-            if (r) t.consume(",");
-            r = r && t.consume(")");
-            t.exit(r);
-            return r;
         }
     }
 }

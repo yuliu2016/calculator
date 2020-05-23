@@ -26,16 +26,6 @@ public final class ExceptClause extends NodeWrapper {
         return has(1, ExceptClause2.RULE);
     }
 
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = t.consume("except");
-        if (r) ExceptClause2.parse(t, lv + 1);
-        t.exit(r);
-        return r;
-    }
-
     /**
      * 'expr' ['as' 'NAME']
      */
@@ -62,16 +52,6 @@ public final class ExceptClause extends NodeWrapper {
         public boolean hasAsName() {
             return has(1, ExceptClause22.RULE);
         }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = Expr.parse(t, lv + 1);
-            if (r) ExceptClause22.parse(t, lv + 1);
-            t.exit(r);
-            return r;
-        }
     }
 
     /**
@@ -91,16 +71,6 @@ public final class ExceptClause extends NodeWrapper {
 
         public String name() {
             return get(1, TokenType.NAME);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = t.consume("as");
-            r = r && t.consume(TokenType.NAME);
-            t.exit(r);
-            return r;
         }
     }
 }

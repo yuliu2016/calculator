@@ -27,25 +27,6 @@ public final class ShiftExpr extends NodeWrapper {
         return getList(1, ShiftExpr2::of);
     }
 
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = Sum.parse(t, lv + 1);
-        if (r) parseShiftOpSums(t, lv);
-        t.exit(r);
-        return r;
-    }
-
-    private static void parseShiftOpSums(ParseTree t, int lv) {
-        t.enterCollection();
-        while (true) {
-            var p = t.position();
-            if (!ShiftExpr2.parse(t, lv + 1) || t.loopGuard(p)) break;
-        }
-        t.exitCollection();
-    }
-
     /**
      * 'shift_op' 'sum'
      */
@@ -67,16 +48,6 @@ public final class ShiftExpr extends NodeWrapper {
 
         public Sum sum() {
             return get(1, Sum::of);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = ShiftOp.parse(t, lv + 1);
-            r = r && Sum.parse(t, lv + 1);
-            t.exit(r);
-            return r;
         }
     }
 }

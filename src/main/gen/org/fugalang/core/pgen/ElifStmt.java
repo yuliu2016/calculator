@@ -24,15 +24,4 @@ public final class ElifStmt extends NodeWrapper {
     public Suite suite() {
         return get(2, Suite::of);
     }
-
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = t.consume("elif");
-        r = r && NamedExpr.parse(t, lv + 1);
-        r = r && Suite.parse(t, lv + 1);
-        t.exit(r);
-        return r;
-    }
 }

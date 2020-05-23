@@ -35,26 +35,6 @@ public final class FullArgList extends NodeWrapper {
         return has(2, FullArgList3.RULE);
     }
 
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = DefaultArg.parse(t, lv + 1);
-        if (r) parseDefaultArgs(t, lv);
-        if (r) FullArgList3.parse(t, lv + 1);
-        t.exit(r);
-        return r;
-    }
-
-    private static void parseDefaultArgs(ParseTree t, int lv) {
-        t.enterCollection();
-        while (true) {
-            var p = t.position();
-            if (!FullArgList2.parse(t, lv + 1) || t.loopGuard(p)) break;
-        }
-        t.exitCollection();
-    }
-
     /**
      * ',' 'default_arg'
      */
@@ -72,16 +52,6 @@ public final class FullArgList extends NodeWrapper {
 
         public DefaultArg defaultArg() {
             return get(1, DefaultArg::of);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = t.consume(",");
-            r = r && DefaultArg.parse(t, lv + 1);
-            t.exit(r);
-            return r;
         }
     }
 
@@ -106,16 +76,6 @@ public final class FullArgList extends NodeWrapper {
 
         public boolean hasKwargsOrArgsKwargs() {
             return has(1, FullArgList32.RULE);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = t.consume(",");
-            if (r) FullArgList32.parse(t, lv + 1);
-            t.exit(r);
-            return r;
         }
     }
 
@@ -148,16 +108,6 @@ public final class FullArgList extends NodeWrapper {
 
         public boolean hasArgsKwargs() {
             return has(1, ArgsKwargs.RULE);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = Kwargs.parse(t, lv + 1);
-            r = r || ArgsKwargs.parse(t, lv + 1);
-            t.exit(r);
-            return r;
         }
     }
 }

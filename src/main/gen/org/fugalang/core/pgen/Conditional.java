@@ -28,18 +28,4 @@ public final class Conditional extends NodeWrapper {
     public Expr expr() {
         return get(5, Expr::of);
     }
-
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = t.consume("if");
-        r = r && Disjunction.parse(t, lv + 1);
-        r = r && t.consume("?");
-        r = r && Disjunction.parse(t, lv + 1);
-        r = r && t.consume("else");
-        r = r && Expr.parse(t, lv + 1);
-        t.exit(r);
-        return r;
-    }
 }

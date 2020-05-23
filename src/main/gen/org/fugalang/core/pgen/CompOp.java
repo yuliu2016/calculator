@@ -65,24 +65,6 @@ public final class CompOp extends NodeWrapper {
         return has(9, CompOp10.RULE);
     }
 
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = t.consume("<");
-        r = r || t.consume(">");
-        r = r || t.consume("==");
-        r = r || t.consume(">=");
-        r = r || t.consume("<=");
-        r = r || t.consume("!=");
-        r = r || t.consume("in");
-        r = r || CompOp8.parse(t, lv + 1);
-        r = r || t.consume("is");
-        r = r || CompOp10.parse(t, lv + 1);
-        t.exit(r);
-        return r;
-    }
-
     /**
      * 'not' 'in'
      */
@@ -96,16 +78,6 @@ public final class CompOp extends NodeWrapper {
 
         private CompOp8(ParseTreeNode node) {
             super(RULE, node);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = t.consume("not");
-            r = r && t.consume("in");
-            t.exit(r);
-            return r;
         }
     }
 
@@ -122,16 +94,6 @@ public final class CompOp extends NodeWrapper {
 
         private CompOp10(ParseTreeNode node) {
             super(RULE, node);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = t.consume("is");
-            r = r && t.consume("not");
-            t.exit(r);
-            return r;
         }
     }
 }

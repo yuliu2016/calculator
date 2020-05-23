@@ -57,11 +57,7 @@ public class ClassName {
         return typeStr;
     }
 
-    public static ClassName of(String realClassName) {
-        return ClassName.of(realClassName, null);
-    }
-
-    public static ClassName of(String realClassName, String printName) {
-        return new ClassName(realClassName, false, printName);
+    public static ClassName of(String realClassName, String ruleName) {
+        return new ClassName(realClassName, false, ruleName);
     }
 }

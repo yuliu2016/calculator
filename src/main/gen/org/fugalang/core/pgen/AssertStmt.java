@@ -29,17 +29,6 @@ public final class AssertStmt extends NodeWrapper {
         return has(2, AssertStmt3.RULE);
     }
 
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = t.consume("assert");
-        r = r && Expr.parse(t, lv + 1);
-        if (r) AssertStmt3.parse(t, lv + 1);
-        t.exit(r);
-        return r;
-    }
-
     /**
      * ',' 'expr'
      */
@@ -57,16 +46,6 @@ public final class AssertStmt extends NodeWrapper {
 
         public Expr expr() {
             return get(1, Expr::of);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = t.consume(",");
-            r = r && Expr.parse(t, lv + 1);
-            t.exit(r);
-            return r;
         }
     }
 }

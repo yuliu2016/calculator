@@ -24,15 +24,4 @@ public final class ListAtom extends NodeWrapper {
     public boolean hasNamedExprList() {
         return has(1, NamedExprList.RULE);
     }
-
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = t.consume("[");
-        if (r) NamedExprList.parse(t, lv + 1);
-        r = r && t.consume("]");
-        t.exit(r);
-        return r;
-    }
 }

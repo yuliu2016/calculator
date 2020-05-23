@@ -5,6 +5,7 @@ import org.fugalang.core.parser.impl.SimpleParseTree;
 import org.fugalang.core.parser.impl.LazyParserContext;
 import org.fugalang.core.parser.impl.LexingVisitor;
 import org.fugalang.core.pgen.SingleInput;
+import org.fugalang.core.pgen.parser.Parser;
 import org.fugalang.core.pprint.ConsoleColor;
 import org.fugalang.core.pprint.ParseTreePPrint;
 import org.fugalang.core.token.SimpleLexer;
@@ -25,7 +26,7 @@ public class ParserRepl {
                 var visitor = LexingVisitor.of(s);
                 var lexer = SimpleLexer.of(visitor);
                 var context = LazyParserContext.of(lexer, visitor, false);
-                var tree = SimpleParseTree.parse(context, SingleInput::parse, SingleInput::of);
+                var tree = SimpleParseTree.parse(context, Parser::single_input, SingleInput::of);
 
                 System.out.println(ParseTreePPrint.format(tree.getNode(), 2));
             } catch (SyntaxError e) {

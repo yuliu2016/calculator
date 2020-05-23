@@ -13,17 +13,17 @@ public class ClassSet {
 
     private final PackageOutput packageOutput;
 
-    private final List<ClassComponents> classes;
+    private final List<NamedClass> classes;
 
     // represents the working top-level class
-    private ClassComponents currentClass;
+    private NamedClass currentClass;
 
     public ClassSet(PackageOutput packageOutput) {
         this.packageOutput = packageOutput;
         classes = new ArrayList<>();
     }
 
-    public List<ClassComponents> getClasses() {
+    public List<NamedClass> getClasses() {
         return classes;
     }
 
@@ -46,7 +46,7 @@ public class ClassSet {
         var rootClassBuilder = new ClassBuilder(packageOutput.getPackageName(),
                 className.getType(), className.getRuleName());
 
-        currentClass = new ClassComponents(rootClassBuilder);
+        currentClass = new NamedClass(rootClassBuilder);
         classes.add(currentClass);
 
         return rootClassBuilder;
@@ -68,7 +68,7 @@ public class ClassSet {
         var current = currentClass;
 
         var dupError = false;
-        for (var builder : current.componentClasses) {
+        for (var builder : current.components) {
             if (builder.getClassName().equals(className.getType())) {
                 dupError = true;
                 break;
@@ -76,7 +76,7 @@ public class ClassSet {
         }
 
         if (dupError) {
-            for (var builder : current.componentClasses) {
+            for (var builder : current.components) {
                 System.out.println(builder.generateClassCode());
             }
             throw new IllegalArgumentException("Duplicate inner class: " + className);
@@ -85,7 +85,7 @@ public class ClassSet {
         var builder = new ClassBuilder(packageOutput.getPackageName(),
                 className.getType(), className.getRuleName());
 
-        current.componentClasses.add(builder);
+        current.components.add(builder);
 
         return builder;
     }
@@ -113,8 +113,48 @@ public class ClassSet {
                 Files.writeString(Paths.get(packageOutput.getFilePath().toString(),
                         aClass.getClassName() + ".java"), code);
             }
+
+            var parserBase = packageOutput.getParserPath().toString();
+            var parserPath = Paths.get(parserBase, "Parser.java");
+            var pcls = generateParserClass();
+            Files.writeString(parserPath, pcls);
+
+            var parserRulePath = Paths.get(parserBase, "ParserRules.java");
+            var ruleClass = generateRuleClass();
+            Files.writeString(parserRulePath, ruleClass);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private String generateParserClass() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("package ").append(packageOutput.getParserPackage()).append(";\n\n");
+        sb.append("import org.fugalang.core.parser.ParseTree;\n");
+        sb.append("import org.fugalang.core.token.TokenType;\n\n" + "import static ")
+                .append(packageOutput.getParserPackage());
+        sb.append(".ParserRules.*;\n\n" +
+                "@SuppressWarnings(\"UnusedReturnValue\")\n" +
+                "public class Parser {\n");
+        for (NamedClass namedClass : classes) {
+            namedClass.generateParser(sb);
+        }
+        sb.append("}\n");
+        return sb.toString();
+    }
+
+    private String generateRuleClass() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("package ").append(packageOutput.getParserPackage()).append(";\n\n");
+        sb.append("import org.fugalang.core.parser.ParserRule;\n\n");
+        sb.append("import static org.fugalang.core.parser.ParserRule.and_rule;\n" +
+                "import static org.fugalang.core.parser.ParserRule.or_rule;\n\n" +
+                "public class ParserRules {\n");
+        for (NamedClass namedClass : classes) {
+            namedClass.generateRules(sb);
+        }
+        sb.append("}\n");
+        return sb.toString();
     }
 }

@@ -27,25 +27,6 @@ public final class BitwiseOr extends NodeWrapper {
         return getList(1, BitwiseOr2::of);
     }
 
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = BitwiseXor.parse(t, lv + 1);
-        if (r) parseBitwiseXors(t, lv);
-        t.exit(r);
-        return r;
-    }
-
-    private static void parseBitwiseXors(ParseTree t, int lv) {
-        t.enterCollection();
-        while (true) {
-            var p = t.position();
-            if (!BitwiseOr2.parse(t, lv + 1) || t.loopGuard(p)) break;
-        }
-        t.exitCollection();
-    }
-
     /**
      * '|' 'bitwise_xor'
      */
@@ -63,16 +44,6 @@ public final class BitwiseOr extends NodeWrapper {
 
         public BitwiseXor bitwiseXor() {
             return get(1, BitwiseXor::of);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = t.consume("|");
-            r = r && BitwiseXor.parse(t, lv + 1);
-            t.exit(r);
-            return r;
         }
     }
 }

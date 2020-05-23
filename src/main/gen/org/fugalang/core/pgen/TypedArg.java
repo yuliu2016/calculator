@@ -30,16 +30,6 @@ public final class TypedArg extends NodeWrapper {
         return has(1, TypedArg2.RULE);
     }
 
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = t.consume(TokenType.NAME);
-        if (r) TypedArg2.parse(t, lv + 1);
-        t.exit(r);
-        return r;
-    }
-
     /**
      * ':' 'expr'
      */
@@ -57,16 +47,6 @@ public final class TypedArg extends NodeWrapper {
 
         public Expr expr() {
             return get(1, Expr::of);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = t.consume(":");
-            r = r && Expr.parse(t, lv + 1);
-            t.exit(r);
-            return r;
         }
     }
 }

@@ -31,26 +31,6 @@ public final class SetMaker extends NodeWrapper {
         return is(2);
     }
 
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = ExprOrStar.parse(t, lv + 1);
-        if (r) parseExprOrStars(t, lv);
-        if (r) t.consume(",");
-        t.exit(r);
-        return r;
-    }
-
-    private static void parseExprOrStars(ParseTree t, int lv) {
-        t.enterCollection();
-        while (true) {
-            var p = t.position();
-            if (!SetMaker2.parse(t, lv + 1) || t.loopGuard(p)) break;
-        }
-        t.exitCollection();
-    }
-
     /**
      * ',' 'expr_or_star'
      */
@@ -68,16 +48,6 @@ public final class SetMaker extends NodeWrapper {
 
         public ExprOrStar exprOrStar() {
             return get(1, ExprOrStar::of);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = t.consume(",");
-            r = r && ExprOrStar.parse(t, lv + 1);
-            t.exit(r);
-            return r;
         }
     }
 }

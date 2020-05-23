@@ -45,8 +45,7 @@ public class ParserGenerator {
     public ParserGenerator(
             Rules rules,
             TokenConverter converter,
-            Path path,
-            String packageName,
+            PackageOutput packageOutput,
             String tokenTypeClass
     ) {
         ruleMap = new LinkedHashMap<>();
@@ -55,7 +54,7 @@ public class ParserGenerator {
         }
         this.converter = converter;
 
-        classSet = new ClassSet(path, packageName);
+        classSet = new ClassSet(packageOutput);
 
         this.tokenTypeClass = tokenTypeClass;
 
@@ -259,7 +258,7 @@ public class ParserGenerator {
                     new IllegalStateException("SubRule token " + subRule.token + " is invalid!"));
 
             var classType = convertedValue.getClassName();
-            var className = ClassName.of(classType);
+            var className = ClassName.of(classType, null);
 
             if (classType.equals("boolean")) {
                 var fieldName = ParserStringUtil

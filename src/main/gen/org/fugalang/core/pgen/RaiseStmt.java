@@ -25,16 +25,6 @@ public final class RaiseStmt extends NodeWrapper {
         return has(1, RaiseStmt2.RULE);
     }
 
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = t.consume("raise");
-        if (r) RaiseStmt2.parse(t, lv + 1);
-        t.exit(r);
-        return r;
-    }
-
     /**
      * 'expr' ['from' 'expr']
      */
@@ -61,16 +51,6 @@ public final class RaiseStmt extends NodeWrapper {
         public boolean hasFromExpr() {
             return has(1, RaiseStmt22.RULE);
         }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = Expr.parse(t, lv + 1);
-            if (r) RaiseStmt22.parse(t, lv + 1);
-            t.exit(r);
-            return r;
-        }
     }
 
     /**
@@ -90,16 +70,6 @@ public final class RaiseStmt extends NodeWrapper {
 
         public Expr expr() {
             return get(1, Expr::of);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = t.consume("from");
-            r = r && Expr.parse(t, lv + 1);
-            t.exit(r);
-            return r;
         }
     }
 }

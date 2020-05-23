@@ -31,27 +31,6 @@ public final class WithStmt extends NodeWrapper {
         return get(3, Suite::of);
     }
 
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = t.consume("with");
-        r = r && WithItem.parse(t, lv + 1);
-        if (r) parseWithItems(t, lv);
-        r = r && Suite.parse(t, lv + 1);
-        t.exit(r);
-        return r;
-    }
-
-    private static void parseWithItems(ParseTree t, int lv) {
-        t.enterCollection();
-        while (true) {
-            var p = t.position();
-            if (!WithStmt3.parse(t, lv + 1) || t.loopGuard(p)) break;
-        }
-        t.exitCollection();
-    }
-
     /**
      * ',' 'with_item'
      */
@@ -69,16 +48,6 @@ public final class WithStmt extends NodeWrapper {
 
         public WithItem withItem() {
             return get(1, WithItem::of);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = t.consume(",");
-            r = r && WithItem.parse(t, lv + 1);
-            t.exit(r);
-            return r;
         }
     }
 }

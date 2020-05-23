@@ -31,26 +31,6 @@ public final class Exprlist extends NodeWrapper {
         return is(2);
     }
 
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = Expr.parse(t, lv + 1);
-        if (r) parseExprs(t, lv);
-        if (r) t.consume(",");
-        t.exit(r);
-        return r;
-    }
-
-    private static void parseExprs(ParseTree t, int lv) {
-        t.enterCollection();
-        while (true) {
-            var p = t.position();
-            if (!Exprlist2.parse(t, lv + 1) || t.loopGuard(p)) break;
-        }
-        t.exitCollection();
-    }
-
     /**
      * ',' 'expr'
      */
@@ -68,16 +48,6 @@ public final class Exprlist extends NodeWrapper {
 
         public Expr expr() {
             return get(1, Expr::of);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = t.consume(",");
-            r = r && Expr.parse(t, lv + 1);
-            t.exit(r);
-            return r;
         }
     }
 }

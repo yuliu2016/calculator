@@ -28,25 +28,6 @@ public final class FileInput extends NodeWrapper {
         return get(1, TokenType.ENDMARKER);
     }
 
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        parseNewlineOrStmts(t, lv);
-        r = t.consume(TokenType.ENDMARKER);
-        t.exit(r);
-        return r;
-    }
-
-    private static void parseNewlineOrStmts(ParseTree t, int lv) {
-        t.enterCollection();
-        while (true) {
-            var p = t.position();
-            if (!FileInput1.parse(t, lv + 1) || t.loopGuard(p)) break;
-        }
-        t.exitCollection();
-    }
-
     /**
      * 'NEWLINE' | 'stmt'
      */
@@ -76,16 +57,6 @@ public final class FileInput extends NodeWrapper {
 
         public boolean hasStmt() {
             return has(1, Stmt.RULE);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = t.consume(TokenType.NEWLINE);
-            r = r || Stmt.parse(t, lv + 1);
-            t.exit(r);
-            return r;
         }
     }
 }

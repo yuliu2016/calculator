@@ -33,16 +33,6 @@ public final class Inversion extends NodeWrapper {
         return has(1, Comparison.RULE);
     }
 
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = Inversion1.parse(t, lv + 1);
-        r = r || Comparison.parse(t, lv + 1);
-        t.exit(r);
-        return r;
-    }
-
     /**
      * 'not' 'inversion'
      */
@@ -60,16 +50,6 @@ public final class Inversion extends NodeWrapper {
 
         public Inversion inversion() {
             return get(1, Inversion::of);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = t.consume("not");
-            r = r && Inversion.parse(t, lv + 1);
-            t.exit(r);
-            return r;
         }
     }
 }

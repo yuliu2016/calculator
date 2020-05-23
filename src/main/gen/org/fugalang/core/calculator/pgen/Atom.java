@@ -34,16 +34,6 @@ public final class Atom extends NodeWrapper {
         return has(1, TokenType.NUMBER);
     }
 
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = Atom1.parse(t, lv + 1);
-        r = r || t.consume(TokenType.NUMBER);
-        t.exit(r);
-        return r;
-    }
-
     /**
      * '(' 'sum' ')'
      */
@@ -61,17 +51,6 @@ public final class Atom extends NodeWrapper {
 
         public Sum sum() {
             return get(1, Sum::of);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = t.consume("(");
-            r = r && Sum.parse(t, lv + 1);
-            r = r && t.consume(")");
-            t.exit(r);
-            return r;
         }
     }
 }

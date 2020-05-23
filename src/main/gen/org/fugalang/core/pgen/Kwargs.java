@@ -24,15 +24,4 @@ public final class Kwargs extends NodeWrapper {
     public boolean isComma() {
         return is(2);
     }
-
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = t.consume("**");
-        r = r && TypedArg.parse(t, lv + 1);
-        if (r) t.consume(",");
-        t.exit(r);
-        return r;
-    }
 }

@@ -110,7 +110,7 @@ public class ClassField {
         };
     }
 
-    public String asParserStmt(RuleType ruleType, boolean isFirst) {
+    public String getParserFieldStatement(RuleType ruleType, boolean isFirst) {
         var resultExpr = getResultExpr();
 
         return switch (fieldType) {
@@ -122,8 +122,8 @@ public class ClassField {
     }
 
     private String getLoopExpr() {
-        var name = ParserStringUtil.capitalizeFirstChar(fieldName);
-        return "parse" + name + "(t, lv)";
+        var rule_name = className.getRuleName().replace(":", "_");
+        return rule_name + "_loop(t, lv)";
     }
 
     private String getOptionalStmt(String resultExpr, RuleType ruleType, boolean isFirst) {
@@ -145,7 +145,7 @@ public class ClassField {
 
     private String getResultExpr() {
         return switch (resultSource.getType()) {
-            case Class -> resultSource.getValue() + ".parse(t, lv + 1)";
+            case Class -> resultSource.getValue().replace(":", "_") + "(t, lv + 1)";
             case TokenType -> "t.consume(" + resultSource.getValue() + ")";
             case TokenLiteral -> "t.consume(\"" + resultSource.getValue() + "\")";
         };
@@ -161,8 +161,8 @@ public class ClassField {
 
     private String getRequiredLoopParser() {
         var resultExpr = getResultExpr();
-        var name = ParserStringUtil.capitalizeFirstChar(fieldName);
-        return "\n    private static boolean parse" + name + "(ParseTree t, int lv) {\n" +
+        var rule_name = className.getRuleName().replace(":", "_");
+        return "\n    private static boolean " + rule_name + "_loop(ParseTree t, int lv) {\n" +
                 "        t.enterCollection();\n" +
                 "        var r = " + resultExpr + ";\n" +
                 "        if (r) while (true) {\n" +
@@ -176,8 +176,8 @@ public class ClassField {
 
     private String getOptionalLoopParser() {
         var resultExpr = getResultExpr();
-        var name = ParserStringUtil.capitalizeFirstChar(fieldName);
-        return "\n    private static void parse" + name + "(ParseTree t, int lv) {\n" +
+        var rule_name = className.getRuleName().replace(":", "_");
+        return "\n    private static void " + rule_name + "_loop(ParseTree t, int lv) {\n" +
                 "        t.enterCollection();\n" +
                 "        while (true) {\n" +
                 "            var p = t.position();\n" +

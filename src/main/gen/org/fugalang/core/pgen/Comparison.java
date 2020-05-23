@@ -27,25 +27,6 @@ public final class Comparison extends NodeWrapper {
         return getList(1, Comparison2::of);
     }
 
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = BitwiseOr.parse(t, lv + 1);
-        if (r) parseCompOpBitwiseOrs(t, lv);
-        t.exit(r);
-        return r;
-    }
-
-    private static void parseCompOpBitwiseOrs(ParseTree t, int lv) {
-        t.enterCollection();
-        while (true) {
-            var p = t.position();
-            if (!Comparison2.parse(t, lv + 1) || t.loopGuard(p)) break;
-        }
-        t.exitCollection();
-    }
-
     /**
      * 'comp_op' 'bitwise_or'
      */
@@ -67,16 +48,6 @@ public final class Comparison extends NodeWrapper {
 
         public BitwiseOr bitwiseOr() {
             return get(1, BitwiseOr::of);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = CompOp.parse(t, lv + 1);
-            r = r && BitwiseOr.parse(t, lv + 1);
-            t.exit(r);
-            return r;
         }
     }
 }

@@ -31,26 +31,6 @@ public final class Targetlist extends NodeWrapper {
         return is(2);
     }
 
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = Target.parse(t, lv + 1);
-        if (r) parseTargets(t, lv);
-        if (r) t.consume(",");
-        t.exit(r);
-        return r;
-    }
-
-    private static void parseTargets(ParseTree t, int lv) {
-        t.enterCollection();
-        while (true) {
-            var p = t.position();
-            if (!Targetlist2.parse(t, lv + 1) || t.loopGuard(p)) break;
-        }
-        t.exitCollection();
-    }
-
     /**
      * ',' 'target'
      */
@@ -68,16 +48,6 @@ public final class Targetlist extends NodeWrapper {
 
         public Target target() {
             return get(1, Target::of);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = t.consume(",");
-            r = r && Target.parse(t, lv + 1);
-            t.exit(r);
-            return r;
         }
     }
 }

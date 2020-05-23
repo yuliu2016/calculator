@@ -36,16 +36,6 @@ public final class BlockSuite extends NodeWrapper {
         return has(1, BlockSuite2.RULE);
     }
 
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = BlockSuite1.parse(t, lv + 1);
-        r = r || BlockSuite2.parse(t, lv + 1);
-        t.exit(r);
-        return r;
-    }
-
     /**
      * '{' 'simple_stmt' '}'
      */
@@ -63,17 +53,6 @@ public final class BlockSuite extends NodeWrapper {
 
         public SimpleStmt simpleStmt() {
             return get(1, SimpleStmt::of);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = t.consume("{");
-            r = r && SimpleStmt.parse(t, lv + 1);
-            r = r && t.consume("}");
-            t.exit(r);
-            return r;
         }
     }
 
@@ -98,29 +77,6 @@ public final class BlockSuite extends NodeWrapper {
 
         public List<Stmt> stmts() {
             return getList(2, Stmt::of);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = t.consume("{");
-            r = r && t.consume(TokenType.NEWLINE);
-            r = r && parseStmts(t, lv);
-            r = r && t.consume("}");
-            t.exit(r);
-            return r;
-        }
-
-        private static boolean parseStmts(ParseTree t, int lv) {
-            t.enterCollection();
-            var r = Stmt.parse(t, lv + 1);
-            if (r) while (true) {
-                var p = t.position();
-                if (!Stmt.parse(t, lv + 1) || t.loopGuard(p)) break;
-            }
-            t.exitCollection();
-            return r;
         }
     }
 }

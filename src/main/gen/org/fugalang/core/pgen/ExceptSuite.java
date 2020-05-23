@@ -39,28 +39,6 @@ public final class ExceptSuite extends NodeWrapper {
         return has(2, FinallySuite.RULE);
     }
 
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = parseExceptClauseSuites(t, lv);
-        if (r) ElseSuite.parse(t, lv + 1);
-        if (r) FinallySuite.parse(t, lv + 1);
-        t.exit(r);
-        return r;
-    }
-
-    private static boolean parseExceptClauseSuites(ParseTree t, int lv) {
-        t.enterCollection();
-        var r = ExceptSuite1.parse(t, lv + 1);
-        if (r) while (true) {
-            var p = t.position();
-            if (!ExceptSuite1.parse(t, lv + 1) || t.loopGuard(p)) break;
-        }
-        t.exitCollection();
-        return r;
-    }
-
     /**
      * 'except_clause' 'suite'
      */
@@ -82,16 +60,6 @@ public final class ExceptSuite extends NodeWrapper {
 
         public Suite suite() {
             return get(1, Suite::of);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = ExceptClause.parse(t, lv + 1);
-            r = r && Suite.parse(t, lv + 1);
-            t.exit(r);
-            return r;
         }
     }
 }

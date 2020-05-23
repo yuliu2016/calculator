@@ -28,26 +28,6 @@ public final class NonlocalStmt extends NodeWrapper {
         return getList(2, NonlocalStmt3::of);
     }
 
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = t.consume("nonlocal");
-        r = r && t.consume(TokenType.NAME);
-        if (r) parseNames(t, lv);
-        t.exit(r);
-        return r;
-    }
-
-    private static void parseNames(ParseTree t, int lv) {
-        t.enterCollection();
-        while (true) {
-            var p = t.position();
-            if (!NonlocalStmt3.parse(t, lv + 1) || t.loopGuard(p)) break;
-        }
-        t.exitCollection();
-    }
-
     /**
      * ',' 'NAME'
      */
@@ -65,16 +45,6 @@ public final class NonlocalStmt extends NodeWrapper {
 
         public String name() {
             return get(1, TokenType.NAME);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = t.consume(",");
-            r = r && t.consume(TokenType.NAME);
-            t.exit(r);
-            return r;
         }
     }
 }

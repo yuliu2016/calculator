@@ -33,16 +33,6 @@ public final class Slice extends NodeWrapper {
         return has(1, Expr.RULE);
     }
 
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = Slice1.parse(t, lv + 1);
-        r = r || Expr.parse(t, lv + 1);
-        t.exit(r);
-        return r;
-    }
-
     /**
      * ['expr'] 'slice_expr' ['slice_expr']
      */
@@ -76,17 +66,6 @@ public final class Slice extends NodeWrapper {
 
         public boolean hasSliceExpr1() {
             return has(2, SliceExpr.RULE);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            Expr.parse(t, lv + 1);
-            r = SliceExpr.parse(t, lv + 1);
-            if (r) SliceExpr.parse(t, lv + 1);
-            t.exit(r);
-            return r;
         }
     }
 }

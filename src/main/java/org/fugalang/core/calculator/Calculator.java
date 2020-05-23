@@ -1,6 +1,7 @@
 package org.fugalang.core.calculator;
 
 import org.fugalang.core.calculator.pgen.*;
+import org.fugalang.core.calculator.pgen.parser.Parser;
 import org.fugalang.core.parser.SyntaxError;
 import org.fugalang.core.parser.impl.LazyParserContext;
 import org.fugalang.core.parser.impl.LexingVisitor;
@@ -115,7 +116,7 @@ public class Calculator {
                 var visitor = LexingVisitor.of(input);
                 var lexer = SimpleLexer.of(visitor);
                 var context = LazyParserContext.of(lexer, visitor, false);
-                var tree = SimpleParseTree.parse(context, Sum::parse, Sum::of);
+                var tree = SimpleParseTree.parse(context, Parser::sum, Sum::of);
 
                 var result = evaluate0(tree);
 

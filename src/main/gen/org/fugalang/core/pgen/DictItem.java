@@ -33,16 +33,6 @@ public final class DictItem extends NodeWrapper {
         return has(1, DictItem2.RULE);
     }
 
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = DictItem1.parse(t, lv + 1);
-        r = r || DictItem2.parse(t, lv + 1);
-        t.exit(r);
-        return r;
-    }
-
     /**
      * 'expr' ':' 'expr'
      */
@@ -65,17 +55,6 @@ public final class DictItem extends NodeWrapper {
         public Expr expr1() {
             return get(2, Expr::of);
         }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = Expr.parse(t, lv + 1);
-            r = r && t.consume(":");
-            r = r && Expr.parse(t, lv + 1);
-            t.exit(r);
-            return r;
-        }
     }
 
     /**
@@ -95,16 +74,6 @@ public final class DictItem extends NodeWrapper {
 
         public BitwiseOr bitwiseOr() {
             return get(1, BitwiseOr::of);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = t.consume("**");
-            r = r && BitwiseOr.parse(t, lv + 1);
-            t.exit(r);
-            return r;
         }
     }
 }

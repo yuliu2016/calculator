@@ -34,16 +34,6 @@ public final class NamedExpr extends NodeWrapper {
         return has(1, Expr.RULE);
     }
 
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = NamedExpr1.parse(t, lv + 1);
-        r = r || Expr.parse(t, lv + 1);
-        t.exit(r);
-        return r;
-    }
-
     /**
      * 'NAME' ':=' 'expr'
      */
@@ -65,17 +55,6 @@ public final class NamedExpr extends NodeWrapper {
 
         public Expr expr() {
             return get(2, Expr::of);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = t.consume(TokenType.NAME);
-            r = r && t.consume(":=");
-            r = r && Expr.parse(t, lv + 1);
-            t.exit(r);
-            return r;
         }
     }
 }

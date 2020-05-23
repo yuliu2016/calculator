@@ -92,23 +92,4 @@ public final class SmallStmt extends NodeWrapper {
     public boolean hasAssignment() {
         return has(10, Assignment.RULE);
     }
-
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = t.consume("pass");
-        r = r || t.consume("break");
-        r = r || t.consume("continue");
-        r = r || DelStmt.parse(t, lv + 1);
-        r = r || ReturnStmt.parse(t, lv + 1);
-        r = r || RaiseStmt.parse(t, lv + 1);
-        r = r || NonlocalStmt.parse(t, lv + 1);
-        r = r || AssertStmt.parse(t, lv + 1);
-        r = r || ImportName.parse(t, lv + 1);
-        r = r || ImportFrom.parse(t, lv + 1);
-        r = r || Assignment.parse(t, lv + 1);
-        t.exit(r);
-        return r;
-    }
 }

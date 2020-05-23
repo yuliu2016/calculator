@@ -29,17 +29,6 @@ public final class Annassign extends NodeWrapper {
         return has(2, Annassign3.RULE);
     }
 
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = t.consume(":");
-        r = r && Expr.parse(t, lv + 1);
-        if (r) Annassign3.parse(t, lv + 1);
-        t.exit(r);
-        return r;
-    }
-
     /**
      * '=' 'exprlist_star'
      */
@@ -57,16 +46,6 @@ public final class Annassign extends NodeWrapper {
 
         public ExprlistStar exprlistStar() {
             return get(1, ExprlistStar::of);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = t.consume("=");
-            r = r && ExprlistStar.parse(t, lv + 1);
-            t.exit(r);
-            return r;
         }
     }
 }

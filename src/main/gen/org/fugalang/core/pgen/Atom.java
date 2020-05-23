@@ -77,21 +77,4 @@ public final class Atom extends NodeWrapper {
     public boolean isFalse() {
         return is(8);
     }
-
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = TupleAtom.parse(t, lv + 1);
-        r = r || ListAtom.parse(t, lv + 1);
-        r = r || DictOrSet.parse(t, lv + 1);
-        r = r || t.consume(TokenType.NAME);
-        r = r || t.consume(TokenType.NUMBER);
-        r = r || t.consume(TokenType.STRING);
-        r = r || t.consume("None");
-        r = r || t.consume("True");
-        r = r || t.consume("False");
-        t.exit(r);
-        return r;
-    }
 }

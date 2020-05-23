@@ -35,17 +35,6 @@ public final class Assignment extends NodeWrapper {
         return has(2, Assignment3.RULE);
     }
 
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        t.consume("/");
-        r = ExprlistStar.parse(t, lv + 1);
-        if (r) Assignment3.parse(t, lv + 1);
-        t.exit(r);
-        return r;
-    }
-
     /**
      * 'annassign' | ('=' 'exprlist_star')+ | 'augassign' 'exprlist'
      */
@@ -80,28 +69,6 @@ public final class Assignment extends NodeWrapper {
         public boolean hasAugassignExprlist() {
             return has(2, Assignment33.RULE);
         }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = Annassign.parse(t, lv + 1);
-            r = r || parseExprlistStars(t, lv);
-            r = r || Assignment33.parse(t, lv + 1);
-            t.exit(r);
-            return r;
-        }
-
-        private static boolean parseExprlistStars(ParseTree t, int lv) {
-            t.enterCollection();
-            var r = Assignment32.parse(t, lv + 1);
-            if (r) while (true) {
-                var p = t.position();
-                if (!Assignment32.parse(t, lv + 1) || t.loopGuard(p)) break;
-            }
-            t.exitCollection();
-            return r;
-        }
     }
 
     /**
@@ -121,16 +88,6 @@ public final class Assignment extends NodeWrapper {
 
         public ExprlistStar exprlistStar() {
             return get(1, ExprlistStar::of);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = t.consume("=");
-            r = r && ExprlistStar.parse(t, lv + 1);
-            t.exit(r);
-            return r;
         }
     }
 
@@ -155,16 +112,6 @@ public final class Assignment extends NodeWrapper {
 
         public Exprlist exprlist() {
             return get(1, Exprlist::of);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = Augassign.parse(t, lv + 1);
-            r = r && Exprlist.parse(t, lv + 1);
-            t.exit(r);
-            return r;
         }
     }
 }

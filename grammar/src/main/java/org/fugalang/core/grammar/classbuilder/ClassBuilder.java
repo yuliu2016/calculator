@@ -36,6 +36,10 @@ public class ClassBuilder {
         return className;
     }
 
+    public String getRuleName() {
+        return ruleName;
+    }
+
     public String generateClassCode() {
         return generateClassCode(List.of());
     }
@@ -44,7 +48,7 @@ public class ClassBuilder {
         return classImports;
     }
 
-    public String generateClassCode(List<ClassBuilder> componentClasses) {
+    public String generateClassCode(List<ClassBuilder> components) {
         StringBuilder sb = new StringBuilder();
 
         sb
@@ -55,7 +59,7 @@ public class ClassBuilder {
         Set<String> userImports = new TreeSet<>();
         Set<String> javaImports = new TreeSet<>();
 
-        var importIterator = componentClasses.stream().map(ClassBuilder::getClassImports).iterator();
+        var importIterator = components.stream().map(ClassBuilder::getClassImports).iterator();
 
         for (Set<String> importSet : FirstAndMore.of(classImports, importIterator)) {
             for (String theImport : importSet) {
@@ -89,7 +93,7 @@ public class ClassBuilder {
 
         sb.append(generateClassBody(false));
 
-        for (ClassBuilder componentClass : componentClasses) {
+        for (ClassBuilder componentClass : components) {
             var classDef = componentClass.generateClassBody(true);
             sb.append(ParserStringUtil.indent(classDef, 4));
         }
@@ -165,15 +169,6 @@ public class ClassBuilder {
             }
         }
 
-        generateParsingFunc(sb);
-
-        for (ClassField field : fields) {
-            var loopParser = field.getLoopParser();
-            if (loopParser != null) {
-                sb.append(loopParser);
-            }
-        }
-
         if (isStaticInnerClass) {
             sb.append("}\n");
         }
@@ -183,18 +178,46 @@ public class ClassBuilder {
         return sb.toString();
     }
 
-    private void generateParsingFunc(StringBuilder sb) {
+    public void generateRuleDeclaration(StringBuilder sb) {
+        var small_name = ruleName.replace(":", "_");
+        var cap_name = small_name.toUpperCase();
+        sb.append("    public static final ParserRule ")
+                .append(cap_name)
+                .append(" = ")
+                .append(switch (ruleType) {
+                    case Conjunction -> "and_rule";
+                    case Disjunction -> "or_rule";
+                })
+                .append("(\"")
+                .append(ruleName)
+                .append("\");\n");
+    }
+
+    public void generateParsingFunction(StringBuilder sb) {
+        var small_name = ruleName.replace(":", "_");
+        var cap_name = small_name.toUpperCase();
         sb.append("\n");
-        sb.append("    public static boolean parse(ParseTree t, int lv) {\n");
+
+        // rule name constant
+
+        if (headerComments != null && !headerComments.isBlank()) {
+            sb.append("    /**\n     * ")
+                    .append(headerComments)
+                    .append("\n     */\n");
+        }
+
+        sb.append("    public static boolean ")
+                .append(small_name)
+                .append("(ParseTree t, int lv) {\n");
 
         var mb = new StringBuilder();
-        mb.append("if (t.recursionGuard(lv)) return false;\n");
-        mb.append("t.enter(lv, RULE);\n");
-        mb.append("boolean r;\n");
+        mb.append("if (t.recursionGuard(lv)) return false;\n" + "t.enter(lv, ")
+                .append(cap_name)
+                .append(");\n" + "boolean r;\n");
 
         var first = true;
         for (ClassField field : fields) {
-            var result = field.asParserStmt(ruleType, first);
+            var result = field.getParserFieldStatement(ruleType, first);
             if (field.isRequired()) {
                 first = false;
             }
@@ -206,13 +229,21 @@ public class ClassBuilder {
                     " may match an empty string");
         }
 
-        mb.append("t.exit(r);\n");
-        mb.append("return r;\n");
+        mb.append("t.exit(r);\n" +
+                "return r;\n");
 
         sb.append(ParserStringUtil.indent(mb.toString(), 8));
 
         sb.append("    }\n");
+
+        for (ClassField field : fields) {
+            var loopParser = field.getLoopParser();
+            if (loopParser != null) {
+                sb.append(loopParser);
+            }
+        }
     }
+
 
     public void addImport(String classImport) {
         classImports.add(classImport);

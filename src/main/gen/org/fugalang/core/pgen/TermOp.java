@@ -36,17 +36,4 @@ public final class TermOp extends NodeWrapper {
     public boolean isFloorDiv() {
         return is(4);
     }
-
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = t.consume("*");
-        r = r || t.consume("@");
-        r = r || t.consume("/");
-        r = r || t.consume("%");
-        r = r || t.consume("//");
-        t.exit(r);
-        return r;
-    }
 }

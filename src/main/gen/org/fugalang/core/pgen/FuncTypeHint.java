@@ -20,15 +20,4 @@ public final class FuncTypeHint extends NodeWrapper {
     public Expr expr() {
         return get(1, Expr::of);
     }
-
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = t.consume("<");
-        r = r && Expr.parse(t, lv + 1);
-        r = r && t.consume(">");
-        t.exit(r);
-        return r;
-    }
 }

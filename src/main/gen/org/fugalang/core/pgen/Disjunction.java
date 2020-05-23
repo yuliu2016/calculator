@@ -27,25 +27,6 @@ public final class Disjunction extends NodeWrapper {
         return getList(1, Disjunction2::of);
     }
 
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = Conjunction.parse(t, lv + 1);
-        if (r) parseOrConjunctions(t, lv);
-        t.exit(r);
-        return r;
-    }
-
-    private static void parseOrConjunctions(ParseTree t, int lv) {
-        t.enterCollection();
-        while (true) {
-            var p = t.position();
-            if (!Disjunction2.parse(t, lv + 1) || t.loopGuard(p)) break;
-        }
-        t.exitCollection();
-    }
-
     /**
      * 'or' 'conjunction'
      */
@@ -63,16 +44,6 @@ public final class Disjunction extends NodeWrapper {
 
         public Conjunction conjunction() {
             return get(1, Conjunction::of);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = t.consume("or");
-            r = r && Conjunction.parse(t, lv + 1);
-            t.exit(r);
-            return r;
         }
     }
 }

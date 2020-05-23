@@ -25,4 +25,12 @@ public class ParserRule {
     public static ParserRule of(String ruleName, RuleType ruleType) {
         return new ParserRule(ruleName, ruleType);
     }
+
+    public static ParserRule and_rule(String ruleName) {
+        return of(ruleName, RuleType.Conjunction);
+    }
+
+    public static ParserRule or_rule(String ruleName) {
+        return of(ruleName, RuleType.Disjunction);
+    }
 }

@@ -32,14 +32,4 @@ public final class NamedExprStar extends NodeWrapper {
     public boolean hasNamedExpr() {
         return has(1, NamedExpr.RULE);
     }
-
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = StarExpr.parse(t, lv + 1);
-        r = r || NamedExpr.parse(t, lv + 1);
-        t.exit(r);
-        return r;
-    }
 }

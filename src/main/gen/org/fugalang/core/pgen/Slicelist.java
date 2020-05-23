@@ -31,26 +31,6 @@ public final class Slicelist extends NodeWrapper {
         return is(2);
     }
 
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = Slice.parse(t, lv + 1);
-        if (r) parseSlices(t, lv);
-        if (r) t.consume(",");
-        t.exit(r);
-        return r;
-    }
-
-    private static void parseSlices(ParseTree t, int lv) {
-        t.enterCollection();
-        while (true) {
-            var p = t.position();
-            if (!Slicelist2.parse(t, lv + 1) || t.loopGuard(p)) break;
-        }
-        t.exitCollection();
-    }
-
     /**
      * ',' 'slice'
      */
@@ -68,16 +48,6 @@ public final class Slicelist extends NodeWrapper {
 
         public Slice slice() {
             return get(1, Slice::of);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = t.consume(",");
-            r = r && Slice.parse(t, lv + 1);
-            t.exit(r);
-            return r;
         }
     }
 }

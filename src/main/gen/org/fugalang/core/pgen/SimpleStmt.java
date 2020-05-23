@@ -31,26 +31,6 @@ public final class SimpleStmt extends NodeWrapper {
         return is(2);
     }
 
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = SmallStmt.parse(t, lv + 1);
-        if (r) parseSmallStmts(t, lv);
-        if (r) t.consume(";");
-        t.exit(r);
-        return r;
-    }
-
-    private static void parseSmallStmts(ParseTree t, int lv) {
-        t.enterCollection();
-        while (true) {
-            var p = t.position();
-            if (!SimpleStmt2.parse(t, lv + 1) || t.loopGuard(p)) break;
-        }
-        t.exitCollection();
-    }
-
     /**
      * ';' 'small_stmt'
      */
@@ -68,16 +48,6 @@ public final class SimpleStmt extends NodeWrapper {
 
         public SmallStmt smallStmt() {
             return get(1, SmallStmt::of);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = t.consume(";");
-            r = r && SmallStmt.parse(t, lv + 1);
-            t.exit(r);
-            return r;
         }
     }
 }

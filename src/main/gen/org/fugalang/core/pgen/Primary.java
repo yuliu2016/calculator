@@ -34,24 +34,4 @@ public final class Primary extends NodeWrapper {
     public boolean hasBlockSuite() {
         return has(2, BlockSuite.RULE);
     }
-
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = Atom.parse(t, lv + 1);
-        if (r) parseTrailers(t, lv);
-        if (r) BlockSuite.parse(t, lv + 1);
-        t.exit(r);
-        return r;
-    }
-
-    private static void parseTrailers(ParseTree t, int lv) {
-        t.enterCollection();
-        while (true) {
-            var p = t.position();
-            if (!Trailer.parse(t, lv + 1) || t.loopGuard(p)) break;
-        }
-        t.exitCollection();
-    }
 }

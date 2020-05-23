@@ -39,23 +39,13 @@ public class PEGCompat {
     }
 
     public static Iterable<AndRule> allAndRules(OrRule orRule) {
-        return FirstAndMore.of(
-                orRule.andRule(),
-                orRule.orRule2s()
-                        .stream()
-                        .map(OrRule.OrRule2::andRule)
-                        .iterator()
-        );
+        return FirstAndMore.of(orRule.andRule(),
+                orRule.orRule2s(), OrRule.OrRule2::andRule);
     }
 
     public static Iterable<RepeatRule> allRepeatRules(AndRule andRule) {
-        return FirstAndMore.of(
-                andRule.repeatRule(),
-                andRule.repeatRules()
-                        .stream()
-                        .map(AndRule.AndRule2::repeatRule)
-                        .iterator()
-        );
+        return FirstAndMore.of(andRule.repeatRule(),
+                andRule.repeatRules(), AndRule.AndRule2::repeatRule);
     }
 
     public static SubRuleType getRuleType(SubRule subRule) {

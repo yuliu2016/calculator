@@ -45,19 +45,6 @@ public final class PipeFor extends NodeWrapper {
         return has(4, PipeFor5.RULE);
     }
 
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        CompFor.parse(t, lv + 1);
-        r = t.consume("for");
-        r = r && Targetlist.parse(t, lv + 1);
-        if (r) PipeFor4.parse(t, lv + 1);
-        if (r) PipeFor5.parse(t, lv + 1);
-        t.exit(r);
-        return r;
-    }
-
     /**
      * 'if' 'named_expr'
      */
@@ -75,16 +62,6 @@ public final class PipeFor extends NodeWrapper {
 
         public NamedExpr namedExpr() {
             return get(1, NamedExpr::of);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = t.consume("if");
-            r = r && NamedExpr.parse(t, lv + 1);
-            t.exit(r);
-            return r;
         }
     }
 
@@ -117,16 +94,6 @@ public final class PipeFor extends NodeWrapper {
 
         public boolean hasBlockSuite() {
             return has(1, BlockSuite.RULE);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = Parameters.parse(t, lv + 1);
-            r = r || BlockSuite.parse(t, lv + 1);
-            t.exit(r);
-            return r;
         }
     }
 }

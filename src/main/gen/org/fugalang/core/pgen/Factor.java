@@ -33,16 +33,6 @@ public final class Factor extends NodeWrapper {
         return has(1, Power.RULE);
     }
 
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = Factor1.parse(t, lv + 1);
-        r = r || Power.parse(t, lv + 1);
-        t.exit(r);
-        return r;
-    }
-
     /**
      * ('+' | '-' | '~') 'factor'
      */
@@ -64,16 +54,6 @@ public final class Factor extends NodeWrapper {
 
         public Factor factor() {
             return get(1, Factor::of);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = Factor11.parse(t, lv + 1);
-            r = r && Factor.parse(t, lv + 1);
-            t.exit(r);
-            return r;
         }
     }
 
@@ -102,17 +82,6 @@ public final class Factor extends NodeWrapper {
 
         public boolean isBitNot() {
             return is(2);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = t.consume("+");
-            r = r || t.consume("-");
-            r = r || t.consume("~");
-            t.exit(r);
-            return r;
         }
     }
 }

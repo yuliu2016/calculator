@@ -36,18 +36,4 @@ public final class ForStmt extends NodeWrapper {
     public boolean hasElseSuite() {
         return has(5, ElseSuite.RULE);
     }
-
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = t.consume("for");
-        r = r && Targetlist.parse(t, lv + 1);
-        r = r && t.consume("in");
-        r = r && Exprlist.parse(t, lv + 1);
-        r = r && Suite.parse(t, lv + 1);
-        if (r) ElseSuite.parse(t, lv + 1);
-        t.exit(r);
-        return r;
-    }
 }

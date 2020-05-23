@@ -27,25 +27,6 @@ public final class BitwiseAnd extends NodeWrapper {
         return getList(1, BitwiseAnd2::of);
     }
 
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = ShiftExpr.parse(t, lv + 1);
-        if (r) parseShiftExprs(t, lv);
-        t.exit(r);
-        return r;
-    }
-
-    private static void parseShiftExprs(ParseTree t, int lv) {
-        t.enterCollection();
-        while (true) {
-            var p = t.position();
-            if (!BitwiseAnd2.parse(t, lv + 1) || t.loopGuard(p)) break;
-        }
-        t.exitCollection();
-    }
-
     /**
      * '&' 'shift_expr'
      */
@@ -63,16 +44,6 @@ public final class BitwiseAnd extends NodeWrapper {
 
         public ShiftExpr shiftExpr() {
             return get(1, ShiftExpr::of);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = t.consume("&");
-            r = r && ShiftExpr.parse(t, lv + 1);
-            t.exit(r);
-            return r;
         }
     }
 }

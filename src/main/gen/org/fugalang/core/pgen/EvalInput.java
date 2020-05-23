@@ -31,24 +31,4 @@ public final class EvalInput extends NodeWrapper {
     public String endmarker() {
         return get(2, TokenType.ENDMARKER);
     }
-
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = Exprlist.parse(t, lv + 1);
-        if (r) parseNewlines(t, lv);
-        r = r && t.consume(TokenType.ENDMARKER);
-        t.exit(r);
-        return r;
-    }
-
-    private static void parseNewlines(ParseTree t, int lv) {
-        t.enterCollection();
-        while (true) {
-            var p = t.position();
-            if (!t.consume(TokenType.NEWLINE) || t.loopGuard(p)) break;
-        }
-        t.exitCollection();
-    }
 }

@@ -20,14 +20,4 @@ public final class ElseSuite extends NodeWrapper {
     public Suite suite() {
         return get(1, Suite::of);
     }
-
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = t.consume("else");
-        r = r && Suite.parse(t, lv + 1);
-        t.exit(r);
-        return r;
-    }
 }

@@ -40,15 +40,4 @@ public final class Expr extends NodeWrapper {
     public boolean hasDisjunction() {
         return has(2, Disjunction.RULE);
     }
-
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = Conditional.parse(t, lv + 1);
-        r = r || Funcdef.parse(t, lv + 1);
-        r = r || Disjunction.parse(t, lv + 1);
-        t.exit(r);
-        return r;
-    }
 }

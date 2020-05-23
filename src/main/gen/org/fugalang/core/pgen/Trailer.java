@@ -42,17 +42,6 @@ public final class Trailer extends NodeWrapper {
         return has(2, Subscript.RULE);
     }
 
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = Trailer1.parse(t, lv + 1);
-        r = r || Parameters.parse(t, lv + 1);
-        r = r || Subscript.parse(t, lv + 1);
-        t.exit(r);
-        return r;
-    }
-
     /**
      * '.' 'NAME'
      */
@@ -70,16 +59,6 @@ public final class Trailer extends NodeWrapper {
 
         public String name() {
             return get(1, TokenType.NAME);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = t.consume(".");
-            r = r && t.consume(TokenType.NAME);
-            t.exit(r);
-            return r;
         }
     }
 }

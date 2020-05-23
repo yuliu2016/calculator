@@ -39,27 +39,6 @@ public final class ArgsKwargs extends NodeWrapper {
         return has(3, ArgsKwargs4.RULE);
     }
 
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = t.consume("*");
-        if (r) TypedArg.parse(t, lv + 1);
-        if (r) parseDefaultArgs(t, lv);
-        if (r) ArgsKwargs4.parse(t, lv + 1);
-        t.exit(r);
-        return r;
-    }
-
-    private static void parseDefaultArgs(ParseTree t, int lv) {
-        t.enterCollection();
-        while (true) {
-            var p = t.position();
-            if (!ArgsKwargs3.parse(t, lv + 1) || t.loopGuard(p)) break;
-        }
-        t.exitCollection();
-    }
-
     /**
      * ',' 'default_arg'
      */
@@ -77,16 +56,6 @@ public final class ArgsKwargs extends NodeWrapper {
 
         public DefaultArg defaultArg() {
             return get(1, DefaultArg::of);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = t.consume(",");
-            r = r && DefaultArg.parse(t, lv + 1);
-            t.exit(r);
-            return r;
         }
     }
 
@@ -111,16 +80,6 @@ public final class ArgsKwargs extends NodeWrapper {
 
         public boolean hasKwargs() {
             return has(1, Kwargs.RULE);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = t.consume(",");
-            if (r) Kwargs.parse(t, lv + 1);
-            t.exit(r);
-            return r;
         }
     }
 }

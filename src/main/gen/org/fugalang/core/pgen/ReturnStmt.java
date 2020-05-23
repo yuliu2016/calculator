@@ -24,14 +24,4 @@ public final class ReturnStmt extends NodeWrapper {
     public boolean hasExprlistStar() {
         return has(1, ExprlistStar.RULE);
     }
-
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = t.consume("return");
-        if (r) ExprlistStar.parse(t, lv + 1);
-        t.exit(r);
-        return r;
-    }
 }

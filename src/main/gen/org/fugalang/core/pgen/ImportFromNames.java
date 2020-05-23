@@ -31,27 +31,6 @@ public final class ImportFromNames extends NodeWrapper {
         return getList(1, ParseTreeNode::asBoolean);
     }
 
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = ImportFromNames1.parse(t, lv + 1);
-        r = r || parseIsDots(t, lv);
-        t.exit(r);
-        return r;
-    }
-
-    private static boolean parseIsDots(ParseTree t, int lv) {
-        t.enterCollection();
-        var r = t.consume(".");
-        if (r) while (true) {
-            var p = t.position();
-            if (!t.consume(".") || t.loopGuard(p)) break;
-        }
-        t.exitCollection();
-        return r;
-    }
-
     /**
      * '.'* 'dotted_name'
      */
@@ -73,25 +52,6 @@ public final class ImportFromNames extends NodeWrapper {
 
         public DottedName dottedName() {
             return get(1, DottedName::of);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            parseIsDots(t, lv);
-            r = DottedName.parse(t, lv + 1);
-            t.exit(r);
-            return r;
-        }
-
-        private static void parseIsDots(ParseTree t, int lv) {
-            t.enterCollection();
-            while (true) {
-                var p = t.position();
-                if (!t.consume(".") || t.loopGuard(p)) break;
-            }
-            t.exitCollection();
         }
     }
 }

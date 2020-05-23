@@ -32,14 +32,4 @@ public final class PipeExpr extends NodeWrapper {
     public boolean hasFactor() {
         return has(1, Factor.RULE);
     }
-
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = PipeFor.parse(t, lv + 1);
-        r = r || Factor.parse(t, lv + 1);
-        t.exit(r);
-        return r;
-    }
 }

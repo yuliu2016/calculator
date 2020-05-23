@@ -27,25 +27,6 @@ public final class Pipeline extends NodeWrapper {
         return getList(1, Pipeline2::of);
     }
 
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = Factor.parse(t, lv + 1);
-        if (r) parsePipeExprs(t, lv);
-        t.exit(r);
-        return r;
-    }
-
-    private static void parsePipeExprs(ParseTree t, int lv) {
-        t.enterCollection();
-        while (true) {
-            var p = t.position();
-            if (!Pipeline2.parse(t, lv + 1) || t.loopGuard(p)) break;
-        }
-        t.exitCollection();
-    }
-
     /**
      * '->' 'pipe_expr'
      */
@@ -63,16 +44,6 @@ public final class Pipeline extends NodeWrapper {
 
         public PipeExpr pipeExpr() {
             return get(1, PipeExpr::of);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = t.consume("->");
-            r = r && PipeExpr.parse(t, lv + 1);
-            t.exit(r);
-            return r;
         }
     }
 }

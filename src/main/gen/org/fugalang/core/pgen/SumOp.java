@@ -24,14 +24,4 @@ public final class SumOp extends NodeWrapper {
     public boolean isMinus() {
         return is(1);
     }
-
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = t.consume("+");
-        r = r || t.consume("-");
-        t.exit(r);
-        return r;
-    }
 }

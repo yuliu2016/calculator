@@ -50,18 +50,6 @@ public final class Target extends NodeWrapper {
         return has(3, Primary.RULE);
     }
 
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = t.consume(TokenType.NAME);
-        r = r || Target2.parse(t, lv + 1);
-        r = r || Target3.parse(t, lv + 1);
-        r = r || Primary.parse(t, lv + 1);
-        t.exit(r);
-        return r;
-    }
-
     /**
      * '(' 'targetlist' ')'
      */
@@ -79,17 +67,6 @@ public final class Target extends NodeWrapper {
 
         public Targetlist targetlist() {
             return get(1, Targetlist::of);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = t.consume("(");
-            r = r && Targetlist.parse(t, lv + 1);
-            r = r && t.consume(")");
-            t.exit(r);
-            return r;
         }
     }
 
@@ -110,16 +87,6 @@ public final class Target extends NodeWrapper {
 
         public Target target() {
             return get(1, Target::of);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = t.consume("*");
-            r = r && Target.parse(t, lv + 1);
-            t.exit(r);
-            return r;
         }
     }
 }

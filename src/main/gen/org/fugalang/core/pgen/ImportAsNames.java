@@ -27,25 +27,6 @@ public final class ImportAsNames extends NodeWrapper {
         return getList(1, ImportAsNames2::of);
     }
 
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = ImportAsName.parse(t, lv + 1);
-        if (r) parseImportAsNames(t, lv);
-        t.exit(r);
-        return r;
-    }
-
-    private static void parseImportAsNames(ParseTree t, int lv) {
-        t.enterCollection();
-        while (true) {
-            var p = t.position();
-            if (!ImportAsNames2.parse(t, lv + 1) || t.loopGuard(p)) break;
-        }
-        t.exitCollection();
-    }
-
     /**
      * ',' 'import_as_name'
      */
@@ -63,16 +44,6 @@ public final class ImportAsNames extends NodeWrapper {
 
         public ImportAsName importAsName() {
             return get(1, ImportAsName::of);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = t.consume(",");
-            r = r && ImportAsName.parse(t, lv + 1);
-            t.exit(r);
-            return r;
         }
     }
 }

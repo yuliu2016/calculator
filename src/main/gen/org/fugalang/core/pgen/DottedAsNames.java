@@ -27,25 +27,6 @@ public final class DottedAsNames extends NodeWrapper {
         return getList(1, DottedAsNames2::of);
     }
 
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = DottedAsName.parse(t, lv + 1);
-        if (r) parseDottedAsNames(t, lv);
-        t.exit(r);
-        return r;
-    }
-
-    private static void parseDottedAsNames(ParseTree t, int lv) {
-        t.enterCollection();
-        while (true) {
-            var p = t.position();
-            if (!DottedAsNames2.parse(t, lv + 1) || t.loopGuard(p)) break;
-        }
-        t.exitCollection();
-    }
-
     /**
      * ',' 'dotted_as_name'
      */
@@ -63,16 +44,6 @@ public final class DottedAsNames extends NodeWrapper {
 
         public DottedAsName dottedAsName() {
             return get(1, DottedAsName::of);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = t.consume(",");
-            r = r && DottedAsName.parse(t, lv + 1);
-            t.exit(r);
-            return r;
         }
     }
 }

@@ -19,12 +19,8 @@ public class ResultSource {
         return value;
     }
 
-    public static ResultSource ofClass(String className) {
-        return new ResultSource(SourceType.Class, className);
-    }
-
     public static ResultSource ofClass(ClassName className) {
-        return ofClass(className.getType());
+        return new ResultSource(SourceType.Class, className.getRuleName());
     }
 
     public static ResultSource ofTokenType(String tokenType) {

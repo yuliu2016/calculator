@@ -27,25 +27,6 @@ public final class Term extends NodeWrapper {
         return getList(1, Term2::of);
     }
 
-    public static boolean parse(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULE);
-        boolean r;
-        r = Factor.parse(t, lv + 1);
-        if (r) parseTerm2s(t, lv);
-        t.exit(r);
-        return r;
-    }
-
-    private static void parseTerm2s(ParseTree t, int lv) {
-        t.enterCollection();
-        while (true) {
-            var p = t.position();
-            if (!Term2.parse(t, lv + 1) || t.loopGuard(p)) break;
-        }
-        t.exitCollection();
-    }
-
     /**
      * ('*' | '/' | '%') 'factor'
      */
@@ -67,16 +48,6 @@ public final class Term extends NodeWrapper {
 
         public Factor factor() {
             return get(1, Factor::of);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = Term21.parse(t, lv + 1);
-            r = r && Factor.parse(t, lv + 1);
-            t.exit(r);
-            return r;
         }
     }
 
@@ -105,17 +76,6 @@ public final class Term extends NodeWrapper {
 
         public boolean isModulus() {
             return is(2);
-        }
-
-        public static boolean parse(ParseTree t, int lv) {
-            if (t.recursionGuard(lv)) return false;
-            t.enter(lv, RULE);
-            boolean r;
-            r = t.consume("*");
-            r = r || t.consume("/");
-            r = r || t.consume("%");
-            t.exit(r);
-            return r;
         }
     }
 }

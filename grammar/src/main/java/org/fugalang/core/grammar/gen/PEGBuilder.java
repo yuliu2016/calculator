@@ -204,7 +204,10 @@ public class PEGBuilder {
             var convertedValue = converter.checkToken(token).orElseThrow();
 
             var classType = convertedValue.getClassName();
-            var className = ClassName.of(classType);
+
+            // this is used to unambiguously refer to two list references of the same token
+            var ruleName = cb.getRuleName() + ":" + convertedValue.getFieldName().toLowerCase();
+            var className = ClassName.of(classType, ruleName);
 
             if (classType.equals("boolean")) {
                 var fieldName = ParserStringUtil
