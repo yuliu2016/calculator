@@ -1,67 +1,57 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.*;
+import org.fugalang.core.parser.NodeWrapper;
+import org.fugalang.core.parser.ParseTreeNode;
+import org.fugalang.core.pgen.parser.ParserRules;
 
 /**
  * pipe_for: ['comp_for'] 'for' 'targetlist' ['if' 'named_expr'] ['parameters' | 'block_suite']
  */
 public final class PipeFor extends NodeWrapper {
-    public static final ParserRule RULE =
-            ParserRule.of("pipe_for", RuleType.Conjunction);
 
-    public static PipeFor of(ParseTreeNode node) {
-        return new PipeFor(node);
-    }
-
-    private PipeFor(ParseTreeNode node) {
-        super(RULE, node);
+    public PipeFor(ParseTreeNode node) {
+        super(ParserRules.PIPE_FOR, node);
     }
 
     public CompFor compFor() {
-        return get(0, CompFor::of);
+        return get(0, CompFor::new);
     }
 
     public boolean hasCompFor() {
-        return has(0, CompFor.RULE);
+        return has(0, ParserRules.COMP_FOR);
     }
 
     public Targetlist targetlist() {
-        return get(2, Targetlist::of);
+        return get(2, Targetlist::new);
     }
 
     public PipeFor4 ifNamedExpr() {
-        return get(3, PipeFor4::of);
+        return get(3, PipeFor4::new);
     }
 
     public boolean hasIfNamedExpr() {
-        return has(3, PipeFor4.RULE);
+        return has(3, ParserRules.PIPE_FOR_4);
     }
 
     public PipeFor5 parametersOrBlockSuite() {
-        return get(4, PipeFor5::of);
+        return get(4, PipeFor5::new);
     }
 
     public boolean hasParametersOrBlockSuite() {
-        return has(4, PipeFor5.RULE);
+        return has(4, ParserRules.PIPE_FOR_5);
     }
 
     /**
      * 'if' 'named_expr'
      */
     public static final class PipeFor4 extends NodeWrapper {
-        public static final ParserRule RULE =
-                ParserRule.of("pipe_for:4", RuleType.Conjunction);
 
-        public static PipeFor4 of(ParseTreeNode node) {
-            return new PipeFor4(node);
-        }
-
-        private PipeFor4(ParseTreeNode node) {
-            super(RULE, node);
+        public PipeFor4(ParseTreeNode node) {
+            super(ParserRules.PIPE_FOR_4, node);
         }
 
         public NamedExpr namedExpr() {
-            return get(1, NamedExpr::of);
+            return get(1, NamedExpr::new);
         }
     }
 
@@ -69,31 +59,25 @@ public final class PipeFor extends NodeWrapper {
      * 'parameters' | 'block_suite'
      */
     public static final class PipeFor5 extends NodeWrapper {
-        public static final ParserRule RULE =
-                ParserRule.of("pipe_for:5", RuleType.Disjunction);
 
-        public static PipeFor5 of(ParseTreeNode node) {
-            return new PipeFor5(node);
-        }
-
-        private PipeFor5(ParseTreeNode node) {
-            super(RULE, node);
+        public PipeFor5(ParseTreeNode node) {
+            super(ParserRules.PIPE_FOR_5, node);
         }
 
         public Parameters parameters() {
-            return get(0, Parameters::of);
+            return get(0, Parameters::new);
         }
 
         public boolean hasParameters() {
-            return has(0, Parameters.RULE);
+            return has(0, ParserRules.PARAMETERS);
         }
 
         public BlockSuite blockSuite() {
-            return get(1, BlockSuite::of);
+            return get(1, BlockSuite::new);
         }
 
         public boolean hasBlockSuite() {
-            return has(1, BlockSuite.RULE);
+            return has(1, ParserRules.BLOCK_SUITE);
         }
     }
 }

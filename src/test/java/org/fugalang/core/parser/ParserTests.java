@@ -23,6 +23,6 @@ public class ParserTests {
         var visitor = LexingVisitor.of(s);
         var lexer = SimpleLexer.of(visitor);
         var context = LazyParserContext.of(lexer, visitor, false);
-        SimpleParseTree.parse(context, Parser::single_input, SingleInput::of);
+        SimpleParseTree.parse(context, Parser::single_input, SingleInput::new);
     }
 }

@@ -1,6 +1,8 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.*;
+import org.fugalang.core.parser.NodeWrapper;
+import org.fugalang.core.parser.ParseTreeNode;
+import org.fugalang.core.pgen.parser.ParserRules;
 
 import java.util.List;
 
@@ -8,42 +10,30 @@ import java.util.List;
  * conjunction: 'inversion' ('and' 'inversion')*
  */
 public final class Conjunction extends NodeWrapper {
-    public static final ParserRule RULE =
-            ParserRule.of("conjunction", RuleType.Conjunction);
 
-    public static Conjunction of(ParseTreeNode node) {
-        return new Conjunction(node);
-    }
-
-    private Conjunction(ParseTreeNode node) {
-        super(RULE, node);
+    public Conjunction(ParseTreeNode node) {
+        super(ParserRules.CONJUNCTION, node);
     }
 
     public Inversion inversion() {
-        return get(0, Inversion::of);
+        return get(0, Inversion::new);
     }
 
     public List<Conjunction2> andInversions() {
-        return getList(1, Conjunction2::of);
+        return getList(1, Conjunction2::new);
     }
 
     /**
      * 'and' 'inversion'
      */
     public static final class Conjunction2 extends NodeWrapper {
-        public static final ParserRule RULE =
-                ParserRule.of("conjunction:2", RuleType.Conjunction);
 
-        public static Conjunction2 of(ParseTreeNode node) {
-            return new Conjunction2(node);
-        }
-
-        private Conjunction2(ParseTreeNode node) {
-            super(RULE, node);
+        public Conjunction2(ParseTreeNode node) {
+            super(ParserRules.CONJUNCTION_2, node);
         }
 
         public Inversion inversion() {
-            return get(1, Inversion::of);
+            return get(1, Inversion::new);
         }
     }
 }

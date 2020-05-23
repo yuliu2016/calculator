@@ -1,6 +1,8 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.*;
+import org.fugalang.core.parser.NodeWrapper;
+import org.fugalang.core.parser.ParseTreeNode;
+import org.fugalang.core.pgen.parser.ParserRules;
 
 import java.util.List;
 
@@ -8,46 +10,34 @@ import java.util.List;
  * term: 'pipeline' ('term_op' 'pipeline')*
  */
 public final class Term extends NodeWrapper {
-    public static final ParserRule RULE =
-            ParserRule.of("term", RuleType.Conjunction);
 
-    public static Term of(ParseTreeNode node) {
-        return new Term(node);
-    }
-
-    private Term(ParseTreeNode node) {
-        super(RULE, node);
+    public Term(ParseTreeNode node) {
+        super(ParserRules.TERM, node);
     }
 
     public Pipeline pipeline() {
-        return get(0, Pipeline::of);
+        return get(0, Pipeline::new);
     }
 
     public List<Term2> termOpPipelines() {
-        return getList(1, Term2::of);
+        return getList(1, Term2::new);
     }
 
     /**
      * 'term_op' 'pipeline'
      */
     public static final class Term2 extends NodeWrapper {
-        public static final ParserRule RULE =
-                ParserRule.of("term:2", RuleType.Conjunction);
 
-        public static Term2 of(ParseTreeNode node) {
-            return new Term2(node);
-        }
-
-        private Term2(ParseTreeNode node) {
-            super(RULE, node);
+        public Term2(ParseTreeNode node) {
+            super(ParserRules.TERM_2, node);
         }
 
         public TermOp termOp() {
-            return get(0, TermOp::of);
+            return get(0, TermOp::new);
         }
 
         public Pipeline pipeline() {
-            return get(1, Pipeline::of);
+            return get(1, Pipeline::new);
         }
     }
 }

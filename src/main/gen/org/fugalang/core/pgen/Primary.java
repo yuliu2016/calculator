@@ -1,6 +1,8 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.*;
+import org.fugalang.core.parser.NodeWrapper;
+import org.fugalang.core.parser.ParseTreeNode;
+import org.fugalang.core.pgen.parser.ParserRules;
 
 import java.util.List;
 
@@ -8,30 +10,24 @@ import java.util.List;
  * primary: 'atom' 'trailer'* ['block_suite']
  */
 public final class Primary extends NodeWrapper {
-    public static final ParserRule RULE =
-            ParserRule.of("primary", RuleType.Conjunction);
 
-    public static Primary of(ParseTreeNode node) {
-        return new Primary(node);
-    }
-
-    private Primary(ParseTreeNode node) {
-        super(RULE, node);
+    public Primary(ParseTreeNode node) {
+        super(ParserRules.PRIMARY, node);
     }
 
     public Atom atom() {
-        return get(0, Atom::of);
+        return get(0, Atom::new);
     }
 
     public List<Trailer> trailers() {
-        return getList(1, Trailer::of);
+        return getList(1, Trailer::new);
     }
 
     public BlockSuite blockSuite() {
-        return get(2, BlockSuite::of);
+        return get(2, BlockSuite::new);
     }
 
     public boolean hasBlockSuite() {
-        return has(2, BlockSuite.RULE);
+        return has(2, ParserRules.BLOCK_SUITE);
     }
 }

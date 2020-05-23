@@ -1,23 +1,19 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.*;
+import org.fugalang.core.parser.NodeWrapper;
+import org.fugalang.core.parser.ParseTreeNode;
+import org.fugalang.core.pgen.parser.ParserRules;
 
 /**
  * else_suite: 'else' 'suite'
  */
 public final class ElseSuite extends NodeWrapper {
-    public static final ParserRule RULE =
-            ParserRule.of("else_suite", RuleType.Conjunction);
 
-    public static ElseSuite of(ParseTreeNode node) {
-        return new ElseSuite(node);
-    }
-
-    private ElseSuite(ParseTreeNode node) {
-        super(RULE, node);
+    public ElseSuite(ParseTreeNode node) {
+        super(ParserRules.ELSE_SUITE, node);
     }
 
     public Suite suite() {
-        return get(1, Suite::of);
+        return get(1, Suite::new);
     }
 }

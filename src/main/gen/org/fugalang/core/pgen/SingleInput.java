@@ -1,21 +1,17 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.*;
+import org.fugalang.core.parser.NodeWrapper;
+import org.fugalang.core.parser.ParseTreeNode;
+import org.fugalang.core.pgen.parser.ParserRules;
 import org.fugalang.core.token.TokenType;
 
 /**
  * single_input: 'NEWLINE' | 'simple_stmt' | 'compound_stmt' 'NEWLINE'
  */
 public final class SingleInput extends NodeWrapper {
-    public static final ParserRule RULE =
-            ParserRule.of("single_input", RuleType.Disjunction);
 
-    public static SingleInput of(ParseTreeNode node) {
-        return new SingleInput(node);
-    }
-
-    private SingleInput(ParseTreeNode node) {
-        super(RULE, node);
+    public SingleInput(ParseTreeNode node) {
+        super(ParserRules.SINGLE_INPUT, node);
     }
 
     public String newline() {
@@ -27,38 +23,32 @@ public final class SingleInput extends NodeWrapper {
     }
 
     public SimpleStmt simpleStmt() {
-        return get(1, SimpleStmt::of);
+        return get(1, SimpleStmt::new);
     }
 
     public boolean hasSimpleStmt() {
-        return has(1, SimpleStmt.RULE);
+        return has(1, ParserRules.SIMPLE_STMT);
     }
 
     public SingleInput3 compoundStmtNewline() {
-        return get(2, SingleInput3::of);
+        return get(2, SingleInput3::new);
     }
 
     public boolean hasCompoundStmtNewline() {
-        return has(2, SingleInput3.RULE);
+        return has(2, ParserRules.SINGLE_INPUT_3);
     }
 
     /**
      * 'compound_stmt' 'NEWLINE'
      */
     public static final class SingleInput3 extends NodeWrapper {
-        public static final ParserRule RULE =
-                ParserRule.of("single_input:3", RuleType.Conjunction);
 
-        public static SingleInput3 of(ParseTreeNode node) {
-            return new SingleInput3(node);
-        }
-
-        private SingleInput3(ParseTreeNode node) {
-            super(RULE, node);
+        public SingleInput3(ParseTreeNode node) {
+            super(ParserRules.SINGLE_INPUT_3, node);
         }
 
         public CompoundStmt compoundStmt() {
-            return get(0, CompoundStmt::of);
+            return get(0, CompoundStmt::new);
         }
 
         public String newline() {

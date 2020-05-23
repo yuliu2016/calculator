@@ -1,51 +1,41 @@
 package org.fugalang.core.calculator.pgen;
 
-import org.fugalang.core.parser.*;
+import org.fugalang.core.calculator.pgen.parser.ParserRules;
+import org.fugalang.core.parser.NodeWrapper;
+import org.fugalang.core.parser.ParseTreeNode;
 
 /**
  * power: 'atom' ['**' 'factor']
  */
 public final class Power extends NodeWrapper {
-    public static final ParserRule RULE =
-            ParserRule.of("power", RuleType.Conjunction);
 
-    public static Power of(ParseTreeNode node) {
-        return new Power(node);
-    }
-
-    private Power(ParseTreeNode node) {
-        super(RULE, node);
+    public Power(ParseTreeNode node) {
+        super(ParserRules.POWER, node);
     }
 
     public Atom atom() {
-        return get(0, Atom::of);
+        return get(0, Atom::new);
     }
 
     public Power2 factor() {
-        return get(1, Power2::of);
+        return get(1, Power2::new);
     }
 
     public boolean hasFactor() {
-        return has(1, Power2.RULE);
+        return has(1, ParserRules.POWER_2);
     }
 
     /**
      * '**' 'factor'
      */
     public static final class Power2 extends NodeWrapper {
-        public static final ParserRule RULE =
-                ParserRule.of("power:2", RuleType.Conjunction);
 
-        public static Power2 of(ParseTreeNode node) {
-            return new Power2(node);
-        }
-
-        private Power2(ParseTreeNode node) {
-            super(RULE, node);
+        public Power2(ParseTreeNode node) {
+            super(ParserRules.POWER_2, node);
         }
 
         public Factor factor() {
-            return get(1, Factor::of);
+            return get(1, Factor::new);
         }
     }
 }

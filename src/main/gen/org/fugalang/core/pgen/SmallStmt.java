@@ -1,20 +1,16 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.*;
+import org.fugalang.core.parser.NodeWrapper;
+import org.fugalang.core.parser.ParseTreeNode;
+import org.fugalang.core.pgen.parser.ParserRules;
 
 /**
  * small_stmt: 'pass' | 'break' | 'continue' | 'del_stmt' | 'return_stmt' | 'raise_stmt' | 'nonlocal_stmt' | 'assert_stmt' | 'import_name' | 'import_from' | 'assignment'
  */
 public final class SmallStmt extends NodeWrapper {
-    public static final ParserRule RULE =
-            ParserRule.of("small_stmt", RuleType.Disjunction);
 
-    public static SmallStmt of(ParseTreeNode node) {
-        return new SmallStmt(node);
-    }
-
-    private SmallStmt(ParseTreeNode node) {
-        super(RULE, node);
+    public SmallStmt(ParseTreeNode node) {
+        super(ParserRules.SMALL_STMT, node);
     }
 
     public boolean isPass() {
@@ -30,66 +26,66 @@ public final class SmallStmt extends NodeWrapper {
     }
 
     public DelStmt delStmt() {
-        return get(3, DelStmt::of);
+        return get(3, DelStmt::new);
     }
 
     public boolean hasDelStmt() {
-        return has(3, DelStmt.RULE);
+        return has(3, ParserRules.DEL_STMT);
     }
 
     public ReturnStmt returnStmt() {
-        return get(4, ReturnStmt::of);
+        return get(4, ReturnStmt::new);
     }
 
     public boolean hasReturnStmt() {
-        return has(4, ReturnStmt.RULE);
+        return has(4, ParserRules.RETURN_STMT);
     }
 
     public RaiseStmt raiseStmt() {
-        return get(5, RaiseStmt::of);
+        return get(5, RaiseStmt::new);
     }
 
     public boolean hasRaiseStmt() {
-        return has(5, RaiseStmt.RULE);
+        return has(5, ParserRules.RAISE_STMT);
     }
 
     public NonlocalStmt nonlocalStmt() {
-        return get(6, NonlocalStmt::of);
+        return get(6, NonlocalStmt::new);
     }
 
     public boolean hasNonlocalStmt() {
-        return has(6, NonlocalStmt.RULE);
+        return has(6, ParserRules.NONLOCAL_STMT);
     }
 
     public AssertStmt assertStmt() {
-        return get(7, AssertStmt::of);
+        return get(7, AssertStmt::new);
     }
 
     public boolean hasAssertStmt() {
-        return has(7, AssertStmt.RULE);
+        return has(7, ParserRules.ASSERT_STMT);
     }
 
     public ImportName importName() {
-        return get(8, ImportName::of);
+        return get(8, ImportName::new);
     }
 
     public boolean hasImportName() {
-        return has(8, ImportName.RULE);
+        return has(8, ParserRules.IMPORT_NAME);
     }
 
     public ImportFrom importFrom() {
-        return get(9, ImportFrom::of);
+        return get(9, ImportFrom::new);
     }
 
     public boolean hasImportFrom() {
-        return has(9, ImportFrom.RULE);
+        return has(9, ParserRules.IMPORT_FROM);
     }
 
     public Assignment assignment() {
-        return get(10, Assignment::of);
+        return get(10, Assignment::new);
     }
 
     public boolean hasAssignment() {
-        return has(10, Assignment.RULE);
+        return has(10, ParserRules.ASSIGNMENT);
     }
 }

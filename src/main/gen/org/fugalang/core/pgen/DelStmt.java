@@ -1,23 +1,19 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.*;
+import org.fugalang.core.parser.NodeWrapper;
+import org.fugalang.core.parser.ParseTreeNode;
+import org.fugalang.core.pgen.parser.ParserRules;
 
 /**
  * del_stmt: 'del' 'targetlist'
  */
 public final class DelStmt extends NodeWrapper {
-    public static final ParserRule RULE =
-            ParserRule.of("del_stmt", RuleType.Conjunction);
 
-    public static DelStmt of(ParseTreeNode node) {
-        return new DelStmt(node);
-    }
-
-    private DelStmt(ParseTreeNode node) {
-        super(RULE, node);
+    public DelStmt(ParseTreeNode node) {
+        super(ParserRules.DEL_STMT, node);
     }
 
     public Targetlist targetlist() {
-        return get(1, Targetlist::of);
+        return get(1, Targetlist::new);
     }
 }

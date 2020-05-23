@@ -1,6 +1,8 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.*;
+import org.fugalang.core.parser.NodeWrapper;
+import org.fugalang.core.parser.ParseTreeNode;
+import org.fugalang.core.pgen.parser.ParserRules;
 
 import java.util.List;
 
@@ -8,23 +10,17 @@ import java.util.List;
  * targetlist: 'target' (',' 'target')* [',']
  */
 public final class Targetlist extends NodeWrapper {
-    public static final ParserRule RULE =
-            ParserRule.of("targetlist", RuleType.Conjunction);
 
-    public static Targetlist of(ParseTreeNode node) {
-        return new Targetlist(node);
-    }
-
-    private Targetlist(ParseTreeNode node) {
-        super(RULE, node);
+    public Targetlist(ParseTreeNode node) {
+        super(ParserRules.TARGETLIST, node);
     }
 
     public Target target() {
-        return get(0, Target::of);
+        return get(0, Target::new);
     }
 
     public List<Targetlist2> targets() {
-        return getList(1, Targetlist2::of);
+        return getList(1, Targetlist2::new);
     }
 
     public boolean isComma() {
@@ -35,19 +31,13 @@ public final class Targetlist extends NodeWrapper {
      * ',' 'target'
      */
     public static final class Targetlist2 extends NodeWrapper {
-        public static final ParserRule RULE =
-                ParserRule.of("targetlist:2", RuleType.Conjunction);
 
-        public static Targetlist2 of(ParseTreeNode node) {
-            return new Targetlist2(node);
-        }
-
-        private Targetlist2(ParseTreeNode node) {
-            super(RULE, node);
+        public Targetlist2(ParseTreeNode node) {
+            super(ParserRules.TARGETLIST_2, node);
         }
 
         public Target target() {
-            return get(1, Target::of);
+            return get(1, Target::new);
         }
     }
 }

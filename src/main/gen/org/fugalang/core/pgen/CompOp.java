@@ -1,20 +1,16 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.*;
+import org.fugalang.core.parser.NodeWrapper;
+import org.fugalang.core.parser.ParseTreeNode;
+import org.fugalang.core.pgen.parser.ParserRules;
 
 /**
  * comp_op: '<' | '>' | '==' | '>=' | '<=' | '!=' | 'in' | 'not' 'in' | 'is' | 'is' 'not'
  */
 public final class CompOp extends NodeWrapper {
-    public static final ParserRule RULE =
-            ParserRule.of("comp_op", RuleType.Disjunction);
 
-    public static CompOp of(ParseTreeNode node) {
-        return new CompOp(node);
-    }
-
-    private CompOp(ParseTreeNode node) {
-        super(RULE, node);
+    public CompOp(ParseTreeNode node) {
+        super(ParserRules.COMP_OP, node);
     }
 
     public boolean isLess() {
@@ -46,11 +42,11 @@ public final class CompOp extends NodeWrapper {
     }
 
     public CompOp8 notIn() {
-        return get(7, CompOp8::of);
+        return get(7, CompOp8::new);
     }
 
     public boolean hasNotIn() {
-        return has(7, CompOp8.RULE);
+        return has(7, ParserRules.COMP_OP_8);
     }
 
     public boolean isIs() {
@@ -58,26 +54,20 @@ public final class CompOp extends NodeWrapper {
     }
 
     public CompOp10 isNot() {
-        return get(9, CompOp10::of);
+        return get(9, CompOp10::new);
     }
 
     public boolean hasIsNot() {
-        return has(9, CompOp10.RULE);
+        return has(9, ParserRules.COMP_OP_10);
     }
 
     /**
      * 'not' 'in'
      */
     public static final class CompOp8 extends NodeWrapper {
-        public static final ParserRule RULE =
-                ParserRule.of("comp_op:8", RuleType.Conjunction);
 
-        public static CompOp8 of(ParseTreeNode node) {
-            return new CompOp8(node);
-        }
-
-        private CompOp8(ParseTreeNode node) {
-            super(RULE, node);
+        public CompOp8(ParseTreeNode node) {
+            super(ParserRules.COMP_OP_8, node);
         }
     }
 
@@ -85,15 +75,9 @@ public final class CompOp extends NodeWrapper {
      * 'is' 'not'
      */
     public static final class CompOp10 extends NodeWrapper {
-        public static final ParserRule RULE =
-                ParserRule.of("comp_op:10", RuleType.Conjunction);
 
-        public static CompOp10 of(ParseTreeNode node) {
-            return new CompOp10(node);
-        }
-
-        private CompOp10(ParseTreeNode node) {
-            super(RULE, node);
+        public CompOp10(ParseTreeNode node) {
+            super(ParserRules.COMP_OP_10, node);
         }
     }
 }

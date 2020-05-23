@@ -1,20 +1,16 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.*;
+import org.fugalang.core.parser.NodeWrapper;
+import org.fugalang.core.parser.ParseTreeNode;
+import org.fugalang.core.pgen.parser.ParserRules;
 
 /**
  * sum_op: '+' | '-'
  */
 public final class SumOp extends NodeWrapper {
-    public static final ParserRule RULE =
-            ParserRule.of("sum_op", RuleType.Disjunction);
 
-    public static SumOp of(ParseTreeNode node) {
-        return new SumOp(node);
-    }
-
-    private SumOp(ParseTreeNode node) {
-        super(RULE, node);
+    public SumOp(ParseTreeNode node) {
+        super(ParserRules.SUM_OP, node);
     }
 
     public boolean isPlus() {

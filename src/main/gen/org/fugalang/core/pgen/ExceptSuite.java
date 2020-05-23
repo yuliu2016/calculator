@@ -1,6 +1,8 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.*;
+import org.fugalang.core.parser.NodeWrapper;
+import org.fugalang.core.parser.ParseTreeNode;
+import org.fugalang.core.pgen.parser.ParserRules;
 
 import java.util.List;
 
@@ -8,58 +10,46 @@ import java.util.List;
  * except_suite: ('except_clause' 'suite')+ ['else_suite'] ['finally_suite']
  */
 public final class ExceptSuite extends NodeWrapper {
-    public static final ParserRule RULE =
-            ParserRule.of("except_suite", RuleType.Conjunction);
 
-    public static ExceptSuite of(ParseTreeNode node) {
-        return new ExceptSuite(node);
-    }
-
-    private ExceptSuite(ParseTreeNode node) {
-        super(RULE, node);
+    public ExceptSuite(ParseTreeNode node) {
+        super(ParserRules.EXCEPT_SUITE, node);
     }
 
     public List<ExceptSuite1> exceptClauseSuites() {
-        return getList(0, ExceptSuite1::of);
+        return getList(0, ExceptSuite1::new);
     }
 
     public ElseSuite elseSuite() {
-        return get(1, ElseSuite::of);
+        return get(1, ElseSuite::new);
     }
 
     public boolean hasElseSuite() {
-        return has(1, ElseSuite.RULE);
+        return has(1, ParserRules.ELSE_SUITE);
     }
 
     public FinallySuite finallySuite() {
-        return get(2, FinallySuite::of);
+        return get(2, FinallySuite::new);
     }
 
     public boolean hasFinallySuite() {
-        return has(2, FinallySuite.RULE);
+        return has(2, ParserRules.FINALLY_SUITE);
     }
 
     /**
      * 'except_clause' 'suite'
      */
     public static final class ExceptSuite1 extends NodeWrapper {
-        public static final ParserRule RULE =
-                ParserRule.of("except_suite:1", RuleType.Conjunction);
 
-        public static ExceptSuite1 of(ParseTreeNode node) {
-            return new ExceptSuite1(node);
-        }
-
-        private ExceptSuite1(ParseTreeNode node) {
-            super(RULE, node);
+        public ExceptSuite1(ParseTreeNode node) {
+            super(ParserRules.EXCEPT_SUITE_1, node);
         }
 
         public ExceptClause exceptClause() {
-            return get(0, ExceptClause::of);
+            return get(0, ExceptClause::new);
         }
 
         public Suite suite() {
-            return get(1, Suite::of);
+            return get(1, Suite::new);
         }
     }
 }

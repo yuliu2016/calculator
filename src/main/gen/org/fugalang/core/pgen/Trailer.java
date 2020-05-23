@@ -1,60 +1,50 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.*;
+import org.fugalang.core.parser.NodeWrapper;
+import org.fugalang.core.parser.ParseTreeNode;
+import org.fugalang.core.pgen.parser.ParserRules;
 import org.fugalang.core.token.TokenType;
 
 /**
  * trailer: '.' 'NAME' | 'parameters' | 'subscript'
  */
 public final class Trailer extends NodeWrapper {
-    public static final ParserRule RULE =
-            ParserRule.of("trailer", RuleType.Disjunction);
 
-    public static Trailer of(ParseTreeNode node) {
-        return new Trailer(node);
-    }
-
-    private Trailer(ParseTreeNode node) {
-        super(RULE, node);
+    public Trailer(ParseTreeNode node) {
+        super(ParserRules.TRAILER, node);
     }
 
     public Trailer1 name() {
-        return get(0, Trailer1::of);
+        return get(0, Trailer1::new);
     }
 
     public boolean hasName() {
-        return has(0, Trailer1.RULE);
+        return has(0, ParserRules.TRAILER_1);
     }
 
     public Parameters parameters() {
-        return get(1, Parameters::of);
+        return get(1, Parameters::new);
     }
 
     public boolean hasParameters() {
-        return has(1, Parameters.RULE);
+        return has(1, ParserRules.PARAMETERS);
     }
 
     public Subscript subscript() {
-        return get(2, Subscript::of);
+        return get(2, Subscript::new);
     }
 
     public boolean hasSubscript() {
-        return has(2, Subscript.RULE);
+        return has(2, ParserRules.SUBSCRIPT);
     }
 
     /**
      * '.' 'NAME'
      */
     public static final class Trailer1 extends NodeWrapper {
-        public static final ParserRule RULE =
-                ParserRule.of("trailer:1", RuleType.Conjunction);
 
-        public static Trailer1 of(ParseTreeNode node) {
-            return new Trailer1(node);
-        }
-
-        private Trailer1(ParseTreeNode node) {
-            super(RULE, node);
+        public Trailer1(ParseTreeNode node) {
+            super(ParserRules.TRAILER_1, node);
         }
 
         public String name() {

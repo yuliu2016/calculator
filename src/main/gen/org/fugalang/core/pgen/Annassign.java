@@ -1,51 +1,41 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.*;
+import org.fugalang.core.parser.NodeWrapper;
+import org.fugalang.core.parser.ParseTreeNode;
+import org.fugalang.core.pgen.parser.ParserRules;
 
 /**
  * annassign: ':' 'expr' ['=' 'exprlist_star']
  */
 public final class Annassign extends NodeWrapper {
-    public static final ParserRule RULE =
-            ParserRule.of("annassign", RuleType.Conjunction);
 
-    public static Annassign of(ParseTreeNode node) {
-        return new Annassign(node);
-    }
-
-    private Annassign(ParseTreeNode node) {
-        super(RULE, node);
+    public Annassign(ParseTreeNode node) {
+        super(ParserRules.ANNASSIGN, node);
     }
 
     public Expr expr() {
-        return get(1, Expr::of);
+        return get(1, Expr::new);
     }
 
     public Annassign3 exprlistStar() {
-        return get(2, Annassign3::of);
+        return get(2, Annassign3::new);
     }
 
     public boolean hasExprlistStar() {
-        return has(2, Annassign3.RULE);
+        return has(2, ParserRules.ANNASSIGN_3);
     }
 
     /**
      * '=' 'exprlist_star'
      */
     public static final class Annassign3 extends NodeWrapper {
-        public static final ParserRule RULE =
-                ParserRule.of("annassign:3", RuleType.Conjunction);
 
-        public static Annassign3 of(ParseTreeNode node) {
-            return new Annassign3(node);
-        }
-
-        private Annassign3(ParseTreeNode node) {
-            super(RULE, node);
+        public Annassign3(ParseTreeNode node) {
+            super(ParserRules.ANNASSIGN_3, node);
         }
 
         public ExprlistStar exprlistStar() {
-            return get(1, ExprlistStar::of);
+            return get(1, ExprlistStar::new);
         }
     }
 }

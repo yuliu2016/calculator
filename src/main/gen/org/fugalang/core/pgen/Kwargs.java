@@ -1,24 +1,20 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.*;
+import org.fugalang.core.parser.NodeWrapper;
+import org.fugalang.core.parser.ParseTreeNode;
+import org.fugalang.core.pgen.parser.ParserRules;
 
 /**
  * kwargs: '**' 'typed_arg' [',']
  */
 public final class Kwargs extends NodeWrapper {
-    public static final ParserRule RULE =
-            ParserRule.of("kwargs", RuleType.Conjunction);
 
-    public static Kwargs of(ParseTreeNode node) {
-        return new Kwargs(node);
-    }
-
-    private Kwargs(ParseTreeNode node) {
-        super(RULE, node);
+    public Kwargs(ParseTreeNode node) {
+        super(ParserRules.KWARGS, node);
     }
 
     public TypedArg typedArg() {
-        return get(1, TypedArg::of);
+        return get(1, TypedArg::new);
     }
 
     public boolean isComma() {

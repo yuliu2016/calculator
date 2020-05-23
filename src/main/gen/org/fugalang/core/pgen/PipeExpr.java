@@ -1,35 +1,31 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.*;
+import org.fugalang.core.parser.NodeWrapper;
+import org.fugalang.core.parser.ParseTreeNode;
+import org.fugalang.core.pgen.parser.ParserRules;
 
 /**
  * pipe_expr: 'pipe_for' | 'factor'
  */
 public final class PipeExpr extends NodeWrapper {
-    public static final ParserRule RULE =
-            ParserRule.of("pipe_expr", RuleType.Disjunction);
 
-    public static PipeExpr of(ParseTreeNode node) {
-        return new PipeExpr(node);
-    }
-
-    private PipeExpr(ParseTreeNode node) {
-        super(RULE, node);
+    public PipeExpr(ParseTreeNode node) {
+        super(ParserRules.PIPE_EXPR, node);
     }
 
     public PipeFor pipeFor() {
-        return get(0, PipeFor::of);
+        return get(0, PipeFor::new);
     }
 
     public boolean hasPipeFor() {
-        return has(0, PipeFor.RULE);
+        return has(0, ParserRules.PIPE_FOR);
     }
 
     public Factor factor() {
-        return get(1, Factor::of);
+        return get(1, Factor::new);
     }
 
     public boolean hasFactor() {
-        return has(1, Factor.RULE);
+        return has(1, ParserRules.FACTOR);
     }
 }

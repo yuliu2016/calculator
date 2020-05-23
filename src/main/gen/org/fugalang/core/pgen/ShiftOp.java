@@ -1,20 +1,16 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.*;
+import org.fugalang.core.parser.NodeWrapper;
+import org.fugalang.core.parser.ParseTreeNode;
+import org.fugalang.core.pgen.parser.ParserRules;
 
 /**
  * shift_op: '<<' | '>>'
  */
 public final class ShiftOp extends NodeWrapper {
-    public static final ParserRule RULE =
-            ParserRule.of("shift_op", RuleType.Disjunction);
 
-    public static ShiftOp of(ParseTreeNode node) {
-        return new ShiftOp(node);
-    }
-
-    private ShiftOp(ParseTreeNode node) {
-        super(RULE, node);
+    public ShiftOp(ParseTreeNode node) {
+        super(ParserRules.SHIFT_OP, node);
     }
 
     public boolean isLshift() {

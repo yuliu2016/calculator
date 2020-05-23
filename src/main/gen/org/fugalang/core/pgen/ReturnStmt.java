@@ -1,27 +1,23 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.*;
+import org.fugalang.core.parser.NodeWrapper;
+import org.fugalang.core.parser.ParseTreeNode;
+import org.fugalang.core.pgen.parser.ParserRules;
 
 /**
  * return_stmt: 'return' ['exprlist_star']
  */
 public final class ReturnStmt extends NodeWrapper {
-    public static final ParserRule RULE =
-            ParserRule.of("return_stmt", RuleType.Conjunction);
 
-    public static ReturnStmt of(ParseTreeNode node) {
-        return new ReturnStmt(node);
-    }
-
-    private ReturnStmt(ParseTreeNode node) {
-        super(RULE, node);
+    public ReturnStmt(ParseTreeNode node) {
+        super(ParserRules.RETURN_STMT, node);
     }
 
     public ExprlistStar exprlistStar() {
-        return get(1, ExprlistStar::of);
+        return get(1, ExprlistStar::new);
     }
 
     public boolean hasExprlistStar() {
-        return has(1, ExprlistStar.RULE);
+        return has(1, ParserRules.EXPRLIST_STAR);
     }
 }

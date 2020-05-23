@@ -29,7 +29,9 @@ public class ClassBuilder {
     }
 
     private void resolvePrelude() {
-        addImport("org.fugalang.core.parser.*");
+        addImport("org.fugalang.core.parser.NodeWrapper");
+        addImport("org.fugalang.core.parser.ParseTreeNode");
+        addImport(packageName + ".parser.ParserRules");
     }
 
     public String getClassName() {
@@ -134,26 +136,14 @@ public class ClassBuilder {
             throw new IllegalStateException("No Rule Type");
         }
 
-        sb.append(" {\n");
+        sb.append(" {\n\n");
 
-        // rule name constant
-        sb.append("    public static final ParserRule RULE =\n")
-                .append("            ParserRule.of(\"")
-                .append(ruleName)
-                .append("\", RuleType.")
-                .append(ruleType.name())
-                .append(");\n\n");
-
-        sb.append("    public static ").append(className).append(" of(ParseTreeNode node) {\n")
-                .append("        return new ").append(className).append("(node);\n")
-                .append("    }\n\n");
-
-        sb.append("    private ")
+        sb.append("    public ")
                 .append(className);
 
-        sb.append("(ParseTreeNode node) {\n" +
-                "        super(RULE, node);\n" +
-                "    }\n");
+        var rule = ruleName.replace(":", "_").toUpperCase();
+        sb.append("(ParseTreeNode node) {\n" + "        super(ParserRules.").append(rule)
+                .append(", node);\n    }\n");
 
         for (int i = 0; i < fields.size(); i++) {
             ClassField field = fields.get(i);

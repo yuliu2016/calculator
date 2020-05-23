@@ -1,39 +1,35 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.*;
+import org.fugalang.core.parser.NodeWrapper;
+import org.fugalang.core.parser.ParseTreeNode;
+import org.fugalang.core.pgen.parser.ParserRules;
 
 /**
  * for_stmt: 'for' 'targetlist' 'in' 'exprlist' 'suite' ['else_suite']
  */
 public final class ForStmt extends NodeWrapper {
-    public static final ParserRule RULE =
-            ParserRule.of("for_stmt", RuleType.Conjunction);
 
-    public static ForStmt of(ParseTreeNode node) {
-        return new ForStmt(node);
-    }
-
-    private ForStmt(ParseTreeNode node) {
-        super(RULE, node);
+    public ForStmt(ParseTreeNode node) {
+        super(ParserRules.FOR_STMT, node);
     }
 
     public Targetlist targetlist() {
-        return get(1, Targetlist::of);
+        return get(1, Targetlist::new);
     }
 
     public Exprlist exprlist() {
-        return get(3, Exprlist::of);
+        return get(3, Exprlist::new);
     }
 
     public Suite suite() {
-        return get(4, Suite::of);
+        return get(4, Suite::new);
     }
 
     public ElseSuite elseSuite() {
-        return get(5, ElseSuite::of);
+        return get(5, ElseSuite::new);
     }
 
     public boolean hasElseSuite() {
-        return has(5, ElseSuite.RULE);
+        return has(5, ParserRules.ELSE_SUITE);
     }
 }

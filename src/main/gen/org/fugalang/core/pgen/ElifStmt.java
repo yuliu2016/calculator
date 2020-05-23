@@ -1,27 +1,23 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.*;
+import org.fugalang.core.parser.NodeWrapper;
+import org.fugalang.core.parser.ParseTreeNode;
+import org.fugalang.core.pgen.parser.ParserRules;
 
 /**
  * elif_stmt: 'elif' 'named_expr' 'suite'
  */
 public final class ElifStmt extends NodeWrapper {
-    public static final ParserRule RULE =
-            ParserRule.of("elif_stmt", RuleType.Conjunction);
 
-    public static ElifStmt of(ParseTreeNode node) {
-        return new ElifStmt(node);
-    }
-
-    private ElifStmt(ParseTreeNode node) {
-        super(RULE, node);
+    public ElifStmt(ParseTreeNode node) {
+        super(ParserRules.ELIF_STMT, node);
     }
 
     public NamedExpr namedExpr() {
-        return get(1, NamedExpr::of);
+        return get(1, NamedExpr::new);
     }
 
     public Suite suite() {
-        return get(2, Suite::of);
+        return get(2, Suite::new);
     }
 }

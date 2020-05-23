@@ -1,21 +1,17 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.*;
+import org.fugalang.core.parser.NodeWrapper;
+import org.fugalang.core.parser.ParseTreeNode;
+import org.fugalang.core.pgen.parser.ParserRules;
 import org.fugalang.core.token.TokenType;
 
 /**
  * import_as_name: 'NAME' ['as' 'NAME']
  */
 public final class ImportAsName extends NodeWrapper {
-    public static final ParserRule RULE =
-            ParserRule.of("import_as_name", RuleType.Conjunction);
 
-    public static ImportAsName of(ParseTreeNode node) {
-        return new ImportAsName(node);
-    }
-
-    private ImportAsName(ParseTreeNode node) {
-        super(RULE, node);
+    public ImportAsName(ParseTreeNode node) {
+        super(ParserRules.IMPORT_AS_NAME, node);
     }
 
     public String name() {
@@ -23,26 +19,20 @@ public final class ImportAsName extends NodeWrapper {
     }
 
     public ImportAsName2 asName() {
-        return get(1, ImportAsName2::of);
+        return get(1, ImportAsName2::new);
     }
 
     public boolean hasAsName() {
-        return has(1, ImportAsName2.RULE);
+        return has(1, ParserRules.IMPORT_AS_NAME_2);
     }
 
     /**
      * 'as' 'NAME'
      */
     public static final class ImportAsName2 extends NodeWrapper {
-        public static final ParserRule RULE =
-                ParserRule.of("import_as_name:2", RuleType.Conjunction);
 
-        public static ImportAsName2 of(ParseTreeNode node) {
-            return new ImportAsName2(node);
-        }
-
-        private ImportAsName2(ParseTreeNode node) {
-            super(RULE, node);
+        public ImportAsName2(ParseTreeNode node) {
+            super(ParserRules.IMPORT_AS_NAME_2, node);
         }
 
         public String name() {

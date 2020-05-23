@@ -1,6 +1,8 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.*;
+import org.fugalang.core.parser.NodeWrapper;
+import org.fugalang.core.parser.ParseTreeNode;
+import org.fugalang.core.pgen.parser.ParserRules;
 
 import java.util.List;
 
@@ -8,23 +10,17 @@ import java.util.List;
  * arglist: 'argument' (',' 'argument')* [',']
  */
 public final class Arglist extends NodeWrapper {
-    public static final ParserRule RULE =
-            ParserRule.of("arglist", RuleType.Conjunction);
 
-    public static Arglist of(ParseTreeNode node) {
-        return new Arglist(node);
-    }
-
-    private Arglist(ParseTreeNode node) {
-        super(RULE, node);
+    public Arglist(ParseTreeNode node) {
+        super(ParserRules.ARGLIST, node);
     }
 
     public Argument argument() {
-        return get(0, Argument::of);
+        return get(0, Argument::new);
     }
 
     public List<Arglist2> arguments() {
-        return getList(1, Arglist2::of);
+        return getList(1, Arglist2::new);
     }
 
     public boolean isComma() {
@@ -35,19 +31,13 @@ public final class Arglist extends NodeWrapper {
      * ',' 'argument'
      */
     public static final class Arglist2 extends NodeWrapper {
-        public static final ParserRule RULE =
-                ParserRule.of("arglist:2", RuleType.Conjunction);
 
-        public static Arglist2 of(ParseTreeNode node) {
-            return new Arglist2(node);
-        }
-
-        private Arglist2(ParseTreeNode node) {
-            super(RULE, node);
+        public Arglist2(ParseTreeNode node) {
+            super(ParserRules.ARGLIST_2, node);
         }
 
         public Argument argument() {
-            return get(1, Argument::of);
+            return get(1, Argument::new);
         }
     }
 }

@@ -1,6 +1,8 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.*;
+import org.fugalang.core.parser.NodeWrapper;
+import org.fugalang.core.parser.ParseTreeNode;
+import org.fugalang.core.pgen.parser.ParserRules;
 
 import java.util.List;
 
@@ -8,46 +10,34 @@ import java.util.List;
  * sum: 'term' ('sum_op' 'term')*
  */
 public final class Sum extends NodeWrapper {
-    public static final ParserRule RULE =
-            ParserRule.of("sum", RuleType.Conjunction);
 
-    public static Sum of(ParseTreeNode node) {
-        return new Sum(node);
-    }
-
-    private Sum(ParseTreeNode node) {
-        super(RULE, node);
+    public Sum(ParseTreeNode node) {
+        super(ParserRules.SUM, node);
     }
 
     public Term term() {
-        return get(0, Term::of);
+        return get(0, Term::new);
     }
 
     public List<Sum2> sumOpTerms() {
-        return getList(1, Sum2::of);
+        return getList(1, Sum2::new);
     }
 
     /**
      * 'sum_op' 'term'
      */
     public static final class Sum2 extends NodeWrapper {
-        public static final ParserRule RULE =
-                ParserRule.of("sum:2", RuleType.Conjunction);
 
-        public static Sum2 of(ParseTreeNode node) {
-            return new Sum2(node);
-        }
-
-        private Sum2(ParseTreeNode node) {
-            super(RULE, node);
+        public Sum2(ParseTreeNode node) {
+            super(ParserRules.SUM_2, node);
         }
 
         public SumOp sumOp() {
-            return get(0, SumOp::of);
+            return get(0, SumOp::new);
         }
 
         public Term term() {
-            return get(1, Term::of);
+            return get(1, Term::new);
         }
     }
 }

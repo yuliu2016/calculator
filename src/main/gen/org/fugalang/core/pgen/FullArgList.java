@@ -1,6 +1,8 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.*;
+import org.fugalang.core.parser.NodeWrapper;
+import org.fugalang.core.parser.ParseTreeNode;
+import org.fugalang.core.pgen.parser.ParserRules;
 
 import java.util.List;
 
@@ -8,50 +10,38 @@ import java.util.List;
  * full_arg_list: 'default_arg' (',' 'default_arg')* [',' ['kwargs' | 'args_kwargs']]
  */
 public final class FullArgList extends NodeWrapper {
-    public static final ParserRule RULE =
-            ParserRule.of("full_arg_list", RuleType.Conjunction);
 
-    public static FullArgList of(ParseTreeNode node) {
-        return new FullArgList(node);
-    }
-
-    private FullArgList(ParseTreeNode node) {
-        super(RULE, node);
+    public FullArgList(ParseTreeNode node) {
+        super(ParserRules.FULL_ARG_LIST, node);
     }
 
     public DefaultArg defaultArg() {
-        return get(0, DefaultArg::of);
+        return get(0, DefaultArg::new);
     }
 
     public List<FullArgList2> defaultArgs() {
-        return getList(1, FullArgList2::of);
+        return getList(1, FullArgList2::new);
     }
 
     public FullArgList3 fullArgList3() {
-        return get(2, FullArgList3::of);
+        return get(2, FullArgList3::new);
     }
 
     public boolean hasFullArgList3() {
-        return has(2, FullArgList3.RULE);
+        return has(2, ParserRules.FULL_ARG_LIST_3);
     }
 
     /**
      * ',' 'default_arg'
      */
     public static final class FullArgList2 extends NodeWrapper {
-        public static final ParserRule RULE =
-                ParserRule.of("full_arg_list:2", RuleType.Conjunction);
 
-        public static FullArgList2 of(ParseTreeNode node) {
-            return new FullArgList2(node);
-        }
-
-        private FullArgList2(ParseTreeNode node) {
-            super(RULE, node);
+        public FullArgList2(ParseTreeNode node) {
+            super(ParserRules.FULL_ARG_LIST_2, node);
         }
 
         public DefaultArg defaultArg() {
-            return get(1, DefaultArg::of);
+            return get(1, DefaultArg::new);
         }
     }
 
@@ -59,23 +49,17 @@ public final class FullArgList extends NodeWrapper {
      * ',' ['kwargs' | 'args_kwargs']
      */
     public static final class FullArgList3 extends NodeWrapper {
-        public static final ParserRule RULE =
-                ParserRule.of("full_arg_list:3", RuleType.Conjunction);
 
-        public static FullArgList3 of(ParseTreeNode node) {
-            return new FullArgList3(node);
-        }
-
-        private FullArgList3(ParseTreeNode node) {
-            super(RULE, node);
+        public FullArgList3(ParseTreeNode node) {
+            super(ParserRules.FULL_ARG_LIST_3, node);
         }
 
         public FullArgList32 kwargsOrArgsKwargs() {
-            return get(1, FullArgList32::of);
+            return get(1, FullArgList32::new);
         }
 
         public boolean hasKwargsOrArgsKwargs() {
-            return has(1, FullArgList32.RULE);
+            return has(1, ParserRules.FULL_ARG_LIST_3_2);
         }
     }
 
@@ -83,31 +67,25 @@ public final class FullArgList extends NodeWrapper {
      * 'kwargs' | 'args_kwargs'
      */
     public static final class FullArgList32 extends NodeWrapper {
-        public static final ParserRule RULE =
-                ParserRule.of("full_arg_list:3:2", RuleType.Disjunction);
 
-        public static FullArgList32 of(ParseTreeNode node) {
-            return new FullArgList32(node);
-        }
-
-        private FullArgList32(ParseTreeNode node) {
-            super(RULE, node);
+        public FullArgList32(ParseTreeNode node) {
+            super(ParserRules.FULL_ARG_LIST_3_2, node);
         }
 
         public Kwargs kwargs() {
-            return get(0, Kwargs::of);
+            return get(0, Kwargs::new);
         }
 
         public boolean hasKwargs() {
-            return has(0, Kwargs.RULE);
+            return has(0, ParserRules.KWARGS);
         }
 
         public ArgsKwargs argsKwargs() {
-            return get(1, ArgsKwargs::of);
+            return get(1, ArgsKwargs::new);
         }
 
         public boolean hasArgsKwargs() {
-            return has(1, ArgsKwargs.RULE);
+            return has(1, ParserRules.ARGS_KWARGS);
         }
     }
 }

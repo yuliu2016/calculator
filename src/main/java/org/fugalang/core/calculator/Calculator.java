@@ -116,7 +116,7 @@ public class Calculator {
                 var visitor = LexingVisitor.of(input);
                 var lexer = SimpleLexer.of(visitor);
                 var context = LazyParserContext.of(lexer, visitor, false);
-                var tree = SimpleParseTree.parse(context, Parser::sum, Sum::of);
+                var tree = SimpleParseTree.parse(context, Parser::sum, Sum::new);
 
                 var result = evaluate0(tree);
 

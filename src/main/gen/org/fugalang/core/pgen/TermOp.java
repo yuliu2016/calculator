@@ -1,20 +1,16 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.*;
+import org.fugalang.core.parser.NodeWrapper;
+import org.fugalang.core.parser.ParseTreeNode;
+import org.fugalang.core.pgen.parser.ParserRules;
 
 /**
  * term_op: '*' | '@' | '/' | '%' | '//'
  */
 public final class TermOp extends NodeWrapper {
-    public static final ParserRule RULE =
-            ParserRule.of("term_op", RuleType.Disjunction);
 
-    public static TermOp of(ParseTreeNode node) {
-        return new TermOp(node);
-    }
-
-    private TermOp(ParseTreeNode node) {
-        super(RULE, node);
+    public TermOp(ParseTreeNode node) {
+        super(ParserRules.TERM_OP, node);
     }
 
     public boolean isTimes() {

@@ -1,27 +1,23 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.*;
+import org.fugalang.core.parser.NodeWrapper;
+import org.fugalang.core.parser.ParseTreeNode;
+import org.fugalang.core.pgen.parser.ParserRules;
 
 /**
  * parameters: '(' ['arglist'] ')'
  */
 public final class Parameters extends NodeWrapper {
-    public static final ParserRule RULE =
-            ParserRule.of("parameters", RuleType.Conjunction);
 
-    public static Parameters of(ParseTreeNode node) {
-        return new Parameters(node);
-    }
-
-    private Parameters(ParseTreeNode node) {
-        super(RULE, node);
+    public Parameters(ParseTreeNode node) {
+        super(ParserRules.PARAMETERS, node);
     }
 
     public Arglist arglist() {
-        return get(1, Arglist::of);
+        return get(1, Arglist::new);
     }
 
     public boolean hasArglist() {
-        return has(1, Arglist.RULE);
+        return has(1, ParserRules.ARGLIST);
     }
 }

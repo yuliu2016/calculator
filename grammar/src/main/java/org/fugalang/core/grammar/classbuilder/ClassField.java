@@ -50,9 +50,9 @@ public class ClassField {
         return switch (resultSource.getType()) {
             case Class -> {
                 if (isSingular()) {
-                    yield "        return get(" + index + ", " + className.getType() + "::of);\n";
+                    yield "        return get(" + index + ", " + className.getType() + "::new);\n";
                 }
-                yield "        return getList(" + index + ", " + className.getRealClassName() + "::of);\n";
+                yield "        return getList(" + index + ", " + className.getRealClassName() + "::new);\n";
             }
 
             case TokenType -> {
@@ -90,8 +90,9 @@ public class ClassField {
                     yield null;
                 }
                 if (isSingular()) {
+                    var rule = className.getRuleName().replace(":", "_").toUpperCase();
                     yield "        return has(" + index + ", " +
-                            className.getType() + ".RULE);\n";
+                            "ParserRules." + rule + ");\n";
                 }
                 yield null;
             }

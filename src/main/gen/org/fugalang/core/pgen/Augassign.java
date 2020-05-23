@@ -1,20 +1,16 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.*;
+import org.fugalang.core.parser.NodeWrapper;
+import org.fugalang.core.parser.ParseTreeNode;
+import org.fugalang.core.pgen.parser.ParserRules;
 
 /**
  * augassign: '+=' | '-=' | '*=' | '@=' | '/=' | '%=' | '&=' | '|=' | '^=' | '<<=' | '>>=' | '**=' | '//='
  */
 public final class Augassign extends NodeWrapper {
-    public static final ParserRule RULE =
-            ParserRule.of("augassign", RuleType.Disjunction);
 
-    public static Augassign of(ParseTreeNode node) {
-        return new Augassign(node);
-    }
-
-    private Augassign(ParseTreeNode node) {
-        super(RULE, node);
+    public Augassign(ParseTreeNode node) {
+        super(ParserRules.AUGASSIGN, node);
     }
 
     public boolean isPlusAssign() {

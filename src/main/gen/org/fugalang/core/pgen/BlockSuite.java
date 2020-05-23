@@ -1,6 +1,8 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.*;
+import org.fugalang.core.parser.NodeWrapper;
+import org.fugalang.core.parser.ParseTreeNode;
+import org.fugalang.core.pgen.parser.ParserRules;
 import org.fugalang.core.token.TokenType;
 
 import java.util.List;
@@ -9,50 +11,38 @@ import java.util.List;
  * block_suite: '{' 'simple_stmt' '}' | '{' 'NEWLINE' 'stmt'+ '}'
  */
 public final class BlockSuite extends NodeWrapper {
-    public static final ParserRule RULE =
-            ParserRule.of("block_suite", RuleType.Disjunction);
 
-    public static BlockSuite of(ParseTreeNode node) {
-        return new BlockSuite(node);
-    }
-
-    private BlockSuite(ParseTreeNode node) {
-        super(RULE, node);
+    public BlockSuite(ParseTreeNode node) {
+        super(ParserRules.BLOCK_SUITE, node);
     }
 
     public BlockSuite1 simpleStmt() {
-        return get(0, BlockSuite1::of);
+        return get(0, BlockSuite1::new);
     }
 
     public boolean hasSimpleStmt() {
-        return has(0, BlockSuite1.RULE);
+        return has(0, ParserRules.BLOCK_SUITE_1);
     }
 
     public BlockSuite2 blockSuite2() {
-        return get(1, BlockSuite2::of);
+        return get(1, BlockSuite2::new);
     }
 
     public boolean hasBlockSuite2() {
-        return has(1, BlockSuite2.RULE);
+        return has(1, ParserRules.BLOCK_SUITE_2);
     }
 
     /**
      * '{' 'simple_stmt' '}'
      */
     public static final class BlockSuite1 extends NodeWrapper {
-        public static final ParserRule RULE =
-                ParserRule.of("block_suite:1", RuleType.Conjunction);
 
-        public static BlockSuite1 of(ParseTreeNode node) {
-            return new BlockSuite1(node);
-        }
-
-        private BlockSuite1(ParseTreeNode node) {
-            super(RULE, node);
+        public BlockSuite1(ParseTreeNode node) {
+            super(ParserRules.BLOCK_SUITE_1, node);
         }
 
         public SimpleStmt simpleStmt() {
-            return get(1, SimpleStmt::of);
+            return get(1, SimpleStmt::new);
         }
     }
 
@@ -60,15 +50,9 @@ public final class BlockSuite extends NodeWrapper {
      * '{' 'NEWLINE' 'stmt'+ '}'
      */
     public static final class BlockSuite2 extends NodeWrapper {
-        public static final ParserRule RULE =
-                ParserRule.of("block_suite:2", RuleType.Conjunction);
 
-        public static BlockSuite2 of(ParseTreeNode node) {
-            return new BlockSuite2(node);
-        }
-
-        private BlockSuite2(ParseTreeNode node) {
-            super(RULE, node);
+        public BlockSuite2(ParseTreeNode node) {
+            super(ParserRules.BLOCK_SUITE_2, node);
         }
 
         public String newline() {
@@ -76,7 +60,7 @@ public final class BlockSuite extends NodeWrapper {
         }
 
         public List<Stmt> stmts() {
-            return getList(2, Stmt::of);
+            return getList(2, Stmt::new);
         }
     }
 }

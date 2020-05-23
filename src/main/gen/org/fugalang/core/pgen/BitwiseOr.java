@@ -1,6 +1,8 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.*;
+import org.fugalang.core.parser.NodeWrapper;
+import org.fugalang.core.parser.ParseTreeNode;
+import org.fugalang.core.pgen.parser.ParserRules;
 
 import java.util.List;
 
@@ -8,42 +10,30 @@ import java.util.List;
  * bitwise_or: 'bitwise_xor' ('|' 'bitwise_xor')*
  */
 public final class BitwiseOr extends NodeWrapper {
-    public static final ParserRule RULE =
-            ParserRule.of("bitwise_or", RuleType.Conjunction);
 
-    public static BitwiseOr of(ParseTreeNode node) {
-        return new BitwiseOr(node);
-    }
-
-    private BitwiseOr(ParseTreeNode node) {
-        super(RULE, node);
+    public BitwiseOr(ParseTreeNode node) {
+        super(ParserRules.BITWISE_OR, node);
     }
 
     public BitwiseXor bitwiseXor() {
-        return get(0, BitwiseXor::of);
+        return get(0, BitwiseXor::new);
     }
 
     public List<BitwiseOr2> bitwiseXors() {
-        return getList(1, BitwiseOr2::of);
+        return getList(1, BitwiseOr2::new);
     }
 
     /**
      * '|' 'bitwise_xor'
      */
     public static final class BitwiseOr2 extends NodeWrapper {
-        public static final ParserRule RULE =
-                ParserRule.of("bitwise_or:2", RuleType.Conjunction);
 
-        public static BitwiseOr2 of(ParseTreeNode node) {
-            return new BitwiseOr2(node);
-        }
-
-        private BitwiseOr2(ParseTreeNode node) {
-            super(RULE, node);
+        public BitwiseOr2(ParseTreeNode node) {
+            super(ParserRules.BITWISE_OR_2, node);
         }
 
         public BitwiseXor bitwiseXor() {
-            return get(1, BitwiseXor::of);
+            return get(1, BitwiseXor::new);
         }
     }
 }

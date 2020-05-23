@@ -1,6 +1,8 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.*;
+import org.fugalang.core.parser.NodeWrapper;
+import org.fugalang.core.parser.ParseTreeNode;
+import org.fugalang.core.pgen.parser.ParserRules;
 
 import java.util.List;
 
@@ -8,23 +10,17 @@ import java.util.List;
  * named_expr_list: 'named_expr_star' (',' 'named_expr_star')* [',']
  */
 public final class NamedExprList extends NodeWrapper {
-    public static final ParserRule RULE =
-            ParserRule.of("named_expr_list", RuleType.Conjunction);
 
-    public static NamedExprList of(ParseTreeNode node) {
-        return new NamedExprList(node);
-    }
-
-    private NamedExprList(ParseTreeNode node) {
-        super(RULE, node);
+    public NamedExprList(ParseTreeNode node) {
+        super(ParserRules.NAMED_EXPR_LIST, node);
     }
 
     public NamedExprStar namedExprStar() {
-        return get(0, NamedExprStar::of);
+        return get(0, NamedExprStar::new);
     }
 
     public List<NamedExprList2> namedExprStars() {
-        return getList(1, NamedExprList2::of);
+        return getList(1, NamedExprList2::new);
     }
 
     public boolean isComma() {
@@ -35,19 +31,13 @@ public final class NamedExprList extends NodeWrapper {
      * ',' 'named_expr_star'
      */
     public static final class NamedExprList2 extends NodeWrapper {
-        public static final ParserRule RULE =
-                ParserRule.of("named_expr_list:2", RuleType.Conjunction);
 
-        public static NamedExprList2 of(ParseTreeNode node) {
-            return new NamedExprList2(node);
-        }
-
-        private NamedExprList2(ParseTreeNode node) {
-            super(RULE, node);
+        public NamedExprList2(ParseTreeNode node) {
+            super(ParserRules.NAMED_EXPR_LIST_2, node);
         }
 
         public NamedExprStar namedExprStar() {
-            return get(1, NamedExprStar::of);
+            return get(1, NamedExprStar::new);
         }
     }
 }

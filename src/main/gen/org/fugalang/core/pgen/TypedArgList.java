@@ -1,43 +1,39 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.*;
+import org.fugalang.core.parser.NodeWrapper;
+import org.fugalang.core.parser.ParseTreeNode;
+import org.fugalang.core.pgen.parser.ParserRules;
 
 /**
  * typed_arg_list: 'kwargs' | 'args_kwargs' | 'full_arg_list'
  */
 public final class TypedArgList extends NodeWrapper {
-    public static final ParserRule RULE =
-            ParserRule.of("typed_arg_list", RuleType.Disjunction);
 
-    public static TypedArgList of(ParseTreeNode node) {
-        return new TypedArgList(node);
-    }
-
-    private TypedArgList(ParseTreeNode node) {
-        super(RULE, node);
+    public TypedArgList(ParseTreeNode node) {
+        super(ParserRules.TYPED_ARG_LIST, node);
     }
 
     public Kwargs kwargs() {
-        return get(0, Kwargs::of);
+        return get(0, Kwargs::new);
     }
 
     public boolean hasKwargs() {
-        return has(0, Kwargs.RULE);
+        return has(0, ParserRules.KWARGS);
     }
 
     public ArgsKwargs argsKwargs() {
-        return get(1, ArgsKwargs::of);
+        return get(1, ArgsKwargs::new);
     }
 
     public boolean hasArgsKwargs() {
-        return has(1, ArgsKwargs.RULE);
+        return has(1, ParserRules.ARGS_KWARGS);
     }
 
     public FullArgList fullArgList() {
-        return get(2, FullArgList::of);
+        return get(2, FullArgList::new);
     }
 
     public boolean hasFullArgList() {
-        return has(2, FullArgList.RULE);
+        return has(2, ParserRules.FULL_ARG_LIST);
     }
 }

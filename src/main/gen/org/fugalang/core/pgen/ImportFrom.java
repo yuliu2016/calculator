@@ -1,43 +1,33 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.*;
+import org.fugalang.core.parser.NodeWrapper;
+import org.fugalang.core.parser.ParseTreeNode;
+import org.fugalang.core.pgen.parser.ParserRules;
 
 /**
  * import_from: 'from' 'import_from_names' 'import' ('*' | '(' 'import_as_names' [','] ')' | 'import_as_names')
  */
 public final class ImportFrom extends NodeWrapper {
-    public static final ParserRule RULE =
-            ParserRule.of("import_from", RuleType.Conjunction);
 
-    public static ImportFrom of(ParseTreeNode node) {
-        return new ImportFrom(node);
-    }
-
-    private ImportFrom(ParseTreeNode node) {
-        super(RULE, node);
+    public ImportFrom(ParseTreeNode node) {
+        super(ParserRules.IMPORT_FROM, node);
     }
 
     public ImportFromNames importFromNames() {
-        return get(1, ImportFromNames::of);
+        return get(1, ImportFromNames::new);
     }
 
     public ImportFrom4 importFrom4() {
-        return get(3, ImportFrom4::of);
+        return get(3, ImportFrom4::new);
     }
 
     /**
      * '*' | '(' 'import_as_names' [','] ')' | 'import_as_names'
      */
     public static final class ImportFrom4 extends NodeWrapper {
-        public static final ParserRule RULE =
-                ParserRule.of("import_from:4", RuleType.Disjunction);
 
-        public static ImportFrom4 of(ParseTreeNode node) {
-            return new ImportFrom4(node);
-        }
-
-        private ImportFrom4(ParseTreeNode node) {
-            super(RULE, node);
+        public ImportFrom4(ParseTreeNode node) {
+            super(ParserRules.IMPORT_FROM_4, node);
         }
 
         public boolean isTimes() {
@@ -45,19 +35,19 @@ public final class ImportFrom extends NodeWrapper {
         }
 
         public ImportFrom42 importFrom42() {
-            return get(1, ImportFrom42::of);
+            return get(1, ImportFrom42::new);
         }
 
         public boolean hasImportFrom42() {
-            return has(1, ImportFrom42.RULE);
+            return has(1, ParserRules.IMPORT_FROM_4_2);
         }
 
         public ImportAsNames importAsNames() {
-            return get(2, ImportAsNames::of);
+            return get(2, ImportAsNames::new);
         }
 
         public boolean hasImportAsNames() {
-            return has(2, ImportAsNames.RULE);
+            return has(2, ParserRules.IMPORT_AS_NAMES);
         }
     }
 
@@ -65,19 +55,13 @@ public final class ImportFrom extends NodeWrapper {
      * '(' 'import_as_names' [','] ')'
      */
     public static final class ImportFrom42 extends NodeWrapper {
-        public static final ParserRule RULE =
-                ParserRule.of("import_from:4:2", RuleType.Conjunction);
 
-        public static ImportFrom42 of(ParseTreeNode node) {
-            return new ImportFrom42(node);
-        }
-
-        private ImportFrom42(ParseTreeNode node) {
-            super(RULE, node);
+        public ImportFrom42(ParseTreeNode node) {
+            super(ParserRules.IMPORT_FROM_4_2, node);
         }
 
         public ImportAsNames importAsNames() {
-            return get(1, ImportAsNames::of);
+            return get(1, ImportAsNames::new);
         }
 
         public boolean isComma() {

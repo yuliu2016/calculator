@@ -1,43 +1,39 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.*;
+import org.fugalang.core.parser.NodeWrapper;
+import org.fugalang.core.parser.ParseTreeNode;
+import org.fugalang.core.pgen.parser.ParserRules;
 
 /**
  * expr: 'conditional' | 'funcdef' | 'disjunction'
  */
 public final class Expr extends NodeWrapper {
-    public static final ParserRule RULE =
-            ParserRule.of("expr", RuleType.Disjunction);
 
-    public static Expr of(ParseTreeNode node) {
-        return new Expr(node);
-    }
-
-    private Expr(ParseTreeNode node) {
-        super(RULE, node);
+    public Expr(ParseTreeNode node) {
+        super(ParserRules.EXPR, node);
     }
 
     public Conditional conditional() {
-        return get(0, Conditional::of);
+        return get(0, Conditional::new);
     }
 
     public boolean hasConditional() {
-        return has(0, Conditional.RULE);
+        return has(0, ParserRules.CONDITIONAL);
     }
 
     public Funcdef funcdef() {
-        return get(1, Funcdef::of);
+        return get(1, Funcdef::new);
     }
 
     public boolean hasFuncdef() {
-        return has(1, Funcdef.RULE);
+        return has(1, ParserRules.FUNCDEF);
     }
 
     public Disjunction disjunction() {
-        return get(2, Disjunction::of);
+        return get(2, Disjunction::new);
     }
 
     public boolean hasDisjunction() {
-        return has(2, Disjunction.RULE);
+        return has(2, ParserRules.DISJUNCTION);
     }
 }

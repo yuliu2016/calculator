@@ -1,76 +1,66 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.*;
+import org.fugalang.core.parser.NodeWrapper;
+import org.fugalang.core.parser.ParseTreeNode;
+import org.fugalang.core.pgen.parser.ParserRules;
 import org.fugalang.core.token.TokenType;
 
 /**
  * argument: 'NAME' ':=' 'expr' | 'NAME' '=' 'expr' | '**' 'expr' | '*' 'expr' | 'expr'
  */
 public final class Argument extends NodeWrapper {
-    public static final ParserRule RULE =
-            ParserRule.of("argument", RuleType.Disjunction);
 
-    public static Argument of(ParseTreeNode node) {
-        return new Argument(node);
-    }
-
-    private Argument(ParseTreeNode node) {
-        super(RULE, node);
+    public Argument(ParseTreeNode node) {
+        super(ParserRules.ARGUMENT, node);
     }
 
     public Argument1 nameExpr() {
-        return get(0, Argument1::of);
+        return get(0, Argument1::new);
     }
 
     public boolean hasNameExpr() {
-        return has(0, Argument1.RULE);
+        return has(0, ParserRules.ARGUMENT_1);
     }
 
     public Argument2 nameExpr1() {
-        return get(1, Argument2::of);
+        return get(1, Argument2::new);
     }
 
     public boolean hasNameExpr1() {
-        return has(1, Argument2.RULE);
+        return has(1, ParserRules.ARGUMENT_2);
     }
 
     public Argument3 expr() {
-        return get(2, Argument3::of);
+        return get(2, Argument3::new);
     }
 
     public boolean hasExpr() {
-        return has(2, Argument3.RULE);
+        return has(2, ParserRules.ARGUMENT_3);
     }
 
     public Argument4 expr1() {
-        return get(3, Argument4::of);
+        return get(3, Argument4::new);
     }
 
     public boolean hasExpr1() {
-        return has(3, Argument4.RULE);
+        return has(3, ParserRules.ARGUMENT_4);
     }
 
     public Expr expr2() {
-        return get(4, Expr::of);
+        return get(4, Expr::new);
     }
 
     public boolean hasExpr2() {
-        return has(4, Expr.RULE);
+        return has(4, ParserRules.EXPR);
     }
 
     /**
      * 'NAME' ':=' 'expr'
      */
     public static final class Argument1 extends NodeWrapper {
-        public static final ParserRule RULE =
-                ParserRule.of("argument:1", RuleType.Conjunction);
 
-        public static Argument1 of(ParseTreeNode node) {
-            return new Argument1(node);
-        }
-
-        private Argument1(ParseTreeNode node) {
-            super(RULE, node);
+        public Argument1(ParseTreeNode node) {
+            super(ParserRules.ARGUMENT_1, node);
         }
 
         public String name() {
@@ -78,7 +68,7 @@ public final class Argument extends NodeWrapper {
         }
 
         public Expr expr() {
-            return get(2, Expr::of);
+            return get(2, Expr::new);
         }
     }
 
@@ -86,15 +76,9 @@ public final class Argument extends NodeWrapper {
      * 'NAME' '=' 'expr'
      */
     public static final class Argument2 extends NodeWrapper {
-        public static final ParserRule RULE =
-                ParserRule.of("argument:2", RuleType.Conjunction);
 
-        public static Argument2 of(ParseTreeNode node) {
-            return new Argument2(node);
-        }
-
-        private Argument2(ParseTreeNode node) {
-            super(RULE, node);
+        public Argument2(ParseTreeNode node) {
+            super(ParserRules.ARGUMENT_2, node);
         }
 
         public String name() {
@@ -102,7 +86,7 @@ public final class Argument extends NodeWrapper {
         }
 
         public Expr expr() {
-            return get(2, Expr::of);
+            return get(2, Expr::new);
         }
     }
 
@@ -110,19 +94,13 @@ public final class Argument extends NodeWrapper {
      * '**' 'expr'
      */
     public static final class Argument3 extends NodeWrapper {
-        public static final ParserRule RULE =
-                ParserRule.of("argument:3", RuleType.Conjunction);
 
-        public static Argument3 of(ParseTreeNode node) {
-            return new Argument3(node);
-        }
-
-        private Argument3(ParseTreeNode node) {
-            super(RULE, node);
+        public Argument3(ParseTreeNode node) {
+            super(ParserRules.ARGUMENT_3, node);
         }
 
         public Expr expr() {
-            return get(1, Expr::of);
+            return get(1, Expr::new);
         }
     }
 
@@ -130,19 +108,13 @@ public final class Argument extends NodeWrapper {
      * '*' 'expr'
      */
     public static final class Argument4 extends NodeWrapper {
-        public static final ParserRule RULE =
-                ParserRule.of("argument:4", RuleType.Conjunction);
 
-        public static Argument4 of(ParseTreeNode node) {
-            return new Argument4(node);
-        }
-
-        private Argument4(ParseTreeNode node) {
-            super(RULE, node);
+        public Argument4(ParseTreeNode node) {
+            super(ParserRules.ARGUMENT_4, node);
         }
 
         public Expr expr() {
-            return get(1, Expr::of);
+            return get(1, Expr::new);
         }
     }
 }

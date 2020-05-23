@@ -1,35 +1,31 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.*;
+import org.fugalang.core.parser.NodeWrapper;
+import org.fugalang.core.parser.ParseTreeNode;
+import org.fugalang.core.pgen.parser.ParserRules;
 
 /**
  * named_expr_star: 'star_expr' | 'named_expr'
  */
 public final class NamedExprStar extends NodeWrapper {
-    public static final ParserRule RULE =
-            ParserRule.of("named_expr_star", RuleType.Disjunction);
 
-    public static NamedExprStar of(ParseTreeNode node) {
-        return new NamedExprStar(node);
-    }
-
-    private NamedExprStar(ParseTreeNode node) {
-        super(RULE, node);
+    public NamedExprStar(ParseTreeNode node) {
+        super(ParserRules.NAMED_EXPR_STAR, node);
     }
 
     public StarExpr starExpr() {
-        return get(0, StarExpr::of);
+        return get(0, StarExpr::new);
     }
 
     public boolean hasStarExpr() {
-        return has(0, StarExpr.RULE);
+        return has(0, ParserRules.STAR_EXPR);
     }
 
     public NamedExpr namedExpr() {
-        return get(1, NamedExpr::of);
+        return get(1, NamedExpr::new);
     }
 
     public boolean hasNamedExpr() {
-        return has(1, NamedExpr.RULE);
+        return has(1, ParserRules.NAMED_EXPR);
     }
 }

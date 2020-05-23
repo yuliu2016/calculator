@@ -1,45 +1,41 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.*;
+import org.fugalang.core.parser.NodeWrapper;
+import org.fugalang.core.parser.ParseTreeNode;
+import org.fugalang.core.pgen.parser.ParserRules;
 import org.fugalang.core.token.TokenType;
 
 /**
  * atom: 'tuple_atom' | 'list_atom' | 'dict_or_set' | 'NAME' | 'NUMBER' | 'STRING' | 'None' | 'True' | 'False'
  */
 public final class Atom extends NodeWrapper {
-    public static final ParserRule RULE =
-            ParserRule.of("atom", RuleType.Disjunction);
 
-    public static Atom of(ParseTreeNode node) {
-        return new Atom(node);
-    }
-
-    private Atom(ParseTreeNode node) {
-        super(RULE, node);
+    public Atom(ParseTreeNode node) {
+        super(ParserRules.ATOM, node);
     }
 
     public TupleAtom tupleAtom() {
-        return get(0, TupleAtom::of);
+        return get(0, TupleAtom::new);
     }
 
     public boolean hasTupleAtom() {
-        return has(0, TupleAtom.RULE);
+        return has(0, ParserRules.TUPLE_ATOM);
     }
 
     public ListAtom listAtom() {
-        return get(1, ListAtom::of);
+        return get(1, ListAtom::new);
     }
 
     public boolean hasListAtom() {
-        return has(1, ListAtom.RULE);
+        return has(1, ParserRules.LIST_ATOM);
     }
 
     public DictOrSet dictOrSet() {
-        return get(2, DictOrSet::of);
+        return get(2, DictOrSet::new);
     }
 
     public boolean hasDictOrSet() {
-        return has(2, DictOrSet.RULE);
+        return has(2, ParserRules.DICT_OR_SET);
     }
 
     public String name() {

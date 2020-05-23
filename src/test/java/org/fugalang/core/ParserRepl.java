@@ -26,7 +26,7 @@ public class ParserRepl {
                 var visitor = LexingVisitor.of(s);
                 var lexer = SimpleLexer.of(visitor);
                 var context = LazyParserContext.of(lexer, visitor, false);
-                var tree = SimpleParseTree.parse(context, Parser::single_input, SingleInput::of);
+                var tree = SimpleParseTree.parse(context, Parser::single_input, SingleInput::new);
 
                 System.out.println(ParseTreePPrint.format(tree.getNode(), 2));
             } catch (SyntaxError e) {

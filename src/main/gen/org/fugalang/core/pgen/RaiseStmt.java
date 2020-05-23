@@ -1,55 +1,45 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.*;
+import org.fugalang.core.parser.NodeWrapper;
+import org.fugalang.core.parser.ParseTreeNode;
+import org.fugalang.core.pgen.parser.ParserRules;
 
 /**
  * raise_stmt: 'raise' ['expr' ['from' 'expr']]
  */
 public final class RaiseStmt extends NodeWrapper {
-    public static final ParserRule RULE =
-            ParserRule.of("raise_stmt", RuleType.Conjunction);
 
-    public static RaiseStmt of(ParseTreeNode node) {
-        return new RaiseStmt(node);
-    }
-
-    private RaiseStmt(ParseTreeNode node) {
-        super(RULE, node);
+    public RaiseStmt(ParseTreeNode node) {
+        super(ParserRules.RAISE_STMT, node);
     }
 
     public RaiseStmt2 raiseStmt2() {
-        return get(1, RaiseStmt2::of);
+        return get(1, RaiseStmt2::new);
     }
 
     public boolean hasRaiseStmt2() {
-        return has(1, RaiseStmt2.RULE);
+        return has(1, ParserRules.RAISE_STMT_2);
     }
 
     /**
      * 'expr' ['from' 'expr']
      */
     public static final class RaiseStmt2 extends NodeWrapper {
-        public static final ParserRule RULE =
-                ParserRule.of("raise_stmt:2", RuleType.Conjunction);
 
-        public static RaiseStmt2 of(ParseTreeNode node) {
-            return new RaiseStmt2(node);
-        }
-
-        private RaiseStmt2(ParseTreeNode node) {
-            super(RULE, node);
+        public RaiseStmt2(ParseTreeNode node) {
+            super(ParserRules.RAISE_STMT_2, node);
         }
 
         public Expr expr() {
-            return get(0, Expr::of);
+            return get(0, Expr::new);
         }
 
         public RaiseStmt22 fromExpr() {
-            return get(1, RaiseStmt22::of);
+            return get(1, RaiseStmt22::new);
         }
 
         public boolean hasFromExpr() {
-            return has(1, RaiseStmt22.RULE);
+            return has(1, ParserRules.RAISE_STMT_2_2);
         }
     }
 
@@ -57,19 +47,13 @@ public final class RaiseStmt extends NodeWrapper {
      * 'from' 'expr'
      */
     public static final class RaiseStmt22 extends NodeWrapper {
-        public static final ParserRule RULE =
-                ParserRule.of("raise_stmt:2:2", RuleType.Conjunction);
 
-        public static RaiseStmt22 of(ParseTreeNode node) {
-            return new RaiseStmt22(node);
-        }
-
-        private RaiseStmt22(ParseTreeNode node) {
-            super(RULE, node);
+        public RaiseStmt22(ParseTreeNode node) {
+            super(ParserRules.RAISE_STMT_2_2, node);
         }
 
         public Expr expr() {
-            return get(1, Expr::of);
+            return get(1, Expr::new);
         }
     }
 }

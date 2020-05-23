@@ -1,6 +1,8 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.*;
+import org.fugalang.core.parser.NodeWrapper;
+import org.fugalang.core.parser.ParseTreeNode;
+import org.fugalang.core.pgen.parser.ParserRules;
 
 import java.util.List;
 
@@ -8,23 +10,17 @@ import java.util.List;
  * dict_maker: 'dict_item' (',' 'dict_item')* [',']
  */
 public final class DictMaker extends NodeWrapper {
-    public static final ParserRule RULE =
-            ParserRule.of("dict_maker", RuleType.Conjunction);
 
-    public static DictMaker of(ParseTreeNode node) {
-        return new DictMaker(node);
-    }
-
-    private DictMaker(ParseTreeNode node) {
-        super(RULE, node);
+    public DictMaker(ParseTreeNode node) {
+        super(ParserRules.DICT_MAKER, node);
     }
 
     public DictItem dictItem() {
-        return get(0, DictItem::of);
+        return get(0, DictItem::new);
     }
 
     public List<DictMaker2> dictItems() {
-        return getList(1, DictMaker2::of);
+        return getList(1, DictMaker2::new);
     }
 
     public boolean isComma() {
@@ -35,19 +31,13 @@ public final class DictMaker extends NodeWrapper {
      * ',' 'dict_item'
      */
     public static final class DictMaker2 extends NodeWrapper {
-        public static final ParserRule RULE =
-                ParserRule.of("dict_maker:2", RuleType.Conjunction);
 
-        public static DictMaker2 of(ParseTreeNode node) {
-            return new DictMaker2(node);
-        }
-
-        private DictMaker2(ParseTreeNode node) {
-            super(RULE, node);
+        public DictMaker2(ParseTreeNode node) {
+            super(ParserRules.DICT_MAKER_2, node);
         }
 
         public DictItem dictItem() {
-            return get(1, DictItem::of);
+            return get(1, DictItem::new);
         }
     }
 }

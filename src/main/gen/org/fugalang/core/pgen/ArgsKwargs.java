@@ -1,6 +1,8 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.*;
+import org.fugalang.core.parser.NodeWrapper;
+import org.fugalang.core.parser.ParseTreeNode;
+import org.fugalang.core.pgen.parser.ParserRules;
 
 import java.util.List;
 
@@ -8,54 +10,42 @@ import java.util.List;
  * args_kwargs: '*' ['typed_arg'] (',' 'default_arg')* [',' ['kwargs']]
  */
 public final class ArgsKwargs extends NodeWrapper {
-    public static final ParserRule RULE =
-            ParserRule.of("args_kwargs", RuleType.Conjunction);
 
-    public static ArgsKwargs of(ParseTreeNode node) {
-        return new ArgsKwargs(node);
-    }
-
-    private ArgsKwargs(ParseTreeNode node) {
-        super(RULE, node);
+    public ArgsKwargs(ParseTreeNode node) {
+        super(ParserRules.ARGS_KWARGS, node);
     }
 
     public TypedArg typedArg() {
-        return get(1, TypedArg::of);
+        return get(1, TypedArg::new);
     }
 
     public boolean hasTypedArg() {
-        return has(1, TypedArg.RULE);
+        return has(1, ParserRules.TYPED_ARG);
     }
 
     public List<ArgsKwargs3> defaultArgs() {
-        return getList(2, ArgsKwargs3::of);
+        return getList(2, ArgsKwargs3::new);
     }
 
     public ArgsKwargs4 argsKwargs4() {
-        return get(3, ArgsKwargs4::of);
+        return get(3, ArgsKwargs4::new);
     }
 
     public boolean hasArgsKwargs4() {
-        return has(3, ArgsKwargs4.RULE);
+        return has(3, ParserRules.ARGS_KWARGS_4);
     }
 
     /**
      * ',' 'default_arg'
      */
     public static final class ArgsKwargs3 extends NodeWrapper {
-        public static final ParserRule RULE =
-                ParserRule.of("args_kwargs:3", RuleType.Conjunction);
 
-        public static ArgsKwargs3 of(ParseTreeNode node) {
-            return new ArgsKwargs3(node);
-        }
-
-        private ArgsKwargs3(ParseTreeNode node) {
-            super(RULE, node);
+        public ArgsKwargs3(ParseTreeNode node) {
+            super(ParserRules.ARGS_KWARGS_3, node);
         }
 
         public DefaultArg defaultArg() {
-            return get(1, DefaultArg::of);
+            return get(1, DefaultArg::new);
         }
     }
 
@@ -63,23 +53,17 @@ public final class ArgsKwargs extends NodeWrapper {
      * ',' ['kwargs']
      */
     public static final class ArgsKwargs4 extends NodeWrapper {
-        public static final ParserRule RULE =
-                ParserRule.of("args_kwargs:4", RuleType.Conjunction);
 
-        public static ArgsKwargs4 of(ParseTreeNode node) {
-            return new ArgsKwargs4(node);
-        }
-
-        private ArgsKwargs4(ParseTreeNode node) {
-            super(RULE, node);
+        public ArgsKwargs4(ParseTreeNode node) {
+            super(ParserRules.ARGS_KWARGS_4, node);
         }
 
         public Kwargs kwargs() {
-            return get(1, Kwargs::of);
+            return get(1, Kwargs::new);
         }
 
         public boolean hasKwargs() {
-            return has(1, Kwargs.RULE);
+            return has(1, ParserRules.KWARGS);
         }
     }
 }

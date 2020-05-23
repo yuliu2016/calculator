@@ -1,6 +1,8 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.*;
+import org.fugalang.core.parser.NodeWrapper;
+import org.fugalang.core.parser.ParseTreeNode;
+import org.fugalang.core.pgen.parser.ParserRules;
 
 import java.util.List;
 
@@ -8,23 +10,17 @@ import java.util.List;
  * set_maker: 'expr_or_star' (',' 'expr_or_star')* [',']
  */
 public final class SetMaker extends NodeWrapper {
-    public static final ParserRule RULE =
-            ParserRule.of("set_maker", RuleType.Conjunction);
 
-    public static SetMaker of(ParseTreeNode node) {
-        return new SetMaker(node);
-    }
-
-    private SetMaker(ParseTreeNode node) {
-        super(RULE, node);
+    public SetMaker(ParseTreeNode node) {
+        super(ParserRules.SET_MAKER, node);
     }
 
     public ExprOrStar exprOrStar() {
-        return get(0, ExprOrStar::of);
+        return get(0, ExprOrStar::new);
     }
 
     public List<SetMaker2> exprOrStars() {
-        return getList(1, SetMaker2::of);
+        return getList(1, SetMaker2::new);
     }
 
     public boolean isComma() {
@@ -35,19 +31,13 @@ public final class SetMaker extends NodeWrapper {
      * ',' 'expr_or_star'
      */
     public static final class SetMaker2 extends NodeWrapper {
-        public static final ParserRule RULE =
-                ParserRule.of("set_maker:2", RuleType.Conjunction);
 
-        public static SetMaker2 of(ParseTreeNode node) {
-            return new SetMaker2(node);
-        }
-
-        private SetMaker2(ParseTreeNode node) {
-            super(RULE, node);
+        public SetMaker2(ParseTreeNode node) {
+            super(ParserRules.SET_MAKER_2, node);
         }
 
         public ExprOrStar exprOrStar() {
-            return get(1, ExprOrStar::of);
+            return get(1, ExprOrStar::new);
         }
     }
 }

@@ -1,55 +1,45 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.*;
+import org.fugalang.core.parser.NodeWrapper;
+import org.fugalang.core.parser.ParseTreeNode;
+import org.fugalang.core.pgen.parser.ParserRules;
 
 /**
  * func_suite: ':' 'expr' | 'block_suite'
  */
 public final class FuncSuite extends NodeWrapper {
-    public static final ParserRule RULE =
-            ParserRule.of("func_suite", RuleType.Disjunction);
 
-    public static FuncSuite of(ParseTreeNode node) {
-        return new FuncSuite(node);
-    }
-
-    private FuncSuite(ParseTreeNode node) {
-        super(RULE, node);
+    public FuncSuite(ParseTreeNode node) {
+        super(ParserRules.FUNC_SUITE, node);
     }
 
     public FuncSuite1 expr() {
-        return get(0, FuncSuite1::of);
+        return get(0, FuncSuite1::new);
     }
 
     public boolean hasExpr() {
-        return has(0, FuncSuite1.RULE);
+        return has(0, ParserRules.FUNC_SUITE_1);
     }
 
     public BlockSuite blockSuite() {
-        return get(1, BlockSuite::of);
+        return get(1, BlockSuite::new);
     }
 
     public boolean hasBlockSuite() {
-        return has(1, BlockSuite.RULE);
+        return has(1, ParserRules.BLOCK_SUITE);
     }
 
     /**
      * ':' 'expr'
      */
     public static final class FuncSuite1 extends NodeWrapper {
-        public static final ParserRule RULE =
-                ParserRule.of("func_suite:1", RuleType.Conjunction);
 
-        public static FuncSuite1 of(ParseTreeNode node) {
-            return new FuncSuite1(node);
-        }
-
-        private FuncSuite1(ParseTreeNode node) {
-            super(RULE, node);
+        public FuncSuite1(ParseTreeNode node) {
+            super(ParserRules.FUNC_SUITE_1, node);
         }
 
         public Expr expr() {
-            return get(1, Expr::of);
+            return get(1, Expr::new);
         }
     }
 }

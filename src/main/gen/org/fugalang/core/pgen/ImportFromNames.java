@@ -1,6 +1,8 @@
 package org.fugalang.core.pgen;
 
-import org.fugalang.core.parser.*;
+import org.fugalang.core.parser.NodeWrapper;
+import org.fugalang.core.parser.ParseTreeNode;
+import org.fugalang.core.pgen.parser.ParserRules;
 
 import java.util.List;
 
@@ -8,23 +10,17 @@ import java.util.List;
  * import_from_names: '.'* 'dotted_name' | '.'+
  */
 public final class ImportFromNames extends NodeWrapper {
-    public static final ParserRule RULE =
-            ParserRule.of("import_from_names", RuleType.Disjunction);
 
-    public static ImportFromNames of(ParseTreeNode node) {
-        return new ImportFromNames(node);
-    }
-
-    private ImportFromNames(ParseTreeNode node) {
-        super(RULE, node);
+    public ImportFromNames(ParseTreeNode node) {
+        super(ParserRules.IMPORT_FROM_NAMES, node);
     }
 
     public ImportFromNames1 importFromNames1() {
-        return get(0, ImportFromNames1::of);
+        return get(0, ImportFromNames1::new);
     }
 
     public boolean hasImportFromNames1() {
-        return has(0, ImportFromNames1.RULE);
+        return has(0, ParserRules.IMPORT_FROM_NAMES_1);
     }
 
     public List<Boolean> isDots() {
@@ -35,15 +31,9 @@ public final class ImportFromNames extends NodeWrapper {
      * '.'* 'dotted_name'
      */
     public static final class ImportFromNames1 extends NodeWrapper {
-        public static final ParserRule RULE =
-                ParserRule.of("import_from_names:1", RuleType.Conjunction);
 
-        public static ImportFromNames1 of(ParseTreeNode node) {
-            return new ImportFromNames1(node);
-        }
-
-        private ImportFromNames1(ParseTreeNode node) {
-            super(RULE, node);
+        public ImportFromNames1(ParseTreeNode node) {
+            super(ParserRules.IMPORT_FROM_NAMES_1, node);
         }
 
         public List<Boolean> isDots() {
@@ -51,7 +41,7 @@ public final class ImportFromNames extends NodeWrapper {
         }
 
         public DottedName dottedName() {
-            return get(1, DottedName::of);
+            return get(1, DottedName::new);
         }
     }
 }
