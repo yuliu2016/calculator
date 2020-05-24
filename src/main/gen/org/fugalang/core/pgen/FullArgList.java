@@ -18,7 +18,7 @@ public final class FullArgList extends NodeWrapper {
         return get(0, DefaultArg.class);
     }
 
-    public List<FullArgList2> defaultArgs() {
+    public List<FullArgList2> commaDefaultArgs() {
         return getList(1, FullArgList2.class);
     }
 

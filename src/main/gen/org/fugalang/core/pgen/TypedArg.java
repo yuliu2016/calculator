@@ -17,11 +17,11 @@ public final class TypedArg extends NodeWrapper {
         return get(0, TokenType.NAME);
     }
 
-    public TypedArg2 expr() {
+    public TypedArg2 colonExpr() {
         return get(1, TypedArg2.class);
     }
 
-    public boolean hasExpr() {
+    public boolean hasColonExpr() {
         return has(1);
     }
 

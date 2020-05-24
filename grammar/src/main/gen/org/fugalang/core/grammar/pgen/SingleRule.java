@@ -17,11 +17,11 @@ public final class SingleRule extends NodeWrapper {
         return get(0, TokenType.NAME);
     }
 
-    public SingleRule3 newline() {
+    public SingleRule3 newlineBitOr() {
         return get(2, SingleRule3.class);
     }
 
-    public boolean hasNewline() {
+    public boolean hasNewlineBitOr() {
         return has(2);
     }
 
@@ -29,7 +29,7 @@ public final class SingleRule extends NodeWrapper {
         return get(3, OrRule.class);
     }
 
-    public String newline1() {
+    public String newline() {
         return get(4, TokenType.NEWLINE);
     }
 

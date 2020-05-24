@@ -12,11 +12,11 @@ public final class FuncSuite extends NodeWrapper {
         super(node);
     }
 
-    public FuncSuite1 expr() {
+    public FuncSuite1 colonExpr() {
         return get(0, FuncSuite1.class);
     }
 
-    public boolean hasExpr() {
+    public boolean hasColonExpr() {
         return has(0);
     }
 

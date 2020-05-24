@@ -12,19 +12,19 @@ public final class DictItem extends NodeWrapper {
         super(node);
     }
 
-    public DictItem1 exprExpr() {
+    public DictItem1 exprColonExpr() {
         return get(0, DictItem1.class);
     }
 
-    public boolean hasExprExpr() {
+    public boolean hasExprColonExpr() {
         return has(0);
     }
 
-    public DictItem2 bitwiseOr() {
+    public DictItem2 powerBitwiseOr() {
         return get(1, DictItem2.class);
     }
 
-    public boolean hasBitwiseOr() {
+    public boolean hasPowerBitwiseOr() {
         return has(1);
     }
 

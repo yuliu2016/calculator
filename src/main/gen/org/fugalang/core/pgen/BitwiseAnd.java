@@ -18,7 +18,7 @@ public final class BitwiseAnd extends NodeWrapper {
         return get(0, ShiftExpr.class);
     }
 
-    public List<BitwiseAnd2> shiftExprs() {
+    public List<BitwiseAnd2> bitAndShiftExprs() {
         return getList(1, BitwiseAnd2.class);
     }
 

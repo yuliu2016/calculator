@@ -47,7 +47,7 @@ public final class Assignment extends NodeWrapper {
             return has(0);
         }
 
-        public List<Assignment32> exprlistStars() {
+        public List<Assignment32> assignExprlistStars() {
             return getList(1, Assignment32.class);
         }
 

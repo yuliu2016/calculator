@@ -18,7 +18,7 @@ public final class DottedAsNames extends NodeWrapper {
         return get(0, DottedAsName.class);
     }
 
-    public List<DottedAsNames2> dottedAsNames() {
+    public List<DottedAsNames2> commaDottedAsNames() {
         return getList(1, DottedAsNames2.class);
     }
 

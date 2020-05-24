@@ -21,19 +21,19 @@ public final class Target extends NodeWrapper {
         return has(0);
     }
 
-    public Target2 targetlist() {
+    public Target2 lparTargetlistRpar() {
         return get(1, Target2.class);
     }
 
-    public boolean hasTargetlist() {
+    public boolean hasLparTargetlistRpar() {
         return has(1);
     }
 
-    public Target3 target() {
+    public Target3 timesTarget() {
         return get(2, Target3.class);
     }
 
-    public boolean hasTarget() {
+    public boolean hasTimesTarget() {
         return has(2);
     }
 

@@ -18,7 +18,7 @@ public final class ImportAsNames extends NodeWrapper {
         return get(0, ImportAsName.class);
     }
 
-    public List<ImportAsNames2> importAsNames() {
+    public List<ImportAsNames2> commaImportAsNames() {
         return getList(1, ImportAsNames2.class);
     }
 

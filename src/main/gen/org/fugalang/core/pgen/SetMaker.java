@@ -18,7 +18,7 @@ public final class SetMaker extends NodeWrapper {
         return get(0, ExprOrStar.class);
     }
 
-    public List<SetMaker2> exprOrStars() {
+    public List<SetMaker2> commaExprOrStars() {
         return getList(1, SetMaker2.class);
     }
 

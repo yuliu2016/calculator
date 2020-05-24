@@ -18,7 +18,7 @@ public final class SimpleStmt extends NodeWrapper {
         return get(0, SmallStmt.class);
     }
 
-    public List<SimpleStmt2> smallStmts() {
+    public List<SimpleStmt2> semicolonSmallStmts() {
         return getList(1, SimpleStmt2.class);
     }
 

@@ -18,7 +18,7 @@ public final class Exprlist extends NodeWrapper {
         return get(0, Expr.class);
     }
 
-    public List<Exprlist2> exprs() {
+    public List<Exprlist2> commaExprs() {
         return getList(1, Exprlist2.class);
     }
 

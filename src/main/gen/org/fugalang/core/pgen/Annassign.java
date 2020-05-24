@@ -16,11 +16,11 @@ public final class Annassign extends NodeWrapper {
         return get(1, Expr.class);
     }
 
-    public Annassign3 exprlistStar() {
+    public Annassign3 assignExprlistStar() {
         return get(2, Annassign3.class);
     }
 
-    public boolean hasExprlistStar() {
+    public boolean hasAssignExprlistStar() {
         return has(2);
     }
 

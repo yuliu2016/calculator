@@ -18,7 +18,7 @@ public final class BitwiseOr extends NodeWrapper {
         return get(0, BitwiseXor.class);
     }
 
-    public List<BitwiseOr2> bitwiseXors() {
+    public List<BitwiseOr2> bitOrBitwiseXors() {
         return getList(1, BitwiseOr2.class);
     }
 

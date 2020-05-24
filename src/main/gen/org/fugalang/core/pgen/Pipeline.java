@@ -18,7 +18,7 @@ public final class Pipeline extends NodeWrapper {
         return get(0, Factor.class);
     }
 
-    public List<Pipeline2> pipeExprs() {
+    public List<Pipeline2> pipePipeExprs() {
         return getList(1, Pipeline2.class);
     }
 

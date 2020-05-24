@@ -147,14 +147,14 @@ public class MetaParser {
     }
 
     /**
-     * sub_rule: '(' or_rule ')' | '[' or_rule ']' | NAME | STRING
+     * sub_rule: group | optional | NAME | STRING
      */
     public static boolean sub_rule(ParseTree t, int lv) {
         var m = t.enter(lv, SUB_RULE);
         if (m != null) return m;
         boolean r;
-        r = sub_rule_1(t, lv + 1);
-        r = r || sub_rule_2(t, lv + 1);
+        r = group(t, lv + 1);
+        r = r || optional(t, lv + 1);
         r = r || t.consume(TokenType.NAME);
         r = r || t.consume(TokenType.STRING);
         t.exit(r);
@@ -162,10 +162,10 @@ public class MetaParser {
     }
 
     /**
-     * '(' or_rule ')'
+     * group: '(' or_rule ')'
      */
-    private static boolean sub_rule_1(ParseTree t, int lv) {
-        var m = t.enter(lv, SUB_RULE_1);
+    public static boolean group(ParseTree t, int lv) {
+        var m = t.enter(lv, GROUP);
         if (m != null) return m;
         boolean r;
         r = t.consume("(");
@@ -176,10 +176,10 @@ public class MetaParser {
     }
 
     /**
-     * '[' or_rule ']'
+     * optional: '[' or_rule ']'
      */
-    private static boolean sub_rule_2(ParseTree t, int lv) {
-        var m = t.enter(lv, SUB_RULE_2);
+    public static boolean optional(ParseTree t, int lv) {
+        var m = t.enter(lv, OPTIONAL);
         if (m != null) return m;
         boolean r;
         r = t.consume("[");

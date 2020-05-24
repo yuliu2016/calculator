@@ -13,11 +13,11 @@ public final class Trailer extends NodeWrapper {
         super(node);
     }
 
-    public Trailer1 name() {
+    public Trailer1 dotName() {
         return get(0, Trailer1.class);
     }
 
-    public boolean hasName() {
+    public boolean hasDotName() {
         return has(0);
     }
 

@@ -16,11 +16,11 @@ public final class DefaultArg extends NodeWrapper {
         return get(0, TypedArg.class);
     }
 
-    public DefaultArg2 expr() {
+    public DefaultArg2 assignExpr() {
         return get(1, DefaultArg2.class);
     }
 
-    public boolean hasExpr() {
+    public boolean hasAssignExpr() {
         return has(1);
     }
 

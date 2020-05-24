@@ -19,7 +19,7 @@ public final class DottedName extends NodeWrapper {
         return get(0, TokenType.NAME);
     }
 
-    public List<DottedName2> names() {
+    public List<DottedName2> dotNames() {
         return getList(1, DottedName2.class);
     }
 

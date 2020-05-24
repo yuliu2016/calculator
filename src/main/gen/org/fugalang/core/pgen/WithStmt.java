@@ -18,7 +18,7 @@ public final class WithStmt extends NodeWrapper {
         return get(1, WithItem.class);
     }
 
-    public List<WithStmt3> withItems() {
+    public List<WithStmt3> commaWithItems() {
         return getList(2, WithStmt3.class);
     }
 

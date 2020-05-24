@@ -12,11 +12,11 @@ public final class Suite extends NodeWrapper {
         super(node);
     }
 
-    public Suite1 simpleStmt() {
+    public Suite1 colonSimpleStmt() {
         return get(0, Suite1.class);
     }
 
-    public boolean hasSimpleStmt() {
+    public boolean hasColonSimpleStmt() {
         return has(0);
     }
 

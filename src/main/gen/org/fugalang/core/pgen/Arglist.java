@@ -18,7 +18,7 @@ public final class Arglist extends NodeWrapper {
         return get(0, Argument.class);
     }
 
-    public List<Arglist2> arguments() {
+    public List<Arglist2> commaArguments() {
         return getList(1, Arglist2.class);
     }
 

@@ -5,7 +5,7 @@ import org.fugalang.core.parser.ParseTreeNode;
 import org.fugalang.core.token.TokenType;
 
 /**
- * sub_rule: '(' or_rule ')' | '[' or_rule ']' | NAME | STRING
+ * sub_rule: group | optional | NAME | STRING
  */
 public final class SubRule extends NodeWrapper {
 
@@ -13,19 +13,19 @@ public final class SubRule extends NodeWrapper {
         super(node);
     }
 
-    public SubRule1 orRule() {
-        return get(0, SubRule1.class);
+    public Group group() {
+        return get(0, Group.class);
     }
 
-    public boolean hasOrRule() {
+    public boolean hasGroup() {
         return has(0);
     }
 
-    public SubRule2 orRule1() {
-        return get(1, SubRule2.class);
+    public Optional optional() {
+        return get(1, Optional.class);
     }
 
-    public boolean hasOrRule1() {
+    public boolean hasOptional() {
         return has(1);
     }
 
@@ -43,33 +43,5 @@ public final class SubRule extends NodeWrapper {
 
     public boolean hasString() {
         return has(3);
-    }
-
-    /**
-     * '(' or_rule ')'
-     */
-    public static final class SubRule1 extends NodeWrapper {
-
-        public SubRule1(ParseTreeNode node) {
-            super(node);
-        }
-
-        public OrRule orRule() {
-            return get(1, OrRule.class);
-        }
-    }
-
-    /**
-     * '[' or_rule ']'
-     */
-    public static final class SubRule2 extends NodeWrapper {
-
-        public SubRule2(ParseTreeNode node) {
-            super(node);
-        }
-
-        public OrRule orRule() {
-            return get(1, OrRule.class);
-        }
     }
 }

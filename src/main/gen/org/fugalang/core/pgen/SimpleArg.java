@@ -17,11 +17,11 @@ public final class SimpleArg extends NodeWrapper {
         return get(0, TokenType.NAME);
     }
 
-    public SimpleArg2 expr() {
+    public SimpleArg2 assignExpr() {
         return get(1, SimpleArg2.class);
     }
 
-    public boolean hasExpr() {
+    public boolean hasAssignExpr() {
         return has(1);
     }
 

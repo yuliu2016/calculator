@@ -18,7 +18,7 @@ public final class ExprlistStar extends NodeWrapper {
         return get(0, ExprOrStar.class);
     }
 
-    public List<ExprlistStar2> exprOrStars() {
+    public List<ExprlistStar2> commaExprOrStars() {
         return getList(1, ExprlistStar2.class);
     }
 

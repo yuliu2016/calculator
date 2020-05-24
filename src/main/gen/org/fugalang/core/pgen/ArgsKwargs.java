@@ -22,7 +22,7 @@ public final class ArgsKwargs extends NodeWrapper {
         return has(1);
     }
 
-    public List<ArgsKwargs3> defaultArgs() {
+    public List<ArgsKwargs3> commaDefaultArgs() {
         return getList(2, ArgsKwargs3.class);
     }
 

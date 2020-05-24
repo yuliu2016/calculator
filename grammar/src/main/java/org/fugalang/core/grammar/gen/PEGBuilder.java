@@ -161,11 +161,11 @@ public class PEGBuilder {
         var repeatType = PEGCompat.getRepeatType(repeatRule);
 
         switch (PEGCompat.getRuleType(subRule)) {
-            case Group -> addOrRuleAsComponent(className, cb, subRule.orRule().orRule(),
+            case Group -> addOrRuleAsComponent(className, cb, subRule.group().orRule(),
                     repeatType, REQUIRED);
 
             case Optional -> addOrRuleAsComponent(className, cb,
-                    subRule.orRule1().orRule(), repeatType, OPTIONAL);
+                    subRule.optional().orRule(), repeatType, OPTIONAL);
 
             case Token -> addToken(cb, repeatType, PEGCompat.getSubruleString(subRule), isOptional);
         }

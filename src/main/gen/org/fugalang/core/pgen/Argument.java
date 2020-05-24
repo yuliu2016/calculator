@@ -13,43 +13,43 @@ public final class Argument extends NodeWrapper {
         super(node);
     }
 
-    public Argument1 nameExpr() {
+    public Argument1 nameAsgnExprExpr() {
         return get(0, Argument1.class);
     }
 
-    public boolean hasNameExpr() {
+    public boolean hasNameAsgnExprExpr() {
         return has(0);
     }
 
-    public Argument2 nameExpr1() {
+    public Argument2 nameAssignExpr() {
         return get(1, Argument2.class);
     }
 
-    public boolean hasNameExpr1() {
+    public boolean hasNameAssignExpr() {
         return has(1);
     }
 
-    public Argument3 expr() {
+    public Argument3 powerExpr() {
         return get(2, Argument3.class);
     }
 
-    public boolean hasExpr() {
+    public boolean hasPowerExpr() {
         return has(2);
     }
 
-    public Argument4 expr1() {
+    public Argument4 timesExpr() {
         return get(3, Argument4.class);
     }
 
-    public boolean hasExpr1() {
+    public boolean hasTimesExpr() {
         return has(3);
     }
 
-    public Expr expr2() {
+    public Expr expr() {
         return get(4, Expr.class);
     }
 
-    public boolean hasExpr2() {
+    public boolean hasExpr() {
         return has(4);
     }
 

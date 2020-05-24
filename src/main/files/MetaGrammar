@@ -5,4 +5,6 @@ single_rule: NAME ':' [NEWLINE '|'] or_rule NEWLINE
 or_rule:     and_rule ([NEWLINE] '|' and_rule)*
 and_rule:    repeat_rule+
 repeat_rule: sub_rule ['*' | '+']
-sub_rule:    '(' or_rule ')' | '[' or_rule ']' | NAME | STRING
+sub_rule:    group | optional | NAME | STRING
+group: '(' or_rule ')'
+optional: '[' or_rule ']'

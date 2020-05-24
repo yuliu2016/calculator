@@ -18,7 +18,7 @@ public final class DictMaker extends NodeWrapper {
         return get(0, DictItem.class);
     }
 
-    public List<DictMaker2> dictItems() {
+    public List<DictMaker2> commaDictItems() {
         return getList(1, DictMaker2.class);
     }
 

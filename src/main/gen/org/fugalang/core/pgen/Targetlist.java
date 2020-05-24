@@ -18,7 +18,7 @@ public final class Targetlist extends NodeWrapper {
         return get(0, Target.class);
     }
 
-    public List<Targetlist2> targets() {
+    public List<Targetlist2> commaTargets() {
         return getList(1, Targetlist2.class);
     }
 

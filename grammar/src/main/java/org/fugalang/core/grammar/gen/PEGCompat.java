@@ -33,8 +33,8 @@ public class PEGCompat {
     }
 
     public static String constructString(SubRule subRule) {
-        return subRule.hasOrRule() ? "(" + constructString(subRule.orRule().orRule()) + ")" :
-                subRule.hasOrRule1() ? "[" + constructString(subRule.orRule1().orRule()) + "]" :
+        return subRule.hasGroup() ? "(" + constructString(subRule.group().orRule()) + ")" :
+                subRule.hasOptional() ? "[" + constructString(subRule.optional().orRule()) + "]" :
                         subRule.hasName() ? subRule.name() : "'" + subRule.string() + "'";
     }
 
@@ -44,8 +44,8 @@ public class PEGCompat {
     }
 
     public static SubRuleType getRuleType(SubRule subRule) {
-        return subRule.hasOrRule() ? SubRuleType.Group :
-                subRule.hasOrRule1() ? SubRuleType.Optional :
+        return subRule.hasGroup() ? SubRuleType.Group :
+                subRule.hasOptional() ? SubRuleType.Optional :
                         SubRuleType.Token;
     }
 

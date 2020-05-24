@@ -18,7 +18,7 @@ public final class Slicelist extends NodeWrapper {
         return get(0, Slice.class);
     }
 
-    public List<Slicelist2> slices() {
+    public List<Slicelist2> commaSlices() {
         return getList(1, Slicelist2.class);
     }
 

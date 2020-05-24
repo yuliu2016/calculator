@@ -13,11 +13,11 @@ public final class NamedExpr extends NodeWrapper {
         super(node);
     }
 
-    public NamedExpr1 nameExpr() {
+    public NamedExpr1 nameAsgnExprExpr() {
         return get(0, NamedExpr1.class);
     }
 
-    public boolean hasNameExpr() {
+    public boolean hasNameAsgnExprExpr() {
         return has(0);
     }
 

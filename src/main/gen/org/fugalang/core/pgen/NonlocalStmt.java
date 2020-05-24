@@ -19,7 +19,7 @@ public final class NonlocalStmt extends NodeWrapper {
         return get(1, TokenType.NAME);
     }
 
-    public List<NonlocalStmt3> names() {
+    public List<NonlocalStmt3> commaNames() {
         return getList(2, NonlocalStmt3.class);
     }
 

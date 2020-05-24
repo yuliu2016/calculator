@@ -15,11 +15,11 @@ public final class BlockSuite extends NodeWrapper {
         super(node);
     }
 
-    public BlockSuite1 simpleStmt() {
+    public BlockSuite1 lbraceSimpleStmtRbrace() {
         return get(0, BlockSuite1.class);
     }
 
-    public boolean hasSimpleStmt() {
+    public boolean hasLbraceSimpleStmtRbrace() {
         return has(0);
     }
 

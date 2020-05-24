@@ -16,11 +16,11 @@ public final class Power extends NodeWrapper {
         return get(0, Primary.class);
     }
 
-    public Power2 factor() {
+    public Power2 powerFactor() {
         return get(1, Power2.class);
     }
 
-    public boolean hasFactor() {
+    public boolean hasPowerFactor() {
         return has(1);
     }
 
