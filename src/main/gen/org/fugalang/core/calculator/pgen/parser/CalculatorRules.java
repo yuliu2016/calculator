@@ -15,8 +15,8 @@ public class CalculatorRules {
     public static final ParserRule FACTOR = or_rule("factor");
     public static final ParserRule FACTOR_1 = and_rule("factor:1");
     public static final ParserRule FACTOR_1_1 = or_rule("factor:1:1");
-    public static final ParserRule POWER = and_rule("power");
-    public static final ParserRule POWER_2 = and_rule("power:2");
+    public static final ParserRule POWER = or_rule("power");
+    public static final ParserRule POWER_1 = and_rule("power:1");
     public static final ParserRule ATOM = or_rule("atom");
     public static final ParserRule ATOM_1 = and_rule("atom:1");
 }

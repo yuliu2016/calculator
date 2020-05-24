@@ -146,26 +146,27 @@ public class CalculatorParser {
     }
 
     /**
-     * power: atom ['**' factor]
+     * power: atom '**' factor | atom
      */
     public static boolean power(ParseTree t, int lv) {
         var m = t.enter(lv, POWER);
         if (m != null) return m;
         boolean r;
-        r = atom(t, lv + 1);
-        if (r) power_2(t, lv + 1);
+        r = power_1(t, lv + 1);
+        r = r || atom(t, lv + 1);
         t.exit(r);
         return r;
     }
 
     /**
-     * '**' factor
+     * atom '**' factor
      */
-    private static boolean power_2(ParseTree t, int lv) {
-        var m = t.enter(lv, POWER_2);
+    private static boolean power_1(ParseTree t, int lv) {
+        var m = t.enter(lv, POWER_1);
         if (m != null) return m;
         boolean r;
-        r = t.consume("**");
+        r = atom(t, lv + 1);
+        r = r && t.consume("**");
         r = r && factor(t, lv + 1);
         t.exit(r);
         return r;

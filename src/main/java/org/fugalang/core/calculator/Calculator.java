@@ -12,12 +12,12 @@ import java.util.Scanner;
 
 public class Calculator {
 
-    private static double evaluate0(Sum sumExpr) {
-        var sum = evaluate0(sumExpr.term());
+    private static double evaluateSum(Sum sumExpr) {
+        var sum = evaluateTerm(sumExpr.term());
 
         for (var opTerm : sumExpr.sum2s()) {
             var term = opTerm.term();
-            var value = evaluate0(term);
+            var value = evaluateTerm(term);
 
             if (opTerm.plusOrMinus().isPlus()) {
                 sum += value;
@@ -29,12 +29,12 @@ public class Calculator {
         return sum;
     }
 
-    private static double evaluate0(Term term) {
-        var product = evaluate0(term.factor());
+    private static double evaluateTerm(Term term) {
+        var product = evaluateFactor(term.factor());
 
         for (var opFactor : term.term2s()) {
             var factor = opFactor.factor();
-            var value = evaluate0(factor);
+            var value = evaluateFactor(factor);
 
             if (opFactor.term21().isTimes()) {
                 product *= value;
@@ -49,40 +49,38 @@ public class Calculator {
         return product;
     }
 
-    private static double evaluate0(Factor factor) {
+    private static double evaluateFactor(Factor factor) {
 
         if (factor.hasPower()) {
-            return evaluate0(factor.power());
+            return evaluatePower(factor.power());
         } else if (factor.hasFactor1()) {
             var factor1 = factor.factor1();
             if (factor1.factor11().isBitNot()) {
-                return ~((int) evaluate0(factor1.factor()));
+                return ~((int) evaluateFactor(factor1.factor()));
             }
             if (factor1.factor11().isMinus()) {
-                return -evaluate0(factor1.factor());
+                return -evaluateFactor(factor1.factor());
             }
             if (factor1.factor11().isPlus()) {
-                return +evaluate0(factor1.factor());
+                return +evaluateFactor(factor1.factor());
             }
         }
         throw new IllegalStateException("Illegal value");
     }
 
-    private static double evaluate0(Power power) {
-
-        var pow = evaluate0(power.atom());
-
-        if (power.hasFactor()) {
-            pow = Math.pow(pow, evaluate0(power.factor().factor()));
+    private static double evaluatePower(Power power) {
+        if (power.hasAtomFactor()) {
+            var exp = power.atomFactor();
+            return Math.pow(evaluateAtom(exp.atom()), evaluateFactor(exp.factor()));
+        } else {
+            return evaluateAtom(power.atom());
         }
-
-        return pow;
     }
 
-    private static double evaluate0(Atom atom) {
+    private static double evaluateAtom(Atom atom) {
 
         if (atom.hasSum()) {
-            return evaluate0(atom.sum().sum());
+            return evaluateSum(atom.sum().sum());
         } else if (atom.hasNumber()) {
             var valStr = atom.number()
                     .replace("_", "")
@@ -118,7 +116,7 @@ public class Calculator {
                 var context = LazyParserContext.of(lexer, visitor, false);
                 var tree = SimpleParseTree.parse(context, CalculatorParser::sum, Sum::new);
 
-                var result = evaluate0(tree);
+                var result = evaluateSum(tree);
 
                 System.out.println(result);
             } catch (SyntaxError e) {

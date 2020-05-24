@@ -60,8 +60,8 @@ public class SimpleParseTree implements ParseTree {
 
             if (memo_at_pos.containsKey(rule)) {
 
-                context.log("memo hit for pos: " + pos + " and rule: " + rule);
                 var value = memo_at_pos.get(rule);
+                context.log("Memo hit for pos: " + pos + " and rule: " + rule + "; " + value);
 
                 if (value.hasResult()) {
                     addNode(value.getResult());

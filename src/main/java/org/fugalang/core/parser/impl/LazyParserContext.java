@@ -50,6 +50,7 @@ public class LazyParserContext implements ParserContext {
     @Override
     public void log(String message) {
         if (debug) System.out.println(message);
+        else System.out.println("Debug off: " + message);
     }
 
     @Override
