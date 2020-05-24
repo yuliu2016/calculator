@@ -1,25 +1,21 @@
-sum: term (('+'|'-') term)*
-term: factor (('*'|'/'|'%') factor)*
-factor: ('+'|'-'|'~') factor | power
+# Calculator Grammar
+
+sum:
+    | sum '+' term
+    | sum '-' term
+    | term
+
+term:
+    | term '*' factor
+    | term '/' factor
+    | term '%' factor
+    | factor
+
+factor:
+    | '+' factor
+    | '-' factor
+    | '~' factor
+    | power
+
 power: atom '**' factor | atom
 atom: '(' sum ')' | NUMBER
-
-# sum:
-#     | sum '+' term
-#     | sum '-' term
-#     | term
-#
-# term:
-#     | term '*' factor
-#     | term '/' factor
-#     | term '%' factor
-#     | factor
-#
-# factor:
-#     | '+' factor
-#     | '-' factor
-#     | '~' factor
-#     | power
-#
-# power: atom '**' factor | atom
-# atom: '(' sum ')' | NUMBER

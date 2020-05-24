@@ -9,24 +9,21 @@ import static org.fugalang.core.grammar.util.ParserStringUtil.*;
 
 public class FieldName {
     public static String getSmartName(ClassName className, AndRule andRule, TokenConverter converter) {
-        if (andRule.repeatRules().stream().allMatch(FieldName::isSingle)) {
-            StringBuilder sb1 = null;
-            StringBuilder sb2 = null;
+        if (andRule.repeatRules().size() <= 3 &&
+                andRule.repeatRules().stream().allMatch(FieldName::isSingle)) {
+
+            StringBuilder sb = null;
             for (RepeatRule rule : andRule.repeatRules()) {
                 var subRuleString = PEGCompat.getSubruleString(rule.subRule());
+                if (sb == null) sb = new StringBuilder();
                 if (isWord(subRuleString)) {
-                    if (sb1 == null) sb1 = new StringBuilder();
-                    sb1.append(convertCase(subRuleString));
+                    sb.append(convertCase(subRuleString));
                 } else {
-                    if (sb2 == null) sb2 = new StringBuilder();
-                    sb2.append(converter.checkToken(subRuleString).orElseThrow().getFieldName());
+                    sb.append(converter.checkToken(subRuleString).orElseThrow().getFieldName());
                 }
             }
-            if (sb1 != null) {
-                return decap(sb1.toString());
-            }
-            if (sb2 != null) {
-                return decap(sb2.toString());
+            if (sb != null) {
+                return decap(sb.toString());
             }
             throw new IllegalArgumentException();
         }

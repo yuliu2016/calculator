@@ -9,138 +9,154 @@ import static org.fugalang.core.calculator.pgen.parser.CalculatorRules.*;
 public class CalculatorParser {
 
     /**
-     * sum: term (('+' | '-') term)*
+     * sum: sum '+' term | sum '-' term | term
      */
     public static boolean sum(ParseTree t, int lv) {
         var m = t.enter(lv, SUM);
         if (m != null) return m;
         boolean r;
-        r = term(t, lv + 1);
-        if (r) sum_2_loop(t, lv);
+        r = sum_1(t, lv + 1);
+        r = r || sum_2(t, lv + 1);
+        r = r || term(t, lv + 1);
         t.exit(r);
         return r;
     }
 
-    private static void sum_2_loop(ParseTree t, int lv) {
-        t.enterLoop();
-        while (true) {
-            var p = t.position();
-            if (!sum_2(t, lv + 1) || t.loopGuard(p)) break;
-        }
-        t.exitLoop();
-    }
-
     /**
-     * ('+' | '-') term
+     * sum '+' term
      */
-    private static boolean sum_2(ParseTree t, int lv) {
-        var m = t.enter(lv, SUM_2);
+    private static boolean sum_1(ParseTree t, int lv) {
+        var m = t.enter(lv, SUM_1);
         if (m != null) return m;
         boolean r;
-        r = sum_2_1(t, lv + 1);
+        r = sum(t, lv + 1);
+        r = r && t.consume("+");
         r = r && term(t, lv + 1);
         t.exit(r);
         return r;
     }
 
     /**
-     * '+' | '-'
+     * sum '-' term
      */
-    private static boolean sum_2_1(ParseTree t, int lv) {
-        var m = t.enter(lv, SUM_2_1);
+    private static boolean sum_2(ParseTree t, int lv) {
+        var m = t.enter(lv, SUM_2);
         if (m != null) return m;
         boolean r;
-        r = t.consume("+");
-        r = r || t.consume("-");
+        r = sum(t, lv + 1);
+        r = r && t.consume("-");
+        r = r && term(t, lv + 1);
         t.exit(r);
         return r;
     }
 
     /**
-     * term: factor (('*' | '/' | '%') factor)*
+     * term: term '*' factor | term '/' factor | term '%' factor | factor
      */
     public static boolean term(ParseTree t, int lv) {
         var m = t.enter(lv, TERM);
         if (m != null) return m;
         boolean r;
-        r = factor(t, lv + 1);
-        if (r) term_2_loop(t, lv);
+        r = term_1(t, lv + 1);
+        r = r || term_2(t, lv + 1);
+        r = r || term_3(t, lv + 1);
+        r = r || factor(t, lv + 1);
         t.exit(r);
         return r;
     }
 
-    private static void term_2_loop(ParseTree t, int lv) {
-        t.enterLoop();
-        while (true) {
-            var p = t.position();
-            if (!term_2(t, lv + 1) || t.loopGuard(p)) break;
-        }
-        t.exitLoop();
-    }
-
     /**
-     * ('*' | '/' | '%') factor
+     * term '*' factor
      */
-    private static boolean term_2(ParseTree t, int lv) {
-        var m = t.enter(lv, TERM_2);
+    private static boolean term_1(ParseTree t, int lv) {
+        var m = t.enter(lv, TERM_1);
         if (m != null) return m;
         boolean r;
-        r = term_2_1(t, lv + 1);
+        r = term(t, lv + 1);
+        r = r && t.consume("*");
         r = r && factor(t, lv + 1);
         t.exit(r);
         return r;
     }
 
     /**
-     * '*' | '/' | '%'
+     * term '/' factor
      */
-    private static boolean term_2_1(ParseTree t, int lv) {
-        var m = t.enter(lv, TERM_2_1);
+    private static boolean term_2(ParseTree t, int lv) {
+        var m = t.enter(lv, TERM_2);
         if (m != null) return m;
         boolean r;
-        r = t.consume("*");
-        r = r || t.consume("/");
-        r = r || t.consume("%");
+        r = term(t, lv + 1);
+        r = r && t.consume("/");
+        r = r && factor(t, lv + 1);
         t.exit(r);
         return r;
     }
 
     /**
-     * factor: ('+' | '-' | '~') factor | power
+     * term '%' factor
+     */
+    private static boolean term_3(ParseTree t, int lv) {
+        var m = t.enter(lv, TERM_3);
+        if (m != null) return m;
+        boolean r;
+        r = term(t, lv + 1);
+        r = r && t.consume("%");
+        r = r && factor(t, lv + 1);
+        t.exit(r);
+        return r;
+    }
+
+    /**
+     * factor: '+' factor | '-' factor | '~' factor | power
      */
     public static boolean factor(ParseTree t, int lv) {
         var m = t.enter(lv, FACTOR);
         if (m != null) return m;
         boolean r;
         r = factor_1(t, lv + 1);
+        r = r || factor_2(t, lv + 1);
+        r = r || factor_3(t, lv + 1);
         r = r || power(t, lv + 1);
         t.exit(r);
         return r;
     }
 
     /**
-     * ('+' | '-' | '~') factor
+     * '+' factor
      */
     private static boolean factor_1(ParseTree t, int lv) {
         var m = t.enter(lv, FACTOR_1);
         if (m != null) return m;
         boolean r;
-        r = factor_1_1(t, lv + 1);
+        r = t.consume("+");
         r = r && factor(t, lv + 1);
         t.exit(r);
         return r;
     }
 
     /**
-     * '+' | '-' | '~'
+     * '-' factor
      */
-    private static boolean factor_1_1(ParseTree t, int lv) {
-        var m = t.enter(lv, FACTOR_1_1);
+    private static boolean factor_2(ParseTree t, int lv) {
+        var m = t.enter(lv, FACTOR_2);
         if (m != null) return m;
         boolean r;
-        r = t.consume("+");
-        r = r || t.consume("-");
-        r = r || t.consume("~");
+        r = t.consume("-");
+        r = r && factor(t, lv + 1);
+        t.exit(r);
+        return r;
+    }
+
+    /**
+     * '~' factor
+     */
+    private static boolean factor_3(ParseTree t, int lv) {
+        var m = t.enter(lv, FACTOR_3);
+        if (m != null) return m;
+        boolean r;
+        r = t.consume("~");
+        r = r && factor(t, lv + 1);
         t.exit(r);
         return r;
     }

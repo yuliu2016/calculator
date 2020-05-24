@@ -12,75 +12,59 @@ import java.util.Scanner;
 
 public class Calculator {
 
-    private static double evaluateSum(Sum sumExpr) {
-        var sum = evaluateTerm(sumExpr.term());
-
-        for (var opTerm : sumExpr.sum2s()) {
-            var term = opTerm.term();
-            var value = evaluateTerm(term);
-
-            if (opTerm.plusOrMinus().isPlus()) {
-                sum += value;
-            } else if (opTerm.plusOrMinus().isMinus()) {
-                sum -= value;
-            }
-        }
-
-        return sum;
-    }
-
-    private static double evaluateTerm(Term term) {
-        var product = evaluateFactor(term.factor());
-
-        for (var opFactor : term.term2s()) {
-            var factor = opFactor.factor();
-            var value = evaluateFactor(factor);
-
-            if (opFactor.term21().isTimes()) {
-                product *= value;
-            } else if (opFactor.term21().isDiv()) {
-                product /= value;
-            }
-            if (opFactor.term21().isModulus()) {
-                product %= value;
-            }
-        }
-
-        return product;
-    }
-
-    private static double evaluateFactor(Factor factor) {
-
-        if (factor.hasPower()) {
-            return evaluatePower(factor.power());
-        } else if (factor.hasFactor1()) {
-            var factor1 = factor.factor1();
-            if (factor1.factor11().isBitNot()) {
-                return ~((int) evaluateFactor(factor1.factor()));
-            }
-            if (factor1.factor11().isMinus()) {
-                return -evaluateFactor(factor1.factor());
-            }
-            if (factor1.factor11().isPlus()) {
-                return +evaluateFactor(factor1.factor());
-            }
-        }
-        throw new IllegalStateException("Illegal value");
-    }
-
-    private static double evaluatePower(Power power) {
-        if (power.hasAtomFactor()) {
-            var exp = power.atomFactor();
-            return Math.pow(evaluateAtom(exp.atom()), evaluateFactor(exp.factor()));
+    private static double evalSum(Sum sum) {
+        if (sum.hasSumPlusTerm()) {
+            var expr = sum.sumPlusTerm();
+            return evalSum(expr.sum()) + evalTerm(expr.term());
+        } else if (sum.hasSumMinusTerm()) {
+            var expr = sum.sumMinusTerm();
+            return evalSum(expr.sum()) - evalTerm(expr.term());
         } else {
-            return evaluateAtom(power.atom());
+            return evalTerm(sum.term());
         }
     }
 
-    private static double evaluateAtom(Atom atom) {
+    private static double evalTerm(Term term) {
+        if (term.hasTermTimesFactor()) {
+            var expr = term.termTimesFactor();
+            return evalTerm(expr.term()) * evalFactor(expr.factor());
+        } else if (term.hasTermDivFactor()) {
+            var expr = term.termDivFactor();
+            return evalTerm(expr.term()) / evalFactor(expr.factor());
+        } else if (term.hasTermModulusFactor()) {
+            var expr = term.termModulusFactor();
+            return evalTerm(expr.term()) % evalFactor(expr.factor());
+        } else {
+            return evalFactor(term.factor());
+        }
+    }
 
-        if (atom.hasSum()) {
-            return evaluateSum(atom.sum().sum());
+    private static double evalFactor(Factor factor) {
+
+        if (factor.hasPlusFactor()) {
+            return +evalFactor(factor.plusFactor().factor());
+        } else if (factor.hasMinusFactor()) {
+            return -evalFactor(factor.minusFactor().factor());
+        } else if (factor.hasBitNotFactor()) {
+            return ~((int) evalFactor(factor.bitNotFactor().factor()));
+        } else {
+            return evalPower(factor.power());
+        }
+    }
+
+    private static double evalPower(Power power) {
+        if (power.hasAtomPowerFactor()) {
+            var exp = power.atomPowerFactor();
+            return Math.pow(evalAtom(exp.atom()), evalFactor(exp.factor()));
+        } else {
+            return evalAtom(power.atom());
+        }
+    }
+
+    private static double evalAtom(Atom atom) {
+
+        if (atom.hasLparSumRpar()) {
+            return evalSum(atom.lparSumRpar().sum());
         } else if (atom.hasNumber()) {
             var valStr = atom.number()
                     .replace("_", "")
@@ -116,14 +100,13 @@ public class Calculator {
                 var context = LazyParserContext.of(lexer, visitor, false);
                 var tree = SimpleParseTree.parse(context, CalculatorParser::sum, Sum::new);
 
-                var result = evaluateSum(tree);
+                var result = evalSum(tree);
 
                 System.out.println(result);
             } catch (SyntaxError e) {
                 System.out.println(e.getMessage());
             } catch (Exception e) {
                 e.printStackTrace(System.out);
-//                System.out.println("Error: Not Implemented");
             }
             System.out.print(">>> ");
         }

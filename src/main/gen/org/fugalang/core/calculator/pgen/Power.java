@@ -12,11 +12,11 @@ public final class Power extends NodeWrapper {
         super(node);
     }
 
-    public Power1 atomFactor() {
+    public Power1 atomPowerFactor() {
         return get(0, Power1.class);
     }
 
-    public boolean hasAtomFactor() {
+    public boolean hasAtomPowerFactor() {
         return has(0);
     }
 

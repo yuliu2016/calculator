@@ -3,10 +3,8 @@ package org.fugalang.core.calculator.pgen;
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
-import java.util.List;
-
 /**
- * term: factor (('*' | '/' | '%') factor)*
+ * term: term '*' factor | term '/' factor | term '%' factor | factor
  */
 public final class Term extends NodeWrapper {
 
@@ -14,16 +12,58 @@ public final class Term extends NodeWrapper {
         super(node);
     }
 
-    public Factor factor() {
-        return get(0, Factor.class);
+    public Term1 termTimesFactor() {
+        return get(0, Term1.class);
     }
 
-    public List<Term2> term2s() {
-        return getList(1, Term2.class);
+    public boolean hasTermTimesFactor() {
+        return has(0);
+    }
+
+    public Term2 termDivFactor() {
+        return get(1, Term2.class);
+    }
+
+    public boolean hasTermDivFactor() {
+        return has(1);
+    }
+
+    public Term3 termModulusFactor() {
+        return get(2, Term3.class);
+    }
+
+    public boolean hasTermModulusFactor() {
+        return has(2);
+    }
+
+    public Factor factor() {
+        return get(3, Factor.class);
+    }
+
+    public boolean hasFactor() {
+        return has(3);
     }
 
     /**
-     * ('*' | '/' | '%') factor
+     * term '*' factor
+     */
+    public static final class Term1 extends NodeWrapper {
+
+        public Term1(ParseTreeNode node) {
+            super(node);
+        }
+
+        public Term term() {
+            return get(0, Term.class);
+        }
+
+        public Factor factor() {
+            return get(2, Factor.class);
+        }
+    }
+
+    /**
+     * term '/' factor
      */
     public static final class Term2 extends NodeWrapper {
 
@@ -31,34 +71,30 @@ public final class Term extends NodeWrapper {
             super(node);
         }
 
-        public Term21 term21() {
-            return get(0, Term21.class);
+        public Term term() {
+            return get(0, Term.class);
         }
 
         public Factor factor() {
-            return get(1, Factor.class);
+            return get(2, Factor.class);
         }
     }
 
     /**
-     * '*' | '/' | '%'
+     * term '%' factor
      */
-    public static final class Term21 extends NodeWrapper {
+    public static final class Term3 extends NodeWrapper {
 
-        public Term21(ParseTreeNode node) {
+        public Term3(ParseTreeNode node) {
             super(node);
         }
 
-        public boolean isTimes() {
-            return is(0);
+        public Term term() {
+            return get(0, Term.class);
         }
 
-        public boolean isDiv() {
-            return is(1);
-        }
-
-        public boolean isModulus() {
-            return is(2);
+        public Factor factor() {
+            return get(2, Factor.class);
         }
     }
 }

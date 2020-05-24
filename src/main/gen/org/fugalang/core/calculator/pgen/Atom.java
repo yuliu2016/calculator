@@ -13,11 +13,11 @@ public final class Atom extends NodeWrapper {
         super(node);
     }
 
-    public Atom1 sum() {
+    public Atom1 lparSumRpar() {
         return get(0, Atom1.class);
     }
 
-    public boolean hasSum() {
+    public boolean hasLparSumRpar() {
         return has(0);
     }
 
