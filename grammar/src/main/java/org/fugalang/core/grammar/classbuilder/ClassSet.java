@@ -105,14 +105,16 @@ public class ClassSet {
         }
     }
 
+    private static String fixLineSep(String s) {
+        return s.replace("\n", System.lineSeparator());
+    }
+
     public void writeToFiles() {
         try {
             setupDir(packageOutput.getFilePath());
 
             for (var aClass : classes) {
-                var code = aClass.generateClassCode()
-                        .replace("\n", System.lineSeparator());
-
+                var code = fixLineSep(aClass.generateClassCode());
                 Files.writeString(Paths.get(packageOutput.getFilePath().toString(),
                         aClass.getClassName() + ".java"), code);
             }
@@ -121,12 +123,12 @@ public class ClassSet {
 
             var parserBase = packageOutput.getParserPath().toString();
             var parserPath = Paths.get(parserBase, packageOutput.getLanguage() + "Parser.java");
-            var pcls = generateParserClass();
-            Files.writeString(parserPath, pcls);
+            var parserClassCode = fixLineSep(generateParserClass());
+            Files.writeString(parserPath, parserClassCode);
 
             var parserRulePath = Paths.get(parserBase, packageOutput.getLanguage() + "Rules.java");
-            var ruleClass = generateRuleClass();
-            Files.writeString(parserRulePath, ruleClass);
+            var ruleClassCode = fixLineSep(generateRuleClass());
+            Files.writeString(parserRulePath, ruleClassCode);
 
         } catch (IOException e) {
             e.printStackTrace();

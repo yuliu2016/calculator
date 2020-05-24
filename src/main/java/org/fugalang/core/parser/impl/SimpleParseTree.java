@@ -17,7 +17,7 @@ public class SimpleParseTree implements ParseTree {
     private int error_pos;
 
     private final Deque<ParseTreeFrame> frame_deque = new ArrayDeque<>();
-    private final Map<MemoKey, MemoValue> memo = new HashMap<>();
+    private final Map<Integer, Map<ParserRule, MemoValue>> memo = new HashMap<>();
 
     private SimpleParseTree() {
     }
@@ -55,27 +55,29 @@ public class SimpleParseTree implements ParseTree {
             return false;
         }
 
-        var key = new MemoKey(pos, rule);
+        if (memo.containsKey(pos)) {
+            var memo_at_pos = memo.get(pos);
 
-        if (memo.containsKey(key)) {
-            var value = memo.get(key);
+            if (memo_at_pos.containsKey(rule)) {
 
-            context.log("memo hit for pos: " + pos + " and rule: " + rule.getRuleName());
+                context.log("memo hit for pos: " + pos + " and rule: " + rule);
+                var value = memo_at_pos.get(rule);
 
-            if (value.hasResult()) {
-                addNode(value.getResult());
-                pos = value.getEndPos();
-                return true;
-            } else {
-                addNode(IndexNode.NULL);
-                // don't change the position
-                // because the frame would fail
-                if (pos != value.getEndPos()) throw new IllegalStateException();
-                return false;
+                if (value.hasResult()) {
+                    addNode(value.getResult());
+                    pos = value.getEndPos();
+                    return true;
+                } else {
+                    addNode(IndexNode.NULL);
+                    // don't change the position
+                    // because the frame would fail
+                    if (pos != value.getEndPos()) throw new IllegalStateException();
+                    return false;
+                }
             }
         }
 
-        var new_frame = new ParseTreeFrame(pos, level, rule, key);
+        var new_frame = new ParseTreeFrame(pos, level, rule);
         frame_deque.push(new_frame);
 
         if (pos > error_pos) {
@@ -92,7 +94,16 @@ public class SimpleParseTree implements ParseTree {
     public void exit(boolean success) {
         var current_frame = frame_deque.pop();
 
-        var key = current_frame.getKey();
+        var start_pos = current_frame.position();
+        Map<ParserRule, MemoValue> memo_at_pos;
+        if (memo.containsKey(start_pos)) {
+            memo_at_pos = memo.get(start_pos);
+        } else {
+            // identityhashmap is used here because
+            // it only makes sense to cache identical rules
+            memo_at_pos = new IdentityHashMap<>();
+            memo.put(start_pos, memo_at_pos);
+        }
 
         if (success) {
             if (context.isDebug()) {
@@ -102,7 +113,7 @@ public class SimpleParseTree implements ParseTree {
             }
             var newNode = ofRule(current_frame);
             addNode(newNode);
-            memo.put(key, new MemoValue(pos, newNode));
+            memo_at_pos.put(current_frame.getRule(), new MemoValue(pos, newNode));
         } else {
             if (context.isDebug()) {
                 context.log("  ".repeat(current_frame.getLevel()) +
@@ -110,7 +121,7 @@ public class SimpleParseTree implements ParseTree {
             }
             addNode(IndexNode.NULL);
             pos = current_frame.position();
-            memo.put(key, new MemoValue(pos, null));
+            memo_at_pos.put(current_frame.getRule(), new MemoValue(pos, null));
         }
     }
 

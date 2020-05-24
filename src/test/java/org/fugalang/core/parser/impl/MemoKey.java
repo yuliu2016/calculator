@@ -2,6 +2,7 @@ package org.fugalang.core.parser.impl;
 
 import org.fugalang.core.parser.ParserRule;
 
+@Deprecated(forRemoval = true)
 public class MemoKey {
     private final int position;
     private final ParserRule parserRule;

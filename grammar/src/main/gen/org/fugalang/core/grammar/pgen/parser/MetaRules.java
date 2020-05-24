@@ -12,7 +12,6 @@ public class MetaRules {
     public static final ParserRule OR_RULE = and_rule("or_rule");
     public static final ParserRule OR_RULE_2 = and_rule("or_rule:2");
     public static final ParserRule AND_RULE = and_rule("and_rule");
-    public static final ParserRule AND_RULE_2 = and_rule("and_rule:2");
     public static final ParserRule REPEAT_RULE = and_rule("repeat_rule");
     public static final ParserRule REPEAT_RULE_2 = or_rule("repeat_rule:2");
     public static final ParserRule SUB_RULE = or_rule("sub_rule");

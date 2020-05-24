@@ -98,36 +98,25 @@ public class MetaParser {
     }
 
     /**
-     * and_rule: repeat_rule (repeat_rule)*
+     * and_rule: repeat_rule+
      */
     public static boolean and_rule(ParseTree t, int lv) {
         var m = t.enter(lv, AND_RULE);
         if (m != null) return m;
         boolean r;
-        r = repeat_rule(t, lv + 1);
-        if (r) and_rule_2_loop(t, lv);
+        r = repeat_rule_loop(t, lv);
         t.exit(r);
         return r;
     }
 
-    private static void and_rule_2_loop(ParseTree t, int lv) {
+    private static boolean repeat_rule_loop(ParseTree t, int lv) {
         t.enterCollection();
-        while (true) {
+        var r = repeat_rule(t, lv + 1);
+        if (r) while (true) {
             var p = t.position();
-            if (!and_rule_2(t, lv + 1) || t.loopGuard(p)) break;
+            if (!repeat_rule(t, lv + 1) || t.loopGuard(p)) break;
         }
         t.exitCollection();
-    }
-
-    /**
-     * repeat_rule
-     */
-    private static boolean and_rule_2(ParseTree t, int lv) {
-        var m = t.enter(lv, AND_RULE_2);
-        if (m != null) return m;
-        boolean r;
-        r = repeat_rule(t, lv + 1);
-        t.exit(r);
         return r;
     }
 

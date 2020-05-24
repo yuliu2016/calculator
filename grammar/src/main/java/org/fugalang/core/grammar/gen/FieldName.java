@@ -9,14 +9,10 @@ import static org.fugalang.core.grammar.util.ParserStringUtil.*;
 
 public class FieldName {
     public static String getSmartName(ClassName className, AndRule andRule, TokenConverter converter) {
-        if (isSingle(andRule.repeatRule()) && andRule
-                .repeatRules()
-                .stream()
-                .map(AndRule.AndRule2::repeatRule)
-                .allMatch(FieldName::isSingle)) {
+        if (andRule.repeatRules().stream().allMatch(FieldName::isSingle)) {
             StringBuilder sb1 = null;
             StringBuilder sb2 = null;
-            for (RepeatRule rule : PEGCompat.allRepeatRules(andRule)) {
+            for (RepeatRule rule : andRule.repeatRules()) {
                 var subRuleString = PEGCompat.getSubruleString(rule.subRule());
                 if (isWord(subRuleString)) {
                     if (sb1 == null) sb1 = new StringBuilder();

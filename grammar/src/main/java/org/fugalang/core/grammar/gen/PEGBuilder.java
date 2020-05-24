@@ -95,7 +95,7 @@ public class PEGBuilder {
                 var newClassName = className.suffix(class_count);
                 class_count++;
 
-                if (andRule.repeatRules().isEmpty()) {
+                if (andRule.repeatRules().size() == 1) {
                     // only one repeat rule - can propagate fields of this class
                     addAndRule(newClassName, cb, andRule, REQUIRED);
                 } else {
@@ -127,9 +127,8 @@ public class PEGBuilder {
             AndRule rule,
             boolean isOptional
     ) {
-
-        if (rule.repeatRules().isEmpty()) {
-            addRepeatedSubRule(className, cb, rule.repeatRule(), isOptional);
+        if (rule.repeatRules().size() == 1) {
+            addRepeatedSubRule(className, cb, rule.repeatRules().get(0), isOptional);
         } else {
             // don't need to check for component classes - every RepeatRule
             // can be on a single field
@@ -142,7 +141,7 @@ public class PEGBuilder {
 
             int class_count = 1;
 
-            for (RepeatRule repeatRule : PEGCompat.allRepeatRules(rule)) {
+            for (RepeatRule repeatRule : rule.repeatRules()) {
                 var classWithCount = className.suffix(class_count);
                 class_count++;
 
@@ -255,7 +254,7 @@ public class PEGBuilder {
         // maybe this can just be added to this class
         // but maybe there needs to be a separate class
 
-        if (rule.orRule2s().isEmpty() && rule.andRule().repeatRules().isEmpty() &&
+        if (rule.orRule2s().isEmpty() && rule.andRule().repeatRules().size() == 1 &&
                 repeatType == RepeatType.Once) {
             // ^fix - single-char repeats
 
