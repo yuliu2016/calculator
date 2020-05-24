@@ -12,8 +12,8 @@ public class MetaParser {
      * rules: [NEWLINE] single_rule+
      */
     public static boolean rules(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, RULES);
+        var m = t.enter(lv, RULES);
+        if (m != null) return m;
         boolean r;
         t.consume(TokenType.NEWLINE);
         r = single_rule_loop(t, lv);
@@ -36,8 +36,8 @@ public class MetaParser {
      * single_rule: NAME ':' [NEWLINE '|'] or_rule NEWLINE
      */
     public static boolean single_rule(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, SINGLE_RULE);
+        var m = t.enter(lv, SINGLE_RULE);
+        if (m != null) return m;
         boolean r;
         r = t.consume(TokenType.NAME);
         r = r && t.consume(":");
@@ -52,8 +52,8 @@ public class MetaParser {
      * NEWLINE '|'
      */
     private static boolean single_rule_3(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, SINGLE_RULE_3);
+        var m = t.enter(lv, SINGLE_RULE_3);
+        if (m != null) return m;
         boolean r;
         r = t.consume(TokenType.NEWLINE);
         r = r && t.consume("|");
@@ -65,8 +65,8 @@ public class MetaParser {
      * or_rule: and_rule ([NEWLINE] '|' and_rule)*
      */
     public static boolean or_rule(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, OR_RULE);
+        var m = t.enter(lv, OR_RULE);
+        if (m != null) return m;
         boolean r;
         r = and_rule(t, lv + 1);
         if (r) or_rule_2_loop(t, lv);
@@ -87,8 +87,8 @@ public class MetaParser {
      * [NEWLINE] '|' and_rule
      */
     private static boolean or_rule_2(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, OR_RULE_2);
+        var m = t.enter(lv, OR_RULE_2);
+        if (m != null) return m;
         boolean r;
         t.consume(TokenType.NEWLINE);
         r = t.consume("|");
@@ -101,8 +101,8 @@ public class MetaParser {
      * and_rule: repeat_rule (repeat_rule)*
      */
     public static boolean and_rule(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, AND_RULE);
+        var m = t.enter(lv, AND_RULE);
+        if (m != null) return m;
         boolean r;
         r = repeat_rule(t, lv + 1);
         if (r) and_rule_2_loop(t, lv);
@@ -123,8 +123,8 @@ public class MetaParser {
      * repeat_rule
      */
     private static boolean and_rule_2(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, AND_RULE_2);
+        var m = t.enter(lv, AND_RULE_2);
+        if (m != null) return m;
         boolean r;
         r = repeat_rule(t, lv + 1);
         t.exit(r);
@@ -135,8 +135,8 @@ public class MetaParser {
      * repeat_rule: sub_rule ['*' | '+']
      */
     public static boolean repeat_rule(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, REPEAT_RULE);
+        var m = t.enter(lv, REPEAT_RULE);
+        if (m != null) return m;
         boolean r;
         r = sub_rule(t, lv + 1);
         if (r) repeat_rule_2(t, lv + 1);
@@ -148,8 +148,8 @@ public class MetaParser {
      * '*' | '+'
      */
     private static boolean repeat_rule_2(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, REPEAT_RULE_2);
+        var m = t.enter(lv, REPEAT_RULE_2);
+        if (m != null) return m;
         boolean r;
         r = t.consume("*");
         r = r || t.consume("+");
@@ -161,8 +161,8 @@ public class MetaParser {
      * sub_rule: '(' or_rule ')' | '[' or_rule ']' | NAME | STRING
      */
     public static boolean sub_rule(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, SUB_RULE);
+        var m = t.enter(lv, SUB_RULE);
+        if (m != null) return m;
         boolean r;
         r = sub_rule_1(t, lv + 1);
         r = r || sub_rule_2(t, lv + 1);
@@ -176,8 +176,8 @@ public class MetaParser {
      * '(' or_rule ')'
      */
     private static boolean sub_rule_1(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, SUB_RULE_1);
+        var m = t.enter(lv, SUB_RULE_1);
+        if (m != null) return m;
         boolean r;
         r = t.consume("(");
         r = r && or_rule(t, lv + 1);
@@ -190,8 +190,8 @@ public class MetaParser {
      * '[' or_rule ']'
      */
     private static boolean sub_rule_2(ParseTree t, int lv) {
-        if (t.recursionGuard(lv)) return false;
-        t.enter(lv, SUB_RULE_2);
+        var m = t.enter(lv, SUB_RULE_2);
+        if (m != null) return m;
         boolean r;
         r = t.consume("[");
         r = r && or_rule(t, lv + 1);

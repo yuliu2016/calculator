@@ -198,9 +198,11 @@ public class ClassBuilder {
                 .append("(ParseTree t, int lv) {\n");
 
         var mb = new StringBuilder();
-        mb.append("if (t.recursionGuard(lv)) return false;\n" + "t.enter(lv, ")
-                .append(cap_name)
-                .append(");\n" + "boolean r;\n");
+        mb.append("var m = t.enter(lv, ")
+                .append(cap_name).append(");\n");
+        mb.append("if (m != null) return m;\n");
+
+        mb.append("boolean r;\n");
 
         var first = true;
         for (ClassField field : fields) {

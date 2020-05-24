@@ -32,4 +32,9 @@ public class MemoKey {
     public int hashCode() {
         return 31 * parserRule.hashCode() + position;
     }
+
+    @Override
+    public String toString() {
+        return "(" + position + ", " + parserRule + ")";
+    }
 }

@@ -17,7 +17,7 @@ public class SimpleParseTree implements ParseTree {
     private int error_pos;
 
     private final Deque<ParseTreeFrame> frame_deque = new ArrayDeque<>();
-//    private final Map<MemoKey, MemoValue> memo = new HashMap<>();
+    private final Map<MemoKey, MemoValue> memo = new HashMap<>();
 
     private SimpleParseTree() {
     }
@@ -32,7 +32,7 @@ public class SimpleParseTree implements ParseTree {
         error_pos = 0;
 
         frame_deque.clear();
-//        memo.clear();
+        memo.clear();
 
         var result = start.apply(this, 0);
 
@@ -46,46 +46,36 @@ public class SimpleParseTree implements ParseTree {
     }
 
     @Override
-    public boolean recursionGuard(int level) {
+    public Boolean enter(int level, ParserRule rule) {
+
         if (level > MAX_RECURSION_LEVEL) {
             if (!frame_deque.isEmpty()) {
-                System.err.println("Max recursion level of 300 reached inside rule " +
-                        frame_deque.peek().getRule());
+                System.err.println("Max recursion level of 300 reached inside rule " + rule);
             }
-            return true;
+            return false;
         }
-        return false;
-    }
 
-    @Override
-    public Boolean enter(int level, ParserRule rule) {
-//
-//        if (level > MAX_RECURSION_LEVEL) {
-//            if (!frame_deque.isEmpty()) {
-//                System.err.println("Max recursion level of 300 reached inside rule " + rule);
-//            }
-//            return true;
-//        }
-//
-//        var key = new MemoKey(pos, rule);
-//
-//        if (memo.containsKey(key)) {
-//            var value = memo.get(key);
-//
-//            if (value.hasResult()) {
-//                addNode(value.getResult());
-//                pos = value.getEndPos();
-//                return true;
-//            } else {
-//                addNode(IndexNode.NULL);
-//                // don't change the position
-//                // because the frame would fail
-//                if (pos != value.getEndPos()) throw new IllegalStateException();
-//                return false;
-//            }
-//        }
+        var key = new MemoKey(pos, rule);
 
-        var new_frame = new ParseTreeFrame(pos, level, rule, null);
+        if (memo.containsKey(key)) {
+            var value = memo.get(key);
+
+            context.log("memo hit for pos: " + pos + " and rule: " + rule.getRuleName());
+
+            if (value.hasResult()) {
+                addNode(value.getResult());
+                pos = value.getEndPos();
+                return true;
+            } else {
+                addNode(IndexNode.NULL);
+                // don't change the position
+                // because the frame would fail
+                if (pos != value.getEndPos()) throw new IllegalStateException();
+                return false;
+            }
+        }
+
+        var new_frame = new ParseTreeFrame(pos, level, rule, key);
         frame_deque.push(new_frame);
 
         if (pos > error_pos) {
@@ -102,7 +92,7 @@ public class SimpleParseTree implements ParseTree {
     public void exit(boolean success) {
         var current_frame = frame_deque.pop();
 
-//        var key = current_frame.getKey();
+        var key = current_frame.getKey();
 
         if (success) {
             if (context.isDebug()) {
@@ -112,7 +102,7 @@ public class SimpleParseTree implements ParseTree {
             }
             var newNode = ofRule(current_frame);
             addNode(newNode);
-//            memo.put(key, new MemoValue(pos, newNode));
+            memo.put(key, new MemoValue(pos, newNode));
         } else {
             if (context.isDebug()) {
                 context.log("  ".repeat(current_frame.getLevel()) +
@@ -120,7 +110,7 @@ public class SimpleParseTree implements ParseTree {
             }
             addNode(IndexNode.NULL);
             pos = current_frame.position();
-//            memo.put(key, new MemoValue(pos, null));
+            memo.put(key, new MemoValue(pos, null));
         }
     }
 

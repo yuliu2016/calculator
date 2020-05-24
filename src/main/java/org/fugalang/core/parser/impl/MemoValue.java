@@ -22,4 +22,9 @@ public class MemoValue {
     public int getEndPos() {
         return endPos;
     }
+
+    @Override
+    public String toString() {
+        return hasResult() ? "succ" : "fail";
+    }
 }
