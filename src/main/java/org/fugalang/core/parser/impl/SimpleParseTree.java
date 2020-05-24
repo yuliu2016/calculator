@@ -147,7 +147,7 @@ public class SimpleParseTree implements ParseTree {
     }
 
     @Override
-    public void enterCollection() {
+    public void enterLoop() {
         if (frame_deque.isEmpty()) {
             throw new ParserException("No frame on deque");
         }
@@ -163,7 +163,7 @@ public class SimpleParseTree implements ParseTree {
     }
 
     @Override
-    public void exitCollection() {
+    public void exitLoop() {
         if (frame_deque.isEmpty()) {
             throw new ParserException("No frame on deque");
         }

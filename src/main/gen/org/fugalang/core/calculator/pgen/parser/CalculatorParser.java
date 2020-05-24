@@ -22,12 +22,12 @@ public class CalculatorParser {
     }
 
     private static void sum_2_loop(ParseTree t, int lv) {
-        t.enterCollection();
+        t.enterLoop();
         while (true) {
             var p = t.position();
             if (!sum_2(t, lv + 1) || t.loopGuard(p)) break;
         }
-        t.exitCollection();
+        t.exitLoop();
     }
 
     /**
@@ -70,12 +70,12 @@ public class CalculatorParser {
     }
 
     private static void term_2_loop(ParseTree t, int lv) {
-        t.enterCollection();
+        t.enterLoop();
         while (true) {
             var p = t.position();
             if (!term_2(t, lv + 1) || t.loopGuard(p)) break;
         }
-        t.exitCollection();
+        t.exitLoop();
     }
 
     /**

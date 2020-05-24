@@ -153,13 +153,13 @@ public class ClassField {
         var rule_name = className.getRuleName().replace(":", "_");
         var maybeLevel = resultSource.getType() == SourceType.Class ? ", int lv" : "";
         return "\n    private static boolean " + rule_name + "_loop(ParseTree t" + maybeLevel + ") {\n" +
-                "        t.enterCollection();\n" +
+                "        t.enterLoop();\n" +
                 "        var r = " + resultExpr + ";\n" +
                 "        if (r) while (true) {\n" +
                 "            var p = t.position();\n" +
                 "            if (!" + resultExpr + " || t.loopGuard(p)) break;\n" +
                 "        }\n" +
-                "        t.exitCollection();\n" +
+                "        t.exitLoop();\n" +
                 "        return r;\n" +
                 "    }\n";
     }
@@ -169,12 +169,12 @@ public class ClassField {
         var rule_name = className.getRuleName().replace(":", "_");
         var maybeLevel = resultSource.getType() == SourceType.Class ? ", int lv" : "";
         return "\n    private static void " + rule_name + "_loop(ParseTree t" + maybeLevel + ") {\n" +
-                "        t.enterCollection();\n" +
+                "        t.enterLoop();\n" +
                 "        while (true) {\n" +
                 "            var p = t.position();\n" +
                 "            if (!" + resultExpr + " || t.loopGuard(p)) break;\n" +
                 "        }\n" +
-                "        t.exitCollection();\n" +
+                "        t.exitLoop();\n" +
                 "    }\n";
     }
 }

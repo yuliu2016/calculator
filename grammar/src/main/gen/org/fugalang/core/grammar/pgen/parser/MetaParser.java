@@ -22,13 +22,13 @@ public class MetaParser {
     }
 
     private static boolean single_rule_loop(ParseTree t, int lv) {
-        t.enterCollection();
+        t.enterLoop();
         var r = single_rule(t, lv + 1);
         if (r) while (true) {
             var p = t.position();
             if (!single_rule(t, lv + 1) || t.loopGuard(p)) break;
         }
-        t.exitCollection();
+        t.exitLoop();
         return r;
     }
 
@@ -75,12 +75,12 @@ public class MetaParser {
     }
 
     private static void or_rule_2_loop(ParseTree t, int lv) {
-        t.enterCollection();
+        t.enterLoop();
         while (true) {
             var p = t.position();
             if (!or_rule_2(t, lv + 1) || t.loopGuard(p)) break;
         }
-        t.exitCollection();
+        t.exitLoop();
     }
 
     /**
@@ -110,13 +110,13 @@ public class MetaParser {
     }
 
     private static boolean repeat_rule_loop(ParseTree t, int lv) {
-        t.enterCollection();
+        t.enterLoop();
         var r = repeat_rule(t, lv + 1);
         if (r) while (true) {
             var p = t.position();
             if (!repeat_rule(t, lv + 1) || t.loopGuard(p)) break;
         }
-        t.exitCollection();
+        t.exitLoop();
         return r;
     }
 

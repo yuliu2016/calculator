@@ -49,12 +49,12 @@ public class FugaParser {
     }
 
     private static void file_input_1_loop(ParseTree t, int lv) {
-        t.enterCollection();
+        t.enterLoop();
         while (true) {
             var p = t.position();
             if (!file_input_1(t, lv + 1) || t.loopGuard(p)) break;
         }
-        t.exitCollection();
+        t.exitLoop();
     }
 
     /**
@@ -85,12 +85,12 @@ public class FugaParser {
     }
 
     private static void eval_input_newline_loop(ParseTree t) {
-        t.enterCollection();
+        t.enterLoop();
         while (true) {
             var p = t.position();
             if (!t.consume(TokenType.NEWLINE) || t.loopGuard(p)) break;
         }
-        t.exitCollection();
+        t.exitLoop();
     }
 
     /**
@@ -134,12 +134,12 @@ public class FugaParser {
     }
 
     private static void simple_stmt_2_loop(ParseTree t, int lv) {
-        t.enterCollection();
+        t.enterLoop();
         while (true) {
             var p = t.position();
             if (!simple_stmt_2(t, lv + 1) || t.loopGuard(p)) break;
         }
-        t.exitCollection();
+        t.exitLoop();
     }
 
     /**
@@ -269,12 +269,12 @@ public class FugaParser {
     }
 
     private static void nonlocal_stmt_3_loop(ParseTree t, int lv) {
-        t.enterCollection();
+        t.enterLoop();
         while (true) {
             var p = t.position();
             if (!nonlocal_stmt_3(t, lv + 1) || t.loopGuard(p)) break;
         }
-        t.exitCollection();
+        t.exitLoop();
     }
 
     /**
@@ -358,12 +358,12 @@ public class FugaParser {
     }
 
     private static void exprlist_star_2_loop(ParseTree t, int lv) {
-        t.enterCollection();
+        t.enterLoop();
         while (true) {
             var p = t.position();
             if (!exprlist_star_2(t, lv + 1) || t.loopGuard(p)) break;
         }
-        t.exitCollection();
+        t.exitLoop();
     }
 
     /**
@@ -408,13 +408,13 @@ public class FugaParser {
     }
 
     private static boolean assignment_3_2_loop(ParseTree t, int lv) {
-        t.enterCollection();
+        t.enterLoop();
         var r = assignment_3_2(t, lv + 1);
         if (r) while (true) {
             var p = t.position();
             if (!assignment_3_2(t, lv + 1) || t.loopGuard(p)) break;
         }
-        t.exitCollection();
+        t.exitLoop();
         return r;
     }
 
@@ -579,13 +579,13 @@ public class FugaParser {
     }
 
     private static boolean import_from_names_2_dot_loop(ParseTree t) {
-        t.enterCollection();
+        t.enterLoop();
         var r = t.consume(".");
         if (r) while (true) {
             var p = t.position();
             if (!t.consume(".") || t.loopGuard(p)) break;
         }
-        t.exitCollection();
+        t.exitLoop();
         return r;
     }
 
@@ -655,12 +655,12 @@ public class FugaParser {
     }
 
     private static void import_as_names_2_loop(ParseTree t, int lv) {
-        t.enterCollection();
+        t.enterLoop();
         while (true) {
             var p = t.position();
             if (!import_as_names_2(t, lv + 1) || t.loopGuard(p)) break;
         }
-        t.exitCollection();
+        t.exitLoop();
     }
 
     /**
@@ -690,12 +690,12 @@ public class FugaParser {
     }
 
     private static void dotted_as_names_2_loop(ParseTree t, int lv) {
-        t.enterCollection();
+        t.enterLoop();
         while (true) {
             var p = t.position();
             if (!dotted_as_names_2(t, lv + 1) || t.loopGuard(p)) break;
         }
-        t.exitCollection();
+        t.exitLoop();
     }
 
     /**
@@ -725,12 +725,12 @@ public class FugaParser {
     }
 
     private static void dotted_name_2_loop(ParseTree t, int lv) {
-        t.enterCollection();
+        t.enterLoop();
         while (true) {
             var p = t.position();
             if (!dotted_name_2(t, lv + 1) || t.loopGuard(p)) break;
         }
-        t.exitCollection();
+        t.exitLoop();
     }
 
     /**
@@ -779,12 +779,12 @@ public class FugaParser {
     }
 
     private static void elif_stmt_loop(ParseTree t, int lv) {
-        t.enterCollection();
+        t.enterLoop();
         while (true) {
             var p = t.position();
             if (!elif_stmt(t, lv + 1) || t.loopGuard(p)) break;
         }
-        t.exitCollection();
+        t.exitLoop();
     }
 
     /**
@@ -876,12 +876,12 @@ public class FugaParser {
     }
 
     private static void with_stmt_3_loop(ParseTree t, int lv) {
-        t.enterCollection();
+        t.enterLoop();
         while (true) {
             var p = t.position();
             if (!with_stmt_3(t, lv + 1) || t.loopGuard(p)) break;
         }
-        t.exitCollection();
+        t.exitLoop();
     }
 
     /**
@@ -1005,13 +1005,13 @@ public class FugaParser {
     }
 
     private static boolean stmt_loop(ParseTree t, int lv) {
-        t.enterCollection();
+        t.enterLoop();
         var r = stmt(t, lv + 1);
         if (r) while (true) {
             var p = t.position();
             if (!stmt(t, lv + 1) || t.loopGuard(p)) break;
         }
-        t.exitCollection();
+        t.exitLoop();
         return r;
     }
 
@@ -1108,13 +1108,13 @@ public class FugaParser {
     }
 
     private static boolean except_suite_1_loop(ParseTree t, int lv) {
-        t.enterCollection();
+        t.enterLoop();
         var r = except_suite_1(t, lv + 1);
         if (r) while (true) {
             var p = t.position();
             if (!except_suite_1(t, lv + 1) || t.loopGuard(p)) break;
         }
-        t.exitCollection();
+        t.exitLoop();
         return r;
     }
 
@@ -1160,12 +1160,12 @@ public class FugaParser {
     }
 
     private static void full_arg_list_2_loop(ParseTree t, int lv) {
-        t.enterCollection();
+        t.enterLoop();
         while (true) {
             var p = t.position();
             if (!full_arg_list_2(t, lv + 1) || t.loopGuard(p)) break;
         }
-        t.exitCollection();
+        t.exitLoop();
     }
 
     /**
@@ -1223,12 +1223,12 @@ public class FugaParser {
     }
 
     private static void args_kwargs_3_loop(ParseTree t, int lv) {
-        t.enterCollection();
+        t.enterLoop();
         while (true) {
             var p = t.position();
             if (!args_kwargs_3(t, lv + 1) || t.loopGuard(p)) break;
         }
-        t.exitCollection();
+        t.exitLoop();
     }
 
     /**
@@ -1337,12 +1337,12 @@ public class FugaParser {
     }
 
     private static void simple_arg_list_2_loop(ParseTree t, int lv) {
-        t.enterCollection();
+        t.enterLoop();
         while (true) {
             var p = t.position();
             if (!simple_arg_list_2(t, lv + 1) || t.loopGuard(p)) break;
         }
-        t.exitCollection();
+        t.exitLoop();
     }
 
     /**
@@ -1511,12 +1511,12 @@ public class FugaParser {
     }
 
     private static void disjunction_2_loop(ParseTree t, int lv) {
-        t.enterCollection();
+        t.enterLoop();
         while (true) {
             var p = t.position();
             if (!disjunction_2(t, lv + 1) || t.loopGuard(p)) break;
         }
-        t.exitCollection();
+        t.exitLoop();
     }
 
     /**
@@ -1546,12 +1546,12 @@ public class FugaParser {
     }
 
     private static void conjunction_2_loop(ParseTree t, int lv) {
-        t.enterCollection();
+        t.enterLoop();
         while (true) {
             var p = t.position();
             if (!conjunction_2(t, lv + 1) || t.loopGuard(p)) break;
         }
-        t.exitCollection();
+        t.exitLoop();
     }
 
     /**
@@ -1607,12 +1607,12 @@ public class FugaParser {
     }
 
     private static void comparison_2_loop(ParseTree t, int lv) {
-        t.enterCollection();
+        t.enterLoop();
         while (true) {
             var p = t.position();
             if (!comparison_2(t, lv + 1) || t.loopGuard(p)) break;
         }
-        t.exitCollection();
+        t.exitLoop();
     }
 
     /**
@@ -1689,12 +1689,12 @@ public class FugaParser {
     }
 
     private static void bitwise_or_2_loop(ParseTree t, int lv) {
-        t.enterCollection();
+        t.enterLoop();
         while (true) {
             var p = t.position();
             if (!bitwise_or_2(t, lv + 1) || t.loopGuard(p)) break;
         }
-        t.exitCollection();
+        t.exitLoop();
     }
 
     /**
@@ -1724,12 +1724,12 @@ public class FugaParser {
     }
 
     private static void bitwise_xor_2_loop(ParseTree t, int lv) {
-        t.enterCollection();
+        t.enterLoop();
         while (true) {
             var p = t.position();
             if (!bitwise_xor_2(t, lv + 1) || t.loopGuard(p)) break;
         }
-        t.exitCollection();
+        t.exitLoop();
     }
 
     /**
@@ -1759,12 +1759,12 @@ public class FugaParser {
     }
 
     private static void bitwise_and_2_loop(ParseTree t, int lv) {
-        t.enterCollection();
+        t.enterLoop();
         while (true) {
             var p = t.position();
             if (!bitwise_and_2(t, lv + 1) || t.loopGuard(p)) break;
         }
-        t.exitCollection();
+        t.exitLoop();
     }
 
     /**
@@ -1807,12 +1807,12 @@ public class FugaParser {
     }
 
     private static void shift_expr_2_loop(ParseTree t, int lv) {
-        t.enterCollection();
+        t.enterLoop();
         while (true) {
             var p = t.position();
             if (!shift_expr_2(t, lv + 1) || t.loopGuard(p)) break;
         }
-        t.exitCollection();
+        t.exitLoop();
     }
 
     /**
@@ -1855,12 +1855,12 @@ public class FugaParser {
     }
 
     private static void sum_2_loop(ParseTree t, int lv) {
-        t.enterCollection();
+        t.enterLoop();
         while (true) {
             var p = t.position();
             if (!sum_2(t, lv + 1) || t.loopGuard(p)) break;
         }
-        t.exitCollection();
+        t.exitLoop();
     }
 
     /**
@@ -1906,12 +1906,12 @@ public class FugaParser {
     }
 
     private static void term_2_loop(ParseTree t, int lv) {
-        t.enterCollection();
+        t.enterLoop();
         while (true) {
             var p = t.position();
             if (!term_2(t, lv + 1) || t.loopGuard(p)) break;
         }
-        t.exitCollection();
+        t.exitLoop();
     }
 
     /**
@@ -1941,12 +1941,12 @@ public class FugaParser {
     }
 
     private static void pipeline_2_loop(ParseTree t, int lv) {
-        t.enterCollection();
+        t.enterLoop();
         while (true) {
             var p = t.position();
             if (!pipeline_2(t, lv + 1) || t.loopGuard(p)) break;
         }
-        t.exitCollection();
+        t.exitLoop();
     }
 
     /**
@@ -2141,12 +2141,12 @@ public class FugaParser {
     }
 
     private static void trailer_loop(ParseTree t, int lv) {
-        t.enterCollection();
+        t.enterLoop();
         while (true) {
             var p = t.position();
             if (!trailer(t, lv + 1) || t.loopGuard(p)) break;
         }
-        t.exitCollection();
+        t.exitLoop();
     }
 
     /**
@@ -2252,12 +2252,12 @@ public class FugaParser {
     }
 
     private static void named_expr_list_2_loop(ParseTree t, int lv) {
-        t.enterCollection();
+        t.enterLoop();
         while (true) {
             var p = t.position();
             if (!named_expr_list_2(t, lv + 1) || t.loopGuard(p)) break;
         }
-        t.exitCollection();
+        t.exitLoop();
     }
 
     /**
@@ -2329,12 +2329,12 @@ public class FugaParser {
     }
 
     private static void slicelist_2_loop(ParseTree t, int lv) {
-        t.enterCollection();
+        t.enterLoop();
         while (true) {
             var p = t.position();
             if (!slicelist_2(t, lv + 1) || t.loopGuard(p)) break;
         }
-        t.exitCollection();
+        t.exitLoop();
     }
 
     /**
@@ -2461,12 +2461,12 @@ public class FugaParser {
     }
 
     private static void targetlist_2_loop(ParseTree t, int lv) {
-        t.enterCollection();
+        t.enterLoop();
         while (true) {
             var p = t.position();
             if (!targetlist_2(t, lv + 1) || t.loopGuard(p)) break;
         }
-        t.exitCollection();
+        t.exitLoop();
     }
 
     /**
@@ -2497,12 +2497,12 @@ public class FugaParser {
     }
 
     private static void exprlist_2_loop(ParseTree t, int lv) {
-        t.enterCollection();
+        t.enterLoop();
         while (true) {
             var p = t.position();
             if (!exprlist_2(t, lv + 1) || t.loopGuard(p)) break;
         }
-        t.exitCollection();
+        t.exitLoop();
     }
 
     /**
@@ -2573,12 +2573,12 @@ public class FugaParser {
     }
 
     private static void dict_maker_2_loop(ParseTree t, int lv) {
-        t.enterCollection();
+        t.enterLoop();
         while (true) {
             var p = t.position();
             if (!dict_maker_2(t, lv + 1) || t.loopGuard(p)) break;
         }
-        t.exitCollection();
+        t.exitLoop();
     }
 
     /**
@@ -2609,12 +2609,12 @@ public class FugaParser {
     }
 
     private static void set_maker_2_loop(ParseTree t, int lv) {
-        t.enterCollection();
+        t.enterLoop();
         while (true) {
             var p = t.position();
             if (!set_maker_2(t, lv + 1) || t.loopGuard(p)) break;
         }
-        t.exitCollection();
+        t.exitLoop();
     }
 
     /**
@@ -2645,12 +2645,12 @@ public class FugaParser {
     }
 
     private static void arglist_2_loop(ParseTree t, int lv) {
-        t.enterCollection();
+        t.enterLoop();
         while (true) {
             var p = t.position();
             if (!arglist_2(t, lv + 1) || t.loopGuard(p)) break;
         }
-        t.exitCollection();
+        t.exitLoop();
     }
 
     /**

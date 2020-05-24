@@ -21,12 +21,12 @@ public interface ParseTree {
     /**
      * Enter a collection subframe
      */
-    void enterCollection();
+    void enterLoop();
 
     /**
      * Enter the collection subframe
      */
-    void exitCollection();
+    void exitLoop();
 
     /**
      * Consume a token of a certain type. This will only succeed if
