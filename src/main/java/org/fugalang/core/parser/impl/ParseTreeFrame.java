@@ -11,15 +11,21 @@ public class ParseTreeFrame {
     private final int position;
     private final int level;
     private final ParserRule rule;
+    private final MemoKey key;
 
     private final List<ParseTreeNode> nodes = new ArrayList<>();
 
     List<ParseTreeNode> collection = null;
 
-    public ParseTreeFrame(int position, int level, ParserRule rule) {
+    public ParseTreeFrame(int position, int level, ParserRule rule, MemoKey key) {
         this.position = position;
         this.level = level;
         this.rule = rule;
+        this.key = key;
+    }
+
+    public MemoKey getKey() {
+        return key;
     }
 
     public int position() {

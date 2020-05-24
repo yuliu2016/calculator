@@ -1,13 +1,15 @@
 package org.fugalang.core.parser;
 
-import java.util.function.Supplier;
-
 public interface ParserContext {
     void errorForElem(int index, String message);
 
-    void log(Supplier<String> message);
+    void log(String message);
 
     boolean didFinish(int index);
 
     ParserElement getElem(int index);
+
+    default boolean isDebug() {
+        return false;
+    }
 }

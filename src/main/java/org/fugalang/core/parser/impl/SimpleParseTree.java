@@ -17,6 +17,7 @@ public class SimpleParseTree implements ParseTree {
     private int error_pos;
 
     private final Deque<ParseTreeFrame> frame_deque = new ArrayDeque<>();
+//    private final Map<MemoKey, MemoValue> memo = new HashMap<>();
 
     private SimpleParseTree() {
     }
@@ -31,6 +32,7 @@ public class SimpleParseTree implements ParseTree {
         error_pos = 0;
 
         frame_deque.clear();
+//        memo.clear();
 
         var result = start.apply(this, 0);
 
@@ -56,42 +58,74 @@ public class SimpleParseTree implements ParseTree {
     }
 
     @Override
-    public void enter(int level, ParserRule rule) {
-        var new_frame = new ParseTreeFrame(pos, level, rule);
+    public Boolean enter(int level, ParserRule rule) {
+//
+//        if (level > MAX_RECURSION_LEVEL) {
+//            if (!frame_deque.isEmpty()) {
+//                System.err.println("Max recursion level of 300 reached inside rule " + rule);
+//            }
+//            return true;
+//        }
+//
+//        var key = new MemoKey(pos, rule);
+//
+//        if (memo.containsKey(key)) {
+//            var value = memo.get(key);
+//
+//            if (value.hasResult()) {
+//                addNode(value.getResult());
+//                pos = value.getEndPos();
+//                return true;
+//            } else {
+//                addNode(IndexNode.NULL);
+//                // don't change the position
+//                // because the frame would fail
+//                if (pos != value.getEndPos()) throw new IllegalStateException();
+//                return false;
+//            }
+//        }
+
+        var new_frame = new ParseTreeFrame(pos, level, rule, null);
         frame_deque.push(new_frame);
 
         if (pos > error_pos) {
             error_pos = pos;
         }
 
-        context.log(() -> "  ".repeat(level) + "Entering Frame: " + rule + " at level " + level);
+        if (context.isDebug()) {
+            context.log("  ".repeat(level) + "Entering Frame: " + rule + " at level " + level);
+        }
+        return null;
     }
 
     @Override
     public void exit(boolean success) {
         var current_frame = frame_deque.pop();
 
-        if (success) {
-            context.log(() -> "  ".repeat(current_frame.getLevel()) +
-                    "Success in frame: " + current_frame.getRule() + " at level " +
-                    current_frame.getLevel() + " and position " + pos);
-            addNode(ofRule(current_frame));
-        } else {
-            context.log(() -> "  ".repeat(current_frame.getLevel()) +
-                    "Failure in frame: " + current_frame.getRule() + " at level " + current_frame.getLevel());
+//        var key = current_frame.getKey();
 
-            addNode(ofFailedRule(current_frame));
+        if (success) {
+            if (context.isDebug()) {
+                context.log("  ".repeat(current_frame.getLevel()) +
+                        "Success in frame: " + current_frame.getRule() + " at level " +
+                        current_frame.getLevel() + " and position " + pos);
+            }
+            var newNode = ofRule(current_frame);
+            addNode(newNode);
+//            memo.put(key, new MemoValue(pos, newNode));
+        } else {
+            if (context.isDebug()) {
+                context.log("  ".repeat(current_frame.getLevel()) +
+                        "Failure in frame: " + current_frame.getRule() + " at level " + current_frame.getLevel());
+            }
+            addNode(IndexNode.NULL);
             pos = current_frame.position();
+//            memo.put(key, new MemoValue(pos, null));
         }
     }
 
     private static ParseTreeNode ofRule(ParseTreeFrame frame) {
         return new IndexNode(frame.getNodes(), true,
-                false, frame.getRule(), null);
-    }
-
-    private static ParseTreeNode ofFailedRule(ParseTreeFrame frame) {
-        return new IndexNode(null, false,
                 false, frame.getRule(), null);
     }
 
@@ -170,15 +204,19 @@ public class SimpleParseTree implements ParseTree {
                 throw new ParserException("The type " + type +
                         " can only be parsed with literals");
             }
-            context.log(() -> "  ".repeat(current_frame.getLevel() + 1) +
-                    "Success in type " + type + ": " + token.getValue());
+            if (context.isDebug()) {
+                context.log("  ".repeat(current_frame.getLevel() + 1) +
+                        "Success in type " + type + ": " + token.getValue());
+            }
             addNode(ofElement(token));
             pos++;
             return true;
         }
 
-        context.log(() -> "  ".repeat(current_frame.getLevel() + 1) +
-                "Failure in type " + type + ": " + token.getValue());
+        if (context.isDebug()) {
+            context.log("  ".repeat(current_frame.getLevel() + 1) +
+                    "Failure in type " + type + ": " + token.getValue());
+        }
         addNode(IndexNode.NULL);
         return false;
     }
@@ -196,16 +234,22 @@ public class SimpleParseTree implements ParseTree {
         var current_frame = frame_deque.peek();
 
         if (token.getType().isLiteral() && token.getValue().equals(literal)) {
-            context.log(() -> "  ".repeat(current_frame.getLevel() + 1) +
-                    "Success in literal " + literal + ": " + token.getValue());
+
+            if (context.isDebug()) {
+                context.log("  ".repeat(current_frame.getLevel() + 1) +
+                        "Success in literal " + literal + ": " + token.getValue());
+            }
 
             addNode(ofElement(token));
             pos++;
             return true;
         }
 
-        context.log(() -> "  ".repeat(current_frame.getLevel() + 1) +
-                "Failure in literal " + literal + ": " + token.getValue());
+        if (context.isDebug()) {
+            context.log("  ".repeat(current_frame.getLevel() + 1) +
+                    "Failure in literal " + literal + ": " + token.getValue());
+        }
+
         addNode(IndexNode.NULL);
         return false;
     }

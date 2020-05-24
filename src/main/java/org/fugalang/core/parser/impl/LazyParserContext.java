@@ -7,7 +7,6 @@ import org.fugalang.core.parser.SyntaxError;
 import org.fugalang.core.util.LazyArrayList;
 
 import java.util.Iterator;
-import java.util.function.Supplier;
 
 public class LazyParserContext implements ParserContext {
 
@@ -44,8 +43,13 @@ public class LazyParserContext implements ParserContext {
     }
 
     @Override
-    public void log(Supplier<String> message) {
-        if (debug) System.out.println(message.get());
+    public boolean isDebug() {
+        return debug;
+    }
+
+    @Override
+    public void log(String message) {
+        if (debug) System.out.println(message);
     }
 
     @Override

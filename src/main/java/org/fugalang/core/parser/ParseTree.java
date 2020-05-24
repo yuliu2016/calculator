@@ -15,7 +15,7 @@ public interface ParseTree {
      * @param level the recursion level
      * @param rule  the rule that is being parsed
      */
-    void enter(int level, ParserRule rule);
+    Boolean enter(int level, ParserRule rule);
 
     /**
      * Exit the current call frame. This must be called in pairs

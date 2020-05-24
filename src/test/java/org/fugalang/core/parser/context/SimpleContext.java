@@ -1,11 +1,10 @@
 package org.fugalang.core.parser.context;
 
 import org.fugalang.core.parser.ParserContext;
-import org.fugalang.core.parser.SyntaxError;
 import org.fugalang.core.parser.ParserElement;
+import org.fugalang.core.parser.SyntaxError;
 
 import java.util.List;
-import java.util.function.Supplier;
 
 @Deprecated(forRemoval = true)
 public class SimpleContext implements ParserContext {
@@ -25,8 +24,8 @@ public class SimpleContext implements ParserContext {
     }
 
     @Override
-    public void log(Supplier<String> message) {
-        if (debug) System.out.println(message.get());
+    public void log(String message) {
+        if (debug) System.out.println(message);
     }
 
     @Override
