@@ -60,4 +60,17 @@ public class ParserStringUtil {
 
         return lines;
     }
+
+    public static boolean isWord(String s) {
+        if (s == null) {
+            return false;
+        }
+        for (int i = 0; i < s.length(); i++) {
+            var c = s.charAt(i);
+            if (!(c == '_' || c >= 'A' && c <= 'Z' || c >= 'a' && c <= 'z')) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

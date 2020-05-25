@@ -8,6 +8,8 @@ import org.fugalang.core.parser.RuleType;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import static org.fugalang.core.grammar.util.ParserStringUtil.*;
+
 public class PEGBuilder {
 
     private final Map<String, OrRule> ruleMap;
@@ -50,17 +52,20 @@ public class PEGBuilder {
     public void generateClasses() {
         // do this first because each rule needs to lookup the types of previous rules
         for (var entry : ruleMap.entrySet()) {
-            classNameMap.put(entry.getKey(), ParserStringUtil.convertCase(entry.getKey()));
+            classNameMap.put(entry.getKey(), convertCase(entry.getKey()));
         }
 
         for (var entry : ruleMap.entrySet()) {
+            if (isLeftRecursive(entry.getKey(), entry.getValue())) {
+                System.out.println("Left Recursive Rule!!! " + entry);
+            }
             var realClassName = classNameMap.get(entry.getKey());
             var className = ClassName.of(realClassName, entry.getKey());
 
             // use a root class to reduce files
             ClassBuilder cb = classSet.createRootClass(className);
 
-            var rule_repr = entry.getKey() + ": " + PEGCompat.constructString(entry.getValue());
+            var rule_repr = entry.getKey() + ": " + PEGUtil.constructString(entry.getValue());
             cb.setHeaderComments(rule_repr);
             cb.setRuleType(RuleType.Disjunction);
 
@@ -87,7 +92,7 @@ public class PEGBuilder {
 
             // must create new classes for AND rules that have more than one
             // REPEAT rule
-            for (AndRule andRule : PEGCompat.allAndRules(rule)) {
+            for (AndRule andRule : PEGUtil.allAndRules(rule)) {
 
                 // add class count to the name, even if not used, because
                 // otherwise could result in the same class names later,
@@ -103,11 +108,11 @@ public class PEGBuilder {
                     // a list can't hold multiple-ly typed objects
                     var component_cb = classSet.createComponentClass(newClassName);
 
-                    var rule_repr = PEGCompat.constructString(andRule);
+                    var rule_repr = PEGUtil.constructString(andRule);
                     component_cb.setHeaderComments(rule_repr);
                     component_cb.setRuleType(RuleType.Conjunction);
 
-                    var smart_name = FieldName.getSmartName(newClassName, andRule, converter);
+                    var smart_name = getSmartName(newClassName, andRule);
 
                     // Add a field to the class set
                     // The reason to do this first is that if adding the rule fails,
@@ -158,16 +163,16 @@ public class PEGBuilder {
     ) {
         SubRule subRule = repeatRule.subRule();
 
-        var repeatType = PEGCompat.getRepeatType(repeatRule);
+        var repeatType = PEGUtil.getRepeatType(repeatRule);
 
-        switch (PEGCompat.getRuleType(subRule)) {
+        switch (PEGUtil.getRuleType(subRule)) {
             case Group -> addOrRuleAsComponent(className, cb, subRule.group().orRule(),
                     repeatType, REQUIRED);
 
             case Optional -> addOrRuleAsComponent(className, cb,
                     subRule.optional().orRule(), repeatType, OPTIONAL);
 
-            case Token -> addToken(cb, repeatType, PEGCompat.getSubruleString(subRule), isOptional);
+            case Token -> addToken(cb, repeatType, PEGUtil.getSubruleString(subRule), isOptional);
         }
     }
 
@@ -263,11 +268,11 @@ public class PEGBuilder {
         } else {
 
             var component_cb = classSet.createComponentClass(className);
-            var rule_repr = PEGCompat.constructString(rule);
+            var rule_repr = PEGUtil.constructString(rule);
             component_cb.setHeaderComments(rule_repr);
             component_cb.setRuleType(RuleType.Disjunction);
 
-            var smart_name = FieldName.getSmartName(className, rule, converter);
+            var smart_name = getSmartName(className, rule);
 
             // Add a field to the class set
             // The reason to do this first is that if adding the rule fails,
@@ -277,5 +282,51 @@ public class PEGBuilder {
 
             addOrRule(className, component_cb, rule);
         }
+    }
+
+    public String getSmartName(ClassName className, AndRule andRule) {
+        if (andRule.repeatRules().size() <= 3 &&
+                andRule.repeatRules().stream().allMatch(PEGUtil::isSingle)) {
+
+            StringBuilder sb = null;
+            for (RepeatRule rule : andRule.repeatRules()) {
+                var subRuleString = PEGUtil.getSubruleString(rule.subRule());
+                if (sb == null) sb = new StringBuilder();
+                if (isWord(subRuleString)) {
+                    sb.append(convertCase(subRuleString));
+                } else {
+                    sb.append(converter.checkToken(subRuleString).orElseThrow().getFieldName());
+                }
+            }
+            if (sb != null) {
+                return decap(sb.toString());
+            }
+            throw new IllegalArgumentException();
+        }
+        return className.decapName();
+    }
+
+
+    public String getSmartName(ClassName className, OrRule orRule) {
+        var andList = orRule.orRule2s();
+        if (andList.isEmpty()) {
+            return getSmartName(className, orRule.andRule());
+        }
+        if (andList.size() == 1) {
+            return getSmartName(className, orRule.andRule()) +
+                    "Or" + capitalizeFirstChar(getSmartName(className, andList.get(0).andRule()));
+        }
+        return className.decapName();
+    }
+
+    private static String getFirstName(OrRule rule) {
+        var repeatRules = rule.andRule().repeatRules();
+        if (repeatRules.isEmpty()) return null;
+        var sub = repeatRules.get(0).subRule();
+        return sub.hasName() ? sub.name() : null;
+    }
+
+    public static boolean isLeftRecursive(String name, OrRule rule) {
+        return name.equals(getFirstName(rule));
     }
 }

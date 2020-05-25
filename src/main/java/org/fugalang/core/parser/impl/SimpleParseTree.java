@@ -14,10 +14,10 @@ public class SimpleParseTree implements ParseTree {
     private ParseTreeNode result_node;
 
     private int pos;
-    private int error_pos;
+    private int max_reached_pos;
 
-    private final Deque<ParseTreeFrame> frame_deque = new ArrayDeque<>();
-    private final Map<Integer, Map<ParserRule, MemoValue>> memo = new HashMap<>();
+    private final Deque<Frame> frame_deque = new ArrayDeque<>();
+    private final Map<Integer, Map<ParserRule, Memo>> memo = new HashMap<>();
 
     private SimpleParseTree() {
     }
@@ -29,7 +29,7 @@ public class SimpleParseTree implements ParseTree {
     ) {
         this.context = context;
         pos = 0;
-        error_pos = 0;
+        max_reached_pos = 0;
 
         frame_deque.clear();
         memo.clear();
@@ -37,9 +37,9 @@ public class SimpleParseTree implements ParseTree {
         var result = start.apply(this, 0);
 
         if (!result) {
-            context.errorForElem(error_pos, "Invalid syntax");
+            context.errorForElem(max_reached_pos, "Invalid syntax");
         } else if (!context.didFinish(pos)) {
-            context.errorForElem(error_pos, "Invalid syntax");
+            context.errorForElem(max_reached_pos, "Invalid syntax");
         }
 
         return converter.apply(result_node);
@@ -55,8 +55,9 @@ public class SimpleParseTree implements ParseTree {
             return false;
         }
 
+        Map<ParserRule, Memo> memo_at_pos;
         if (memo.containsKey(pos)) {
-            var memo_at_pos = memo.get(pos);
+            memo_at_pos = memo.get(pos);
 
             if (memo_at_pos.containsKey(rule)) {
 
@@ -75,13 +76,18 @@ public class SimpleParseTree implements ParseTree {
                     return false;
                 }
             }
+        } else {
+            // IdentityHashMap is used here because
+            // it only makes sense to cache identical rules
+            memo_at_pos = new IdentityHashMap<>();
+            memo.put(pos, memo_at_pos);
         }
 
-        var new_frame = new ParseTreeFrame(pos, level, rule);
+        var new_frame = new Frame(pos, level, rule, memo_at_pos);
         frame_deque.push(new_frame);
 
-        if (pos > error_pos) {
-            error_pos = pos;
+        if (pos > max_reached_pos) {
+            max_reached_pos = pos;
         }
 
         if (context.isDebug()) {
@@ -94,40 +100,26 @@ public class SimpleParseTree implements ParseTree {
     public void exit(boolean success) {
         var current_frame = frame_deque.pop();
 
-        var start_pos = current_frame.position();
-        Map<ParserRule, MemoValue> memo_at_pos;
-        if (memo.containsKey(start_pos)) {
-            memo_at_pos = memo.get(start_pos);
-        } else {
-            // identityhashmap is used here because
-            // it only makes sense to cache identical rules
-            memo_at_pos = new IdentityHashMap<>();
-            memo.put(start_pos, memo_at_pos);
-        }
+        var memo_at_pos = current_frame.memo_at_pos;
 
         if (success) {
             if (context.isDebug()) {
-                context.log("  ".repeat(current_frame.getLevel()) +
-                        "Success in frame: " + current_frame.getRule() + " at level " +
-                        current_frame.getLevel() + " and position " + pos);
+                context.log("  ".repeat(current_frame.level) +
+                        "Success in frame: " + current_frame.rule + " at level " +
+                        current_frame.level + " and position " + pos);
             }
-            var newNode = ofRule(current_frame);
+            var newNode = IndexNode.fromFrame(current_frame);
             addNode(newNode);
-            memo_at_pos.put(current_frame.getRule(), new MemoValue(pos, newNode));
+            memo_at_pos.put(current_frame.rule, new Memo(pos, newNode));
         } else {
             if (context.isDebug()) {
-                context.log("  ".repeat(current_frame.getLevel()) +
-                        "Failure in frame: " + current_frame.getRule() + " at level " + current_frame.getLevel());
+                context.log("  ".repeat(current_frame.level) +
+                        "Failure in frame: " + current_frame.rule + " at level " + current_frame.level);
             }
             addNode(IndexNode.NULL);
-            pos = current_frame.position();
-            memo_at_pos.put(current_frame.getRule(), new MemoValue(pos, null));
+            pos = current_frame.position;
+            memo_at_pos.put(current_frame.rule, new Memo(pos, null));
         }
-    }
-
-    private static ParseTreeNode ofRule(ParseTreeFrame frame) {
-        return new IndexNode(frame.getNodes(), true,
-                false, frame.getRule(), null);
     }
 
     private void addNode(ParseTreeNode node) {
@@ -142,7 +134,7 @@ public class SimpleParseTree implements ParseTree {
                 current_frame.collection.add(node);
             }
         } else {
-            current_frame.getNodes().add(node);
+            current_frame.nodes.add(node);
         }
     }
 
@@ -158,10 +150,6 @@ public class SimpleParseTree implements ParseTree {
         current_frame.collection = new ArrayList<>();
     }
 
-    private static ParseTreeNode ofCollection(List<ParseTreeNode> collection) {
-        return new IndexNode(collection, true, true, null, null);
-    }
-
     @Override
     public void exitLoop() {
         if (frame_deque.isEmpty()) {
@@ -172,20 +160,9 @@ public class SimpleParseTree implements ParseTree {
             throw new ParserException("Mismatched exit collection");
         }
 
-        // empty lists are not considered a collection for string
-        // purposes. It is instead handled in ParseTreeNode#asCollection
-        // to return an empty iterable to the coller if the node
-        // is not present
-        var node = current_frame.collection.isEmpty() ?
-                IndexNode.NULL :
-                ofCollection(current_frame.collection);
-
+        var node = IndexNode.fromCollection(current_frame.collection);
         current_frame.collection = null;
         addNode(node);
-    }
-
-    private static ParseTreeNode ofElement(ParserElement element) {
-        return new IndexNode(null, true, false, null, element);
     }
 
     @Override
@@ -206,16 +183,16 @@ public class SimpleParseTree implements ParseTree {
                         " can only be parsed with literals");
             }
             if (context.isDebug()) {
-                context.log("  ".repeat(current_frame.getLevel() + 1) +
+                context.log("  ".repeat(current_frame.level + 1) +
                         "Success in type " + type + ": " + token.getValue());
             }
-            addNode(ofElement(token));
+            addNode(IndexNode.ofElement(token));
             pos++;
             return true;
         }
 
         if (context.isDebug()) {
-            context.log("  ".repeat(current_frame.getLevel() + 1) +
+            context.log("  ".repeat(current_frame.level + 1) +
                     "Failure in type " + type + ": " + token.getValue());
         }
         addNode(IndexNode.NULL);
@@ -237,17 +214,17 @@ public class SimpleParseTree implements ParseTree {
         if (token.getType().isLiteral() && token.getValue().equals(literal)) {
 
             if (context.isDebug()) {
-                context.log("  ".repeat(current_frame.getLevel() + 1) +
+                context.log("  ".repeat(current_frame.level + 1) +
                         "Success in literal " + literal + ": " + token.getValue());
             }
 
-            addNode(ofElement(token));
+            addNode(IndexNode.ofElement(token));
             pos++;
             return true;
         }
 
         if (context.isDebug()) {
-            context.log("  ".repeat(current_frame.getLevel() + 1) +
+            context.log("  ".repeat(current_frame.level + 1) +
                     "Failure in literal " + literal + ": " + token.getValue());
         }
 

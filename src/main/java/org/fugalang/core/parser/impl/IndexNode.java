@@ -10,6 +10,25 @@ class IndexNode implements ParseTreeNode {
     static final ParseTreeNode NULL = new IndexNode(null, false,
             false, null, null);
 
+    static ParseTreeNode fromFrame(Frame frame) {
+        return new IndexNode(frame.nodes, true,
+                false, frame.rule, null);
+    }
+
+    static ParseTreeNode fromCollection(List<ParseTreeNode> collection) {
+        // empty lists are not considered a collection for string
+        // purposes. It is instead handled in ParseTreeNode#asCollection
+        // to return an empty iterable to the coller if the node
+        // is not present
+        return collection.isEmpty() ? NULL : new IndexNode(
+                collection, true, true, null, null);
+    }
+
+    static ParseTreeNode ofElement(ParserElement element) {
+        return new IndexNode(null, true,
+                false, null, element);
+    }
+
     private final List<ParseTreeNode> children;
 
     private final boolean isPresent;

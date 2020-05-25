@@ -127,7 +127,7 @@ public abstract class NodeWrapper {
 
     @Override
     public String toString() {
-        return prettyFormat(0);
+        return prettyFormat(-1);
     }
 
     public String prettyFormat(int indent) {

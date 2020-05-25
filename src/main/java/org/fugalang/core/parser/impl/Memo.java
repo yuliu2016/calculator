@@ -2,11 +2,11 @@ package org.fugalang.core.parser.impl;
 
 import org.fugalang.core.parser.ParseTreeNode;
 
-public class MemoValue {
+public class Memo {
     private final int endPos;
     private final ParseTreeNode result;
 
-    public MemoValue(int endPos, ParseTreeNode result) {
+    public Memo(int endPos, ParseTreeNode result) {
         this.endPos = endPos;
         this.result = result;
     }

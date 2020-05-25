@@ -11,6 +11,30 @@ public class CalculatorParser {
     /**
      * sum: sum '+' term | sum '-' term | term
      */
+    public static boolean sum_recur(ParseTree t, int lv) {
+        var m = t.enter(lv, SUM);
+        if (m != null) return m;
+        var pos = t.position();
+        var lastpos = pos;
+//        storeMemo(fail);
+        boolean r = false;
+        while (true) {
+//            t.reset(pos);
+            boolean res = sum(t, lv);
+            if (res) r = true;
+            var endpos = t.position();
+            if (endpos > lastpos) break;
+            lastpos = endpos;
+//            storeMemo();
+        }
+//        t.reset(lastpos);
+        t.exit(r);
+        return r;
+    }
+
+    /**
+     * sum: sum '+' term | sum '-' term | term
+     */
     public static boolean sum(ParseTree t, int lv) {
         var m = t.enter(lv, SUM);
         if (m != null) return m;

@@ -8,7 +8,7 @@ import org.fugalang.core.grammar.util.FirstAndMore;
 
 import java.util.stream.Collectors;
 
-public class PEGCompat {
+public class PEGUtil {
     public static String constructString(OrRule orRule) {
         return constructString(orRule.andRule()) + orRule
                 .orRule2s()
@@ -21,7 +21,7 @@ public class PEGCompat {
         return andRule
                 .repeatRules()
                 .stream()
-                .map(PEGCompat::constructString)
+                .map(PEGUtil::constructString)
                 .collect(Collectors.joining(" "));
     }
 
@@ -61,4 +61,13 @@ public class PEGCompat {
         return subRule.hasName() ? subRule.name() :
                 subRule.hasString() ? subRule.string() : null;
     }
+
+    public static boolean isSingle(RepeatRule repeatRule) {
+        if (repeatRule.hasTimesOrPlus()) {
+            return false;
+        }
+        var sub = repeatRule.subRule();
+        return sub.hasString() || sub.hasName();
+    }
+
 }
