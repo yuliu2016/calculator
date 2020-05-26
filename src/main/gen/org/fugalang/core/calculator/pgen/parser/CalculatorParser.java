@@ -14,22 +14,23 @@ public class CalculatorParser {
     public static boolean sum_recur(ParseTree t, int lv) {
         var m = t.enter(lv, SUM);
         if (m != null) return m;
-        var pos = t.position();
-        var lastpos = pos;
-//        storeMemo(fail);
-        boolean r = false;
+        var p = t.position();
+        t.cache();
+        boolean s = false;
         while (true) {
-//            t.reset(pos);
-            boolean res = sum(t, lv);
-            if (res) r = true;
-            var endpos = t.position();
-            if (endpos > lastpos) break;
-            lastpos = endpos;
-//            storeMemo();
+            t.reset();
+            boolean r;
+            r = sum_1(t, lv + 1);
+            r = r || sum_2(t, lv + 1);
+            r = r || term(t, lv + 1);
+            if (r) s = true;
+            var e = t.position();
+            if (e <= p) break;
+            p = e;
         }
-//        t.reset(lastpos);
-        t.exit(r);
-        return r;
+        t.restore();
+        t.exit(s);
+        return s;
     }
 
     /**

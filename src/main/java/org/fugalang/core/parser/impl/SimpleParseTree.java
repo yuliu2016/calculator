@@ -45,11 +45,35 @@ public class SimpleParseTree implements ParseTree {
         return converter.apply(result_node);
     }
 
+    private Frame peekFrame() {
+        if (frame_deque.isEmpty()) {
+            throw new ParserException("No frame on deque");
+        }
+        return frame_deque.peek();
+    }
+
+    private void addNode(ParseTreeNode node) {
+        if (frame_deque.isEmpty()) {
+            result_node = node;
+            return;
+        }
+        var current_frame = frame_deque.peek();
+        if (current_frame.collection != null) {
+            // collections should not contain a failed rule/node
+            if (node.isPresent()) {
+                current_frame.collection.add(node);
+            }
+        } else {
+            current_frame.nodes.add(node);
+        }
+    }
+
     @Override
     public Boolean enter(int level, ParserRule rule) {
 
         if (level > MAX_RECURSION_LEVEL) {
             if (!frame_deque.isEmpty()) {
+                // Don't throw an exception because a long stack trace isn't really needed
                 System.err.println("Max recursion level of 300 reached inside rule " + rule);
             }
             return false;
@@ -72,7 +96,7 @@ public class SimpleParseTree implements ParseTree {
                     addNode(IndexNode.NULL);
                     // don't change the position
                     // because the frame would fail
-                    if (pos != value.getEndPos()) throw new IllegalStateException();
+                    if (pos != value.getEndPos()) throw new ParserException();
                     return false;
                 }
             }
@@ -98,138 +122,69 @@ public class SimpleParseTree implements ParseTree {
 
     @Override
     public void exit(boolean success) {
-        var current_frame = frame_deque.pop();
+        var frame = frame_deque.pop();
 
-        var memo_at_pos = current_frame.memo_at_pos;
+        var memo_at_pos = frame.memo_at_pos;
 
         if (success) {
             if (context.isDebug()) {
-                context.log("  ".repeat(current_frame.level) +
-                        "Success in frame: " + current_frame.rule + " at level " +
-                        current_frame.level + " and position " + pos);
+                context.log("  ".repeat(frame.level) +
+                        "Success in frame: " + frame.rule + " at level " +
+                        frame.level + " and position " + pos);
             }
-            var newNode = IndexNode.fromFrame(current_frame);
-            addNode(newNode);
-            memo_at_pos.put(current_frame.rule, new Memo(pos, newNode));
+            var node_from_frame = IndexNode.fromFrame(frame);
+            addNode(node_from_frame);
+            memo_at_pos.put(frame.rule, new Memo(pos, node_from_frame));
         } else {
             if (context.isDebug()) {
-                context.log("  ".repeat(current_frame.level) +
-                        "Failure in frame: " + current_frame.rule + " at level " + current_frame.level);
+                context.log("  ".repeat(frame.level) +
+                        "Failure in frame: " + frame.rule + " at level " + frame.level);
             }
             addNode(IndexNode.NULL);
-            pos = current_frame.position;
-            memo_at_pos.put(current_frame.rule, new Memo(pos, null));
+            pos = frame.position;
+            memo_at_pos.put(frame.rule, new Memo(pos, null));
         }
     }
 
-    private void addNode(ParseTreeNode node) {
-        if (frame_deque.isEmpty()) {
-            result_node = node;
-            return;
-        }
-        var current_frame = frame_deque.peek();
-        if (current_frame.collection != null) {
-            // collections should not contain a failed rule/node
-            if (node.isPresent()) {
-                current_frame.collection.add(node);
-            }
-        } else {
-            current_frame.nodes.add(node);
-        }
+    @Override
+    public void cache() {
+        var frame = peekFrame();
+        frame.memo_at_pos.put(frame.rule, new Memo(frame.position, null));
+    }
+
+    @Override
+    public void reset() {
+        var frame = peekFrame();
+        frame.nodes.clear();
+        frame.collection = null;
+        pos = frame.position;
+    }
+
+    @Override
+    public void restore() {
+        var frame = peekFrame();
+        frame.nodes.clear();
+        frame.nodes.addAll(frame.collection);
     }
 
     @Override
     public void enterLoop() {
-        if (frame_deque.isEmpty()) {
-            throw new ParserException("No frame on deque");
-        }
-        var current_frame = frame_deque.peek();
-        if (current_frame.collection != null) {
+        var frame = peekFrame();
+        if (frame.collection != null) {
             throw new ParserException("Collection already entered");
         }
-        current_frame.collection = new ArrayList<>();
+        frame.collection = new ArrayList<>();
     }
 
     @Override
     public void exitLoop() {
-        if (frame_deque.isEmpty()) {
-            throw new ParserException("No frame on deque");
-        }
-        var current_frame = frame_deque.peek();
-        if (current_frame.collection == null) {
+        var frame = peekFrame();
+        if (frame.collection == null) {
             throw new ParserException("Mismatched exit collection");
         }
-
-        var node = IndexNode.fromCollection(current_frame.collection);
-        current_frame.collection = null;
+        var node = IndexNode.fromCollection(frame.collection);
+        frame.collection = null;
         addNode(node);
-    }
-
-    @Override
-    public boolean consume(ElementType type) {
-        if (context.didFinish(pos)) {
-            return false;
-        }
-        var token = context.getElem(pos);
-
-        if (frame_deque.isEmpty()) {
-            throw new ParserException("No frame on deque");
-        }
-        var current_frame = frame_deque.peek();
-
-        if (token.getType() == type) {
-            if (type.isLiteral()) {
-                throw new ParserException("The type " + type +
-                        " can only be parsed with literals");
-            }
-            if (context.isDebug()) {
-                context.log("  ".repeat(current_frame.level + 1) +
-                        "Success in type " + type + ": " + token.getValue());
-            }
-            addNode(IndexNode.ofElement(token));
-            pos++;
-            return true;
-        }
-
-        if (context.isDebug()) {
-            context.log("  ".repeat(current_frame.level + 1) +
-                    "Failure in type " + type + ": " + token.getValue());
-        }
-        addNode(IndexNode.NULL);
-        return false;
-    }
-
-    @Override
-    public boolean consume(String literal) {
-        if (context.didFinish(pos)) {
-            return false;
-        }
-        var token = context.getElem(pos);
-
-        if (frame_deque.isEmpty()) {
-            throw new ParserException("No frame on deque");
-        }
-        var current_frame = frame_deque.peek();
-
-        if (token.getType().isLiteral() && token.getValue().equals(literal)) {
-
-            if (context.isDebug()) {
-                context.log("  ".repeat(current_frame.level + 1) +
-                        "Success in literal " + literal + ": " + token.getValue());
-            }
-
-            addNode(IndexNode.ofElement(token));
-            pos++;
-            return true;
-        }
-
-        if (context.isDebug()) {
-            context.log("  ".repeat(current_frame.level + 1) +
-                    "Failure in literal " + literal + ": " + token.getValue());
-        }
-
-        addNode(IndexNode.NULL);
-        return false;
     }
 
     @Override
@@ -240,9 +195,67 @@ public class SimpleParseTree implements ParseTree {
     @Override
     public boolean loopGuard(int position) {
         if (position == this.pos) {
-            throw new ParserException("Parsed an empty string");
+            System.err.println("Loop parsed an empty string");
+            return true;
+        } else {
+            return false;
         }
-        return false;
+    }
+
+    @Override
+    public boolean consume(ElementType type) {
+        if (context.didFinish(pos)) {
+            return false;
+        }
+        var token = context.getElem(pos);
+        var frame = peekFrame();
+
+        if (token.getType() == type) {
+            if (type.isLiteral()) {
+                throw new ParserException("The type " + type +
+                        " can only be parsed with literals");
+            }
+            if (context.isDebug()) {
+                context.log("  ".repeat(frame.level + 1) +
+                        "Success in type " + type + ": " + token.getValue());
+            }
+            addNode(IndexNode.ofElement(token));
+            pos++;
+            return true;
+        } else {
+            if (context.isDebug()) {
+                context.log("  ".repeat(frame.level + 1) +
+                        "Failure in type " + type + ": " + token.getValue());
+            }
+            addNode(IndexNode.NULL);
+            return false;
+        }
+    }
+
+    @Override
+    public boolean consume(String literal) {
+        if (context.didFinish(pos)) {
+            return false;
+        }
+        var token = context.getElem(pos);
+        var frame = peekFrame();
+
+        if (token.getType().isLiteral() && token.getValue().equals(literal)) {
+            if (context.isDebug()) {
+                context.log("  ".repeat(frame.level + 1) +
+                        "Success in literal " + literal + ": " + token.getValue());
+            }
+            addNode(IndexNode.ofElement(token));
+            pos++;
+            return true;
+        } else {
+            if (context.isDebug()) {
+                context.log("  ".repeat(frame.level + 1) +
+                        "Failure in literal " + literal + ": " + token.getValue());
+            }
+            addNode(IndexNode.NULL);
+            return false;
+        }
     }
 
     @Override
