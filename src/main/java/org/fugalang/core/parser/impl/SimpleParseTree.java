@@ -42,6 +42,12 @@ public class SimpleParseTree implements ParseTree {
             context.errorForElem(max_reached_pos, "Invalid syntax");
         }
 
+        // clear fields so that the node references can
+        // be garbage collected by JVM before another call to this methods
+        frame_deque.clear();
+        memo.clear();
+        this.context = null;
+
         return converter.apply(result_node);
     }
 
@@ -84,9 +90,12 @@ public class SimpleParseTree implements ParseTree {
             memo_at_pos = memo.get(pos);
 
             if (memo_at_pos.containsKey(rule)) {
-
                 var value = memo_at_pos.get(rule);
-                context.log("Memo hit for pos: " + pos + " and rule: " + rule + "; " + value);
+
+                if (context.isDebug()) {
+                    context.log("  ".repeat(level) + "Memo found for pos " + pos +
+                            " and rule " + rule + "; " + value);
+                }
 
                 if (value.hasResult()) {
                     addNode(value.getResult());
@@ -124,7 +133,10 @@ public class SimpleParseTree implements ParseTree {
     public void exit(boolean success) {
         var frame = frame_deque.pop();
 
-        var memo_at_pos = frame.memo_at_pos;
+        // add to the memo ONLY if the parent frame is not exepecting left-recursion
+        // caching is handled by save instead
+        var enable_memo = frame_deque.isEmpty() ||
+                frame_deque.peek().left_recursion_nodes == null;
 
         if (success) {
             if (context.isDebug()) {
@@ -134,7 +146,9 @@ public class SimpleParseTree implements ParseTree {
             }
             var node_from_frame = IndexNode.fromFrame(frame);
             addNode(node_from_frame);
-            memo_at_pos.put(frame.rule, new Memo(pos, node_from_frame));
+            if (enable_memo) {
+                frame.memo_at_pos.put(frame.rule, new Memo(pos, node_from_frame));
+            }
         } else {
             if (context.isDebug()) {
                 context.log("  ".repeat(frame.level) +
@@ -142,29 +156,36 @@ public class SimpleParseTree implements ParseTree {
             }
             addNode(IndexNode.NULL);
             pos = frame.position;
-            memo_at_pos.put(frame.rule, new Memo(pos, null));
+            if (enable_memo) {
+                frame.memo_at_pos.put(frame.rule, new Memo(pos, null));
+            }
         }
     }
 
     @Override
-    public void cache() {
+    public void cache(boolean success) {
         var frame = peekFrame();
-        frame.memo_at_pos.put(frame.rule, new Memo(frame.position, null));
-    }
 
-    @Override
-    public void reset() {
-        var frame = peekFrame();
-        frame.nodes.clear();
-        frame.collection = null;
+        if (success) {
+            var node_from_frame = IndexNode.fromFrame(frame);
+            frame.memo_at_pos.put(frame.rule, new Memo(pos, node_from_frame));
+        } else {
+            frame.memo_at_pos.put(frame.rule, new Memo(frame.position, null));
+        }
+
+        // remember the previous nodes, because when the left-recursion rule
+        // cannot parse a longer string, it needs to be restored
+        frame.left_recursion_nodes = frame.nodes;
+        frame.nodes = new ArrayList<>();
         pos = frame.position;
     }
 
     @Override
-    public void restore() {
+    public void restore(int position) {
         var frame = peekFrame();
-        frame.nodes.clear();
-        frame.nodes.addAll(frame.collection);
+        frame.nodes = frame.left_recursion_nodes;
+        frame.left_recursion_nodes = null;
+        pos = position;
     }
 
     @Override

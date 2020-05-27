@@ -11,40 +11,25 @@ public class CalculatorParser {
     /**
      * sum: sum '+' term | sum '-' term | term
      */
-    public static boolean sum_recur(ParseTree t, int lv) {
+    public static boolean sum(ParseTree t, int lv) {
         var m = t.enter(lv, SUM);
         if (m != null) return m;
         var p = t.position();
-        t.cache();
         boolean s = false;
         while (true) {
-            t.reset();
+            t.cache(s);
             boolean r;
             r = sum_1(t, lv + 1);
             r = r || sum_2(t, lv + 1);
             r = r || term(t, lv + 1);
-            if (r) s = true;
+            s = r || s;
             var e = t.position();
             if (e <= p) break;
             p = e;
         }
-        t.restore();
+        t.restore(p);
         t.exit(s);
         return s;
-    }
-
-    /**
-     * sum: sum '+' term | sum '-' term | term
-     */
-    public static boolean sum(ParseTree t, int lv) {
-        var m = t.enter(lv, SUM);
-        if (m != null) return m;
-        boolean r;
-        r = sum_1(t, lv + 1);
-        r = r || sum_2(t, lv + 1);
-        r = r || term(t, lv + 1);
-        t.exit(r);
-        return r;
     }
 
     /**
@@ -81,13 +66,23 @@ public class CalculatorParser {
     public static boolean term(ParseTree t, int lv) {
         var m = t.enter(lv, TERM);
         if (m != null) return m;
-        boolean r;
-        r = term_1(t, lv + 1);
-        r = r || term_2(t, lv + 1);
-        r = r || term_3(t, lv + 1);
-        r = r || factor(t, lv + 1);
-        t.exit(r);
-        return r;
+        var p = t.position();
+        boolean s = false;
+        while (true) {
+            t.cache(s);
+            boolean r;
+            r = term_1(t, lv + 1);
+            r = r || term_2(t, lv + 1);
+            r = r || term_3(t, lv + 1);
+            r = r || factor(t, lv + 1);
+            s = r || s;
+            var e = t.position();
+            if (e <= p) break;
+            p = e;
+        }
+        t.restore(p);
+        t.exit(s);
+        return s;
     }
 
     /**

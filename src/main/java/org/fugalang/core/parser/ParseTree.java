@@ -1,5 +1,8 @@
 package org.fugalang.core.parser;
 
+/**
+ * Interface used by a generated PEG parser
+ */
 public interface ParseTree {
 
     /**
@@ -21,31 +24,54 @@ public interface ParseTree {
     Boolean enter(int level, ParserRule rule);
 
     /**
-     * Pop the current call frame store the result
+     * Pop the current call frame store the result. This will also store the
+     * resulting tree in the memoization cache, unless it's parent frame
+     * is parsing a left-recursive rule, i.e. it has called
+     * {@link #cache(boolean)} at least once. This is needed because on
+     * {@link #enter(int, ParserRule)} of the same frame later, it needs
+     * to retry the rule, not just pulling it from the cache
      *
      * @param success whether this frame has successfully parsed its components
      */
     void exit(boolean success);
 
-
-    void cache();
-
-    void reset();
-
-    void restore();
+    /**
+     * Cache the current parsing result, used to parse left-recursive grammars.
+     * The children nodes of the current frame is assigned to a cache field,
+     * then emptied, so that the same frame can be re-parsed with new information
+     * for the parser.
+     *
+     * @param success if the cache should indicate success or not. When parsing
+     *                left-recursive grammars, this should be false for the
+     *                first iteration to "prime" a failure (to avoid infinite
+     *                recursion). Subsequent calls should be true (when parsing
+     *                is actually successful)
+     */
+    void cache(boolean success);
 
     /**
-     * Enter a collection subframe
+     * Restore the last cached value from {@link #cache(boolean)} back onto
+     * the frame. This is needed because there has to be one extra iteration
+     * before the parser realises that it has parsed the longest chain of
+     * tokens that it could for the left-recursive rule.
+     *
+     * @param position the position to go back to, as tracked in the call frame
+     */
+    void restore(int position);
+
+    /**
+     * Enter a loop subframe. This must be paired with {@link #exitLoop()} ()}
      */
     void enterLoop();
 
     /**
-     * Enter the collection subframe
+     * Exit a loop subframe. This must be paired with {@link #enterLoop()} ()} ()}
      */
     void exitLoop();
 
     /**
-     * @return the current position of the parser
+     * @return the current position of the parser. i.e. the index to the stream
+     * of tokens that it's currently parsing
      */
     int position();
 

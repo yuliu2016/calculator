@@ -12,11 +12,15 @@ class Frame {
     final int position;
     final int level;
     final ParserRule rule;
-    final List<ParseTreeNode> nodes = new ArrayList<>();
     final Map<ParserRule, Memo> memo_at_pos;
 
-    // a mutable collection of
+    List<ParseTreeNode> nodes = new ArrayList<>();
+
+    // used for tracking collection sub-frames
     List<ParseTreeNode> collection = null;
+
+    // used for tracking left recursion;
+    List<ParseTreeNode> left_recursion_nodes = null;
 
     public Frame(int position, int level, ParserRule rule, Map<ParserRule, Memo> memo_at_pos) {
         this.position = position;
