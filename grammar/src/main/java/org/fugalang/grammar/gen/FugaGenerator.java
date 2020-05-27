@@ -4,7 +4,7 @@ public class FugaGenerator {
     private static final String USER_DIR = System.getProperty("user.dir");
     private static final String GRAMMAR_PATH = "src/main/files/Grammar";
     private static final PackageOutput PACKAGE_OUTPUT = new PackageOutput(USER_DIR,
-            "src/main/gen", "org.fugalang.core.pgen", "Fuga");
+            "src/main/gen", "org.fugalang.core.peg", "Fuga");
 
     public static void main(String[] args) throws Exception {
         new PEGBuilder(

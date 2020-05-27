@@ -1,9 +1,9 @@
 package org.fugalang.grammar.gen;
 
-import org.fugalang.grammar.pgen.AndRule;
-import org.fugalang.grammar.pgen.OrRule;
-import org.fugalang.grammar.pgen.RepeatRule;
-import org.fugalang.grammar.pgen.SubRule;
+import org.fugalang.grammar.peg.AndRule;
+import org.fugalang.grammar.peg.OrRule;
+import org.fugalang.grammar.peg.RepeatRule;
+import org.fugalang.grammar.peg.SubRule;
 import org.fugalang.grammar.util.FirstAndMore;
 
 import java.util.stream.Collectors;

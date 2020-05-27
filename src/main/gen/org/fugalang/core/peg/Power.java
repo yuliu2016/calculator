@@ -1,0 +1,40 @@
+package org.fugalang.core.peg;
+
+import org.fugalang.core.parser.NodeWrapper;
+import org.fugalang.core.parser.ParseTreeNode;
+
+/**
+ * power: primary ['**' factor]
+ */
+public final class Power extends NodeWrapper {
+
+    public Power(ParseTreeNode node) {
+        super(node);
+    }
+
+    public Primary primary() {
+        return get(0, Primary.class);
+    }
+
+    public Power2 powerFactor() {
+        return get(1, Power2.class);
+    }
+
+    public boolean hasPowerFactor() {
+        return has(1);
+    }
+
+    /**
+     * '**' factor
+     */
+    public static final class Power2 extends NodeWrapper {
+
+        public Power2(ParseTreeNode node) {
+            super(node);
+        }
+
+        public Factor factor() {
+            return get(1, Factor.class);
+        }
+    }
+}

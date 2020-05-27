@@ -1,7 +1,7 @@
 package org.fugalang.grammar.gen;
 
-import org.fugalang.grammar.pgen.Rules;
-import org.fugalang.grammar.pgen.parser.MetaParser;
+import org.fugalang.grammar.peg.Rules;
+import org.fugalang.grammar.peg.parser.MetaParser;
 import org.fugalang.core.parser.impl.LazyParserContext;
 import org.fugalang.core.parser.impl.LexingVisitor;
 import org.fugalang.core.parser.impl.SimpleParseTree;

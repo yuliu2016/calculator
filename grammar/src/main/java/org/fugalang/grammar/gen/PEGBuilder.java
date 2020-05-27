@@ -3,7 +3,7 @@ package org.fugalang.grammar.gen;
 import org.fugalang.grammar.util.ParserStringUtil;
 import org.fugalang.core.parser.RuleType;
 import org.fugalang.grammar.classbuilder.*;
-import org.fugalang.grammar.pgen.*;
+import org.fugalang.grammar.peg.*;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

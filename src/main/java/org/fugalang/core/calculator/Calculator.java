@@ -1,7 +1,7 @@
 package org.fugalang.core.calculator;
 
-import org.fugalang.core.calculator.pgen.*;
-import org.fugalang.core.calculator.pgen.parser.CalculatorParser;
+import org.fugalang.core.calculator.peg.*;
+import org.fugalang.core.calculator.peg.parser.CalculatorParser;
 import org.fugalang.core.parser.SyntaxError;
 import org.fugalang.core.parser.impl.LazyParserContext;
 import org.fugalang.core.parser.impl.LexingVisitor;
