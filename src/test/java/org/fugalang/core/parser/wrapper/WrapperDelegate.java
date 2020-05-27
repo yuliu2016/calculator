@@ -141,66 +141,59 @@ class WrapperDelegate implements NodeDelegate {
         if (repr != null) {
             return repr;
         }
-        switch (rule.getRuleType()) {
-            case Disjunction -> {
-                var maybeName = rule.getRuleName() + "#" + chosenIndex;
-                repr = "(" + maybeName + " " + chosenComponent + ")";
-            }
-            case Conjunction -> {
-                var maybeName = rule.getRuleName() + " ";
-                var sb = new StringBuilder();
-                sb.append("(");
-                sb.append(maybeName);
-                for (int i = 0; i < components.size(); i++) {
-                    Object component = components.get(i);
-                    if (component == null) {
-                        sb.append("null");
-                    } else {
-                        sb.append(component.toString());
-                    }
-                    if (i != components.size() - 1) {
-                        sb.append(" ");
-                    }
+        if (rule.getRuleType() == RuleType.Disjunction) {
+            var maybeName = rule.getRuleName() + "#" + chosenIndex;
+            repr = "(" + maybeName + " " + chosenComponent + ")";
+        } else if (rule.getRuleType() == RuleType.Conjunction) {
+            var maybeName = rule.getRuleName() + " ";
+            var sb = new StringBuilder();
+            sb.append("(");
+            sb.append(maybeName);
+            for (int i = 0; i < components.size(); i++) {
+                Object component = components.get(i);
+                if (component == null) {
+                    sb.append("null");
+                } else {
+                    sb.append(component.toString());
                 }
-                sb.append(")");
-                repr = sb.toString();
+                if (i != components.size() - 1) {
+                    sb.append(" ");
+                }
             }
+            sb.append(")");
+            repr = sb.toString();
         }
         return repr;
     }
 
     @Override
     public void buildString(TreeStringBuilder builder) {
-        switch (rule.getRuleType()) {
+        if (rule.getRuleType() == RuleType.Disjunction) {
+            builder.setName(rule.getRuleName() + "#" + chosenIndex);
 
-            case Disjunction -> {
-                builder.setName(rule.getRuleName() + "#" + chosenIndex);
-
-                if (chosenComponent instanceof TreeStringElem) {
-                    builder.addElem((TreeStringElem) chosenComponent);
-                } else if (chosenComponent instanceof List) {
-                    builder.addElem(new ListStringElem((List<?>) chosenComponent));
-                } else {
-                    builder.addString(chosenComponent.toString());
-                }
+            if (chosenComponent instanceof TreeStringElem) {
+                builder.addElem((TreeStringElem) chosenComponent);
+            } else if (chosenComponent instanceof List) {
+                builder.addElem(new ListStringElem((List<?>) chosenComponent));
+            } else {
+                builder.addString(chosenComponent.toString());
             }
-            case Conjunction -> {
-                builder.setName(rule.getRuleName());
+        } else if (rule.getRuleType() == RuleType.Conjunction) {
+            builder.setName(rule.getRuleName());
 
-                for (Object component : components) {
-                    if (component == null) {
-                        continue;
+            for (Object component : components) {
+                if (component == null) {
+                    continue;
+                }
+                if (component instanceof List) {
+                    var list = (List<?>) component;
+                    if (!list.isEmpty()) {
+                        builder.addElem(new ListStringElem((List<?>) component));
                     }
-                    if (component instanceof List) {
-                        var list = (List<?>) component;
-                        if (!list.isEmpty()) {
-                            builder.addElem(new ListStringElem((List<?>) component));
-                        }
-                    } else if (component instanceof TreeStringElem) {
-                        builder.addElem((TreeStringElem) component);
-                    } else {
-                        builder.addString(component.toString());
-                    }
+                } else if (component instanceof TreeStringElem) {
+                    builder.addElem((TreeStringElem) component);
+                } else {
+                    builder.addString(component.toString());
                 }
             }
         }
