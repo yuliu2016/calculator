@@ -1,9 +1,9 @@
 package org.fugalang.grammar.gen;
 
-import org.fugalang.grammar.util.ParserStringUtil;
 import org.fugalang.core.parser.RuleType;
 import org.fugalang.grammar.classbuilder.*;
 import org.fugalang.grammar.peg.*;
+import org.fugalang.grammar.util.ParserStringUtil;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -40,10 +40,6 @@ public class PEGBuilder {
 
         if (toFiles) {
             classSet.writeToFiles();
-        } else {
-            for (var classWithComponents : classSet.getClasses()) {
-                System.out.println(classWithComponents.generateClassCode());
-            }
         }
     }
 
@@ -54,14 +50,13 @@ public class PEGBuilder {
         }
 
         for (var entry : ruleMap.entrySet()) {
-            if (isLeftRecursive(entry.getKey(), entry.getValue())) {
-                System.out.println("Left Recursive Rule!!! " + entry);
-            }
+            var left_recursive = isLeftRecursive(entry.getKey(), entry.getValue());
+
             var realClassName = classNameMap.get(entry.getKey());
             var className = ClassName.of(realClassName, entry.getKey());
 
             // use a root class to reduce files
-            ClassBuilder cb = classSet.createRootClass(className);
+            ClassBuilder cb = classSet.createRootClass(className, left_recursive);
 
             var rule_repr = entry.getKey() + ": " + PEGUtil.constructString(entry.getValue());
             cb.setHeaderComments(rule_repr);
@@ -329,6 +324,6 @@ public class PEGBuilder {
     }
 
     public static boolean isLeftRecursive(String name, OrRule rule) {
-        return name.equals(getFirstName(rule));
+        return !rule.orRule2s().isEmpty() && name.equals(getFirstName(rule));
     }
 }

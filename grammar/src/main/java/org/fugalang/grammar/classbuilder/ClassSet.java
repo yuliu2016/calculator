@@ -28,7 +28,7 @@ public class ClassSet {
         return classes;
     }
 
-    public ClassBuilder createRootClass(ClassName className) {
+    public ClassBuilder createRootClass(ClassName className, boolean leftRecursive) {
         var dupError = false;
         for (var cls : classes) {
             if (cls.getClassName().equals(className.getType())) {
@@ -44,7 +44,7 @@ public class ClassSet {
             throw new IllegalArgumentException("Duplicate class: " + className);
         }
 
-        var rootClassBuilder = new ClassBuilder(packageOutput, className);
+        var rootClassBuilder = new ClassBuilder(packageOutput, className, leftRecursive);
 
         currentClass = new NamedClass(rootClassBuilder);
         classes.add(currentClass);
@@ -82,7 +82,7 @@ public class ClassSet {
             throw new IllegalArgumentException("Duplicate inner class: " + className);
         }
 
-        var builder = new ClassBuilder(packageOutput, className);
+        var builder = new ClassBuilder(packageOutput, className, false);
 
         current.components.add(builder);
 

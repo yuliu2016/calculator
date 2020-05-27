@@ -1,15 +1,16 @@
 package org.fugalang.grammar.classbuilder;
 
+import org.fugalang.core.parser.RuleType;
 import org.fugalang.grammar.gen.PackageOutput;
 import org.fugalang.grammar.util.FirstAndMore;
 import org.fugalang.grammar.util.ParserStringUtil;
-import org.fugalang.core.parser.RuleType;
 
 import java.util.*;
 
 public class ClassBuilder {
     private final PackageOutput packageOutput;
     private final ClassName className;
+    private final boolean leftRecursive;
 
     private final List<ClassField> fields = new ArrayList<>();
     private final Map<String, Integer> fieldNameCounter = new HashMap<>();
@@ -20,9 +21,11 @@ public class ClassBuilder {
 
     private RuleType ruleType = null;
 
-    public ClassBuilder(PackageOutput packageOutput, ClassName className) {
+    public ClassBuilder(PackageOutput packageOutput,
+                        ClassName className, boolean leftRecursive) {
         this.packageOutput = packageOutput;
         this.className = className;
+        this.leftRecursive = leftRecursive;
 
         resolvePrelude();
     }
@@ -194,31 +197,19 @@ public class ClassBuilder {
                 .append(small_name)
                 .append("(ParseTree t, int lv) {\n");
 
-        var mb = new StringBuilder();
-        mb.append("var m = t.enter(lv, ")
+        sb.append("        var m = t.enter(lv, ")
                 .append(cap_name).append(");\n");
-        mb.append("if (m != null) return m;\n");
+        sb.append("        if (m != null) return m;\n");
 
-        mb.append("boolean r;\n");
-
-        var first = true;
-        for (ClassField field : fields) {
-            var result = field.getParserFieldStatement(ruleType, first);
-            if (field.isRequired()) {
-                first = false;
+        if (leftRecursive) {
+            if (!isNamedRule) {
+                throw new IllegalStateException(
+                        "Cannot be left-recursive and not a named rule");
             }
-            mb.append(result);
+            generateLeftRecursiveBody(sb);
+        } else {
+            generateNormalParserBody(sb);
         }
-
-        if (first) {
-            throw new IllegalStateException("The rule for class " + className +
-                    " may match an empty string");
-        }
-
-        mb.append("t.exit(r);\n" +
-                "return r;\n");
-
-        sb.append(ParserStringUtil.indent(mb.toString(), 8));
 
         sb.append("    }\n");
 
@@ -228,6 +219,59 @@ public class ClassBuilder {
                 sb.append(loopParser);
             }
         }
+    }
+
+    private void generateNormalParserBody(StringBuilder sb) {
+        sb.append("        boolean r;\n");
+
+        var first = true;
+        for (ClassField field : fields) {
+            var result = field.getParserFieldStatement(ruleType, first);
+            if (field.isRequired()) {
+                first = false;
+            }
+            sb.append("        ");
+            sb.append(result);
+        }
+
+        if (first) {
+            throw new IllegalStateException("The rule for class " + className +
+                    " may match an empty string");
+        }
+
+        sb.append("        t.exit(r);\n" +
+                "        return r;\n");
+    }
+
+    private void generateLeftRecursiveBody(StringBuilder sb) {
+        sb.append("        var p = t.position();\n" +
+                "        boolean s = false;\n" +
+                "        while (true) {\n" +
+                "            t.cache(s);\n" +
+                "            boolean r;\n");
+        var first = true;
+        for (ClassField field : fields) {
+            var result = field.getParserFieldStatement(ruleType, first);
+            if (field.isRequired()) {
+                first = false;
+            }
+            sb.append("            ");
+            sb.append(result);
+        }
+
+        if (first) {
+            throw new IllegalStateException("The rule for class " + className +
+                    " may match an empty string");
+        }
+
+        sb.append("            s = r || s;\n" +
+                "            var e = t.position();\n" +
+                "            if (e <= p) break;\n" +
+                "            p = e;\n" +
+                "        }\n" +
+                "        t.restore(p);\n" +
+                "        t.exit(s);\n" +
+                "        return s;\n");
     }
 
 

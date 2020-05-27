@@ -125,7 +125,7 @@ public class ParserGenerator {
             var className = ClassName.of(realClassName, entry.getKey());
 
             // use a root class to reduce files
-            ClassBuilder cb = classSet.createRootClass(className);
+            ClassBuilder cb = classSet.createRootClass(className, false);
 
             cb.setHeaderComments(entry.getKey() + ": " + entry.getValue().toSimpleString());
             cb.setRuleType(RuleType.Disjunction);
