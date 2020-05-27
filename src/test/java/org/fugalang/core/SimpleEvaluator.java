@@ -9,20 +9,21 @@ package org.fugalang.core;
      "100 * ( 2 + 12 ) / 14" ---> 100     
 */
 
-import org.fugalang.core.parser.SyntaxError;
 import org.fugalang.core.parser.ParserElement;
+import org.fugalang.core.parser.SyntaxError;
 import org.fugalang.core.pprint.ConsoleColor;
 import org.fugalang.core.token.LexerTests;
-import org.fugalang.core.token.Operator;
 import org.fugalang.core.token.TokenType;
 
 import java.util.List;
 import java.util.Scanner;
 import java.util.Stack;
 
+@Deprecated
 // https://www.geeksforgeeks.org/expression-evaluation/
 public class SimpleEvaluator {
     public static int evaluate(List<ParserElement> tokens) {
+        System.out.println("token.getLineEnd() = " + tokens.get(0).getLineEnd());
 
         // Stack for numbers: 'values'
         Stack<Integer> values = new Stack<>();
@@ -41,22 +42,22 @@ public class SimpleEvaluator {
             }
 
             // Current token is an opening brace, push it to 'ops'
-            else if (token.valueEquals(Operator.LPAR.getCode()))
+            else if (token.getValue().equals("("))
                 ops.push(token.getValue());
 
                 // Closing brace encountered, solve entire brace
-            else if (token.valueEquals(Operator.RPAR.getCode())) {
-                while (!ops.peek().equals(Operator.LPAR.getCode())) {
+            else if (token.getValue().equals(")")) {
+                while (!ops.peek().equals("(")) {
                     values.push(applyOp(ops.pop(), values.pop(), values.pop()));
                 }
                 ops.pop();
             }
 
             // Current token is an operator.
-            else if (token.valueEquals(Operator.PLUS.getCode()) ||
-                    token.valueEquals(Operator.MINUS.getCode()) ||
-                    token.valueEquals(Operator.TIMES.getCode()) ||
-                    token.valueEquals(Operator.DIV.getCode())) {
+            else if (token.valueEquals("+") ||
+                    token.valueEquals("-") ||
+                    token.valueEquals("*") ||
+                    token.valueEquals("/")) {
                 // While top of 'ops' has same or greater precedence to current
                 // token, which is an operator. Apply operator on top of 'ops'
                 // to top two elements in values stack
@@ -81,11 +82,11 @@ public class SimpleEvaluator {
     // Returns true if 'op2' has higher or same precedence as 'op1', 
     // otherwise returns false. 
     public static boolean hasPrecedence(String op1, String op2) {
-        if (op2.equals(Operator.LPAR.getCode()) || op2.equals(Operator.RPAR.getCode()))
+        if (op2.equals("(") || op2.equals(")"))
             return false;
         //noinspection RedundantIfStatement
-        if ((op1.equals(Operator.TIMES.getCode()) || op1.equals(Operator.DIV.getCode())) &&
-                (op2.equals(Operator.PLUS.getCode()) || op2.equals(Operator.MINUS.getCode())))
+        if ((op1.equals("*") || op1.equals("/")) &&
+                (op2.equals("+") || op2.equals("-")))
             return false;
         else
             return true;

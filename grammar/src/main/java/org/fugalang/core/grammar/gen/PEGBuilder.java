@@ -166,13 +166,17 @@ public class PEGBuilder {
         var repeatType = PEGUtil.getRepeatType(repeatRule);
 
         switch (PEGUtil.getRuleType(subRule)) {
-            case Group -> addOrRuleAsComponent(className, cb, subRule.group().orRule(),
-                    repeatType, REQUIRED);
-
-            case Optional -> addOrRuleAsComponent(className, cb,
-                    subRule.optional().orRule(), repeatType, OPTIONAL);
-
-            case Token -> addToken(cb, repeatType, PEGUtil.getSubruleString(subRule), isOptional);
+            case Group:
+                addOrRuleAsComponent(className, cb, subRule.group().orRule(),
+                        repeatType, REQUIRED);
+                break;
+            case Optional:
+                addOrRuleAsComponent(className, cb,
+                        subRule.optional().orRule(), repeatType, OPTIONAL);
+                break;
+            case Token:
+                addToken(cb, repeatType, PEGUtil.getSubruleString(subRule), isOptional);
+                break;
         }
     }
 

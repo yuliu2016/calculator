@@ -170,10 +170,7 @@ public class ClassBuilder {
         sb.append("    public static final ParserRule ")
                 .append(cap_name)
                 .append(" = ")
-                .append(switch (ruleType) {
-                    case Conjunction -> "and_rule";
-                    case Disjunction -> "or_rule";
-                })
+                .append(ruleType == RuleType.Conjunction ? "and_rule" : "or_rule")
                 .append("(\"")
                 .append(getRuleName())
                 .append("\");\n");

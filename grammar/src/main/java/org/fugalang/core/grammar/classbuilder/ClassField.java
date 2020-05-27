@@ -47,30 +47,28 @@ public class ClassField {
     }
 
     private String asGetterBody(RuleType ruleType, int index) {
-        return switch (resultSource.getType()) {
-            case Class -> {
+        switch (resultSource.getType()) {
+            case Class:
                 if (isSingular()) {
-                    yield "        return get(" + index + ", " + className.getType() + ".class);\n";
+                    return "        return get(" + index + ", " + className.getType() + ".class);\n";
                 }
-                yield "        return getList(" + index + ", " + className.getRealClassName() + ".class);\n";
-            }
-
-            case TokenType -> {
+                return "        return getList(" + index + ", " + className.getRealClassName() + ".class);\n";
+            case TokenType:
                 if (isSingular()) {
-                    yield "        return get(" + index + ", " + resultSource.getValue() + ");\n";
+                    return "        return get(" + index + ", " + resultSource.getValue() + ");\n";
                 }
-                yield "        return getList(" + index + ", ParseTreeNode::asString);\n";
-            }
-            case TokenLiteral -> {
+                return "        return getList(" + index + ", ParseTreeNode::asString);\n";
+            case TokenLiteral:
                 if (ruleType == RuleType.Conjunction && fieldType == FieldType.Required) {
-                    yield null;
+                    return null;
                 }
                 if (isSingular()) {
-                    yield "        return is(" + index + ");\n";
+                    return "        return is(" + index + ");\n";
                 }
-                yield "        return getList(" + index + ", ParseTreeNode::asBoolean);\n";
-            }
-        };
+                return "        return getList(" + index + ", ParseTreeNode::asBoolean);\n";
+            default:
+                throw new IllegalArgumentException();
+        }
     }
 
     public String asAbsentCheck(RuleType ruleType, int index) {
@@ -84,29 +82,38 @@ public class ClassField {
     }
 
     private String absentCheckBody(RuleType ruleType, int index) {
-        return switch (resultSource.getType()) {
-            case Class, TokenType -> {
+        switch (resultSource.getType()) {
+            case Class:
+            case TokenType:
                 if (ruleType == RuleType.Conjunction && fieldType == FieldType.Required) {
-                    yield null;
+                    return null;
                 }
                 if (isSingular()) {
-                    yield "        return has(" + index + ");\n";
+                    return "        return has(" + index + ");\n";
                 }
-                yield null;
-            }
-            case TokenLiteral -> null;
-        };
+                return null;
+            case TokenLiteral:
+                return null;
+            default:
+                throw new IllegalArgumentException();
+        }
     }
 
     public String getParserFieldStatement(RuleType ruleType, boolean isFirst) {
         var resultExpr = getResultExpr();
 
-        return switch (fieldType) {
-            case Required -> getRequiredStmt(resultExpr, ruleType, isFirst);
-            case Optional -> getOptionalStmt(resultExpr, ruleType, isFirst);
-            case RequiredList -> getRequiredStmt(getLoopExpr(), ruleType, isFirst);
-            case OptionalList -> getOptionalStmt(getLoopExpr(), ruleType, isFirst);
-        };
+        switch (fieldType) {
+            case Required:
+                return getRequiredStmt(resultExpr, ruleType, isFirst);
+            case Optional:
+                return getOptionalStmt(resultExpr, ruleType, isFirst);
+            case RequiredList:
+                return getRequiredStmt(getLoopExpr(), ruleType, isFirst);
+            case OptionalList:
+                return getOptionalStmt(getLoopExpr(), ruleType, isFirst);
+            default:
+                throw new IllegalArgumentException();
+        }
     }
 
     private String getLoopExpr() {
@@ -116,28 +123,30 @@ public class ClassField {
     }
 
     private String getOptionalStmt(String resultExpr, RuleType ruleType, boolean isFirst) {
-        var condition = isFirst ? "" : switch (ruleType) {
-            case Conjunction -> "if (r) ";
-            case Disjunction -> "if (!r) ";
-        };
+        var condition = isFirst ? "" :
+                (ruleType == RuleType.Conjunction ?
+                        "if (r) " : "if (!r) ");
         return condition + resultExpr + ";\n";
     }
 
     private String getRequiredStmt(String resultExpr, RuleType ruleType, boolean isFirst) {
         var condition = isFirst ? "r = " :
-                switch (ruleType) {
-                    case Conjunction -> "r = r && ";
-                    case Disjunction -> "r = r || ";
-                };
+                (ruleType == RuleType.Conjunction ?
+                        "r = r && " : "r = r || ");
         return condition + resultExpr + ";\n";
     }
 
     private String getResultExpr() {
-        return switch (resultSource.getType()) {
-            case Class -> resultSource.getValue().replace(":", "_") + "(t, lv + 1)";
-            case TokenType -> "t.consume(" + resultSource.getValue() + ")";
-            case TokenLiteral -> "t.consume(\"" + resultSource.getValue() + "\")";
-        };
+        switch (resultSource.getType()) {
+            case Class:
+                return resultSource.getValue().replace(":", "_") + "(t, lv + 1)";
+            case TokenType:
+                return "t.consume(" + resultSource.getValue() + ")";
+            case TokenLiteral:
+                return "t.consume(\"" + resultSource.getValue() + "\")";
+            default:
+                throw new IllegalArgumentException();
+        }
     }
 
     public String getLoopParser() {

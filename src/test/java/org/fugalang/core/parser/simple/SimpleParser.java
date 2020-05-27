@@ -1,10 +1,8 @@
 package org.fugalang.core.parser.simple;
 
-import org.fugalang.core.parser.SyntaxError;
 import org.fugalang.core.parser.ParserElement;
-import org.fugalang.core.token.Operator;
+import org.fugalang.core.parser.SyntaxError;
 import org.fugalang.core.token.TokenType;
-import org.fugalang.core.token.Tokenizer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +24,7 @@ public class SimpleParser {
         List<Term> terms = new ArrayList<>();
         while (true) {
             visitor.markLookahead();
-            var op = parseOperator(visitor, Operator.PLUS.getCode(), Operator.MINUS.getCode());
+            var op = parseOperator(visitor, "+", "-");
             var term = parseTerm(visitor);
             if (op == null) {
                 // no more items that matches this rule
@@ -54,7 +52,7 @@ public class SimpleParser {
         List<Atom> atoms = new ArrayList<>();
         while (true) {
             visitor.markLookahead();
-            var op = parseOperator(visitor, Operator.TIMES.getCode(), Operator.DIV.getCode());
+            var op = parseOperator(visitor, "*", "/");
             var term = parseAtom(visitor);
             if (op == null) {
                 // no more items that matches this rule
@@ -96,11 +94,11 @@ public class SimpleParser {
             return new Atom(token.getValue());
         }
 
-        if (token.getValue().equals(Operator.LPAR.getCode())) {
+        if (token.getValue().equals("(")) {
             visitor.markLookahead();
 
             var arithmeticExpr = parseArithmeticExpr(visitor);
-            var r_par = parseOperator(visitor, Operator.RPAR.getCode());
+            var r_par = parseOperator(visitor, ")");
 
             if (arithmeticExpr == null || r_par == null) {
                 visitor.abortLookahead();

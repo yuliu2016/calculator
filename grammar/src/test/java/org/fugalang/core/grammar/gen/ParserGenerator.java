@@ -223,13 +223,17 @@ public class ParserGenerator {
         var subRule = repeatRule.subRule;
 
         switch (subRule.type) {
-            case Group -> addOrRuleAsComponent(className, cb, subRule.groupedOrRule,
-                    repeatRule.type, REQUIRED);
-
-            case Optional -> addOrRuleAsComponent(className, cb,
-                    subRule.optionalOrRule, repeatRule.type, OPTIONAL);
-
-            case Token -> addToken(cb, repeatRule.type, subRule, isOptional);
+            case Group:
+                addOrRuleAsComponent(className, cb, subRule.groupedOrRule,
+                        repeatRule.type, REQUIRED);
+                break;
+            case Optional:
+                addOrRuleAsComponent(className, cb,
+                        subRule.optionalOrRule, repeatRule.type, OPTIONAL);
+                break;
+            case Token:
+                addToken(cb, repeatRule.type, subRule, isOptional);
+                break;
         }
     }
 

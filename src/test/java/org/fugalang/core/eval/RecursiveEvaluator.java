@@ -8,7 +8,6 @@ import org.fugalang.core.parser.simple.SimpleParser;
 import org.fugalang.core.parser.simple.Term;
 import org.fugalang.core.pprint.ConsoleColor;
 import org.fugalang.core.token.LexerTests;
-import org.fugalang.core.token.Operator;
 
 import java.util.List;
 import java.util.Scanner;
@@ -29,9 +28,9 @@ public class RecursiveEvaluator {
             var term = expr.getTerms().get(i);
             var value = evaluate0(term);
 
-            if (op.equals(Operator.PLUS.getCode())) {
+            if (op.equals("+")) {
                 sum += value;
-            } else if (op.equals(Operator.MINUS.getCode())) {
+            } else if (op.equals("-")) {
                 sum -= value;
             } else {
                 throw new IllegalStateException("Illegal op: " + op);
@@ -49,9 +48,9 @@ public class RecursiveEvaluator {
             var atom = term.getAtoms().get(i);
             var value = evaluate0(atom);
 
-            if (op.equals(Operator.TIMES.getCode())) {
+            if (op.equals("*")) {
                 product *= value;
-            } else if (op.equals(Operator.DIV.getCode())) {
+            } else if (op.equals("/")) {
                 product /= value;
             } else {
                 throw new IllegalStateException("Illegal Op: " + op);
