@@ -3,10 +3,8 @@ package org.fugalang.core.peg;
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
-import java.util.List;
-
 /**
- * bitwise_or: bitwise_xor ('|' bitwise_xor)*
+ * bitwise_or: bitwise_or '|' bitwise_xor | bitwise_xor
  */
 public final class BitwiseOr extends NodeWrapper {
 
@@ -14,25 +12,37 @@ public final class BitwiseOr extends NodeWrapper {
         super(node);
     }
 
-    public BitwiseXor bitwiseXor() {
-        return get(0, BitwiseXor.class);
+    public BitwiseOr1 bitwiseOrBitOrBitwiseXor() {
+        return get(0, BitwiseOr1.class);
     }
 
-    public List<BitwiseOr2> bitOrBitwiseXors() {
-        return getList(1, BitwiseOr2.class);
+    public boolean hasBitwiseOrBitOrBitwiseXor() {
+        return has(0);
+    }
+
+    public BitwiseXor bitwiseXor() {
+        return get(1, BitwiseXor.class);
+    }
+
+    public boolean hasBitwiseXor() {
+        return has(1);
     }
 
     /**
-     * '|' bitwise_xor
+     * bitwise_or '|' bitwise_xor
      */
-    public static final class BitwiseOr2 extends NodeWrapper {
+    public static final class BitwiseOr1 extends NodeWrapper {
 
-        public BitwiseOr2(ParseTreeNode node) {
+        public BitwiseOr1(ParseTreeNode node) {
             super(node);
         }
 
+        public BitwiseOr bitwiseOr() {
+            return get(0, BitwiseOr.class);
+        }
+
         public BitwiseXor bitwiseXor() {
-            return get(1, BitwiseXor.class);
+            return get(2, BitwiseXor.class);
         }
     }
 }

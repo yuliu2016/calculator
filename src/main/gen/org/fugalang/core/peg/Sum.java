@@ -3,10 +3,8 @@ package org.fugalang.core.peg;
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
-import java.util.List;
-
 /**
- * sum: term (sum_op term)*
+ * sum: sum '+' term | sum '-' term | term
  */
 public final class Sum extends NodeWrapper {
 
@@ -14,16 +12,50 @@ public final class Sum extends NodeWrapper {
         super(node);
     }
 
-    public Term term() {
-        return get(0, Term.class);
+    public Sum1 sumPlusTerm() {
+        return get(0, Sum1.class);
     }
 
-    public List<Sum2> sumOpTerms() {
-        return getList(1, Sum2.class);
+    public boolean hasSumPlusTerm() {
+        return has(0);
+    }
+
+    public Sum2 sumMinusTerm() {
+        return get(1, Sum2.class);
+    }
+
+    public boolean hasSumMinusTerm() {
+        return has(1);
+    }
+
+    public Term term() {
+        return get(2, Term.class);
+    }
+
+    public boolean hasTerm() {
+        return has(2);
     }
 
     /**
-     * sum_op term
+     * sum '+' term
+     */
+    public static final class Sum1 extends NodeWrapper {
+
+        public Sum1(ParseTreeNode node) {
+            super(node);
+        }
+
+        public Sum sum() {
+            return get(0, Sum.class);
+        }
+
+        public Term term() {
+            return get(2, Term.class);
+        }
+    }
+
+    /**
+     * sum '-' term
      */
     public static final class Sum2 extends NodeWrapper {
 
@@ -31,12 +63,12 @@ public final class Sum extends NodeWrapper {
             super(node);
         }
 
-        public SumOp sumOp() {
-            return get(0, SumOp.class);
+        public Sum sum() {
+            return get(0, Sum.class);
         }
 
         public Term term() {
-            return get(1, Term.class);
+            return get(2, Term.class);
         }
     }
 }

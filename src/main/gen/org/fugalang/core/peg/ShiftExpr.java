@@ -3,10 +3,8 @@ package org.fugalang.core.peg;
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
-import java.util.List;
-
 /**
- * shift_expr: sum (shift_op sum)*
+ * shift_expr: shift_expr '<<' sum | shift_expr '>>' sum | sum
  */
 public final class ShiftExpr extends NodeWrapper {
 
@@ -14,16 +12,50 @@ public final class ShiftExpr extends NodeWrapper {
         super(node);
     }
 
-    public Sum sum() {
-        return get(0, Sum.class);
+    public ShiftExpr1 shiftExprLshiftSum() {
+        return get(0, ShiftExpr1.class);
     }
 
-    public List<ShiftExpr2> shiftOpSums() {
-        return getList(1, ShiftExpr2.class);
+    public boolean hasShiftExprLshiftSum() {
+        return has(0);
+    }
+
+    public ShiftExpr2 shiftExprRshiftSum() {
+        return get(1, ShiftExpr2.class);
+    }
+
+    public boolean hasShiftExprRshiftSum() {
+        return has(1);
+    }
+
+    public Sum sum() {
+        return get(2, Sum.class);
+    }
+
+    public boolean hasSum() {
+        return has(2);
     }
 
     /**
-     * shift_op sum
+     * shift_expr '<<' sum
+     */
+    public static final class ShiftExpr1 extends NodeWrapper {
+
+        public ShiftExpr1(ParseTreeNode node) {
+            super(node);
+        }
+
+        public ShiftExpr shiftExpr() {
+            return get(0, ShiftExpr.class);
+        }
+
+        public Sum sum() {
+            return get(2, Sum.class);
+        }
+    }
+
+    /**
+     * shift_expr '>>' sum
      */
     public static final class ShiftExpr2 extends NodeWrapper {
 
@@ -31,12 +63,12 @@ public final class ShiftExpr extends NodeWrapper {
             super(node);
         }
 
-        public ShiftOp shiftOp() {
-            return get(0, ShiftOp.class);
+        public ShiftExpr shiftExpr() {
+            return get(0, ShiftExpr.class);
         }
 
         public Sum sum() {
-            return get(1, Sum.class);
+            return get(2, Sum.class);
         }
     }
 }

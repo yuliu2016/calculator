@@ -4,7 +4,7 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * power: primary ['**' factor]
+ * power: primary '**' factor | primary
  */
 public final class Power extends NodeWrapper {
 
@@ -12,29 +12,37 @@ public final class Power extends NodeWrapper {
         super(node);
     }
 
+    public Power1 primaryPowerFactor() {
+        return get(0, Power1.class);
+    }
+
+    public boolean hasPrimaryPowerFactor() {
+        return has(0);
+    }
+
     public Primary primary() {
-        return get(0, Primary.class);
+        return get(1, Primary.class);
     }
 
-    public Power2 powerFactor() {
-        return get(1, Power2.class);
-    }
-
-    public boolean hasPowerFactor() {
+    public boolean hasPrimary() {
         return has(1);
     }
 
     /**
-     * '**' factor
+     * primary '**' factor
      */
-    public static final class Power2 extends NodeWrapper {
+    public static final class Power1 extends NodeWrapper {
 
-        public Power2(ParseTreeNode node) {
+        public Power1(ParseTreeNode node) {
             super(node);
         }
 
+        public Primary primary() {
+            return get(0, Primary.class);
+        }
+
         public Factor factor() {
-            return get(1, Factor.class);
+            return get(2, Factor.class);
         }
     }
 }

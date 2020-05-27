@@ -1,6 +1,10 @@
 # Grammar for Fuga
 
-single_input: NEWLINE | simple_stmt | compound_stmt NEWLINE
+single_input:
+    | NEWLINE
+    | simple_stmt
+    | compound_stmt NEWLINE
+
 file_input: (NEWLINE | stmt)* ENDMARKER
 eval_input: exprlist NEWLINE* ENDMARKER
 
@@ -83,7 +87,7 @@ kwargs: '**' typed_arg [',']
 default_arg: typed_arg ['=' expr]
 typed_arg: NAME [':' expr]
 
-simple_arg_list: simple_arg (simple_arg)*
+simple_arg_list: simple_arg+
 simple_arg: NAME ['=' expr]
 
 func_type_hint: '<' expr '>'
@@ -95,21 +99,46 @@ funcdef: 'def' [func_type_hint] [func_args] func_suite
 named_expr: NAME ':=' expr | expr
 conditional: 'if' disjunction '?' disjunction 'else' expr
 expr: conditional | funcdef | disjunction
-disjunction: conjunction ('or' conjunction)*
-conjunction: inversion ('and' inversion)*
-inversion: 'not' inversion | comparison
-comparison: bitwise_or (comp_op bitwise_or)*
+disjunction:
+    | disjunction 'or' conjunction
+    | conjunction
+conjunction:
+    | conjunction 'and' inversion
+    | inversion
+inversion:
+    | 'not' inversion
+    | comparison
+comparison:
+    | bitwise_or (comp_op bitwise_or)+
+    | bitwise_or
 comp_op: '<'|'>'|'=='|'>='|'<='|'!='|'in'|'not' 'in'|'is'|'is' 'not'
-bitwise_or: bitwise_xor ('|' bitwise_xor)*
-bitwise_xor: bitwise_and ('^' bitwise_and)*
-bitwise_and: shift_expr ('&' shift_expr)*
-shift_op: '<<' | '>>'
-shift_expr: sum (shift_op sum)*
-sum_op: '+'|'-'
-sum: term (sum_op term)*
-term_op: '*'|'@'|'/'|'%'|'//'
-term: pipeline (term_op pipeline)*
-pipeline: factor ('->' pipe_expr)*
+bitwise_or:
+    | bitwise_or '|' bitwise_xor
+    | bitwise_xor
+bitwise_xor:
+    | bitwise_xor '^' bitwise_and
+    | bitwise_and
+bitwise_and:
+    | bitwise_and '&' shift_expr
+    | shift_expr
+shift_expr:
+    | shift_expr '<<' sum
+    | shift_expr '>>' sum
+    | sum
+sum:
+    | sum '+' term
+    | sum '-' term
+    | term
+term:
+    | term '*' pipe
+    | term '/' pipe
+    | term '%' pipe
+    | term '//' pipe
+    | term '@' pipe
+    | pipe
+pipe:
+    | pipe '->' pipe_expr
+    | factor
 pipe_expr: pipe_for | factor
 
 pipe_for: [comp_for] 'for' targetlist ['if' named_expr] [parameters | block_suite]
@@ -117,8 +146,14 @@ comp_for: 'for' targetlist 'in' disjunction [comp_iter]
 comp_if: 'if' named_expr [comp_iter]
 comp_iter: comp_for | comp_if
 
-factor: ('+'|'-'|'~') factor | power
-power: primary ['**' factor]
+factor:
+    | '+' factor
+    | '-' factor
+    | '~' factor
+    | power
+power:
+    | primary '**' factor
+    | primary
 
 # Atoms
 

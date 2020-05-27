@@ -1324,36 +1324,25 @@ public class FugaParser {
     }
 
     /**
-     * simple_arg_list: simple_arg (simple_arg)*
+     * simple_arg_list: simple_arg+
      */
     public static boolean simple_arg_list(ParseTree t, int lv) {
         var m = t.enter(lv, SIMPLE_ARG_LIST);
         if (m != null) return m;
         boolean r;
-        r = simple_arg(t, lv + 1);
-        if (r) simple_arg_list_2_loop(t, lv);
+        r = simple_arg_loop(t, lv);
         t.exit(r);
         return r;
     }
 
-    private static void simple_arg_list_2_loop(ParseTree t, int lv) {
+    private static boolean simple_arg_loop(ParseTree t, int lv) {
         t.enterLoop();
-        while (true) {
+        var r = simple_arg(t, lv + 1);
+        if (r) while (true) {
             var p = t.position();
-            if (!simple_arg_list_2(t, lv + 1) || t.loopGuard(p)) break;
+            if (!simple_arg(t, lv + 1) || t.loopGuard(p)) break;
         }
         t.exitLoop();
-    }
-
-    /**
-     * simple_arg
-     */
-    private static boolean simple_arg_list_2(ParseTree t, int lv) {
-        var m = t.enter(lv, SIMPLE_ARG_LIST_2);
-        if (m != null) return m;
-        boolean r;
-        r = simple_arg(t, lv + 1);
-        t.exit(r);
         return r;
     }
 
@@ -1498,70 +1487,74 @@ public class FugaParser {
     }
 
     /**
-     * disjunction: conjunction ('or' conjunction)*
+     * disjunction: disjunction 'or' conjunction | conjunction
      */
     public static boolean disjunction(ParseTree t, int lv) {
         var m = t.enter(lv, DISJUNCTION);
         if (m != null) return m;
-        boolean r;
-        r = conjunction(t, lv + 1);
-        if (r) disjunction_2_loop(t, lv);
-        t.exit(r);
-        return r;
-    }
-
-    private static void disjunction_2_loop(ParseTree t, int lv) {
-        t.enterLoop();
+        var p = t.position();
+        boolean s = false;
         while (true) {
-            var p = t.position();
-            if (!disjunction_2(t, lv + 1) || t.loopGuard(p)) break;
+            t.cache(s);
+            boolean r;
+            r = disjunction_1(t, lv + 1);
+            r = r || conjunction(t, lv + 1);
+            s = r || s;
+            var e = t.position();
+            if (e <= p) break;
+            p = e;
         }
-        t.exitLoop();
+        t.restore(p);
+        t.exit(s);
+        return s;
     }
 
     /**
-     * 'or' conjunction
+     * disjunction 'or' conjunction
      */
-    private static boolean disjunction_2(ParseTree t, int lv) {
-        var m = t.enter(lv, DISJUNCTION_2);
+    private static boolean disjunction_1(ParseTree t, int lv) {
+        var m = t.enter(lv, DISJUNCTION_1);
         if (m != null) return m;
         boolean r;
-        r = t.consume("or");
+        r = disjunction(t, lv + 1);
+        r = r && t.consume("or");
         r = r && conjunction(t, lv + 1);
         t.exit(r);
         return r;
     }
 
     /**
-     * conjunction: inversion ('and' inversion)*
+     * conjunction: conjunction 'and' inversion | inversion
      */
     public static boolean conjunction(ParseTree t, int lv) {
         var m = t.enter(lv, CONJUNCTION);
         if (m != null) return m;
-        boolean r;
-        r = inversion(t, lv + 1);
-        if (r) conjunction_2_loop(t, lv);
-        t.exit(r);
-        return r;
-    }
-
-    private static void conjunction_2_loop(ParseTree t, int lv) {
-        t.enterLoop();
+        var p = t.position();
+        boolean s = false;
         while (true) {
-            var p = t.position();
-            if (!conjunction_2(t, lv + 1) || t.loopGuard(p)) break;
+            t.cache(s);
+            boolean r;
+            r = conjunction_1(t, lv + 1);
+            r = r || inversion(t, lv + 1);
+            s = r || s;
+            var e = t.position();
+            if (e <= p) break;
+            p = e;
         }
-        t.exitLoop();
+        t.restore(p);
+        t.exit(s);
+        return s;
     }
 
     /**
-     * 'and' inversion
+     * conjunction 'and' inversion
      */
-    private static boolean conjunction_2(ParseTree t, int lv) {
-        var m = t.enter(lv, CONJUNCTION_2);
+    private static boolean conjunction_1(ParseTree t, int lv) {
+        var m = t.enter(lv, CONJUNCTION_1);
         if (m != null) return m;
         boolean r;
-        r = t.consume("and");
+        r = conjunction(t, lv + 1);
+        r = r && t.consume("and");
         r = r && inversion(t, lv + 1);
         t.exit(r);
         return r;
@@ -1594,32 +1587,47 @@ public class FugaParser {
     }
 
     /**
-     * comparison: bitwise_or (comp_op bitwise_or)*
+     * comparison: bitwise_or (comp_op bitwise_or)+ | bitwise_or
      */
     public static boolean comparison(ParseTree t, int lv) {
         var m = t.enter(lv, COMPARISON);
         if (m != null) return m;
         boolean r;
-        r = bitwise_or(t, lv + 1);
-        if (r) comparison_2_loop(t, lv);
+        r = comparison_1(t, lv + 1);
+        r = r || bitwise_or(t, lv + 1);
         t.exit(r);
         return r;
     }
 
-    private static void comparison_2_loop(ParseTree t, int lv) {
+    /**
+     * bitwise_or (comp_op bitwise_or)+
+     */
+    private static boolean comparison_1(ParseTree t, int lv) {
+        var m = t.enter(lv, COMPARISON_1);
+        if (m != null) return m;
+        boolean r;
+        r = bitwise_or(t, lv + 1);
+        r = r && comparison_1_2_loop(t, lv);
+        t.exit(r);
+        return r;
+    }
+
+    private static boolean comparison_1_2_loop(ParseTree t, int lv) {
         t.enterLoop();
-        while (true) {
+        var r = comparison_1_2(t, lv + 1);
+        if (r) while (true) {
             var p = t.position();
-            if (!comparison_2(t, lv + 1) || t.loopGuard(p)) break;
+            if (!comparison_1_2(t, lv + 1) || t.loopGuard(p)) break;
         }
         t.exitLoop();
+        return r;
     }
 
     /**
      * comp_op bitwise_or
      */
-    private static boolean comparison_2(ParseTree t, int lv) {
-        var m = t.enter(lv, COMPARISON_2);
+    private static boolean comparison_1_2(ParseTree t, int lv) {
+        var m = t.enter(lv, COMPARISON_1_2);
         if (m != null) return m;
         boolean r;
         r = comp_op(t, lv + 1);
@@ -1676,287 +1684,349 @@ public class FugaParser {
     }
 
     /**
-     * bitwise_or: bitwise_xor ('|' bitwise_xor)*
+     * bitwise_or: bitwise_or '|' bitwise_xor | bitwise_xor
      */
     public static boolean bitwise_or(ParseTree t, int lv) {
         var m = t.enter(lv, BITWISE_OR);
         if (m != null) return m;
-        boolean r;
-        r = bitwise_xor(t, lv + 1);
-        if (r) bitwise_or_2_loop(t, lv);
-        t.exit(r);
-        return r;
-    }
-
-    private static void bitwise_or_2_loop(ParseTree t, int lv) {
-        t.enterLoop();
+        var p = t.position();
+        boolean s = false;
         while (true) {
-            var p = t.position();
-            if (!bitwise_or_2(t, lv + 1) || t.loopGuard(p)) break;
+            t.cache(s);
+            boolean r;
+            r = bitwise_or_1(t, lv + 1);
+            r = r || bitwise_xor(t, lv + 1);
+            s = r || s;
+            var e = t.position();
+            if (e <= p) break;
+            p = e;
         }
-        t.exitLoop();
+        t.restore(p);
+        t.exit(s);
+        return s;
     }
 
     /**
-     * '|' bitwise_xor
+     * bitwise_or '|' bitwise_xor
      */
-    private static boolean bitwise_or_2(ParseTree t, int lv) {
-        var m = t.enter(lv, BITWISE_OR_2);
+    private static boolean bitwise_or_1(ParseTree t, int lv) {
+        var m = t.enter(lv, BITWISE_OR_1);
         if (m != null) return m;
         boolean r;
-        r = t.consume("|");
+        r = bitwise_or(t, lv + 1);
+        r = r && t.consume("|");
         r = r && bitwise_xor(t, lv + 1);
         t.exit(r);
         return r;
     }
 
     /**
-     * bitwise_xor: bitwise_and ('^' bitwise_and)*
+     * bitwise_xor: bitwise_xor '^' bitwise_and | bitwise_and
      */
     public static boolean bitwise_xor(ParseTree t, int lv) {
         var m = t.enter(lv, BITWISE_XOR);
         if (m != null) return m;
-        boolean r;
-        r = bitwise_and(t, lv + 1);
-        if (r) bitwise_xor_2_loop(t, lv);
-        t.exit(r);
-        return r;
-    }
-
-    private static void bitwise_xor_2_loop(ParseTree t, int lv) {
-        t.enterLoop();
+        var p = t.position();
+        boolean s = false;
         while (true) {
-            var p = t.position();
-            if (!bitwise_xor_2(t, lv + 1) || t.loopGuard(p)) break;
+            t.cache(s);
+            boolean r;
+            r = bitwise_xor_1(t, lv + 1);
+            r = r || bitwise_and(t, lv + 1);
+            s = r || s;
+            var e = t.position();
+            if (e <= p) break;
+            p = e;
         }
-        t.exitLoop();
+        t.restore(p);
+        t.exit(s);
+        return s;
     }
 
     /**
-     * '^' bitwise_and
+     * bitwise_xor '^' bitwise_and
      */
-    private static boolean bitwise_xor_2(ParseTree t, int lv) {
-        var m = t.enter(lv, BITWISE_XOR_2);
+    private static boolean bitwise_xor_1(ParseTree t, int lv) {
+        var m = t.enter(lv, BITWISE_XOR_1);
         if (m != null) return m;
         boolean r;
-        r = t.consume("^");
+        r = bitwise_xor(t, lv + 1);
+        r = r && t.consume("^");
         r = r && bitwise_and(t, lv + 1);
         t.exit(r);
         return r;
     }
 
     /**
-     * bitwise_and: shift_expr ('&' shift_expr)*
+     * bitwise_and: bitwise_and '&' shift_expr | shift_expr
      */
     public static boolean bitwise_and(ParseTree t, int lv) {
         var m = t.enter(lv, BITWISE_AND);
         if (m != null) return m;
-        boolean r;
-        r = shift_expr(t, lv + 1);
-        if (r) bitwise_and_2_loop(t, lv);
-        t.exit(r);
-        return r;
-    }
-
-    private static void bitwise_and_2_loop(ParseTree t, int lv) {
-        t.enterLoop();
+        var p = t.position();
+        boolean s = false;
         while (true) {
-            var p = t.position();
-            if (!bitwise_and_2(t, lv + 1) || t.loopGuard(p)) break;
+            t.cache(s);
+            boolean r;
+            r = bitwise_and_1(t, lv + 1);
+            r = r || shift_expr(t, lv + 1);
+            s = r || s;
+            var e = t.position();
+            if (e <= p) break;
+            p = e;
         }
-        t.exitLoop();
+        t.restore(p);
+        t.exit(s);
+        return s;
     }
 
     /**
-     * '&' shift_expr
+     * bitwise_and '&' shift_expr
      */
-    private static boolean bitwise_and_2(ParseTree t, int lv) {
-        var m = t.enter(lv, BITWISE_AND_2);
+    private static boolean bitwise_and_1(ParseTree t, int lv) {
+        var m = t.enter(lv, BITWISE_AND_1);
         if (m != null) return m;
         boolean r;
-        r = t.consume("&");
+        r = bitwise_and(t, lv + 1);
+        r = r && t.consume("&");
         r = r && shift_expr(t, lv + 1);
         t.exit(r);
         return r;
     }
 
     /**
-     * shift_op: '<<' | '>>'
-     */
-    public static boolean shift_op(ParseTree t, int lv) {
-        var m = t.enter(lv, SHIFT_OP);
-        if (m != null) return m;
-        boolean r;
-        r = t.consume("<<");
-        r = r || t.consume(">>");
-        t.exit(r);
-        return r;
-    }
-
-    /**
-     * shift_expr: sum (shift_op sum)*
+     * shift_expr: shift_expr '<<' sum | shift_expr '>>' sum | sum
      */
     public static boolean shift_expr(ParseTree t, int lv) {
         var m = t.enter(lv, SHIFT_EXPR);
         if (m != null) return m;
-        boolean r;
-        r = sum(t, lv + 1);
-        if (r) shift_expr_2_loop(t, lv);
-        t.exit(r);
-        return r;
-    }
-
-    private static void shift_expr_2_loop(ParseTree t, int lv) {
-        t.enterLoop();
+        var p = t.position();
+        boolean s = false;
         while (true) {
-            var p = t.position();
-            if (!shift_expr_2(t, lv + 1) || t.loopGuard(p)) break;
+            t.cache(s);
+            boolean r;
+            r = shift_expr_1(t, lv + 1);
+            r = r || shift_expr_2(t, lv + 1);
+            r = r || sum(t, lv + 1);
+            s = r || s;
+            var e = t.position();
+            if (e <= p) break;
+            p = e;
         }
-        t.exitLoop();
+        t.restore(p);
+        t.exit(s);
+        return s;
     }
 
     /**
-     * shift_op sum
+     * shift_expr '<<' sum
      */
-    private static boolean shift_expr_2(ParseTree t, int lv) {
-        var m = t.enter(lv, SHIFT_EXPR_2);
+    private static boolean shift_expr_1(ParseTree t, int lv) {
+        var m = t.enter(lv, SHIFT_EXPR_1);
         if (m != null) return m;
         boolean r;
-        r = shift_op(t, lv + 1);
+        r = shift_expr(t, lv + 1);
+        r = r && t.consume("<<");
         r = r && sum(t, lv + 1);
         t.exit(r);
         return r;
     }
 
     /**
-     * sum_op: '+' | '-'
+     * shift_expr '>>' sum
      */
-    public static boolean sum_op(ParseTree t, int lv) {
-        var m = t.enter(lv, SUM_OP);
+    private static boolean shift_expr_2(ParseTree t, int lv) {
+        var m = t.enter(lv, SHIFT_EXPR_2);
         if (m != null) return m;
         boolean r;
-        r = t.consume("+");
-        r = r || t.consume("-");
+        r = shift_expr(t, lv + 1);
+        r = r && t.consume(">>");
+        r = r && sum(t, lv + 1);
         t.exit(r);
         return r;
     }
 
     /**
-     * sum: term (sum_op term)*
+     * sum: sum '+' term | sum '-' term | term
      */
     public static boolean sum(ParseTree t, int lv) {
         var m = t.enter(lv, SUM);
         if (m != null) return m;
-        boolean r;
-        r = term(t, lv + 1);
-        if (r) sum_2_loop(t, lv);
-        t.exit(r);
-        return r;
-    }
-
-    private static void sum_2_loop(ParseTree t, int lv) {
-        t.enterLoop();
+        var p = t.position();
+        boolean s = false;
         while (true) {
-            var p = t.position();
-            if (!sum_2(t, lv + 1) || t.loopGuard(p)) break;
+            t.cache(s);
+            boolean r;
+            r = sum_1(t, lv + 1);
+            r = r || sum_2(t, lv + 1);
+            r = r || term(t, lv + 1);
+            s = r || s;
+            var e = t.position();
+            if (e <= p) break;
+            p = e;
         }
-        t.exitLoop();
+        t.restore(p);
+        t.exit(s);
+        return s;
     }
 
     /**
-     * sum_op term
+     * sum '+' term
      */
-    private static boolean sum_2(ParseTree t, int lv) {
-        var m = t.enter(lv, SUM_2);
+    private static boolean sum_1(ParseTree t, int lv) {
+        var m = t.enter(lv, SUM_1);
         if (m != null) return m;
         boolean r;
-        r = sum_op(t, lv + 1);
+        r = sum(t, lv + 1);
+        r = r && t.consume("+");
         r = r && term(t, lv + 1);
         t.exit(r);
         return r;
     }
 
     /**
-     * term_op: '*' | '@' | '/' | '%' | '//'
+     * sum '-' term
      */
-    public static boolean term_op(ParseTree t, int lv) {
-        var m = t.enter(lv, TERM_OP);
+    private static boolean sum_2(ParseTree t, int lv) {
+        var m = t.enter(lv, SUM_2);
         if (m != null) return m;
         boolean r;
-        r = t.consume("*");
-        r = r || t.consume("@");
-        r = r || t.consume("/");
-        r = r || t.consume("%");
-        r = r || t.consume("//");
+        r = sum(t, lv + 1);
+        r = r && t.consume("-");
+        r = r && term(t, lv + 1);
         t.exit(r);
         return r;
     }
 
     /**
-     * term: pipeline (term_op pipeline)*
+     * term: term '*' pipe | term '/' pipe | term '%' pipe | term '//' pipe | term '@' pipe | pipe
      */
     public static boolean term(ParseTree t, int lv) {
         var m = t.enter(lv, TERM);
         if (m != null) return m;
+        var p = t.position();
+        boolean s = false;
+        while (true) {
+            t.cache(s);
+            boolean r;
+            r = term_1(t, lv + 1);
+            r = r || term_2(t, lv + 1);
+            r = r || term_3(t, lv + 1);
+            r = r || term_4(t, lv + 1);
+            r = r || term_5(t, lv + 1);
+            r = r || pipe(t, lv + 1);
+            s = r || s;
+            var e = t.position();
+            if (e <= p) break;
+            p = e;
+        }
+        t.restore(p);
+        t.exit(s);
+        return s;
+    }
+
+    /**
+     * term '*' pipe
+     */
+    private static boolean term_1(ParseTree t, int lv) {
+        var m = t.enter(lv, TERM_1);
+        if (m != null) return m;
         boolean r;
-        r = pipeline(t, lv + 1);
-        if (r) term_2_loop(t, lv);
+        r = term(t, lv + 1);
+        r = r && t.consume("*");
+        r = r && pipe(t, lv + 1);
         t.exit(r);
         return r;
     }
 
-    private static void term_2_loop(ParseTree t, int lv) {
-        t.enterLoop();
-        while (true) {
-            var p = t.position();
-            if (!term_2(t, lv + 1) || t.loopGuard(p)) break;
-        }
-        t.exitLoop();
-    }
-
     /**
-     * term_op pipeline
+     * term '/' pipe
      */
     private static boolean term_2(ParseTree t, int lv) {
         var m = t.enter(lv, TERM_2);
         if (m != null) return m;
         boolean r;
-        r = term_op(t, lv + 1);
-        r = r && pipeline(t, lv + 1);
+        r = term(t, lv + 1);
+        r = r && t.consume("/");
+        r = r && pipe(t, lv + 1);
         t.exit(r);
         return r;
     }
 
     /**
-     * pipeline: factor ('->' pipe_expr)*
+     * term '%' pipe
      */
-    public static boolean pipeline(ParseTree t, int lv) {
-        var m = t.enter(lv, PIPELINE);
+    private static boolean term_3(ParseTree t, int lv) {
+        var m = t.enter(lv, TERM_3);
         if (m != null) return m;
         boolean r;
-        r = factor(t, lv + 1);
-        if (r) pipeline_2_loop(t, lv);
+        r = term(t, lv + 1);
+        r = r && t.consume("%");
+        r = r && pipe(t, lv + 1);
         t.exit(r);
         return r;
     }
 
-    private static void pipeline_2_loop(ParseTree t, int lv) {
-        t.enterLoop();
+    /**
+     * term '//' pipe
+     */
+    private static boolean term_4(ParseTree t, int lv) {
+        var m = t.enter(lv, TERM_4);
+        if (m != null) return m;
+        boolean r;
+        r = term(t, lv + 1);
+        r = r && t.consume("//");
+        r = r && pipe(t, lv + 1);
+        t.exit(r);
+        return r;
+    }
+
+    /**
+     * term '@' pipe
+     */
+    private static boolean term_5(ParseTree t, int lv) {
+        var m = t.enter(lv, TERM_5);
+        if (m != null) return m;
+        boolean r;
+        r = term(t, lv + 1);
+        r = r && t.consume("@");
+        r = r && pipe(t, lv + 1);
+        t.exit(r);
+        return r;
+    }
+
+    /**
+     * pipe: pipe '->' pipe_expr | factor
+     */
+    public static boolean pipe(ParseTree t, int lv) {
+        var m = t.enter(lv, PIPE);
+        if (m != null) return m;
+        var p = t.position();
+        boolean s = false;
         while (true) {
-            var p = t.position();
-            if (!pipeline_2(t, lv + 1) || t.loopGuard(p)) break;
+            t.cache(s);
+            boolean r;
+            r = pipe_1(t, lv + 1);
+            r = r || factor(t, lv + 1);
+            s = r || s;
+            var e = t.position();
+            if (e <= p) break;
+            p = e;
         }
-        t.exitLoop();
+        t.restore(p);
+        t.exit(s);
+        return s;
     }
 
     /**
-     * '->' pipe_expr
+     * pipe '->' pipe_expr
      */
-    private static boolean pipeline_2(ParseTree t, int lv) {
-        var m = t.enter(lv, PIPELINE_2);
+    private static boolean pipe_1(ParseTree t, int lv) {
+        var m = t.enter(lv, PIPE_1);
         if (m != null) return m;
         boolean r;
-        r = t.consume("->");
+        r = pipe(t, lv + 1);
+        r = r && t.consume("->");
         r = r && pipe_expr(t, lv + 1);
         t.exit(r);
         return r;
@@ -2061,66 +2131,81 @@ public class FugaParser {
     }
 
     /**
-     * factor: ('+' | '-' | '~') factor | power
+     * factor: '+' factor | '-' factor | '~' factor | power
      */
     public static boolean factor(ParseTree t, int lv) {
         var m = t.enter(lv, FACTOR);
         if (m != null) return m;
         boolean r;
         r = factor_1(t, lv + 1);
+        r = r || factor_2(t, lv + 1);
+        r = r || factor_3(t, lv + 1);
         r = r || power(t, lv + 1);
         t.exit(r);
         return r;
     }
 
     /**
-     * ('+' | '-' | '~') factor
+     * '+' factor
      */
     private static boolean factor_1(ParseTree t, int lv) {
         var m = t.enter(lv, FACTOR_1);
         if (m != null) return m;
         boolean r;
-        r = factor_1_1(t, lv + 1);
+        r = t.consume("+");
         r = r && factor(t, lv + 1);
         t.exit(r);
         return r;
     }
 
     /**
-     * '+' | '-' | '~'
+     * '-' factor
      */
-    private static boolean factor_1_1(ParseTree t, int lv) {
-        var m = t.enter(lv, FACTOR_1_1);
+    private static boolean factor_2(ParseTree t, int lv) {
+        var m = t.enter(lv, FACTOR_2);
         if (m != null) return m;
         boolean r;
-        r = t.consume("+");
-        r = r || t.consume("-");
-        r = r || t.consume("~");
+        r = t.consume("-");
+        r = r && factor(t, lv + 1);
         t.exit(r);
         return r;
     }
 
     /**
-     * power: primary ['**' factor]
+     * '~' factor
+     */
+    private static boolean factor_3(ParseTree t, int lv) {
+        var m = t.enter(lv, FACTOR_3);
+        if (m != null) return m;
+        boolean r;
+        r = t.consume("~");
+        r = r && factor(t, lv + 1);
+        t.exit(r);
+        return r;
+    }
+
+    /**
+     * power: primary '**' factor | primary
      */
     public static boolean power(ParseTree t, int lv) {
         var m = t.enter(lv, POWER);
         if (m != null) return m;
         boolean r;
-        r = primary(t, lv + 1);
-        if (r) power_2(t, lv + 1);
+        r = power_1(t, lv + 1);
+        r = r || primary(t, lv + 1);
         t.exit(r);
         return r;
     }
 
     /**
-     * '**' factor
+     * primary '**' factor
      */
-    private static boolean power_2(ParseTree t, int lv) {
-        var m = t.enter(lv, POWER_2);
+    private static boolean power_1(ParseTree t, int lv) {
+        var m = t.enter(lv, POWER_1);
         if (m != null) return m;
         boolean r;
-        r = t.consume("**");
+        r = primary(t, lv + 1);
+        r = r && t.consume("**");
         r = r && factor(t, lv + 1);
         t.exit(r);
         return r;

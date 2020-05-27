@@ -3,10 +3,8 @@ package org.fugalang.core.peg;
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
-import java.util.List;
-
 /**
- * conjunction: inversion ('and' inversion)*
+ * conjunction: conjunction 'and' inversion | inversion
  */
 public final class Conjunction extends NodeWrapper {
 
@@ -14,25 +12,37 @@ public final class Conjunction extends NodeWrapper {
         super(node);
     }
 
-    public Inversion inversion() {
-        return get(0, Inversion.class);
+    public Conjunction1 conjunctionAndInversion() {
+        return get(0, Conjunction1.class);
     }
 
-    public List<Conjunction2> andInversions() {
-        return getList(1, Conjunction2.class);
+    public boolean hasConjunctionAndInversion() {
+        return has(0);
+    }
+
+    public Inversion inversion() {
+        return get(1, Inversion.class);
+    }
+
+    public boolean hasInversion() {
+        return has(1);
     }
 
     /**
-     * 'and' inversion
+     * conjunction 'and' inversion
      */
-    public static final class Conjunction2 extends NodeWrapper {
+    public static final class Conjunction1 extends NodeWrapper {
 
-        public Conjunction2(ParseTreeNode node) {
+        public Conjunction1(ParseTreeNode node) {
             super(node);
         }
 
+        public Conjunction conjunction() {
+            return get(0, Conjunction.class);
+        }
+
         public Inversion inversion() {
-            return get(1, Inversion.class);
+            return get(2, Inversion.class);
         }
     }
 }

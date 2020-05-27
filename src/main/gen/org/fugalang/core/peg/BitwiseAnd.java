@@ -3,10 +3,8 @@ package org.fugalang.core.peg;
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
-import java.util.List;
-
 /**
- * bitwise_and: shift_expr ('&' shift_expr)*
+ * bitwise_and: bitwise_and '&' shift_expr | shift_expr
  */
 public final class BitwiseAnd extends NodeWrapper {
 
@@ -14,25 +12,37 @@ public final class BitwiseAnd extends NodeWrapper {
         super(node);
     }
 
-    public ShiftExpr shiftExpr() {
-        return get(0, ShiftExpr.class);
+    public BitwiseAnd1 bitwiseAndBitAndShiftExpr() {
+        return get(0, BitwiseAnd1.class);
     }
 
-    public List<BitwiseAnd2> bitAndShiftExprs() {
-        return getList(1, BitwiseAnd2.class);
+    public boolean hasBitwiseAndBitAndShiftExpr() {
+        return has(0);
+    }
+
+    public ShiftExpr shiftExpr() {
+        return get(1, ShiftExpr.class);
+    }
+
+    public boolean hasShiftExpr() {
+        return has(1);
     }
 
     /**
-     * '&' shift_expr
+     * bitwise_and '&' shift_expr
      */
-    public static final class BitwiseAnd2 extends NodeWrapper {
+    public static final class BitwiseAnd1 extends NodeWrapper {
 
-        public BitwiseAnd2(ParseTreeNode node) {
+        public BitwiseAnd1(ParseTreeNode node) {
             super(node);
         }
 
+        public BitwiseAnd bitwiseAnd() {
+            return get(0, BitwiseAnd.class);
+        }
+
         public ShiftExpr shiftExpr() {
-            return get(1, ShiftExpr.class);
+            return get(2, ShiftExpr.class);
         }
     }
 }

@@ -6,7 +6,7 @@ import org.fugalang.core.parser.ParseTreeNode;
 import java.util.List;
 
 /**
- * simple_arg_list: simple_arg (simple_arg)*
+ * simple_arg_list: simple_arg+
  */
 public final class SimpleArgList extends NodeWrapper {
 
@@ -14,25 +14,7 @@ public final class SimpleArgList extends NodeWrapper {
         super(node);
     }
 
-    public SimpleArg simpleArg() {
-        return get(0, SimpleArg.class);
-    }
-
-    public List<SimpleArgList2> simpleArgs() {
-        return getList(1, SimpleArgList2.class);
-    }
-
-    /**
-     * simple_arg
-     */
-    public static final class SimpleArgList2 extends NodeWrapper {
-
-        public SimpleArgList2(ParseTreeNode node) {
-            super(node);
-        }
-
-        public SimpleArg simpleArg() {
-            return get(0, SimpleArg.class);
-        }
+    public List<SimpleArg> simpleArgs() {
+        return getList(0, SimpleArg.class);
     }
 }

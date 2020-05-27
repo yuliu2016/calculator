@@ -3,10 +3,8 @@ package org.fugalang.core.peg;
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
-import java.util.List;
-
 /**
- * disjunction: conjunction ('or' conjunction)*
+ * disjunction: disjunction 'or' conjunction | conjunction
  */
 public final class Disjunction extends NodeWrapper {
 
@@ -14,25 +12,37 @@ public final class Disjunction extends NodeWrapper {
         super(node);
     }
 
-    public Conjunction conjunction() {
-        return get(0, Conjunction.class);
+    public Disjunction1 disjunctionOrConjunction() {
+        return get(0, Disjunction1.class);
     }
 
-    public List<Disjunction2> orConjunctions() {
-        return getList(1, Disjunction2.class);
+    public boolean hasDisjunctionOrConjunction() {
+        return has(0);
+    }
+
+    public Conjunction conjunction() {
+        return get(1, Conjunction.class);
+    }
+
+    public boolean hasConjunction() {
+        return has(1);
     }
 
     /**
-     * 'or' conjunction
+     * disjunction 'or' conjunction
      */
-    public static final class Disjunction2 extends NodeWrapper {
+    public static final class Disjunction1 extends NodeWrapper {
 
-        public Disjunction2(ParseTreeNode node) {
+        public Disjunction1(ParseTreeNode node) {
             super(node);
         }
 
+        public Disjunction disjunction() {
+            return get(0, Disjunction.class);
+        }
+
         public Conjunction conjunction() {
-            return get(1, Conjunction.class);
+            return get(2, Conjunction.class);
         }
     }
 }
