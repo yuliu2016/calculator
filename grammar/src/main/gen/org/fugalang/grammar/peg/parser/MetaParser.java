@@ -98,37 +98,37 @@ public class MetaParser {
     }
 
     /**
-     * and_rule: repeat_rule+
+     * and_rule: repeat+
      */
     public static boolean and_rule(ParseTree t) {
         var m = t.enter(AND_RULE);
         if (m != null) return m;
         boolean r;
-        r = repeat_rule_loop(t);
+        r = repeat_loop(t);
         t.exit(r);
         return r;
     }
 
-    private static boolean repeat_rule_loop(ParseTree t) {
+    private static boolean repeat_loop(ParseTree t) {
         t.enterLoop();
-        var r = repeat_rule(t);
+        var r = repeat(t);
         if (r) while (true) {
             var p = t.position();
-            if (!repeat_rule(t) || t.loopGuard(p)) break;
+            if (!repeat(t) || t.loopGuard(p)) break;
         }
         t.exitLoop();
         return r;
     }
 
     /**
-     * repeat_rule: sub_rule ['*' | '+']
+     * repeat: item ['*' | '+']
      */
-    public static boolean repeat_rule(ParseTree t) {
-        var m = t.enter(REPEAT_RULE);
+    public static boolean repeat(ParseTree t) {
+        var m = t.enter(REPEAT);
         if (m != null) return m;
         boolean r;
-        r = sub_rule(t);
-        if (r) repeat_rule_2(t);
+        r = item(t);
+        if (r) repeat_2(t);
         t.exit(r);
         return r;
     }
@@ -136,8 +136,8 @@ public class MetaParser {
     /**
      * '*' | '+'
      */
-    private static boolean repeat_rule_2(ParseTree t) {
-        var m = t.enter(REPEAT_RULE_2);
+    private static boolean repeat_2(ParseTree t) {
+        var m = t.enter(REPEAT_2);
         if (m != null) return m;
         boolean r;
         r = t.consume("*");
@@ -147,10 +147,10 @@ public class MetaParser {
     }
 
     /**
-     * sub_rule: group | optional | NAME | STRING
+     * item: group | optional | NAME | STRING
      */
-    public static boolean sub_rule(ParseTree t) {
-        var m = t.enter(SUB_RULE);
+    public static boolean item(ParseTree t) {
+        var m = t.enter(ITEM);
         if (m != null) return m;
         boolean r;
         r = group(t);

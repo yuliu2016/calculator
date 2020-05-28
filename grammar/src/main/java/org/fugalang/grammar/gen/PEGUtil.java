@@ -1,9 +1,9 @@
 package org.fugalang.grammar.gen;
 
 import org.fugalang.grammar.peg.AndRule;
+import org.fugalang.grammar.peg.Item;
 import org.fugalang.grammar.peg.OrRule;
-import org.fugalang.grammar.peg.RepeatRule;
-import org.fugalang.grammar.peg.SubRule;
+import org.fugalang.grammar.peg.Repeat;
 import org.fugalang.grammar.util.FirstAndMore;
 
 import java.util.stream.Collectors;
@@ -19,23 +19,23 @@ public class PEGUtil {
 
     public static String constructString(AndRule andRule) {
         return andRule
-                .repeatRules()
+                .repeats()
                 .stream()
                 .map(PEGUtil::constructString)
                 .collect(Collectors.joining(" "));
     }
 
-    public static String constructString(RepeatRule repeatRule) {
-        var modifier = repeatRule.hasTimesOrPlus() ?
-                (repeatRule.timesOrPlus().isPlus() ? "+" : "*")
+    public static String constructString(Repeat repeat) {
+        var modifier = repeat.hasTimesOrPlus() ?
+                (repeat.timesOrPlus().isPlus() ? "+" : "*")
                 : "";
-        return constructString(repeatRule.subRule()) + modifier;
+        return constructString(repeat.item()) + modifier;
     }
 
-    public static String constructString(SubRule subRule) {
-        return subRule.hasGroup() ? "(" + constructString(subRule.group().orRule()) + ")" :
-                subRule.hasOptional() ? "[" + constructString(subRule.optional().orRule()) + "]" :
-                        subRule.hasName() ? subRule.name() : "'" + subRule.string() + "'";
+    public static String constructString(Item item) {
+        return item.hasGroup() ? "(" + constructString(item.group().orRule()) + ")" :
+                item.hasOptional() ? "[" + constructString(item.optional().orRule()) + "]" :
+                        item.hasName() ? item.name() : "'" + item.string() + "'";
     }
 
     public static Iterable<AndRule> allAndRules(OrRule orRule) {
@@ -43,30 +43,30 @@ public class PEGUtil {
                 orRule.orRule2s(), OrRule.OrRule2::andRule);
     }
 
-    public static SubRuleType getRuleType(SubRule subRule) {
-        return subRule.hasGroup() ? SubRuleType.Group :
-                subRule.hasOptional() ? SubRuleType.Optional :
+    public static SubRuleType getRuleType(Item item) {
+        return item.hasGroup() ? SubRuleType.Group :
+                item.hasOptional() ? SubRuleType.Optional :
                         SubRuleType.Token;
     }
 
-    public static RepeatType getRepeatType(RepeatRule repeatRule) {
-        return repeatRule.hasTimesOrPlus() ?
-                repeatRule.timesOrPlus().isPlus() ?
+    public static RepeatType getRepeatType(Repeat repeat) {
+        return repeat.hasTimesOrPlus() ?
+                repeat.timesOrPlus().isPlus() ?
                         RepeatType.OnceOrMore
                         : RepeatType.NoneOrMore
                 : RepeatType.Once;
     }
 
-    public static String getSubruleString(SubRule subRule) {
-        return subRule.hasName() ? subRule.name() :
-                subRule.hasString() ? subRule.string() : null;
+    public static String getItemString(Item item) {
+        return item.hasName() ? item.name() :
+                item.hasString() ? item.string() : null;
     }
 
-    public static boolean isSingle(RepeatRule repeatRule) {
-        if (repeatRule.hasTimesOrPlus()) {
+    public static boolean isSingle(Repeat repeat) {
+        if (repeat.hasTimesOrPlus()) {
             return false;
         }
-        var sub = repeatRule.subRule();
+        var sub = repeat.item();
         return sub.hasString() || sub.hasName();
     }
 

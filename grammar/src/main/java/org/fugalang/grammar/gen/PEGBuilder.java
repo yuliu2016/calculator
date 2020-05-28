@@ -93,7 +93,7 @@ public class PEGBuilder {
                 var newClassName = className.suffix(class_count);
                 class_count++;
 
-                if (andRule.repeatRules().size() == 1) {
+                if (andRule.repeats().size() == 1) {
                     // only one repeat rule - can propagate fields of this class
                     addAndRule(newClassName, cb, andRule, REQUIRED);
                 } else {
@@ -125,8 +125,8 @@ public class PEGBuilder {
             AndRule rule,
             boolean isOptional
     ) {
-        if (rule.repeatRules().size() == 1) {
-            addRepeatedSubRule(className, cb, rule.repeatRules().get(0), isOptional);
+        if (rule.repeats().size() == 1) {
+            addRepeatedSubRule(className, cb, rule.repeats().get(0), isOptional);
         } else {
             // don't need to check for component classes - every RepeatRule
             // can be on a single field
@@ -139,7 +139,7 @@ public class PEGBuilder {
 
             int class_count = 1;
 
-            for (RepeatRule repeatRule : rule.repeatRules()) {
+            for (var repeatRule : rule.repeats()) {
                 var classWithCount = className.suffix(class_count);
                 class_count++;
 
@@ -151,24 +151,24 @@ public class PEGBuilder {
     private void addRepeatedSubRule(
             ClassName className,
             ClassBuilder cb,
-            RepeatRule repeatRule,
+            Repeat repeatRule,
             boolean isOptional
     ) {
-        SubRule subRule = repeatRule.subRule();
+        Item item = repeatRule.item();
 
         var repeatType = PEGUtil.getRepeatType(repeatRule);
 
-        switch (PEGUtil.getRuleType(subRule)) {
+        switch (PEGUtil.getRuleType(item)) {
             case Group:
-                addOrRuleAsComponent(className, cb, subRule.group().orRule(),
+                addOrRuleAsComponent(className, cb, item.group().orRule(),
                         repeatType, REQUIRED);
                 break;
             case Optional:
                 addOrRuleAsComponent(className, cb,
-                        subRule.optional().orRule(), repeatType, OPTIONAL);
+                        item.optional().orRule(), repeatType, OPTIONAL);
                 break;
             case Token:
-                addToken(cb, repeatType, PEGUtil.getSubruleString(subRule), isOptional);
+                addToken(cb, repeatType, PEGUtil.getItemString(item), isOptional);
                 break;
         }
     }
@@ -256,7 +256,7 @@ public class PEGBuilder {
         // maybe this can just be added to this class
         // but maybe there needs to be a separate class
 
-        if (rule.orRule2s().isEmpty() && rule.andRule().repeatRules().size() == 1 &&
+        if (rule.orRule2s().isEmpty() && rule.andRule().repeats().size() == 1 &&
                 repeatType == RepeatType.Once) {
             // ^fix - single-char repeats
 
@@ -282,17 +282,17 @@ public class PEGBuilder {
     }
 
     public String getSmartName(ClassName className, AndRule andRule) {
-        if (andRule.repeatRules().size() <= 3 &&
-                andRule.repeatRules().stream().allMatch(PEGUtil::isSingle)) {
+        if (andRule.repeats().size() <= 3 &&
+                andRule.repeats().stream().allMatch(PEGUtil::isSingle)) {
 
             StringBuilder sb = null;
-            for (RepeatRule rule : andRule.repeatRules()) {
-                var subRuleString = PEGUtil.getSubruleString(rule.subRule());
+            for (var rule : andRule.repeats()) {
+                var itemString = PEGUtil.getItemString(rule.item());
                 if (sb == null) sb = new StringBuilder();
-                if (ParserStringUtil.isWord(subRuleString)) {
-                    sb.append(ParserStringUtil.convertCase(subRuleString));
+                if (ParserStringUtil.isWord(itemString)) {
+                    sb.append(ParserStringUtil.convertCase(itemString));
                 } else {
-                    sb.append(converter.checkToken(subRuleString).orElseThrow().getFieldName());
+                    sb.append(converter.checkToken(itemString).orElseThrow().getFieldName());
                 }
             }
             if (sb != null) {
@@ -317,9 +317,9 @@ public class PEGBuilder {
     }
 
     private static String getFirstName(OrRule rule) {
-        var repeatRules = rule.andRule().repeatRules();
+        var repeatRules = rule.andRule().repeats();
         if (repeatRules.isEmpty()) return null;
-        var sub = repeatRules.get(0).subRule();
+        var sub = repeatRules.get(0).item();
         return sub.hasName() ? sub.name() : null;
     }
 

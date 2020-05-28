@@ -4,20 +4,20 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * repeat_rule: sub_rule ['*' | '+']
+ * repeat: item ['*' | '+']
  */
-public final class RepeatRule extends NodeWrapper {
+public final class Repeat extends NodeWrapper {
 
-    public RepeatRule(ParseTreeNode node) {
+    public Repeat(ParseTreeNode node) {
         super(node);
     }
 
-    public SubRule subRule() {
-        return get(0, SubRule.class);
+    public Item item() {
+        return get(0, Item.class);
     }
 
-    public RepeatRule2 timesOrPlus() {
-        return get(1, RepeatRule2.class);
+    public Repeat2 timesOrPlus() {
+        return get(1, Repeat2.class);
     }
 
     public boolean hasTimesOrPlus() {
@@ -27,9 +27,9 @@ public final class RepeatRule extends NodeWrapper {
     /**
      * '*' | '+'
      */
-    public static final class RepeatRule2 extends NodeWrapper {
+    public static final class Repeat2 extends NodeWrapper {
 
-        public RepeatRule2(ParseTreeNode node) {
+        public Repeat2(ParseTreeNode node) {
             super(node);
         }
 

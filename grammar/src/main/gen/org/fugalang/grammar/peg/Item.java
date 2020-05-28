@@ -5,11 +5,11 @@ import org.fugalang.core.parser.ParseTreeNode;
 import org.fugalang.core.token.TokenType;
 
 /**
- * sub_rule: group | optional | NAME | STRING
+ * item: group | optional | NAME | STRING
  */
-public final class SubRule extends NodeWrapper {
+public final class Item extends NodeWrapper {
 
-    public SubRule(ParseTreeNode node) {
+    public Item(ParseTreeNode node) {
         super(node);
     }
 
