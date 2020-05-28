@@ -62,11 +62,9 @@ public class FugaRules {
     public static final ParserRule TRY_STMT_3 = or_rule("try_stmt:3");
     public static final ParserRule WITH_STMT = and_rule("with_stmt");
     public static final ParserRule WITH_STMT_3 = and_rule("with_stmt:3");
-    public static final ParserRule WITH_ITEM = and_rule("with_item");
-    public static final ParserRule WITH_ITEM_2 = and_rule("with_item:2");
+    public static final ParserRule EXPR_AS_NAME = and_rule("expr_as_name");
+    public static final ParserRule EXPR_AS_NAME_2 = and_rule("expr_as_name:2");
     public static final ParserRule EXCEPT_CLAUSE = and_rule("except_clause");
-    public static final ParserRule EXCEPT_CLAUSE_2 = and_rule("except_clause:2");
-    public static final ParserRule EXCEPT_CLAUSE_2_2 = and_rule("except_clause:2:2");
     public static final ParserRule BLOCK_SUITE = or_rule("block_suite");
     public static final ParserRule BLOCK_SUITE_1 = and_rule("block_suite:1");
     public static final ParserRule BLOCK_SUITE_2 = and_rule("block_suite:2");

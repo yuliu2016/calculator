@@ -8,7 +8,6 @@ public interface ParseTree {
     /**
      * Enter a new call frame in the parse tree stack
      *
-     * @param level the recursion level
      * @param rule  the rule that is being parsed
      * @return a boolean value containing the result on entering
      * this frame. The value is nonnull if the result of this
@@ -21,7 +20,12 @@ public interface ParseTree {
      * to be called. Otherwise, every {@code enter} call must be linked
      * with a call to {@link #exit(boolean)}
      */
-    Boolean enter(int level, ParserRule rule);
+    Boolean enter(ParserRule rule);
+
+    @SuppressWarnings("unused")
+    default Boolean enter(int level, ParserRule rule) {
+        return enter(rule);
+    }
 
     /**
      * Pop the current call frame store the result. This will also store the

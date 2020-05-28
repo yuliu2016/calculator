@@ -10,7 +10,6 @@ import java.util.Map;
 class Frame {
 
     final int position;
-    final int level;
     final ParserRule rule;
     final Map<ParserRule, Memo> memo_at_pos;
 
@@ -22,9 +21,8 @@ class Frame {
     // used for tracking left recursion;
     List<ParseTreeNode> left_recursion_nodes = null;
 
-    public Frame(int position, int level, ParserRule rule, Map<ParserRule, Memo> memo_at_pos) {
+    public Frame(int position, ParserRule rule, Map<ParserRule, Memo> memo_at_pos) {
         this.position = position;
-        this.level = level;
         this.rule = rule;
         this.memo_at_pos = memo_at_pos;
     }

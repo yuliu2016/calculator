@@ -5,11 +5,11 @@ import org.fugalang.core.parser.ParseTreeNode;
 import org.fugalang.core.token.TokenType;
 
 /**
- * with_item: expr ['as' NAME]
+ * expr_as_name: expr ['as' NAME]
  */
-public final class WithItem extends NodeWrapper {
+public final class ExprAsName extends NodeWrapper {
 
-    public WithItem(ParseTreeNode node) {
+    public ExprAsName(ParseTreeNode node) {
         super(node);
     }
 
@@ -17,8 +17,8 @@ public final class WithItem extends NodeWrapper {
         return get(0, Expr.class);
     }
 
-    public WithItem2 asName() {
-        return get(1, WithItem2.class);
+    public ExprAsName2 asName() {
+        return get(1, ExprAsName2.class);
     }
 
     public boolean hasAsName() {
@@ -28,9 +28,9 @@ public final class WithItem extends NodeWrapper {
     /**
      * 'as' NAME
      */
-    public static final class WithItem2 extends NodeWrapper {
+    public static final class ExprAsName2 extends NodeWrapper {
 
-        public WithItem2(ParseTreeNode node) {
+        public ExprAsName2(ParseTreeNode node) {
             super(node);
         }
 

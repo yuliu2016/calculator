@@ -7,7 +7,6 @@ import org.fugalang.core.peg.*;
 import org.fugalang.core.peg.parser.FugaParser;
 import org.fugalang.core.token.SimpleLexer;
 
-import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -44,7 +43,7 @@ public class ParserTests {
     }
 
     private static <T> void parse(
-            String s, BiFunction<ParseTree, Integer, Boolean> start,
+            String s, Function<ParseTree, Boolean> start,
             Function<ParseTreeNode, T> converter) {
         var visitor = LexingVisitor.of(s);
         var lexer = SimpleLexer.of(visitor);

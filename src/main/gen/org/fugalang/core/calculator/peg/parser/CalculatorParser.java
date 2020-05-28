@@ -11,17 +11,17 @@ public class CalculatorParser {
     /**
      * sum: sum '+' term | sum '-' term | term
      */
-    public static boolean sum(ParseTree t, int lv) {
-        var m = t.enter(lv, SUM);
+    public static boolean sum(ParseTree t) {
+        var m = t.enter(SUM);
         if (m != null) return m;
         var p = t.position();
         boolean s = false;
         while (true) {
             t.cache(s);
             boolean r;
-            r = sum_1(t, lv + 1);
-            r = r || sum_2(t, lv + 1);
-            r = r || term(t, lv + 1);
+            r = sum_1(t);
+            r = r || sum_2(t);
+            r = r || term(t);
             s = r || s;
             var e = t.position();
             if (e <= p) break;
@@ -35,13 +35,13 @@ public class CalculatorParser {
     /**
      * sum '+' term
      */
-    private static boolean sum_1(ParseTree t, int lv) {
-        var m = t.enter(lv, SUM_1);
+    private static boolean sum_1(ParseTree t) {
+        var m = t.enter(SUM_1);
         if (m != null) return m;
         boolean r;
-        r = sum(t, lv + 1);
+        r = sum(t);
         r = r && t.consume("+");
-        r = r && term(t, lv + 1);
+        r = r && term(t);
         t.exit(r);
         return r;
     }
@@ -49,13 +49,13 @@ public class CalculatorParser {
     /**
      * sum '-' term
      */
-    private static boolean sum_2(ParseTree t, int lv) {
-        var m = t.enter(lv, SUM_2);
+    private static boolean sum_2(ParseTree t) {
+        var m = t.enter(SUM_2);
         if (m != null) return m;
         boolean r;
-        r = sum(t, lv + 1);
+        r = sum(t);
         r = r && t.consume("-");
-        r = r && term(t, lv + 1);
+        r = r && term(t);
         t.exit(r);
         return r;
     }
@@ -63,18 +63,18 @@ public class CalculatorParser {
     /**
      * term: term '*' factor | term '/' factor | term '%' factor | factor
      */
-    public static boolean term(ParseTree t, int lv) {
-        var m = t.enter(lv, TERM);
+    public static boolean term(ParseTree t) {
+        var m = t.enter(TERM);
         if (m != null) return m;
         var p = t.position();
         boolean s = false;
         while (true) {
             t.cache(s);
             boolean r;
-            r = term_1(t, lv + 1);
-            r = r || term_2(t, lv + 1);
-            r = r || term_3(t, lv + 1);
-            r = r || factor(t, lv + 1);
+            r = term_1(t);
+            r = r || term_2(t);
+            r = r || term_3(t);
+            r = r || factor(t);
             s = r || s;
             var e = t.position();
             if (e <= p) break;
@@ -88,13 +88,13 @@ public class CalculatorParser {
     /**
      * term '*' factor
      */
-    private static boolean term_1(ParseTree t, int lv) {
-        var m = t.enter(lv, TERM_1);
+    private static boolean term_1(ParseTree t) {
+        var m = t.enter(TERM_1);
         if (m != null) return m;
         boolean r;
-        r = term(t, lv + 1);
+        r = term(t);
         r = r && t.consume("*");
-        r = r && factor(t, lv + 1);
+        r = r && factor(t);
         t.exit(r);
         return r;
     }
@@ -102,13 +102,13 @@ public class CalculatorParser {
     /**
      * term '/' factor
      */
-    private static boolean term_2(ParseTree t, int lv) {
-        var m = t.enter(lv, TERM_2);
+    private static boolean term_2(ParseTree t) {
+        var m = t.enter(TERM_2);
         if (m != null) return m;
         boolean r;
-        r = term(t, lv + 1);
+        r = term(t);
         r = r && t.consume("/");
-        r = r && factor(t, lv + 1);
+        r = r && factor(t);
         t.exit(r);
         return r;
     }
@@ -116,13 +116,13 @@ public class CalculatorParser {
     /**
      * term '%' factor
      */
-    private static boolean term_3(ParseTree t, int lv) {
-        var m = t.enter(lv, TERM_3);
+    private static boolean term_3(ParseTree t) {
+        var m = t.enter(TERM_3);
         if (m != null) return m;
         boolean r;
-        r = term(t, lv + 1);
+        r = term(t);
         r = r && t.consume("%");
-        r = r && factor(t, lv + 1);
+        r = r && factor(t);
         t.exit(r);
         return r;
     }
@@ -130,14 +130,14 @@ public class CalculatorParser {
     /**
      * factor: '+' factor | '-' factor | '~' factor | power
      */
-    public static boolean factor(ParseTree t, int lv) {
-        var m = t.enter(lv, FACTOR);
+    public static boolean factor(ParseTree t) {
+        var m = t.enter(FACTOR);
         if (m != null) return m;
         boolean r;
-        r = factor_1(t, lv + 1);
-        r = r || factor_2(t, lv + 1);
-        r = r || factor_3(t, lv + 1);
-        r = r || power(t, lv + 1);
+        r = factor_1(t);
+        r = r || factor_2(t);
+        r = r || factor_3(t);
+        r = r || power(t);
         t.exit(r);
         return r;
     }
@@ -145,12 +145,12 @@ public class CalculatorParser {
     /**
      * '+' factor
      */
-    private static boolean factor_1(ParseTree t, int lv) {
-        var m = t.enter(lv, FACTOR_1);
+    private static boolean factor_1(ParseTree t) {
+        var m = t.enter(FACTOR_1);
         if (m != null) return m;
         boolean r;
         r = t.consume("+");
-        r = r && factor(t, lv + 1);
+        r = r && factor(t);
         t.exit(r);
         return r;
     }
@@ -158,12 +158,12 @@ public class CalculatorParser {
     /**
      * '-' factor
      */
-    private static boolean factor_2(ParseTree t, int lv) {
-        var m = t.enter(lv, FACTOR_2);
+    private static boolean factor_2(ParseTree t) {
+        var m = t.enter(FACTOR_2);
         if (m != null) return m;
         boolean r;
         r = t.consume("-");
-        r = r && factor(t, lv + 1);
+        r = r && factor(t);
         t.exit(r);
         return r;
     }
@@ -171,12 +171,12 @@ public class CalculatorParser {
     /**
      * '~' factor
      */
-    private static boolean factor_3(ParseTree t, int lv) {
-        var m = t.enter(lv, FACTOR_3);
+    private static boolean factor_3(ParseTree t) {
+        var m = t.enter(FACTOR_3);
         if (m != null) return m;
         boolean r;
         r = t.consume("~");
-        r = r && factor(t, lv + 1);
+        r = r && factor(t);
         t.exit(r);
         return r;
     }
@@ -184,12 +184,12 @@ public class CalculatorParser {
     /**
      * power: atom '**' factor | atom
      */
-    public static boolean power(ParseTree t, int lv) {
-        var m = t.enter(lv, POWER);
+    public static boolean power(ParseTree t) {
+        var m = t.enter(POWER);
         if (m != null) return m;
         boolean r;
-        r = power_1(t, lv + 1);
-        r = r || atom(t, lv + 1);
+        r = power_1(t);
+        r = r || atom(t);
         t.exit(r);
         return r;
     }
@@ -197,13 +197,13 @@ public class CalculatorParser {
     /**
      * atom '**' factor
      */
-    private static boolean power_1(ParseTree t, int lv) {
-        var m = t.enter(lv, POWER_1);
+    private static boolean power_1(ParseTree t) {
+        var m = t.enter(POWER_1);
         if (m != null) return m;
         boolean r;
-        r = atom(t, lv + 1);
+        r = atom(t);
         r = r && t.consume("**");
-        r = r && factor(t, lv + 1);
+        r = r && factor(t);
         t.exit(r);
         return r;
     }
@@ -211,11 +211,11 @@ public class CalculatorParser {
     /**
      * atom: '(' sum ')' | NUMBER
      */
-    public static boolean atom(ParseTree t, int lv) {
-        var m = t.enter(lv, ATOM);
+    public static boolean atom(ParseTree t) {
+        var m = t.enter(ATOM);
         if (m != null) return m;
         boolean r;
-        r = atom_1(t, lv + 1);
+        r = atom_1(t);
         r = r || t.consume(TokenType.NUMBER);
         t.exit(r);
         return r;
@@ -224,12 +224,12 @@ public class CalculatorParser {
     /**
      * '(' sum ')'
      */
-    private static boolean atom_1(ParseTree t, int lv) {
-        var m = t.enter(lv, ATOM_1);
+    private static boolean atom_1(ParseTree t) {
+        var m = t.enter(ATOM_1);
         if (m != null) return m;
         boolean r;
         r = t.consume("(");
-        r = r && sum(t, lv + 1);
+        r = r && sum(t);
         r = r && t.consume(")");
         t.exit(r);
         return r;

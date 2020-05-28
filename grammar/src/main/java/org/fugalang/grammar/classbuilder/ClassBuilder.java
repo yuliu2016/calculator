@@ -195,9 +195,9 @@ public class ClassBuilder {
         var visibility = isNamedRule ? "public" : "private";
         sb.append("    ").append(visibility).append(" static boolean ")
                 .append(small_name)
-                .append("(ParseTree t, int lv) {\n");
+                .append("(ParseTree t) {\n");
 
-        sb.append("        var m = t.enter(lv, ")
+        sb.append("        var m = t.enter(")
                 .append(cap_name).append(");\n");
         sb.append("        if (m != null) return m;\n");
 

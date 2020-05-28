@@ -6,7 +6,7 @@ import org.fugalang.core.parser.ParseTreeNode;
 import java.util.List;
 
 /**
- * with_stmt: 'with' with_item (',' with_item)* suite
+ * with_stmt: 'with' expr_as_name (',' expr_as_name)* suite
  */
 public final class WithStmt extends NodeWrapper {
 
@@ -14,11 +14,11 @@ public final class WithStmt extends NodeWrapper {
         super(node);
     }
 
-    public WithItem withItem() {
-        return get(1, WithItem.class);
+    public ExprAsName exprAsName() {
+        return get(1, ExprAsName.class);
     }
 
-    public List<WithStmt3> commaWithItems() {
+    public List<WithStmt3> commaExprAsNames() {
         return getList(2, WithStmt3.class);
     }
 
@@ -27,7 +27,7 @@ public final class WithStmt extends NodeWrapper {
     }
 
     /**
-     * ',' with_item
+     * ',' expr_as_name
      */
     public static final class WithStmt3 extends NodeWrapper {
 
@@ -35,8 +35,8 @@ public final class WithStmt extends NodeWrapper {
             super(node);
         }
 
-        public WithItem withItem() {
-            return get(1, WithItem.class);
+        public ExprAsName exprAsName() {
+            return get(1, ExprAsName.class);
         }
     }
 }

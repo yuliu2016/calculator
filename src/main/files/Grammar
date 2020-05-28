@@ -66,10 +66,10 @@ elif_stmt: 'elif' named_expr suite
 while_stmt: 'while' named_expr suite [else_suite]
 for_stmt: 'for' targetlist 'in' exprlist suite [else_suite]
 try_stmt: 'try' suite (except_suite | finally_suite)
-with_stmt: 'with' with_item (',' with_item)* suite
+with_stmt: 'with' expr_as_name (',' expr_as_name)* suite
 
-with_item: expr ['as' NAME]
-except_clause: 'except' [expr ['as' NAME]]
+expr_as_name: expr ['as' NAME]
+except_clause: 'except' [expr_as_name]
 
 block_suite:  '{' simple_stmt '}' | '{' NEWLINE stmt+ '}'
 suite: ':' simple_stmt | block_suite

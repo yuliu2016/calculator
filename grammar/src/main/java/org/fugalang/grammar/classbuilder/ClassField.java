@@ -1,8 +1,8 @@
 package org.fugalang.grammar.classbuilder;
 
 
-import org.fugalang.grammar.util.ParserStringUtil;
 import org.fugalang.core.parser.RuleType;
+import org.fugalang.grammar.util.ParserStringUtil;
 
 public class ClassField {
     private final ClassName className;
@@ -118,8 +118,7 @@ public class ClassField {
 
     private String getLoopExpr() {
         var rule_name = className.getRuleName().replace(":", "_");
-        var rule_suffix = resultSource.getType() == SourceType.Class ? "_loop(t, lv)" : "_loop(t)";
-        return rule_name + rule_suffix;
+        return rule_name + "_loop(t)";
     }
 
     private String getOptionalStmt(String resultExpr, RuleType ruleType, boolean isFirst) {
@@ -139,7 +138,7 @@ public class ClassField {
     private String getResultExpr() {
         switch (resultSource.getType()) {
             case Class:
-                return resultSource.getValue().replace(":", "_") + "(t, lv + 1)";
+                return resultSource.getValue().replace(":", "_") + "(t)";
             case TokenType:
                 return "t.consume(" + resultSource.getValue() + ")";
             case TokenLiteral:
@@ -160,8 +159,7 @@ public class ClassField {
     private String getRequiredLoopParser() {
         var resultExpr = getResultExpr();
         var rule_name = className.getRuleName().replace(":", "_");
-        var maybeLevel = resultSource.getType() == SourceType.Class ? ", int lv" : "";
-        return "\n    private static boolean " + rule_name + "_loop(ParseTree t" + maybeLevel + ") {\n" +
+        return "\n    private static boolean " + rule_name + "_loop(ParseTree t) {\n" +
                 "        t.enterLoop();\n" +
                 "        var r = " + resultExpr + ";\n" +
                 "        if (r) while (true) {\n" +
@@ -176,8 +174,7 @@ public class ClassField {
     private String getOptionalLoopParser() {
         var resultExpr = getResultExpr();
         var rule_name = className.getRuleName().replace(":", "_");
-        var maybeLevel = resultSource.getType() == SourceType.Class ? ", int lv" : "";
-        return "\n    private static void " + rule_name + "_loop(ParseTree t" + maybeLevel + ") {\n" +
+        return "\n    private static void " + rule_name + "_loop(ParseTree t) {\n" +
                 "        t.enterLoop();\n" +
                 "        while (true) {\n" +
                 "            var p = t.position();\n" +
