@@ -22,17 +22,12 @@ public interface ParseTree {
      */
     Boolean enter(ParserRule rule);
 
-    @SuppressWarnings("unused")
-    default Boolean enter(int level, ParserRule rule) {
-        return enter(rule);
-    }
-
     /**
      * Pop the current call frame store the result. This will also store the
      * resulting tree in the memoization cache, unless it's parent frame
      * is parsing a left-recursive rule, i.e. it has called
      * {@link #cache(boolean)} at least once. This is needed because on
-     * {@link #enter(int, ParserRule)} of the same frame later, it needs
+     * {@link #enter(ParserRule)} of the same frame later, it needs
      * to retry the rule, not just pulling it from the cache
      *
      * @param success whether this frame has successfully parsed its components

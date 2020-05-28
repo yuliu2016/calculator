@@ -4,9 +4,10 @@ single_input:
     | NEWLINE
     | simple_stmt
     | compound_stmt NEWLINE
-
-file_input: (NEWLINE | stmt)* ENDMARKER
-eval_input: exprlist NEWLINE* ENDMARKER
+file_input:
+    | (NEWLINE | stmt)* ENDMARKER
+eval_input:
+    | exprlist NEWLINE* ENDMARKER
 
 # Statements
 stmt: (simple_stmt | compound_stmt) NEWLINE
@@ -96,9 +97,15 @@ funcdef: 'def' [func_type_hint] [func_args] func_suite
 
 # Expressions
 
-named_expr: NAME ':=' expr | expr
-conditional: 'if' disjunction '?' disjunction 'else' expr
-expr: conditional | funcdef | disjunction
+named_expr:
+    | NAME ':=' expr
+    | expr
+conditional:
+    | 'if' disjunction '?' disjunction 'else' expr
+expr:
+    | conditional
+    | funcdef
+    | disjunction
 disjunction:
     | disjunction 'or' conjunction
     | conjunction
@@ -111,7 +118,17 @@ inversion:
 comparison:
     | bitwise_or (comp_op bitwise_or)+
     | bitwise_or
-comp_op: '<'|'>'|'=='|'>='|'<='|'!='|'in'|'not' 'in'|'is'|'is' 'not'
+comp_op:
+    | '<'
+    | '>'
+    | '=='
+    | '>='
+    | '<='
+    | '!='
+    | 'in'
+    | 'not' 'in'
+    | 'is'
+    | 'is' 'not'
 bitwise_or:
     | bitwise_or '|' bitwise_xor
     | bitwise_xor
@@ -139,7 +156,9 @@ term:
 pipe:
     | pipe '->' pipe_expr
     | factor
-pipe_expr: pipe_for | factor
+pipe_expr:
+    | pipe_for
+    | factor
 
 pipe_for: [comp_for] 'for' targetlist ['if' named_expr] [parameters | block_suite]
 comp_for: 'for' targetlist 'in' disjunction [comp_iter]
@@ -154,10 +173,12 @@ factor:
 power:
     | primary '**' factor
     | primary
-
-# Atoms
-
-primary: atom trailer* [block_suite]
+primary:
+    | primary '.' NAME
+    | primary parameters
+    | primary subscript
+    | primary block_suite
+    | atom
 atom:
     | tuple_atom
     | list_atom
@@ -175,11 +196,6 @@ dict_or_set: '{' [dict_maker | set_maker] '}'
 
 named_expr_star: star_expr | named_expr
 named_expr_list: named_expr_star (',' named_expr_star)* [',']
-
-trailer:
-    | '.' NAME
-    | parameters
-    | subscript
 
 subscript: '[' slicelist ']'
 slicelist: slice (',' slice)* [',']

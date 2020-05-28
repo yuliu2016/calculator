@@ -2186,26 +2186,82 @@ public class FugaParser {
     }
 
     /**
-     * primary: atom trailer* [block_suite]
+     * primary: primary '.' NAME | primary parameters | primary subscript | primary block_suite | atom
      */
     public static boolean primary(ParseTree t) {
         var m = t.enter(PRIMARY);
         if (m != null) return m;
+        var p = t.position();
+        boolean s = false;
+        while (true) {
+            t.cache(s);
+            boolean r;
+            r = primary_1(t);
+            r = r || primary_2(t);
+            r = r || primary_3(t);
+            r = r || primary_4(t);
+            r = r || atom(t);
+            s = r || s;
+            var e = t.position();
+            if (e <= p) break;
+            p = e;
+        }
+        t.restore(p);
+        t.exit(s);
+        return s;
+    }
+
+    /**
+     * primary '.' NAME
+     */
+    private static boolean primary_1(ParseTree t) {
+        var m = t.enter(PRIMARY_1);
+        if (m != null) return m;
         boolean r;
-        r = atom(t);
-        if (r) trailer_loop(t);
-        if (r) block_suite(t);
+        r = primary(t);
+        r = r && t.consume(".");
+        r = r && t.consume(TokenType.NAME);
         t.exit(r);
         return r;
     }
 
-    private static void trailer_loop(ParseTree t) {
-        t.enterLoop();
-        while (true) {
-            var p = t.position();
-            if (!trailer(t) || t.loopGuard(p)) break;
-        }
-        t.exitLoop();
+    /**
+     * primary parameters
+     */
+    private static boolean primary_2(ParseTree t) {
+        var m = t.enter(PRIMARY_2);
+        if (m != null) return m;
+        boolean r;
+        r = primary(t);
+        r = r && parameters(t);
+        t.exit(r);
+        return r;
+    }
+
+    /**
+     * primary subscript
+     */
+    private static boolean primary_3(ParseTree t) {
+        var m = t.enter(PRIMARY_3);
+        if (m != null) return m;
+        boolean r;
+        r = primary(t);
+        r = r && subscript(t);
+        t.exit(r);
+        return r;
+    }
+
+    /**
+     * primary block_suite
+     */
+    private static boolean primary_4(ParseTree t) {
+        var m = t.enter(PRIMARY_4);
+        if (m != null) return m;
+        boolean r;
+        r = primary(t);
+        r = r && block_suite(t);
+        t.exit(r);
+        return r;
     }
 
     /**
@@ -2328,33 +2384,6 @@ public class FugaParser {
         boolean r;
         r = t.consume(",");
         r = r && named_expr_star(t);
-        t.exit(r);
-        return r;
-    }
-
-    /**
-     * trailer: '.' NAME | parameters | subscript
-     */
-    public static boolean trailer(ParseTree t) {
-        var m = t.enter(TRAILER);
-        if (m != null) return m;
-        boolean r;
-        r = trailer_1(t);
-        r = r || parameters(t);
-        r = r || subscript(t);
-        t.exit(r);
-        return r;
-    }
-
-    /**
-     * '.' NAME
-     */
-    private static boolean trailer_1(ParseTree t) {
-        var m = t.enter(TRAILER_1);
-        if (m != null) return m;
-        boolean r;
-        r = t.consume(".");
-        r = r && t.consume(TokenType.NAME);
         t.exit(r);
         return r;
     }

@@ -7,8 +7,7 @@ import java.util.function.Function;
 
 /**
  * PEG parse tree implementation
- *
- * Source of implementation algorithms
+ * Source of implementation algorithms:
  * https://github.com/python/cpython/blob/master/Grammar/python.gram
  * https://medium.com/@gvanrossum_83706/left-recursive-peg-grammars-65dab3c580e1
  * https://github.com/PhilippeSigaud/Pegged/wiki/Left-Recursion
@@ -17,46 +16,30 @@ public class SimpleParseTree implements ParseTree {
 
     public static final int MAX_RECURSION_LEVEL = 300;
 
-    private ParserContext context;
     private ParseTreeNode result_node;
 
-    private int pos;
-    private int max_reached_pos;
-    private int level;
+    private int pos = 0;
+    private int max_reached_pos = 0;
+    private int level = 0;
 
+    private final ParserContext context;
     private final Deque<Frame> frame_deque = new ArrayDeque<>();
     private final Map<Integer, Map<ParserRule, Memo>> memo = new HashMap<>();
 
-    private SimpleParseTree() {
-    }
-
-    public <T> T parseImpl(
+    private SimpleParseTree(
             ParserContext context,
-            Function<ParseTree, Boolean> start,
-            Function<ParseTreeNode, T> converter
-    ) {
+            Function<ParseTree, Boolean> start) {
         this.context = context;
-        pos = 0;
-        max_reached_pos = 0;
-        level = 0;
-
-        frame_deque.clear();
-        memo.clear();
-
         var result = start.apply(this);
-
-        if (!result) {
-            context.errorForElem(max_reached_pos, "Invalid syntax");
-        } else if (!context.didFinish(pos)) {
+        if (pos > max_reached_pos) {
+            max_reached_pos = pos;
+        }
+        if (!result || !context.didFinish(pos)) {
             context.errorForElem(max_reached_pos, "Invalid syntax");
         }
+    }
 
-        // clear fields so that the node references can
-        // be garbage collected by JVM before another call to this methods
-        frame_deque.clear();
-        memo.clear();
-        this.context = null;
-
+    private <T> T getResult(Function<ParseTreeNode, T> converter) {
         return converter.apply(result_node);
     }
 
@@ -125,6 +108,10 @@ public class SimpleParseTree implements ParseTree {
             memo.put(pos, memo_at_pos);
         }
 
+        if (context.isDebug()) {
+            context.log("  ".repeat(level) + "Entering Frame: " + rule);
+        }
+
         var new_frame = new Frame(pos, rule, memo_at_pos);
         frame_deque.push(new_frame);
 
@@ -132,9 +119,6 @@ public class SimpleParseTree implements ParseTree {
             max_reached_pos = pos;
         }
 
-        if (context.isDebug()) {
-            context.log("  ".repeat(level) + "Entering Frame: " + rule + " at level " + level);
-        }
         return null;
     }
 
@@ -150,8 +134,7 @@ public class SimpleParseTree implements ParseTree {
         if (success) {
             if (context.isDebug()) {
                 context.log("  ".repeat(level) +
-                        "Success in frame: " + frame.rule + " at level " +
-                        level + " and position " + pos);
+                        "Success in frame: " + frame.rule + " at position " + pos);
             }
             var node_from_frame = IndexNode.fromFrame(frame);
             addNode(node_from_frame);
@@ -161,7 +144,7 @@ public class SimpleParseTree implements ParseTree {
         } else {
             if (context.isDebug()) {
                 context.log("  ".repeat(level) +
-                        "Failure in frame: " + frame.rule + " at level " + level);
+                        "Failure in frame: " + frame.rule);
             }
             addNode(IndexNode.NULL);
             pos = frame.position;
@@ -292,13 +275,11 @@ public class SimpleParseTree implements ParseTree {
         return "ParseTree";
     }
 
-    private static final SimpleParseTree INSTANCE = new SimpleParseTree();
-
     public static <T> T parse(
             ParserContext context,
             Function<ParseTree, Boolean> start,
             Function<ParseTreeNode, T> converter
     ) {
-        return INSTANCE.parseImpl(context, start, converter);
+        return new SimpleParseTree(context, start).getResult(converter);
     }
 }

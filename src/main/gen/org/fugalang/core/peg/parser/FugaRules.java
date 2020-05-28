@@ -145,7 +145,11 @@ public class FugaRules {
     public static final ParserRule FACTOR_3 = and_rule("factor:3");
     public static final ParserRule POWER = or_rule("power");
     public static final ParserRule POWER_1 = and_rule("power:1");
-    public static final ParserRule PRIMARY = and_rule("primary");
+    public static final ParserRule PRIMARY = or_rule("primary");
+    public static final ParserRule PRIMARY_1 = and_rule("primary:1");
+    public static final ParserRule PRIMARY_2 = and_rule("primary:2");
+    public static final ParserRule PRIMARY_3 = and_rule("primary:3");
+    public static final ParserRule PRIMARY_4 = and_rule("primary:4");
     public static final ParserRule ATOM = or_rule("atom");
     public static final ParserRule TUPLE_ATOM = and_rule("tuple_atom");
     public static final ParserRule LIST_ATOM = and_rule("list_atom");
@@ -154,8 +158,6 @@ public class FugaRules {
     public static final ParserRule NAMED_EXPR_STAR = or_rule("named_expr_star");
     public static final ParserRule NAMED_EXPR_LIST = and_rule("named_expr_list");
     public static final ParserRule NAMED_EXPR_LIST_2 = and_rule("named_expr_list:2");
-    public static final ParserRule TRAILER = or_rule("trailer");
-    public static final ParserRule TRAILER_1 = and_rule("trailer:1");
     public static final ParserRule SUBSCRIPT = and_rule("subscript");
     public static final ParserRule SLICELIST = and_rule("slicelist");
     public static final ParserRule SLICELIST_2 = and_rule("slicelist:2");
