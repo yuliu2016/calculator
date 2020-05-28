@@ -209,13 +209,15 @@ public class CalculatorParser {
     }
 
     /**
-     * atom: '(' sum ')' | NUMBER
+     * atom: '(' sum ')' | NAME '(' [parameters] ')' | NAME | NUMBER
      */
     public static boolean atom(ParseTree t) {
         var m = t.enter(ATOM);
         if (m != null) return m;
         boolean r;
         r = atom_1(t);
+        r = r || atom_2(t);
+        r = r || t.consume(TokenType.NAME);
         r = r || t.consume(TokenType.NUMBER);
         t.exit(r);
         return r;
@@ -231,6 +233,57 @@ public class CalculatorParser {
         r = t.consume("(");
         r = r && sum(t);
         r = r && t.consume(")");
+        t.exit(r);
+        return r;
+    }
+
+    /**
+     * NAME '(' [parameters] ')'
+     */
+    private static boolean atom_2(ParseTree t) {
+        var m = t.enter(ATOM_2);
+        if (m != null) return m;
+        boolean r;
+        r = t.consume(TokenType.NAME);
+        r = r && t.consume("(");
+        if (r) parameters(t);
+        r = r && t.consume(")");
+        t.exit(r);
+        return r;
+    }
+
+    /**
+     * parameters: sum (',' sum)* [',']
+     */
+    public static boolean parameters(ParseTree t) {
+        var m = t.enter(PARAMETERS);
+        if (m != null) return m;
+        boolean r;
+        r = sum(t);
+        if (r) parameters_2_loop(t);
+        if (r) t.consume(",");
+        t.exit(r);
+        return r;
+    }
+
+    private static void parameters_2_loop(ParseTree t) {
+        t.enterLoop();
+        while (true) {
+            var p = t.position();
+            if (!parameters_2(t) || t.loopGuard(p)) break;
+        }
+        t.exitLoop();
+    }
+
+    /**
+     * ',' sum
+     */
+    private static boolean parameters_2(ParseTree t) {
+        var m = t.enter(PARAMETERS_2);
+        if (m != null) return m;
+        boolean r;
+        r = t.consume(",");
+        r = r && sum(t);
         t.exit(r);
         return r;
     }

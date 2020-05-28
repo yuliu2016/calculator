@@ -5,6 +5,14 @@ import org.fugalang.core.parser.*;
 import java.util.*;
 import java.util.function.Function;
 
+/**
+ * PEG parse tree implementation
+ *
+ * Source of implementation algorithms
+ * https://github.com/python/cpython/blob/master/Grammar/python.gram
+ * https://medium.com/@gvanrossum_83706/left-recursive-peg-grammars-65dab3c580e1
+ * https://github.com/PhilippeSigaud/Pegged/wiki/Left-Recursion
+ */
 public class SimpleParseTree implements ParseTree {
 
     public static final int MAX_RECURSION_LEVEL = 300;

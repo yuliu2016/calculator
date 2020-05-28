@@ -4,18 +4,23 @@ sum:
     | sum '+' term
     | sum '-' term
     | term
-
 term:
     | term '*' factor
     | term '/' factor
     | term '%' factor
     | factor
-
 factor:
     | '+' factor
     | '-' factor
     | '~' factor
     | power
-
-power: atom '**' factor | atom
-atom: '(' sum ')' | NUMBER
+power:
+    | atom '**' factor
+    | atom
+atom:
+    | '(' sum ')'
+    | NAME '(' [parameters] ')'
+    | NAME
+    | NUMBER
+parameters:
+    | sum (',' sum)* [',']

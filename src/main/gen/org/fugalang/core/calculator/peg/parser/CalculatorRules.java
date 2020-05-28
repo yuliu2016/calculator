@@ -21,4 +21,7 @@ public class CalculatorRules {
     public static final ParserRule POWER_1 = and_rule("power:1");
     public static final ParserRule ATOM = or_rule("atom");
     public static final ParserRule ATOM_1 = and_rule("atom:1");
+    public static final ParserRule ATOM_2 = and_rule("atom:2");
+    public static final ParserRule PARAMETERS = and_rule("parameters");
+    public static final ParserRule PARAMETERS_2 = and_rule("parameters:2");
 }
