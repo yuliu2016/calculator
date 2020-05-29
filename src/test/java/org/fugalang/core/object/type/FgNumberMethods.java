@@ -5,6 +5,7 @@ import static org.fugalang.core.object.type.FgTypeFunc.*;
 /**
  * Number suite
  */
+@Deprecated
 public class FgNumberMethods {
 
     public final BinaryFunc  nb_add;

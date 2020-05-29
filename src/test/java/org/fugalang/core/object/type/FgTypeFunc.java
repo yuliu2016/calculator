@@ -3,6 +3,7 @@ package org.fugalang.core.object.type;
 import org.fugalang.core.object.FgObject;
 
 @SuppressWarnings("unused")
+@Deprecated
 public interface FgTypeFunc {
 
     @FunctionalInterface

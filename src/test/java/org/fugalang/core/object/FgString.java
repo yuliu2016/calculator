@@ -2,6 +2,7 @@ package org.fugalang.core.object;
 
 import org.fugalang.core.object.type.FgType;
 
+@Deprecated
 public class FgString extends FgObject {
 
     private final String value;

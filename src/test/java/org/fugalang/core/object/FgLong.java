@@ -5,6 +5,7 @@ import org.fugalang.core.object.type.FgType;
 
 import java.math.BigInteger;
 
+@Deprecated
 public class FgLong extends FgObject {
 
     // todo support small ints

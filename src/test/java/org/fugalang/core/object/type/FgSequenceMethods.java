@@ -2,6 +2,7 @@ package org.fugalang.core.object.type;
 
 import static org.fugalang.core.object.type.FgTypeFunc.*;
 
+@Deprecated
 public class FgSequenceMethods {
     public final LenFunc sq_length;
     public final BinaryFunc sq_concat;

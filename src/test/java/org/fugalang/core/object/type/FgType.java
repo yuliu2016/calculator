@@ -2,6 +2,7 @@ package org.fugalang.core.object.type;
 
 import static org.fugalang.core.object.type.FgTypeFunc.*;
 
+@Deprecated
 public class FgType {
     public final String tp_name;
     public final FgNumberMethods tp_number;

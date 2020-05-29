@@ -2,6 +2,7 @@ package org.fugalang.core.object.type;
 
 import static org.fugalang.core.object.type.FgTypeFunc.*;
 
+@Deprecated
 public class FgMappingMethods {
     public final LenFunc mp_length;
     public final BinaryFunc mp_subscript;

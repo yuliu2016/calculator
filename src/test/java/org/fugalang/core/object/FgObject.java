@@ -5,6 +5,7 @@ import org.fugalang.core.object.type.FgType;
 /**
  * The base Fuga Object class
  */
+@Deprecated
 public class FgObject {
     public final FgType ob_type;
 
