@@ -154,8 +154,7 @@ public class PEGBuilder {
             Repeat repeatRule,
             boolean isOptional
     ) {
-        Item item = repeatRule.item();
-
+        var item = PEGUtil.getRepeatItem(repeatRule);
         var repeatType = PEGUtil.getRepeatType(repeatRule);
 
         switch (PEGUtil.getRuleType(item)) {
@@ -287,7 +286,7 @@ public class PEGBuilder {
 
             StringBuilder sb = null;
             for (var rule : andRule.repeats()) {
-                var itemString = PEGUtil.getItemString(rule.item());
+                var itemString = PEGUtil.getItemString(PEGUtil.getRepeatItem(rule));
                 if (sb == null) sb = new StringBuilder();
                 if (ParserStringUtil.isWord(itemString)) {
                     sb.append(ParserStringUtil.convertCase(itemString));
@@ -319,7 +318,7 @@ public class PEGBuilder {
     private static String getFirstName(OrRule rule) {
         var repeatRules = rule.andRule().repeats();
         if (repeatRules.isEmpty()) return null;
-        var sub = repeatRules.get(0).item();
+        var sub = PEGUtil.getRepeatItem(repeatRules.get(0));
         return sub.hasName() ? sub.name() : null;
     }
 

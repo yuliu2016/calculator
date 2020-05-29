@@ -121,27 +121,41 @@ public class MetaParser {
     }
 
     /**
-     * repeat: item ['*' | '+']
+     * repeat: item '*' | item '+' | item
      */
     public static boolean repeat(ParseTree t) {
         var m = t.enter(REPEAT);
         if (m != null) return m;
         boolean r;
-        r = item(t);
-        if (r) repeat_2(t);
+        r = repeat_1(t);
+        r = r || repeat_2(t);
+        r = r || item(t);
         t.exit(r);
         return r;
     }
 
     /**
-     * '*' | '+'
+     * item '*'
+     */
+    private static boolean repeat_1(ParseTree t) {
+        var m = t.enter(REPEAT_1);
+        if (m != null) return m;
+        boolean r;
+        r = item(t);
+        r = r && t.consume("*");
+        t.exit(r);
+        return r;
+    }
+
+    /**
+     * item '+'
      */
     private static boolean repeat_2(ParseTree t) {
         var m = t.enter(REPEAT_2);
         if (m != null) return m;
         boolean r;
-        r = t.consume("*");
-        r = r || t.consume("+");
+        r = item(t);
+        r = r && t.consume("+");
         t.exit(r);
         return r;
     }

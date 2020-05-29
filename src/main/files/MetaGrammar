@@ -9,7 +9,9 @@ or_rule:
 and_rule:
     | repeat+
 repeat:
-    | item ['*' | '+']
+    | item '*'
+    | item '+'
+    | item
 item:
     | group
     | optional

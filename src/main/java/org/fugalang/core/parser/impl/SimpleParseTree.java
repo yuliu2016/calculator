@@ -72,9 +72,14 @@ public class SimpleParseTree implements ParseTree {
         if (level > MAX_RECURSION_LEVEL) {
             if (!frame_deque.isEmpty()) {
                 // Don't throw an exception because a long stack trace isn't really needed
-                System.err.println("Max recursion level of 300 reached inside rule " + rule);
+                System.err.println("Max recursion level of " + MAX_RECURSION_LEVEL +
+                        " reached inside rule " + rule);
             }
             return false;
+        }
+
+        if (context.isDebug()) {
+            context.log("  ".repeat(level) + "Entering Frame: " + rule);
         }
 
         Map<ParserRule, Memo> memo_at_pos;
@@ -89,6 +94,8 @@ public class SimpleParseTree implements ParseTree {
                             " and rule " + rule + "; " + value);
                 }
 
+                // exit won't be called, so level must be decreased
+                level--;
                 if (value.hasResult()) {
                     addNode(value.getResult());
                     pos = value.getEndPos();
@@ -106,10 +113,6 @@ public class SimpleParseTree implements ParseTree {
             // it only makes sense to cache identical rules
             memo_at_pos = new IdentityHashMap<>();
             memo.put(pos, memo_at_pos);
-        }
-
-        if (context.isDebug()) {
-            context.log("  ".repeat(level) + "Entering Frame: " + rule);
         }
 
         var new_frame = new Frame(pos, rule, memo_at_pos);
@@ -230,7 +233,9 @@ public class SimpleParseTree implements ParseTree {
             }
             if (context.isDebug()) {
                 context.log("  ".repeat(level + 1) +
-                        "Success in type " + type + ": " + token.getValue());
+                        "Success in type " + type + ": Token is '" +
+                        token.getValue().replace("\r\n", "\\n")
+                                .replace("\n", "\\n") + "'");
             }
             addNode(IndexNode.ofElement(token));
             pos++;
@@ -238,7 +243,9 @@ public class SimpleParseTree implements ParseTree {
         } else {
             if (context.isDebug()) {
                 context.log("  ".repeat(level + 1) +
-                        "Failure in type " + type + ": " + token.getValue());
+                        "Failure in type " + type + ": Token is '" +
+                        token.getValue().replace("\r", "\\r")
+                                .replace("\n", "\\n") + "'");
             }
             addNode(IndexNode.NULL);
             return false;
@@ -255,7 +262,7 @@ public class SimpleParseTree implements ParseTree {
         if (token.getType().isLiteral() && token.getValue().equals(literal)) {
             if (context.isDebug()) {
                 context.log("  ".repeat(level + 1) +
-                        "Success in literal " + literal + ": " + token.getValue());
+                        "Success in literal '" + literal + "'");
             }
             addNode(IndexNode.ofElement(token));
             pos++;
@@ -263,7 +270,9 @@ public class SimpleParseTree implements ParseTree {
         } else {
             if (context.isDebug()) {
                 context.log("  ".repeat(level + 1) +
-                        "Failure in literal " + literal + ": " + token.getValue());
+                        "Failure in literal '" + literal + "': Token is '" +
+                        token.getValue().replace("\r", "\\r")
+                                .replace("\n", "\\n") + "'");
             }
             addNode(IndexNode.NULL);
             return false;
