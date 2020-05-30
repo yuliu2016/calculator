@@ -2,10 +2,9 @@ package org.fugalang.core.peg;
 
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
-import org.fugalang.core.token.TokenType;
 
 /**
- * expr_as_name: expr ['as' NAME]
+ * expr_as_name: expr [as_name]
  */
 public final class ExprAsName extends NodeWrapper {
 
@@ -17,25 +16,11 @@ public final class ExprAsName extends NodeWrapper {
         return get(0, Expr.class);
     }
 
-    public ExprAsName2 asName() {
-        return get(1, ExprAsName2.class);
+    public AsName asName() {
+        return get(1, AsName.class);
     }
 
     public boolean hasAsName() {
         return has(1);
-    }
-
-    /**
-     * 'as' NAME
-     */
-    public static final class ExprAsName2 extends NodeWrapper {
-
-        public ExprAsName2(ParseTreeNode node) {
-            super(node);
-        }
-
-        public String name() {
-            return get(1, TokenType.NAME);
-        }
     }
 }

@@ -3,8 +3,10 @@ package org.fugalang.core.peg;
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
+import java.util.List;
+
 /**
- * func_args: simple_arg_list | '(' [typed_arg_list] ')'
+ * func_args: simple_arg+ | '(' [typed_arg_list] ')'
  */
 public final class FuncArgs extends NodeWrapper {
 
@@ -12,12 +14,8 @@ public final class FuncArgs extends NodeWrapper {
         super(node);
     }
 
-    public SimpleArgList simpleArgList() {
-        return get(0, SimpleArgList.class);
-    }
-
-    public boolean hasSimpleArgList() {
-        return has(0);
+    public List<SimpleArg> simpleArgs() {
+        return getList(0, SimpleArg.class);
     }
 
     public FuncArgs2 funcArgs2() {

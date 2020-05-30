@@ -4,7 +4,7 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * except_clause: 'except' [expr_as_name]
+ * except_clause: 'except' [expr_as_name] suite
  */
 public final class ExceptClause extends NodeWrapper {
 
@@ -18,5 +18,9 @@ public final class ExceptClause extends NodeWrapper {
 
     public boolean hasExprAsName() {
         return has(1);
+    }
+
+    public Suite suite() {
+        return get(2, Suite.class);
     }
 }

@@ -10,7 +10,8 @@ eval_input:
     | exprlist NEWLINE* ENDMARKER
 
 # Statements
-stmt: (simple_stmt | compound_stmt) NEWLINE
+stmt:
+    | (simple_stmt | compound_stmt) NEWLINE
 simple_stmt:
     | ';'.small_stmt+ [';']
 
@@ -31,29 +32,73 @@ flow_stmt:
     | return_stmt
     | raise_stmt
 
-del_stmt: 'del' targetlist
-return_stmt: 'return' [exprlist_star]
-raise_stmt: 'raise' [expr ['from' expr]]
+del_stmt:
+    | 'del' targetlist
+return_stmt:
+    | 'return' [exprlist_star]
+raise_stmt:
+    | 'raise' [expr ['from' expr]]
 nonlocal_stmt:
     | 'nonlocal' ','.NAME+
-assert_stmt: 'assert' expr [',' expr]
+assert_stmt:
+    | 'assert' expr [',' expr]
 
-expr_or_star: star_expr | expr
-star_expr: '*' bitwise_or
-exprlist_star: ','.expr_or_star+ [',']
+
+star_expr:
+    | '*' bitwise_or
+exprlist:
+    | ','.expr+ [',']
+target:
+    | NAME
+    | '(' targetlist ')'
+    | '*' target
+    | primary
+targetlist:
+    | ','.target+ [',']
+expr_or_star:
+    | star_expr
+    | expr
+exprlist_star:
+    | ','.expr_or_star+ [',']
+named_expr_star:
+    | star_expr
+    | named_expr
+named_expr_list:
+    | ','.named_expr_star+ [',']
+
+subscript:
+    | '[' slicelist ']'
+slicelist:
+    | ','.slice+ [',']
+slice: [expr] slice_expr [slice_expr] | expr
+slice_expr:
+    | ':' [expr]
+
+dict_item:
+    | expr ':' expr
+    | '**' bitwise_or
+dict_maker:
+    | ','.dict_item+ [',']
 
 assignment:
     | ['/'] exprlist_star [annassign | ('=' exprlist_star)+ | augassign exprlist]
 augassign:
     | '+=' | '-=' | '*=' | '@=' | '/=' | '%=' | '&=' | '|=' | '^=' | '<<=' | '>>=' | '**=' | '//='
-annassign: ':' expr ['=' exprlist_star]
+annassign:
+    | ':' expr ['=' exprlist_star]
 
-import_name: 'import' dotted_as_names
+as_name:
+    | 'as' NAME
+import_name:
+    | 'import' dotted_as_names
 import_from:
     | 'from' import_from_names 'import' ('*' | '(' import_as_names [','] ')' | import_as_names)
-import_from_names: dotted_name | '.'+ [dotted_name]
-import_as_name: NAME ['as' NAME]
-dotted_as_name: dotted_name ['as' NAME]
+import_from_names:
+    | dotted_name | '.'+ [dotted_name]
+import_as_name:
+    | NAME [as_name]
+dotted_as_name:
+    | dotted_name [as_name]
 import_as_names:
     | ','.import_as_name+
 dotted_as_names:
@@ -70,40 +115,76 @@ compound_stmt:
     | try_stmt
     | with_stmt
 
-if_stmt: 'if' named_expr suite elif_stmt* [else_suite]
-elif_stmt: 'elif' named_expr suite
-while_stmt: 'while' named_expr suite [else_suite]
-for_stmt: 'for' targetlist 'in' exprlist suite [else_suite]
-try_stmt: 'try' suite (except_suite | finally_suite)
+if_stmt:
+    | 'if' named_expr suite elif_stmt* [else_suite]
+elif_stmt:
+    | 'elif' named_expr suite
+while_stmt:
+    | 'while' named_expr suite [else_suite]
+for_stmt:
+    | 'for' targetlist 'in' exprlist suite [else_suite]
+try_stmt:
+    | 'try' suite (except_suite | finally_suite)
 with_stmt:
     | 'with' ','.expr_as_name+ suite
+expr_as_name:
+    | expr [as_name]
+block_suite:
+    | '{' simple_stmt '}'
+    | '{' NEWLINE stmt+ '}'
+suite:
+    | ':' simple_stmt
+    | block_suite
+else_suite:
+    | 'else' suite
+finally_suite:
+    | 'finally' suite
+func_suite:
+    | ':' expr
+    | block_suite
+except_clause:
+    | 'except' [expr_as_name] suite
+except_suite:
+    | except_clause+ [else_suite] [finally_suite]
 
-expr_as_name: expr ['as' NAME]
-except_clause: 'except' [expr_as_name]
+# Function calls
 
-block_suite:  '{' simple_stmt '}' | '{' NEWLINE stmt+ '}'
-suite: ':' simple_stmt | block_suite
-else_suite: 'else' suite
-finally_suite: 'finally' suite
-func_suite: ':' expr | block_suite
-except_suite: (except_clause suite)+ [else_suite] [finally_suite]
+parameters:
+    | '(' [arglist] ')'
+arglist:
+    | ','.argument+  [',']
+argument:
+    | NAME ':=' expr
+    | NAME '=' expr
+    | '**' expr
+    | '*' expr
+    | expr
 
 # Function definitions
 
-typed_arg_list: kwargs | args_kwargs | full_arg_list
+typed_arg_list:
+    | kwargs
+    | args_kwargs
+    | full_arg_list
 full_arg_list:
     | ','.default_arg+ [','  [kwargs | args_kwargs]]
-args_kwargs: '*' [typed_arg] (','  default_arg)* [','  [kwargs]]
-kwargs: '**' typed_arg [',']
-default_arg: typed_arg ['=' expr]
-typed_arg: NAME [':' expr]
-
-simple_arg_list: simple_arg+
-simple_arg: NAME ['=' expr]
-
-func_type_hint: '<' expr '>'
-func_args: simple_arg_list | '(' [typed_arg_list] ')'
-funcdef: 'def' [func_type_hint] [func_args] func_suite
+args_kwargs:
+    | '*' [typed_arg] (','  default_arg)* [','  [kwargs]]
+kwargs:
+    | '**' typed_arg [',']
+default_arg:
+    | typed_arg ['=' expr]
+typed_arg:
+    | NAME [':' expr]
+simple_arg:
+    | NAME ['=' expr]
+func_type_hint:
+    | '<' expr '>'
+func_args:
+    | simple_arg+
+    | '(' [typed_arg_list] ')'
+funcdef:
+    | 'def' [func_type_hint] [func_args] func_suite
 
 # Expressions
 
@@ -170,10 +251,15 @@ pipe_expr:
     | pipe_for
     | factor
 
-pipe_for: [comp_for] 'for' targetlist ['if' named_expr] [parameters | block_suite]
-comp_for: 'for' targetlist 'in' disjunction [comp_iter]
-comp_if: 'if' named_expr [comp_iter]
-comp_iter: comp_for | comp_if
+pipe_for:
+    | [comp_for] 'for' targetlist ['if' named_expr] [parameters | block_suite]
+comp_for:
+    | 'for' targetlist 'in' disjunction [comp_iter]
+comp_if:
+    | 'if' named_expr [comp_iter]
+comp_iter:
+    | comp_for
+    | comp_if
 
 factor:
     | '+' factor
@@ -189,6 +275,12 @@ primary:
     | primary subscript
     | primary block_suite
     | atom
+tuple_atom:
+    | '(' [named_expr_list] ')'
+list_atom:
+    | '[' [named_expr_list] ']'
+dict_or_set:
+    | '{' [dict_maker | exprlist_star] '}'
 atom:
     | tuple_atom
     | list_atom
@@ -199,42 +291,3 @@ atom:
     | 'None'
     | 'True'
     | 'False'
-
-tuple_atom: '(' [named_expr_list] ')'
-list_atom: '[' [named_expr_list] ']'
-dict_or_set: '{' [dict_maker | exprlist_star] '}'
-
-named_expr_star: star_expr | named_expr
-named_expr_list:
-    | ','.named_expr_star+ [',']
-
-subscript: '[' slicelist ']'
-slicelist:
-    | ','.slice+ [',']
-slice: [expr] slice_expr [slice_expr] | expr
-slice_expr: ':' [expr]
-parameters: '(' [arglist] ')'
-
-target:
-    | NAME
-    | '(' targetlist ')'
-    | '*' target
-    | primary
-
-targetlist:
-    | ','.target+ [',']
-exprlist:
-    | ','.expr+ [',']
-
-dict_item: expr ':' expr | '**' bitwise_or
-dict_maker:
-    | ','.dict_item+ [',']
-
-arglist:
-    | ','.argument+  [',']
-argument:
-    | NAME ':=' expr
-    | NAME '=' expr
-    | '**' expr
-    | '*' expr
-    | expr
