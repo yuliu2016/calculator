@@ -11,7 +11,8 @@ eval_input:
 
 # Statements
 stmt: (simple_stmt | compound_stmt) NEWLINE
-simple_stmt: small_stmt (';' small_stmt)* [';']
+simple_stmt:
+    | ';'.small_stmt+ [';']
 
 # Small Statements
 small_stmt:
@@ -33,25 +34,32 @@ flow_stmt:
 del_stmt: 'del' targetlist
 return_stmt: 'return' [exprlist_star]
 raise_stmt: 'raise' [expr ['from' expr]]
-nonlocal_stmt: 'nonlocal' NAME (',' NAME)*
+nonlocal_stmt:
+    | 'nonlocal' ','.NAME+
 assert_stmt: 'assert' expr [',' expr]
 
 expr_or_star: star_expr | expr
 star_expr: '*' bitwise_or
-exprlist_star: expr_or_star (',' expr_or_star)* [',']
+exprlist_star: ','.expr_or_star+ [',']
 
-assignment: ['/'] exprlist_star [annassign | ('=' exprlist_star)+ | augassign exprlist]
-augassign: '+=' | '-=' | '*=' | '@=' | '/=' | '%=' | '&=' | '|=' | '^=' | '<<=' | '>>=' | '**=' | '//='
+assignment:
+    | ['/'] exprlist_star [annassign | ('=' exprlist_star)+ | augassign exprlist]
+augassign:
+    | '+=' | '-=' | '*=' | '@=' | '/=' | '%=' | '&=' | '|=' | '^=' | '<<=' | '>>=' | '**=' | '//='
 annassign: ':' expr ['=' exprlist_star]
 
 import_name: 'import' dotted_as_names
-import_from: 'from' import_from_names 'import' ('*' | '(' import_as_names [','] ')' | import_as_names)
+import_from:
+    | 'from' import_from_names 'import' ('*' | '(' import_as_names [','] ')' | import_as_names)
 import_from_names: dotted_name | '.'+ [dotted_name]
 import_as_name: NAME ['as' NAME]
 dotted_as_name: dotted_name ['as' NAME]
-import_as_names: import_as_name (',' import_as_name)*
-dotted_as_names: dotted_as_name (',' dotted_as_name)*
-dotted_name: NAME ('.' NAME)*
+import_as_names:
+    | ','.import_as_name+
+dotted_as_names:
+    | ','.dotted_as_name+
+dotted_name:
+    | '.'.NAME+
 
 # Compound statements
 
@@ -67,7 +75,8 @@ elif_stmt: 'elif' named_expr suite
 while_stmt: 'while' named_expr suite [else_suite]
 for_stmt: 'for' targetlist 'in' exprlist suite [else_suite]
 try_stmt: 'try' suite (except_suite | finally_suite)
-with_stmt: 'with' expr_as_name (',' expr_as_name)* suite
+with_stmt:
+    | 'with' ','.expr_as_name+ suite
 
 expr_as_name: expr ['as' NAME]
 except_clause: 'except' [expr_as_name]
@@ -82,7 +91,8 @@ except_suite: (except_clause suite)+ [else_suite] [finally_suite]
 # Function definitions
 
 typed_arg_list: kwargs | args_kwargs | full_arg_list
-full_arg_list: default_arg (','  default_arg)* [','  [kwargs | args_kwargs]]
+full_arg_list:
+    | ','.default_arg+ [','  [kwargs | args_kwargs]]
 args_kwargs: '*' [typed_arg] (','  default_arg)* [','  [kwargs]]
 kwargs: '**' typed_arg [',']
 default_arg: typed_arg ['=' expr]
@@ -192,13 +202,15 @@ atom:
 
 tuple_atom: '(' [named_expr_list] ')'
 list_atom: '[' [named_expr_list] ']'
-dict_or_set: '{' [dict_maker | set_maker] '}'
+dict_or_set: '{' [dict_maker | exprlist_star] '}'
 
 named_expr_star: star_expr | named_expr
-named_expr_list: named_expr_star (',' named_expr_star)* [',']
+named_expr_list:
+    | ','.named_expr_star+ [',']
 
 subscript: '[' slicelist ']'
-slicelist: slice (',' slice)* [',']
+slicelist:
+    | ','.slice+ [',']
 slice: [expr] slice_expr [slice_expr] | expr
 slice_expr: ':' [expr]
 parameters: '(' [arglist] ')'
@@ -209,14 +221,17 @@ target:
     | '*' target
     | primary
 
-targetlist: target (',' target)* [',']
-exprlist: expr (',' expr)* [',']
+targetlist:
+    | ','.target+ [',']
+exprlist:
+    | ','.expr+ [',']
 
 dict_item: expr ':' expr | '**' bitwise_or
-dict_maker: dict_item (',' dict_item)* [',']
-set_maker: expr_or_star (',' expr_or_star)* [',']
+dict_maker:
+    | ','.dict_item+ [',']
 
-arglist: argument (',' argument)*  [',']
+arglist:
+    | ','.argument+  [',']
 argument:
     | NAME ':=' expr
     | NAME '=' expr

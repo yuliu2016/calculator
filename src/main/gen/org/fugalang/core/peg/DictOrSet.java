@@ -4,7 +4,7 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * dict_or_set: '{' [dict_maker | set_maker] '}'
+ * dict_or_set: '{' [dict_maker | exprlist_star] '}'
  */
 public final class DictOrSet extends NodeWrapper {
 
@@ -12,16 +12,16 @@ public final class DictOrSet extends NodeWrapper {
         super(node);
     }
 
-    public DictOrSet2 dictMakerOrSetMaker() {
+    public DictOrSet2 dictMakerOrExprlistStar() {
         return get(1, DictOrSet2.class);
     }
 
-    public boolean hasDictMakerOrSetMaker() {
+    public boolean hasDictMakerOrExprlistStar() {
         return has(1);
     }
 
     /**
-     * dict_maker | set_maker
+     * dict_maker | exprlist_star
      */
     public static final class DictOrSet2 extends NodeWrapper {
 
@@ -37,11 +37,11 @@ public final class DictOrSet extends NodeWrapper {
             return has(0);
         }
 
-        public SetMaker setMaker() {
-            return get(1, SetMaker.class);
+        public ExprlistStar exprlistStar() {
+            return get(1, ExprlistStar.class);
         }
 
-        public boolean hasSetMaker() {
+        public boolean hasExprlistStar() {
             return has(1);
         }
     }

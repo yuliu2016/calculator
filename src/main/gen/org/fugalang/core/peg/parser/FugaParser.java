@@ -120,38 +120,26 @@ public class FugaParser {
     }
 
     /**
-     * simple_stmt: small_stmt (';' small_stmt)* [';']
+     * simple_stmt: ';'.small_stmt+ [';']
      */
     public static boolean simple_stmt(ParseTree t) {
         var m = t.enter(SIMPLE_STMT);
         if (m != null) return m;
         boolean r;
-        r = small_stmt(t);
-        if (r) simple_stmt_2_loop(t);
+        r = small_stmt_loop(t);
         if (r) t.consume(";");
         t.exit(r);
         return r;
     }
 
-    private static void simple_stmt_2_loop(ParseTree t) {
+    private static boolean small_stmt_loop(ParseTree t) {
         t.enterLoop();
-        while (true) {
+        var r = small_stmt(t);
+        if (r) while (true) {
             var p = t.position();
-            if (!simple_stmt_2(t) || t.loopGuard(p)) break;
+            if (!t.skip(";") || !small_stmt(t) || t.loopGuard(p)) break;
         }
         t.exitLoop();
-    }
-
-    /**
-     * ';' small_stmt
-     */
-    private static boolean simple_stmt_2(ParseTree t) {
-        var m = t.enter(SIMPLE_STMT_2);
-        if (m != null) return m;
-        boolean r;
-        r = t.consume(";");
-        r = r && small_stmt(t);
-        t.exit(r);
         return r;
     }
 
@@ -255,38 +243,26 @@ public class FugaParser {
     }
 
     /**
-     * nonlocal_stmt: 'nonlocal' NAME (',' NAME)*
+     * nonlocal_stmt: 'nonlocal' ','.NAME+
      */
     public static boolean nonlocal_stmt(ParseTree t) {
         var m = t.enter(NONLOCAL_STMT);
         if (m != null) return m;
         boolean r;
         r = t.consume("nonlocal");
-        r = r && t.consume(TokenType.NAME);
-        if (r) nonlocal_stmt_3_loop(t);
+        r = r && nonlocal_stmt_name_loop(t);
         t.exit(r);
         return r;
     }
 
-    private static void nonlocal_stmt_3_loop(ParseTree t) {
+    private static boolean nonlocal_stmt_name_loop(ParseTree t) {
         t.enterLoop();
-        while (true) {
+        var r = t.consume(TokenType.NAME);
+        if (r) while (true) {
             var p = t.position();
-            if (!nonlocal_stmt_3(t) || t.loopGuard(p)) break;
+            if (!t.skip(",") || !t.consume(TokenType.NAME) || t.loopGuard(p)) break;
         }
         t.exitLoop();
-    }
-
-    /**
-     * ',' NAME
-     */
-    private static boolean nonlocal_stmt_3(ParseTree t) {
-        var m = t.enter(NONLOCAL_STMT_3);
-        if (m != null) return m;
-        boolean r;
-        r = t.consume(",");
-        r = r && t.consume(TokenType.NAME);
-        t.exit(r);
         return r;
     }
 
@@ -344,38 +320,26 @@ public class FugaParser {
     }
 
     /**
-     * exprlist_star: expr_or_star (',' expr_or_star)* [',']
+     * exprlist_star: ','.expr_or_star+ [',']
      */
     public static boolean exprlist_star(ParseTree t) {
         var m = t.enter(EXPRLIST_STAR);
         if (m != null) return m;
         boolean r;
-        r = expr_or_star(t);
-        if (r) exprlist_star_2_loop(t);
+        r = expr_or_star_loop(t);
         if (r) t.consume(",");
         t.exit(r);
         return r;
     }
 
-    private static void exprlist_star_2_loop(ParseTree t) {
+    private static boolean expr_or_star_loop(ParseTree t) {
         t.enterLoop();
-        while (true) {
+        var r = expr_or_star(t);
+        if (r) while (true) {
             var p = t.position();
-            if (!exprlist_star_2(t) || t.loopGuard(p)) break;
+            if (!t.skip(",") || !expr_or_star(t) || t.loopGuard(p)) break;
         }
         t.exitLoop();
-    }
-
-    /**
-     * ',' expr_or_star
-     */
-    private static boolean exprlist_star_2(ParseTree t) {
-        var m = t.enter(EXPRLIST_STAR_2);
-        if (m != null) return m;
-        boolean r;
-        r = t.consume(",");
-        r = r && expr_or_star(t);
-        t.exit(r);
         return r;
     }
 
@@ -642,107 +606,71 @@ public class FugaParser {
     }
 
     /**
-     * import_as_names: import_as_name (',' import_as_name)*
+     * import_as_names: ','.import_as_name+
      */
     public static boolean import_as_names(ParseTree t) {
         var m = t.enter(IMPORT_AS_NAMES);
         if (m != null) return m;
         boolean r;
-        r = import_as_name(t);
-        if (r) import_as_names_2_loop(t);
+        r = import_as_name_loop(t);
         t.exit(r);
         return r;
     }
 
-    private static void import_as_names_2_loop(ParseTree t) {
+    private static boolean import_as_name_loop(ParseTree t) {
         t.enterLoop();
-        while (true) {
+        var r = import_as_name(t);
+        if (r) while (true) {
             var p = t.position();
-            if (!import_as_names_2(t) || t.loopGuard(p)) break;
+            if (!t.skip(",") || !import_as_name(t) || t.loopGuard(p)) break;
         }
         t.exitLoop();
-    }
-
-    /**
-     * ',' import_as_name
-     */
-    private static boolean import_as_names_2(ParseTree t) {
-        var m = t.enter(IMPORT_AS_NAMES_2);
-        if (m != null) return m;
-        boolean r;
-        r = t.consume(",");
-        r = r && import_as_name(t);
-        t.exit(r);
         return r;
     }
 
     /**
-     * dotted_as_names: dotted_as_name (',' dotted_as_name)*
+     * dotted_as_names: ','.dotted_as_name+
      */
     public static boolean dotted_as_names(ParseTree t) {
         var m = t.enter(DOTTED_AS_NAMES);
         if (m != null) return m;
         boolean r;
-        r = dotted_as_name(t);
-        if (r) dotted_as_names_2_loop(t);
+        r = dotted_as_name_loop(t);
         t.exit(r);
         return r;
     }
 
-    private static void dotted_as_names_2_loop(ParseTree t) {
+    private static boolean dotted_as_name_loop(ParseTree t) {
         t.enterLoop();
-        while (true) {
+        var r = dotted_as_name(t);
+        if (r) while (true) {
             var p = t.position();
-            if (!dotted_as_names_2(t) || t.loopGuard(p)) break;
+            if (!t.skip(",") || !dotted_as_name(t) || t.loopGuard(p)) break;
         }
         t.exitLoop();
-    }
-
-    /**
-     * ',' dotted_as_name
-     */
-    private static boolean dotted_as_names_2(ParseTree t) {
-        var m = t.enter(DOTTED_AS_NAMES_2);
-        if (m != null) return m;
-        boolean r;
-        r = t.consume(",");
-        r = r && dotted_as_name(t);
-        t.exit(r);
         return r;
     }
 
     /**
-     * dotted_name: NAME ('.' NAME)*
+     * dotted_name: '.'.NAME+
      */
     public static boolean dotted_name(ParseTree t) {
         var m = t.enter(DOTTED_NAME);
         if (m != null) return m;
         boolean r;
-        r = t.consume(TokenType.NAME);
-        if (r) dotted_name_2_loop(t);
+        r = dotted_name_name_loop(t);
         t.exit(r);
         return r;
     }
 
-    private static void dotted_name_2_loop(ParseTree t) {
+    private static boolean dotted_name_name_loop(ParseTree t) {
         t.enterLoop();
-        while (true) {
+        var r = t.consume(TokenType.NAME);
+        if (r) while (true) {
             var p = t.position();
-            if (!dotted_name_2(t) || t.loopGuard(p)) break;
+            if (!t.skip(".") || !t.consume(TokenType.NAME) || t.loopGuard(p)) break;
         }
         t.exitLoop();
-    }
-
-    /**
-     * '.' NAME
-     */
-    private static boolean dotted_name_2(ParseTree t) {
-        var m = t.enter(DOTTED_NAME_2);
-        if (m != null) return m;
-        boolean r;
-        r = t.consume(".");
-        r = r && t.consume(TokenType.NAME);
-        t.exit(r);
         return r;
     }
 
@@ -861,39 +789,27 @@ public class FugaParser {
     }
 
     /**
-     * with_stmt: 'with' expr_as_name (',' expr_as_name)* suite
+     * with_stmt: 'with' ','.expr_as_name+ suite
      */
     public static boolean with_stmt(ParseTree t) {
         var m = t.enter(WITH_STMT);
         if (m != null) return m;
         boolean r;
         r = t.consume("with");
-        r = r && expr_as_name(t);
-        if (r) with_stmt_3_loop(t);
+        r = r && expr_as_name_loop(t);
         r = r && suite(t);
         t.exit(r);
         return r;
     }
 
-    private static void with_stmt_3_loop(ParseTree t) {
+    private static boolean expr_as_name_loop(ParseTree t) {
         t.enterLoop();
-        while (true) {
+        var r = expr_as_name(t);
+        if (r) while (true) {
             var p = t.position();
-            if (!with_stmt_3(t) || t.loopGuard(p)) break;
+            if (!t.skip(",") || !expr_as_name(t) || t.loopGuard(p)) break;
         }
         t.exitLoop();
-    }
-
-    /**
-     * ',' expr_as_name
-     */
-    private static boolean with_stmt_3(ParseTree t) {
-        var m = t.enter(WITH_STMT_3);
-        if (m != null) return m;
-        boolean r;
-        r = t.consume(",");
-        r = r && expr_as_name(t);
-        t.exit(r);
         return r;
     }
 
@@ -1120,50 +1036,38 @@ public class FugaParser {
     }
 
     /**
-     * full_arg_list: default_arg (',' default_arg)* [',' [kwargs | args_kwargs]]
+     * full_arg_list: ','.default_arg+ [',' [kwargs | args_kwargs]]
      */
     public static boolean full_arg_list(ParseTree t) {
         var m = t.enter(FULL_ARG_LIST);
         if (m != null) return m;
         boolean r;
-        r = default_arg(t);
-        if (r) full_arg_list_2_loop(t);
-        if (r) full_arg_list_3(t);
+        r = default_arg_loop(t);
+        if (r) full_arg_list_2(t);
         t.exit(r);
         return r;
     }
 
-    private static void full_arg_list_2_loop(ParseTree t) {
+    private static boolean default_arg_loop(ParseTree t) {
         t.enterLoop();
-        while (true) {
+        var r = default_arg(t);
+        if (r) while (true) {
             var p = t.position();
-            if (!full_arg_list_2(t) || t.loopGuard(p)) break;
+            if (!t.skip(",") || !default_arg(t) || t.loopGuard(p)) break;
         }
         t.exitLoop();
-    }
-
-    /**
-     * ',' default_arg
-     */
-    private static boolean full_arg_list_2(ParseTree t) {
-        var m = t.enter(FULL_ARG_LIST_2);
-        if (m != null) return m;
-        boolean r;
-        r = t.consume(",");
-        r = r && default_arg(t);
-        t.exit(r);
         return r;
     }
 
     /**
      * ',' [kwargs | args_kwargs]
      */
-    private static boolean full_arg_list_3(ParseTree t) {
-        var m = t.enter(FULL_ARG_LIST_3);
+    private static boolean full_arg_list_2(ParseTree t) {
+        var m = t.enter(FULL_ARG_LIST_2);
         if (m != null) return m;
         boolean r;
         r = t.consume(",");
-        if (r) full_arg_list_3_2(t);
+        if (r) full_arg_list_2_2(t);
         t.exit(r);
         return r;
     }
@@ -1171,8 +1075,8 @@ public class FugaParser {
     /**
      * kwargs | args_kwargs
      */
-    private static boolean full_arg_list_3_2(ParseTree t) {
-        var m = t.enter(FULL_ARG_LIST_3_2);
+    private static boolean full_arg_list_2_2(ParseTree t) {
+        var m = t.enter(FULL_ARG_LIST_2_2);
         if (m != null) return m;
         boolean r;
         r = kwargs(t);
@@ -2313,7 +2217,7 @@ public class FugaParser {
     }
 
     /**
-     * dict_or_set: '{' [dict_maker | set_maker] '}'
+     * dict_or_set: '{' [dict_maker | exprlist_star] '}'
      */
     public static boolean dict_or_set(ParseTree t) {
         var m = t.enter(DICT_OR_SET);
@@ -2327,14 +2231,14 @@ public class FugaParser {
     }
 
     /**
-     * dict_maker | set_maker
+     * dict_maker | exprlist_star
      */
     private static boolean dict_or_set_2(ParseTree t) {
         var m = t.enter(DICT_OR_SET_2);
         if (m != null) return m;
         boolean r;
         r = dict_maker(t);
-        r = r || set_maker(t);
+        r = r || exprlist_star(t);
         t.exit(r);
         return r;
     }
@@ -2353,38 +2257,26 @@ public class FugaParser {
     }
 
     /**
-     * named_expr_list: named_expr_star (',' named_expr_star)* [',']
+     * named_expr_list: ','.named_expr_star+ [',']
      */
     public static boolean named_expr_list(ParseTree t) {
         var m = t.enter(NAMED_EXPR_LIST);
         if (m != null) return m;
         boolean r;
-        r = named_expr_star(t);
-        if (r) named_expr_list_2_loop(t);
+        r = named_expr_star_loop(t);
         if (r) t.consume(",");
         t.exit(r);
         return r;
     }
 
-    private static void named_expr_list_2_loop(ParseTree t) {
+    private static boolean named_expr_star_loop(ParseTree t) {
         t.enterLoop();
-        while (true) {
+        var r = named_expr_star(t);
+        if (r) while (true) {
             var p = t.position();
-            if (!named_expr_list_2(t) || t.loopGuard(p)) break;
+            if (!t.skip(",") || !named_expr_star(t) || t.loopGuard(p)) break;
         }
         t.exitLoop();
-    }
-
-    /**
-     * ',' named_expr_star
-     */
-    private static boolean named_expr_list_2(ParseTree t) {
-        var m = t.enter(NAMED_EXPR_LIST_2);
-        if (m != null) return m;
-        boolean r;
-        r = t.consume(",");
-        r = r && named_expr_star(t);
-        t.exit(r);
         return r;
     }
 
@@ -2403,38 +2295,26 @@ public class FugaParser {
     }
 
     /**
-     * slicelist: slice (',' slice)* [',']
+     * slicelist: ','.slice+ [',']
      */
     public static boolean slicelist(ParseTree t) {
         var m = t.enter(SLICELIST);
         if (m != null) return m;
         boolean r;
-        r = slice(t);
-        if (r) slicelist_2_loop(t);
+        r = slice_loop(t);
         if (r) t.consume(",");
         t.exit(r);
         return r;
     }
 
-    private static void slicelist_2_loop(ParseTree t) {
+    private static boolean slice_loop(ParseTree t) {
         t.enterLoop();
-        while (true) {
+        var r = slice(t);
+        if (r) while (true) {
             var p = t.position();
-            if (!slicelist_2(t) || t.loopGuard(p)) break;
+            if (!t.skip(",") || !slice(t) || t.loopGuard(p)) break;
         }
         t.exitLoop();
-    }
-
-    /**
-     * ',' slice
-     */
-    private static boolean slicelist_2(ParseTree t) {
-        var m = t.enter(SLICELIST_2);
-        if (m != null) return m;
-        boolean r;
-        r = t.consume(",");
-        r = r && slice(t);
-        t.exit(r);
         return r;
     }
 
@@ -2535,74 +2415,50 @@ public class FugaParser {
     }
 
     /**
-     * targetlist: target (',' target)* [',']
+     * targetlist: ','.target+ [',']
      */
     public static boolean targetlist(ParseTree t) {
         var m = t.enter(TARGETLIST);
         if (m != null) return m;
         boolean r;
-        r = target(t);
-        if (r) targetlist_2_loop(t);
+        r = target_loop(t);
         if (r) t.consume(",");
         t.exit(r);
         return r;
     }
 
-    private static void targetlist_2_loop(ParseTree t) {
+    private static boolean target_loop(ParseTree t) {
         t.enterLoop();
-        while (true) {
+        var r = target(t);
+        if (r) while (true) {
             var p = t.position();
-            if (!targetlist_2(t) || t.loopGuard(p)) break;
+            if (!t.skip(",") || !target(t) || t.loopGuard(p)) break;
         }
         t.exitLoop();
-    }
-
-    /**
-     * ',' target
-     */
-    private static boolean targetlist_2(ParseTree t) {
-        var m = t.enter(TARGETLIST_2);
-        if (m != null) return m;
-        boolean r;
-        r = t.consume(",");
-        r = r && target(t);
-        t.exit(r);
         return r;
     }
 
     /**
-     * exprlist: expr (',' expr)* [',']
+     * exprlist: ','.expr+ [',']
      */
     public static boolean exprlist(ParseTree t) {
         var m = t.enter(EXPRLIST);
         if (m != null) return m;
         boolean r;
-        r = expr(t);
-        if (r) exprlist_2_loop(t);
+        r = expr_loop(t);
         if (r) t.consume(",");
         t.exit(r);
         return r;
     }
 
-    private static void exprlist_2_loop(ParseTree t) {
+    private static boolean expr_loop(ParseTree t) {
         t.enterLoop();
-        while (true) {
+        var r = expr(t);
+        if (r) while (true) {
             var p = t.position();
-            if (!exprlist_2(t) || t.loopGuard(p)) break;
+            if (!t.skip(",") || !expr(t) || t.loopGuard(p)) break;
         }
         t.exitLoop();
-    }
-
-    /**
-     * ',' expr
-     */
-    private static boolean exprlist_2(ParseTree t) {
-        var m = t.enter(EXPRLIST_2);
-        if (m != null) return m;
-        boolean r;
-        r = t.consume(",");
-        r = r && expr(t);
-        t.exit(r);
         return r;
     }
 
@@ -2647,110 +2503,50 @@ public class FugaParser {
     }
 
     /**
-     * dict_maker: dict_item (',' dict_item)* [',']
+     * dict_maker: ','.dict_item+ [',']
      */
     public static boolean dict_maker(ParseTree t) {
         var m = t.enter(DICT_MAKER);
         if (m != null) return m;
         boolean r;
-        r = dict_item(t);
-        if (r) dict_maker_2_loop(t);
+        r = dict_item_loop(t);
         if (r) t.consume(",");
         t.exit(r);
         return r;
     }
 
-    private static void dict_maker_2_loop(ParseTree t) {
+    private static boolean dict_item_loop(ParseTree t) {
         t.enterLoop();
-        while (true) {
+        var r = dict_item(t);
+        if (r) while (true) {
             var p = t.position();
-            if (!dict_maker_2(t) || t.loopGuard(p)) break;
+            if (!t.skip(",") || !dict_item(t) || t.loopGuard(p)) break;
         }
         t.exitLoop();
-    }
-
-    /**
-     * ',' dict_item
-     */
-    private static boolean dict_maker_2(ParseTree t) {
-        var m = t.enter(DICT_MAKER_2);
-        if (m != null) return m;
-        boolean r;
-        r = t.consume(",");
-        r = r && dict_item(t);
-        t.exit(r);
         return r;
     }
 
     /**
-     * set_maker: expr_or_star (',' expr_or_star)* [',']
-     */
-    public static boolean set_maker(ParseTree t) {
-        var m = t.enter(SET_MAKER);
-        if (m != null) return m;
-        boolean r;
-        r = expr_or_star(t);
-        if (r) set_maker_2_loop(t);
-        if (r) t.consume(",");
-        t.exit(r);
-        return r;
-    }
-
-    private static void set_maker_2_loop(ParseTree t) {
-        t.enterLoop();
-        while (true) {
-            var p = t.position();
-            if (!set_maker_2(t) || t.loopGuard(p)) break;
-        }
-        t.exitLoop();
-    }
-
-    /**
-     * ',' expr_or_star
-     */
-    private static boolean set_maker_2(ParseTree t) {
-        var m = t.enter(SET_MAKER_2);
-        if (m != null) return m;
-        boolean r;
-        r = t.consume(",");
-        r = r && expr_or_star(t);
-        t.exit(r);
-        return r;
-    }
-
-    /**
-     * arglist: argument (',' argument)* [',']
+     * arglist: ','.argument+ [',']
      */
     public static boolean arglist(ParseTree t) {
         var m = t.enter(ARGLIST);
         if (m != null) return m;
         boolean r;
-        r = argument(t);
-        if (r) arglist_2_loop(t);
+        r = argument_loop(t);
         if (r) t.consume(",");
         t.exit(r);
         return r;
     }
 
-    private static void arglist_2_loop(ParseTree t) {
+    private static boolean argument_loop(ParseTree t) {
         t.enterLoop();
-        while (true) {
+        var r = argument(t);
+        if (r) while (true) {
             var p = t.position();
-            if (!arglist_2(t) || t.loopGuard(p)) break;
+            if (!t.skip(",") || !argument(t) || t.loopGuard(p)) break;
         }
         t.exitLoop();
-    }
-
-    /**
-     * ',' argument
-     */
-    private static boolean arglist_2(ParseTree t) {
-        var m = t.enter(ARGLIST_2);
-        if (m != null) return m;
-        boolean r;
-        r = t.consume(",");
-        r = r && argument(t);
-        t.exit(r);
         return r;
     }
 

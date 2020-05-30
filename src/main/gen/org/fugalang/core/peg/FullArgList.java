@@ -6,7 +6,7 @@ import org.fugalang.core.parser.ParseTreeNode;
 import java.util.List;
 
 /**
- * full_arg_list: default_arg (',' default_arg)* [',' [kwargs | args_kwargs]]
+ * full_arg_list: ','.default_arg+ [',' [kwargs | args_kwargs]]
  */
 public final class FullArgList extends NodeWrapper {
 
@@ -14,24 +14,20 @@ public final class FullArgList extends NodeWrapper {
         super(node);
     }
 
-    public DefaultArg defaultArg() {
-        return get(0, DefaultArg.class);
+    public List<DefaultArg> defaultArgs() {
+        return getList(0, DefaultArg.class);
     }
 
-    public List<FullArgList2> commaDefaultArgs() {
-        return getList(1, FullArgList2.class);
+    public FullArgList2 fullArgList2() {
+        return get(1, FullArgList2.class);
     }
 
-    public FullArgList3 fullArgList3() {
-        return get(2, FullArgList3.class);
-    }
-
-    public boolean hasFullArgList3() {
-        return has(2);
+    public boolean hasFullArgList2() {
+        return has(1);
     }
 
     /**
-     * ',' default_arg
+     * ',' [kwargs | args_kwargs]
      */
     public static final class FullArgList2 extends NodeWrapper {
 
@@ -39,22 +35,8 @@ public final class FullArgList extends NodeWrapper {
             super(node);
         }
 
-        public DefaultArg defaultArg() {
-            return get(1, DefaultArg.class);
-        }
-    }
-
-    /**
-     * ',' [kwargs | args_kwargs]
-     */
-    public static final class FullArgList3 extends NodeWrapper {
-
-        public FullArgList3(ParseTreeNode node) {
-            super(node);
-        }
-
-        public FullArgList32 kwargsOrArgsKwargs() {
-            return get(1, FullArgList32.class);
+        public FullArgList22 kwargsOrArgsKwargs() {
+            return get(1, FullArgList22.class);
         }
 
         public boolean hasKwargsOrArgsKwargs() {
@@ -65,9 +47,9 @@ public final class FullArgList extends NodeWrapper {
     /**
      * kwargs | args_kwargs
      */
-    public static final class FullArgList32 extends NodeWrapper {
+    public static final class FullArgList22 extends NodeWrapper {
 
-        public FullArgList32(ParseTreeNode node) {
+        public FullArgList22(ParseTreeNode node) {
             super(node);
         }
 

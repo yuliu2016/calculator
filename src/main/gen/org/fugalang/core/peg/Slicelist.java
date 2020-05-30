@@ -6,7 +6,7 @@ import org.fugalang.core.parser.ParseTreeNode;
 import java.util.List;
 
 /**
- * slicelist: slice (',' slice)* [',']
+ * slicelist: ','.slice+ [',']
  */
 public final class Slicelist extends NodeWrapper {
 
@@ -14,29 +14,11 @@ public final class Slicelist extends NodeWrapper {
         super(node);
     }
 
-    public Slice slice() {
-        return get(0, Slice.class);
-    }
-
-    public List<Slicelist2> commaSlices() {
-        return getList(1, Slicelist2.class);
+    public List<Slice> slices() {
+        return getList(0, Slice.class);
     }
 
     public boolean isComma() {
-        return is(2);
-    }
-
-    /**
-     * ',' slice
-     */
-    public static final class Slicelist2 extends NodeWrapper {
-
-        public Slicelist2(ParseTreeNode node) {
-            super(node);
-        }
-
-        public Slice slice() {
-            return get(1, Slice.class);
-        }
+        return is(1);
     }
 }

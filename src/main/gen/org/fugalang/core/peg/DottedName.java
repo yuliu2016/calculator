@@ -7,7 +7,7 @@ import org.fugalang.core.token.TokenType;
 import java.util.List;
 
 /**
- * dotted_name: NAME ('.' NAME)*
+ * dotted_name: '.'.NAME+
  */
 public final class DottedName extends NodeWrapper {
 
@@ -15,25 +15,7 @@ public final class DottedName extends NodeWrapper {
         super(node);
     }
 
-    public String name() {
-        return get(0, TokenType.NAME);
-    }
-
-    public List<DottedName2> dotNames() {
-        return getList(1, DottedName2.class);
-    }
-
-    /**
-     * '.' NAME
-     */
-    public static final class DottedName2 extends NodeWrapper {
-
-        public DottedName2(ParseTreeNode node) {
-            super(node);
-        }
-
-        public String name() {
-            return get(1, TokenType.NAME);
-        }
+    public List<String> names() {
+        return getList(0, ParseTreeNode::asString);
     }
 }
