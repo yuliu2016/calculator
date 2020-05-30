@@ -71,11 +71,11 @@ public class Calculator {
             double[] resolved;
             if (call.hasParameters()) {
                 var param = call.parameters();
-                resolved = new double[param.commaSums().size() + 1];
-                resolved[0] = evalSum(param.sum());
-                int i = 1;
-                for (var commaSum : param.commaSums()) {
-                    resolved[i] = evalSum(commaSum.sum());
+                var sums = param.sums();
+                resolved = new double[sums.size()];
+                int i = 0;
+                for (var sum : sums) {
+                    resolved[i] = evalSum(sum);
                     i++;
                 }
             } else {

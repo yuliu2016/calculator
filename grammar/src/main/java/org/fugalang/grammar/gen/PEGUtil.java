@@ -27,7 +27,7 @@ public class PEGUtil {
 
     public static String constructString(Repeat repeat) {
         var item = constructString(getRepeatItem(repeat));
-        return repeat.hasDelimited() ? repeat.delimited().string() + "." + item + "+" :
+        return repeat.hasDelimited() ? "'" + repeat.delimited().string() + "'." + item + "+" :
                 repeat.hasItemPlus() ? item + "+" :
                         repeat.hasItemTimes() ? item + "*" :
                                 item;

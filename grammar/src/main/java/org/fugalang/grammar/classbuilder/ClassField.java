@@ -167,12 +167,13 @@ public class ClassField {
     private String getRequiredLoopParser() {
         var resultExpr = getResultExpr();
         var rule_name = className.getRuleName().replace(":", "_");
+        var delimExpr = delimiter == null ? "" : "!t.skip(\"" + delimiter + "\") || ";
         return "\n    private static boolean " + rule_name + "_loop(ParseTree t) {\n" +
                 "        t.enterLoop();\n" +
                 "        var r = " + resultExpr + ";\n" +
                 "        if (r) while (true) {\n" +
                 "            var p = t.position();\n" +
-                "            if (!" + resultExpr + " || t.loopGuard(p)) break;\n" +
+                "            if (" + delimExpr + "!" + resultExpr + " || t.loopGuard(p)) break;\n" +
                 "        }\n" +
                 "        t.exitLoop();\n" +
                 "        return r;\n" +

@@ -280,6 +280,31 @@ public class SimpleParseTree implements ParseTree {
     }
 
     @Override
+    public boolean skip(String literal) {
+        if (context.didFinish(pos)) {
+            return false;
+        }
+        var token = context.getElem(pos);
+
+        if (token.getType().isLiteral() && token.getValue().equals(literal)) {
+            if (context.isDebug()) {
+                context.log("  ".repeat(level + 1) +
+                        "Success in literal '" + literal + "'");
+            }
+            pos++;
+            return true;
+        } else {
+            if (context.isDebug()) {
+                context.log("  ".repeat(level + 1) +
+                        "Failure in literal '" + literal + "': Token is '" +
+                        token.getValue().replace("\r", "\\r")
+                                .replace("\n", "\\n") + "'");
+            }
+            return false;
+        }
+    }
+
+    @Override
     public String toString() {
         return "ParseTree";
     }

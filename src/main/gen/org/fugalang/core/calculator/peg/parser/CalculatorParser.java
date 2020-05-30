@@ -253,38 +253,26 @@ public class CalculatorParser {
     }
 
     /**
-     * parameters: sum (',' sum)* [',']
+     * parameters: ','.sum+ [',']
      */
     public static boolean parameters(ParseTree t) {
         var m = t.enter(PARAMETERS);
         if (m != null) return m;
         boolean r;
-        r = sum(t);
-        if (r) parameters_2_loop(t);
+        r = sum_loop(t);
         if (r) t.consume(",");
         t.exit(r);
         return r;
     }
 
-    private static void parameters_2_loop(ParseTree t) {
+    private static boolean sum_loop(ParseTree t) {
         t.enterLoop();
-        while (true) {
+        var r = sum(t);
+        if (r) while (true) {
             var p = t.position();
-            if (!parameters_2(t) || t.loopGuard(p)) break;
+            if (!t.skip(",") || !sum(t) || t.loopGuard(p)) break;
         }
         t.exitLoop();
-    }
-
-    /**
-     * ',' sum
-     */
-    private static boolean parameters_2(ParseTree t) {
-        var m = t.enter(PARAMETERS_2);
-        if (m != null) return m;
-        boolean r;
-        r = t.consume(",");
-        r = r && sum(t);
-        t.exit(r);
         return r;
     }
 }
