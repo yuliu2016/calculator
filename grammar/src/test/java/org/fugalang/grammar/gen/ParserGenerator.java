@@ -98,6 +98,7 @@ public class ParserGenerator {
         }
     }
 
+    @SuppressWarnings("unused")
     public void generate(boolean toFiles) {
         if (!classSet.getClasses().isEmpty()) {
             throw new IllegalStateException("Cannot repeat generation");
@@ -290,7 +291,7 @@ public class ParserGenerator {
     ) {
         if (repeatType == RepeatType.Once) {
             var fieldType = isOptional ? FieldType.Optional : FieldType.Required;
-            var field = new ClassField(className, fieldName, fieldType, resultSource);
+            var field = new ClassField(className, fieldName, fieldType, resultSource, null);
             cb.addField(field);
         } else {
             cb.addImport("java.util.List");
@@ -301,7 +302,7 @@ public class ParserGenerator {
 
             var fieldType = repeatType == RepeatType.OnceOrMore ?
                     FieldType.RequiredList : FieldType.OptionalList;
-            var field = new ClassField(newClassName, newFieldName, fieldType, resultSource);
+            var field = new ClassField(newClassName, newFieldName, fieldType, resultSource, null);
             cb.addField(field);
         }
     }

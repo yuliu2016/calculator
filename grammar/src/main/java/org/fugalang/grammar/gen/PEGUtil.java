@@ -26,8 +26,11 @@ public class PEGUtil {
     }
 
     public static String constructString(Repeat repeat) {
-        var modifier = repeat.hasItemTimes() ? "*" : repeat.hasItemPlus() ? "+" : "";
-        return constructString(getRepeatItem(repeat)) + modifier;
+        var item = constructString(getRepeatItem(repeat));
+        return repeat.hasDelimited() ? repeat.delimited().string() + "." + item + "+" :
+                repeat.hasItemPlus() ? item + "+" :
+                        repeat.hasItemTimes() ? item + "*" :
+                                item;
     }
 
     public static String constructString(Item item) {
@@ -48,13 +51,15 @@ public class PEGUtil {
     }
 
     public static RepeatType getRepeatType(Repeat repeat) {
-        return repeat.hasItemTimes() ? RepeatType.NoneOrMore :
-                repeat.hasItemPlus() ? RepeatType.OnceOrMore : RepeatType.Once;
+        return repeat.hasDelimited() ? RepeatType.OnceOrMore :
+                repeat.hasItemTimes() ? RepeatType.NoneOrMore :
+                        repeat.hasItemPlus() ? RepeatType.OnceOrMore : RepeatType.Once;
     }
 
     public static Item getRepeatItem(Repeat repeat) {
-        return repeat.hasItemTimes() ? repeat.itemTimes().item() :
-                repeat.hasItemPlus() ? repeat.itemPlus().item() : repeat.item();
+        return repeat.hasDelimited() ? repeat.delimited().item() :
+                repeat.hasItemTimes() ? repeat.itemTimes().item() :
+                        repeat.hasItemPlus() ? repeat.itemPlus().item() : repeat.item();
     }
 
     public static String getItemString(Item item) {

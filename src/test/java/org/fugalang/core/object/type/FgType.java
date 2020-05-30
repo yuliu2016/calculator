@@ -2,6 +2,7 @@ package org.fugalang.core.object.type;
 
 import static org.fugalang.core.object.type.FgTypeFunc.*;
 
+@SuppressWarnings("DeprecatedIsStillUsed")
 @Deprecated
 public class FgType {
     public final String tp_name;

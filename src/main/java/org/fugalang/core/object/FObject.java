@@ -1,5 +1,7 @@
 package org.fugalang.core.object;
 
+import static org.fugalang.core.object.FConst.NotImplemented;
+
 @SuppressWarnings("unused")
 public class FObject {
 
@@ -146,8 +148,4 @@ public class FObject {
     public FObject __inplace_matrix_multiply__(FObject o) {
         return NotImplemented;
     }
-
-    public static final FObject NotImplemented = new FObject();
-    public static final FObject True = new FObject();
-    public static final FObject False = new FObject();
 }

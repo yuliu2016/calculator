@@ -9,12 +9,20 @@ public class ClassField {
     private final String fieldName;
     private final FieldType fieldType;
     private final ResultSource resultSource;
+    private final String delimiter;
 
-    public ClassField(ClassName className, String fieldName, FieldType fieldType, ResultSource resultSource) {
+    public ClassField(
+            ClassName className,
+            String fieldName,
+            FieldType fieldType,
+            ResultSource resultSource,
+            String delimiter
+    ) {
         this.className = className;
         this.fieldName = fieldName;
         this.fieldType = fieldType;
         this.resultSource = resultSource;
+        this.delimiter = delimiter;
     }
 
     public String getFieldName() {
@@ -33,7 +41,7 @@ public class ClassField {
      * Used for field name conflict resolution
      */
     public ClassField withFieldName(String newFieldName) {
-        return new ClassField(className, newFieldName, fieldType, resultSource);
+        return new ClassField(className, newFieldName, fieldType, resultSource, delimiter);
     }
 
     public String asGetter(RuleType ruleType, int index) {

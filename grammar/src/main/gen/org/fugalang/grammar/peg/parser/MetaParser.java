@@ -121,14 +121,15 @@ public class MetaParser {
     }
 
     /**
-     * repeat: item '*' | item '+' | item
+     * repeat: delimited | item '*' | item '+' | item
      */
     public static boolean repeat(ParseTree t) {
         var m = t.enter(REPEAT);
         if (m != null) return m;
         boolean r;
-        r = repeat_1(t);
+        r = delimited(t);
         r = r || repeat_2(t);
+        r = r || repeat_3(t);
         r = r || item(t);
         t.exit(r);
         return r;
@@ -137,8 +138,8 @@ public class MetaParser {
     /**
      * item '*'
      */
-    private static boolean repeat_1(ParseTree t) {
-        var m = t.enter(REPEAT_1);
+    private static boolean repeat_2(ParseTree t) {
+        var m = t.enter(REPEAT_2);
         if (m != null) return m;
         boolean r;
         r = item(t);
@@ -150,8 +151,8 @@ public class MetaParser {
     /**
      * item '+'
      */
-    private static boolean repeat_2(ParseTree t) {
-        var m = t.enter(REPEAT_2);
+    private static boolean repeat_3(ParseTree t) {
+        var m = t.enter(REPEAT_3);
         if (m != null) return m;
         boolean r;
         r = item(t);
@@ -199,6 +200,21 @@ public class MetaParser {
         r = t.consume("[");
         r = r && or_rule(t);
         r = r && t.consume("]");
+        t.exit(r);
+        return r;
+    }
+
+    /**
+     * delimited: STRING '.' item '+'
+     */
+    public static boolean delimited(ParseTree t) {
+        var m = t.enter(DELIMITED);
+        if (m != null) return m;
+        boolean r;
+        r = t.consume(TokenType.STRING);
+        r = r && t.consume(".");
+        r = r && item(t);
+        r = r && t.consume("+");
         t.exit(r);
         return r;
     }

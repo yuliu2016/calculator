@@ -5,6 +5,7 @@ import static org.fugalang.core.object.type.FgTypeFunc.*;
 /**
  * Number suite
  */
+@SuppressWarnings("DeprecatedIsStillUsed")
 @Deprecated
 public class FgNumberMethods {
 

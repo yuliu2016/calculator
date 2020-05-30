@@ -9,6 +9,7 @@ or_rule:
 and_rule:
     | repeat+
 repeat:
+    | delimited
     | item '*'
     | item '+'
     | item
@@ -21,3 +22,5 @@ group:
     | '(' or_rule ')'
 optional:
     | '[' or_rule ']'
+delimited:
+    | STRING '.' item '+'
