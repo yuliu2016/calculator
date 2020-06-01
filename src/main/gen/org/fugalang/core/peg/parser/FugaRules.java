@@ -43,6 +43,7 @@ public class FugaRules {
     public static final ParserRule DICT_ITEM_1 = and_rule("dict_item:1");
     public static final ParserRule DICT_ITEM_2 = and_rule("dict_item:2");
     public static final ParserRule DICT_MAKER = and_rule("dict_maker");
+    public static final ParserRule AS_NAME = and_rule("as_name");
     public static final ParserRule ASSIGNMENT = and_rule("assignment");
     public static final ParserRule ASSIGNMENT_3 = or_rule("assignment:3");
     public static final ParserRule ASSIGNMENT_3_2 = and_rule("assignment:3:2");
@@ -50,13 +51,12 @@ public class FugaRules {
     public static final ParserRule AUGASSIGN = or_rule("augassign");
     public static final ParserRule ANNASSIGN = and_rule("annassign");
     public static final ParserRule ANNASSIGN_3 = and_rule("annassign:3");
-    public static final ParserRule AS_NAME = and_rule("as_name");
     public static final ParserRule IMPORT_NAME = and_rule("import_name");
     public static final ParserRule IMPORT_FROM = and_rule("import_from");
-    public static final ParserRule IMPORT_FROM_4 = or_rule("import_from:4");
-    public static final ParserRule IMPORT_FROM_4_2 = and_rule("import_from:4:2");
     public static final ParserRule IMPORT_FROM_NAMES = or_rule("import_from_names");
     public static final ParserRule IMPORT_FROM_NAMES_2 = and_rule("import_from_names:2");
+    public static final ParserRule IMPORT_FROM_ITEMS = or_rule("import_from_items");
+    public static final ParserRule IMPORT_FROM_ITEMS_2 = and_rule("import_from_items:2");
     public static final ParserRule IMPORT_AS_NAME = and_rule("import_as_name");
     public static final ParserRule DOTTED_AS_NAME = and_rule("dotted_as_name");
     public static final ParserRule IMPORT_AS_NAMES = and_rule("import_as_names");

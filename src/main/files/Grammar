@@ -43,6 +43,7 @@ nonlocal_stmt:
 assert_stmt:
     | 'assert' expr [',' expr]
 
+# Expression groups
 
 star_expr:
     | '*' bitwise_or
@@ -70,7 +71,9 @@ subscript:
     | '[' slicelist ']'
 slicelist:
     | ','.slice+ [',']
-slice: [expr] slice_expr [slice_expr] | expr
+slice:
+    | [expr] slice_expr [slice_expr]
+    | expr
 slice_expr:
     | ':' [expr]
 
@@ -79,22 +82,43 @@ dict_item:
     | '**' bitwise_or
 dict_maker:
     | ','.dict_item+ [',']
+as_name:
+    | 'as' NAME
+
+# Assignments
 
 assignment:
     | ['/'] exprlist_star [annassign | ('=' exprlist_star)+ | augassign exprlist]
 augassign:
-    | '+=' | '-=' | '*=' | '@=' | '/=' | '%=' | '&=' | '|=' | '^=' | '<<=' | '>>=' | '**=' | '//='
+    | '+='
+    | '-='
+    | '*='
+    | '@='
+    | '/='
+    | '%='
+    | '&='
+    | '|='
+    | '^='
+    | '<<='
+    | '>>='
+    | '**='
+    | '//='
 annassign:
     | ':' expr ['=' exprlist_star]
 
-as_name:
-    | 'as' NAME
+# Import Statments
+
 import_name:
     | 'import' dotted_as_names
 import_from:
-    | 'from' import_from_names 'import' ('*' | '(' import_as_names [','] ')' | import_as_names)
+    | 'from' import_from_names 'import' import_from_items
 import_from_names:
-    | dotted_name | '.'+ [dotted_name]
+    | dotted_name
+    | '.'+ [dotted_name]
+import_from_items:
+    | '*'
+    | '(' import_as_names [','] ')'
+    | import_as_names
 import_as_name:
     | NAME [as_name]
 dotted_as_name:
@@ -129,6 +153,9 @@ with_stmt:
     | 'with' ','.expr_as_name+ suite
 expr_as_name:
     | expr [as_name]
+
+# Suites
+
 block_suite:
     | '{' simple_stmt '}'
     | '{' NEWLINE stmt+ '}'

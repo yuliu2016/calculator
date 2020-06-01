@@ -613,6 +613,19 @@ public class FugaParser {
     }
 
     /**
+     * as_name: 'as' NAME
+     */
+    public static boolean as_name(ParseTree t) {
+        var m = t.enter(AS_NAME);
+        if (m != null) return m;
+        boolean r;
+        r = t.consume("as");
+        r = r && t.consume(TokenType.NAME);
+        t.exit(r);
+        return r;
+    }
+
+    /**
      * assignment: ['/'] exprlist_star [annassign | ('=' exprlist_star)+ | augassign exprlist]
      */
     public static boolean assignment(ParseTree t) {
@@ -729,19 +742,6 @@ public class FugaParser {
     }
 
     /**
-     * as_name: 'as' NAME
-     */
-    public static boolean as_name(ParseTree t) {
-        var m = t.enter(AS_NAME);
-        if (m != null) return m;
-        boolean r;
-        r = t.consume("as");
-        r = r && t.consume(TokenType.NAME);
-        t.exit(r);
-        return r;
-    }
-
-    /**
      * import_name: 'import' dotted_as_names
      */
     public static boolean import_name(ParseTree t) {
@@ -755,7 +755,7 @@ public class FugaParser {
     }
 
     /**
-     * import_from: 'from' import_from_names 'import' ('*' | '(' import_as_names [','] ')' | import_as_names)
+     * import_from: 'from' import_from_names 'import' import_from_items
      */
     public static boolean import_from(ParseTree t) {
         var m = t.enter(IMPORT_FROM);
@@ -764,36 +764,7 @@ public class FugaParser {
         r = t.consume("from");
         r = r && import_from_names(t);
         r = r && t.consume("import");
-        r = r && import_from_4(t);
-        t.exit(r);
-        return r;
-    }
-
-    /**
-     * '*' | '(' import_as_names [','] ')' | import_as_names
-     */
-    private static boolean import_from_4(ParseTree t) {
-        var m = t.enter(IMPORT_FROM_4);
-        if (m != null) return m;
-        boolean r;
-        r = t.consume("*");
-        r = r || import_from_4_2(t);
-        r = r || import_as_names(t);
-        t.exit(r);
-        return r;
-    }
-
-    /**
-     * '(' import_as_names [','] ')'
-     */
-    private static boolean import_from_4_2(ParseTree t) {
-        var m = t.enter(IMPORT_FROM_4_2);
-        if (m != null) return m;
-        boolean r;
-        r = t.consume("(");
-        r = r && import_as_names(t);
-        if (r) t.consume(",");
-        r = r && t.consume(")");
+        r = r && import_from_items(t);
         t.exit(r);
         return r;
     }
@@ -832,6 +803,35 @@ public class FugaParser {
             if (!t.consume(".") || t.loopGuard(p)) break;
         }
         t.exitLoop();
+        return r;
+    }
+
+    /**
+     * import_from_items: '*' | '(' import_as_names [','] ')' | import_as_names
+     */
+    public static boolean import_from_items(ParseTree t) {
+        var m = t.enter(IMPORT_FROM_ITEMS);
+        if (m != null) return m;
+        boolean r;
+        r = t.consume("*");
+        r = r || import_from_items_2(t);
+        r = r || import_as_names(t);
+        t.exit(r);
+        return r;
+    }
+
+    /**
+     * '(' import_as_names [','] ')'
+     */
+    private static boolean import_from_items_2(ParseTree t) {
+        var m = t.enter(IMPORT_FROM_ITEMS_2);
+        if (m != null) return m;
+        boolean r;
+        r = t.consume("(");
+        r = r && import_as_names(t);
+        if (r) t.consume(",");
+        r = r && t.consume(")");
+        t.exit(r);
         return r;
     }
 
