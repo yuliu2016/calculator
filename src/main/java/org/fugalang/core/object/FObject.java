@@ -1,9 +1,10 @@
 package org.fugalang.core.object;
 
-import static org.fugalang.core.object.FConst.NotImplemented;
 
 @SuppressWarnings("unused")
 public class FObject {
+
+    private static final FObject NI = FConst.NotImplemented;
 
     @Override
     public String toString() {
@@ -31,166 +32,166 @@ public class FObject {
     }
 
     public FObject __repr__() {
-        return NotImplemented;
+        return NI;
     }
 
     public FObject __str__() {
-        return NotImplemented;
+        return NI;
     }
 
     public FObject __format__() {
-        return NotImplemented;
+        return NI;
     }
 
     public FObject __hash__() {
-        return NotImplemented;
+        return NI;
     }
 
     public FObject __bool__() {
-        return NotImplemented;
+        return NI;
     }
 
     // Comparision Operators
 
     public FObject __compare__(FObject o) {
-        return NotImplemented;
+        return NI;
     }
 
     public FObject __lt__(FObject o) {
-        return NotImplemented;
+        return NI;
     }
 
     public FObject __le__(FObject o) {
-        return NotImplemented;
+        return NI;
     }
 
     public FObject __eq__(FObject o) {
-        return NotImplemented;
+        return NI;
     }
 
     public FObject __ne__(FObject o) {
-        return NotImplemented;
+        return NI;
     }
 
     public FObject __gt__(FObject o) {
-        return NotImplemented;
+        return NI;
     }
 
     public FObject __ge__(FObject o) {
-        return NotImplemented;
+        return NI;
     }
 
 
     // Customizing attribute acces
 
     public FObject __getattr__(FObject o) {
-        return NotImplemented;
+        return NI;
     }
 
     public FObject __setattr__(FObject o) {
-        return NotImplemented;
+        return NI;
     }
 
     public FObject __delattr__(FObject o) {
-        return NotImplemented;
+        return NI;
     }
 
     public FObject __dir__(FObject o) {
-        return NotImplemented;
+        return NI;
     }
 
     // calling
 
     public FObject __call__(FObject o) {
-        return NotImplemented;
+        return NI;
     }
 
     // Sequences
 
     public FObject __len__() {
-        return NotImplemented;
+        return NI;
     }
 
     public FObject __getitem__(FObject o) {
-        return NotImplemented;
+        return NI;
     }
 
     public FObject __setitem__(FObject o) {
-        return NotImplemented;
+        return NI;
     }
 
     public FObject __delitem__(FObject o) {
-        return NotImplemented;
+        return NI;
     }
 
     public FObject __iter__(FObject o) {
-        return NotImplemented;
+        return NI;
     }
 
     public FObject __reversed__(FObject o) {
-        return NotImplemented;
+        return NI;
     }
 
     public FObject __contains__(FObject o) {
-        return NotImplemented;
+        return NI;
     }
 
     // Number Operators
 
     public FObject __add__(FObject o) {
-        return NotImplemented;
+        return NI;
     }
 
     public FObject __sub__(FObject o) {
-        return NotImplemented;
+        return NI;
     }
 
     public FObject __mul__(FObject o) {
-        return NotImplemented;
+        return NI;
     }
 
     public FObject __matmul__(FObject o) {
-        return NotImplemented;
+        return NI;
     }
 
     public FObject __truediv__(FObject o) {
-        return NotImplemented;
+        return NI;
     }
 
     public FObject __floordiv__(FObject o) {
-        return NotImplemented;
+        return NI;
     }
 
     public FObject __mod__(FObject o) {
-        return NotImplemented;
+        return NI;
     }
 
     public FObject __divmod__(FObject o) {
-        return NotImplemented;
+        return NI;
     }
 
     public FObject __pow__(FObject o) {
-        return NotImplemented;
+        return NI;
     }
 
     public FObject __lshift__(FObject o) {
-        return NotImplemented;
+        return NI;
     }
 
     public FObject __rshift__(FObject o) {
-        return NotImplemented;
+        return NI;
     }
 
     public FObject __and__(FObject o) {
-        return NotImplemented;
+        return NI;
     }
 
     public FObject __xor__(FObject o) {
-        return NotImplemented;
+        return NI;
     }
 
     public FObject __or__(FObject o) {
-        return NotImplemented;
+        return NI;
     }
 
     // Number Operators (right hand operand)
@@ -312,54 +313,54 @@ public class FObject {
     // Unary operators
 
     public FObject __neg__() {
-        return NotImplemented;
+        return NI;
     }
 
     public FObject __pos__() {
-        return NotImplemented;
+        return NI;
     }
 
     public FObject __abs__() {
-        return NotImplemented;
+        return NI;
     }
 
     public FObject __invert__() {
-        return NotImplemented;
+        return NI;
     }
 
     // Number functions
 
-    public FObject __int__(FObject o) {
-        return NotImplemented;
+    public FObject __int__() {
+        return NI;
     }
 
-    public FObject __float__(FObject o) {
-        return NotImplemented;
+    public FObject __float__() {
+        return NI;
     }
 
-    public FObject __round__(FObject o) {
-        return NotImplemented;
+    public FObject __round__() {
+        return NI;
     }
 
-    public FObject __trunk__(FObject o) {
-        return NotImplemented;
+    public FObject __trunk__() {
+        return NI;
     }
 
-    public FObject __floor__(FObject o) {
-        return NotImplemented;
+    public FObject __floor__() {
+        return NI;
     }
 
-    public FObject __ceil__(FObject o) {
-        return NotImplemented;
+    public FObject __ceil__() {
+        return NI;
     }
 
     // Context managers
 
     public FObject __enter__(FObject o) {
-        return NotImplemented;
+        return NI;
     }
 
     public FObject __exit__(FObject o) {
-        return NotImplemented;
+        return NI;
     }
 }
