@@ -178,13 +178,13 @@ public class Calculator {
 
     private static void noParam(String name, double[] params) {
         if (params.length != 0) {
-            throw new SyntaxError("Function " + name +
+            throw new RuntimeException("Function " + name +
                     " does not expect any parameters");
         }
     }
 
     private static double firstParam(String name, double[] params) {
-        if (params.length != 1) throw new SyntaxError("Function " + name +
+        if (params.length != 1) throw new RuntimeException("Function " + name +
                 " requires one and only one parameter");
         return params[0];
     }

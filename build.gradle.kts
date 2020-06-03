@@ -33,6 +33,6 @@ dependencies {
 
 tasks.jar {
     manifest {
-        attributes["Main-Class"] = "org.fugalang.core.calculator.Calculator"
+        attributes["Main-Class"] = "calculator.Main"
     }
 }
