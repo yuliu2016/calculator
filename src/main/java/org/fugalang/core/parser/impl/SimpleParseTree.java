@@ -75,6 +75,7 @@ public class SimpleParseTree implements ParseTree {
                 System.err.println("Max recursion level of " + MAX_RECURSION_LEVEL +
                         " reached inside rule " + rule);
             }
+            level--;
             return false;
         }
 

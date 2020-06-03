@@ -13,7 +13,7 @@ public final class SmallStmt extends NodeWrapper {
     }
 
     public FlowStmt flowStmt() {
-        return get(0, FlowStmt.class);
+        return new FlowStmt(get(0));
     }
 
     public boolean hasFlowStmt() {
@@ -21,7 +21,7 @@ public final class SmallStmt extends NodeWrapper {
     }
 
     public DelStmt delStmt() {
-        return get(1, DelStmt.class);
+        return new DelStmt(get(1));
     }
 
     public boolean hasDelStmt() {
@@ -29,7 +29,7 @@ public final class SmallStmt extends NodeWrapper {
     }
 
     public NonlocalStmt nonlocalStmt() {
-        return get(2, NonlocalStmt.class);
+        return new NonlocalStmt(get(2));
     }
 
     public boolean hasNonlocalStmt() {
@@ -37,7 +37,7 @@ public final class SmallStmt extends NodeWrapper {
     }
 
     public AssertStmt assertStmt() {
-        return get(3, AssertStmt.class);
+        return new AssertStmt(get(3));
     }
 
     public boolean hasAssertStmt() {
@@ -45,7 +45,7 @@ public final class SmallStmt extends NodeWrapper {
     }
 
     public ImportName importName() {
-        return get(4, ImportName.class);
+        return new ImportName(get(4));
     }
 
     public boolean hasImportName() {
@@ -53,7 +53,7 @@ public final class SmallStmt extends NodeWrapper {
     }
 
     public ImportFrom importFrom() {
-        return get(5, ImportFrom.class);
+        return new ImportFrom(get(5));
     }
 
     public boolean hasImportFrom() {
@@ -61,7 +61,7 @@ public final class SmallStmt extends NodeWrapper {
     }
 
     public Assignment assignment() {
-        return get(6, Assignment.class);
+        return new Assignment(get(6));
     }
 
     public boolean hasAssignment() {

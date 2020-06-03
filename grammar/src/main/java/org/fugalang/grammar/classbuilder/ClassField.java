@@ -58,9 +58,9 @@ public class ClassField {
         switch (resultSource.getType()) {
             case Class:
                 if (isSingular()) {
-                    return "        return get(" + index + ", " + className.getType() + ".class);\n";
+                    return "        return new " + className.getType()  + "(get(" + index + "));\n";
                 }
-                return "        return getList(" + index + ", " + className.getRealClassName() + ".class);\n";
+                return "        return getList(" + index + ", " + className.getRealClassName() + "::new);\n";
             case TokenType:
                 if (isSingular()) {
                     return "        return get(" + index + ", " + resultSource.getValue() + ");\n";

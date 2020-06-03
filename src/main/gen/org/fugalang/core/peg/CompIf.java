@@ -13,11 +13,11 @@ public final class CompIf extends NodeWrapper {
     }
 
     public NamedExpr namedExpr() {
-        return get(1, NamedExpr.class);
+        return new NamedExpr(get(1));
     }
 
     public CompIter compIter() {
-        return get(2, CompIter.class);
+        return new CompIter(get(2));
     }
 
     public boolean hasCompIter() {

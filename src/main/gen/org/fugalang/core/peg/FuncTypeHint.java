@@ -13,6 +13,6 @@ public final class FuncTypeHint extends NodeWrapper {
     }
 
     public Expr expr() {
-        return get(1, Expr.class);
+        return new Expr(get(1));
     }
 }

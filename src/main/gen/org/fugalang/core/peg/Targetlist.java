@@ -15,7 +15,7 @@ public final class Targetlist extends NodeWrapper {
     }
 
     public List<Target> targets() {
-        return getList(0, Target.class);
+        return getList(0, Target::new);
     }
 
     public boolean isComma() {

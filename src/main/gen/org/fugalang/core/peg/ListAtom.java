@@ -13,7 +13,7 @@ public final class ListAtom extends NodeWrapper {
     }
 
     public NamedExprList namedExprList() {
-        return get(1, NamedExprList.class);
+        return new NamedExprList(get(1));
     }
 
     public boolean hasNamedExprList() {

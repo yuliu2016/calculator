@@ -13,7 +13,7 @@ public final class Pipe extends NodeWrapper {
     }
 
     public Pipe1 pipePipePipeExpr() {
-        return get(0, Pipe1.class);
+        return new Pipe1(get(0));
     }
 
     public boolean hasPipePipePipeExpr() {
@@ -21,7 +21,7 @@ public final class Pipe extends NodeWrapper {
     }
 
     public Factor factor() {
-        return get(1, Factor.class);
+        return new Factor(get(1));
     }
 
     public boolean hasFactor() {
@@ -38,11 +38,11 @@ public final class Pipe extends NodeWrapper {
         }
 
         public Pipe pipe() {
-            return get(0, Pipe.class);
+            return new Pipe(get(0));
         }
 
         public PipeExpr pipeExpr() {
-            return get(2, PipeExpr.class);
+            return new PipeExpr(get(2));
         }
     }
 }

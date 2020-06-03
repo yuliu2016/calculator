@@ -15,7 +15,7 @@ public final class DictMaker extends NodeWrapper {
     }
 
     public List<DictItem> dictItems() {
-        return getList(0, DictItem.class);
+        return getList(0, DictItem::new);
     }
 
     public boolean isComma() {

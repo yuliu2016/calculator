@@ -13,11 +13,11 @@ public final class TryStmt extends NodeWrapper {
     }
 
     public Suite suite() {
-        return get(1, Suite.class);
+        return new Suite(get(1));
     }
 
     public TryStmt3 exceptSuiteOrFinallySuite() {
-        return get(2, TryStmt3.class);
+        return new TryStmt3(get(2));
     }
 
     /**
@@ -30,7 +30,7 @@ public final class TryStmt extends NodeWrapper {
         }
 
         public ExceptSuite exceptSuite() {
-            return get(0, ExceptSuite.class);
+            return new ExceptSuite(get(0));
         }
 
         public boolean hasExceptSuite() {
@@ -38,7 +38,7 @@ public final class TryStmt extends NodeWrapper {
         }
 
         public FinallySuite finallySuite() {
-            return get(1, FinallySuite.class);
+            return new FinallySuite(get(1));
         }
 
         public boolean hasFinallySuite() {

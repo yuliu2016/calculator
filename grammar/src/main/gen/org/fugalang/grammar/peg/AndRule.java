@@ -15,6 +15,6 @@ public final class AndRule extends NodeWrapper {
     }
 
     public List<Repeat> repeats() {
-        return getList(0, Repeat.class);
+        return getList(0, Repeat::new);
     }
 }

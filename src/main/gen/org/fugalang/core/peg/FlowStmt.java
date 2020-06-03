@@ -25,7 +25,7 @@ public final class FlowStmt extends NodeWrapper {
     }
 
     public ReturnStmt returnStmt() {
-        return get(3, ReturnStmt.class);
+        return new ReturnStmt(get(3));
     }
 
     public boolean hasReturnStmt() {
@@ -33,7 +33,7 @@ public final class FlowStmt extends NodeWrapper {
     }
 
     public RaiseStmt raiseStmt() {
-        return get(4, RaiseStmt.class);
+        return new RaiseStmt(get(4));
     }
 
     public boolean hasRaiseStmt() {

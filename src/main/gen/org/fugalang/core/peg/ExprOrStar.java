@@ -13,7 +13,7 @@ public final class ExprOrStar extends NodeWrapper {
     }
 
     public StarExpr starExpr() {
-        return get(0, StarExpr.class);
+        return new StarExpr(get(0));
     }
 
     public boolean hasStarExpr() {
@@ -21,7 +21,7 @@ public final class ExprOrStar extends NodeWrapper {
     }
 
     public Expr expr() {
-        return get(1, Expr.class);
+        return new Expr(get(1));
     }
 
     public boolean hasExpr() {

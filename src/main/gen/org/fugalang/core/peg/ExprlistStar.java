@@ -15,7 +15,7 @@ public final class ExprlistStar extends NodeWrapper {
     }
 
     public List<ExprOrStar> exprOrStars() {
-        return getList(0, ExprOrStar.class);
+        return getList(0, ExprOrStar::new);
     }
 
     public boolean isComma() {

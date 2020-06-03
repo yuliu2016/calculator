@@ -15,7 +15,7 @@ public final class SimpleStmt extends NodeWrapper {
     }
 
     public List<SmallStmt> smallStmts() {
-        return getList(0, SmallStmt.class);
+        return getList(0, SmallStmt::new);
     }
 
     public boolean isSemicolon() {

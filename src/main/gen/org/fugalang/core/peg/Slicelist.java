@@ -15,7 +15,7 @@ public final class Slicelist extends NodeWrapper {
     }
 
     public List<Slice> slices() {
-        return getList(0, Slice.class);
+        return getList(0, Slice::new);
     }
 
     public boolean isComma() {

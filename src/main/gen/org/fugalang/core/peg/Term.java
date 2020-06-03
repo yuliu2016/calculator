@@ -13,7 +13,7 @@ public final class Term extends NodeWrapper {
     }
 
     public Term1 termTimesPipe() {
-        return get(0, Term1.class);
+        return new Term1(get(0));
     }
 
     public boolean hasTermTimesPipe() {
@@ -21,7 +21,7 @@ public final class Term extends NodeWrapper {
     }
 
     public Term2 termDivPipe() {
-        return get(1, Term2.class);
+        return new Term2(get(1));
     }
 
     public boolean hasTermDivPipe() {
@@ -29,7 +29,7 @@ public final class Term extends NodeWrapper {
     }
 
     public Term3 termModulusPipe() {
-        return get(2, Term3.class);
+        return new Term3(get(2));
     }
 
     public boolean hasTermModulusPipe() {
@@ -37,7 +37,7 @@ public final class Term extends NodeWrapper {
     }
 
     public Term4 termFloorDivPipe() {
-        return get(3, Term4.class);
+        return new Term4(get(3));
     }
 
     public boolean hasTermFloorDivPipe() {
@@ -45,7 +45,7 @@ public final class Term extends NodeWrapper {
     }
 
     public Term5 termMatrixTimesPipe() {
-        return get(4, Term5.class);
+        return new Term5(get(4));
     }
 
     public boolean hasTermMatrixTimesPipe() {
@@ -53,7 +53,7 @@ public final class Term extends NodeWrapper {
     }
 
     public Pipe pipe() {
-        return get(5, Pipe.class);
+        return new Pipe(get(5));
     }
 
     public boolean hasPipe() {
@@ -70,11 +70,11 @@ public final class Term extends NodeWrapper {
         }
 
         public Term term() {
-            return get(0, Term.class);
+            return new Term(get(0));
         }
 
         public Pipe pipe() {
-            return get(2, Pipe.class);
+            return new Pipe(get(2));
         }
     }
 
@@ -88,11 +88,11 @@ public final class Term extends NodeWrapper {
         }
 
         public Term term() {
-            return get(0, Term.class);
+            return new Term(get(0));
         }
 
         public Pipe pipe() {
-            return get(2, Pipe.class);
+            return new Pipe(get(2));
         }
     }
 
@@ -106,11 +106,11 @@ public final class Term extends NodeWrapper {
         }
 
         public Term term() {
-            return get(0, Term.class);
+            return new Term(get(0));
         }
 
         public Pipe pipe() {
-            return get(2, Pipe.class);
+            return new Pipe(get(2));
         }
     }
 
@@ -124,11 +124,11 @@ public final class Term extends NodeWrapper {
         }
 
         public Term term() {
-            return get(0, Term.class);
+            return new Term(get(0));
         }
 
         public Pipe pipe() {
-            return get(2, Pipe.class);
+            return new Pipe(get(2));
         }
     }
 
@@ -142,11 +142,11 @@ public final class Term extends NodeWrapper {
         }
 
         public Term term() {
-            return get(0, Term.class);
+            return new Term(get(0));
         }
 
         public Pipe pipe() {
-            return get(2, Pipe.class);
+            return new Pipe(get(2));
         }
     }
 }

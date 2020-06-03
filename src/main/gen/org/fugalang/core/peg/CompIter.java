@@ -13,7 +13,7 @@ public final class CompIter extends NodeWrapper {
     }
 
     public CompFor compFor() {
-        return get(0, CompFor.class);
+        return new CompFor(get(0));
     }
 
     public boolean hasCompFor() {
@@ -21,7 +21,7 @@ public final class CompIter extends NodeWrapper {
     }
 
     public CompIf compIf() {
-        return get(1, CompIf.class);
+        return new CompIf(get(1));
     }
 
     public boolean hasCompIf() {

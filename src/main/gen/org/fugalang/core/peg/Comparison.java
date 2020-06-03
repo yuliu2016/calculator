@@ -15,7 +15,7 @@ public final class Comparison extends NodeWrapper {
     }
 
     public Comparison1 comparison1() {
-        return get(0, Comparison1.class);
+        return new Comparison1(get(0));
     }
 
     public boolean hasComparison1() {
@@ -23,7 +23,7 @@ public final class Comparison extends NodeWrapper {
     }
 
     public BitwiseOr bitwiseOr() {
-        return get(1, BitwiseOr.class);
+        return new BitwiseOr(get(1));
     }
 
     public boolean hasBitwiseOr() {
@@ -40,11 +40,11 @@ public final class Comparison extends NodeWrapper {
         }
 
         public BitwiseOr bitwiseOr() {
-            return get(0, BitwiseOr.class);
+            return new BitwiseOr(get(0));
         }
 
         public List<Comparison12> compOpBitwiseOrs() {
-            return getList(1, Comparison12.class);
+            return getList(1, Comparison12::new);
         }
     }
 
@@ -58,11 +58,11 @@ public final class Comparison extends NodeWrapper {
         }
 
         public CompOp compOp() {
-            return get(0, CompOp.class);
+            return new CompOp(get(0));
         }
 
         public BitwiseOr bitwiseOr() {
-            return get(1, BitwiseOr.class);
+            return new BitwiseOr(get(1));
         }
     }
 }

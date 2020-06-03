@@ -13,7 +13,7 @@ public final class BitwiseAnd extends NodeWrapper {
     }
 
     public BitwiseAnd1 bitwiseAndBitAndShiftExpr() {
-        return get(0, BitwiseAnd1.class);
+        return new BitwiseAnd1(get(0));
     }
 
     public boolean hasBitwiseAndBitAndShiftExpr() {
@@ -21,7 +21,7 @@ public final class BitwiseAnd extends NodeWrapper {
     }
 
     public ShiftExpr shiftExpr() {
-        return get(1, ShiftExpr.class);
+        return new ShiftExpr(get(1));
     }
 
     public boolean hasShiftExpr() {
@@ -38,11 +38,11 @@ public final class BitwiseAnd extends NodeWrapper {
         }
 
         public BitwiseAnd bitwiseAnd() {
-            return get(0, BitwiseAnd.class);
+            return new BitwiseAnd(get(0));
         }
 
         public ShiftExpr shiftExpr() {
-            return get(2, ShiftExpr.class);
+            return new ShiftExpr(get(2));
         }
     }
 }

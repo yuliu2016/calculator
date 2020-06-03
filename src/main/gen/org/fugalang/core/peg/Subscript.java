@@ -13,6 +13,6 @@ public final class Subscript extends NodeWrapper {
     }
 
     public Slicelist slicelist() {
-        return get(1, Slicelist.class);
+        return new Slicelist(get(1));
     }
 }

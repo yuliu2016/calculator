@@ -13,14 +13,14 @@ public final class Conditional extends NodeWrapper {
     }
 
     public Disjunction disjunction() {
-        return get(1, Disjunction.class);
+        return new Disjunction(get(1));
     }
 
     public Disjunction disjunction1() {
-        return get(3, Disjunction.class);
+        return new Disjunction(get(3));
     }
 
     public Expr expr() {
-        return get(5, Expr.class);
+        return new Expr(get(5));
     }
 }

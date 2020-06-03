@@ -14,7 +14,7 @@ public final class Atom extends NodeWrapper {
     }
 
     public Atom1 lparSumRpar() {
-        return get(0, Atom1.class);
+        return new Atom1(get(0));
     }
 
     public boolean hasLparSumRpar() {
@@ -22,7 +22,7 @@ public final class Atom extends NodeWrapper {
     }
 
     public Atom2 atom2() {
-        return get(1, Atom2.class);
+        return new Atom2(get(1));
     }
 
     public boolean hasAtom2() {
@@ -55,7 +55,7 @@ public final class Atom extends NodeWrapper {
         }
 
         public Sum sum() {
-            return get(1, Sum.class);
+            return new Sum(get(1));
         }
     }
 
@@ -73,7 +73,7 @@ public final class Atom extends NodeWrapper {
         }
 
         public Parameters parameters() {
-            return get(2, Parameters.class);
+            return new Parameters(get(2));
         }
 
         public boolean hasParameters() {

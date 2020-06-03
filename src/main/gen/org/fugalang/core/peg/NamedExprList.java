@@ -15,7 +15,7 @@ public final class NamedExprList extends NodeWrapper {
     }
 
     public List<NamedExprStar> namedExprStars() {
-        return getList(0, NamedExprStar.class);
+        return getList(0, NamedExprStar::new);
     }
 
     public boolean isComma() {

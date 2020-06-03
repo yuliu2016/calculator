@@ -13,7 +13,7 @@ public final class SliceExpr extends NodeWrapper {
     }
 
     public Expr expr() {
-        return get(1, Expr.class);
+        return new Expr(get(1));
     }
 
     public boolean hasExpr() {

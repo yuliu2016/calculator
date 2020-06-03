@@ -18,7 +18,7 @@ public final class TypedArg extends NodeWrapper {
     }
 
     public TypedArg2 colonExpr() {
-        return get(1, TypedArg2.class);
+        return new TypedArg2(get(1));
     }
 
     public boolean hasColonExpr() {
@@ -35,7 +35,7 @@ public final class TypedArg extends NodeWrapper {
         }
 
         public Expr expr() {
-            return get(1, Expr.class);
+            return new Expr(get(1));
         }
     }
 }

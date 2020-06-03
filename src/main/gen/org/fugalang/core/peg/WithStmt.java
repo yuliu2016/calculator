@@ -15,10 +15,10 @@ public final class WithStmt extends NodeWrapper {
     }
 
     public List<ExprAsName> exprAsNames() {
-        return getList(1, ExprAsName.class);
+        return getList(1, ExprAsName::new);
     }
 
     public Suite suite() {
-        return get(2, Suite.class);
+        return new Suite(get(2));
     }
 }

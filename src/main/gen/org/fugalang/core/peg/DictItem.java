@@ -13,7 +13,7 @@ public final class DictItem extends NodeWrapper {
     }
 
     public DictItem1 exprColonExpr() {
-        return get(0, DictItem1.class);
+        return new DictItem1(get(0));
     }
 
     public boolean hasExprColonExpr() {
@@ -21,7 +21,7 @@ public final class DictItem extends NodeWrapper {
     }
 
     public DictItem2 powerBitwiseOr() {
-        return get(1, DictItem2.class);
+        return new DictItem2(get(1));
     }
 
     public boolean hasPowerBitwiseOr() {
@@ -38,11 +38,11 @@ public final class DictItem extends NodeWrapper {
         }
 
         public Expr expr() {
-            return get(0, Expr.class);
+            return new Expr(get(0));
         }
 
         public Expr expr1() {
-            return get(2, Expr.class);
+            return new Expr(get(2));
         }
     }
 
@@ -56,7 +56,7 @@ public final class DictItem extends NodeWrapper {
         }
 
         public BitwiseOr bitwiseOr() {
-            return get(1, BitwiseOr.class);
+            return new BitwiseOr(get(1));
         }
     }
 }

@@ -13,6 +13,6 @@ public final class DelStmt extends NodeWrapper {
     }
 
     public Targetlist targetlist() {
-        return get(1, Targetlist.class);
+        return new Targetlist(get(1));
     }
 }

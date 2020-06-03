@@ -13,7 +13,7 @@ public final class BitwiseXor extends NodeWrapper {
     }
 
     public BitwiseXor1 bitwiseXorBitXorBitwiseAnd() {
-        return get(0, BitwiseXor1.class);
+        return new BitwiseXor1(get(0));
     }
 
     public boolean hasBitwiseXorBitXorBitwiseAnd() {
@@ -21,7 +21,7 @@ public final class BitwiseXor extends NodeWrapper {
     }
 
     public BitwiseAnd bitwiseAnd() {
-        return get(1, BitwiseAnd.class);
+        return new BitwiseAnd(get(1));
     }
 
     public boolean hasBitwiseAnd() {
@@ -38,11 +38,11 @@ public final class BitwiseXor extends NodeWrapper {
         }
 
         public BitwiseXor bitwiseXor() {
-            return get(0, BitwiseXor.class);
+            return new BitwiseXor(get(0));
         }
 
         public BitwiseAnd bitwiseAnd() {
-            return get(2, BitwiseAnd.class);
+            return new BitwiseAnd(get(2));
         }
     }
 }

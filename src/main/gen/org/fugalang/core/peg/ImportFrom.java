@@ -13,10 +13,10 @@ public final class ImportFrom extends NodeWrapper {
     }
 
     public ImportFromNames importFromNames() {
-        return get(1, ImportFromNames.class);
+        return new ImportFromNames(get(1));
     }
 
     public ImportFromItems importFromItems() {
-        return get(3, ImportFromItems.class);
+        return new ImportFromItems(get(3));
     }
 }

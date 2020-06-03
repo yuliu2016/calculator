@@ -16,11 +16,11 @@ public final class OrRule extends NodeWrapper {
     }
 
     public AndRule andRule() {
-        return get(0, AndRule.class);
+        return new AndRule(get(0));
     }
 
     public List<OrRule2> orRule2s() {
-        return getList(1, OrRule2.class);
+        return getList(1, OrRule2::new);
     }
 
     /**
@@ -41,7 +41,7 @@ public final class OrRule extends NodeWrapper {
         }
 
         public AndRule andRule() {
-            return get(2, AndRule.class);
+            return new AndRule(get(2));
         }
     }
 }

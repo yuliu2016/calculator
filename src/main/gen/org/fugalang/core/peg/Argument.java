@@ -14,7 +14,7 @@ public final class Argument extends NodeWrapper {
     }
 
     public Argument1 nameAsgnExprExpr() {
-        return get(0, Argument1.class);
+        return new Argument1(get(0));
     }
 
     public boolean hasNameAsgnExprExpr() {
@@ -22,7 +22,7 @@ public final class Argument extends NodeWrapper {
     }
 
     public Argument2 nameAssignExpr() {
-        return get(1, Argument2.class);
+        return new Argument2(get(1));
     }
 
     public boolean hasNameAssignExpr() {
@@ -30,7 +30,7 @@ public final class Argument extends NodeWrapper {
     }
 
     public Argument3 powerExpr() {
-        return get(2, Argument3.class);
+        return new Argument3(get(2));
     }
 
     public boolean hasPowerExpr() {
@@ -38,7 +38,7 @@ public final class Argument extends NodeWrapper {
     }
 
     public Argument4 timesExpr() {
-        return get(3, Argument4.class);
+        return new Argument4(get(3));
     }
 
     public boolean hasTimesExpr() {
@@ -46,7 +46,7 @@ public final class Argument extends NodeWrapper {
     }
 
     public Expr expr() {
-        return get(4, Expr.class);
+        return new Expr(get(4));
     }
 
     public boolean hasExpr() {
@@ -67,7 +67,7 @@ public final class Argument extends NodeWrapper {
         }
 
         public Expr expr() {
-            return get(2, Expr.class);
+            return new Expr(get(2));
         }
     }
 
@@ -85,7 +85,7 @@ public final class Argument extends NodeWrapper {
         }
 
         public Expr expr() {
-            return get(2, Expr.class);
+            return new Expr(get(2));
         }
     }
 
@@ -99,7 +99,7 @@ public final class Argument extends NodeWrapper {
         }
 
         public Expr expr() {
-            return get(1, Expr.class);
+            return new Expr(get(1));
         }
     }
 
@@ -113,7 +113,7 @@ public final class Argument extends NodeWrapper {
         }
 
         public Expr expr() {
-            return get(1, Expr.class);
+            return new Expr(get(1));
         }
     }
 }

@@ -13,11 +13,11 @@ public final class DottedAsName extends NodeWrapper {
     }
 
     public DottedName dottedName() {
-        return get(0, DottedName.class);
+        return new DottedName(get(0));
     }
 
     public AsName asName() {
-        return get(1, AsName.class);
+        return new AsName(get(1));
     }
 
     public boolean hasAsName() {

@@ -18,7 +18,7 @@ public final class ImportAsName extends NodeWrapper {
     }
 
     public AsName asName() {
-        return get(1, AsName.class);
+        return new AsName(get(1));
     }
 
     public boolean hasAsName() {

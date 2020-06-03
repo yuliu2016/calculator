@@ -13,7 +13,7 @@ public final class ShiftExpr extends NodeWrapper {
     }
 
     public ShiftExpr1 shiftExprLshiftSum() {
-        return get(0, ShiftExpr1.class);
+        return new ShiftExpr1(get(0));
     }
 
     public boolean hasShiftExprLshiftSum() {
@@ -21,7 +21,7 @@ public final class ShiftExpr extends NodeWrapper {
     }
 
     public ShiftExpr2 shiftExprRshiftSum() {
-        return get(1, ShiftExpr2.class);
+        return new ShiftExpr2(get(1));
     }
 
     public boolean hasShiftExprRshiftSum() {
@@ -29,7 +29,7 @@ public final class ShiftExpr extends NodeWrapper {
     }
 
     public Sum sum() {
-        return get(2, Sum.class);
+        return new Sum(get(2));
     }
 
     public boolean hasSum() {
@@ -46,11 +46,11 @@ public final class ShiftExpr extends NodeWrapper {
         }
 
         public ShiftExpr shiftExpr() {
-            return get(0, ShiftExpr.class);
+            return new ShiftExpr(get(0));
         }
 
         public Sum sum() {
-            return get(2, Sum.class);
+            return new Sum(get(2));
         }
     }
 
@@ -64,11 +64,11 @@ public final class ShiftExpr extends NodeWrapper {
         }
 
         public ShiftExpr shiftExpr() {
-            return get(0, ShiftExpr.class);
+            return new ShiftExpr(get(0));
         }
 
         public Sum sum() {
-            return get(2, Sum.class);
+            return new Sum(get(2));
         }
     }
 }

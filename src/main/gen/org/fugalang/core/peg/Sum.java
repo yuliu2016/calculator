@@ -13,7 +13,7 @@ public final class Sum extends NodeWrapper {
     }
 
     public Sum1 sumPlusTerm() {
-        return get(0, Sum1.class);
+        return new Sum1(get(0));
     }
 
     public boolean hasSumPlusTerm() {
@@ -21,7 +21,7 @@ public final class Sum extends NodeWrapper {
     }
 
     public Sum2 sumMinusTerm() {
-        return get(1, Sum2.class);
+        return new Sum2(get(1));
     }
 
     public boolean hasSumMinusTerm() {
@@ -29,7 +29,7 @@ public final class Sum extends NodeWrapper {
     }
 
     public Term term() {
-        return get(2, Term.class);
+        return new Term(get(2));
     }
 
     public boolean hasTerm() {
@@ -46,11 +46,11 @@ public final class Sum extends NodeWrapper {
         }
 
         public Sum sum() {
-            return get(0, Sum.class);
+            return new Sum(get(0));
         }
 
         public Term term() {
-            return get(2, Term.class);
+            return new Term(get(2));
         }
     }
 
@@ -64,11 +64,11 @@ public final class Sum extends NodeWrapper {
         }
 
         public Sum sum() {
-            return get(0, Sum.class);
+            return new Sum(get(0));
         }
 
         public Term term() {
-            return get(2, Term.class);
+            return new Term(get(2));
         }
     }
 }

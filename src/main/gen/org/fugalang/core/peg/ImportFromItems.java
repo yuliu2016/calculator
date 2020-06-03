@@ -17,7 +17,7 @@ public final class ImportFromItems extends NodeWrapper {
     }
 
     public ImportFromItems2 importFromItems2() {
-        return get(1, ImportFromItems2.class);
+        return new ImportFromItems2(get(1));
     }
 
     public boolean hasImportFromItems2() {
@@ -25,7 +25,7 @@ public final class ImportFromItems extends NodeWrapper {
     }
 
     public ImportAsNames importAsNames() {
-        return get(2, ImportAsNames.class);
+        return new ImportAsNames(get(2));
     }
 
     public boolean hasImportAsNames() {
@@ -42,7 +42,7 @@ public final class ImportFromItems extends NodeWrapper {
         }
 
         public ImportAsNames importAsNames() {
-            return get(1, ImportAsNames.class);
+            return new ImportAsNames(get(1));
         }
 
         public boolean isComma() {

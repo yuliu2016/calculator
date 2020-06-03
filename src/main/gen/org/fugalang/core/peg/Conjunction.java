@@ -13,7 +13,7 @@ public final class Conjunction extends NodeWrapper {
     }
 
     public Conjunction1 conjunctionAndInversion() {
-        return get(0, Conjunction1.class);
+        return new Conjunction1(get(0));
     }
 
     public boolean hasConjunctionAndInversion() {
@@ -21,7 +21,7 @@ public final class Conjunction extends NodeWrapper {
     }
 
     public Inversion inversion() {
-        return get(1, Inversion.class);
+        return new Inversion(get(1));
     }
 
     public boolean hasInversion() {
@@ -38,11 +38,11 @@ public final class Conjunction extends NodeWrapper {
         }
 
         public Conjunction conjunction() {
-            return get(0, Conjunction.class);
+            return new Conjunction(get(0));
         }
 
         public Inversion inversion() {
-            return get(2, Inversion.class);
+            return new Inversion(get(2));
         }
     }
 }

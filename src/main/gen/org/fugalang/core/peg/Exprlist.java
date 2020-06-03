@@ -15,7 +15,7 @@ public final class Exprlist extends NodeWrapper {
     }
 
     public List<Expr> exprs() {
-        return getList(0, Expr.class);
+        return getList(0, Expr::new);
     }
 
     public boolean isComma() {

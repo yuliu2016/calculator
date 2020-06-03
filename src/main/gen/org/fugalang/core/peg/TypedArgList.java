@@ -13,7 +13,7 @@ public final class TypedArgList extends NodeWrapper {
     }
 
     public Kwargs kwargs() {
-        return get(0, Kwargs.class);
+        return new Kwargs(get(0));
     }
 
     public boolean hasKwargs() {
@@ -21,7 +21,7 @@ public final class TypedArgList extends NodeWrapper {
     }
 
     public ArgsKwargs argsKwargs() {
-        return get(1, ArgsKwargs.class);
+        return new ArgsKwargs(get(1));
     }
 
     public boolean hasArgsKwargs() {
@@ -29,7 +29,7 @@ public final class TypedArgList extends NodeWrapper {
     }
 
     public FullArgList fullArgList() {
-        return get(2, FullArgList.class);
+        return new FullArgList(get(2));
     }
 
     public boolean hasFullArgList() {

@@ -19,11 +19,11 @@ public final class Assignment extends NodeWrapper {
     }
 
     public ExprlistStar exprlistStar() {
-        return get(1, ExprlistStar.class);
+        return new ExprlistStar(get(1));
     }
 
     public Assignment3 assignment3() {
-        return get(2, Assignment3.class);
+        return new Assignment3(get(2));
     }
 
     public boolean hasAssignment3() {
@@ -40,7 +40,7 @@ public final class Assignment extends NodeWrapper {
         }
 
         public Annassign annassign() {
-            return get(0, Annassign.class);
+            return new Annassign(get(0));
         }
 
         public boolean hasAnnassign() {
@@ -48,11 +48,11 @@ public final class Assignment extends NodeWrapper {
         }
 
         public List<Assignment32> assignExprlistStars() {
-            return getList(1, Assignment32.class);
+            return getList(1, Assignment32::new);
         }
 
         public Assignment33 augassignExprlist() {
-            return get(2, Assignment33.class);
+            return new Assignment33(get(2));
         }
 
         public boolean hasAugassignExprlist() {
@@ -70,7 +70,7 @@ public final class Assignment extends NodeWrapper {
         }
 
         public ExprlistStar exprlistStar() {
-            return get(1, ExprlistStar.class);
+            return new ExprlistStar(get(1));
         }
     }
 
@@ -84,11 +84,11 @@ public final class Assignment extends NodeWrapper {
         }
 
         public Augassign augassign() {
-            return get(0, Augassign.class);
+            return new Augassign(get(0));
         }
 
         public Exprlist exprlist() {
-            return get(1, Exprlist.class);
+            return new Exprlist(get(1));
         }
     }
 }

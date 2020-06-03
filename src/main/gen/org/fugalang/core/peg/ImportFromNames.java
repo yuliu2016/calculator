@@ -15,7 +15,7 @@ public final class ImportFromNames extends NodeWrapper {
     }
 
     public DottedName dottedName() {
-        return get(0, DottedName.class);
+        return new DottedName(get(0));
     }
 
     public boolean hasDottedName() {
@@ -23,7 +23,7 @@ public final class ImportFromNames extends NodeWrapper {
     }
 
     public ImportFromNames2 importFromNames2() {
-        return get(1, ImportFromNames2.class);
+        return new ImportFromNames2(get(1));
     }
 
     public boolean hasImportFromNames2() {
@@ -44,7 +44,7 @@ public final class ImportFromNames extends NodeWrapper {
         }
 
         public DottedName dottedName() {
-            return get(1, DottedName.class);
+            return new DottedName(get(1));
         }
 
         public boolean hasDottedName() {

@@ -13,11 +13,11 @@ public final class ExprAsName extends NodeWrapper {
     }
 
     public Expr expr() {
-        return get(0, Expr.class);
+        return new Expr(get(0));
     }
 
     public AsName asName() {
-        return get(1, AsName.class);
+        return new AsName(get(1));
     }
 
     public boolean hasAsName() {

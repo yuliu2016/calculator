@@ -14,7 +14,7 @@ public final class Item extends NodeWrapper {
     }
 
     public Group group() {
-        return get(0, Group.class);
+        return new Group(get(0));
     }
 
     public boolean hasGroup() {
@@ -22,7 +22,7 @@ public final class Item extends NodeWrapper {
     }
 
     public Optional optional() {
-        return get(1, Optional.class);
+        return new Optional(get(1));
     }
 
     public boolean hasOptional() {

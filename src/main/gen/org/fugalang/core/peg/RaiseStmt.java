@@ -13,7 +13,7 @@ public final class RaiseStmt extends NodeWrapper {
     }
 
     public RaiseStmt2 raiseStmt2() {
-        return get(1, RaiseStmt2.class);
+        return new RaiseStmt2(get(1));
     }
 
     public boolean hasRaiseStmt2() {
@@ -30,11 +30,11 @@ public final class RaiseStmt extends NodeWrapper {
         }
 
         public Expr expr() {
-            return get(0, Expr.class);
+            return new Expr(get(0));
         }
 
         public RaiseStmt22 fromExpr() {
-            return get(1, RaiseStmt22.class);
+            return new RaiseStmt22(get(1));
         }
 
         public boolean hasFromExpr() {
@@ -52,7 +52,7 @@ public final class RaiseStmt extends NodeWrapper {
         }
 
         public Expr expr() {
-            return get(1, Expr.class);
+            return new Expr(get(1));
         }
     }
 }

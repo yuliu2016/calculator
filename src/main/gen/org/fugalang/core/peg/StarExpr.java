@@ -13,6 +13,6 @@ public final class StarExpr extends NodeWrapper {
     }
 
     public BitwiseOr bitwiseOr() {
-        return get(1, BitwiseOr.class);
+        return new BitwiseOr(get(1));
     }
 }

@@ -13,6 +13,6 @@ public final class ElseSuite extends NodeWrapper {
     }
 
     public Suite suite() {
-        return get(1, Suite.class);
+        return new Suite(get(1));
     }
 }

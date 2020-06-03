@@ -41,7 +41,7 @@ public final class CompOp extends NodeWrapper {
     }
 
     public CompOp8 notIn() {
-        return get(7, CompOp8.class);
+        return new CompOp8(get(7));
     }
 
     public boolean hasNotIn() {
@@ -53,7 +53,7 @@ public final class CompOp extends NodeWrapper {
     }
 
     public CompOp10 isNot() {
-        return get(9, CompOp10.class);
+        return new CompOp10(get(9));
     }
 
     public boolean hasIsNot() {

@@ -18,7 +18,7 @@ public final class SingleRule extends NodeWrapper {
     }
 
     public SingleRule3 newlineBitOr() {
-        return get(2, SingleRule3.class);
+        return new SingleRule3(get(2));
     }
 
     public boolean hasNewlineBitOr() {
@@ -26,7 +26,7 @@ public final class SingleRule extends NodeWrapper {
     }
 
     public OrRule orRule() {
-        return get(3, OrRule.class);
+        return new OrRule(get(3));
     }
 
     public String newline() {

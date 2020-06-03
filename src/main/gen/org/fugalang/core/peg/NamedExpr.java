@@ -14,7 +14,7 @@ public final class NamedExpr extends NodeWrapper {
     }
 
     public NamedExpr1 nameAsgnExprExpr() {
-        return get(0, NamedExpr1.class);
+        return new NamedExpr1(get(0));
     }
 
     public boolean hasNameAsgnExprExpr() {
@@ -22,7 +22,7 @@ public final class NamedExpr extends NodeWrapper {
     }
 
     public Expr expr() {
-        return get(1, Expr.class);
+        return new Expr(get(1));
     }
 
     public boolean hasExpr() {
@@ -43,7 +43,7 @@ public final class NamedExpr extends NodeWrapper {
         }
 
         public Expr expr() {
-            return get(2, Expr.class);
+            return new Expr(get(2));
         }
     }
 }

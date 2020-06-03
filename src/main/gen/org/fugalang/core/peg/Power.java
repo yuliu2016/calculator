@@ -13,7 +13,7 @@ public final class Power extends NodeWrapper {
     }
 
     public Power1 primaryPowerFactor() {
-        return get(0, Power1.class);
+        return new Power1(get(0));
     }
 
     public boolean hasPrimaryPowerFactor() {
@@ -21,7 +21,7 @@ public final class Power extends NodeWrapper {
     }
 
     public Primary primary() {
-        return get(1, Primary.class);
+        return new Primary(get(1));
     }
 
     public boolean hasPrimary() {
@@ -38,11 +38,11 @@ public final class Power extends NodeWrapper {
         }
 
         public Primary primary() {
-            return get(0, Primary.class);
+            return new Primary(get(0));
         }
 
         public Factor factor() {
-            return get(2, Factor.class);
+            return new Factor(get(2));
         }
     }
 }

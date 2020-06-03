@@ -13,7 +13,7 @@ public final class ExceptClause extends NodeWrapper {
     }
 
     public ExprAsName exprAsName() {
-        return get(1, ExprAsName.class);
+        return new ExprAsName(get(1));
     }
 
     public boolean hasExprAsName() {
@@ -21,6 +21,6 @@ public final class ExceptClause extends NodeWrapper {
     }
 
     public Suite suite() {
-        return get(2, Suite.class);
+        return new Suite(get(2));
     }
 }

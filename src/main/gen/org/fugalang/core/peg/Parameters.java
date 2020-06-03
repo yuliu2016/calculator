@@ -13,7 +13,7 @@ public final class Parameters extends NodeWrapper {
     }
 
     public Arglist arglist() {
-        return get(1, Arglist.class);
+        return new Arglist(get(1));
     }
 
     public boolean hasArglist() {

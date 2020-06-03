@@ -13,7 +13,7 @@ public final class DictOrSet extends NodeWrapper {
     }
 
     public DictOrSet2 dictMakerOrExprlistStar() {
-        return get(1, DictOrSet2.class);
+        return new DictOrSet2(get(1));
     }
 
     public boolean hasDictMakerOrExprlistStar() {
@@ -30,7 +30,7 @@ public final class DictOrSet extends NodeWrapper {
         }
 
         public DictMaker dictMaker() {
-            return get(0, DictMaker.class);
+            return new DictMaker(get(0));
         }
 
         public boolean hasDictMaker() {
@@ -38,7 +38,7 @@ public final class DictOrSet extends NodeWrapper {
         }
 
         public ExprlistStar exprlistStar() {
-            return get(1, ExprlistStar.class);
+            return new ExprlistStar(get(1));
         }
 
         public boolean hasExprlistStar() {

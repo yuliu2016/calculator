@@ -13,7 +13,7 @@ public final class Disjunction extends NodeWrapper {
     }
 
     public Disjunction1 disjunctionOrConjunction() {
-        return get(0, Disjunction1.class);
+        return new Disjunction1(get(0));
     }
 
     public boolean hasDisjunctionOrConjunction() {
@@ -21,7 +21,7 @@ public final class Disjunction extends NodeWrapper {
     }
 
     public Conjunction conjunction() {
-        return get(1, Conjunction.class);
+        return new Conjunction(get(1));
     }
 
     public boolean hasConjunction() {
@@ -38,11 +38,11 @@ public final class Disjunction extends NodeWrapper {
         }
 
         public Disjunction disjunction() {
-            return get(0, Disjunction.class);
+            return new Disjunction(get(0));
         }
 
         public Conjunction conjunction() {
-            return get(2, Conjunction.class);
+            return new Conjunction(get(2));
         }
     }
 }

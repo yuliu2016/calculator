@@ -13,6 +13,6 @@ public final class Group extends NodeWrapper {
     }
 
     public OrRule orRule() {
-        return get(1, OrRule.class);
+        return new OrRule(get(1));
     }
 }

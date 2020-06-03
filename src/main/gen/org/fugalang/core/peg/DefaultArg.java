@@ -13,11 +13,11 @@ public final class DefaultArg extends NodeWrapper {
     }
 
     public TypedArg typedArg() {
-        return get(0, TypedArg.class);
+        return new TypedArg(get(0));
     }
 
     public DefaultArg2 assignExpr() {
-        return get(1, DefaultArg2.class);
+        return new DefaultArg2(get(1));
     }
 
     public boolean hasAssignExpr() {
@@ -34,7 +34,7 @@ public final class DefaultArg extends NodeWrapper {
         }
 
         public Expr expr() {
-            return get(1, Expr.class);
+            return new Expr(get(1));
         }
     }
 }

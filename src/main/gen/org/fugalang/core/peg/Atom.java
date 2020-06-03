@@ -14,7 +14,7 @@ public final class Atom extends NodeWrapper {
     }
 
     public TupleAtom tupleAtom() {
-        return get(0, TupleAtom.class);
+        return new TupleAtom(get(0));
     }
 
     public boolean hasTupleAtom() {
@@ -22,7 +22,7 @@ public final class Atom extends NodeWrapper {
     }
 
     public ListAtom listAtom() {
-        return get(1, ListAtom.class);
+        return new ListAtom(get(1));
     }
 
     public boolean hasListAtom() {
@@ -30,7 +30,7 @@ public final class Atom extends NodeWrapper {
     }
 
     public DictOrSet dictOrSet() {
-        return get(2, DictOrSet.class);
+        return new DictOrSet(get(2));
     }
 
     public boolean hasDictOrSet() {

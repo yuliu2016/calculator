@@ -15,11 +15,11 @@ public final class ExceptSuite extends NodeWrapper {
     }
 
     public List<ExceptClause> exceptClauses() {
-        return getList(0, ExceptClause.class);
+        return getList(0, ExceptClause::new);
     }
 
     public ElseSuite elseSuite() {
-        return get(1, ElseSuite.class);
+        return new ElseSuite(get(1));
     }
 
     public boolean hasElseSuite() {
@@ -27,7 +27,7 @@ public final class ExceptSuite extends NodeWrapper {
     }
 
     public FinallySuite finallySuite() {
-        return get(2, FinallySuite.class);
+        return new FinallySuite(get(2));
     }
 
     public boolean hasFinallySuite() {

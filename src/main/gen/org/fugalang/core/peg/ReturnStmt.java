@@ -13,7 +13,7 @@ public final class ReturnStmt extends NodeWrapper {
     }
 
     public ExprlistStar exprlistStar() {
-        return get(1, ExprlistStar.class);
+        return new ExprlistStar(get(1));
     }
 
     public boolean hasExprlistStar() {

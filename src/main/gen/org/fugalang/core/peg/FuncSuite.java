@@ -13,7 +13,7 @@ public final class FuncSuite extends NodeWrapper {
     }
 
     public FuncSuite1 colonExpr() {
-        return get(0, FuncSuite1.class);
+        return new FuncSuite1(get(0));
     }
 
     public boolean hasColonExpr() {
@@ -21,7 +21,7 @@ public final class FuncSuite extends NodeWrapper {
     }
 
     public BlockSuite blockSuite() {
-        return get(1, BlockSuite.class);
+        return new BlockSuite(get(1));
     }
 
     public boolean hasBlockSuite() {
@@ -38,7 +38,7 @@ public final class FuncSuite extends NodeWrapper {
         }
 
         public Expr expr() {
-            return get(1, Expr.class);
+            return new Expr(get(1));
         }
     }
 }

@@ -18,7 +18,7 @@ public final class SimpleArg extends NodeWrapper {
     }
 
     public SimpleArg2 assignExpr() {
-        return get(1, SimpleArg2.class);
+        return new SimpleArg2(get(1));
     }
 
     public boolean hasAssignExpr() {
@@ -35,7 +35,7 @@ public final class SimpleArg extends NodeWrapper {
         }
 
         public Expr expr() {
-            return get(1, Expr.class);
+            return new Expr(get(1));
         }
     }
 }

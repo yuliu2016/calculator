@@ -15,6 +15,6 @@ public final class ImportAsNames extends NodeWrapper {
     }
 
     public List<ImportAsName> importAsNames() {
-        return getList(0, ImportAsName.class);
+        return getList(0, ImportAsName::new);
     }
 }

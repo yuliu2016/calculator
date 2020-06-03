@@ -14,7 +14,7 @@ public final class Primary extends NodeWrapper {
     }
 
     public Primary1 primaryDotName() {
-        return get(0, Primary1.class);
+        return new Primary1(get(0));
     }
 
     public boolean hasPrimaryDotName() {
@@ -22,7 +22,7 @@ public final class Primary extends NodeWrapper {
     }
 
     public Primary2 primaryParameters() {
-        return get(1, Primary2.class);
+        return new Primary2(get(1));
     }
 
     public boolean hasPrimaryParameters() {
@@ -30,7 +30,7 @@ public final class Primary extends NodeWrapper {
     }
 
     public Primary3 primarySubscript() {
-        return get(2, Primary3.class);
+        return new Primary3(get(2));
     }
 
     public boolean hasPrimarySubscript() {
@@ -38,7 +38,7 @@ public final class Primary extends NodeWrapper {
     }
 
     public Primary4 primaryBlockSuite() {
-        return get(3, Primary4.class);
+        return new Primary4(get(3));
     }
 
     public boolean hasPrimaryBlockSuite() {
@@ -46,7 +46,7 @@ public final class Primary extends NodeWrapper {
     }
 
     public Atom atom() {
-        return get(4, Atom.class);
+        return new Atom(get(4));
     }
 
     public boolean hasAtom() {
@@ -63,7 +63,7 @@ public final class Primary extends NodeWrapper {
         }
 
         public Primary primary() {
-            return get(0, Primary.class);
+            return new Primary(get(0));
         }
 
         public String name() {
@@ -81,11 +81,11 @@ public final class Primary extends NodeWrapper {
         }
 
         public Primary primary() {
-            return get(0, Primary.class);
+            return new Primary(get(0));
         }
 
         public Parameters parameters() {
-            return get(1, Parameters.class);
+            return new Parameters(get(1));
         }
     }
 
@@ -99,11 +99,11 @@ public final class Primary extends NodeWrapper {
         }
 
         public Primary primary() {
-            return get(0, Primary.class);
+            return new Primary(get(0));
         }
 
         public Subscript subscript() {
-            return get(1, Subscript.class);
+            return new Subscript(get(1));
         }
     }
 
@@ -117,11 +117,11 @@ public final class Primary extends NodeWrapper {
         }
 
         public Primary primary() {
-            return get(0, Primary.class);
+            return new Primary(get(0));
         }
 
         public BlockSuite blockSuite() {
-            return get(1, BlockSuite.class);
+            return new BlockSuite(get(1));
         }
     }
 }

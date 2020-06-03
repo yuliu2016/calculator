@@ -15,7 +15,7 @@ public final class Parameters extends NodeWrapper {
     }
 
     public List<Sum> sums() {
-        return getList(0, Sum.class);
+        return getList(0, Sum::new);
     }
 
     public boolean isComma() {

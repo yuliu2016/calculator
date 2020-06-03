@@ -15,6 +15,6 @@ public final class DottedAsNames extends NodeWrapper {
     }
 
     public List<DottedAsName> dottedAsNames() {
-        return getList(0, DottedAsName.class);
+        return getList(0, DottedAsName::new);
     }
 }

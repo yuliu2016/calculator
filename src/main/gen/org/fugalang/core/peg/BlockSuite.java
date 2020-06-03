@@ -16,7 +16,7 @@ public final class BlockSuite extends NodeWrapper {
     }
 
     public BlockSuite1 lbraceSimpleStmtRbrace() {
-        return get(0, BlockSuite1.class);
+        return new BlockSuite1(get(0));
     }
 
     public boolean hasLbraceSimpleStmtRbrace() {
@@ -24,7 +24,7 @@ public final class BlockSuite extends NodeWrapper {
     }
 
     public BlockSuite2 blockSuite2() {
-        return get(1, BlockSuite2.class);
+        return new BlockSuite2(get(1));
     }
 
     public boolean hasBlockSuite2() {
@@ -41,7 +41,7 @@ public final class BlockSuite extends NodeWrapper {
         }
 
         public SimpleStmt simpleStmt() {
-            return get(1, SimpleStmt.class);
+            return new SimpleStmt(get(1));
         }
     }
 
@@ -59,7 +59,7 @@ public final class BlockSuite extends NodeWrapper {
         }
 
         public List<Stmt> stmts() {
-            return getList(2, Stmt.class);
+            return getList(2, Stmt::new);
         }
     }
 }

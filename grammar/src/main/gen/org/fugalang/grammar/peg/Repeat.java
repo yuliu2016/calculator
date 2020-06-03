@@ -13,7 +13,7 @@ public final class Repeat extends NodeWrapper {
     }
 
     public Delimited delimited() {
-        return get(0, Delimited.class);
+        return new Delimited(get(0));
     }
 
     public boolean hasDelimited() {
@@ -21,7 +21,7 @@ public final class Repeat extends NodeWrapper {
     }
 
     public Repeat2 itemTimes() {
-        return get(1, Repeat2.class);
+        return new Repeat2(get(1));
     }
 
     public boolean hasItemTimes() {
@@ -29,7 +29,7 @@ public final class Repeat extends NodeWrapper {
     }
 
     public Repeat3 itemPlus() {
-        return get(2, Repeat3.class);
+        return new Repeat3(get(2));
     }
 
     public boolean hasItemPlus() {
@@ -37,7 +37,7 @@ public final class Repeat extends NodeWrapper {
     }
 
     public Item item() {
-        return get(3, Item.class);
+        return new Item(get(3));
     }
 
     public boolean hasItem() {
@@ -54,7 +54,7 @@ public final class Repeat extends NodeWrapper {
         }
 
         public Item item() {
-            return get(0, Item.class);
+            return new Item(get(0));
         }
     }
 
@@ -68,7 +68,7 @@ public final class Repeat extends NodeWrapper {
         }
 
         public Item item() {
-            return get(0, Item.class);
+            return new Item(get(0));
         }
     }
 }

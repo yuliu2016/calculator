@@ -15,7 +15,7 @@ public final class Arglist extends NodeWrapper {
     }
 
     public List<Argument> arguments() {
-        return getList(0, Argument.class);
+        return getList(0, Argument::new);
     }
 
     public boolean isComma() {

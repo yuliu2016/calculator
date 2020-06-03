@@ -22,7 +22,7 @@ public final class Target extends NodeWrapper {
     }
 
     public Target2 lparTargetlistRpar() {
-        return get(1, Target2.class);
+        return new Target2(get(1));
     }
 
     public boolean hasLparTargetlistRpar() {
@@ -30,7 +30,7 @@ public final class Target extends NodeWrapper {
     }
 
     public Target3 timesTarget() {
-        return get(2, Target3.class);
+        return new Target3(get(2));
     }
 
     public boolean hasTimesTarget() {
@@ -38,7 +38,7 @@ public final class Target extends NodeWrapper {
     }
 
     public Primary primary() {
-        return get(3, Primary.class);
+        return new Primary(get(3));
     }
 
     public boolean hasPrimary() {
@@ -55,7 +55,7 @@ public final class Target extends NodeWrapper {
         }
 
         public Targetlist targetlist() {
-            return get(1, Targetlist.class);
+            return new Targetlist(get(1));
         }
     }
 
@@ -69,7 +69,7 @@ public final class Target extends NodeWrapper {
         }
 
         public Target target() {
-            return get(1, Target.class);
+            return new Target(get(1));
         }
     }
 }

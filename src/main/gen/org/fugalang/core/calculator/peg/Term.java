@@ -13,7 +13,7 @@ public final class Term extends NodeWrapper {
     }
 
     public Term1 termTimesFactor() {
-        return get(0, Term1.class);
+        return new Term1(get(0));
     }
 
     public boolean hasTermTimesFactor() {
@@ -21,7 +21,7 @@ public final class Term extends NodeWrapper {
     }
 
     public Term2 termDivFactor() {
-        return get(1, Term2.class);
+        return new Term2(get(1));
     }
 
     public boolean hasTermDivFactor() {
@@ -29,7 +29,7 @@ public final class Term extends NodeWrapper {
     }
 
     public Term3 termModulusFactor() {
-        return get(2, Term3.class);
+        return new Term3(get(2));
     }
 
     public boolean hasTermModulusFactor() {
@@ -37,7 +37,7 @@ public final class Term extends NodeWrapper {
     }
 
     public Factor factor() {
-        return get(3, Factor.class);
+        return new Factor(get(3));
     }
 
     public boolean hasFactor() {
@@ -54,11 +54,11 @@ public final class Term extends NodeWrapper {
         }
 
         public Term term() {
-            return get(0, Term.class);
+            return new Term(get(0));
         }
 
         public Factor factor() {
-            return get(2, Factor.class);
+            return new Factor(get(2));
         }
     }
 
@@ -72,11 +72,11 @@ public final class Term extends NodeWrapper {
         }
 
         public Term term() {
-            return get(0, Term.class);
+            return new Term(get(0));
         }
 
         public Factor factor() {
-            return get(2, Factor.class);
+            return new Factor(get(2));
         }
     }
 
@@ -90,11 +90,11 @@ public final class Term extends NodeWrapper {
         }
 
         public Term term() {
-            return get(0, Term.class);
+            return new Term(get(0));
         }
 
         public Factor factor() {
-            return get(2, Factor.class);
+            return new Factor(get(2));
         }
     }
 }

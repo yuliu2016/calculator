@@ -13,7 +13,7 @@ public final class Factor extends NodeWrapper {
     }
 
     public Factor1 plusFactor() {
-        return get(0, Factor1.class);
+        return new Factor1(get(0));
     }
 
     public boolean hasPlusFactor() {
@@ -21,7 +21,7 @@ public final class Factor extends NodeWrapper {
     }
 
     public Factor2 minusFactor() {
-        return get(1, Factor2.class);
+        return new Factor2(get(1));
     }
 
     public boolean hasMinusFactor() {
@@ -29,7 +29,7 @@ public final class Factor extends NodeWrapper {
     }
 
     public Factor3 bitNotFactor() {
-        return get(2, Factor3.class);
+        return new Factor3(get(2));
     }
 
     public boolean hasBitNotFactor() {
@@ -37,7 +37,7 @@ public final class Factor extends NodeWrapper {
     }
 
     public Power power() {
-        return get(3, Power.class);
+        return new Power(get(3));
     }
 
     public boolean hasPower() {
@@ -54,7 +54,7 @@ public final class Factor extends NodeWrapper {
         }
 
         public Factor factor() {
-            return get(1, Factor.class);
+            return new Factor(get(1));
         }
     }
 
@@ -68,7 +68,7 @@ public final class Factor extends NodeWrapper {
         }
 
         public Factor factor() {
-            return get(1, Factor.class);
+            return new Factor(get(1));
         }
     }
 
@@ -82,7 +82,7 @@ public final class Factor extends NodeWrapper {
         }
 
         public Factor factor() {
-            return get(1, Factor.class);
+            return new Factor(get(1));
         }
     }
 }

@@ -15,11 +15,11 @@ public final class FuncArgs extends NodeWrapper {
     }
 
     public List<SimpleArg> simpleArgs() {
-        return getList(0, SimpleArg.class);
+        return getList(0, SimpleArg::new);
     }
 
     public FuncArgs2 funcArgs2() {
-        return get(1, FuncArgs2.class);
+        return new FuncArgs2(get(1));
     }
 
     public boolean hasFuncArgs2() {
@@ -36,7 +36,7 @@ public final class FuncArgs extends NodeWrapper {
         }
 
         public TypedArgList typedArgList() {
-            return get(1, TypedArgList.class);
+            return new TypedArgList(get(1));
         }
 
         public boolean hasTypedArgList() {

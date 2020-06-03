@@ -18,6 +18,6 @@ public final class Delimited extends NodeWrapper {
     }
 
     public Item item() {
-        return get(2, Item.class);
+        return new Item(get(2));
     }
 }

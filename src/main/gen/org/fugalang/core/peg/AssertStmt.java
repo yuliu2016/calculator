@@ -13,11 +13,11 @@ public final class AssertStmt extends NodeWrapper {
     }
 
     public Expr expr() {
-        return get(1, Expr.class);
+        return new Expr(get(1));
     }
 
     public AssertStmt3 commaExpr() {
-        return get(2, AssertStmt3.class);
+        return new AssertStmt3(get(2));
     }
 
     public boolean hasCommaExpr() {
@@ -34,7 +34,7 @@ public final class AssertStmt extends NodeWrapper {
         }
 
         public Expr expr() {
-            return get(1, Expr.class);
+            return new Expr(get(1));
         }
     }
 }

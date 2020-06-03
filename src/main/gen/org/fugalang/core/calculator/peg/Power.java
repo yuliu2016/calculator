@@ -13,7 +13,7 @@ public final class Power extends NodeWrapper {
     }
 
     public Power1 atomPowerFactor() {
-        return get(0, Power1.class);
+        return new Power1(get(0));
     }
 
     public boolean hasAtomPowerFactor() {
@@ -21,7 +21,7 @@ public final class Power extends NodeWrapper {
     }
 
     public Atom atom() {
-        return get(1, Atom.class);
+        return new Atom(get(1));
     }
 
     public boolean hasAtom() {
@@ -38,11 +38,11 @@ public final class Power extends NodeWrapper {
         }
 
         public Atom atom() {
-            return get(0, Atom.class);
+            return new Atom(get(0));
         }
 
         public Factor factor() {
-            return get(2, Factor.class);
+            return new Factor(get(2));
         }
     }
 }

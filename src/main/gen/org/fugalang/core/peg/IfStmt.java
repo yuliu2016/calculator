@@ -15,19 +15,19 @@ public final class IfStmt extends NodeWrapper {
     }
 
     public NamedExpr namedExpr() {
-        return get(1, NamedExpr.class);
+        return new NamedExpr(get(1));
     }
 
     public Suite suite() {
-        return get(2, Suite.class);
+        return new Suite(get(2));
     }
 
     public List<ElifStmt> elifStmts() {
-        return getList(3, ElifStmt.class);
+        return getList(3, ElifStmt::new);
     }
 
     public ElseSuite elseSuite() {
-        return get(4, ElseSuite.class);
+        return new ElseSuite(get(4));
     }
 
     public boolean hasElseSuite() {

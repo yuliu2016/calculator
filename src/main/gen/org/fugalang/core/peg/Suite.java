@@ -13,7 +13,7 @@ public final class Suite extends NodeWrapper {
     }
 
     public Suite1 colonSimpleStmt() {
-        return get(0, Suite1.class);
+        return new Suite1(get(0));
     }
 
     public boolean hasColonSimpleStmt() {
@@ -21,7 +21,7 @@ public final class Suite extends NodeWrapper {
     }
 
     public BlockSuite blockSuite() {
-        return get(1, BlockSuite.class);
+        return new BlockSuite(get(1));
     }
 
     public boolean hasBlockSuite() {
@@ -38,7 +38,7 @@ public final class Suite extends NodeWrapper {
         }
 
         public SimpleStmt simpleStmt() {
-            return get(1, SimpleStmt.class);
+            return new SimpleStmt(get(1));
         }
     }
 }

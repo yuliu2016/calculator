@@ -13,19 +13,19 @@ public final class ForStmt extends NodeWrapper {
     }
 
     public Targetlist targetlist() {
-        return get(1, Targetlist.class);
+        return new Targetlist(get(1));
     }
 
     public Exprlist exprlist() {
-        return get(3, Exprlist.class);
+        return new Exprlist(get(3));
     }
 
     public Suite suite() {
-        return get(4, Suite.class);
+        return new Suite(get(4));
     }
 
     public ElseSuite elseSuite() {
-        return get(5, ElseSuite.class);
+        return new ElseSuite(get(5));
     }
 
     public boolean hasElseSuite() {
