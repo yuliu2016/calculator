@@ -4,15 +4,46 @@ import org.fugalang.core.calculator.peg.*;
 
 @SuppressWarnings("unused")
 public interface CalculatorVisitor<T> {
-    T visitSum(Sum sum);
 
-    T visitTerm(Term term);
+    /**
+     * sum: sum '+' term | sum '-' term | term
+     */
+    default T visitSum(Sum sum) {
+        return null;
+    }
 
-    T visitFactor(Factor factor);
+    /**
+     * term: term '*' factor | term '/' factor | term '%' factor | factor
+     */
+    default T visitTerm(Term term) {
+        return null;
+    }
 
-    T visitPower(Power power);
+    /**
+     * factor: '+' factor | '-' factor | '~' factor | power
+     */
+    default T visitFactor(Factor factor) {
+        return null;
+    }
 
-    T visitAtom(Atom atom);
+    /**
+     * power: atom '**' factor | atom
+     */
+    default T visitPower(Power power) {
+        return null;
+    }
 
-    T visitParameters(Parameters parameters);
+    /**
+     * atom: '(' sum ')' | NAME '(' [parameters] ')' | NAME | NUMBER
+     */
+    default T visitAtom(Atom atom) {
+        return null;
+    }
+
+    /**
+     * parameters: ','.sum+ [',']
+     */
+    default T visitParameters(Parameters parameters) {
+        return null;
+    }
 }

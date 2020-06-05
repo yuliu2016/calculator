@@ -2,6 +2,7 @@ package org.fugalang.core.calculator;
 
 import org.fugalang.core.calculator.peg.*;
 import org.fugalang.core.calculator.peg.parser.CalculatorParser;
+import org.fugalang.core.calculator.peg.visitor.CalculatorVisitor;
 import org.fugalang.core.parser.SyntaxError;
 import org.fugalang.core.parser.impl.LazyParserContext;
 import org.fugalang.core.parser.impl.LexingVisitor;
@@ -10,61 +11,64 @@ import org.fugalang.core.token.SimpleLexer;
 
 import java.util.Scanner;
 
-public class Calculator {
+public class Calculator implements CalculatorVisitor<Double> {
 
-    private static double evalSum(Sum sum) {
+    @Override
+    public Double visitSum(Sum sum) {
         if (sum.hasSumPlusTerm()) {
             var expr = sum.sumPlusTerm();
-            return evalSum(expr.sum()) + evalTerm(expr.term());
+            return visitSum(expr.sum()) + visitTerm(expr.term());
         } else if (sum.hasSumMinusTerm()) {
             var expr = sum.sumMinusTerm();
-            return evalSum(expr.sum()) - evalTerm(expr.term());
+            return visitSum(expr.sum()) - visitTerm(expr.term());
         } else {
-            return evalTerm(sum.term());
+            return visitTerm(sum.term());
         }
     }
 
-    private static double evalTerm(Term term) {
+    @Override
+    public Double visitTerm(Term term) {
         if (term.hasTermTimesFactor()) {
             var expr = term.termTimesFactor();
-            return evalTerm(expr.term()) * evalFactor(expr.factor());
+            return visitTerm(expr.term()) * visitFactor(expr.factor());
         } else if (term.hasTermDivFactor()) {
             var expr = term.termDivFactor();
-            return evalTerm(expr.term()) / evalFactor(expr.factor());
+            return visitTerm(expr.term()) / visitFactor(expr.factor());
         } else if (term.hasTermModulusFactor()) {
             var expr = term.termModulusFactor();
-            return evalTerm(expr.term()) % evalFactor(expr.factor());
+            return visitTerm(expr.term()) % visitFactor(expr.factor());
         } else {
-            return evalFactor(term.factor());
+            return visitFactor(term.factor());
         }
     }
 
-    private static double evalFactor(Factor factor) {
-
+    @Override
+    public Double visitFactor(Factor factor) {
         if (factor.hasPlusFactor()) {
-            return +evalFactor(factor.plusFactor().factor());
+            return +visitFactor(factor.plusFactor().factor());
         } else if (factor.hasMinusFactor()) {
-            return -evalFactor(factor.minusFactor().factor());
+            return -visitFactor(factor.minusFactor().factor());
         } else if (factor.hasBitNotFactor()) {
-            return ~((int) evalFactor(factor.bitNotFactor().factor()));
+            return (double) ~visitFactor(factor.bitNotFactor().factor()).intValue();
         } else {
-            return evalPower(factor.power());
+            return visitPower(factor.power());
         }
     }
 
-    private static double evalPower(Power power) {
+    @Override
+    public Double visitPower(Power power) {
         if (power.hasAtomPowerFactor()) {
             var exp = power.atomPowerFactor();
-            return Math.pow(evalAtom(exp.atom()), evalFactor(exp.factor()));
+            return Math.pow(visitAtom(exp.atom()), visitFactor(exp.factor()));
         } else {
-            return evalAtom(power.atom());
+            return visitAtom(power.atom());
         }
     }
 
-    private static double evalAtom(Atom atom) {
-
+    @Override
+    public Double visitAtom(Atom atom) {
         if (atom.hasLparSumRpar()) {
-            return evalSum(atom.lparSumRpar().sum());
+            return visitSum(atom.lparSumRpar().sum());
         } else if (atom.hasAtom2()) {
             var call = atom.atom2();
             var name = call.name().toLowerCase();
@@ -75,7 +79,7 @@ public class Calculator {
                 resolved = new double[sums.size()];
                 int i = 0;
                 for (var sum : sums) {
-                    resolved[i] = evalSum(sum);
+                    resolved[i] = visitSum(sum);
                     i++;
                 }
             } else {
@@ -91,13 +95,13 @@ public class Calculator {
                     .replace("j", "");
 
             if (valStr.startsWith("0x")) {
-                return Integer.parseInt(valStr.substring(2), 16);
+                return (double) Integer.parseInt(valStr.substring(2), 16);
             }
             if (valStr.startsWith("0b")) {
-                return Integer.parseInt(valStr.substring(2), 2);
+                return (double) Integer.parseInt(valStr.substring(2), 2);
             }
             if (valStr.startsWith("0o")) {
-                return Integer.parseInt(valStr.substring(2), 8);
+                return (double) Integer.parseInt(valStr.substring(2), 8);
             }
             return Double.parseDouble(valStr);
         }
@@ -251,6 +255,7 @@ public class Calculator {
 
 
     public static void main(String[] args) {
+        var calculator = new Calculator();
         var scanner = new Scanner(System.in);
         String input;
         System.out.print(">>> ");
@@ -265,8 +270,7 @@ public class Calculator {
                 var context = LazyParserContext.of(lexer, visitor, false);
                 var tree = SimpleParseTree.parse(context, CalculatorParser::sum, Sum::new);
 
-                var result = evalSum(tree);
-
+                var result = calculator.visitSum(tree);
                 System.out.println(result);
             } catch (SyntaxError e) {
                 System.out.println(e.getMessage());

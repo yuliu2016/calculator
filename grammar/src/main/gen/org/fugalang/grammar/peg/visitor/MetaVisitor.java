@@ -4,21 +4,67 @@ import org.fugalang.grammar.peg.*;
 
 @SuppressWarnings("unused")
 public interface MetaVisitor<T> {
-    T visitRules(Rules rules);
 
-    T visitSingleRule(SingleRule singleRule);
+    /**
+     * rules: [NEWLINE] single_rule+
+     */
+    default T visitRules(Rules rules) {
+        return null;
+    }
 
-    T visitOrRule(OrRule orRule);
+    /**
+     * single_rule: NAME ':' [NEWLINE '|'] or_rule NEWLINE
+     */
+    default T visitSingleRule(SingleRule singleRule) {
+        return null;
+    }
 
-    T visitAndRule(AndRule andRule);
+    /**
+     * or_rule: and_rule ([NEWLINE] '|' and_rule)*
+     */
+    default T visitOrRule(OrRule orRule) {
+        return null;
+    }
 
-    T visitRepeat(Repeat repeat);
+    /**
+     * and_rule: repeat+
+     */
+    default T visitAndRule(AndRule andRule) {
+        return null;
+    }
 
-    T visitItem(Item item);
+    /**
+     * repeat: delimited | item '*' | item '+' | item
+     */
+    default T visitRepeat(Repeat repeat) {
+        return null;
+    }
 
-    T visitGroup(Group group);
+    /**
+     * item: group | optional | NAME | STRING
+     */
+    default T visitItem(Item item) {
+        return null;
+    }
 
-    T visitOptional(Optional optional);
+    /**
+     * group: '(' or_rule ')'
+     */
+    default T visitGroup(Group group) {
+        return null;
+    }
 
-    T visitDelimited(Delimited delimited);
+    /**
+     * optional: '[' or_rule ']'
+     */
+    default T visitOptional(Optional optional) {
+        return null;
+    }
+
+    /**
+     * delimited: STRING '.' item '+'
+     */
+    default T visitDelimited(Delimited delimited) {
+        return null;
+    }
 }

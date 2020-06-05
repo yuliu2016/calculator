@@ -187,7 +187,7 @@ public class ClassSet {
                 .append(packageOutput.getPackageName());
         sb.append(".*;\n\n@SuppressWarnings(\"unused\")\npublic interface ");
         sb.append(packageOutput.getLanguage());
-        sb.append("Visitor<T> {");
+        sb.append("Visitor<T> {\n");
         for (NamedClass namedClass : classes) {
             namedClass.generateVisitor(sb);
         }

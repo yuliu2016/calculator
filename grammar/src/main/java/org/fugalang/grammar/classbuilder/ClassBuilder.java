@@ -168,13 +168,19 @@ public class ClassBuilder {
     }
 
     public void generateVisitor(StringBuilder sb) {
-        sb.append("\n    T visit")
+        sb.append("\n");
+        if (headerComments != null && !headerComments.isBlank()) {
+            sb.append("    /**\n     * ")
+                    .append(headerComments)
+                    .append("\n     */\n");
+        }
+        sb.append("    default T visit")
                 .append(className.getType())
                 .append("(")
                 .append(className.getType())
                 .append(" ")
                 .append(className.decapName())
-                .append(");\n");
+                .append(") {\n        return null;\n    }\n");
     }
 
     public void generateRuleDeclaration(StringBuilder sb) {
