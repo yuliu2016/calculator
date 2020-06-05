@@ -33,4 +33,8 @@ public class NamedClass {
             component.generateRuleDeclaration(sb);
         }
     }
+
+    public void generateVisitor(StringBuilder sb) {
+        rootClass.generateVisitor(sb);
+    }
 }

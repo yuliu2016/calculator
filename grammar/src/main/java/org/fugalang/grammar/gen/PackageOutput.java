@@ -34,4 +34,12 @@ public class PackageOutput {
     public String getParserPackage() {
         return packageName + ".parser";
     }
+
+    public Path getVisitorPath() {
+        return Paths.get(filePath.toString(), "visitor");
+    }
+
+    public String getVisitorPackage() {
+        return packageName + ".visitor";
+    }
 }

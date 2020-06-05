@@ -167,6 +167,16 @@ public class ClassBuilder {
         return sb.toString();
     }
 
+    public void generateVisitor(StringBuilder sb) {
+        sb.append("\n    T visit")
+                .append(className.getType())
+                .append("(")
+                .append(className.getType())
+                .append(" ")
+                .append(className.decapName())
+                .append(");\n");
+    }
+
     public void generateRuleDeclaration(StringBuilder sb) {
         var small_name = getRuleName().replace(":", "_");
         var cap_name = small_name.toUpperCase();

@@ -119,16 +119,25 @@ public class ClassSet {
                         aClass.getClassName() + ".java"), code);
             }
 
+            var lang = packageOutput.getLanguage();
+
             setupDir(packageOutput.getParserPath());
 
             var parserBase = packageOutput.getParserPath().toString();
-            var parserPath = Paths.get(parserBase, packageOutput.getLanguage() + "Parser.java");
+            var parserPath = Paths.get(parserBase, lang + "Parser.java");
             var parserClassCode = fixLineSep(generateParserClass());
             Files.writeString(parserPath, parserClassCode);
 
-            var parserRulePath = Paths.get(parserBase, packageOutput.getLanguage() + "Rules.java");
+            var parserRulePath = Paths.get(parserBase, lang + "Rules.java");
             var ruleClassCode = fixLineSep(generateRuleClass());
             Files.writeString(parserRulePath, ruleClassCode);
+
+            setupDir(packageOutput.getVisitorPath());
+
+            var visitorBase = packageOutput.getVisitorPath().toString();
+            var visitorPath = Paths.get(visitorBase, lang + "Visitor.java");
+            var visitorCode = fixLineSep(generateVisitorClass());
+            Files.writeString(visitorPath, visitorCode);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -166,6 +175,21 @@ public class ClassSet {
         sb.append("Rules {\n");
         for (NamedClass namedClass : classes) {
             namedClass.generateRules(sb);
+        }
+        sb.append("}\n");
+        return sb.toString();
+    }
+
+    private String generateVisitorClass() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("package ").append(packageOutput.getVisitorPackage()).append(";\n\n");
+        sb.append("import ")
+                .append(packageOutput.getPackageName());
+        sb.append(".*;\n\n@SuppressWarnings(\"unused\")\npublic interface ");
+        sb.append(packageOutput.getLanguage());
+        sb.append("Visitor<T> {");
+        for (NamedClass namedClass : classes) {
+            namedClass.generateVisitor(sb);
         }
         sb.append("}\n");
         return sb.toString();

@@ -7,7 +7,7 @@ public class FBool extends FLong {
         super(bigInteger);
     }
 
-    public static class True extends FBool {
+    static class True extends FBool {
 
         True() {
             super(BigInteger.ONE);
@@ -19,7 +19,7 @@ public class FBool extends FLong {
         }
     }
 
-    public static class False extends FBool {
+    static class False extends FBool {
 
         False() {
             super(BigInteger.ZERO);
