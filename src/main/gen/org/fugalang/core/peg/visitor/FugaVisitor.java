@@ -1,6 +1,6 @@
 package org.fugalang.core.peg.visitor;
 
-import org.fugalang.core.peg.*;
+import org.fugalang.core.peg.wrapper.*;
 
 @SuppressWarnings("unused")
 public interface FugaVisitor<T> {

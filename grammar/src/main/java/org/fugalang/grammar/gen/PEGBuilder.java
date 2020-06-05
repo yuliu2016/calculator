@@ -2,10 +2,7 @@ package org.fugalang.grammar.gen;
 
 import org.fugalang.core.parser.RuleType;
 import org.fugalang.grammar.classbuilder.*;
-import org.fugalang.grammar.peg.AndRule;
-import org.fugalang.grammar.peg.OrRule;
-import org.fugalang.grammar.peg.Repeat;
-import org.fugalang.grammar.peg.Rules;
+import org.fugalang.grammar.peg.wrapper.*;
 import org.fugalang.grammar.util.ParserStringUtil;
 
 import java.util.LinkedHashMap;

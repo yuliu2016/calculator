@@ -111,11 +111,11 @@ public class ClassSet {
 
     public void writeToFiles() {
         try {
-            setupDir(packageOutput.getFilePath());
+            setupDir(packageOutput.getWrapperPath());
 
             for (var aClass : classes) {
                 var code = fixLineSep(aClass.generateClassCode());
-                Files.writeString(Paths.get(packageOutput.getFilePath().toString(),
+                Files.writeString(Paths.get(packageOutput.getWrapperPath().toString(),
                         aClass.getClassName() + ".java"), code);
             }
 
@@ -184,7 +184,7 @@ public class ClassSet {
         StringBuilder sb = new StringBuilder();
         sb.append("package ").append(packageOutput.getVisitorPackage()).append(";\n\n");
         sb.append("import ")
-                .append(packageOutput.getPackageName());
+                .append(packageOutput.getWrapperPackage());
         sb.append(".*;\n\n@SuppressWarnings(\"unused\")\npublic interface ");
         sb.append(packageOutput.getLanguage());
         sb.append("Visitor<T> {\n");

@@ -19,12 +19,12 @@ public class PackageOutput {
         return language;
     }
 
-    public String getPackageName() {
-        return packageName;
+    public String getWrapperPackage() {
+        return packageName + ".wrapper";
     }
 
-    public Path getFilePath() {
-        return filePath;
+    public Path getWrapperPath() {
+        return Paths.get(filePath.toString(), "wrapper");
     }
 
     public Path getParserPath() {

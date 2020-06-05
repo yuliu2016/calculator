@@ -1,6 +1,6 @@
 package org.fugalang.core.calculator;
 
-import org.fugalang.core.calculator.peg.*;
+import org.fugalang.core.calculator.peg.wrapper.*;
 import org.fugalang.core.calculator.peg.parser.CalculatorParser;
 import org.fugalang.core.calculator.peg.visitor.CalculatorVisitor;
 import org.fugalang.core.parser.SyntaxError;

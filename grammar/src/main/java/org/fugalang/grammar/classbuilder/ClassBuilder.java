@@ -56,7 +56,7 @@ public class ClassBuilder {
 
         sb
                 .append("package ")
-                .append(packageOutput.getPackageName())
+                .append(packageOutput.getWrapperPackage())
                 .append(";\n\n");
 
         Set<String> userImports = new TreeSet<>();

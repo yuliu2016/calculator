@@ -1,11 +1,11 @@
 package org.fugalang.grammar.gen;
 
-import org.fugalang.grammar.peg.Rules;
-import org.fugalang.grammar.peg.parser.MetaParser;
 import org.fugalang.core.parser.impl.LazyParserContext;
 import org.fugalang.core.parser.impl.LexingVisitor;
 import org.fugalang.core.parser.impl.SimpleParseTree;
 import org.fugalang.core.token.SimpleLexer;
+import org.fugalang.grammar.peg.parser.MetaParser;
+import org.fugalang.grammar.peg.wrapper.Rules;
 
 import java.io.IOException;
 import java.nio.file.Files;

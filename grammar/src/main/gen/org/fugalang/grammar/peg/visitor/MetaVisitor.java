@@ -1,6 +1,6 @@
 package org.fugalang.grammar.peg.visitor;
 
-import org.fugalang.grammar.peg.*;
+import org.fugalang.grammar.peg.wrapper.*;
 
 @SuppressWarnings("unused")
 public interface MetaVisitor<T> {

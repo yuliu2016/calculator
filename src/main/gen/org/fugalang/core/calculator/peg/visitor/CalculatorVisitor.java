@@ -1,6 +1,6 @@
 package org.fugalang.core.calculator.peg.visitor;
 
-import org.fugalang.core.calculator.peg.*;
+import org.fugalang.core.calculator.peg.wrapper.*;
 
 @SuppressWarnings("unused")
 public interface CalculatorVisitor<T> {

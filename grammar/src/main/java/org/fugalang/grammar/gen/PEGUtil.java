@@ -1,9 +1,9 @@
 package org.fugalang.grammar.gen;
 
-import org.fugalang.grammar.peg.AndRule;
-import org.fugalang.grammar.peg.Item;
-import org.fugalang.grammar.peg.OrRule;
-import org.fugalang.grammar.peg.Repeat;
+import org.fugalang.grammar.peg.wrapper.AndRule;
+import org.fugalang.grammar.peg.wrapper.Item;
+import org.fugalang.grammar.peg.wrapper.OrRule;
+import org.fugalang.grammar.peg.wrapper.Repeat;
 import org.fugalang.grammar.util.FirstAndMore;
 
 import java.util.stream.Collectors;

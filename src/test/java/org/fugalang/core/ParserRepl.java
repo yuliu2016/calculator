@@ -4,7 +4,7 @@ import org.fugalang.core.parser.SyntaxError;
 import org.fugalang.core.parser.impl.LazyParserContext;
 import org.fugalang.core.parser.impl.LexingVisitor;
 import org.fugalang.core.parser.impl.SimpleParseTree;
-import org.fugalang.core.peg.SingleInput;
+import org.fugalang.core.peg.wrapper.SingleInput;
 import org.fugalang.core.peg.parser.FugaParser;
 import org.fugalang.core.pprint.ConsoleColor;
 import org.fugalang.core.pprint.ParseTreePPrint;
