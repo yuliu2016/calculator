@@ -3,247 +3,395 @@ package org.fugalang.core.object;
 import java.math.BigInteger;
 
 
-public class FLong extends FObject {
+public class FLong implements FType<BigInteger> {
 
-    private static final FObject NI = FConst.NotImplemented;
-
-    public static FLong of(long val) {
-        return new FLong(BigInteger.valueOf(val));
-    }
-
-    private final BigInteger f_long;
-
-    FLong(BigInteger bigInteger) {
-        this.f_long = bigInteger;
-    }
-
-    public int getInteger() {
-        return f_long.intValueExact();
+    @Override
+    public Object __repr__(BigInteger a) {
+        return null;
     }
 
     @Override
-    public FObject __repr__() {
-        return FString.of(f_long.toString());
+    public Object __str__(BigInteger a) {
+        return null;
     }
 
     @Override
-    public FObject __str__() {
-        return __repr__();
+    public Object __format__(BigInteger a) {
+        return null;
     }
 
     @Override
-    public FObject __format__() {
-        return __repr__();
+    public Object __hash__(BigInteger a) {
+        return null;
     }
 
     @Override
-    public FObject __hash__() {
-        return this;
+    public Object __bool__(BigInteger a) {
+        return null;
     }
 
     @Override
-    public FObject __bool__() {
-        return f_long.signum() != 0 ? FConst.True : FConst.False;
+    public Object __compare__(BigInteger a, Object b) {
+        return null;
     }
 
     @Override
-    public FObject __compare__(FObject o) {
-        if (!(o instanceof FLong))
-            return NI;
-        return FLong.of(f_long.compareTo(((FLong) o).f_long));
+    public Object __lt__(BigInteger a, Object b) {
+        return null;
     }
 
     @Override
-    public FObject __lt__(FObject o) {
-        if (!(o instanceof FLong))
-            return FConst.False;
-        return f_long.compareTo(((FLong) o).f_long) < 0 ?
-                FConst.True : FConst.False;
+    public Object __le__(BigInteger a, Object b) {
+        return null;
     }
 
     @Override
-    public FObject __le__(FObject o) {
-        if (!(o instanceof FLong))
-            return FConst.False;
-        return f_long.compareTo(((FLong) o).f_long) <= 0 ?
-                FConst.True : FConst.False;
+    public Object __eq__(BigInteger a, Object b) {
+        return null;
     }
 
     @Override
-    public FObject __eq__(FObject o) {
-        if (!(o instanceof FLong))
-            return FConst.False;
-        return f_long.compareTo(((FLong) o).f_long) == 0 ?
-                FConst.True : FConst.False;
+    public Object __ne__(BigInteger a, Object b) {
+        return null;
     }
 
     @Override
-    public FObject __ne__(FObject o) {
-        if (!(o instanceof FLong))
-            return FConst.False;
-        return f_long.compareTo(((FLong) o).f_long) != 0 ?
-                FConst.True : FConst.False;
+    public Object __gt__(BigInteger a, Object b) {
+        return null;
     }
 
     @Override
-    public FObject __gt__(FObject o) {
-        if (!(o instanceof FLong))
-            return FConst.False;
-        return f_long.compareTo(((FLong) o).f_long) > 0 ?
-                FConst.True : FConst.False;
+    public Object __ge__(BigInteger a, Object b) {
+        return null;
     }
 
     @Override
-    public FObject __ge__(FObject o) {
-        if (!(o instanceof FLong))
-            return FConst.False;
-        return f_long.compareTo(((FLong) o).f_long) >= 0 ?
-                FConst.True : FConst.False;
+    public Object __getattr__(BigInteger a, Object o) {
+        return null;
     }
 
     @Override
-    public FObject __add__(FObject o) {
-        if (!(o instanceof FLong))
-            return NI;
-        return new FLong(f_long.add(((FLong) o).f_long));
+    public Object __setattr__(BigInteger a, Object o) {
+        return null;
     }
 
     @Override
-    public FObject __sub__(FObject o) {
-        if (!(o instanceof FLong))
-            return NI;
-        return new FLong(f_long.subtract(((FLong) o).f_long));
+    public Object __delattr__(BigInteger a, Object o) {
+        return null;
     }
 
     @Override
-    public FObject __mul__(FObject o) {
-        if (!(o instanceof FLong))
-            return NI;
-        return new FLong(f_long.multiply(((FLong) o).f_long));
+    public Object __dir__(BigInteger a, Object o) {
+        return null;
     }
 
     @Override
-    public FObject __matmul__(FObject o) {
-        return NI;
+    public Object __call__(BigInteger a, Object o) {
+        return null;
     }
 
     @Override
-    public FObject __truediv__(FObject o) {
-        if (!(o instanceof FLong))
-            return NI;
-        return new FLong(f_long.divide(((FLong) o).f_long));
+    public Object __len__(BigInteger a) {
+        return null;
     }
 
     @Override
-    public FObject __floordiv__(FObject o) {
-        if (!(o instanceof FLong))
-            return NI;
-        return new FLong(f_long.divide(((FLong) o).f_long));
+    public Object __getitem__(BigInteger a, Object o) {
+        return null;
     }
 
     @Override
-    public FObject __mod__(FObject o) {
-        if (!(o instanceof FLong))
-            return NI;
-        return new FLong(f_long.mod(((FLong) o).f_long));
+    public Object __setitem__(BigInteger a, Object o) {
+        return null;
     }
 
     @Override
-    public FObject __divmod__(FObject o) {
-        if (!(o instanceof FLong))
-            return NI;
-        return new FLong(f_long.divide(((FLong) o).f_long));
+    public Object __delitem__(BigInteger a, Object o) {
+        return null;
     }
 
     @Override
-    public FObject __pow__(FObject o) {
-        if (!(o instanceof FLong))
-            return NI;
-        return new FLong(f_long.subtract(((FLong) o).f_long));
+    public Object __iter__(BigInteger a, Object o) {
+        return null;
     }
 
     @Override
-    public FObject __lshift__(FObject o) {
-        if (!(o instanceof FLong))
-            return NI;
-        return new FLong(f_long.shiftLeft(((FLong) o).f_long.intValueExact()));
+    public Object __reversed__(BigInteger a, Object o) {
+        return null;
     }
 
     @Override
-    public FObject __rshift__(FObject o) {
-        if (!(o instanceof FLong))
-            return NI;
-        return new FLong(f_long.shiftRight(((FLong) o).f_long.intValueExact()));
+    public Object __contains__(BigInteger a, Object o) {
+        return null;
     }
 
     @Override
-    public FObject __and__(FObject o) {
-        if (!(o instanceof FLong))
-            return NI;
-        return new FLong(f_long.and(((FLong) o).f_long));
+    public Object __add__(BigInteger a, Object o) {
+        return null;
     }
 
     @Override
-    public FObject __xor__(FObject o) {
-        if (!(o instanceof FLong))
-            return NI;
-        return new FLong(f_long.xor(((FLong) o).f_long));
+    public Object __sub__(BigInteger a, Object o) {
+        return null;
     }
 
     @Override
-    public FObject __or__(FObject o) {
-        if (!(o instanceof FLong))
-            return NI;
-        return new FLong(f_long.or(((FLong) o).f_long));
+    public Object __mul__(BigInteger a, Object o) {
+        return null;
     }
 
     @Override
-    public FObject __neg__() {
-        return new FLong(f_long.negate());
+    public Object __matmul__(BigInteger a, Object o) {
+        return null;
     }
 
     @Override
-    public FObject __pos__() {
-        return this;
+    public Object __truediv__(BigInteger a, Object o) {
+        return null;
     }
 
     @Override
-    public FObject __abs__() {
-        return new FLong(f_long.abs());
+    public Object __floordiv__(BigInteger a, Object o) {
+        return null;
     }
 
     @Override
-    public FObject __invert__() {
-        return new FLong(f_long.not());
+    public Object __mod__(BigInteger a, Object o) {
+        return null;
     }
 
     @Override
-    public FObject __int__() {
-        return this;
+    public Object __divmod__(BigInteger a, Object o) {
+        return null;
     }
 
     @Override
-    public FObject __float__() {
-        return super.__float__();
+    public Object __pow__(BigInteger a, Object o) {
+        return null;
     }
 
     @Override
-    public FObject __round__() {
-        return this;
+    public Object __lshift__(BigInteger a, Object o) {
+        return null;
     }
 
     @Override
-    public FObject __trunk__() {
-        return this;
+    public Object __rshift__(BigInteger a, Object o) {
+        return null;
     }
 
     @Override
-    public FObject __floor__() {
-        return this;
+    public Object __and__(BigInteger a, Object o) {
+        return null;
     }
 
     @Override
-    public FObject __ceil__() {
-        return this;
+    public Object __xor__(BigInteger a, Object o) {
+        return null;
+    }
+
+    @Override
+    public Object __or__(BigInteger a, Object o) {
+        return null;
+    }
+
+    @Override
+    public Object __radd__(BigInteger a, Object o) {
+        return null;
+    }
+
+    @Override
+    public Object __rsub__(BigInteger a, Object o) {
+        return null;
+    }
+
+    @Override
+    public Object __rmul__(BigInteger a, Object o) {
+        return null;
+    }
+
+    @Override
+    public Object __rmatmul__(BigInteger a, Object o) {
+        return null;
+    }
+
+    @Override
+    public Object __rtruediv__(BigInteger a, Object o) {
+        return null;
+    }
+
+    @Override
+    public Object __rfloordiv__(BigInteger a, Object o) {
+        return null;
+    }
+
+    @Override
+    public Object __rmod__(BigInteger a, Object o) {
+        return null;
+    }
+
+    @Override
+    public Object __rdivmod__(BigInteger a, Object o) {
+        return null;
+    }
+
+    @Override
+    public Object __rpow__(BigInteger a, Object o) {
+        return null;
+    }
+
+    @Override
+    public Object __rlshift__(BigInteger a, Object o) {
+        return null;
+    }
+
+    @Override
+    public Object __rrshift__(BigInteger a, Object o) {
+        return null;
+    }
+
+    @Override
+    public Object __rand__(BigInteger a, Object o) {
+        return null;
+    }
+
+    @Override
+    public Object __rxor__(BigInteger a, Object o) {
+        return null;
+    }
+
+    @Override
+    public Object __ror__(BigInteger a, Object o) {
+        return null;
+    }
+
+    @Override
+    public Object __iadd__(BigInteger a, Object o) {
+        return null;
+    }
+
+    @Override
+    public Object __isub__(BigInteger a, Object o) {
+        return null;
+    }
+
+    @Override
+    public Object __imul__(BigInteger a, Object o) {
+        return null;
+    }
+
+    @Override
+    public Object __imatmul__(BigInteger a, Object o) {
+        return null;
+    }
+
+    @Override
+    public Object __itruediv__(BigInteger a, Object o) {
+        return null;
+    }
+
+    @Override
+    public Object __ifloordiv__(BigInteger a, Object o) {
+        return null;
+    }
+
+    @Override
+    public Object __imod__(BigInteger a, Object o) {
+        return null;
+    }
+
+    @Override
+    public Object __idivmod__(BigInteger a, Object o) {
+        return null;
+    }
+
+    @Override
+    public Object __ipow__(BigInteger a, Object o) {
+        return null;
+    }
+
+    @Override
+    public Object __ilshift__(BigInteger a, Object o) {
+        return null;
+    }
+
+    @Override
+    public Object __irshift__(BigInteger a, Object o) {
+        return null;
+    }
+
+    @Override
+    public Object __iand__(BigInteger a, Object o) {
+        return null;
+    }
+
+    @Override
+    public Object __ixor__(BigInteger a, Object o) {
+        return null;
+    }
+
+    @Override
+    public Object __ior__(BigInteger a, Object o) {
+        return null;
+    }
+
+    @Override
+    public Object __neg__(BigInteger a) {
+        return null;
+    }
+
+    @Override
+    public Object __pos__(BigInteger a) {
+        return null;
+    }
+
+    @Override
+    public Object __abs__(BigInteger a) {
+        return null;
+    }
+
+    @Override
+    public Object __invert__(BigInteger a) {
+        return null;
+    }
+
+    @Override
+    public Object __int__(BigInteger a) {
+        return null;
+    }
+
+    @Override
+    public Object __float__(BigInteger a) {
+        return null;
+    }
+
+    @Override
+    public Object __round__(BigInteger a) {
+        return null;
+    }
+
+    @Override
+    public Object __trunk__(BigInteger a) {
+        return null;
+    }
+
+    @Override
+    public Object __floor__(BigInteger a) {
+        return null;
+    }
+
+    @Override
+    public Object __ceil__(BigInteger a) {
+        return null;
+    }
+
+    @Override
+    public Object __enter__(BigInteger a, Object o) {
+        return null;
+    }
+
+    @Override
+    public Object __exit__(BigInteger a, Object o) {
+        return null;
     }
 }
