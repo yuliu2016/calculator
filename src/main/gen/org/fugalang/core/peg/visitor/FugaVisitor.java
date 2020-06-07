@@ -41,14 +41,26 @@ public interface FugaVisitor<T> {
     }
 
     /**
-     * small_stmt: flow_stmt | del_stmt | nonlocal_stmt | assert_stmt | import_name | import_from | assignment
+     * small_stmt: 
+     * | flow_stmt
+     * | del_stmt
+     * | nonlocal_stmt
+     * | assert_stmt
+     * | import_name
+     * | import_from
+     * | assignment
      */
     default T visitSmallStmt(SmallStmt smallStmt) {
         return null;
     }
 
     /**
-     * flow_stmt: 'pass' | 'break' | 'continue' | return_stmt | raise_stmt
+     * flow_stmt: 
+     * | 'pass'
+     * | 'break'
+     * | 'continue'
+     * | return_stmt
+     * | raise_stmt
      */
     default T visitFlowStmt(FlowStmt flowStmt) {
         return null;
@@ -223,7 +235,20 @@ public interface FugaVisitor<T> {
     }
 
     /**
-     * augassign: '+=' | '-=' | '*=' | '@=' | '/=' | '%=' | '&=' | '|=' | '^=' | '<<=' | '>>=' | '**=' | '//='
+     * augassign: 
+     * | '+='
+     * | '-='
+     * | '*='
+     * | '@='
+     * | '/='
+     * | '%='
+     * | '&='
+     * | '|='
+     * | '^='
+     * | '<<='
+     * | '>>='
+     * | '**='
+     * | '//='
      */
     default T visitAugassign(Augassign augassign) {
         return null;
@@ -300,7 +325,12 @@ public interface FugaVisitor<T> {
     }
 
     /**
-     * compound_stmt: if_stmt | while_stmt | for_stmt | try_stmt | with_stmt
+     * compound_stmt: 
+     * | if_stmt
+     * | while_stmt
+     * | for_stmt
+     * | try_stmt
+     * | with_stmt
      */
     default T visitCompoundStmt(CompoundStmt compoundStmt) {
         return null;
@@ -356,7 +386,7 @@ public interface FugaVisitor<T> {
     }
 
     /**
-     * block_suite: '{' simple_stmt '}' | '{' NEWLINE stmt+ '}'
+     * block_suite: '{' NEWLINE stmt+ '}'
      */
     default T visitBlockSuite(BlockSuite blockSuite) {
         return null;
@@ -419,7 +449,12 @@ public interface FugaVisitor<T> {
     }
 
     /**
-     * argument: NAME ':=' expr | NAME '=' expr | '**' expr | '*' expr | expr
+     * argument: 
+     * | NAME ':=' expr
+     * | NAME '=' expr
+     * | '**' expr
+     * | '*' expr
+     * | expr
      */
     default T visitArgument(Argument argument) {
         return null;
@@ -503,7 +538,7 @@ public interface FugaVisitor<T> {
     }
 
     /**
-     * conditional: 'if' disjunction '?' disjunction 'else' expr
+     * conditional: 'if' disjunction '?' disjunction ':' expr
      */
     default T visitConditional(Conditional conditional) {
         return null;
@@ -545,7 +580,17 @@ public interface FugaVisitor<T> {
     }
 
     /**
-     * comp_op: '<' | '>' | '==' | '>=' | '<=' | '!=' | 'in' | 'not' 'in' | 'is' | 'is' 'not'
+     * comp_op: 
+     * | '<'
+     * | '>'
+     * | '=='
+     * | '>='
+     * | '<='
+     * | '!='
+     * | 'in'
+     * | 'not' 'in'
+     * | 'is'
+     * | 'is' 'not'
      */
     default T visitCompOp(CompOp compOp) {
         return null;
@@ -587,7 +632,13 @@ public interface FugaVisitor<T> {
     }
 
     /**
-     * term: term '*' pipe_expr | term '/' pipe_expr | term '%' pipe_expr | term '//' pipe_expr | term '@' pipe_expr | pipe_expr
+     * term: 
+     * | term '*' pipe_expr
+     * | term '/' pipe_expr
+     * | term '%' pipe_expr
+     * | term '//' pipe_expr
+     * | term '@' pipe_expr
+     * | pipe_expr
      */
     default T visitTerm(Term term) {
         return null;
@@ -615,7 +666,12 @@ public interface FugaVisitor<T> {
     }
 
     /**
-     * primary: primary '.' NAME | primary parameters | primary subscript | primary block_suite | atom
+     * primary: 
+     * | primary '.' NAME
+     * | primary parameters
+     * | primary subscript
+     * | primary block_suite
+     * | atom
      */
     default T visitPrimary(Primary primary) {
         return null;
@@ -664,14 +720,27 @@ public interface FugaVisitor<T> {
     }
 
     /**
-     * collection: tuple_atom | list_iter | list_atom | set_atom | dict_iter | dict_atom
+     * collection: 
+     * | tuple_atom
+     * | list_iter
+     * | list_atom
+     * | set_atom
+     * | dict_iter
+     * | dict_atom
      */
     default T visitCollection(Collection collection) {
         return null;
     }
 
     /**
-     * atom: collection | NAME | NUMBER | STRING | 'None' | 'True' | 'False'
+     * atom: 
+     * | collection
+     * | NAME
+     * | NUMBER
+     * | STRING
+     * | 'None'
+     * | 'True'
+     * | 'False'
      */
     default T visitAtom(Atom atom) {
         return null;

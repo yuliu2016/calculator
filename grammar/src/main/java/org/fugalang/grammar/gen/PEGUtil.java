@@ -6,15 +6,27 @@ import org.fugalang.grammar.peg.wrapper.OrRule;
 import org.fugalang.grammar.peg.wrapper.Repeat;
 import org.fugalang.grammar.util.FirstAndMore;
 
+import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
 public class PEGUtil {
     public static String constructString(OrRule orRule) {
-        return constructString(orRule.andRule()) + orRule
-                .orRule2s()
-                .stream()
-                .map(rule -> " | " + constructString(rule.andRule()))
-                .collect(Collectors.joining());
+        var orRuleList = orRule.orRule2s();
+        StringJoiner joiner;
+
+        if (orRuleList.size() >= 4) {
+            joiner = new StringJoiner("\n| ", "\n| ", "");
+        } else {
+            joiner = new StringJoiner(" | ");
+        }
+
+        joiner.add(constructString(orRule.andRule()));
+
+        for (var orRule2 : orRuleList) {
+            joiner.add(constructString(orRule2.andRule()));
+        }
+
+        return joiner.toString();
     }
 
     public static String constructString(AndRule andRule) {

@@ -164,7 +164,6 @@ expr_as_name:
 # Suites
 
 block_suite:
-    | '{' simple_stmt '}'
     | '{' NEWLINE stmt+ '}'
 suite:
     | ':' simple_stmt
@@ -226,7 +225,7 @@ named_expr:
     | NAME ':=' expr
     | expr
 conditional:
-    | 'if' disjunction '?' disjunction 'else' expr
+    | 'if' disjunction '?' disjunction ':' expr
 expr:
     | conditional
     | funcdef

@@ -115,9 +115,7 @@ public class ClassBuilder {
         }
 
         if (headerComments != null && !headerComments.isBlank()) {
-            sb.append("/**\n * ")
-                    .append(headerComments)
-                    .append("\n */\n");
+            sb.append(ParserStringUtil.javadoc(headerComments, 0));
         }
 
         if (isStaticInnerClass) {
@@ -170,9 +168,7 @@ public class ClassBuilder {
     public void generateVisitor(StringBuilder sb) {
         sb.append("\n");
         if (headerComments != null && !headerComments.isBlank()) {
-            sb.append("    /**\n     * ")
-                    .append(headerComments)
-                    .append("\n     */\n");
+            sb.append(ParserStringUtil.javadoc(headerComments, 4));
         }
         sb.append("    default T visit")
                 .append(className.getType())
@@ -203,9 +199,7 @@ public class ClassBuilder {
         // rule name constant
 
         if (headerComments != null && !headerComments.isBlank()) {
-            sb.append("    /**\n     * ")
-                    .append(headerComments)
-                    .append("\n     */\n");
+            sb.append(ParserStringUtil.javadoc(headerComments, 4));
         }
 
         var visibility = isNamedRule ? "public" : "private";

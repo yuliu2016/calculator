@@ -144,7 +144,14 @@ public class FugaParser {
     }
 
     /**
-     * small_stmt: flow_stmt | del_stmt | nonlocal_stmt | assert_stmt | import_name | import_from | assignment
+     * small_stmt: 
+     * | flow_stmt
+     * | del_stmt
+     * | nonlocal_stmt
+     * | assert_stmt
+     * | import_name
+     * | import_from
+     * | assignment
      */
     public static boolean small_stmt(ParseTree t) {
         var m = t.enter(SMALL_STMT);
@@ -162,7 +169,12 @@ public class FugaParser {
     }
 
     /**
-     * flow_stmt: 'pass' | 'break' | 'continue' | return_stmt | raise_stmt
+     * flow_stmt: 
+     * | 'pass'
+     * | 'break'
+     * | 'continue'
+     * | return_stmt
+     * | raise_stmt
      */
     public static boolean flow_stmt(ParseTree t) {
         var m = t.enter(FLOW_STMT);
@@ -744,7 +756,20 @@ public class FugaParser {
     }
 
     /**
-     * augassign: '+=' | '-=' | '*=' | '@=' | '/=' | '%=' | '&=' | '|=' | '^=' | '<<=' | '>>=' | '**=' | '//='
+     * augassign: 
+     * | '+='
+     * | '-='
+     * | '*='
+     * | '@='
+     * | '/='
+     * | '%='
+     * | '&='
+     * | '|='
+     * | '^='
+     * | '<<='
+     * | '>>='
+     * | '**='
+     * | '//='
      */
     public static boolean augassign(ParseTree t) {
         var m = t.enter(AUGASSIGN);
@@ -984,7 +1009,12 @@ public class FugaParser {
     }
 
     /**
-     * compound_stmt: if_stmt | while_stmt | for_stmt | try_stmt | with_stmt
+     * compound_stmt: 
+     * | if_stmt
+     * | while_stmt
+     * | for_stmt
+     * | try_stmt
+     * | with_stmt
      */
     public static boolean compound_stmt(ParseTree t) {
         var m = t.enter(COMPOUND_STMT);
@@ -1136,37 +1166,10 @@ public class FugaParser {
     }
 
     /**
-     * block_suite: '{' simple_stmt '}' | '{' NEWLINE stmt+ '}'
+     * block_suite: '{' NEWLINE stmt+ '}'
      */
     public static boolean block_suite(ParseTree t) {
         var m = t.enter(BLOCK_SUITE);
-        if (m != null) return m;
-        boolean r;
-        r = block_suite_1(t);
-        r = r || block_suite_2(t);
-        t.exit(r);
-        return r;
-    }
-
-    /**
-     * '{' simple_stmt '}'
-     */
-    private static boolean block_suite_1(ParseTree t) {
-        var m = t.enter(BLOCK_SUITE_1);
-        if (m != null) return m;
-        boolean r;
-        r = t.consume("{");
-        r = r && simple_stmt(t);
-        r = r && t.consume("}");
-        t.exit(r);
-        return r;
-    }
-
-    /**
-     * '{' NEWLINE stmt+ '}'
-     */
-    private static boolean block_suite_2(ParseTree t) {
-        var m = t.enter(BLOCK_SUITE_2);
         if (m != null) return m;
         boolean r;
         r = t.consume("{");
@@ -1344,7 +1347,12 @@ public class FugaParser {
     }
 
     /**
-     * argument: NAME ':=' expr | NAME '=' expr | '**' expr | '*' expr | expr
+     * argument: 
+     * | NAME ':=' expr
+     * | NAME '=' expr
+     * | '**' expr
+     * | '*' expr
+     * | expr
      */
     public static boolean argument(ParseTree t) {
         var m = t.enter(ARGUMENT);
@@ -1714,7 +1722,7 @@ public class FugaParser {
     }
 
     /**
-     * conditional: 'if' disjunction '?' disjunction 'else' expr
+     * conditional: 'if' disjunction '?' disjunction ':' expr
      */
     public static boolean conditional(ParseTree t) {
         var m = t.enter(CONDITIONAL);
@@ -1724,7 +1732,7 @@ public class FugaParser {
         r = r && disjunction(t);
         r = r && t.consume("?");
         r = r && disjunction(t);
-        r = r && t.consume("else");
+        r = r && t.consume(":");
         r = r && expr(t);
         t.exit(r);
         return r;
@@ -1895,7 +1903,17 @@ public class FugaParser {
     }
 
     /**
-     * comp_op: '<' | '>' | '==' | '>=' | '<=' | '!=' | 'in' | 'not' 'in' | 'is' | 'is' 'not'
+     * comp_op: 
+     * | '<'
+     * | '>'
+     * | '=='
+     * | '>='
+     * | '<='
+     * | '!='
+     * | 'in'
+     * | 'not' 'in'
+     * | 'is'
+     * | 'is' 'not'
      */
     public static boolean comp_op(ParseTree t) {
         var m = t.enter(COMP_OP);
@@ -2157,7 +2175,13 @@ public class FugaParser {
     }
 
     /**
-     * term: term '*' pipe_expr | term '/' pipe_expr | term '%' pipe_expr | term '//' pipe_expr | term '@' pipe_expr | pipe_expr
+     * term: 
+     * | term '*' pipe_expr
+     * | term '/' pipe_expr
+     * | term '%' pipe_expr
+     * | term '//' pipe_expr
+     * | term '@' pipe_expr
+     * | pipe_expr
      */
     public static boolean term(ParseTree t) {
         var m = t.enter(TERM);
@@ -2372,7 +2396,12 @@ public class FugaParser {
     }
 
     /**
-     * primary: primary '.' NAME | primary parameters | primary subscript | primary block_suite | atom
+     * primary: 
+     * | primary '.' NAME
+     * | primary parameters
+     * | primary subscript
+     * | primary block_suite
+     * | atom
      */
     public static boolean primary(ParseTree t) {
         var m = t.enter(PRIMARY);
@@ -2537,7 +2566,13 @@ public class FugaParser {
     }
 
     /**
-     * collection: tuple_atom | list_iter | list_atom | set_atom | dict_iter | dict_atom
+     * collection: 
+     * | tuple_atom
+     * | list_iter
+     * | list_atom
+     * | set_atom
+     * | dict_iter
+     * | dict_atom
      */
     public static boolean collection(ParseTree t) {
         var m = t.enter(COLLECTION);
@@ -2554,7 +2589,14 @@ public class FugaParser {
     }
 
     /**
-     * atom: collection | NAME | NUMBER | STRING | 'None' | 'True' | 'False'
+     * atom: 
+     * | collection
+     * | NAME
+     * | NUMBER
+     * | STRING
+     * | 'None'
+     * | 'True'
+     * | 'False'
      */
     public static boolean atom(ParseTree t) {
         var m = t.enter(ATOM);

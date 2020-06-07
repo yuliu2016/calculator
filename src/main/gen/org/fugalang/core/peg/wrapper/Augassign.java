@@ -4,7 +4,20 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * augassign: '+=' | '-=' | '*=' | '@=' | '/=' | '%=' | '&=' | '|=' | '^=' | '<<=' | '>>=' | '**=' | '//='
+ * augassign: 
+ * | '+='
+ * | '-='
+ * | '*='
+ * | '@='
+ * | '/='
+ * | '%='
+ * | '&='
+ * | '|='
+ * | '^='
+ * | '<<='
+ * | '>>='
+ * | '**='
+ * | '//='
  */
 public final class Augassign extends NodeWrapper {
 

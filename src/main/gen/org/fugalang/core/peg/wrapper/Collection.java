@@ -4,7 +4,13 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * collection: tuple_atom | list_iter | list_atom | set_atom | dict_iter | dict_atom
+ * collection: 
+ * | tuple_atom
+ * | list_iter
+ * | list_atom
+ * | set_atom
+ * | dict_iter
+ * | dict_atom
  */
 public final class Collection extends NodeWrapper {
 

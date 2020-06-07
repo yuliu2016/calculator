@@ -4,7 +4,13 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * term: term '*' pipe_expr | term '/' pipe_expr | term '%' pipe_expr | term '//' pipe_expr | term '@' pipe_expr | pipe_expr
+ * term: 
+ * | term '*' pipe_expr
+ * | term '/' pipe_expr
+ * | term '%' pipe_expr
+ * | term '//' pipe_expr
+ * | term '@' pipe_expr
+ * | pipe_expr
  */
 public final class Term extends NodeWrapper {
 

@@ -5,7 +5,12 @@ import org.fugalang.core.parser.ParseTreeNode;
 import org.fugalang.core.token.TokenType;
 
 /**
- * argument: NAME ':=' expr | NAME '=' expr | '**' expr | '*' expr | expr
+ * argument: 
+ * | NAME ':=' expr
+ * | NAME '=' expr
+ * | '**' expr
+ * | '*' expr
+ * | expr
  */
 public final class Argument extends NodeWrapper {
 

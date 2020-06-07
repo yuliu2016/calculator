@@ -4,7 +4,14 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * small_stmt: flow_stmt | del_stmt | nonlocal_stmt | assert_stmt | import_name | import_from | assignment
+ * small_stmt: 
+ * | flow_stmt
+ * | del_stmt
+ * | nonlocal_stmt
+ * | assert_stmt
+ * | import_name
+ * | import_from
+ * | assignment
  */
 public final class SmallStmt extends NodeWrapper {
 

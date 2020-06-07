@@ -4,7 +4,12 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * flow_stmt: 'pass' | 'break' | 'continue' | return_stmt | raise_stmt
+ * flow_stmt: 
+ * | 'pass'
+ * | 'break'
+ * | 'continue'
+ * | return_stmt
+ * | raise_stmt
  */
 public final class FlowStmt extends NodeWrapper {
 

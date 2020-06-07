@@ -33,6 +33,18 @@ public class ParserStringUtil {
                 word.substring(1);
     }
 
+    public static String javadoc(String block, int indentation) {
+        String idt = " ".repeat(indentation);
+        return splitLines(block)
+                .stream()
+                .map(ln -> idt + " * " + ln)
+                .collect(Collectors.joining(
+                        "\n",
+                        idt + "/**\n",
+                        "\n" + idt + " */\n"
+                ));
+    }
+
     public static String indent(String block, int indentation) {
         String idt = " ".repeat(indentation);
         return splitLines(block).stream().map(ln -> ln.isBlank() ? ln : idt + ln)

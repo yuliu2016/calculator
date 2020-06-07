@@ -5,7 +5,12 @@ import org.fugalang.core.parser.ParseTreeNode;
 import org.fugalang.core.token.TokenType;
 
 /**
- * primary: primary '.' NAME | primary parameters | primary subscript | primary block_suite | atom
+ * primary: 
+ * | primary '.' NAME
+ * | primary parameters
+ * | primary subscript
+ * | primary block_suite
+ * | atom
  */
 public final class Primary extends NodeWrapper {
 

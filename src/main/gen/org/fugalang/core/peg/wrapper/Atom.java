@@ -5,7 +5,14 @@ import org.fugalang.core.parser.ParseTreeNode;
 import org.fugalang.core.token.TokenType;
 
 /**
- * atom: collection | NAME | NUMBER | STRING | 'None' | 'True' | 'False'
+ * atom: 
+ * | collection
+ * | NAME
+ * | NUMBER
+ * | STRING
+ * | 'None'
+ * | 'True'
+ * | 'False'
  */
 public final class Atom extends NodeWrapper {
 
