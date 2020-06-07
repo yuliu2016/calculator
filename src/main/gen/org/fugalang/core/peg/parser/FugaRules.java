@@ -42,8 +42,11 @@ public class FugaRules {
     public static final ParserRule DICT_ITEM = or_rule("dict_item");
     public static final ParserRule DICT_ITEM_1 = and_rule("dict_item:1");
     public static final ParserRule DICT_ITEM_2 = and_rule("dict_item:2");
-    public static final ParserRule DICT_MAKER = and_rule("dict_maker");
+    public static final ParserRule DICT_ITEMS = and_rule("dict_items");
     public static final ParserRule AS_NAME = and_rule("as_name");
+    public static final ParserRule ITER_FOR = and_rule("iter_for");
+    public static final ParserRule ITER_IF = and_rule("iter_if");
+    public static final ParserRule ITERATOR = and_rule("iterator");
     public static final ParserRule ASSIGNMENT = and_rule("assignment");
     public static final ParserRule ASSIGNMENT_3 = or_rule("assignment:3");
     public static final ParserRule ASSIGNMENT_3_2 = and_rule("assignment:3:2");
@@ -141,15 +144,8 @@ public class FugaRules {
     public static final ParserRule TERM_3 = and_rule("term:3");
     public static final ParserRule TERM_4 = and_rule("term:4");
     public static final ParserRule TERM_5 = and_rule("term:5");
-    public static final ParserRule PIPE = or_rule("pipe");
-    public static final ParserRule PIPE_1 = and_rule("pipe:1");
     public static final ParserRule PIPE_EXPR = or_rule("pipe_expr");
-    public static final ParserRule PIPE_FOR = and_rule("pipe_for");
-    public static final ParserRule PIPE_FOR_4 = and_rule("pipe_for:4");
-    public static final ParserRule PIPE_FOR_5 = or_rule("pipe_for:5");
-    public static final ParserRule COMP_FOR = and_rule("comp_for");
-    public static final ParserRule COMP_IF = and_rule("comp_if");
-    public static final ParserRule COMP_ITER = or_rule("comp_iter");
+    public static final ParserRule PIPE_EXPR_1 = and_rule("pipe_expr:1");
     public static final ParserRule FACTOR = or_rule("factor");
     public static final ParserRule FACTOR_1 = and_rule("factor:1");
     public static final ParserRule FACTOR_2 = and_rule("factor:2");
@@ -162,8 +158,11 @@ public class FugaRules {
     public static final ParserRule PRIMARY_3 = and_rule("primary:3");
     public static final ParserRule PRIMARY_4 = and_rule("primary:4");
     public static final ParserRule TUPLE_ATOM = and_rule("tuple_atom");
+    public static final ParserRule LIST_ITER = and_rule("list_iter");
     public static final ParserRule LIST_ATOM = and_rule("list_atom");
-    public static final ParserRule DICT_OR_SET = and_rule("dict_or_set");
-    public static final ParserRule DICT_OR_SET_2 = or_rule("dict_or_set:2");
+    public static final ParserRule SET_ATOM = and_rule("set_atom");
+    public static final ParserRule DICT_ITER = and_rule("dict_iter");
+    public static final ParserRule DICT_ATOM = and_rule("dict_atom");
+    public static final ParserRule COLLECTION = or_rule("collection");
     public static final ParserRule ATOM = or_rule("atom");
 }

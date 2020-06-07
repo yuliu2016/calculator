@@ -28,11 +28,6 @@ public class FString implements FType<String> {
     }
 
     @Override
-    public Object __compare__(String a, Object b) {
-        return null;
-    }
-
-    @Override
     public Object __lt__(String a, Object b) {
         return null;
     }

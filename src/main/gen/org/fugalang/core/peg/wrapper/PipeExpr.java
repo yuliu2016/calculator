@@ -4,7 +4,7 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * pipe_expr: pipe_for | factor
+ * pipe_expr: pipe_expr '->' factor | factor
  */
 public final class PipeExpr extends NodeWrapper {
 
@@ -12,11 +12,11 @@ public final class PipeExpr extends NodeWrapper {
         super(node);
     }
 
-    public PipeFor pipeFor() {
-        return new PipeFor(get(0));
+    public PipeExpr1 pipeExprPipeFactor() {
+        return new PipeExpr1(get(0));
     }
 
-    public boolean hasPipeFor() {
+    public boolean hasPipeExprPipeFactor() {
         return has(0);
     }
 
@@ -26,5 +26,23 @@ public final class PipeExpr extends NodeWrapper {
 
     public boolean hasFactor() {
         return has(1);
+    }
+
+    /**
+     * pipe_expr '->' factor
+     */
+    public static final class PipeExpr1 extends NodeWrapper {
+
+        public PipeExpr1(ParseTreeNode node) {
+            super(node);
+        }
+
+        public PipeExpr pipeExpr() {
+            return new PipeExpr(get(0));
+        }
+
+        public Factor factor() {
+            return new Factor(get(2));
+        }
     }
 }

@@ -139,22 +139,22 @@ public final class FLong implements FType<BigInteger> {
 
     @Override
     public Object __add__(BigInteger a, Object o) {
-        if (o instanceof BigInteger) return a.add((BigInteger) o);
-        if (o instanceof Double) return FConst.FloatType.__add__(a.doubleValue(), o);
+        if (o.getClass() == BigInteger.class) return a.add((BigInteger) o);
+        if (o.getClass() == Double.class) return FConst.FloatType.__add__(a.doubleValue(), o);
         return null;
     }
 
     @Override
     public Object __sub__(BigInteger a, Object o) {
-        if (o instanceof BigInteger) return a.subtract((BigInteger) o);
-        if (o instanceof Double) return FConst.FloatType.__sub__(a.doubleValue(), o);
+        if (o.getClass() == BigInteger.class) return a.subtract((BigInteger) o);
+        if (o.getClass() == Double.class) return FConst.FloatType.__sub__(a.doubleValue(), o);
         return null;
     }
 
     @Override
     public Object __mul__(BigInteger a, Object o) {
-        if (o instanceof BigInteger) return a.multiply((BigInteger) o);
-        if (o instanceof Double) return FConst.FloatType.__mul__(a.doubleValue(), o);
+        if (o.getClass() == BigInteger.class) return a.multiply((BigInteger) o);
+        if (o.getClass() == Double.class) return FConst.FloatType.__mul__(a.doubleValue(), o);
         return null;
     }
 
@@ -175,52 +175,52 @@ public final class FLong implements FType<BigInteger> {
 
     @Override
     public Object __mod__(BigInteger a, Object o) {
-        if (o instanceof BigInteger) return a.mod((BigInteger) o);
-        if (o instanceof Double) return FConst.FloatType.__mod__(a.doubleValue(), o);
+        if (o.getClass() == BigInteger.class) return a.mod((BigInteger) o);
+        if (o.getClass() == Double.class) return FConst.FloatType.__mod__(a.doubleValue(), o);
         return null;
     }
 
     @Override
     public Object __divmod__(BigInteger a, Object o) {
-        if (o instanceof BigInteger) return a.divideAndRemainder((BigInteger) o);
-        if (o instanceof Double) return FConst.FloatType.__mod__(a.doubleValue(), o);
+        if (o.getClass() == BigInteger.class) return a.divideAndRemainder((BigInteger) o);
+        if (o.getClass() == Double.class) return FConst.FloatType.__mod__(a.doubleValue(), o);
         return null;
     }
 
     @Override
     public Object __pow__(BigInteger a, Object o) {
-        if (o instanceof BigInteger) return a.pow(((BigInteger) o).intValueExact());
-        if (o instanceof Double) return FConst.FloatType.__pow__((Double) o, a);
+        if (o.getClass() == BigInteger.class) return a.pow(((BigInteger) o).intValueExact());
+        if (o.getClass() == Double.class) return FConst.FloatType.__pow__((Double) o, a);
         return null;
     }
 
     @Override
     public Object __lshift__(BigInteger a, Object o) {
-        if (o instanceof BigInteger) return a.shiftLeft(((BigInteger) o).intValueExact());
+        if (o.getClass() == BigInteger.class) return a.shiftLeft(((BigInteger) o).intValueExact());
         return null;
     }
 
     @Override
     public Object __rshift__(BigInteger a, Object o) {
-        if (o instanceof BigInteger) return a.shiftRight(((BigInteger) o).intValueExact());
+        if (o.getClass() == BigInteger.class) return a.shiftRight(((BigInteger) o).intValueExact());
         return null;
     }
 
     @Override
     public Object __and__(BigInteger a, Object o) {
-        if (o instanceof BigInteger) return a.and((BigInteger) o);
+        if (o.getClass() == BigInteger.class) return a.and((BigInteger) o);
         return null;
     }
 
     @Override
     public Object __xor__(BigInteger a, Object o) {
-        if (o instanceof BigInteger) return a.xor((BigInteger) o);
+        if (o.getClass() == BigInteger.class) return a.xor((BigInteger) o);
         return null;
     }
 
     @Override
     public Object __or__(BigInteger a, Object o) {
-        if (o instanceof BigInteger) return a.or((BigInteger) o);
+        if (o.getClass() == BigInteger.class) return a.or((BigInteger) o);
         return null;
     }
 

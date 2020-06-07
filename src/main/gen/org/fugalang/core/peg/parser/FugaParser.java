@@ -589,10 +589,10 @@ public class FugaParser {
     }
 
     /**
-     * dict_maker: ','.dict_item+ [',']
+     * dict_items: ','.dict_item+ [',']
      */
-    public static boolean dict_maker(ParseTree t) {
-        var m = t.enter(DICT_MAKER);
+    public static boolean dict_items(ParseTree t) {
+        var m = t.enter(DICT_ITEMS);
         if (m != null) return m;
         boolean r;
         r = dict_item_loop(t);
@@ -623,6 +623,59 @@ public class FugaParser {
         r = r && t.consume(TokenType.NAME);
         t.exit(r);
         return r;
+    }
+
+    /**
+     * iter_for: 'for' targetlist 'in' disjunction [iter_if]
+     */
+    public static boolean iter_for(ParseTree t) {
+        var m = t.enter(ITER_FOR);
+        if (m != null) return m;
+        boolean r;
+        r = t.consume("for");
+        r = r && targetlist(t);
+        r = r && t.consume("in");
+        r = r && disjunction(t);
+        if (r) iter_if(t);
+        t.exit(r);
+        return r;
+    }
+
+    /**
+     * iter_if: 'if' named_expr
+     */
+    public static boolean iter_if(ParseTree t) {
+        var m = t.enter(ITER_IF);
+        if (m != null) return m;
+        boolean r;
+        r = t.consume("if");
+        r = r && named_expr(t);
+        t.exit(r);
+        return r;
+    }
+
+    /**
+     * iterator: iter_for* 'for' targetlist [iter_if]
+     */
+    public static boolean iterator(ParseTree t) {
+        var m = t.enter(ITERATOR);
+        if (m != null) return m;
+        boolean r;
+        iter_for_loop(t);
+        r = t.consume("for");
+        r = r && targetlist(t);
+        if (r) iter_if(t);
+        t.exit(r);
+        return r;
+    }
+
+    private static void iter_for_loop(ParseTree t) {
+        t.enterLoop();
+        while (true) {
+            var p = t.position();
+            if (!iter_for(t) || t.loopGuard(p)) break;
+        }
+        t.exitLoop();
     }
 
     /**
@@ -2104,7 +2157,7 @@ public class FugaParser {
     }
 
     /**
-     * term: term '*' pipe | term '/' pipe | term '%' pipe | term '//' pipe | term '@' pipe | pipe
+     * term: term '*' pipe_expr | term '/' pipe_expr | term '%' pipe_expr | term '//' pipe_expr | term '@' pipe_expr | pipe_expr
      */
     public static boolean term(ParseTree t) {
         var m = t.enter(TERM);
@@ -2119,7 +2172,7 @@ public class FugaParser {
             r = r || term_3(t);
             r = r || term_4(t);
             r = r || term_5(t);
-            r = r || pipe(t);
+            r = r || pipe_expr(t);
             s = r || s;
             var e = t.position();
             if (e <= p) break;
@@ -2131,7 +2184,7 @@ public class FugaParser {
     }
 
     /**
-     * term '*' pipe
+     * term '*' pipe_expr
      */
     private static boolean term_1(ParseTree t) {
         var m = t.enter(TERM_1);
@@ -2139,13 +2192,13 @@ public class FugaParser {
         boolean r;
         r = term(t);
         r = r && t.consume("*");
-        r = r && pipe(t);
+        r = r && pipe_expr(t);
         t.exit(r);
         return r;
     }
 
     /**
-     * term '/' pipe
+     * term '/' pipe_expr
      */
     private static boolean term_2(ParseTree t) {
         var m = t.enter(TERM_2);
@@ -2153,13 +2206,13 @@ public class FugaParser {
         boolean r;
         r = term(t);
         r = r && t.consume("/");
-        r = r && pipe(t);
+        r = r && pipe_expr(t);
         t.exit(r);
         return r;
     }
 
     /**
-     * term '%' pipe
+     * term '%' pipe_expr
      */
     private static boolean term_3(ParseTree t) {
         var m = t.enter(TERM_3);
@@ -2167,13 +2220,13 @@ public class FugaParser {
         boolean r;
         r = term(t);
         r = r && t.consume("%");
-        r = r && pipe(t);
+        r = r && pipe_expr(t);
         t.exit(r);
         return r;
     }
 
     /**
-     * term '//' pipe
+     * term '//' pipe_expr
      */
     private static boolean term_4(ParseTree t) {
         var m = t.enter(TERM_4);
@@ -2181,13 +2234,13 @@ public class FugaParser {
         boolean r;
         r = term(t);
         r = r && t.consume("//");
-        r = r && pipe(t);
+        r = r && pipe_expr(t);
         t.exit(r);
         return r;
     }
 
     /**
-     * term '@' pipe
+     * term '@' pipe_expr
      */
     private static boolean term_5(ParseTree t) {
         var m = t.enter(TERM_5);
@@ -2195,23 +2248,23 @@ public class FugaParser {
         boolean r;
         r = term(t);
         r = r && t.consume("@");
-        r = r && pipe(t);
+        r = r && pipe_expr(t);
         t.exit(r);
         return r;
     }
 
     /**
-     * pipe: pipe '->' pipe_expr | factor
+     * pipe_expr: pipe_expr '->' factor | factor
      */
-    public static boolean pipe(ParseTree t) {
-        var m = t.enter(PIPE);
+    public static boolean pipe_expr(ParseTree t) {
+        var m = t.enter(PIPE_EXPR);
         if (m != null) return m;
         var p = t.position();
         boolean s = false;
         while (true) {
             t.cache(s);
             boolean r;
-            r = pipe_1(t);
+            r = pipe_expr_1(t);
             r = r || factor(t);
             s = r || s;
             var e = t.position();
@@ -2224,113 +2277,15 @@ public class FugaParser {
     }
 
     /**
-     * pipe '->' pipe_expr
+     * pipe_expr '->' factor
      */
-    private static boolean pipe_1(ParseTree t) {
-        var m = t.enter(PIPE_1);
+    private static boolean pipe_expr_1(ParseTree t) {
+        var m = t.enter(PIPE_EXPR_1);
         if (m != null) return m;
         boolean r;
-        r = pipe(t);
+        r = pipe_expr(t);
         r = r && t.consume("->");
-        r = r && pipe_expr(t);
-        t.exit(r);
-        return r;
-    }
-
-    /**
-     * pipe_expr: pipe_for | factor
-     */
-    public static boolean pipe_expr(ParseTree t) {
-        var m = t.enter(PIPE_EXPR);
-        if (m != null) return m;
-        boolean r;
-        r = pipe_for(t);
-        r = r || factor(t);
-        t.exit(r);
-        return r;
-    }
-
-    /**
-     * pipe_for: [comp_for] 'for' targetlist ['if' named_expr] [parameters | block_suite]
-     */
-    public static boolean pipe_for(ParseTree t) {
-        var m = t.enter(PIPE_FOR);
-        if (m != null) return m;
-        boolean r;
-        comp_for(t);
-        r = t.consume("for");
-        r = r && targetlist(t);
-        if (r) pipe_for_4(t);
-        if (r) pipe_for_5(t);
-        t.exit(r);
-        return r;
-    }
-
-    /**
-     * 'if' named_expr
-     */
-    private static boolean pipe_for_4(ParseTree t) {
-        var m = t.enter(PIPE_FOR_4);
-        if (m != null) return m;
-        boolean r;
-        r = t.consume("if");
-        r = r && named_expr(t);
-        t.exit(r);
-        return r;
-    }
-
-    /**
-     * parameters | block_suite
-     */
-    private static boolean pipe_for_5(ParseTree t) {
-        var m = t.enter(PIPE_FOR_5);
-        if (m != null) return m;
-        boolean r;
-        r = parameters(t);
-        r = r || block_suite(t);
-        t.exit(r);
-        return r;
-    }
-
-    /**
-     * comp_for: 'for' targetlist 'in' disjunction [comp_iter]
-     */
-    public static boolean comp_for(ParseTree t) {
-        var m = t.enter(COMP_FOR);
-        if (m != null) return m;
-        boolean r;
-        r = t.consume("for");
-        r = r && targetlist(t);
-        r = r && t.consume("in");
-        r = r && disjunction(t);
-        if (r) comp_iter(t);
-        t.exit(r);
-        return r;
-    }
-
-    /**
-     * comp_if: 'if' named_expr [comp_iter]
-     */
-    public static boolean comp_if(ParseTree t) {
-        var m = t.enter(COMP_IF);
-        if (m != null) return m;
-        boolean r;
-        r = t.consume("if");
-        r = r && named_expr(t);
-        if (r) comp_iter(t);
-        t.exit(r);
-        return r;
-    }
-
-    /**
-     * comp_iter: comp_for | comp_if
-     */
-    public static boolean comp_iter(ParseTree t) {
-        var m = t.enter(COMP_ITER);
-        if (m != null) return m;
-        boolean r;
-        r = comp_for(t);
-        r = r || comp_if(t);
+        r = r && factor(t);
         t.exit(r);
         return r;
     }
@@ -2510,6 +2465,21 @@ public class FugaParser {
     }
 
     /**
+     * list_iter: '[' expr_or_star iterator ']'
+     */
+    public static boolean list_iter(ParseTree t) {
+        var m = t.enter(LIST_ITER);
+        if (m != null) return m;
+        boolean r;
+        r = t.consume("[");
+        r = r && expr_or_star(t);
+        r = r && iterator(t);
+        r = r && t.consume("]");
+        t.exit(r);
+        return r;
+    }
+
+    /**
      * list_atom: '[' [named_expr_list] ']'
      */
     public static boolean list_atom(ParseTree t) {
@@ -2524,42 +2494,73 @@ public class FugaParser {
     }
 
     /**
-     * dict_or_set: '{' [dict_maker | exprlist_star] '}'
+     * set_atom: '{' [exprlist_star] '}'
      */
-    public static boolean dict_or_set(ParseTree t) {
-        var m = t.enter(DICT_OR_SET);
+    public static boolean set_atom(ParseTree t) {
+        var m = t.enter(SET_ATOM);
         if (m != null) return m;
         boolean r;
         r = t.consume("{");
-        if (r) dict_or_set_2(t);
+        if (r) exprlist_star(t);
         r = r && t.consume("}");
         t.exit(r);
         return r;
     }
 
     /**
-     * dict_maker | exprlist_star
+     * dict_iter: '{' dict_item iterator '}'
      */
-    private static boolean dict_or_set_2(ParseTree t) {
-        var m = t.enter(DICT_OR_SET_2);
+    public static boolean dict_iter(ParseTree t) {
+        var m = t.enter(DICT_ITER);
         if (m != null) return m;
         boolean r;
-        r = dict_maker(t);
-        r = r || exprlist_star(t);
+        r = t.consume("{");
+        r = r && dict_item(t);
+        r = r && iterator(t);
+        r = r && t.consume("}");
         t.exit(r);
         return r;
     }
 
     /**
-     * atom: tuple_atom | list_atom | dict_or_set | NAME | NUMBER | STRING | 'None' | 'True' | 'False'
+     * dict_atom: '{' [dict_items] '}'
+     */
+    public static boolean dict_atom(ParseTree t) {
+        var m = t.enter(DICT_ATOM);
+        if (m != null) return m;
+        boolean r;
+        r = t.consume("{");
+        if (r) dict_items(t);
+        r = r && t.consume("}");
+        t.exit(r);
+        return r;
+    }
+
+    /**
+     * collection: tuple_atom | list_iter | list_atom | set_atom | dict_iter | dict_atom
+     */
+    public static boolean collection(ParseTree t) {
+        var m = t.enter(COLLECTION);
+        if (m != null) return m;
+        boolean r;
+        r = tuple_atom(t);
+        r = r || list_iter(t);
+        r = r || list_atom(t);
+        r = r || set_atom(t);
+        r = r || dict_iter(t);
+        r = r || dict_atom(t);
+        t.exit(r);
+        return r;
+    }
+
+    /**
+     * atom: collection | NAME | NUMBER | STRING | 'None' | 'True' | 'False'
      */
     public static boolean atom(ParseTree t) {
         var m = t.enter(ATOM);
         if (m != null) return m;
         boolean r;
-        r = tuple_atom(t);
-        r = r || list_atom(t);
-        r = r || dict_or_set(t);
+        r = collection(t);
         r = r || t.consume(TokenType.NAME);
         r = r || t.consume(TokenType.NUMBER);
         r = r || t.consume(TokenType.STRING);

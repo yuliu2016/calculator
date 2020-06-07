@@ -35,7 +35,7 @@ public final class FObject {
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (!(obj instanceof FObject)) return false;
+        if (!(obj.getClass() == FObject.class)) return false;
         FObject f_obj = ((FObject) obj);
         Boolean eq = (Boolean) type.__eq__(value, f_obj);
         return eq == null ? false : eq;

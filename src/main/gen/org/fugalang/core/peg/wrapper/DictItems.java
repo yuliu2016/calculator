@@ -6,11 +6,11 @@ import org.fugalang.core.parser.ParseTreeNode;
 import java.util.List;
 
 /**
- * dict_maker: ','.dict_item+ [',']
+ * dict_items: ','.dict_item+ [',']
  */
-public final class DictMaker extends NodeWrapper {
+public final class DictItems extends NodeWrapper {
 
-    public DictMaker(ParseTreeNode node) {
+    public DictItems(ParseTreeNode node) {
         super(node);
     }
 

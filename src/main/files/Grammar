@@ -80,10 +80,17 @@ slice_expr:
 dict_item:
     | expr ':' expr
     | '**' bitwise_or
-dict_maker:
+dict_items:
     | ','.dict_item+ [',']
 as_name:
     | 'as' NAME
+
+iter_for:
+    | 'for' targetlist 'in' disjunction [iter_if]
+iter_if:
+    | 'if' named_expr
+iterator:
+    | iter_for* 'for' targetlist [iter_if]
 
 # Assignments
 
@@ -265,29 +272,15 @@ sum:
     | sum '-' term
     | term
 term:
-    | term '*' pipe
-    | term '/' pipe
-    | term '%' pipe
-    | term '//' pipe
-    | term '@' pipe
-    | pipe
-pipe:
-    | pipe '->' pipe_expr
-    | factor
+    | term '*' pipe_expr
+    | term '/' pipe_expr
+    | term '%' pipe_expr
+    | term '//' pipe_expr
+    | term '@' pipe_expr
+    | pipe_expr
 pipe_expr:
-    | pipe_for
+    | pipe_expr '->' factor
     | factor
-
-pipe_for:
-    | [comp_for] 'for' targetlist ['if' named_expr] [parameters | block_suite]
-comp_for:
-    | 'for' targetlist 'in' disjunction [comp_iter]
-comp_if:
-    | 'if' named_expr [comp_iter]
-comp_iter:
-    | comp_for
-    | comp_if
-
 factor:
     | '+' factor
     | '-' factor
@@ -304,14 +297,25 @@ primary:
     | atom
 tuple_atom:
     | '(' [named_expr_list] ')'
+list_iter:
+    | '[' expr_or_star iterator ']'
 list_atom:
     | '[' [named_expr_list] ']'
-dict_or_set:
-    | '{' [dict_maker | exprlist_star] '}'
-atom:
+set_atom:
+    | '{' [exprlist_star] '}'
+dict_iter:
+    | '{' dict_item iterator '}'
+dict_atom:
+    | '{' [dict_items] '}'
+collection:
     | tuple_atom
+    | list_iter
     | list_atom
-    | dict_or_set
+    | set_atom
+    | dict_iter
+    | dict_atom
+atom:
+    | collection
     | NAME
     | NUMBER
     | STRING

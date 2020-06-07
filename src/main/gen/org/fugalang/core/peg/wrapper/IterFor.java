@@ -4,11 +4,11 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * comp_for: 'for' targetlist 'in' disjunction [comp_iter]
+ * iter_for: 'for' targetlist 'in' disjunction [iter_if]
  */
-public final class CompFor extends NodeWrapper {
+public final class IterFor extends NodeWrapper {
 
-    public CompFor(ParseTreeNode node) {
+    public IterFor(ParseTreeNode node) {
         super(node);
     }
 
@@ -20,11 +20,11 @@ public final class CompFor extends NodeWrapper {
         return new Disjunction(get(3));
     }
 
-    public CompIter compIter() {
-        return new CompIter(get(4));
+    public IterIf iterIf() {
+        return new IterIf(get(4));
     }
 
-    public boolean hasCompIter() {
+    public boolean hasIterIf() {
         return has(4);
     }
 }

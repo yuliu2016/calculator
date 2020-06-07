@@ -181,9 +181,9 @@ public interface FugaVisitor<T> {
     }
 
     /**
-     * dict_maker: ','.dict_item+ [',']
+     * dict_items: ','.dict_item+ [',']
      */
-    default T visitDictMaker(DictMaker dictMaker) {
+    default T visitDictItems(DictItems dictItems) {
         return null;
     }
 
@@ -191,6 +191,27 @@ public interface FugaVisitor<T> {
      * as_name: 'as' NAME
      */
     default T visitAsName(AsName asName) {
+        return null;
+    }
+
+    /**
+     * iter_for: 'for' targetlist 'in' disjunction [iter_if]
+     */
+    default T visitIterFor(IterFor iterFor) {
+        return null;
+    }
+
+    /**
+     * iter_if: 'if' named_expr
+     */
+    default T visitIterIf(IterIf iterIf) {
+        return null;
+    }
+
+    /**
+     * iterator: iter_for* 'for' targetlist [iter_if]
+     */
+    default T visitIterator(Iterator iterator) {
         return null;
     }
 
@@ -566,51 +587,16 @@ public interface FugaVisitor<T> {
     }
 
     /**
-     * term: term '*' pipe | term '/' pipe | term '%' pipe | term '//' pipe | term '@' pipe | pipe
+     * term: term '*' pipe_expr | term '/' pipe_expr | term '%' pipe_expr | term '//' pipe_expr | term '@' pipe_expr | pipe_expr
      */
     default T visitTerm(Term term) {
         return null;
     }
 
     /**
-     * pipe: pipe '->' pipe_expr | factor
-     */
-    default T visitPipe(Pipe pipe) {
-        return null;
-    }
-
-    /**
-     * pipe_expr: pipe_for | factor
+     * pipe_expr: pipe_expr '->' factor | factor
      */
     default T visitPipeExpr(PipeExpr pipeExpr) {
-        return null;
-    }
-
-    /**
-     * pipe_for: [comp_for] 'for' targetlist ['if' named_expr] [parameters | block_suite]
-     */
-    default T visitPipeFor(PipeFor pipeFor) {
-        return null;
-    }
-
-    /**
-     * comp_for: 'for' targetlist 'in' disjunction [comp_iter]
-     */
-    default T visitCompFor(CompFor compFor) {
-        return null;
-    }
-
-    /**
-     * comp_if: 'if' named_expr [comp_iter]
-     */
-    default T visitCompIf(CompIf compIf) {
-        return null;
-    }
-
-    /**
-     * comp_iter: comp_for | comp_if
-     */
-    default T visitCompIter(CompIter compIter) {
         return null;
     }
 
@@ -643,6 +629,13 @@ public interface FugaVisitor<T> {
     }
 
     /**
+     * list_iter: '[' expr_or_star iterator ']'
+     */
+    default T visitListIter(ListIter listIter) {
+        return null;
+    }
+
+    /**
      * list_atom: '[' [named_expr_list] ']'
      */
     default T visitListAtom(ListAtom listAtom) {
@@ -650,14 +643,35 @@ public interface FugaVisitor<T> {
     }
 
     /**
-     * dict_or_set: '{' [dict_maker | exprlist_star] '}'
+     * set_atom: '{' [exprlist_star] '}'
      */
-    default T visitDictOrSet(DictOrSet dictOrSet) {
+    default T visitSetAtom(SetAtom setAtom) {
         return null;
     }
 
     /**
-     * atom: tuple_atom | list_atom | dict_or_set | NAME | NUMBER | STRING | 'None' | 'True' | 'False'
+     * dict_iter: '{' dict_item iterator '}'
+     */
+    default T visitDictIter(DictIter dictIter) {
+        return null;
+    }
+
+    /**
+     * dict_atom: '{' [dict_items] '}'
+     */
+    default T visitDictAtom(DictAtom dictAtom) {
+        return null;
+    }
+
+    /**
+     * collection: tuple_atom | list_iter | list_atom | set_atom | dict_iter | dict_atom
+     */
+    default T visitCollection(Collection collection) {
+        return null;
+    }
+
+    /**
+     * atom: collection | NAME | NUMBER | STRING | 'None' | 'True' | 'False'
      */
     default T visitAtom(Atom atom) {
         return null;
