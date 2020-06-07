@@ -3,65 +3,77 @@ package org.fugalang.core.object;
 import java.math.BigInteger;
 
 
-public class FLong implements FType<BigInteger> {
+public final class FLong implements FType<BigInteger> {
+
+    static FLong INSTANCE = new FLong();
+
+    private FLong() {
+    }
 
     @Override
     public Object __repr__(BigInteger a) {
-        return null;
+        return a.toString();
     }
 
     @Override
     public Object __str__(BigInteger a) {
-        return null;
+        return __repr__(a);
     }
 
     @Override
     public Object __format__(BigInteger a) {
-        return null;
+        return __repr__(a);
     }
 
     @Override
     public Object __hash__(BigInteger a) {
-        return null;
+        return a.hashCode();
     }
 
     @Override
     public Object __bool__(BigInteger a) {
-        return null;
-    }
-
-    @Override
-    public Object __compare__(BigInteger a, Object b) {
-        return null;
+        return a.signum() != 0;
     }
 
     @Override
     public Object __lt__(BigInteger a, Object b) {
+        if (b.getClass() == BigInteger.class) return a.compareTo((BigInteger) b) < 0;
+        if (b.getClass() == Double.class) return a.doubleValue() < (Double) b;
         return null;
     }
 
     @Override
     public Object __le__(BigInteger a, Object b) {
+        if (b.getClass() == BigInteger.class) return a.compareTo((BigInteger) b) < 0;
+        if (b.getClass() == Double.class) return a.doubleValue() <= (Double) b;
         return null;
     }
 
     @Override
     public Object __eq__(BigInteger a, Object b) {
+        if (b.getClass() == BigInteger.class) return a.compareTo((BigInteger) b) < 0;
+        if (b.getClass() == Double.class) return a.doubleValue() == (Double) b;
         return null;
     }
 
     @Override
     public Object __ne__(BigInteger a, Object b) {
+        if (b.getClass() == BigInteger.class) return a.compareTo((BigInteger) b) < 0;
+        if (b.getClass() == Double.class) return a.doubleValue() != (Double) b;
         return null;
     }
 
     @Override
     public Object __gt__(BigInteger a, Object b) {
+        if (b.getClass() == BigInteger.class) return a.compareTo((BigInteger) b) < 0;
+        if (b.getClass() == Double.class) return a.doubleValue() > (Double) b;
         return null;
     }
 
     @Override
     public Object __ge__(BigInteger a, Object b) {
+        if (b.getClass() == BigInteger.class) return a.compareTo((BigInteger) b) < 0;
+        if (b.getClass() == Double.class) return a.doubleValue() >= (Double) b;
         return null;
     }
 
@@ -127,16 +139,22 @@ public class FLong implements FType<BigInteger> {
 
     @Override
     public Object __add__(BigInteger a, Object o) {
+        if (o instanceof BigInteger) return a.add((BigInteger) o);
+        if (o instanceof Double) return FConst.FloatType.__add__(a.doubleValue(), o);
         return null;
     }
 
     @Override
     public Object __sub__(BigInteger a, Object o) {
+        if (o instanceof BigInteger) return a.subtract((BigInteger) o);
+        if (o instanceof Double) return FConst.FloatType.__sub__(a.doubleValue(), o);
         return null;
     }
 
     @Override
     public Object __mul__(BigInteger a, Object o) {
+        if (o instanceof BigInteger) return a.multiply((BigInteger) o);
+        if (o instanceof Double) return FConst.FloatType.__mul__(a.doubleValue(), o);
         return null;
     }
 
@@ -147,51 +165,62 @@ public class FLong implements FType<BigInteger> {
 
     @Override
     public Object __truediv__(BigInteger a, Object o) {
-        return null;
+        return FConst.FloatType.__truediv__(a.doubleValue(), o);
     }
 
     @Override
     public Object __floordiv__(BigInteger a, Object o) {
-        return null;
+        return FConst.FloatType.__floordiv__(a.doubleValue(), o);
     }
 
     @Override
     public Object __mod__(BigInteger a, Object o) {
+        if (o instanceof BigInteger) return a.mod((BigInteger) o);
+        if (o instanceof Double) return FConst.FloatType.__mod__(a.doubleValue(), o);
         return null;
     }
 
     @Override
     public Object __divmod__(BigInteger a, Object o) {
+        if (o instanceof BigInteger) return a.divideAndRemainder((BigInteger) o);
+        if (o instanceof Double) return FConst.FloatType.__mod__(a.doubleValue(), o);
         return null;
     }
 
     @Override
     public Object __pow__(BigInteger a, Object o) {
+        if (o instanceof BigInteger) return a.pow(((BigInteger) o).intValueExact());
+        if (o instanceof Double) return FConst.FloatType.__pow__((Double) o, a);
         return null;
     }
 
     @Override
     public Object __lshift__(BigInteger a, Object o) {
+        if (o instanceof BigInteger) return a.shiftLeft(((BigInteger) o).intValueExact());
         return null;
     }
 
     @Override
     public Object __rshift__(BigInteger a, Object o) {
+        if (o instanceof BigInteger) return a.shiftRight(((BigInteger) o).intValueExact());
         return null;
     }
 
     @Override
     public Object __and__(BigInteger a, Object o) {
+        if (o instanceof BigInteger) return a.and((BigInteger) o);
         return null;
     }
 
     @Override
     public Object __xor__(BigInteger a, Object o) {
+        if (o instanceof BigInteger) return a.xor((BigInteger) o);
         return null;
     }
 
     @Override
     public Object __or__(BigInteger a, Object o) {
+        if (o instanceof BigInteger) return a.or((BigInteger) o);
         return null;
     }
 
@@ -337,52 +366,52 @@ public class FLong implements FType<BigInteger> {
 
     @Override
     public Object __neg__(BigInteger a) {
-        return null;
+        return a.negate();
     }
 
     @Override
     public Object __pos__(BigInteger a) {
-        return null;
+        return a;
     }
 
     @Override
     public Object __abs__(BigInteger a) {
-        return null;
+        return a.abs();
     }
 
     @Override
     public Object __invert__(BigInteger a) {
-        return null;
+        return a.not();
     }
 
     @Override
     public Object __int__(BigInteger a) {
-        return null;
+        return a;
     }
 
     @Override
     public Object __float__(BigInteger a) {
-        return null;
+        return a.doubleValue();
     }
 
     @Override
     public Object __round__(BigInteger a) {
-        return null;
+        return a.doubleValue();
     }
 
     @Override
     public Object __trunk__(BigInteger a) {
-        return null;
+        return a;
     }
 
     @Override
     public Object __floor__(BigInteger a) {
-        return null;
+        return a;
     }
 
     @Override
     public Object __ceil__(BigInteger a) {
-        return null;
+        return a;
     }
 
     @Override

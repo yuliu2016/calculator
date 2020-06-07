@@ -3,6 +3,7 @@ package org.fugalang.core.object;
 @SuppressWarnings("unused")
 public interface FType<T> {
 
+    // Basic operators
     Object __repr__(T a);
     Object __str__(T a);
     Object __format__(T a);
@@ -10,7 +11,6 @@ public interface FType<T> {
     Object __bool__(T a);
 
     // Comparision Operators
-    Object __compare__(T a, Object b);
     Object __lt__(T a, Object b);
     Object __le__(T a, Object b);
     Object __eq__(T a, Object b);

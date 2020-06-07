@@ -1,65 +1,138 @@
 package org.fugalang.core.object;
 
-public class FTuple implements FType<Object[]> {
+import org.fugalang.core.eval.FEval;
+
+import java.math.BigInteger;
+import java.util.Arrays;
+import java.util.StringJoiner;
+
+public final class FTuple implements FType<Object[]> {
+
+    static FTuple INSTANCE = new FTuple();
+
+    private FTuple() {
+    }
+
 
     @Override
     public Object __repr__(Object[] a) {
-        return null;
+        if (a.length == 0) {
+            return "()";
+        }
+        var sj = new StringJoiner(", ", "(", ")");
+        for (Object o : a) {
+            sj.add(o.toString());
+        }
+        return sj.toString();
     }
 
     @Override
     public Object __str__(Object[] a) {
-        return null;
+        return __repr__(a);
     }
 
     @Override
     public Object __format__(Object[] a) {
-        return null;
+        return __repr__(a);
     }
 
     @Override
     public Object __hash__(Object[] a) {
-        return null;
+        return Arrays.hashCode(a);
     }
 
     @Override
     public Object __bool__(Object[] a) {
-        return null;
-    }
-
-    @Override
-    public Object __compare__(Object[] a, Object b) {
-        return null;
+        return a.length != 0;
     }
 
     @Override
     public Object __lt__(Object[] a, Object b) {
-        return null;
+        if (!(b instanceof Object[])) return null;
+        var c = (Object[]) b;
+        int m = Math.max(a.length, c.length);
+        for (int i = 0; i < m; i++) {
+            var x = a[i];
+            var y = c[i];
+            if (!FEval.compareEqIsTrue(x, y)) {
+                return FEval.compareLt(x, y);
+            }
+        }
+        return a.length < c.length;
     }
 
     @Override
     public Object __le__(Object[] a, Object b) {
-        return null;
+        if (!(b instanceof Object[])) return null;
+        var c = (Object[]) b;
+        int m = Math.max(a.length, c.length);
+        for (int i = 0; i < m; i++) {
+            var x = a[i];
+            var y = c[i];
+            if (!FEval.compareEqIsTrue(x, y)) {
+                return FEval.compareLe(x, y);
+            }
+        }
+        return a.length <= c.length;
+    }
+
+    private static boolean tupleEquals(Object[] a, Object[] c) {
+        if (a.length != c.length) {
+            return false;
+        }
+        int i = 0;
+        while (i < a.length) {
+            var x = a[i];
+            var y = c[i];
+            if (FEval.compareEqIsTrue(x, y)) {
+                i++;
+            } else {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
     public Object __eq__(Object[] a, Object b) {
-        return null;
+        if (!(b instanceof Object[])) return null;
+        return tupleEquals(a, (Object[]) b);
     }
 
     @Override
     public Object __ne__(Object[] a, Object b) {
-        return null;
+        if (!(b instanceof Object[])) return null;
+        return !tupleEquals(a, (Object[]) b);
     }
 
     @Override
     public Object __gt__(Object[] a, Object b) {
-        return null;
+        if (!(b instanceof Object[])) return null;
+        var c = (Object[]) b;
+        int m = Math.max(a.length, c.length);
+        for (int i = 0; i < m; i++) {
+            var x = a[i];
+            var y = c[i];
+            if (!FEval.compareEqIsTrue(x, y)) {
+                return FEval.compareGt(x, y);
+            }
+        }
+        return a.length > c.length;
     }
 
     @Override
     public Object __ge__(Object[] a, Object b) {
-        return null;
+        if (!(b instanceof Object[])) return null;
+        var c = (Object[]) b;
+        int m = Math.max(a.length, c.length);
+        for (int i = 0; i < m; i++) {
+            var x = a[i];
+            var y = c[i];
+            if (!FEval.compareEqIsTrue(x, y)) {
+                return FEval.compareGe(x, y);
+            }
+        }
+        return a.length >= c.length;
     }
 
     @Override
@@ -89,11 +162,18 @@ public class FTuple implements FType<Object[]> {
 
     @Override
     public Object __len__(Object[] a) {
-        return null;
+        return a.length;
     }
 
     @Override
     public Object __getitem__(Object[] a, Object o) {
+        if (o.getClass() == BigInteger.class) {
+            var index = ((BigInteger) o).intValue();
+            if (index < 0 || index >= a.length) {
+                throw new IndexOutOfBoundsException();
+            }
+            return a[index];
+        }
         return null;
     }
 
@@ -124,6 +204,13 @@ public class FTuple implements FType<Object[]> {
 
     @Override
     public Object __add__(Object[] a, Object o) {
+        if (o instanceof Object[]) {
+            var b = ((Object[]) o);
+            var c = new Object[a.length + b.length];
+            System.arraycopy(a, 0, c, 0, a.length);
+            System.arraycopy(b, 0, c, a.length, b.length);
+            return c;
+        }
         return null;
     }
 

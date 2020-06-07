@@ -2,7 +2,12 @@ package org.fugalang.core.object;
 
 import java.math.BigInteger;
 
-public class FFloat implements FType<Double> {
+public final class FFloat implements FType<Double> {
+
+    static FFloat INSTANCE = new FFloat();
+
+    private FFloat() {
+    }
 
     private static Double asDouble(Object o) {
         if (o.getClass() == Double.class) {
@@ -37,11 +42,6 @@ public class FFloat implements FType<Double> {
     @Override
     public Object __bool__(Double a) {
         return !Double.isNaN(a) && a != 0;
-    }
-
-    @Override
-    public Object __compare__(Double a, Object b) {
-        return null;
     }
 
     @Override
@@ -149,79 +149,73 @@ public class FFloat implements FType<Double> {
     @Override
     public Object __sub__(Double a, Object o) {
         var b = asDouble(o);
-        return b == null ? null : a + b;
+        return b == null ? null : a - b;
     }
 
     @Override
     public Object __mul__(Double a, Object o) {
         var b = asDouble(o);
-        return b == null ? null : a + b;
+        return b == null ? null : a * b;
     }
 
     @Override
     public Object __matmul__(Double a, Object o) {
-        var b = asDouble(o);
-        return b == null ? null : a + b;
+        return null;
     }
 
     @Override
     public Object __truediv__(Double a, Object o) {
         var b = asDouble(o);
-        return b == null ? null : a + b;
+        return b == null ? null : a / b;
     }
 
     @Override
     public Object __floordiv__(Double a, Object o) {
         var b = asDouble(o);
-        return b == null ? null : a + b;
+        return b == null ? null : (int) Math.floor(a / b);
     }
 
     @Override
     public Object __mod__(Double a, Object o) {
         var b = asDouble(o);
-        return b == null ? null : a + b;
+        return b == null ? null : a % b;
     }
 
     @Override
     public Object __divmod__(Double a, Object o) {
         var b = asDouble(o);
-        return b == null ? null : a + b;
+        return b == null ? null : new Double[]{a / b, a % b};
     }
 
     @Override
     public Object __pow__(Double a, Object o) {
         var b = asDouble(o);
-        return b == null ? null : a + b;
+        return b == null ? null : Math.pow(a, b);
     }
 
     @Override
     public Object __lshift__(Double a, Object o) {
-        var b = asDouble(o);
-        return b == null ? null : a + b;
+        return null;
     }
 
     @Override
     public Object __rshift__(Double a, Object o) {
-        var b = asDouble(o);
-        return b == null ? null : a + b;
+        return null;
     }
 
     @Override
     public Object __and__(Double a, Object o) {
-        var b = asDouble(o);
-        return b == null ? null : a + b;
+        return null;
     }
 
     @Override
     public Object __xor__(Double a, Object o) {
-        var b = asDouble(o);
-        return b == null ? null : a + b;
+        return null;
     }
 
     @Override
     public Object __or__(Double a, Object o) {
-        var b = asDouble(o);
-        return b == null ? null : a + b;
+        return null;
     }
 
     @Override
@@ -366,17 +360,17 @@ public class FFloat implements FType<Double> {
 
     @Override
     public Object __neg__(Double a) {
-        return null;
+        return -a;
     }
 
     @Override
     public Object __pos__(Double a) {
-        return null;
+        return a;
     }
 
     @Override
     public Object __abs__(Double a) {
-        return null;
+        return Math.abs(a);
     }
 
     @Override
