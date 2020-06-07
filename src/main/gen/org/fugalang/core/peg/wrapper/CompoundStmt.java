@@ -4,12 +4,12 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * compound_stmt: 
- * | if_stmt
- * | while_stmt
- * | for_stmt
- * | try_stmt
- * | with_stmt
+ * compound_stmt:
+ * *   | if_stmt
+ * *   | while_stmt
+ * *   | for_stmt
+ * *   | try_stmt
+ * *   | with_stmt
  */
 public final class CompoundStmt extends NodeWrapper {
 

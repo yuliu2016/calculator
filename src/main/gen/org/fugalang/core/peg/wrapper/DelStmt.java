@@ -4,7 +4,8 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * del_stmt: 'del' targetlist
+ * del_stmt:
+ * *   | 'del' targetlist
  */
 public final class DelStmt extends NodeWrapper {
 

@@ -7,7 +7,8 @@ import org.fugalang.core.token.TokenType;
 import java.util.List;
 
 /**
- * rules: [NEWLINE] single_rule+
+ * rules:
+ * *   | [NEWLINE] single_rule+
  */
 public final class Rules extends NodeWrapper {
 

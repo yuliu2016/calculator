@@ -4,7 +4,10 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * sum: sum '+' term | sum '-' term | term
+ * sum:
+ * *   | sum '+' term
+ * *   | sum '-' term
+ * *   | term
  */
 public final class Sum extends NodeWrapper {
 

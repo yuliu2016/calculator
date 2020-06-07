@@ -4,7 +4,10 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * import_from_items: '*' | '(' import_as_names [','] ')' | import_as_names
+ * import_from_items:
+ * *   | '*'
+ * *   | '(' import_as_names [','] ')'
+ * *   | import_as_names
  */
 public final class ImportFromItems extends NodeWrapper {
 

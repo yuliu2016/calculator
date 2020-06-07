@@ -4,7 +4,8 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * expr_as_name: expr [as_name]
+ * expr_as_name:
+ * *   | expr [as_name]
  */
 public final class ExprAsName extends NodeWrapper {
 

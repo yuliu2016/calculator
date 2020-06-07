@@ -5,7 +5,8 @@ import org.fugalang.core.parser.ParseTreeNode;
 import org.fugalang.core.token.TokenType;
 
 /**
- * delimited: STRING '.' item '+'
+ * delimited:
+ * *   | STRING '.' item '+'
  */
 public final class Delimited extends NodeWrapper {
 

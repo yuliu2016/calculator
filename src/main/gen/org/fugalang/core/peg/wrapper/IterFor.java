@@ -4,7 +4,8 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * iter_for: 'for' targetlist 'in' disjunction [iter_if]
+ * iter_for:
+ * *   | 'for' targetlist 'in' disjunction [iter_if]
  */
 public final class IterFor extends NodeWrapper {
 

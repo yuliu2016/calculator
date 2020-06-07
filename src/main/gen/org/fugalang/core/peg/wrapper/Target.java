@@ -5,7 +5,11 @@ import org.fugalang.core.parser.ParseTreeNode;
 import org.fugalang.core.token.TokenType;
 
 /**
- * target: NAME | '(' targetlist ')' | '*' target | primary
+ * target:
+ * *   | NAME
+ * *   | '(' targetlist ')'
+ * *   | '*' target
+ * *   | primary
  */
 public final class Target extends NodeWrapper {
 

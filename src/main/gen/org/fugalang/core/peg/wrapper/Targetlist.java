@@ -6,7 +6,8 @@ import org.fugalang.core.parser.ParseTreeNode;
 import java.util.List;
 
 /**
- * targetlist: ','.target+ [',']
+ * targetlist:
+ * *   | ','.target+ [',']
  */
 public final class Targetlist extends NodeWrapper {
 

@@ -5,7 +5,8 @@ import org.fugalang.core.parser.ParseTreeNode;
 import org.fugalang.core.token.TokenType;
 
 /**
- * simple_arg: NAME ['=' expr]
+ * simple_arg:
+ * *   | NAME ['=' expr]
  */
 public final class SimpleArg extends NodeWrapper {
 

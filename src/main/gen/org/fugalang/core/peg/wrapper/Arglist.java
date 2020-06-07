@@ -6,7 +6,8 @@ import org.fugalang.core.parser.ParseTreeNode;
 import java.util.List;
 
 /**
- * arglist: ','.argument+ [',']
+ * arglist:
+ * *   | ','.argument+ [',']
  */
 public final class Arglist extends NodeWrapper {
 

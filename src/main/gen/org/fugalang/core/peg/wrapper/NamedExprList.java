@@ -6,7 +6,8 @@ import org.fugalang.core.parser.ParseTreeNode;
 import java.util.List;
 
 /**
- * named_expr_list: ','.named_expr_star+ [',']
+ * named_expr_list:
+ * *   | ','.named_expr_star+ [',']
  */
 public final class NamedExprList extends NodeWrapper {
 

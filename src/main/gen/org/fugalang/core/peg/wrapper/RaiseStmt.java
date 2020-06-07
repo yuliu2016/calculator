@@ -4,7 +4,8 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * raise_stmt: 'raise' [expr ['from' expr]]
+ * raise_stmt:
+ * *   | 'raise' [expr ['from' expr]]
  */
 public final class RaiseStmt extends NodeWrapper {
 

@@ -5,7 +5,8 @@ import org.fugalang.core.parser.ParseTreeNode;
 import org.fugalang.core.token.TokenType;
 
 /**
- * as_name: 'as' NAME
+ * as_name:
+ * *   | 'as' NAME
  */
 public final class AsName extends NodeWrapper {
 

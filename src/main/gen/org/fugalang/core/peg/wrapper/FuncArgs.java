@@ -6,7 +6,9 @@ import org.fugalang.core.parser.ParseTreeNode;
 import java.util.List;
 
 /**
- * func_args: simple_arg+ | '(' [typed_arg_list] ')'
+ * func_args:
+ * *   | simple_arg+
+ * *   | '(' [typed_arg_list] ')'
  */
 public final class FuncArgs extends NodeWrapper {
 

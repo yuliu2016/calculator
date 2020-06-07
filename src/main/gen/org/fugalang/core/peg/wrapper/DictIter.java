@@ -4,7 +4,8 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * dict_iter: '{' dict_item iterator '}'
+ * dict_iter:
+ * *   | '{' dict_item iterator '}'
  */
 public final class DictIter extends NodeWrapper {
 

@@ -5,7 +5,11 @@ import org.fugalang.core.parser.ParseTreeNode;
 import org.fugalang.core.token.TokenType;
 
 /**
- * atom: '(' sum ')' | NAME '(' [parameters] ')' | NAME | NUMBER
+ * atom:
+ * *   | '(' sum ')'
+ * *   | NAME '(' [parameters] ')'
+ * *   | NAME
+ * *   | NUMBER
  */
 public final class Atom extends NodeWrapper {
 

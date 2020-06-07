@@ -4,7 +4,8 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * kwargs: '**' typed_arg [',']
+ * kwargs:
+ * *   | '**' typed_arg [',']
  */
 public final class Kwargs extends NodeWrapper {
 

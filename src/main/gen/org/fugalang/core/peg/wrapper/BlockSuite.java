@@ -7,7 +7,8 @@ import org.fugalang.core.token.TokenType;
 import java.util.List;
 
 /**
- * block_suite: '{' NEWLINE stmt+ '}'
+ * block_suite:
+ * *   | '{' NEWLINE stmt+ '}'
  */
 public final class BlockSuite extends NodeWrapper {
 

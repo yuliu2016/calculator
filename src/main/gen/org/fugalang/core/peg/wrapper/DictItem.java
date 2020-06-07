@@ -4,7 +4,9 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * dict_item: expr ':' expr | '**' bitwise_or
+ * dict_item:
+ * *   | expr ':' expr
+ * *   | '**' bitwise_or
  */
 public final class DictItem extends NodeWrapper {
 

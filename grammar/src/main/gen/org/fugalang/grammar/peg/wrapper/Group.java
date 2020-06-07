@@ -4,7 +4,8 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * group: '(' or_rule ')'
+ * group:
+ * *   | '(' or_rule ')'
  */
 public final class Group extends NodeWrapper {
 

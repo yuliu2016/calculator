@@ -1,21 +1,27 @@
 package org.fugalang.grammar.gen;
 
-import org.fugalang.grammar.peg.wrapper.AndRule;
-import org.fugalang.grammar.peg.wrapper.Item;
-import org.fugalang.grammar.peg.wrapper.OrRule;
-import org.fugalang.grammar.peg.wrapper.Repeat;
+import org.fugalang.grammar.peg.wrapper.*;
 import org.fugalang.grammar.util.FirstAndMore;
 
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
 public class PEGUtil {
+
+    public static String constructString(SingleRule singleRule) {
+        return singleRule.name() + ":" + constructString(singleRule.orRule(), true);
+    }
+
     public static String constructString(OrRule orRule) {
+        return constructString(orRule, false);
+    }
+
+    public static String constructString(OrRule orRule, boolean named) {
         var orRuleList = orRule.orRule2s();
         StringJoiner joiner;
 
-        if (orRuleList.size() >= 4) {
-            joiner = new StringJoiner("\n| ", "\n| ", "");
+        if (named) {
+            joiner = new StringJoiner("\n*   | ", "\n*   | ", "");
         } else {
             joiner = new StringJoiner(" | ");
         }

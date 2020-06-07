@@ -4,7 +4,10 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * typed_arg_list: kwargs | args_kwargs | full_arg_list
+ * typed_arg_list:
+ * *   | kwargs
+ * *   | args_kwargs
+ * *   | full_arg_list
  */
 public final class TypedArgList extends NodeWrapper {
 

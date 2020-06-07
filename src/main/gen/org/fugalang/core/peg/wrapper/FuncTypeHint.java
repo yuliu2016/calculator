@@ -4,7 +4,8 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * func_type_hint: '<' expr '>'
+ * func_type_hint:
+ * *   | '<' expr '>'
  */
 public final class FuncTypeHint extends NodeWrapper {
 

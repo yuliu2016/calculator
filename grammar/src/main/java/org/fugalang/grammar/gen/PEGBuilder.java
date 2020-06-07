@@ -6,11 +6,12 @@ import org.fugalang.grammar.peg.wrapper.*;
 import org.fugalang.grammar.util.ParserStringUtil;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 public class PEGBuilder {
 
-    private final Map<String, OrRule> ruleMap;
+    private final List<SingleRule> rules;
     private final TokenConverter converter;
     private final Map<String, String> classNameMap = new LinkedHashMap<>();
     private final ClassSet classSet;
@@ -23,10 +24,7 @@ public class PEGBuilder {
             TokenConverter converter,
             PackageOutput packageOutput
     ) {
-        ruleMap = new LinkedHashMap<>();
-        for (var rule : rules.singleRules()) {
-            ruleMap.put(rule.name(), rule.orRule());
-        }
+        this.rules = rules.singleRules();
         this.converter = converter;
         classSet = new ClassSet(packageOutput);
     }
@@ -45,24 +43,24 @@ public class PEGBuilder {
 
     public void generateClasses() {
         // do this first because each rule needs to lookup the types of previous rules
-        for (var entry : ruleMap.entrySet()) {
-            classNameMap.put(entry.getKey(), ParserStringUtil.convertCase(entry.getKey()));
+        for (var singleRule : rules) {
+            classNameMap.put(singleRule.name(), ParserStringUtil.convertCase(singleRule.name()));
         }
 
-        for (var entry : ruleMap.entrySet()) {
-            var left_recursive = isLeftRecursive(entry.getKey(), entry.getValue());
+        for (var singleRule : rules) {
+            var left_recursive = isLeftRecursive(singleRule.name(), singleRule.orRule());
 
-            var realClassName = classNameMap.get(entry.getKey());
-            var className = ClassName.of(realClassName, entry.getKey());
+            var realClassName = classNameMap.get(singleRule.name());
+            var className = ClassName.of(realClassName, singleRule.name());
 
             // use a root class to reduce files
             ClassBuilder cb = classSet.createRootClass(className, left_recursive);
 
-            var rule_repr = entry.getKey() + ": " + PEGUtil.constructString(entry.getValue());
+            var rule_repr = PEGUtil.constructString(singleRule);
             cb.setHeaderComments(rule_repr);
             cb.setRuleType(RuleType.Disjunction);
 
-            addOrRule(className, cb, entry.getValue());
+            addOrRule(className, cb, singleRule.orRule());
 
             // protect against not initializing result
             cb.guardMatchEmptyString();

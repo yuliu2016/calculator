@@ -6,7 +6,8 @@ import org.fugalang.core.parser.ParseTreeNode;
 import java.util.List;
 
 /**
- * iterator: iter_for* 'for' targetlist [iter_if]
+ * iterator:
+ * *   | iter_for* 'for' targetlist [iter_if]
  */
 public final class Iterator extends NodeWrapper {
 

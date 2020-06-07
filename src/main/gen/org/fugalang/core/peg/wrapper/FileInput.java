@@ -7,7 +7,8 @@ import org.fugalang.core.token.TokenType;
 import java.util.List;
 
 /**
- * file_input: (NEWLINE | stmt)* ENDMARKER
+ * file_input:
+ * *   | (NEWLINE | stmt)* ENDMARKER
  */
 public final class FileInput extends NodeWrapper {
 

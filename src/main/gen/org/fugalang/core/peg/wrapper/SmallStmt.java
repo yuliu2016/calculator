@@ -4,14 +4,18 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * small_stmt: 
- * | flow_stmt
- * | del_stmt
- * | nonlocal_stmt
- * | assert_stmt
- * | import_name
- * | import_from
- * | assignment
+ * small_stmt:
+ * *   | 'pass'
+ * *   | 'break'
+ * *   | 'continue'
+ * *   | return_stmt
+ * *   | raise_stmt
+ * *   | del_stmt
+ * *   | nonlocal_stmt
+ * *   | assert_stmt
+ * *   | import_name
+ * *   | import_from
+ * *   | assignment
  */
 public final class SmallStmt extends NodeWrapper {
 
@@ -19,59 +23,79 @@ public final class SmallStmt extends NodeWrapper {
         super(node);
     }
 
-    public FlowStmt flowStmt() {
-        return new FlowStmt(get(0));
+    public boolean isPass() {
+        return is(0);
     }
 
-    public boolean hasFlowStmt() {
-        return has(0);
+    public boolean isBreak() {
+        return is(1);
     }
 
-    public DelStmt delStmt() {
-        return new DelStmt(get(1));
+    public boolean isContinue() {
+        return is(2);
     }
 
-    public boolean hasDelStmt() {
-        return has(1);
+    public ReturnStmt returnStmt() {
+        return new ReturnStmt(get(3));
     }
 
-    public NonlocalStmt nonlocalStmt() {
-        return new NonlocalStmt(get(2));
-    }
-
-    public boolean hasNonlocalStmt() {
-        return has(2);
-    }
-
-    public AssertStmt assertStmt() {
-        return new AssertStmt(get(3));
-    }
-
-    public boolean hasAssertStmt() {
+    public boolean hasReturnStmt() {
         return has(3);
     }
 
-    public ImportName importName() {
-        return new ImportName(get(4));
+    public RaiseStmt raiseStmt() {
+        return new RaiseStmt(get(4));
     }
 
-    public boolean hasImportName() {
+    public boolean hasRaiseStmt() {
         return has(4);
     }
 
-    public ImportFrom importFrom() {
-        return new ImportFrom(get(5));
+    public DelStmt delStmt() {
+        return new DelStmt(get(5));
     }
 
-    public boolean hasImportFrom() {
+    public boolean hasDelStmt() {
         return has(5);
     }
 
+    public NonlocalStmt nonlocalStmt() {
+        return new NonlocalStmt(get(6));
+    }
+
+    public boolean hasNonlocalStmt() {
+        return has(6);
+    }
+
+    public AssertStmt assertStmt() {
+        return new AssertStmt(get(7));
+    }
+
+    public boolean hasAssertStmt() {
+        return has(7);
+    }
+
+    public ImportName importName() {
+        return new ImportName(get(8));
+    }
+
+    public boolean hasImportName() {
+        return has(8);
+    }
+
+    public ImportFrom importFrom() {
+        return new ImportFrom(get(9));
+    }
+
+    public boolean hasImportFrom() {
+        return has(9);
+    }
+
     public Assignment assignment() {
-        return new Assignment(get(6));
+        return new Assignment(get(10));
     }
 
     public boolean hasAssignment() {
-        return has(6);
+        return has(10);
     }
 }

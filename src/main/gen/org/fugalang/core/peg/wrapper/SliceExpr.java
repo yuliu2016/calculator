@@ -4,7 +4,8 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * slice_expr: ':' [expr]
+ * slice_expr:
+ * *   | ':' [expr]
  */
 public final class SliceExpr extends NodeWrapper {
 

@@ -4,7 +4,8 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * set_atom: '{' [exprlist_star] '}'
+ * set_atom:
+ * *   | '{' [exprlist_star] '}'
  */
 public final class SetAtom extends NodeWrapper {
 

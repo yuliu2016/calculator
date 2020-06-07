@@ -4,7 +4,8 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * list_iter: '[' expr_or_star iterator ']'
+ * list_iter:
+ * *   | '[' expr_or_star iterator ']'
  */
 public final class ListIter extends NodeWrapper {
 

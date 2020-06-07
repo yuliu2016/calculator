@@ -4,7 +4,11 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * repeat: delimited | item '*' | item '+' | item
+ * repeat:
+ * *   | delimited
+ * *   | item '*'
+ * *   | item '+'
+ * *   | item
  */
 public final class Repeat extends NodeWrapper {
 

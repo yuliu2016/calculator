@@ -4,17 +4,17 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * comp_op: 
- * | '<'
- * | '>'
- * | '=='
- * | '>='
- * | '<='
- * | '!='
- * | 'in'
- * | 'not' 'in'
- * | 'is'
- * | 'is' 'not'
+ * comp_op:
+ * *   | '<'
+ * *   | '>'
+ * *   | '=='
+ * *   | '>='
+ * *   | '<='
+ * *   | '!='
+ * *   | 'in'
+ * *   | 'not' 'in'
+ * *   | 'is'
+ * *   | 'is' 'not'
  */
 public final class CompOp extends NodeWrapper {
 

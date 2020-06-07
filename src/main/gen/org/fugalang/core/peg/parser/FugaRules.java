@@ -15,7 +15,6 @@ public class FugaRules {
     public static final ParserRule STMT_1 = or_rule("stmt:1");
     public static final ParserRule SIMPLE_STMT = and_rule("simple_stmt");
     public static final ParserRule SMALL_STMT = or_rule("small_stmt");
-    public static final ParserRule FLOW_STMT = or_rule("flow_stmt");
     public static final ParserRule DEL_STMT = and_rule("del_stmt");
     public static final ParserRule RETURN_STMT = and_rule("return_stmt");
     public static final ParserRule RAISE_STMT = and_rule("raise_stmt");
@@ -161,6 +160,5 @@ public class FugaRules {
     public static final ParserRule SET_ATOM = and_rule("set_atom");
     public static final ParserRule DICT_ITER = and_rule("dict_iter");
     public static final ParserRule DICT_ATOM = and_rule("dict_atom");
-    public static final ParserRule COLLECTION = or_rule("collection");
     public static final ParserRule ATOM = or_rule("atom");
 }

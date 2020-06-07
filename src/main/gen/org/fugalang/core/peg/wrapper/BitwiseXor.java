@@ -4,7 +4,9 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * bitwise_xor: bitwise_xor '^' bitwise_and | bitwise_and
+ * bitwise_xor:
+ * *   | bitwise_xor '^' bitwise_and
+ * *   | bitwise_and
  */
 public final class BitwiseXor extends NodeWrapper {
 

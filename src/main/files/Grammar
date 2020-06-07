@@ -17,20 +17,17 @@ simple_stmt:
 
 # Small Statements
 small_stmt:
-    | flow_stmt
+    | 'pass'
+    | 'break'
+    | 'continue'
+    | return_stmt
+    | raise_stmt
     | del_stmt
     | nonlocal_stmt
     | assert_stmt
     | import_name
     | import_from
     | assignment
-
-flow_stmt:
-    | 'pass'
-    | 'break'
-    | 'continue'
-    | return_stmt
-    | raise_stmt
 
 del_stmt:
     | 'del' targetlist
@@ -306,15 +303,13 @@ dict_iter:
     | '{' dict_item iterator '}'
 dict_atom:
     | '{' [dict_items] '}'
-collection:
+atom:
     | tuple_atom
     | list_iter
     | list_atom
     | set_atom
     | dict_iter
     | dict_atom
-atom:
-    | collection
     | NAME
     | NUMBER
     | STRING

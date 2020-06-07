@@ -7,7 +7,8 @@ import org.fugalang.core.token.TokenType;
 import java.util.List;
 
 /**
- * eval_input: exprlist NEWLINE* ENDMARKER
+ * eval_input:
+ * *   | exprlist NEWLINE* ENDMARKER
  */
 public final class EvalInput extends NodeWrapper {
 

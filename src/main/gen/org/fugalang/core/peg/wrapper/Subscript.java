@@ -4,7 +4,8 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * subscript: '[' slicelist ']'
+ * subscript:
+ * *   | '[' slicelist ']'
  */
 public final class Subscript extends NodeWrapper {
 

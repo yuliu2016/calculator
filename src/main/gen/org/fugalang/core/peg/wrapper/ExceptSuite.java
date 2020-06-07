@@ -6,7 +6,8 @@ import org.fugalang.core.parser.ParseTreeNode;
 import java.util.List;
 
 /**
- * except_suite: except_clause+ [else_suite] [finally_suite]
+ * except_suite:
+ * *   | except_clause+ [else_suite] [finally_suite]
  */
 public final class ExceptSuite extends NodeWrapper {
 

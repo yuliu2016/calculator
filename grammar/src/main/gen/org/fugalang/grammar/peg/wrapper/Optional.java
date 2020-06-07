@@ -4,7 +4,8 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * optional: '[' or_rule ']'
+ * optional:
+ * *   | '[' or_rule ']'
  */
 public final class Optional extends NodeWrapper {
 

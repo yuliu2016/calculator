@@ -5,7 +5,10 @@ import org.fugalang.core.parser.ParseTreeNode;
 import org.fugalang.core.token.TokenType;
 
 /**
- * single_input: NEWLINE | simple_stmt | compound_stmt NEWLINE
+ * single_input:
+ * *   | NEWLINE
+ * *   | simple_stmt
+ * *   | compound_stmt NEWLINE
  */
 public final class SingleInput extends NodeWrapper {
 

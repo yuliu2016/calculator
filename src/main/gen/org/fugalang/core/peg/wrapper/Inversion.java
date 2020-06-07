@@ -4,7 +4,9 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * inversion: 'not' inversion | comparison
+ * inversion:
+ * *   | 'not' inversion
+ * *   | comparison
  */
 public final class Inversion extends NodeWrapper {
 

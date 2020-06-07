@@ -6,7 +6,8 @@ import org.fugalang.core.parser.ParseTreeNode;
 import java.util.List;
 
 /**
- * if_stmt: 'if' named_expr suite elif_stmt* [else_suite]
+ * if_stmt:
+ * *   | 'if' named_expr suite elif_stmt* [else_suite]
  */
 public final class IfStmt extends NodeWrapper {
 

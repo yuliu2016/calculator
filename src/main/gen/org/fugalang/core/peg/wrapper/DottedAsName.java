@@ -4,7 +4,8 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * dotted_as_name: dotted_name [as_name]
+ * dotted_as_name:
+ * *   | dotted_name [as_name]
  */
 public final class DottedAsName extends NodeWrapper {
 

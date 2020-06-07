@@ -6,7 +6,8 @@ import org.fugalang.core.parser.ParseTreeNode;
 import java.util.List;
 
 /**
- * slicelist: ','.slice+ [',']
+ * slicelist:
+ * *   | ','.slice+ [',']
  */
 public final class Slicelist extends NodeWrapper {
 

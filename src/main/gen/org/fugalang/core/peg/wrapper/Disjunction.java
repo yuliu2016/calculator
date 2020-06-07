@@ -4,7 +4,9 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * disjunction: disjunction 'or' conjunction | conjunction
+ * disjunction:
+ * *   | disjunction 'or' conjunction
+ * *   | conjunction
  */
 public final class Disjunction extends NodeWrapper {
 

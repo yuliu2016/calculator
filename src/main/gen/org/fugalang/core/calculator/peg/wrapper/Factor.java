@@ -4,7 +4,11 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * factor: '+' factor | '-' factor | '~' factor | power
+ * factor:
+ * *   | '+' factor
+ * *   | '-' factor
+ * *   | '~' factor
+ * *   | power
  */
 public final class Factor extends NodeWrapper {
 

@@ -6,7 +6,8 @@ import org.fugalang.core.parser.ParseTreeNode;
 import java.util.List;
 
 /**
- * args_kwargs: '*' [typed_arg] (',' default_arg)* [',' [kwargs]]
+ * args_kwargs:
+ * *   | '*' [typed_arg] (',' default_arg)* [',' [kwargs]]
  */
 public final class ArgsKwargs extends NodeWrapper {
 

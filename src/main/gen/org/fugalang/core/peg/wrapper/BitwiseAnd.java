@@ -4,7 +4,9 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * bitwise_and: bitwise_and '&' shift_expr | shift_expr
+ * bitwise_and:
+ * *   | bitwise_and '&' shift_expr
+ * *   | shift_expr
  */
 public final class BitwiseAnd extends NodeWrapper {
 

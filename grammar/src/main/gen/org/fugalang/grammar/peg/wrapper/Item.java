@@ -5,7 +5,11 @@ import org.fugalang.core.parser.ParseTreeNode;
 import org.fugalang.core.token.TokenType;
 
 /**
- * item: group | optional | NAME | STRING
+ * item:
+ * *   | group
+ * *   | optional
+ * *   | NAME
+ * *   | STRING
  */
 public final class Item extends NodeWrapper {
 

@@ -6,7 +6,8 @@ import org.fugalang.core.parser.ParseTreeNode;
 import java.util.List;
 
 /**
- * assignment: ['/'] exprlist_star [annassign | ('=' exprlist_star)+ | augassign exprlist]
+ * assignment:
+ * *   | ['/'] exprlist_star [annassign | ('=' exprlist_star)+ | augassign exprlist]
  */
 public final class Assignment extends NodeWrapper {
 

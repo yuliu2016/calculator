@@ -6,7 +6,9 @@ import org.fugalang.core.parser.ParseTreeNode;
 import java.util.List;
 
 /**
- * comparison: bitwise_or (comp_op bitwise_or)+ | bitwise_or
+ * comparison:
+ * *   | bitwise_or (comp_op bitwise_or)+
+ * *   | bitwise_or
  */
 public final class Comparison extends NodeWrapper {
 

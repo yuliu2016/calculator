@@ -6,7 +6,8 @@ import org.fugalang.core.parser.ParseTreeNode;
 import java.util.List;
 
 /**
- * parameters: ','.sum+ [',']
+ * parameters:
+ * *   | ','.sum+ [',']
  */
 public final class Parameters extends NodeWrapper {
 

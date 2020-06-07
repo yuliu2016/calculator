@@ -9,7 +9,8 @@ import static org.fugalang.grammar.peg.parser.MetaRules.*;
 public class MetaParser {
 
     /**
-     * rules: [NEWLINE] single_rule+
+     * rules:
+     * *   | [NEWLINE] single_rule+
      */
     public static boolean rules(ParseTree t) {
         var m = t.enter(RULES);
@@ -33,7 +34,8 @@ public class MetaParser {
     }
 
     /**
-     * single_rule: NAME ':' [NEWLINE '|'] or_rule NEWLINE
+     * single_rule:
+     * *   | NAME ':' [NEWLINE '|'] or_rule NEWLINE
      */
     public static boolean single_rule(ParseTree t) {
         var m = t.enter(SINGLE_RULE);
@@ -62,7 +64,8 @@ public class MetaParser {
     }
 
     /**
-     * or_rule: and_rule ([NEWLINE] '|' and_rule)*
+     * or_rule:
+     * *   | and_rule ([NEWLINE] '|' and_rule)*
      */
     public static boolean or_rule(ParseTree t) {
         var m = t.enter(OR_RULE);
@@ -98,7 +101,8 @@ public class MetaParser {
     }
 
     /**
-     * and_rule: repeat+
+     * and_rule:
+     * *   | repeat+
      */
     public static boolean and_rule(ParseTree t) {
         var m = t.enter(AND_RULE);
@@ -121,7 +125,11 @@ public class MetaParser {
     }
 
     /**
-     * repeat: delimited | item '*' | item '+' | item
+     * repeat:
+     * *   | delimited
+     * *   | item '*'
+     * *   | item '+'
+     * *   | item
      */
     public static boolean repeat(ParseTree t) {
         var m = t.enter(REPEAT);
@@ -162,7 +170,11 @@ public class MetaParser {
     }
 
     /**
-     * item: group | optional | NAME | STRING
+     * item:
+     * *   | group
+     * *   | optional
+     * *   | NAME
+     * *   | STRING
      */
     public static boolean item(ParseTree t) {
         var m = t.enter(ITEM);
@@ -177,7 +189,8 @@ public class MetaParser {
     }
 
     /**
-     * group: '(' or_rule ')'
+     * group:
+     * *   | '(' or_rule ')'
      */
     public static boolean group(ParseTree t) {
         var m = t.enter(GROUP);
@@ -191,7 +204,8 @@ public class MetaParser {
     }
 
     /**
-     * optional: '[' or_rule ']'
+     * optional:
+     * *   | '[' or_rule ']'
      */
     public static boolean optional(ParseTree t) {
         var m = t.enter(OPTIONAL);
@@ -205,7 +219,8 @@ public class MetaParser {
     }
 
     /**
-     * delimited: STRING '.' item '+'
+     * delimited:
+     * *   | STRING '.' item '+'
      */
     public static boolean delimited(ParseTree t) {
         var m = t.enter(DELIMITED);

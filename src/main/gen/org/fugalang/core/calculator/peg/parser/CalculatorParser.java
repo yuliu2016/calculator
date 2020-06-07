@@ -9,7 +9,10 @@ import static org.fugalang.core.calculator.peg.parser.CalculatorRules.*;
 public class CalculatorParser {
 
     /**
-     * sum: sum '+' term | sum '-' term | term
+     * sum:
+     * *   | sum '+' term
+     * *   | sum '-' term
+     * *   | term
      */
     public static boolean sum(ParseTree t) {
         var m = t.enter(SUM);
@@ -61,7 +64,11 @@ public class CalculatorParser {
     }
 
     /**
-     * term: term '*' factor | term '/' factor | term '%' factor | factor
+     * term:
+     * *   | term '*' factor
+     * *   | term '/' factor
+     * *   | term '%' factor
+     * *   | factor
      */
     public static boolean term(ParseTree t) {
         var m = t.enter(TERM);
@@ -128,7 +135,11 @@ public class CalculatorParser {
     }
 
     /**
-     * factor: '+' factor | '-' factor | '~' factor | power
+     * factor:
+     * *   | '+' factor
+     * *   | '-' factor
+     * *   | '~' factor
+     * *   | power
      */
     public static boolean factor(ParseTree t) {
         var m = t.enter(FACTOR);
@@ -182,7 +193,9 @@ public class CalculatorParser {
     }
 
     /**
-     * power: atom '**' factor | atom
+     * power:
+     * *   | atom '**' factor
+     * *   | atom
      */
     public static boolean power(ParseTree t) {
         var m = t.enter(POWER);
@@ -209,7 +222,11 @@ public class CalculatorParser {
     }
 
     /**
-     * atom: '(' sum ')' | NAME '(' [parameters] ')' | NAME | NUMBER
+     * atom:
+     * *   | '(' sum ')'
+     * *   | NAME '(' [parameters] ')'
+     * *   | NAME
+     * *   | NUMBER
      */
     public static boolean atom(ParseTree t) {
         var m = t.enter(ATOM);
@@ -253,7 +270,8 @@ public class CalculatorParser {
     }
 
     /**
-     * parameters: ','.sum+ [',']
+     * parameters:
+     * *   | ','.sum+ [',']
      */
     public static boolean parameters(ParseTree t) {
         var m = t.enter(PARAMETERS);

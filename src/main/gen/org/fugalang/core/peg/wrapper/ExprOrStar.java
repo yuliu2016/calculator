@@ -4,7 +4,9 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * expr_or_star: star_expr | expr
+ * expr_or_star:
+ * *   | star_expr
+ * *   | expr
  */
 public final class ExprOrStar extends NodeWrapper {
 

@@ -4,7 +4,8 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * parameters: '(' [arglist] ')'
+ * parameters:
+ * *   | '(' [arglist] ')'
  */
 public final class Parameters extends NodeWrapper {
 

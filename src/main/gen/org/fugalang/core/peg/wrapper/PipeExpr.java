@@ -4,7 +4,9 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * pipe_expr: pipe_expr '->' factor | factor
+ * pipe_expr:
+ * *   | pipe_expr '->' factor
+ * *   | factor
  */
 public final class PipeExpr extends NodeWrapper {
 

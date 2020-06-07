@@ -6,7 +6,9 @@ import org.fugalang.core.parser.ParseTreeNode;
 import java.util.List;
 
 /**
- * import_from_names: dotted_name | '.'+ [dotted_name]
+ * import_from_names:
+ * *   | dotted_name
+ * *   | '.'+ [dotted_name]
  */
 public final class ImportFromNames extends NodeWrapper {
 

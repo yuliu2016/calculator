@@ -4,7 +4,10 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * shift_expr: shift_expr '<<' sum | shift_expr '>>' sum | sum
+ * shift_expr:
+ * *   | shift_expr '<<' sum
+ * *   | shift_expr '>>' sum
+ * *   | sum
  */
 public final class ShiftExpr extends NodeWrapper {
 

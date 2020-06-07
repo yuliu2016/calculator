@@ -5,7 +5,9 @@ import org.fugalang.core.parser.ParseTreeNode;
 import org.fugalang.core.token.TokenType;
 
 /**
- * named_expr: NAME ':=' expr | expr
+ * named_expr:
+ * *   | NAME ':=' expr
+ * *   | expr
  */
 public final class NamedExpr extends NodeWrapper {
 

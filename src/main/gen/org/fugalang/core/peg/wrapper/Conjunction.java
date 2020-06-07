@@ -4,7 +4,9 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * conjunction: conjunction 'and' inversion | inversion
+ * conjunction:
+ * *   | conjunction 'and' inversion
+ * *   | inversion
  */
 public final class Conjunction extends NodeWrapper {
 

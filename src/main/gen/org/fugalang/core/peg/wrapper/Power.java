@@ -4,7 +4,9 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * power: primary '**' factor | primary
+ * power:
+ * *   | primary '**' factor
+ * *   | primary
  */
 public final class Power extends NodeWrapper {
 
