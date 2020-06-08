@@ -35,7 +35,7 @@ public class MetaParser {
 
     /**
      * single_rule:
-     * *   | NAME ':' [NEWLINE '|'] or_rule NEWLINE
+     * *   | NAME ':' NEWLINE '|' or_rule NEWLINE
      */
     public static boolean single_rule(ParseTree t) {
         var m = t.enter(SINGLE_RULE);
@@ -43,22 +43,10 @@ public class MetaParser {
         boolean r;
         r = t.consume(TokenType.NAME);
         r = r && t.consume(":");
-        if (r) single_rule_3(t);
+        r = r && t.consume(TokenType.NEWLINE);
+        r = r && t.consume("|");
         r = r && or_rule(t);
         r = r && t.consume(TokenType.NEWLINE);
-        t.exit(r);
-        return r;
-    }
-
-    /**
-     * NEWLINE '|'
-     */
-    private static boolean single_rule_3(ParseTree t) {
-        var m = t.enter(SINGLE_RULE_3);
-        if (m != null) return m;
-        boolean r;
-        r = t.consume(TokenType.NEWLINE);
-        r = r && t.consume("|");
         t.exit(r);
         return r;
     }

@@ -56,7 +56,7 @@ public class PEGBuilder {
             // use a root class to reduce files
             ClassBuilder cb = classSet.createRootClass(className, left_recursive);
 
-            var rule_repr = PEGUtil.constructString(singleRule);
+            var rule_repr = Stringifier.INSTANCE.visitSingleRule(singleRule);
             cb.setHeaderComments(rule_repr);
             cb.setRuleType(RuleType.Disjunction);
 
@@ -103,7 +103,7 @@ public class PEGBuilder {
                     // a list can't hold multiple-ly typed objects
                     var component_cb = classSet.createComponentClass(newClassName);
 
-                    var rule_repr = PEGUtil.constructString(andRule);
+                    var rule_repr = Stringifier.INSTANCE.visitAndRule(andRule);
                     component_cb.setHeaderComments(rule_repr);
                     component_cb.setRuleType(RuleType.Conjunction);
 
@@ -201,7 +201,7 @@ public class PEGBuilder {
         } else {
 
             var component_cb = classSet.createComponentClass(className);
-            var rule_repr = PEGUtil.constructString(rule);
+            var rule_repr = Stringifier.INSTANCE.visitOrRule(rule);
             component_cb.setHeaderComments(rule_repr);
             component_cb.setRuleType(RuleType.Disjunction);
 

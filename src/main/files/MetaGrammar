@@ -3,7 +3,7 @@
 rules:
     | [NEWLINE] single_rule+
 single_rule:
-    | NAME ':' [NEWLINE '|'] or_rule NEWLINE
+    | NAME ':' NEWLINE '|' or_rule NEWLINE
 or_rule:
     | and_rule ([NEWLINE] '|' and_rule)*
 and_rule:

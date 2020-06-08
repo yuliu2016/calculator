@@ -15,7 +15,7 @@ public interface MetaVisitor<T> {
 
     /**
      * single_rule:
-     * *   | NAME ':' [NEWLINE '|'] or_rule NEWLINE
+     * *   | NAME ':' NEWLINE '|' or_rule NEWLINE
      */
     default T visitSingleRule(SingleRule singleRule) {
         return null;
