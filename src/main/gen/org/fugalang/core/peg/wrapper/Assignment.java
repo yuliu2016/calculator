@@ -7,7 +7,10 @@ import java.util.List;
 
 /**
  * assignment:
- * *   | ['/'] exprlist_star [annassign | ('=' exprlist_star)+ | augassign exprlist]
+ * *   | expassign
+ * *   | annassign
+ * *   | augassign
+ * *   | '='.exprlist_star+
  */
 public final class Assignment extends NodeWrapper {
 
@@ -15,81 +18,31 @@ public final class Assignment extends NodeWrapper {
         super(node);
     }
 
-    public boolean isDiv() {
-        return is(0);
+    public Expassign expassign() {
+        return new Expassign(get(0));
     }
 
-    public ExprlistStar exprlistStar() {
-        return new ExprlistStar(get(1));
+    public boolean hasExpassign() {
+        return has(0);
     }
 
-    public Assignment3 assignment3() {
-        return new Assignment3(get(2));
+    public Annassign annassign() {
+        return new Annassign(get(1));
     }
 
-    public boolean hasAssignment3() {
+    public boolean hasAnnassign() {
+        return has(1);
+    }
+
+    public Augassign augassign() {
+        return new Augassign(get(2));
+    }
+
+    public boolean hasAugassign() {
         return has(2);
     }
 
-    /**
-     * annassign | ('=' exprlist_star)+ | augassign exprlist
-     */
-    public static final class Assignment3 extends NodeWrapper {
-
-        public Assignment3(ParseTreeNode node) {
-            super(node);
-        }
-
-        public Annassign annassign() {
-            return new Annassign(get(0));
-        }
-
-        public boolean hasAnnassign() {
-            return has(0);
-        }
-
-        public List<Assignment32> assignExprlistStars() {
-            return getList(1, Assignment32::new);
-        }
-
-        public Assignment33 augassignExprlist() {
-            return new Assignment33(get(2));
-        }
-
-        public boolean hasAugassignExprlist() {
-            return has(2);
-        }
-    }
-
-    /**
-     * '=' exprlist_star
-     */
-    public static final class Assignment32 extends NodeWrapper {
-
-        public Assignment32(ParseTreeNode node) {
-            super(node);
-        }
-
-        public ExprlistStar exprlistStar() {
-            return new ExprlistStar(get(1));
-        }
-    }
-
-    /**
-     * augassign exprlist
-     */
-    public static final class Assignment33 extends NodeWrapper {
-
-        public Assignment33(ParseTreeNode node) {
-            super(node);
-        }
-
-        public Augassign augassign() {
-            return new Augassign(get(0));
-        }
-
-        public Exprlist exprlist() {
-            return new Exprlist(get(1));
-        }
+    public List<ExprlistStar> exprlistStars() {
+        return getList(3, ExprlistStar::new);
     }
 }

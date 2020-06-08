@@ -258,14 +258,41 @@ public interface FugaVisitor<T> {
 
     /**
      * assignment:
-     * *   | ['/'] exprlist_star [annassign | ('=' exprlist_star)+ | augassign exprlist]
+     * *   | expassign
+     * *   | annassign
+     * *   | augassign
+     * *   | '='.exprlist_star+
      */
     default T visitAssignment(Assignment assignment) {
         return null;
     }
 
     /**
+     * expassign:
+     * *   | '/' NAME '=' exprlist_star
+     */
+    default T visitExpassign(Expassign expassign) {
+        return null;
+    }
+
+    /**
+     * annassign:
+     * *   | exprlist_star ':' expr ['=' exprlist_star]
+     */
+    default T visitAnnassign(Annassign annassign) {
+        return null;
+    }
+
+    /**
      * augassign:
+     * *   | exprlist_star augassign_op exprlist
+     */
+    default T visitAugassign(Augassign augassign) {
+        return null;
+    }
+
+    /**
+     * augassign_op:
      * *   | '+='
      * *   | '-='
      * *   | '*='
@@ -280,15 +307,7 @@ public interface FugaVisitor<T> {
      * *   | '**='
      * *   | '//='
      */
-    default T visitAugassign(Augassign augassign) {
-        return null;
-    }
-
-    /**
-     * annassign:
-     * *   | ':' expr ['=' exprlist_star]
-     */
-    default T visitAnnassign(Annassign annassign) {
+    default T visitAugassignOp(AugassignOp augassignOp) {
         return null;
     }
 

@@ -92,8 +92,17 @@ iterator:
 # Assignments
 
 assignment:
-    | ['/'] exprlist_star [annassign | ('=' exprlist_star)+ | augassign exprlist]
+    | expassign
+    | annassign
+    | augassign
+    | '='.exprlist_star+
+expassign:
+    | '/' NAME '=' exprlist_star
+annassign:
+    | exprlist_star ':' expr ['=' exprlist_star]
 augassign:
+    | exprlist_star augassign_op exprlist
+augassign_op:
     | '+='
     | '-='
     | '*='
@@ -107,8 +116,6 @@ augassign:
     | '>>='
     | '**='
     | '//='
-annassign:
-    | ':' expr ['=' exprlist_star]
 
 # Import Statments
 
