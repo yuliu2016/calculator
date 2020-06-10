@@ -5,7 +5,7 @@ import org.fugalang.core.parser.ParseTreeNode;
 
 /**
  * annassign:
- * *   | exprlist_star ':' expr ['=' exprlist_star]
+ * *   | target ':' expr ['=' exprlist]
  */
 public final class Annassign extends NodeWrapper {
 
@@ -13,24 +13,24 @@ public final class Annassign extends NodeWrapper {
         super(node);
     }
 
-    public ExprlistStar exprlistStar() {
-        return new ExprlistStar(get(0));
+    public Target target() {
+        return new Target(get(0));
     }
 
     public Expr expr() {
         return new Expr(get(2));
     }
 
-    public Annassign4 assignExprlistStar() {
+    public Annassign4 assignExprlist() {
         return new Annassign4(get(3));
     }
 
-    public boolean hasAssignExprlistStar() {
+    public boolean hasAssignExprlist() {
         return has(3);
     }
 
     /**
-     * '=' exprlist_star
+     * '=' exprlist
      */
     public static final class Annassign4 extends NodeWrapper {
 
@@ -38,8 +38,8 @@ public final class Annassign extends NodeWrapper {
             super(node);
         }
 
-        public ExprlistStar exprlistStar() {
-            return new ExprlistStar(get(1));
+        public Exprlist exprlist() {
+            return new Exprlist(get(1));
         }
     }
 }

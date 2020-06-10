@@ -34,7 +34,7 @@ del_stmt:
 return_stmt:
     | 'return' [exprlist_star]
 raise_stmt:
-    | 'raise' [expr ['from' expr]]
+    | 'raise' expr ['from' expr]
 nonlocal_stmt:
     | 'nonlocal' ','.NAME+
 assert_stmt:
@@ -49,7 +49,7 @@ exprlist:
 target:
     | NAME
     | '(' targetlist ')'
-    | '*' target
+    | '*' primary
     | primary
 targetlist:
     | ','.target+ [',']
@@ -92,16 +92,18 @@ iterator:
 # Assignments
 
 assignment:
-    | expassign
+    | pubassign
     | annassign
     | augassign
-    | '='.exprlist_star+
-expassign:
-    | '/' NAME '=' exprlist_star
+    | simple_assign
+pubassign:
+    | '/' NAME '=' exprlist
 annassign:
-    | exprlist_star ':' expr ['=' exprlist_star]
+    | target ':' expr ['=' exprlist]
 augassign:
-    | exprlist_star augassign_op exprlist
+    | target augassign_op exprlist
+simple_assign:
+    | (targetlist '=')* exprlist_star
 augassign_op:
     | '+='
     | '-='

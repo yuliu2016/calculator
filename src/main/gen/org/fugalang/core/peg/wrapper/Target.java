@@ -8,7 +8,7 @@ import org.fugalang.core.token.TokenType;
  * target:
  * *   | NAME
  * *   | '(' targetlist ')'
- * *   | '*' target
+ * *   | '*' primary
  * *   | primary
  */
 public final class Target extends NodeWrapper {
@@ -33,11 +33,11 @@ public final class Target extends NodeWrapper {
         return has(1);
     }
 
-    public Target3 timesTarget() {
+    public Target3 timesPrimary() {
         return new Target3(get(2));
     }
 
-    public boolean hasTimesTarget() {
+    public boolean hasTimesPrimary() {
         return has(2);
     }
 
@@ -64,7 +64,7 @@ public final class Target extends NodeWrapper {
     }
 
     /**
-     * '*' target
+     * '*' primary
      */
     public static final class Target3 extends NodeWrapper {
 
@@ -72,8 +72,8 @@ public final class Target extends NodeWrapper {
             super(node);
         }
 
-        public Target target() {
-            return new Target(get(1));
+        public Primary primary() {
+            return new Primary(get(1));
         }
     }
 }

@@ -213,27 +213,15 @@ public class FugaParser {
 
     /**
      * raise_stmt:
-     * *   | 'raise' [expr ['from' expr]]
+     * *   | 'raise' expr ['from' expr]
      */
     public static boolean raise_stmt(ParseTree t) {
         var m = t.enter(RAISE_STMT);
         if (m != null) return m;
         boolean r;
         r = t.consume("raise");
-        if (r) raise_stmt_2(t);
-        t.exit(r);
-        return r;
-    }
-
-    /**
-     * expr ['from' expr]
-     */
-    private static boolean raise_stmt_2(ParseTree t) {
-        var m = t.enter(RAISE_STMT_2);
-        if (m != null) return m;
-        boolean r;
-        r = expr(t);
-        if (r) raise_stmt_2_2(t);
+        r = r && expr(t);
+        if (r) raise_stmt_3(t);
         t.exit(r);
         return r;
     }
@@ -241,8 +229,8 @@ public class FugaParser {
     /**
      * 'from' expr
      */
-    private static boolean raise_stmt_2_2(ParseTree t) {
-        var m = t.enter(RAISE_STMT_2_2);
+    private static boolean raise_stmt_3(ParseTree t) {
+        var m = t.enter(RAISE_STMT_3);
         if (m != null) return m;
         boolean r;
         r = t.consume("from");
@@ -347,7 +335,7 @@ public class FugaParser {
      * target:
      * *   | NAME
      * *   | '(' targetlist ')'
-     * *   | '*' target
+     * *   | '*' primary
      * *   | primary
      */
     public static boolean target(ParseTree t) {
@@ -377,14 +365,14 @@ public class FugaParser {
     }
 
     /**
-     * '*' target
+     * '*' primary
      */
     private static boolean target_3(ParseTree t) {
         var m = t.enter(TARGET_3);
         if (m != null) return m;
         boolean r;
         r = t.consume("*");
-        r = r && target(t);
+        r = r && primary(t);
         t.exit(r);
         return r;
     }
@@ -716,59 +704,48 @@ public class FugaParser {
 
     /**
      * assignment:
-     * *   | expassign
+     * *   | pubassign
      * *   | annassign
      * *   | augassign
-     * *   | '='.exprlist_star+
+     * *   | simple_assign
      */
     public static boolean assignment(ParseTree t) {
         var m = t.enter(ASSIGNMENT);
         if (m != null) return m;
         boolean r;
-        r = expassign(t);
+        r = pubassign(t);
         r = r || annassign(t);
         r = r || augassign(t);
-        r = r || exprlist_star_loop(t);
+        r = r || simple_assign(t);
         t.exit(r);
         return r;
     }
 
-    private static boolean exprlist_star_loop(ParseTree t) {
-        t.enterLoop();
-        var r = exprlist_star(t);
-        if (r) while (true) {
-            var p = t.position();
-            if (!t.skip("=") || !exprlist_star(t) || t.loopGuard(p)) break;
-        }
-        t.exitLoop();
-        return r;
-    }
-
     /**
-     * expassign:
-     * *   | '/' NAME '=' exprlist_star
+     * pubassign:
+     * *   | '/' NAME '=' exprlist
      */
-    public static boolean expassign(ParseTree t) {
-        var m = t.enter(EXPASSIGN);
+    public static boolean pubassign(ParseTree t) {
+        var m = t.enter(PUBASSIGN);
         if (m != null) return m;
         boolean r;
         r = t.consume("/");
         r = r && t.consume(TokenType.NAME);
         r = r && t.consume("=");
-        r = r && exprlist_star(t);
+        r = r && exprlist(t);
         t.exit(r);
         return r;
     }
 
     /**
      * annassign:
-     * *   | exprlist_star ':' expr ['=' exprlist_star]
+     * *   | target ':' expr ['=' exprlist]
      */
     public static boolean annassign(ParseTree t) {
         var m = t.enter(ANNASSIGN);
         if (m != null) return m;
         boolean r;
-        r = exprlist_star(t);
+        r = target(t);
         r = r && t.consume(":");
         r = r && expr(t);
         if (r) annassign_4(t);
@@ -777,29 +754,65 @@ public class FugaParser {
     }
 
     /**
-     * '=' exprlist_star
+     * '=' exprlist
      */
     private static boolean annassign_4(ParseTree t) {
         var m = t.enter(ANNASSIGN_4);
         if (m != null) return m;
         boolean r;
         r = t.consume("=");
-        r = r && exprlist_star(t);
+        r = r && exprlist(t);
         t.exit(r);
         return r;
     }
 
     /**
      * augassign:
-     * *   | exprlist_star augassign_op exprlist
+     * *   | target augassign_op exprlist
      */
     public static boolean augassign(ParseTree t) {
         var m = t.enter(AUGASSIGN);
         if (m != null) return m;
         boolean r;
-        r = exprlist_star(t);
+        r = target(t);
         r = r && augassign_op(t);
         r = r && exprlist(t);
+        t.exit(r);
+        return r;
+    }
+
+    /**
+     * simple_assign:
+     * *   | (targetlist '=')* exprlist_star
+     */
+    public static boolean simple_assign(ParseTree t) {
+        var m = t.enter(SIMPLE_ASSIGN);
+        if (m != null) return m;
+        boolean r;
+        simple_assign_1_loop(t);
+        r = exprlist_star(t);
+        t.exit(r);
+        return r;
+    }
+
+    private static void simple_assign_1_loop(ParseTree t) {
+        t.enterLoop();
+        while (true) {
+            var p = t.position();
+            if (!simple_assign_1(t) || t.loopGuard(p)) break;
+        }
+        t.exitLoop();
+    }
+
+    /**
+     * targetlist '='
+     */
+    private static boolean simple_assign_1(ParseTree t) {
+        var m = t.enter(SIMPLE_ASSIGN_1);
+        if (m != null) return m;
+        boolean r;
+        r = targetlist(t);
+        r = r && t.consume("=");
         t.exit(r);
         return r;
     }

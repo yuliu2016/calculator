@@ -18,8 +18,7 @@ public class FugaRules {
     public static final ParserRule DEL_STMT = and_rule("del_stmt");
     public static final ParserRule RETURN_STMT = and_rule("return_stmt");
     public static final ParserRule RAISE_STMT = and_rule("raise_stmt");
-    public static final ParserRule RAISE_STMT_2 = and_rule("raise_stmt:2");
-    public static final ParserRule RAISE_STMT_2_2 = and_rule("raise_stmt:2:2");
+    public static final ParserRule RAISE_STMT_3 = and_rule("raise_stmt:3");
     public static final ParserRule NONLOCAL_STMT = and_rule("nonlocal_stmt");
     public static final ParserRule ASSERT_STMT = and_rule("assert_stmt");
     public static final ParserRule ASSERT_STMT_3 = and_rule("assert_stmt:3");
@@ -47,10 +46,12 @@ public class FugaRules {
     public static final ParserRule ITER_IF = and_rule("iter_if");
     public static final ParserRule ITERATOR = and_rule("iterator");
     public static final ParserRule ASSIGNMENT = or_rule("assignment");
-    public static final ParserRule EXPASSIGN = and_rule("expassign");
+    public static final ParserRule PUBASSIGN = and_rule("pubassign");
     public static final ParserRule ANNASSIGN = and_rule("annassign");
     public static final ParserRule ANNASSIGN_4 = and_rule("annassign:4");
     public static final ParserRule AUGASSIGN = and_rule("augassign");
+    public static final ParserRule SIMPLE_ASSIGN = and_rule("simple_assign");
+    public static final ParserRule SIMPLE_ASSIGN_1 = and_rule("simple_assign:1");
     public static final ParserRule AUGASSIGN_OP = or_rule("augassign_op");
     public static final ParserRule IMPORT_NAME = and_rule("import_name");
     public static final ParserRule IMPORT_FROM = and_rule("import_from");

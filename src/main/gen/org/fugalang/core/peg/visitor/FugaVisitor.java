@@ -83,7 +83,7 @@ public interface FugaVisitor<T> {
 
     /**
      * raise_stmt:
-     * *   | 'raise' [expr ['from' expr]]
+     * *   | 'raise' expr ['from' expr]
      */
     default T visitRaiseStmt(RaiseStmt raiseStmt) {
         return null;
@@ -125,7 +125,7 @@ public interface FugaVisitor<T> {
      * target:
      * *   | NAME
      * *   | '(' targetlist ')'
-     * *   | '*' target
+     * *   | '*' primary
      * *   | primary
      */
     default T visitTarget(Target target) {
@@ -258,26 +258,26 @@ public interface FugaVisitor<T> {
 
     /**
      * assignment:
-     * *   | expassign
+     * *   | pubassign
      * *   | annassign
      * *   | augassign
-     * *   | '='.exprlist_star+
+     * *   | simple_assign
      */
     default T visitAssignment(Assignment assignment) {
         return null;
     }
 
     /**
-     * expassign:
-     * *   | '/' NAME '=' exprlist_star
+     * pubassign:
+     * *   | '/' NAME '=' exprlist
      */
-    default T visitExpassign(Expassign expassign) {
+    default T visitPubassign(Pubassign pubassign) {
         return null;
     }
 
     /**
      * annassign:
-     * *   | exprlist_star ':' expr ['=' exprlist_star]
+     * *   | target ':' expr ['=' exprlist]
      */
     default T visitAnnassign(Annassign annassign) {
         return null;
@@ -285,9 +285,17 @@ public interface FugaVisitor<T> {
 
     /**
      * augassign:
-     * *   | exprlist_star augassign_op exprlist
+     * *   | target augassign_op exprlist
      */
     default T visitAugassign(Augassign augassign) {
+        return null;
+    }
+
+    /**
+     * simple_assign:
+     * *   | (targetlist '=')* exprlist_star
+     */
+    default T visitSimpleAssign(SimpleAssign simpleAssign) {
         return null;
     }
 

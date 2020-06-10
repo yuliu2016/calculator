@@ -3,14 +3,12 @@ package org.fugalang.core.peg.wrapper;
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
-import java.util.List;
-
 /**
  * assignment:
- * *   | expassign
+ * *   | pubassign
  * *   | annassign
  * *   | augassign
- * *   | '='.exprlist_star+
+ * *   | simple_assign
  */
 public final class Assignment extends NodeWrapper {
 
@@ -18,11 +16,11 @@ public final class Assignment extends NodeWrapper {
         super(node);
     }
 
-    public Expassign expassign() {
-        return new Expassign(get(0));
+    public Pubassign pubassign() {
+        return new Pubassign(get(0));
     }
 
-    public boolean hasExpassign() {
+    public boolean hasPubassign() {
         return has(0);
     }
 
@@ -42,7 +40,11 @@ public final class Assignment extends NodeWrapper {
         return has(2);
     }
 
-    public List<ExprlistStar> exprlistStars() {
-        return getList(3, ExprlistStar::new);
+    public SimpleAssign simpleAssign() {
+        return new SimpleAssign(get(3));
+    }
+
+    public boolean hasSimpleAssign() {
+        return has(3);
     }
 }

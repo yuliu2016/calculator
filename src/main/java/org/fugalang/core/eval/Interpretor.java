@@ -138,7 +138,7 @@ public class Interpretor implements FugaVisitor<Object> {
 
     /**
      * raise_stmt:
-     * *   | 'raise' [expr ['from' expr]]
+     * *   | 'raise' expr ['from' expr]
      */
     @Override
     public Object visitRaiseStmt(RaiseStmt raiseStmt) {
@@ -185,7 +185,7 @@ public class Interpretor implements FugaVisitor<Object> {
      * target:
      * *   | NAME
      * *   | '(' targetlist ')'
-     * *   | '*' target
+     * *   | '*' primary
      * *   | primary
      */
     @Override
@@ -334,38 +334,28 @@ public class Interpretor implements FugaVisitor<Object> {
 
     /**
      * assignment:
-     * *   | expassign
+     * *   | pubassign
      * *   | annassign
      * *   | augassign
-     * *   | '='.exprlist_star+
+     * *   | simple_assign
      */
     @Override
     public Object visitAssignment(Assignment assignment) {
-        if (assignment.hasExpassign()) {
-            return visitExpassign(assignment.expassign());
-        }
-        if (assignment.hasAnnassign()) {
-            return visitAnnassign(assignment.annassign());
-        }
-        if (assignment.hasAugassign()) {
-            return visitAugassign(assignment.augassign());
-        }
-        var exp_list = assignment.exprlistStars();
         return null;
     }
 
     /**
-     * expassign:
-     * *   | '/' NAME '=' exprlist_star
+     * pubassign:
+     * *   | '/' NAME '=' exprlist
      */
     @Override
-    public Object visitExpassign(Expassign expassign) {
+    public Object visitPubassign(Pubassign expassign) {
         return null;
     }
 
     /**
      * annassign:
-     * *   | exprlist_star ':' expr ['=' exprlist_star]
+     * *   | target ':' expr ['=' exprlist]
      */
     @Override
     public Object visitAnnassign(Annassign annassign) {
@@ -374,10 +364,19 @@ public class Interpretor implements FugaVisitor<Object> {
 
     /**
      * augassign:
-     * *   | exprlist_star augassign_op exprlist
+     * *   | target augassign_op exprlist
      */
     @Override
     public Object visitAugassign(Augassign augassign) {
+        return null;
+    }
+
+    /**
+     * simple_assign:
+     * *   | (targetlist '=')* exprlist_star
+     */
+    @Override
+    public Object visitSimpleAssign(SimpleAssign simpleAssign) {
         return null;
     }
 

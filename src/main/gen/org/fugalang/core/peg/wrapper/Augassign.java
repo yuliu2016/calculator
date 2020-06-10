@@ -5,7 +5,7 @@ import org.fugalang.core.parser.ParseTreeNode;
 
 /**
  * augassign:
- * *   | exprlist_star augassign_op exprlist
+ * *   | target augassign_op exprlist
  */
 public final class Augassign extends NodeWrapper {
 
@@ -13,8 +13,8 @@ public final class Augassign extends NodeWrapper {
         super(node);
     }
 
-    public ExprlistStar exprlistStar() {
-        return new ExprlistStar(get(0));
+    public Target target() {
+        return new Target(get(0));
     }
 
     public AugassignOp augassignOp() {

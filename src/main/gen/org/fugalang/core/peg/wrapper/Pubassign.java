@@ -5,12 +5,12 @@ import org.fugalang.core.parser.ParseTreeNode;
 import org.fugalang.core.token.TokenType;
 
 /**
- * expassign:
- * *   | '/' NAME '=' exprlist_star
+ * pubassign:
+ * *   | '/' NAME '=' exprlist
  */
-public final class Expassign extends NodeWrapper {
+public final class Pubassign extends NodeWrapper {
 
-    public Expassign(ParseTreeNode node) {
+    public Pubassign(ParseTreeNode node) {
         super(node);
     }
 
@@ -18,7 +18,7 @@ public final class Expassign extends NodeWrapper {
         return get(1, TokenType.NAME);
     }
 
-    public ExprlistStar exprlistStar() {
-        return new ExprlistStar(get(3));
+    public Exprlist exprlist() {
+        return new Exprlist(get(3));
     }
 }
