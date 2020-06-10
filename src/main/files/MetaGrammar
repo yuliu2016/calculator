@@ -1,14 +1,14 @@
 # Meta Grammar
 
-rules:
-    | [NEWLINE] single_rule+
-single_rule:
-    | NAME ':' NEWLINE '|' or_rule NEWLINE
-or_rule:
-    | and_rule ([NEWLINE] '|' and_rule)*
-and_rule:
-    | repeat+
-repeat:
+grammar:
+    | [NEWLINE] rule+
+rule:
+    | NAME ':' NEWLINE '|' alt_list NEWLINE
+alt_list:
+    | sequence ([NEWLINE] '|' sequence)*
+sequence:
+    | primary+
+primary:
     | delimited
     | item '*'
     | item '+'
@@ -19,8 +19,8 @@ item:
     | NAME
     | STRING
 group:
-    | '(' or_rule ')'
+    | '(' alt_list ')'
 optional:
-    | '[' or_rule ']'
+    | '[' alt_list ']'
 delimited:
     | STRING '.' item '+'

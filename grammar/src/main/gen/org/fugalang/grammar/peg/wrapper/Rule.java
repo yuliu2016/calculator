@@ -5,12 +5,12 @@ import org.fugalang.core.parser.ParseTreeNode;
 import org.fugalang.core.token.TokenType;
 
 /**
- * single_rule:
- * *   | NAME ':' NEWLINE '|' or_rule NEWLINE
+ * rule:
+ * *   | NAME ':' NEWLINE '|' alt_list NEWLINE
  */
-public final class SingleRule extends NodeWrapper {
+public final class Rule extends NodeWrapper {
 
-    public SingleRule(ParseTreeNode node) {
+    public Rule(ParseTreeNode node) {
         super(node);
     }
 
@@ -22,8 +22,8 @@ public final class SingleRule extends NodeWrapper {
         return get(2, TokenType.NEWLINE);
     }
 
-    public OrRule orRule() {
-        return new OrRule(get(4));
+    public AltList altList() {
+        return new AltList(get(4));
     }
 
     public String newline1() {

@@ -4,15 +4,15 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * repeat:
+ * primary:
  * *   | delimited
  * *   | item '*'
  * *   | item '+'
  * *   | item
  */
-public final class Repeat extends NodeWrapper {
+public final class Primary extends NodeWrapper {
 
-    public Repeat(ParseTreeNode node) {
+    public Primary(ParseTreeNode node) {
         super(node);
     }
 
@@ -24,16 +24,16 @@ public final class Repeat extends NodeWrapper {
         return has(0);
     }
 
-    public Repeat2 itemTimes() {
-        return new Repeat2(get(1));
+    public Primary2 itemTimes() {
+        return new Primary2(get(1));
     }
 
     public boolean hasItemTimes() {
         return has(1);
     }
 
-    public Repeat3 itemPlus() {
-        return new Repeat3(get(2));
+    public Primary3 itemPlus() {
+        return new Primary3(get(2));
     }
 
     public boolean hasItemPlus() {
@@ -51,9 +51,9 @@ public final class Repeat extends NodeWrapper {
     /**
      * item '*'
      */
-    public static final class Repeat2 extends NodeWrapper {
+    public static final class Primary2 extends NodeWrapper {
 
-        public Repeat2(ParseTreeNode node) {
+        public Primary2(ParseTreeNode node) {
             super(node);
         }
 
@@ -65,9 +65,9 @@ public final class Repeat extends NodeWrapper {
     /**
      * item '+'
      */
-    public static final class Repeat3 extends NodeWrapper {
+    public static final class Primary3 extends NodeWrapper {
 
-        public Repeat3(ParseTreeNode node) {
+        public Primary3(ParseTreeNode node) {
             super(node);
         }
 

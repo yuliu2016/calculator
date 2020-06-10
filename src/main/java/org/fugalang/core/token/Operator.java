@@ -19,6 +19,7 @@ public enum Operator {
     ASSIGN("="),
     COLON(":"),
     TERNERY("?"),
+    NOT("!"),
     SEMICOLON(";"),
 
     // second most common - brackets

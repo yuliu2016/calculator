@@ -12,8 +12,8 @@ public class Stringifier implements MetaVisitor<String> {
     private Stringifier() {
     }
 
-    public String stringifyOrRule(OrRule orRule, boolean named) {
-        var orRuleList = orRule.orRule2s();
+    public String stringifyAltList(AltList altList, boolean named) {
+        var sequenceList = altList.altList2s();
         StringJoiner joiner;
 
         if (named) {
@@ -22,46 +22,48 @@ public class Stringifier implements MetaVisitor<String> {
             joiner = new StringJoiner(" | ");
         }
 
-        joiner.add(visitAndRule(orRule.andRule()));
+        joiner.add(visitSequence(altList.sequence()));
 
-        for (var orRule2 : orRuleList) {
-            joiner.add(visitAndRule(orRule2.andRule()));
+        for (var altList2 : sequenceList) {
+            joiner.add(visitSequence(altList2.sequence()));
         }
 
         return joiner.toString();
     }
 
     @Override
-    public String visitRules(Rules rules) {
+    public String visitGrammar(Grammar grammar) {
         return null;
     }
 
     @Override
-    public String visitSingleRule(SingleRule singleRule) {
-        return singleRule.name() + ":" +
-                stringifyOrRule(singleRule.orRule(), true);
+    public String visitRule(Rule rule) {
+        return rule.name() + ":" +
+                stringifyAltList(rule.altList(), true);
     }
 
-    @Override
-    public String visitOrRule(OrRule orRule) {
-        return stringifyOrRule(orRule, false);
-    }
 
     @Override
-    public String visitAndRule(AndRule andRule) {
+    public String visitAltList(AltList altList) {
+        return stringifyAltList(altList, false);
+    }
+
+
+    @Override
+    public String visitSequence(Sequence sequence) {
         StringJoiner joiner = new StringJoiner(" ");
-        for (Repeat repeat : andRule.repeats()) {
-            joiner.add(visitRepeat(repeat));
+        for (var primary : sequence.primarys()) {
+            joiner.add(visitPrimary(primary));
         }
         return joiner.toString();
     }
 
     @Override
-    public String visitRepeat(Repeat repeat) {
-        var item = visitItem(PEGUtil.getRepeatItem(repeat));
-        return repeat.hasDelimited() ? "'" + repeat.delimited().string() + "'." + item + "+" :
-                repeat.hasItemPlus() ? item + "+" :
-                        repeat.hasItemTimes() ? item + "*" :
+    public String visitPrimary(Primary primary) {
+        var item = visitItem(PEGUtil.getRepeatItem(primary));
+        return primary.hasDelimited() ? "'" + primary.delimited().string() + "'." + item + "+" :
+                primary.hasItemPlus() ? item + "+" :
+                        primary.hasItemTimes() ? item + "*" :
                                 item;
     }
 
@@ -74,12 +76,12 @@ public class Stringifier implements MetaVisitor<String> {
 
     @Override
     public String visitGroup(Group group) {
-        return "(" + visitOrRule(group.orRule()) + ")";
+        return "(" + visitAltList(group.altList()) + ")";
     }
 
     @Override
     public String visitOptional(Optional optional) {
-        return "[" + visitOrRule(optional.orRule()) + "]";
+        return "[" + visitAltList(optional.altList()) + "]";
     }
 
     @Override

@@ -8,7 +8,7 @@ public class CalculatorGenerator {
 
     public static void main(String[] args) throws Exception {
         new PEGBuilder(
-                GeneratorUtil.readRules(USER_DIR, GRAMMAR_PATH),
+                GeneratorUtil.readGrammar(USER_DIR, GRAMMAR_PATH),
                 GeneratorUtil.simpleConverter(),
                 PACKAGE_OUTPUT
         ).generate(true);

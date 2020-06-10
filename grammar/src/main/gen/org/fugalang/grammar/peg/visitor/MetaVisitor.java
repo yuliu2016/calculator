@@ -6,45 +6,45 @@ import org.fugalang.grammar.peg.wrapper.*;
 public interface MetaVisitor<T> {
 
     /**
-     * rules:
-     * *   | [NEWLINE] single_rule+
+     * grammar:
+     * *   | [NEWLINE] rule+
      */
-    default T visitRules(Rules rules) {
+    default T visitGrammar(Grammar grammar) {
         return null;
     }
 
     /**
-     * single_rule:
-     * *   | NAME ':' NEWLINE '|' or_rule NEWLINE
+     * rule:
+     * *   | NAME ':' NEWLINE '|' alt_list NEWLINE
      */
-    default T visitSingleRule(SingleRule singleRule) {
+    default T visitRule(Rule rule) {
         return null;
     }
 
     /**
-     * or_rule:
-     * *   | and_rule ([NEWLINE] '|' and_rule)*
+     * alt_list:
+     * *   | sequence ([NEWLINE] '|' sequence)*
      */
-    default T visitOrRule(OrRule orRule) {
+    default T visitAltList(AltList altList) {
         return null;
     }
 
     /**
-     * and_rule:
-     * *   | repeat+
+     * sequence:
+     * *   | primary+
      */
-    default T visitAndRule(AndRule andRule) {
+    default T visitSequence(Sequence sequence) {
         return null;
     }
 
     /**
-     * repeat:
+     * primary:
      * *   | delimited
      * *   | item '*'
      * *   | item '+'
      * *   | item
      */
-    default T visitRepeat(Repeat repeat) {
+    default T visitPrimary(Primary primary) {
         return null;
     }
 
@@ -61,7 +61,7 @@ public interface MetaVisitor<T> {
 
     /**
      * group:
-     * *   | '(' or_rule ')'
+     * *   | '(' alt_list ')'
      */
     default T visitGroup(Group group) {
         return null;
@@ -69,7 +69,7 @@ public interface MetaVisitor<T> {
 
     /**
      * optional:
-     * *   | '[' or_rule ']'
+     * *   | '[' alt_list ']'
      */
     default T visitOptional(Optional optional) {
         return null;

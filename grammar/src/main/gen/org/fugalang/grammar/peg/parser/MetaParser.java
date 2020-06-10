@@ -9,120 +9,120 @@ import static org.fugalang.grammar.peg.parser.MetaRules.*;
 public class MetaParser {
 
     /**
-     * rules:
-     * *   | [NEWLINE] single_rule+
+     * grammar:
+     * *   | [NEWLINE] rule+
      */
-    public static boolean rules(ParseTree t) {
-        var m = t.enter(RULES);
+    public static boolean grammar(ParseTree t) {
+        var m = t.enter(GRAMMAR);
         if (m != null) return m;
         boolean r;
         t.consume(TokenType.NEWLINE);
-        r = single_rule_loop(t);
+        r = rule_loop(t);
         t.exit(r);
         return r;
     }
 
-    private static boolean single_rule_loop(ParseTree t) {
+    private static boolean rule_loop(ParseTree t) {
         t.enterLoop();
-        var r = single_rule(t);
+        var r = rule(t);
         if (r) while (true) {
-            if (!single_rule(t)) break;
+            if (!rule(t)) break;
         }
         t.exitLoop();
         return r;
     }
 
     /**
-     * single_rule:
-     * *   | NAME ':' NEWLINE '|' or_rule NEWLINE
+     * rule:
+     * *   | NAME ':' NEWLINE '|' alt_list NEWLINE
      */
-    public static boolean single_rule(ParseTree t) {
-        var m = t.enter(SINGLE_RULE);
+    public static boolean rule(ParseTree t) {
+        var m = t.enter(RULE);
         if (m != null) return m;
         boolean r;
         r = t.consume(TokenType.NAME);
         r = r && t.consume(":");
         r = r && t.consume(TokenType.NEWLINE);
         r = r && t.consume("|");
-        r = r && or_rule(t);
+        r = r && alt_list(t);
         r = r && t.consume(TokenType.NEWLINE);
         t.exit(r);
         return r;
     }
 
     /**
-     * or_rule:
-     * *   | and_rule ([NEWLINE] '|' and_rule)*
+     * alt_list:
+     * *   | sequence ([NEWLINE] '|' sequence)*
      */
-    public static boolean or_rule(ParseTree t) {
-        var m = t.enter(OR_RULE);
+    public static boolean alt_list(ParseTree t) {
+        var m = t.enter(ALT_LIST);
         if (m != null) return m;
         boolean r;
-        r = and_rule(t);
-        if (r) or_rule_2_loop(t);
+        r = sequence(t);
+        if (r) alt_list_2_loop(t);
         t.exit(r);
         return r;
     }
 
-    private static void or_rule_2_loop(ParseTree t) {
+    private static void alt_list_2_loop(ParseTree t) {
         t.enterLoop();
         while (true) {
-            if (!or_rule_2(t)) break;
+            if (!alt_list_2(t)) break;
         }
         t.exitLoop();
     }
 
     /**
-     * [NEWLINE] '|' and_rule
+     * [NEWLINE] '|' sequence
      */
-    private static boolean or_rule_2(ParseTree t) {
-        var m = t.enter(OR_RULE_2);
+    private static boolean alt_list_2(ParseTree t) {
+        var m = t.enter(ALT_LIST_2);
         if (m != null) return m;
         boolean r;
         t.consume(TokenType.NEWLINE);
         r = t.consume("|");
-        r = r && and_rule(t);
+        r = r && sequence(t);
         t.exit(r);
         return r;
     }
 
     /**
-     * and_rule:
-     * *   | repeat+
+     * sequence:
+     * *   | primary+
      */
-    public static boolean and_rule(ParseTree t) {
-        var m = t.enter(AND_RULE);
+    public static boolean sequence(ParseTree t) {
+        var m = t.enter(SEQUENCE);
         if (m != null) return m;
         boolean r;
-        r = repeat_loop(t);
+        r = primary_loop(t);
         t.exit(r);
         return r;
     }
 
-    private static boolean repeat_loop(ParseTree t) {
+    private static boolean primary_loop(ParseTree t) {
         t.enterLoop();
-        var r = repeat(t);
+        var r = primary(t);
         if (r) while (true) {
-            if (!repeat(t)) break;
+            if (!primary(t)) break;
         }
         t.exitLoop();
         return r;
     }
 
     /**
-     * repeat:
+     * primary:
      * *   | delimited
      * *   | item '*'
      * *   | item '+'
      * *   | item
      */
-    public static boolean repeat(ParseTree t) {
-        var m = t.enter(REPEAT);
+    public static boolean primary(ParseTree t) {
+        var m = t.enter(PRIMARY);
         if (m != null) return m;
         boolean r;
         r = delimited(t);
-        r = r || repeat_2(t);
-        r = r || repeat_3(t);
+        r = r || primary_2(t);
+        r = r || primary_3(t);
         r = r || item(t);
         t.exit(r);
         return r;
@@ -131,8 +131,8 @@ public class MetaParser {
     /**
      * item '*'
      */
-    private static boolean repeat_2(ParseTree t) {
-        var m = t.enter(REPEAT_2);
+    private static boolean primary_2(ParseTree t) {
+        var m = t.enter(PRIMARY_2);
         if (m != null) return m;
         boolean r;
         r = item(t);
@@ -144,8 +144,8 @@ public class MetaParser {
     /**
      * item '+'
      */
-    private static boolean repeat_3(ParseTree t) {
-        var m = t.enter(REPEAT_3);
+    private static boolean primary_3(ParseTree t) {
+        var m = t.enter(PRIMARY_3);
         if (m != null) return m;
         boolean r;
         r = item(t);
@@ -175,14 +175,14 @@ public class MetaParser {
 
     /**
      * group:
-     * *   | '(' or_rule ')'
+     * *   | '(' alt_list ')'
      */
     public static boolean group(ParseTree t) {
         var m = t.enter(GROUP);
         if (m != null) return m;
         boolean r;
         r = t.consume("(");
-        r = r && or_rule(t);
+        r = r && alt_list(t);
         r = r && t.consume(")");
         t.exit(r);
         return r;
@@ -190,14 +190,14 @@ public class MetaParser {
 
     /**
      * optional:
-     * *   | '[' or_rule ']'
+     * *   | '[' alt_list ']'
      */
     public static boolean optional(ParseTree t) {
         var m = t.enter(OPTIONAL);
         if (m != null) return m;
         boolean r;
         r = t.consume("[");
-        r = r && or_rule(t);
+        r = r && alt_list(t);
         r = r && t.consume("]");
         t.exit(r);
         return r;

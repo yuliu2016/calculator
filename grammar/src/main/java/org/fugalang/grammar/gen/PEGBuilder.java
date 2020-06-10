@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class PEGBuilder {
 
-    private final List<SingleRule> rules;
+    private final List<Rule> rules;
     private final TokenConverter converter;
     private final Map<String, String> classNameMap = new LinkedHashMap<>();
     private final ClassSet classSet;
@@ -20,11 +20,11 @@ public class PEGBuilder {
     private static final boolean OPTIONAL = true;
 
     public PEGBuilder(
-            Rules rules,
+            Grammar grammar,
             TokenConverter converter,
             PackageOutput packageOutput
     ) {
-        this.rules = rules.singleRules();
+        this.rules = grammar.rules();
         this.converter = converter;
         classSet = new ClassSet(packageOutput);
     }
@@ -43,24 +43,24 @@ public class PEGBuilder {
 
     public void generateClasses() {
         // do this first because each rule needs to lookup the types of previous rules
-        for (var singleRule : rules) {
-            classNameMap.put(singleRule.name(), ParserStringUtil.convertCase(singleRule.name()));
+        for (var rule : rules) {
+            classNameMap.put(rule.name(), ParserStringUtil.convertCase(rule.name()));
         }
 
-        for (var singleRule : rules) {
-            var left_recursive = isLeftRecursive(singleRule.name(), singleRule.orRule());
+        for (var rule : rules) {
+            var left_recursive = isLeftRecursive(rule.name(), rule.altList());
 
-            var realClassName = classNameMap.get(singleRule.name());
-            var className = ClassName.of(realClassName, singleRule.name());
+            var realClassName = classNameMap.get(rule.name());
+            var className = ClassName.of(realClassName, rule.name());
 
             // use a root class to reduce files
             ClassBuilder cb = classSet.createRootClass(className, left_recursive);
 
-            var rule_repr = Stringifier.INSTANCE.visitSingleRule(singleRule);
+            var rule_repr = Stringifier.INSTANCE.visitRule(rule);
             cb.setHeaderComments(rule_repr);
             cb.setRuleType(RuleType.Disjunction);
 
-            addOrRule(className, cb, singleRule.orRule());
+            addAltList(className, cb, rule.altList());
 
             // protect against not initializing result
             cb.guardMatchEmptyString();
@@ -70,16 +70,16 @@ public class PEGBuilder {
         }
     }
 
-    private void addOrRule(
+    private void addAltList(
             ClassName className,
             ClassBuilder cb,
-            OrRule rule
+            AltList altList
     ) {
-        if (rule.orRule2s().isEmpty()) {
+        if (altList.altList2s().isEmpty()) {
             // only one rule - can propagate fields of this class
             // but need to change the type here
             cb.setRuleType(RuleType.Conjunction);
-            addAndRule(className, cb, rule.andRule(), REQUIRED);
+            addSequence(className, cb, altList.sequence(), REQUIRED);
         } else {
 
             // For counting component classes
@@ -87,7 +87,7 @@ public class PEGBuilder {
 
             // must create new classes for AND rules that have more than one
             // REPEAT rule
-            for (AndRule andRule : PEGUtil.allAndRules(rule)) {
+            for (var sequence : PEGUtil.allSequences(altList)) {
 
                 // add class count to the name, even if not used, because
                 // otherwise could result in the same class names later,
@@ -95,19 +95,19 @@ public class PEGBuilder {
                 var newClassName = className.suffix(class_count);
                 class_count++;
 
-                if (andRule.repeats().size() == 1) {
+                if (sequence.primarys().size() == 1) {
                     // only one repeat rule - can propagate fields of this class
-                    addAndRule(newClassName, cb, andRule, REQUIRED);
+                    addSequence(newClassName, cb, sequence, REQUIRED);
                 } else {
                     // need to make a new class for this, because
                     // a list can't hold multiple-ly typed objects
                     var component_cb = classSet.createComponentClass(newClassName);
 
-                    var rule_repr = Stringifier.INSTANCE.visitAndRule(andRule);
+                    var rule_repr = Stringifier.INSTANCE.visitSequence(sequence);
                     component_cb.setHeaderComments(rule_repr);
                     component_cb.setRuleType(RuleType.Conjunction);
 
-                    var smart_name = getSmartName(newClassName, andRule);
+                    var smart_name = getSmartName(newClassName, sequence);
 
                     // Add a field to the class set
                     // The reason to do this first is that if adding the rule fails,
@@ -120,20 +120,20 @@ public class PEGBuilder {
                             ResultSource.ofClass(newClassName),
                             null);
 
-                    addAndRule(newClassName, component_cb, andRule, REQUIRED);
+                    addSequence(newClassName, component_cb, sequence, REQUIRED);
                 }
             }
         }
     }
 
-    private void addAndRule(
+    private void addSequence(
             ClassName className,
             ClassBuilder cb,
-            AndRule rule,
+            Sequence rule,
             boolean isOptional
     ) {
-        if (rule.repeats().size() == 1) {
-            addRepeatedItem(className, cb, rule.repeats().get(0), isOptional);
+        if (rule.primarys().size() == 1) {
+            addPrimary(className, cb, rule.primarys().get(0), isOptional);
         } else {
             // don't need to check for component classes - every RepeatRule
             // can be on a single field
@@ -146,34 +146,34 @@ public class PEGBuilder {
 
             int class_count = 1;
 
-            for (var repeat : rule.repeats()) {
+            for (var primary : rule.primarys()) {
                 var classWithCount = className.suffix(class_count);
                 class_count++;
 
-                addRepeatedItem(classWithCount, cb, repeat, isOptional);
+                addPrimary(classWithCount, cb, primary, isOptional);
             }
         }
     }
 
-    private void addRepeatedItem(
+    private void addPrimary(
             ClassName className,
             ClassBuilder cb,
-            Repeat repeat,
+            Primary primary,
             boolean isOptional
     ) {
-        var item = PEGUtil.getRepeatItem(repeat);
-        var repeatType = PEGUtil.getRepeatType(repeat);
+        var item = PEGUtil.getRepeatItem(primary);
+        var repeatType = PEGUtil.getRepeatType(primary);
 
-        var delimiter = repeat.hasDelimited() ? repeat.delimited().string() : null;
+        var delimiter = primary.hasDelimited() ? primary.delimited().string() : null;
 
         switch (PEGUtil.getRuleType(item)) {
             case Group:
-                addOrRuleAsComponent(className, cb, item.group().orRule(),
+                addAltListAsComponent(className, cb, item.group().altList(),
                         repeatType, REQUIRED, delimiter);
                 break;
             case Optional:
-                addOrRuleAsComponent(className, cb,
-                        item.optional().orRule(), repeatType, OPTIONAL, delimiter);
+                addAltListAsComponent(className, cb,
+                        item.optional().altList(), repeatType, OPTIONAL, delimiter);
                 break;
             case Token:
                 addToken(cb, repeatType, PEGUtil.getItemString(item), isOptional, delimiter);
@@ -181,10 +181,10 @@ public class PEGBuilder {
         }
     }
 
-    private void addOrRuleAsComponent(
+    private void addAltListAsComponent(
             ClassName className,
             ClassBuilder cb,
-            OrRule rule,
+            AltList rule,
             RepeatType repeatType,
             boolean isOptional,
             String delimiter
@@ -192,16 +192,16 @@ public class PEGBuilder {
         // maybe this can just be added to this class
         // but maybe there needs to be a separate class
 
-        if (rule.orRule2s().isEmpty() && rule.andRule().repeats().size() == 1 &&
+        if (rule.altList2s().isEmpty() && rule.sequence().primarys().size() == 1 &&
                 repeatType == RepeatType.Once) {
             // ^fix - single-char repeats
 
             // just add all the repeat rules and be done with it
-            addAndRule(className, cb, rule.andRule(), isOptional);
+            addSequence(className, cb, rule.sequence(), isOptional);
         } else {
 
             var component_cb = classSet.createComponentClass(className);
-            var rule_repr = Stringifier.INSTANCE.visitOrRule(rule);
+            var rule_repr = Stringifier.INSTANCE.visitAltList(rule);
             component_cb.setHeaderComments(rule_repr);
             component_cb.setRuleType(RuleType.Disjunction);
 
@@ -218,7 +218,7 @@ public class PEGBuilder {
                     ResultSource.ofClass(className),
                     delimiter);
 
-            addOrRule(className, component_cb, rule);
+            addAltList(className, component_cb, rule);
         }
     }
 
@@ -316,13 +316,14 @@ public class PEGBuilder {
         cb.addField(field);
     }
 
-    public String getSmartName(ClassName className, AndRule andRule) {
-        if (andRule.repeats().size() <= 3 &&
-                andRule.repeats().stream().allMatch(PEGUtil::isSingle)) {
+    public String getSmartName(ClassName className, Sequence sequence) {
+        var primaries = sequence.primarys();
+        if (primaries.size() <= 3 &&
+                primaries.stream().allMatch(PEGUtil::isSingle)) {
 
             StringBuilder sb = null;
-            for (var rule : andRule.repeats()) {
-                var itemString = PEGUtil.getItemString(PEGUtil.getRepeatItem(rule));
+            for (var primary : primaries) {
+                var itemString = PEGUtil.getItemString(PEGUtil.getRepeatItem(primary));
                 if (sb == null) sb = new StringBuilder();
                 if (ParserStringUtil.isWord(itemString)) {
                     sb.append(ParserStringUtil.convertCase(itemString));
@@ -339,26 +340,28 @@ public class PEGBuilder {
     }
 
 
-    public String getSmartName(ClassName className, OrRule orRule) {
-        var andList = orRule.orRule2s();
+    public String getSmartName(ClassName className, AltList altList) {
+        var andList = altList.altList2s();
         if (andList.isEmpty()) {
-            return getSmartName(className, orRule.andRule());
+            return getSmartName(className, altList.sequence());
         }
         if (andList.size() == 1) {
-            return getSmartName(className, orRule.andRule()) +
-                    "Or" + ParserStringUtil.capitalizeFirstChar(getSmartName(className, andList.get(0).andRule()));
+            return getSmartName(className, altList.sequence()) +
+                    "Or" + ParserStringUtil.capitalizeFirstChar(
+                    getSmartName(className, andList.get(0).sequence())
+            );
         }
         return className.decapName();
     }
 
-    private static String getFirstName(OrRule rule) {
-        var repeats = rule.andRule().repeats();
+    private static String getFirstName(AltList altList) {
+        var repeats = altList.sequence().primarys();
         if (repeats.isEmpty()) return null;
         var sub = PEGUtil.getRepeatItem(repeats.get(0));
         return sub.hasName() ? sub.name() : null;
     }
 
-    public static boolean isLeftRecursive(String name, OrRule rule) {
-        return !rule.orRule2s().isEmpty() && name.equals(getFirstName(rule));
+    public static boolean isLeftRecursive(String name, AltList altList) {
+        return !altList.altList2s().isEmpty() && name.equals(getFirstName(altList));
     }
 }

@@ -1,16 +1,16 @@
 package org.fugalang.grammar.gen;
 
-import org.fugalang.grammar.peg.wrapper.AndRule;
+import org.fugalang.grammar.peg.wrapper.AltList;
 import org.fugalang.grammar.peg.wrapper.Item;
-import org.fugalang.grammar.peg.wrapper.OrRule;
-import org.fugalang.grammar.peg.wrapper.Repeat;
+import org.fugalang.grammar.peg.wrapper.Primary;
+import org.fugalang.grammar.peg.wrapper.Sequence;
 import org.fugalang.grammar.util.FirstAndMore;
 
 public class PEGUtil {
 
-    public static Iterable<AndRule> allAndRules(OrRule orRule) {
-        return FirstAndMore.of(orRule.andRule(),
-                orRule.orRule2s(), OrRule.OrRule2::andRule);
+    public static Iterable<Sequence> allSequences(AltList altList) {
+        return FirstAndMore.of(altList.sequence(),
+                altList.altList2s(), AltList.AltList2::sequence);
     }
 
     public static SubRuleType getRuleType(Item item) {
@@ -19,16 +19,16 @@ public class PEGUtil {
                         SubRuleType.Token;
     }
 
-    public static RepeatType getRepeatType(Repeat repeat) {
-        return repeat.hasDelimited() ? RepeatType.OnceOrMore :
-                repeat.hasItemTimes() ? RepeatType.NoneOrMore :
-                        repeat.hasItemPlus() ? RepeatType.OnceOrMore : RepeatType.Once;
+    public static RepeatType getRepeatType(Primary primary) {
+        return primary.hasDelimited() ? RepeatType.OnceOrMore :
+                primary.hasItemTimes() ? RepeatType.NoneOrMore :
+                        primary.hasItemPlus() ? RepeatType.OnceOrMore : RepeatType.Once;
     }
 
-    public static Item getRepeatItem(Repeat repeat) {
-        return repeat.hasDelimited() ? repeat.delimited().item() :
-                repeat.hasItemTimes() ? repeat.itemTimes().item() :
-                        repeat.hasItemPlus() ? repeat.itemPlus().item() : repeat.item();
+    public static Item getRepeatItem(Primary primary) {
+        return primary.hasDelimited() ? primary.delimited().item() :
+                primary.hasItemTimes() ? primary.itemTimes().item() :
+                        primary.hasItemPlus() ? primary.itemPlus().item() : primary.item();
     }
 
     public static String getItemString(Item item) {
@@ -36,11 +36,11 @@ public class PEGUtil {
                 item.hasString() ? item.string() : null;
     }
 
-    public static boolean isSingle(Repeat repeat) {
-        if (!repeat.hasItem()) {
+    public static boolean isSingle(Primary primary) {
+        if (!primary.hasItem()) {
             return false;
         }
-        var sub = repeat.item();
-        return sub.hasString() || sub.hasName();
+        var item = primary.item();
+        return item.hasString() || item.hasName();
     }
 }

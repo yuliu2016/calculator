@@ -7,12 +7,12 @@ import org.fugalang.core.token.TokenType;
 import java.util.List;
 
 /**
- * rules:
- * *   | [NEWLINE] single_rule+
+ * grammar:
+ * *   | [NEWLINE] rule+
  */
-public final class Rules extends NodeWrapper {
+public final class Grammar extends NodeWrapper {
 
-    public Rules(ParseTreeNode node) {
+    public Grammar(ParseTreeNode node) {
         super(node);
     }
 
@@ -24,7 +24,7 @@ public final class Rules extends NodeWrapper {
         return has(0);
     }
 
-    public List<SingleRule> singleRules() {
-        return getList(1, SingleRule::new);
+    public List<Rule> rules() {
+        return getList(1, Rule::new);
     }
 }

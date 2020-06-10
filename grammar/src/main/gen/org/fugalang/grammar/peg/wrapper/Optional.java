@@ -5,7 +5,7 @@ import org.fugalang.core.parser.ParseTreeNode;
 
 /**
  * optional:
- * *   | '[' or_rule ']'
+ * *   | '[' alt_list ']'
  */
 public final class Optional extends NodeWrapper {
 
@@ -13,7 +13,7 @@ public final class Optional extends NodeWrapper {
         super(node);
     }
 
-    public OrRule orRule() {
-        return new OrRule(get(1));
+    public AltList altList() {
+        return new AltList(get(1));
     }
 }
