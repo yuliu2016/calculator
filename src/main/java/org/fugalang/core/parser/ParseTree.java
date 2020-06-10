@@ -106,7 +106,7 @@ public interface ParseTree {
     boolean consume(String literal);
 
     /**
-     * Skip a token of a certain string value. This will only
+     * Tests a token of a certain string value. This will only
      * succeed if {@link ElementType#isLiteral()} returns true
      * for the current token, and {@link ParserElement#getValue()}
      * is equal to the literal parameter. This method will test
@@ -116,8 +116,7 @@ public interface ParseTree {
      * @param literal the string representing the value of the token
      * @return true if the token is matched at the current position
      */
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    default boolean skip(String literal) {
+    default boolean test(String literal) {
         testNext();
         return consume(literal);
     }

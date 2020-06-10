@@ -141,7 +141,7 @@ public class FugaParser {
         t.enterLoop();
         var r = small_stmt(t);
         if (r) while (true) {
-            if (!t.skip(";") || !small_stmt(t)) break;
+            if (!(t.test(";") && small_stmt(t))) break;
         }
         t.exitLoop();
         return r;
@@ -254,7 +254,7 @@ public class FugaParser {
         t.enterLoop();
         var r = t.consume(TokenType.NAME);
         if (r) while (true) {
-            if (!t.skip(",") || !t.consume(TokenType.NAME)) break;
+            if (!(t.test(",") && t.consume(TokenType.NAME))) break;
         }
         t.exitLoop();
         return r;
@@ -320,7 +320,7 @@ public class FugaParser {
         t.enterLoop();
         var r = expr(t);
         if (r) while (true) {
-            if (!t.skip(",") || !expr(t)) break;
+            if (!(t.test(",") && expr(t))) break;
         }
         t.exitLoop();
         return r;
@@ -390,7 +390,7 @@ public class FugaParser {
         t.enterLoop();
         var r = target(t);
         if (r) while (true) {
-            if (!t.skip(",") || !target(t)) break;
+            if (!(t.test(",") && target(t))) break;
         }
         t.exitLoop();
         return r;
@@ -429,7 +429,7 @@ public class FugaParser {
         t.enterLoop();
         var r = expr_or_star(t);
         if (r) while (true) {
-            if (!t.skip(",") || !expr_or_star(t)) break;
+            if (!(t.test(",") && expr_or_star(t))) break;
         }
         t.exitLoop();
         return r;
@@ -468,7 +468,7 @@ public class FugaParser {
         t.enterLoop();
         var r = named_expr_star(t);
         if (r) while (true) {
-            if (!t.skip(",") || !named_expr_star(t)) break;
+            if (!(t.test(",") && named_expr_star(t))) break;
         }
         t.exitLoop();
         return r;
@@ -507,7 +507,7 @@ public class FugaParser {
         t.enterLoop();
         var r = slice(t);
         if (r) while (true) {
-            if (!t.skip(",") || !slice(t)) break;
+            if (!(t.test(",") && slice(t))) break;
         }
         t.exitLoop();
         return r;
@@ -616,7 +616,7 @@ public class FugaParser {
         t.enterLoop();
         var r = dict_item(t);
         if (r) while (true) {
-            if (!t.skip(",") || !dict_item(t)) break;
+            if (!(t.test(",") && dict_item(t))) break;
         }
         t.exitLoop();
         return r;
@@ -987,7 +987,7 @@ public class FugaParser {
         t.enterLoop();
         var r = import_as_name(t);
         if (r) while (true) {
-            if (!t.skip(",") || !import_as_name(t)) break;
+            if (!(t.test(",") && import_as_name(t))) break;
         }
         t.exitLoop();
         return r;
@@ -1010,7 +1010,7 @@ public class FugaParser {
         t.enterLoop();
         var r = dotted_as_name(t);
         if (r) while (true) {
-            if (!t.skip(",") || !dotted_as_name(t)) break;
+            if (!(t.test(",") && dotted_as_name(t))) break;
         }
         t.exitLoop();
         return r;
@@ -1033,7 +1033,7 @@ public class FugaParser {
         t.enterLoop();
         var r = t.consume(TokenType.NAME);
         if (r) while (true) {
-            if (!t.skip(".") || !t.consume(TokenType.NAME)) break;
+            if (!(t.test(".") && t.consume(TokenType.NAME))) break;
         }
         t.exitLoop();
         return r;
@@ -1181,7 +1181,7 @@ public class FugaParser {
         t.enterLoop();
         var r = expr_as_name(t);
         if (r) while (true) {
-            if (!t.skip(",") || !expr_as_name(t)) break;
+            if (!(t.test(",") && expr_as_name(t))) break;
         }
         t.exitLoop();
         return r;
@@ -1384,7 +1384,7 @@ public class FugaParser {
         t.enterLoop();
         var r = argument(t);
         if (r) while (true) {
-            if (!t.skip(",") || !argument(t)) break;
+            if (!(t.test(",") && argument(t))) break;
         }
         t.exitLoop();
         return r;
@@ -1500,7 +1500,7 @@ public class FugaParser {
         t.enterLoop();
         var r = default_arg(t);
         if (r) while (true) {
-            if (!t.skip(",") || !default_arg(t)) break;
+            if (!(t.test(",") && default_arg(t))) break;
         }
         t.exitLoop();
         return r;

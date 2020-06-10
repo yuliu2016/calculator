@@ -58,7 +58,7 @@ public class ClassField {
         switch (resultSource.getType()) {
             case Class:
                 if (isSingular()) {
-                    return "        return new " + className.getType()  + "(get(" + index + "));\n";
+                    return "        return new " + className.getType() + "(get(" + index + "));\n";
                 }
                 return "        return getList(" + index + ", " + className.getRealClassName() + "::new);\n";
             case TokenType:
@@ -167,12 +167,14 @@ public class ClassField {
     private String getRequiredLoopParser() {
         var resultExpr = getResultExpr();
         var rule_name = className.getRuleName().replace(":", "_");
-        var delimExpr = delimiter == null ? "" : "!t.skip(\"" + delimiter + "\") || ";
+        var testExpr = delimiter == null ? "!" + resultExpr :
+                "!(t.test(\"" + delimiter + "\") && " + resultExpr + ")";
+
         return "\n    private static boolean " + rule_name + "_loop(ParseTree t) {\n" +
                 "        t.enterLoop();\n" +
                 "        var r = " + resultExpr + ";\n" +
                 "        if (r) while (true) {\n" +
-                "            if (" + delimExpr + "!" + resultExpr + ") break;\n" +
+                "            if (" + testExpr + ") break;\n" +
                 "        }\n" +
                 "        t.exitLoop();\n" +
                 "        return r;\n" +
