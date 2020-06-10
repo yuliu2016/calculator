@@ -55,8 +55,7 @@ public class FugaParser {
     private static void file_input_1_loop(ParseTree t) {
         t.enterLoop();
         while (true) {
-            var p = t.position();
-            if (!file_input_1(t) || t.loopGuard(p)) break;
+            if (!file_input_1(t)) break;
         }
         t.exitLoop();
     }
@@ -92,8 +91,7 @@ public class FugaParser {
     private static void eval_input_newline_loop(ParseTree t) {
         t.enterLoop();
         while (true) {
-            var p = t.position();
-            if (!t.consume(TokenType.NEWLINE) || t.loopGuard(p)) break;
+            if (!t.consume(TokenType.NEWLINE)) break;
         }
         t.exitLoop();
     }
@@ -143,8 +141,7 @@ public class FugaParser {
         t.enterLoop();
         var r = small_stmt(t);
         if (r) while (true) {
-            var p = t.position();
-            if (!t.skip(";") || !small_stmt(t) || t.loopGuard(p)) break;
+            if (!t.skip(";") || !small_stmt(t)) break;
         }
         t.exitLoop();
         return r;
@@ -257,8 +254,7 @@ public class FugaParser {
         t.enterLoop();
         var r = t.consume(TokenType.NAME);
         if (r) while (true) {
-            var p = t.position();
-            if (!t.skip(",") || !t.consume(TokenType.NAME) || t.loopGuard(p)) break;
+            if (!t.skip(",") || !t.consume(TokenType.NAME)) break;
         }
         t.exitLoop();
         return r;
@@ -324,8 +320,7 @@ public class FugaParser {
         t.enterLoop();
         var r = expr(t);
         if (r) while (true) {
-            var p = t.position();
-            if (!t.skip(",") || !expr(t) || t.loopGuard(p)) break;
+            if (!t.skip(",") || !expr(t)) break;
         }
         t.exitLoop();
         return r;
@@ -395,8 +390,7 @@ public class FugaParser {
         t.enterLoop();
         var r = target(t);
         if (r) while (true) {
-            var p = t.position();
-            if (!t.skip(",") || !target(t) || t.loopGuard(p)) break;
+            if (!t.skip(",") || !target(t)) break;
         }
         t.exitLoop();
         return r;
@@ -435,8 +429,7 @@ public class FugaParser {
         t.enterLoop();
         var r = expr_or_star(t);
         if (r) while (true) {
-            var p = t.position();
-            if (!t.skip(",") || !expr_or_star(t) || t.loopGuard(p)) break;
+            if (!t.skip(",") || !expr_or_star(t)) break;
         }
         t.exitLoop();
         return r;
@@ -475,8 +468,7 @@ public class FugaParser {
         t.enterLoop();
         var r = named_expr_star(t);
         if (r) while (true) {
-            var p = t.position();
-            if (!t.skip(",") || !named_expr_star(t) || t.loopGuard(p)) break;
+            if (!t.skip(",") || !named_expr_star(t)) break;
         }
         t.exitLoop();
         return r;
@@ -515,8 +507,7 @@ public class FugaParser {
         t.enterLoop();
         var r = slice(t);
         if (r) while (true) {
-            var p = t.position();
-            if (!t.skip(",") || !slice(t) || t.loopGuard(p)) break;
+            if (!t.skip(",") || !slice(t)) break;
         }
         t.exitLoop();
         return r;
@@ -625,8 +616,7 @@ public class FugaParser {
         t.enterLoop();
         var r = dict_item(t);
         if (r) while (true) {
-            var p = t.position();
-            if (!t.skip(",") || !dict_item(t) || t.loopGuard(p)) break;
+            if (!t.skip(",") || !dict_item(t)) break;
         }
         t.exitLoop();
         return r;
@@ -696,8 +686,7 @@ public class FugaParser {
     private static void iter_for_loop(ParseTree t) {
         t.enterLoop();
         while (true) {
-            var p = t.position();
-            if (!iter_for(t) || t.loopGuard(p)) break;
+            if (!iter_for(t)) break;
         }
         t.exitLoop();
     }
@@ -798,8 +787,7 @@ public class FugaParser {
     private static void simple_assign_1_loop(ParseTree t) {
         t.enterLoop();
         while (true) {
-            var p = t.position();
-            if (!simple_assign_1(t) || t.loopGuard(p)) break;
+            if (!simple_assign_1(t)) break;
         }
         t.exitLoop();
     }
@@ -916,8 +904,7 @@ public class FugaParser {
         t.enterLoop();
         var r = t.consume(".");
         if (r) while (true) {
-            var p = t.position();
-            if (!t.consume(".") || t.loopGuard(p)) break;
+            if (!t.consume(".")) break;
         }
         t.exitLoop();
         return r;
@@ -1000,8 +987,7 @@ public class FugaParser {
         t.enterLoop();
         var r = import_as_name(t);
         if (r) while (true) {
-            var p = t.position();
-            if (!t.skip(",") || !import_as_name(t) || t.loopGuard(p)) break;
+            if (!t.skip(",") || !import_as_name(t)) break;
         }
         t.exitLoop();
         return r;
@@ -1024,8 +1010,7 @@ public class FugaParser {
         t.enterLoop();
         var r = dotted_as_name(t);
         if (r) while (true) {
-            var p = t.position();
-            if (!t.skip(",") || !dotted_as_name(t) || t.loopGuard(p)) break;
+            if (!t.skip(",") || !dotted_as_name(t)) break;
         }
         t.exitLoop();
         return r;
@@ -1048,8 +1033,7 @@ public class FugaParser {
         t.enterLoop();
         var r = t.consume(TokenType.NAME);
         if (r) while (true) {
-            var p = t.position();
-            if (!t.skip(".") || !t.consume(TokenType.NAME) || t.loopGuard(p)) break;
+            if (!t.skip(".") || !t.consume(TokenType.NAME)) break;
         }
         t.exitLoop();
         return r;
@@ -1096,8 +1080,7 @@ public class FugaParser {
     private static void elif_stmt_loop(ParseTree t) {
         t.enterLoop();
         while (true) {
-            var p = t.position();
-            if (!elif_stmt(t) || t.loopGuard(p)) break;
+            if (!elif_stmt(t)) break;
         }
         t.exitLoop();
     }
@@ -1198,8 +1181,7 @@ public class FugaParser {
         t.enterLoop();
         var r = expr_as_name(t);
         if (r) while (true) {
-            var p = t.position();
-            if (!t.skip(",") || !expr_as_name(t) || t.loopGuard(p)) break;
+            if (!t.skip(",") || !expr_as_name(t)) break;
         }
         t.exitLoop();
         return r;
@@ -1239,8 +1221,7 @@ public class FugaParser {
         t.enterLoop();
         var r = stmt(t);
         if (r) while (true) {
-            var p = t.position();
-            if (!stmt(t) || t.loopGuard(p)) break;
+            if (!stmt(t)) break;
         }
         t.exitLoop();
         return r;
@@ -1364,8 +1345,7 @@ public class FugaParser {
         t.enterLoop();
         var r = except_clause(t);
         if (r) while (true) {
-            var p = t.position();
-            if (!except_clause(t) || t.loopGuard(p)) break;
+            if (!except_clause(t)) break;
         }
         t.exitLoop();
         return r;
@@ -1404,8 +1384,7 @@ public class FugaParser {
         t.enterLoop();
         var r = argument(t);
         if (r) while (true) {
-            var p = t.position();
-            if (!t.skip(",") || !argument(t) || t.loopGuard(p)) break;
+            if (!t.skip(",") || !argument(t)) break;
         }
         t.exitLoop();
         return r;
@@ -1521,8 +1500,7 @@ public class FugaParser {
         t.enterLoop();
         var r = default_arg(t);
         if (r) while (true) {
-            var p = t.position();
-            if (!t.skip(",") || !default_arg(t) || t.loopGuard(p)) break;
+            if (!t.skip(",") || !default_arg(t)) break;
         }
         t.exitLoop();
         return r;
@@ -1573,8 +1551,7 @@ public class FugaParser {
     private static void args_kwargs_3_loop(ParseTree t) {
         t.enterLoop();
         while (true) {
-            var p = t.position();
-            if (!args_kwargs_3(t) || t.loopGuard(p)) break;
+            if (!args_kwargs_3(t)) break;
         }
         t.exitLoop();
     }
@@ -1735,8 +1712,7 @@ public class FugaParser {
         t.enterLoop();
         var r = simple_arg(t);
         if (r) while (true) {
-            var p = t.position();
-            if (!simple_arg(t) || t.loopGuard(p)) break;
+            if (!simple_arg(t)) break;
         }
         t.exitLoop();
         return r;
@@ -1974,8 +1950,7 @@ public class FugaParser {
         t.enterLoop();
         var r = comparison_1_2(t);
         if (r) while (true) {
-            var p = t.position();
-            if (!comparison_1_2(t) || t.loopGuard(p)) break;
+            if (!comparison_1_2(t)) break;
         }
         t.exitLoop();
         return r;

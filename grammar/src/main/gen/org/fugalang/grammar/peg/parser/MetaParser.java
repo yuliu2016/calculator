@@ -26,8 +26,7 @@ public class MetaParser {
         t.enterLoop();
         var r = single_rule(t);
         if (r) while (true) {
-            var p = t.position();
-            if (!single_rule(t) || t.loopGuard(p)) break;
+            if (!single_rule(t)) break;
         }
         t.exitLoop();
         return r;
@@ -68,8 +67,7 @@ public class MetaParser {
     private static void or_rule_2_loop(ParseTree t) {
         t.enterLoop();
         while (true) {
-            var p = t.position();
-            if (!or_rule_2(t) || t.loopGuard(p)) break;
+            if (!or_rule_2(t)) break;
         }
         t.exitLoop();
     }
@@ -105,8 +103,7 @@ public class MetaParser {
         t.enterLoop();
         var r = repeat(t);
         if (r) while (true) {
-            var p = t.position();
-            if (!repeat(t) || t.loopGuard(p)) break;
+            if (!repeat(t)) break;
         }
         t.exitLoop();
         return r;

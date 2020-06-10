@@ -211,16 +211,6 @@ public class SimpleParseTree implements ParseTree {
     }
 
     @Override
-    public boolean loopGuard(int position) {
-        if (position == this.pos) {
-            System.err.println("Loop parsed an empty string");
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    @Override
     public boolean consume(ElementType type) {
         if (context.didFinish(pos)) {
             return false;

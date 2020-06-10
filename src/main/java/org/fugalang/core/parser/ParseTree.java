@@ -75,15 +75,6 @@ public interface ParseTree {
     int position();
 
     /**
-     * Guard the loop against an empty string
-     *
-     * @param position the position before the current iteration
-     * @return true if nothing has been parsed and the loop should
-     * return an empty string
-     */
-    boolean loopGuard(int position);
-
-    /**
      * Consume a token of a certain predefined element type.
      * This will only succeed for identical type objects,
      * i.e. (a == b), not (a.equals(b))

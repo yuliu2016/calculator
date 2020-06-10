@@ -172,8 +172,7 @@ public class ClassField {
                 "        t.enterLoop();\n" +
                 "        var r = " + resultExpr + ";\n" +
                 "        if (r) while (true) {\n" +
-                "            var p = t.position();\n" +
-                "            if (" + delimExpr + "!" + resultExpr + " || t.loopGuard(p)) break;\n" +
+                "            if (" + delimExpr + "!" + resultExpr + ") break;\n" +
                 "        }\n" +
                 "        t.exitLoop();\n" +
                 "        return r;\n" +
@@ -186,8 +185,7 @@ public class ClassField {
         return "\n    private static void " + rule_name + "_loop(ParseTree t) {\n" +
                 "        t.enterLoop();\n" +
                 "        while (true) {\n" +
-                "            var p = t.position();\n" +
-                "            if (!" + resultExpr + " || t.loopGuard(p)) break;\n" +
+                "            if (!" + resultExpr + ") break;\n" +
                 "        }\n" +
                 "        t.exitLoop();\n" +
                 "    }\n";
