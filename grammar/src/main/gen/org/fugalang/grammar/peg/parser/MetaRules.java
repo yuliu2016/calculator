@@ -14,6 +14,8 @@ public class MetaRules {
     public static final ParserRule PRIMARY = or_rule("primary");
     public static final ParserRule PRIMARY_2 = and_rule("primary:2");
     public static final ParserRule PRIMARY_3 = and_rule("primary:3");
+    public static final ParserRule PRIMARY_4 = and_rule("primary:4");
+    public static final ParserRule PRIMARY_5 = and_rule("primary:5");
     public static final ParserRule ITEM = or_rule("item");
     public static final ParserRule GROUP = and_rule("group");
     public static final ParserRule OPTIONAL = and_rule("optional");

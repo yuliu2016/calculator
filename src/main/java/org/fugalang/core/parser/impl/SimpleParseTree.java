@@ -130,10 +130,14 @@ public class SimpleParseTree implements ParseTree {
     public void exit(boolean success) {
         var frame = frame_deque.pop();
 
+        // can't use peekFrame() here because a frame has just been popped,
+        // meaning that the deque could indeed be empty
+        var parent_frame = frame_deque.peek();
+
         // add to the memo ONLY if the parent frame is not exepecting left-recursion
         // caching is handled by save instead
-        var enable_memo = frame_deque.isEmpty() ||
-                frame_deque.peek().left_recursion_nodes == null;
+        var enable_memo = parent_frame == null ||
+                parent_frame.left_recursion_nodes == null;
 
         if (success) {
             if (context.isDebug()) {
@@ -141,7 +145,12 @@ public class SimpleParseTree implements ParseTree {
                         "Success in frame: " + frame.rule + " at position " + pos);
             }
             var node_from_frame = IndexNode.fromFrame(frame);
-            addNode(node_from_frame);
+            if (parent_frame != null && parent_frame.isTest) {
+                // already tested, changing the state back
+                parent_frame.isTest = false;
+            } else {
+                addNode(node_from_frame);
+            }
             if (enable_memo) {
                 frame.memo_at_pos.put(frame.rule, new Memo(pos, node_from_frame));
             }
@@ -150,7 +159,12 @@ public class SimpleParseTree implements ParseTree {
                 context.log("  ".repeat(level) +
                         "Failure in frame: " + frame.rule);
             }
-            addNode(IndexNode.NULL);
+            if (parent_frame != null && parent_frame.isTest) {
+                // already tested, changing the state back
+                parent_frame.isTest = false;
+            } else {
+                addNode(IndexNode.NULL);
+            }
             pos = frame.position;
             if (enable_memo) {
                 frame.memo_at_pos.put(frame.rule, new Memo(pos, null));
@@ -211,11 +225,17 @@ public class SimpleParseTree implements ParseTree {
     }
 
     @Override
+    public void testNext() {
+        peekFrame().isTest = true;
+    }
+
+    @Override
     public boolean consume(ElementType type) {
         if (context.didFinish(pos)) {
             return false;
         }
         var token = context.getElem(pos);
+        var frame = peekFrame();
 
         if (token.getType() == type) {
             if (type.isLiteral()) {
@@ -228,7 +248,12 @@ public class SimpleParseTree implements ParseTree {
                         token.getValue().replace("\r\n", "\\n")
                                 .replace("\n", "\\n") + "'");
             }
-            addNode(IndexNode.ofElement(token));
+            if (frame.isTest) {
+                // already tested, changing the state back
+                frame.isTest = false;
+            } else {
+                addNode(IndexNode.ofElement(token));
+            }
             pos++;
             return true;
         } else {
@@ -238,7 +263,12 @@ public class SimpleParseTree implements ParseTree {
                         token.getValue().replace("\r", "\\r")
                                 .replace("\n", "\\n") + "'");
             }
-            addNode(IndexNode.NULL);
+            if (frame.isTest) {
+                // already tested, changing the state back
+                frame.isTest = false;
+            } else {
+                addNode(IndexNode.NULL);
+            }
             return false;
         }
     }
@@ -249,13 +279,19 @@ public class SimpleParseTree implements ParseTree {
             return false;
         }
         var token = context.getElem(pos);
+        var frame = peekFrame();
 
         if (token.getType().isLiteral() && token.getValue().equals(literal)) {
             if (context.isDebug()) {
                 context.log("  ".repeat(level + 1) +
                         "Success in literal '" + literal + "'");
             }
-            addNode(IndexNode.ofElement(token));
+            if (frame.isTest) {
+                // already tested, changing the state back
+                frame.isTest = false;
+            } else {
+                addNode(IndexNode.ofElement(token));
+            }
             pos++;
             return true;
         } else {
@@ -265,31 +301,11 @@ public class SimpleParseTree implements ParseTree {
                         token.getValue().replace("\r", "\\r")
                                 .replace("\n", "\\n") + "'");
             }
-            addNode(IndexNode.NULL);
-            return false;
-        }
-    }
-
-    @Override
-    public boolean skip(String literal) {
-        if (context.didFinish(pos)) {
-            return false;
-        }
-        var token = context.getElem(pos);
-
-        if (token.getType().isLiteral() && token.getValue().equals(literal)) {
-            if (context.isDebug()) {
-                context.log("  ".repeat(level + 1) +
-                        "Success in literal '" + literal + "'");
-            }
-            pos++;
-            return true;
-        } else {
-            if (context.isDebug()) {
-                context.log("  ".repeat(level + 1) +
-                        "Failure in literal '" + literal + "': Token is '" +
-                        token.getValue().replace("\r", "\\r")
-                                .replace("\n", "\\n") + "'");
+            if (frame.isTest) {
+                // already tested, changing the state back
+                frame.isTest = false;
+            } else {
+                addNode(IndexNode.NULL);
             }
             return false;
         }

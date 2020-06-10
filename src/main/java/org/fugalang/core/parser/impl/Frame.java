@@ -13,6 +13,9 @@ class Frame {
     final ParserRule rule;
     final Map<ParserRule, Memo> memo_at_pos;
 
+    boolean isTest = false;
+
+    // nodes in this frame
     List<ParseTreeNode> nodes = new ArrayList<>();
 
     // used for tracking collection sub-frames

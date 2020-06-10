@@ -75,6 +75,16 @@ public interface ParseTree {
     int position();
 
     /**
+     * Set the parse tree's state to *test* mode. When in *test* mode, a successful
+     * frame or element will not be added to the parse tree if it succeeds or failed.
+     * However, the memoization cache is still updated after a result is found.
+     * The parse tree exists test mode when either {@link #consume(String)},
+     * {@link #consume(ElementType)} is called immediately after, or if
+     * {@link #exit(boolean)} has been called on a sub-frame.
+     */
+    void testNext();
+
+    /**
      * Consume a token of a certain predefined element type.
      * This will only succeed for identical type objects,
      * i.e. (a == b), not (a.equals(b))
@@ -106,5 +116,9 @@ public interface ParseTree {
      * @param literal the string representing the value of the token
      * @return true if the token is matched at the current position
      */
-    boolean skip(String literal);
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    default boolean skip(String literal) {
+        testNext();
+        return consume(literal);
+    }
 }

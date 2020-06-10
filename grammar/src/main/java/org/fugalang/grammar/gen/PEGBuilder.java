@@ -135,7 +135,7 @@ public class PEGBuilder {
         if (rule.primarys().size() == 1) {
             addPrimary(className, cb, rule.primarys().get(0), isOptional);
         } else {
-            // don't need to check for component classes - every RepeatRule
+            // don't need to check for component classes - every Primary
             // can be on a single field
 
             // still need to change the names though, since there may be two

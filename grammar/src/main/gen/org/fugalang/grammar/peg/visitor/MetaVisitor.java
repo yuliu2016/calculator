@@ -40,6 +40,8 @@ public interface MetaVisitor<T> {
     /**
      * primary:
      * *   | delimited
+     * *   | '&' item
+     * *   | '!' item
      * *   | item '*'
      * *   | item '+'
      * *   | item

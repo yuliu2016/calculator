@@ -112,6 +112,8 @@ public class MetaParser {
     /**
      * primary:
      * *   | delimited
+     * *   | '&' item
+     * *   | '!' item
      * *   | item '*'
      * *   | item '+'
      * *   | item
@@ -123,7 +125,35 @@ public class MetaParser {
         r = delimited(t);
         r = r || primary_2(t);
         r = r || primary_3(t);
+        r = r || primary_4(t);
+        r = r || primary_5(t);
         r = r || item(t);
+        t.exit(r);
+        return r;
+    }
+
+    /**
+     * '&' item
+     */
+    private static boolean primary_2(ParseTree t) {
+        var m = t.enter(PRIMARY_2);
+        if (m != null) return m;
+        boolean r;
+        r = t.consume("&");
+        r = r && item(t);
+        t.exit(r);
+        return r;
+    }
+
+    /**
+     * '!' item
+     */
+    private static boolean primary_3(ParseTree t) {
+        var m = t.enter(PRIMARY_3);
+        if (m != null) return m;
+        boolean r;
+        r = t.consume("!");
+        r = r && item(t);
         t.exit(r);
         return r;
     }
@@ -131,8 +161,8 @@ public class MetaParser {
     /**
      * item '*'
      */
-    private static boolean primary_2(ParseTree t) {
-        var m = t.enter(PRIMARY_2);
+    private static boolean primary_4(ParseTree t) {
+        var m = t.enter(PRIMARY_4);
         if (m != null) return m;
         boolean r;
         r = item(t);
@@ -144,8 +174,8 @@ public class MetaParser {
     /**
      * item '+'
      */
-    private static boolean primary_3(ParseTree t) {
-        var m = t.enter(PRIMARY_3);
+    private static boolean primary_5(ParseTree t) {
+        var m = t.enter(PRIMARY_5);
         if (m != null) return m;
         boolean r;
         r = item(t);
