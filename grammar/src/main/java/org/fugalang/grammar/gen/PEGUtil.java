@@ -6,6 +6,8 @@ import org.fugalang.grammar.peg.wrapper.Primary;
 import org.fugalang.grammar.peg.wrapper.Sequence;
 import org.fugalang.grammar.util.FirstAndMore;
 
+import static org.fugalang.grammar.gen.Modifier.*;
+
 public class PEGUtil {
 
     public static Iterable<Sequence> allSequences(AltList altList) {
@@ -19,16 +21,24 @@ public class PEGUtil {
                         SubRuleType.Token;
     }
 
-    public static RepeatType getRepeatType(Primary primary) {
-        return primary.hasDelimited() ? RepeatType.OnceOrMore :
-                primary.hasItemTimes() ? RepeatType.NoneOrMore :
-                        primary.hasItemPlus() ? RepeatType.OnceOrMore : RepeatType.Once;
+    public static Modifier getModifier(Primary primary) {
+        if (primary.hasDelimited()) return OnceOrMore;
+        if (primary.hasBitAndItem()) return TestTrue;
+        if (primary.hasNotItem()) return TestFalse;
+        if (primary.hasItemTimes()) return NoneOrMore;
+        if (primary.hasItemPlus()) return OnceOrMore;
+        if (primary.hasItem()) return Once;
+        throw new IllegalArgumentException();
     }
 
-    public static Item getRepeatItem(Primary primary) {
-        return primary.hasDelimited() ? primary.delimited().item() :
-                primary.hasItemTimes() ? primary.itemTimes().item() :
-                        primary.hasItemPlus() ? primary.itemPlus().item() : primary.item();
+    public static Item getModifierItem(Primary primary) {
+        if (primary.hasDelimited()) return primary.delimited().item();
+        if (primary.hasBitAndItem()) return primary.bitAndItem().item();
+        if (primary.hasNotItem()) return primary.notItem().item();
+        if (primary.hasItemTimes()) return primary.itemTimes().item();
+        if (primary.hasItemPlus()) return primary.itemPlus().item();
+        if (primary.hasItem()) return primary.item();
+        throw new IllegalArgumentException();
     }
 
     public static String getItemString(Item item) {
@@ -37,10 +47,14 @@ public class PEGUtil {
     }
 
     public static boolean isSingle(Primary primary) {
-        if (!primary.hasItem()) {
-            return false;
+        if (primary.hasItem()) {
+            var it = primary.item();
+            return it.hasString() || it.hasName();
         }
-        var item = primary.item();
-        return item.hasString() || item.hasName();
+        if (primary.hasBitAndItem()) {
+            var it = primary.bitAndItem().item();
+            return it.hasString() || it.hasName();
+        }
+        return false;
     }
 }

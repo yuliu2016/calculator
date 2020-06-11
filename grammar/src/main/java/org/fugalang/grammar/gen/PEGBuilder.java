@@ -115,7 +115,7 @@ public class PEGBuilder {
                     addField(newClassName,
                             cb,
                             smart_name,
-                            RepeatType.Once,
+                            Modifier.Once,
                             REQUIRED,
                             ResultSource.ofClass(newClassName),
                             null);
@@ -161,22 +161,22 @@ public class PEGBuilder {
             Primary primary,
             boolean isOptional
     ) {
-        var item = PEGUtil.getRepeatItem(primary);
-        var repeatType = PEGUtil.getRepeatType(primary);
+        var item = PEGUtil.getModifierItem(primary);
+        var modifier = PEGUtil.getModifier(primary);
 
         var delimiter = primary.hasDelimited() ? primary.delimited().string() : null;
 
         switch (PEGUtil.getRuleType(item)) {
             case Group:
                 addAltListAsComponent(className, cb, item.group().altList(),
-                        repeatType, REQUIRED, delimiter);
+                        modifier, REQUIRED, delimiter);
                 break;
             case Optional:
                 addAltListAsComponent(className, cb,
-                        item.optional().altList(), repeatType, OPTIONAL, delimiter);
+                        item.optional().altList(), modifier, OPTIONAL, delimiter);
                 break;
             case Token:
-                addToken(cb, repeatType, PEGUtil.getItemString(item), isOptional, delimiter);
+                addToken(cb, modifier, PEGUtil.getItemString(item), isOptional, delimiter);
                 break;
         }
     }
@@ -185,7 +185,7 @@ public class PEGBuilder {
             ClassName className,
             ClassBuilder cb,
             AltList rule,
-            RepeatType repeatType,
+            Modifier modifier,
             boolean isOptional,
             String delimiter
     ) {
@@ -193,7 +193,7 @@ public class PEGBuilder {
         // but maybe there needs to be a separate class
 
         if (rule.altList2s().isEmpty() && rule.sequence().primarys().size() == 1 &&
-                repeatType == RepeatType.Once) {
+                modifier == Modifier.Once) {
             // ^fix - single-char repeats
 
             // just add all the repeat rules and be done with it
@@ -213,7 +213,7 @@ public class PEGBuilder {
             addField(className,
                     cb,
                     smart_name,
-                    repeatType,
+                    modifier,
                     isOptional,
                     ResultSource.ofClass(className),
                     delimiter);
@@ -224,7 +224,7 @@ public class PEGBuilder {
 
     private void addToken(
             ClassBuilder cb,
-            RepeatType repeatType,
+            Modifier modifier,
             String token,
             boolean isOptional,
             String delimiter
@@ -240,7 +240,7 @@ public class PEGBuilder {
             addField(className,
                     cb,
                     className.decapName(),
-                    repeatType,
+                    modifier,
                     isOptional,
                     ResultSource.ofClass(className),
                     delimiter);
@@ -265,7 +265,7 @@ public class PEGBuilder {
                 addField(className,
                         cb,
                         fieldName,
-                        repeatType,
+                        modifier,
                         isOptional,
                         resultSource,
                         delimiter);
@@ -278,7 +278,7 @@ public class PEGBuilder {
                 addField(className,
                         cb,
                         fieldName,
-                        repeatType,
+                        modifier,
                         isOptional,
                         resultSource,
                         delimiter);
@@ -290,7 +290,7 @@ public class PEGBuilder {
             ClassName className,
             ClassBuilder cb,
             String fieldName,
-            RepeatType repeatType,
+            Modifier modifier,
             boolean isOptional,
             ResultSource resultSource,
             String delimiter
@@ -298,21 +298,45 @@ public class PEGBuilder {
         ClassName newClassName;
         String newFieldName;
         FieldType fieldType;
-        if (repeatType == RepeatType.Once) {
-            newClassName = className;
-            newFieldName = fieldName;
-            fieldType = isOptional ? FieldType.Optional : FieldType.Required;
-        } else {
-            cb.addImport("java.util.List");
-            newClassName = className.asList();
-
-            // pluralize the field name
-            newFieldName = fieldName + "s";
-            fieldType = repeatType == RepeatType.OnceOrMore ?
-                    FieldType.RequiredList : FieldType.OptionalList;
-
+        switch (modifier) {
+            case TestTrue:
+                newFieldName = fieldName;
+                newClassName = className;
+                fieldType = FieldType.RequireTrue;
+                break;
+            case TestFalse:
+                newFieldName = fieldName;
+                newClassName = className;
+                fieldType = FieldType.RequireFalse;
+                break;
+            case OnceOrMore:
+                cb.addImport("java.util.List");
+                newClassName = className.asList();
+                newFieldName = fieldName + "s";
+                fieldType = FieldType.RequiredList;
+                break;
+            case NoneOrMore:
+                cb.addImport("java.util.List");
+                newClassName = className.asList();
+                newFieldName = fieldName + "s";
+                fieldType = FieldType.OptionalList;
+                break;
+            case Once:
+                newClassName = className;
+                newFieldName = fieldName;
+                fieldType = isOptional ? FieldType.Optional : FieldType.Required;
+                break;
+            default:
+                throw new IllegalArgumentException();
         }
-        var field = new ClassField(newClassName, newFieldName, fieldType, resultSource, delimiter);
+
+        var field = new ClassField(
+                newClassName,
+                newFieldName,
+                fieldType,
+                resultSource,
+                delimiter);
+
         cb.addField(field);
     }
 
@@ -323,7 +347,7 @@ public class PEGBuilder {
 
             StringBuilder sb = null;
             for (var primary : primaries) {
-                var itemString = PEGUtil.getItemString(PEGUtil.getRepeatItem(primary));
+                var itemString = PEGUtil.getItemString(PEGUtil.getModifierItem(primary));
                 if (sb == null) sb = new StringBuilder();
                 if (ParserStringUtil.isWord(itemString)) {
                     sb.append(ParserStringUtil.convertCase(itemString));
@@ -355,9 +379,9 @@ public class PEGBuilder {
     }
 
     private static String getFirstName(AltList altList) {
-        var repeats = altList.sequence().primarys();
-        if (repeats.isEmpty()) return null;
-        var sub = PEGUtil.getRepeatItem(repeats.get(0));
+        var primaries = altList.sequence().primarys();
+        if (primaries.isEmpty()) return null;
+        var sub = PEGUtil.getModifierItem(primaries.get(0));
         return sub.hasName() ? sub.name() : null;
     }
 

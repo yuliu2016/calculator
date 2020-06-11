@@ -113,6 +113,7 @@ public enum Operator {
             COLON,
             TERNERY,
             SEMICOLON,
+            NOT,
 
             LPAR,
             RPAR,

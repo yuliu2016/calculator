@@ -4,6 +4,8 @@ package org.fugalang.grammar.classbuilder;
 import org.fugalang.core.parser.RuleType;
 import org.fugalang.grammar.util.ParserStringUtil;
 
+import static org.fugalang.grammar.classbuilder.FieldType.*;
+
 public class ClassField {
     private final ClassName className;
     private final String fieldName;
@@ -30,11 +32,15 @@ public class ClassField {
     }
 
     public boolean isRequired() {
-        return fieldType == FieldType.Required || fieldType == FieldType.RequiredList;
+        return fieldType == Required || fieldType == RequiredList;
     }
 
     public boolean isSingular() {
-        return fieldType == FieldType.Required || fieldType == FieldType.Optional;
+        return fieldType == Required || fieldType == Optional;
+    }
+
+    public boolean isPredicate() {
+        return fieldType == RequireTrue || fieldType == RequireFalse;
     }
 
     /**
@@ -55,6 +61,9 @@ public class ClassField {
     }
 
     private String asGetterBody(RuleType ruleType, int index) {
+        if (isPredicate()) {
+            return null;
+        }
         switch (resultSource.getType()) {
             case Class:
                 if (isSingular()) {
@@ -67,7 +76,7 @@ public class ClassField {
                 }
                 return "        return getList(" + index + ", ParseTreeNode::asString);\n";
             case TokenLiteral:
-                if (ruleType == RuleType.Conjunction && fieldType == FieldType.Required) {
+                if (ruleType == RuleType.Conjunction && fieldType == Required) {
                     return null;
                 }
                 if (isSingular()) {
@@ -93,7 +102,7 @@ public class ClassField {
         switch (resultSource.getType()) {
             case Class:
             case TokenType:
-                if (ruleType == RuleType.Conjunction && fieldType == FieldType.Required) {
+                if (ruleType == RuleType.Conjunction && fieldType == Required) {
                     return null;
                 }
                 if (isSingular()) {
@@ -107,14 +116,22 @@ public class ClassField {
         }
     }
 
-    public String getParserFieldStatement(RuleType ruleType, boolean isFirst) {
-        var resultExpr = getResultExpr();
+    public String getTestNextStatement() {
+        if (isPredicate()) {
+            return "t.testNext();\n";
+        }
+        return null;
+    }
 
+    public String getParserFieldStatement(RuleType ruleType, boolean isFirst) {
         switch (fieldType) {
+            case RequireTrue:
             case Required:
-                return getRequiredStmt(resultExpr, ruleType, isFirst);
+                return getRequiredStmt(getResultExpr(), ruleType, isFirst);
+            case RequireFalse:
+                return getRequiredStmt(getInvertedResultExpr(), ruleType, isFirst);
             case Optional:
-                return getOptionalStmt(resultExpr, ruleType, isFirst);
+                return getOptionalStmt(getResultExpr(), ruleType, isFirst);
             case RequiredList:
                 return getRequiredStmt(getLoopExpr(), ruleType, isFirst);
             case OptionalList:
@@ -156,11 +173,15 @@ public class ClassField {
         }
     }
 
+    private String getInvertedResultExpr() {
+        return "!" + getResultExpr();
+    }
+
     public String getLoopParser() {
-        if (isSingular()) {
+        if (isSingular() || isPredicate()) {
             return null;
         }
-        return fieldType == FieldType.RequiredList ?
+        return fieldType == RequiredList ?
                 getRequiredLoopParser() : getOptionalLoopParser();
     }
 

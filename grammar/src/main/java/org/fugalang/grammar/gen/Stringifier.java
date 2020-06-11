@@ -60,11 +60,14 @@ public class Stringifier implements MetaVisitor<String> {
 
     @Override
     public String visitPrimary(Primary primary) {
-        var item = visitItem(PEGUtil.getRepeatItem(primary));
-        return primary.hasDelimited() ? "'" + primary.delimited().string() + "'." + item + "+" :
-                primary.hasItemPlus() ? item + "+" :
-                        primary.hasItemTimes() ? item + "*" :
-                                item;
+        var item = visitItem(PEGUtil.getModifierItem(primary));
+        if (primary.hasDelimited()) return "'" + primary.delimited().string() + "'." + item + "+";
+        if (primary.hasBitAndItem()) return "&" + item;
+        if (primary.hasNotItem()) return "!" + item;
+        if (primary.hasItemTimes()) return item + "*";
+        if (primary.hasItemPlus()) return item + "+";
+        if (primary.hasItem()) return item;
+        throw new IllegalArgumentException();
     }
 
     @Override

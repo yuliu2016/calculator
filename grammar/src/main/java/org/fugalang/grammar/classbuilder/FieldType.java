@@ -4,5 +4,7 @@ public enum FieldType {
     Required,
     Optional,
     OptionalList,
-    RequiredList;
+    RequiredList,
+    RequireTrue,
+    RequireFalse
 }
