@@ -8,7 +8,7 @@ public interface ParseTree {
     /**
      * Enter a new call frame in the parse tree stack
      *
-     * @param rule  the rule that is being parsed
+     * @param rule the rule that is being parsed
      * @return a boolean value containing the result on entering
      * this frame. The value is nonnull if the result of this
      * frame can be predetermined, which can occur in one of two
@@ -81,8 +81,10 @@ public interface ParseTree {
      * The parse tree exists test mode when either {@link #consume(String)},
      * {@link #consume(ElementType)} is called immediately after, or if
      * {@link #exit(boolean)} has been called on a sub-frame.
+     *
+     * @return the parse tree itself, used for object chaining
      */
-    void testNext();
+    ParseTree test();
 
     /**
      * Consume a token of a certain predefined element type.
@@ -104,20 +106,4 @@ public interface ParseTree {
      * @return true if the token is consumed at the current position
      */
     boolean consume(String literal);
-
-    /**
-     * Tests a token of a certain string value. This will only
-     * succeed if {@link ElementType#isLiteral()} returns true
-     * for the current token, and {@link ParserElement#getValue()}
-     * is equal to the literal parameter. This method will test
-     * the literal but will not add it to the parse tree if it
-     * succeeds
-     *
-     * @param literal the string representing the value of the token
-     * @return true if the token is matched at the current position
-     */
-    default boolean test(String literal) {
-        testNext();
-        return consume(literal);
-    }
 }

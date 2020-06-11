@@ -116,22 +116,17 @@ public class ClassField {
         }
     }
 
-    public String getTestNextStatement() {
-        if (isPredicate()) {
-            return "t.testNext();\n";
-        }
-        return null;
-    }
-
     public String getParserFieldStatement(RuleType ruleType, boolean isFirst) {
         switch (fieldType) {
             case RequireTrue:
-            case Required:
-                return getRequiredStmt(getResultExpr(), ruleType, isFirst);
+                return getRequiredStmt(getResultExpr(true), ruleType, isFirst);
             case RequireFalse:
-                return getRequiredStmt(getInvertedResultExpr(), ruleType, isFirst);
+                var resultExpr = "!" + getResultExpr(true);
+                return getRequiredStmt(resultExpr, ruleType, isFirst);
+            case Required:
+                return getRequiredStmt(getResultExpr(false), ruleType, isFirst);
             case Optional:
-                return getOptionalStmt(getResultExpr(), ruleType, isFirst);
+                return getOptionalStmt(getResultExpr(false), ruleType, isFirst);
             case RequiredList:
                 return getRequiredStmt(getLoopExpr(), ruleType, isFirst);
             case OptionalList:
@@ -160,21 +155,19 @@ public class ClassField {
         return condition + resultExpr + ";\n";
     }
 
-    private String getResultExpr() {
+    private String getResultExpr(boolean isPredicate) {
+        var parseTreeInst = isPredicate ? "t.test()" : "t";
         switch (resultSource.getType()) {
             case Class:
-                return resultSource.getValue().replace(":", "_") + "(t)";
+                return resultSource.getValue().replace(":", "_") +
+                        "(" + parseTreeInst + ")";
             case TokenType:
-                return "t.consume(" + resultSource.getValue() + ")";
+                return parseTreeInst + ".consume(" + resultSource.getValue() + ")";
             case TokenLiteral:
-                return "t.consume(\"" + resultSource.getValue() + "\")";
+                return parseTreeInst + ".consume(\"" + resultSource.getValue() + "\")";
             default:
                 throw new IllegalArgumentException();
         }
-    }
-
-    private String getInvertedResultExpr() {
-        return "!" + getResultExpr();
     }
 
     public String getLoopParser() {
@@ -186,10 +179,10 @@ public class ClassField {
     }
 
     private String getRequiredLoopParser() {
-        var resultExpr = getResultExpr();
+        var resultExpr = getResultExpr(false);
         var rule_name = className.getRuleName().replace(":", "_");
         var testExpr = delimiter == null ? "!" + resultExpr :
-                "!(t.test(\"" + delimiter + "\") && " + resultExpr + ")";
+                "!(t.test().consume(\"" + delimiter + "\") && " + resultExpr + ")";
 
         return "\n    private static boolean " + rule_name + "_loop(ParseTree t) {\n" +
                 "        t.enterLoop();\n" +
@@ -203,7 +196,7 @@ public class ClassField {
     }
 
     private String getOptionalLoopParser() {
-        var resultExpr = getResultExpr();
+        var resultExpr = getResultExpr(false);
         var rule_name = className.getRuleName().replace(":", "_");
         return "\n    private static void " + rule_name + "_loop(ParseTree t) {\n" +
                 "        t.enterLoop();\n" +

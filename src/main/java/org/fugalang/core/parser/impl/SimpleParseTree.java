@@ -225,8 +225,9 @@ public class SimpleParseTree implements ParseTree {
     }
 
     @Override
-    public void testNext() {
+    public ParseTree test() {
         peekFrame().isTest = true;
+        return this;
     }
 
     @Override

@@ -236,11 +236,6 @@ public class ClassBuilder {
 
         var first = true;
         for (ClassField field : fields) {
-            var testNext = field.getTestNextStatement();
-            if (testNext != null) {
-                sb.append("        ");
-                sb.append(testNext);
-            }
             var result = field.getParserFieldStatement(ruleType, first);
             if (field.isRequired()) {
                 first = false;
@@ -267,11 +262,6 @@ public class ClassBuilder {
         var first = true;
         for (ClassField field : fields) {
             var result = field.getParserFieldStatement(ruleType, first);
-            var testNext = field.getTestNextStatement();
-            if (testNext != null) {
-                sb.append("            ");
-                sb.append(testNext);
-            }
             if (field.isRequired()) {
                 first = false;
             }
