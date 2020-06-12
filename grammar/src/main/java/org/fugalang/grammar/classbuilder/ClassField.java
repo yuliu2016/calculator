@@ -182,7 +182,7 @@ public class ClassField {
         var resultExpr = getResultExpr(false);
         var rule_name = className.getRuleName().replace(":", "_");
         var testExpr = delimiter == null ? "!" + resultExpr :
-                "!(t.test().consume(\"" + delimiter + "\") && " + resultExpr + ")";
+                "!(t.skip(\"" + delimiter + "\") && " + resultExpr + ")";
 
         return "\n    private static boolean " + rule_name + "_loop(ParseTree t) {\n" +
                 "        t.enterLoop();\n" +

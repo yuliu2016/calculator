@@ -106,4 +106,17 @@ public interface ParseTree {
      * @return true if the token is consumed at the current position
      */
     boolean consume(String literal);
+
+    /**
+     * Skip a token of a certain string value. This will only
+     * succeed if {@link ElementType#isLiteral()} returns true
+     * for the current token, and {@link ParserElement#getValue()}
+     * is equal to the literal parameter. This method will test
+     * the literal but will not add it to the parse tree if it
+     * succeeds
+     *
+     * @param literal the string representing the value of the token
+     * @return true if the token is matched at the current position
+     */
+    boolean skip(String literal);
 }
