@@ -183,13 +183,36 @@ public class Interpretor implements FugaVisitor<Object> {
 
     /**
      * target:
+     * *   | t_primary '.' NAME !t_lookahead
+     * *   | t_primary subscript !t_lookahead
      * *   | NAME
      * *   | '(' targetlist ')'
-     * *   | '*' primary
-     * *   | primary
      */
     @Override
     public Object visitTarget(Target target) {
+        return null;
+    }
+
+    /**
+     * t_primary:
+     * *   | t_primary '.' NAME &t_lookahead
+     * *   | t_primary parameters &t_lookahead
+     * *   | t_primary subscript &t_lookahead
+     * *   | atom &t_lookahead
+     */
+    @Override
+    public Object visitTPrimary(TPrimary tPrimary) {
+        return null;
+    }
+
+    /**
+     * t_lookahead:
+     * *   | '.'
+     * *   | '('
+     * *   | '['
+     */
+    @Override
+    public Object visitTLookahead(TLookahead tLookahead) {
         return null;
     }
 

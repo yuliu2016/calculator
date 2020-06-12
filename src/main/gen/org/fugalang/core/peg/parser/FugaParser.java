@@ -328,19 +328,48 @@ public class FugaParser {
 
     /**
      * target:
+     * *   | t_primary '.' NAME !t_lookahead
+     * *   | t_primary subscript !t_lookahead
      * *   | NAME
      * *   | '(' targetlist ')'
-     * *   | '*' primary
-     * *   | primary
      */
     public static boolean target(ParseTree t) {
         var m = t.enter(TARGET);
         if (m != null) return m;
         boolean r;
-        r = t.consume(TokenType.NAME);
+        r = target_1(t);
         r = r || target_2(t);
-        r = r || target_3(t);
-        r = r || primary(t);
+        r = r || t.consume(TokenType.NAME);
+        r = r || target_4(t);
+        t.exit(r);
+        return r;
+    }
+
+    /**
+     * t_primary '.' NAME !t_lookahead
+     */
+    private static boolean target_1(ParseTree t) {
+        var m = t.enter(TARGET_1);
+        if (m != null) return m;
+        boolean r;
+        r = t_primary(t);
+        r = r && t.consume(".");
+        r = r && t.consume(TokenType.NAME);
+        r = r && !t_lookahead(t.test());
+        t.exit(r);
+        return r;
+    }
+
+    /**
+     * t_primary subscript !t_lookahead
+     */
+    private static boolean target_2(ParseTree t) {
+        var m = t.enter(TARGET_2);
+        if (m != null) return m;
+        boolean r;
+        r = t_primary(t);
+        r = r && subscript(t);
+        r = r && !t_lookahead(t.test());
         t.exit(r);
         return r;
     }
@@ -348,8 +377,8 @@ public class FugaParser {
     /**
      * '(' targetlist ')'
      */
-    private static boolean target_2(ParseTree t) {
-        var m = t.enter(TARGET_2);
+    private static boolean target_4(ParseTree t) {
+        var m = t.enter(TARGET_4);
         if (m != null) return m;
         boolean r;
         r = t.consume("(");
@@ -360,14 +389,103 @@ public class FugaParser {
     }
 
     /**
-     * '*' primary
+     * t_primary:
+     * *   | t_primary '.' NAME &t_lookahead
+     * *   | t_primary parameters &t_lookahead
+     * *   | t_primary subscript &t_lookahead
+     * *   | atom &t_lookahead
      */
-    private static boolean target_3(ParseTree t) {
-        var m = t.enter(TARGET_3);
+    public static boolean t_primary(ParseTree t) {
+        var m = t.enter(T_PRIMARY);
+        if (m != null) return m;
+        var p = t.position();
+        boolean s = false;
+        while (true) {
+            t.cache(s);
+            boolean r;
+            r = t_primary_1(t);
+            r = r || t_primary_2(t);
+            r = r || t_primary_3(t);
+            r = r || t_primary_4(t);
+            s = r || s;
+            var e = t.position();
+            if (e <= p) break;
+            p = e;
+        }
+        t.restore(p);
+        t.exit(s);
+        return s;
+    }
+
+    /**
+     * t_primary '.' NAME &t_lookahead
+     */
+    private static boolean t_primary_1(ParseTree t) {
+        var m = t.enter(T_PRIMARY_1);
         if (m != null) return m;
         boolean r;
-        r = t.consume("*");
-        r = r && primary(t);
+        r = t_primary(t);
+        r = r && t.consume(".");
+        r = r && t.consume(TokenType.NAME);
+        r = r && t_lookahead(t.test());
+        t.exit(r);
+        return r;
+    }
+
+    /**
+     * t_primary parameters &t_lookahead
+     */
+    private static boolean t_primary_2(ParseTree t) {
+        var m = t.enter(T_PRIMARY_2);
+        if (m != null) return m;
+        boolean r;
+        r = t_primary(t);
+        r = r && parameters(t);
+        r = r && t_lookahead(t.test());
+        t.exit(r);
+        return r;
+    }
+
+    /**
+     * t_primary subscript &t_lookahead
+     */
+    private static boolean t_primary_3(ParseTree t) {
+        var m = t.enter(T_PRIMARY_3);
+        if (m != null) return m;
+        boolean r;
+        r = t_primary(t);
+        r = r && subscript(t);
+        r = r && t_lookahead(t.test());
+        t.exit(r);
+        return r;
+    }
+
+    /**
+     * atom &t_lookahead
+     */
+    private static boolean t_primary_4(ParseTree t) {
+        var m = t.enter(T_PRIMARY_4);
+        if (m != null) return m;
+        boolean r;
+        r = atom(t);
+        r = r && t_lookahead(t.test());
+        t.exit(r);
+        return r;
+    }
+
+    /**
+     * t_lookahead:
+     * *   | '.'
+     * *   | '('
+     * *   | '['
+     */
+    public static boolean t_lookahead(ParseTree t) {
+        var m = t.enter(T_LOOKAHEAD);
+        if (m != null) return m;
+        boolean r;
+        r = t.consume(".");
+        r = r || t.consume("(");
+        r = r || t.consume("[");
         t.exit(r);
         return r;
     }

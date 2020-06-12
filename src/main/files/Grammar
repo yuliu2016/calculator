@@ -47,10 +47,19 @@ star_expr:
 exprlist:
     | ','.expr+ [',']
 target:
+    | t_primary '.' NAME !t_lookahead
+    | t_primary subscript !t_lookahead
     | NAME
     | '(' targetlist ')'
-    | '*' primary
-    | primary
+t_primary:
+    | t_primary '.' NAME &t_lookahead
+    | t_primary parameters &t_lookahead
+    | t_primary subscript &t_lookahead
+    | atom &t_lookahead
+t_lookahead:
+    | '.'
+    | '('
+    | '['
 targetlist:
     | ','.target+ [',']
 expr_or_star:

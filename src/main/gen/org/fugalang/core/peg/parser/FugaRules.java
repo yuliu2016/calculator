@@ -25,8 +25,15 @@ public class FugaRules {
     public static final ParserRule STAR_EXPR = and_rule("star_expr");
     public static final ParserRule EXPRLIST = and_rule("exprlist");
     public static final ParserRule TARGET = or_rule("target");
+    public static final ParserRule TARGET_1 = and_rule("target:1");
     public static final ParserRule TARGET_2 = and_rule("target:2");
-    public static final ParserRule TARGET_3 = and_rule("target:3");
+    public static final ParserRule TARGET_4 = and_rule("target:4");
+    public static final ParserRule T_PRIMARY = or_rule("t_primary");
+    public static final ParserRule T_PRIMARY_1 = and_rule("t_primary:1");
+    public static final ParserRule T_PRIMARY_2 = and_rule("t_primary:2");
+    public static final ParserRule T_PRIMARY_3 = and_rule("t_primary:3");
+    public static final ParserRule T_PRIMARY_4 = and_rule("t_primary:4");
+    public static final ParserRule T_LOOKAHEAD = or_rule("t_lookahead");
     public static final ParserRule TARGETLIST = and_rule("targetlist");
     public static final ParserRule EXPR_OR_STAR = or_rule("expr_or_star");
     public static final ParserRule EXPRLIST_STAR = and_rule("exprlist_star");

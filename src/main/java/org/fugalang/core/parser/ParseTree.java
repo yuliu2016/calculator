@@ -78,7 +78,7 @@ public interface ParseTree {
      * Set the parse tree's state to *test* mode. When in *test* mode, a successful
      * frame or element will not be added to the parse tree if it succeeds or failed.
      * However, the memoization cache is still updated after a result is found.
-     * The parse tree exists test mode when either {@link #consume(String)},
+     * The parse tree exits the *test* mode when either {@link #consume(String)},
      * {@link #consume(ElementType)} is called immediately after, or if
      * {@link #exit(boolean)} has been called on a sub-frame.
      *

@@ -148,6 +148,9 @@ public class SimpleParseTree implements ParseTree {
             if (parent_frame != null && parent_frame.isTest) {
                 // already tested, changing the state back
                 parent_frame.isTest = false;
+                // tests do not advance the position, so the current
+                // position needs to be rolled back to the start of the frame
+                pos = frame.position;
             } else {
                 addNode(node_from_frame);
             }
@@ -254,8 +257,9 @@ public class SimpleParseTree implements ParseTree {
                 frame.isTest = false;
             } else {
                 addNode(IndexNode.ofElement(token));
+                // only advance the token position if it's not a test
+                pos++;
             }
-            pos++;
             return true;
         } else {
             if (context.isDebug()) {
@@ -292,8 +296,9 @@ public class SimpleParseTree implements ParseTree {
                 frame.isTest = false;
             } else {
                 addNode(IndexNode.ofElement(token));
+                // only advance the token position if it's not a test
+                pos++;
             }
-            pos++;
             return true;
         } else {
             if (context.isDebug()) {

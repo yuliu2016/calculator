@@ -123,12 +123,33 @@ public interface FugaVisitor<T> {
 
     /**
      * target:
+     * *   | t_primary '.' NAME !t_lookahead
+     * *   | t_primary subscript !t_lookahead
      * *   | NAME
      * *   | '(' targetlist ')'
-     * *   | '*' primary
-     * *   | primary
      */
     default T visitTarget(Target target) {
+        return null;
+    }
+
+    /**
+     * t_primary:
+     * *   | t_primary '.' NAME &t_lookahead
+     * *   | t_primary parameters &t_lookahead
+     * *   | t_primary subscript &t_lookahead
+     * *   | atom &t_lookahead
+     */
+    default T visitTPrimary(TPrimary tPrimary) {
+        return null;
+    }
+
+    /**
+     * t_lookahead:
+     * *   | '.'
+     * *   | '('
+     * *   | '['
+     */
+    default T visitTLookahead(TLookahead tLookahead) {
         return null;
     }
 
