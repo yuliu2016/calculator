@@ -70,8 +70,4 @@ public abstract class NodeWrapper {
     public String prettyFormat(int indent) {
         return ParseTreePPrint.format(node, indent);
     }
-
-    public ParseTreeNode getNode() {
-        return node;
-    }
 }

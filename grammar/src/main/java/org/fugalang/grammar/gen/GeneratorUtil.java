@@ -17,8 +17,9 @@ public class GeneratorUtil {
         data = Files.readString(Paths.get(base, grammarPath));
         var visitor = LexingVisitor.of(data);
         var lexer = SimpleLexer.of(visitor);
-        var context = LazyParserContext.of(lexer, visitor, false);
-        return SimpleParseTree.parse(context, MetaParser::grammar, Grammar::new);
+        var context = LazyParserContext.of(lexer, visitor);
+        var node = SimpleParseTree.parse(context, MetaParser::grammar);
+        return new Grammar(node);
     }
 
     public static TokenConverter simpleConverter() {

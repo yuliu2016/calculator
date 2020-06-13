@@ -10,22 +10,15 @@ import java.util.List;
 public class SimpleContext implements ParserContext {
 
     private final List<? extends ParserElement> elements;
-    private final boolean debug;
 
-    public SimpleContext(List<? extends ParserElement> elements, boolean debug) {
+    public SimpleContext(List<? extends ParserElement> elements) {
         this.elements = elements;
-        this.debug = debug;
     }
 
     @Override
     public void errorForElem(int index, String message) {
         var tok = getElem(index);
         throw new SyntaxError(message + ": token = '" + tok.getValue() + "'");
-    }
-
-    @Override
-    public void log(String message) {
-        if (debug) System.out.println(message);
     }
 
     @Override

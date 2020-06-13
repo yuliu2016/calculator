@@ -3,8 +3,8 @@ package org.fugalang.core.parser;
 import org.fugalang.core.parser.impl.LazyParserContext;
 import org.fugalang.core.parser.impl.LexingVisitor;
 import org.fugalang.core.parser.impl.SimpleParseTree;
-import org.fugalang.core.peg.wrapper.*;
 import org.fugalang.core.peg.parser.FugaParser;
+import org.fugalang.core.peg.wrapper.*;
 import org.fugalang.core.token.SimpleLexer;
 
 import java.util.function.Function;
@@ -47,7 +47,7 @@ public class ParserTests {
             Function<ParseTreeNode, T> converter) {
         var visitor = LexingVisitor.of(s);
         var lexer = SimpleLexer.of(visitor);
-        var context = LazyParserContext.of(lexer, visitor, false);
-        SimpleParseTree.parse(context, start, converter);
+        var context = LazyParserContext.of(lexer, visitor);
+        converter.apply(SimpleParseTree.parse(context, start));
     }
 }

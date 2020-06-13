@@ -11,17 +11,15 @@ import java.util.Iterator;
 public class LazyParserContext implements ParserContext {
 
     private final LazyArrayList<ParserElement> elements;
-    private final boolean debug;
     private final LexingContext lexingContext;
 
-    private LazyParserContext(Iterator<ParserElement> elements, LexingContext lexingContext, boolean debug) {
+    private LazyParserContext(Iterator<ParserElement> elements, LexingContext lexingContext) {
         this.elements = new LazyArrayList<>(elements);
-        this.debug = debug;
         this.lexingContext = lexingContext;
     }
 
-    public static ParserContext of(Iterator<ParserElement> elements, LexingContext lexingContext, boolean debug) {
-        return new LazyParserContext(elements, lexingContext, debug);
+    public static ParserContext of(Iterator<ParserElement> elements, LexingContext lexingContext) {
+        return new LazyParserContext(elements, lexingContext);
     }
 
     @Override
@@ -40,17 +38,6 @@ public class LazyParserContext implements ParserContext {
         var msg = ErrorFormatter.format(message, lineno, line, tok.getColumnStart(), tok.getColumnEnd());
 
         throw new SyntaxError(msg);
-    }
-
-    @Override
-    public boolean isDebug() {
-        return debug;
-    }
-
-    @Override
-    public void log(String message) {
-        if (debug) System.out.println(message);
-        else System.out.println("Debug off: " + message);
     }
 
     @Override

@@ -30,4 +30,24 @@ public class RuleTest {
     public void testNamedExprInList() {
         assertParse("[a:=b]");
     }
+
+    @Test
+    public void testNameOnlyAssign() {
+        assertParse("a = 2");
+    }
+
+    @Test
+    public void testStarAssign() {
+        assertDoesNotParse("*a = 2");
+    }
+
+    @Test
+    public void testSubscriptAssign() {
+        assertParse("a[b] = c");
+    }
+
+    @Test
+    public void testAttrAssign() {
+        assertParse("a.b = c");
+    }
 }

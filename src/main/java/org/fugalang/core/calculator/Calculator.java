@@ -1,8 +1,8 @@
 package org.fugalang.core.calculator;
 
-import org.fugalang.core.calculator.peg.wrapper.*;
 import org.fugalang.core.calculator.peg.parser.CalculatorParser;
 import org.fugalang.core.calculator.peg.visitor.CalculatorVisitor;
+import org.fugalang.core.calculator.peg.wrapper.*;
 import org.fugalang.core.parser.SyntaxError;
 import org.fugalang.core.parser.impl.LazyParserContext;
 import org.fugalang.core.parser.impl.LexingVisitor;
@@ -267,10 +267,11 @@ public class Calculator implements CalculatorVisitor<Double> {
             try {
                 var visitor = LexingVisitor.of(input);
                 var lexer = SimpleLexer.of(visitor);
-                var context = LazyParserContext.of(lexer, visitor, false);
-                var tree = SimpleParseTree.parse(context, CalculatorParser::sum, Sum::new);
+                var context = LazyParserContext.of(lexer, visitor);
+                var node = SimpleParseTree.parse(context, CalculatorParser::sum);
+                var sum = new Sum(node);
 
-                var result = calculator.visitSum(tree);
+                var result = calculator.visitSum(sum);
                 System.out.println(result);
             } catch (SyntaxError e) {
                 System.out.println(e.getMessage());
