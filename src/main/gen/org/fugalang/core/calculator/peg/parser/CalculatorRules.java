@@ -2,14 +2,13 @@ package org.fugalang.core.calculator.peg.parser;
 
 import org.fugalang.core.parser.ParserRule;
 
-import static org.fugalang.core.parser.ParserRule.and_rule;
-import static org.fugalang.core.parser.ParserRule.or_rule;
+import static org.fugalang.core.parser.ParserRule.*;
 
 public class CalculatorRules {
-    public static final ParserRule SUM = or_rule("sum");
+    public static final ParserRule SUM = leftrec_rule("sum");
     public static final ParserRule SUM_1 = and_rule("sum:1");
     public static final ParserRule SUM_2 = and_rule("sum:2");
-    public static final ParserRule TERM = or_rule("term");
+    public static final ParserRule TERM = leftrec_rule("term");
     public static final ParserRule TERM_1 = and_rule("term:1");
     public static final ParserRule TERM_2 = and_rule("term:2");
     public static final ParserRule TERM_3 = and_rule("term:3");

@@ -2,8 +2,7 @@ package org.fugalang.core.peg.parser;
 
 import org.fugalang.core.parser.ParserRule;
 
-import static org.fugalang.core.parser.ParserRule.and_rule;
-import static org.fugalang.core.parser.ParserRule.or_rule;
+import static org.fugalang.core.parser.ParserRule.*;
 
 public class FugaRules {
     public static final ParserRule SINGLE_INPUT = or_rule("single_input");
@@ -28,7 +27,7 @@ public class FugaRules {
     public static final ParserRule TARGET_1 = and_rule("target:1");
     public static final ParserRule TARGET_2 = and_rule("target:2");
     public static final ParserRule TARGET_4 = and_rule("target:4");
-    public static final ParserRule T_PRIMARY = or_rule("t_primary");
+    public static final ParserRule T_PRIMARY = leftrec_rule("t_primary");
     public static final ParserRule T_PRIMARY_1 = and_rule("t_primary:1");
     public static final ParserRule T_PRIMARY_2 = and_rule("t_primary:2");
     public static final ParserRule T_PRIMARY_3 = and_rule("t_primary:3");
@@ -118,9 +117,9 @@ public class FugaRules {
     public static final ParserRule NAMED_EXPR_1 = and_rule("named_expr:1");
     public static final ParserRule CONDITIONAL = and_rule("conditional");
     public static final ParserRule EXPR = or_rule("expr");
-    public static final ParserRule DISJUNCTION = or_rule("disjunction");
+    public static final ParserRule DISJUNCTION = leftrec_rule("disjunction");
     public static final ParserRule DISJUNCTION_1 = and_rule("disjunction:1");
-    public static final ParserRule CONJUNCTION = or_rule("conjunction");
+    public static final ParserRule CONJUNCTION = leftrec_rule("conjunction");
     public static final ParserRule CONJUNCTION_1 = and_rule("conjunction:1");
     public static final ParserRule INVERSION = or_rule("inversion");
     public static final ParserRule INVERSION_1 = and_rule("inversion:1");
@@ -130,25 +129,25 @@ public class FugaRules {
     public static final ParserRule COMP_OP = or_rule("comp_op");
     public static final ParserRule COMP_OP_8 = and_rule("comp_op:8");
     public static final ParserRule COMP_OP_10 = and_rule("comp_op:10");
-    public static final ParserRule BITWISE_OR = or_rule("bitwise_or");
+    public static final ParserRule BITWISE_OR = leftrec_rule("bitwise_or");
     public static final ParserRule BITWISE_OR_1 = and_rule("bitwise_or:1");
-    public static final ParserRule BITWISE_XOR = or_rule("bitwise_xor");
+    public static final ParserRule BITWISE_XOR = leftrec_rule("bitwise_xor");
     public static final ParserRule BITWISE_XOR_1 = and_rule("bitwise_xor:1");
-    public static final ParserRule BITWISE_AND = or_rule("bitwise_and");
+    public static final ParserRule BITWISE_AND = leftrec_rule("bitwise_and");
     public static final ParserRule BITWISE_AND_1 = and_rule("bitwise_and:1");
-    public static final ParserRule SHIFT_EXPR = or_rule("shift_expr");
+    public static final ParserRule SHIFT_EXPR = leftrec_rule("shift_expr");
     public static final ParserRule SHIFT_EXPR_1 = and_rule("shift_expr:1");
     public static final ParserRule SHIFT_EXPR_2 = and_rule("shift_expr:2");
-    public static final ParserRule SUM = or_rule("sum");
+    public static final ParserRule SUM = leftrec_rule("sum");
     public static final ParserRule SUM_1 = and_rule("sum:1");
     public static final ParserRule SUM_2 = and_rule("sum:2");
-    public static final ParserRule TERM = or_rule("term");
+    public static final ParserRule TERM = leftrec_rule("term");
     public static final ParserRule TERM_1 = and_rule("term:1");
     public static final ParserRule TERM_2 = and_rule("term:2");
     public static final ParserRule TERM_3 = and_rule("term:3");
     public static final ParserRule TERM_4 = and_rule("term:4");
     public static final ParserRule TERM_5 = and_rule("term:5");
-    public static final ParserRule PIPE_EXPR = or_rule("pipe_expr");
+    public static final ParserRule PIPE_EXPR = leftrec_rule("pipe_expr");
     public static final ParserRule PIPE_EXPR_1 = and_rule("pipe_expr:1");
     public static final ParserRule FACTOR = or_rule("factor");
     public static final ParserRule FACTOR_1 = and_rule("factor:1");
@@ -156,7 +155,7 @@ public class FugaRules {
     public static final ParserRule FACTOR_3 = and_rule("factor:3");
     public static final ParserRule POWER = or_rule("power");
     public static final ParserRule POWER_1 = and_rule("power:1");
-    public static final ParserRule PRIMARY = or_rule("primary");
+    public static final ParserRule PRIMARY = leftrec_rule("primary");
     public static final ParserRule PRIMARY_1 = and_rule("primary:1");
     public static final ParserRule PRIMARY_2 = and_rule("primary:2");
     public static final ParserRule PRIMARY_3 = and_rule("primary:3");

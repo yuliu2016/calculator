@@ -51,6 +51,10 @@ public class ClassBuilder {
         return classImports;
     }
 
+    public boolean isLeftRecursive() {
+        return leftRecursive;
+    }
+
     public String generateClassCode(List<ClassBuilder> components) {
         StringBuilder sb = new StringBuilder();
 
@@ -185,7 +189,8 @@ public class ClassBuilder {
         sb.append("    public static final ParserRule ")
                 .append(cap_name)
                 .append(" = ")
-                .append(ruleType == RuleType.Conjunction ? "and_rule" : "or_rule")
+                .append(ruleType == RuleType.Conjunction ? "and_rule" :
+                        leftRecursive ? "leftrec_rule" : "or_rule")
                 .append("(\"")
                 .append(getRuleName())
                 .append("\");\n");

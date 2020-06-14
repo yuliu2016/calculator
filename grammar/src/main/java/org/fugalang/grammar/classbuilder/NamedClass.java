@@ -37,4 +37,8 @@ public class NamedClass {
     public void generateVisitor(StringBuilder sb) {
         rootClass.generateVisitor(sb);
     }
+
+    public boolean isLeftRecursive() {
+        return rootClass.isLeftRecursive();
+    }
 }

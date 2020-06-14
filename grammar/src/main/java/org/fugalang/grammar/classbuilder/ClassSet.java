@@ -168,9 +168,15 @@ public class ClassSet {
         StringBuilder sb = new StringBuilder();
         sb.append("package ").append(packageOutput.getParserPackage()).append(";\n\n");
         sb.append("import org.fugalang.core.parser.ParserRule;\n\n");
-        sb.append("import static org.fugalang.core.parser.ParserRule.and_rule;\n" +
-                "import static org.fugalang.core.parser.ParserRule.or_rule;\n\n" +
-                "public class ");
+
+        var imports = classes.stream()
+                .anyMatch(NamedClass::isLeftRecursive) ?
+                "import static org.fugalang.core.parser.ParserRule.*;\n\n" :
+                "import static org.fugalang.core.parser.ParserRule.and_rule;\n" +
+                        "import static org.fugalang.core.parser.ParserRule.or_rule;\n\n";
+
+        sb.append(imports)
+                .append("public class ");
         sb.append(packageOutput.getLanguage());
         sb.append("Rules {\n");
         for (NamedClass namedClass : classes) {

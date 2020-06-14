@@ -3,10 +3,12 @@ package org.fugalang.core.parser;
 public class ParserRule {
     private final String ruleName;
     private final RuleType ruleType;
+    private final boolean isLeftRecursive;
 
-    private ParserRule(String ruleName, RuleType ruleType) {
+    private ParserRule(String ruleName, RuleType ruleType, boolean isLeftRecursive) {
         this.ruleName = ruleName;
         this.ruleType = ruleType;
+        this.isLeftRecursive = isLeftRecursive;
     }
 
     public String getRuleName() {
@@ -17,20 +19,25 @@ public class ParserRule {
         return ruleType;
     }
 
+    public boolean isLeftRecursive() {
+        return isLeftRecursive;
+    }
+
     @Override
     public String toString() {
         return ruleName;
     }
 
-    public static ParserRule of(String ruleName, RuleType ruleType) {
-        return new ParserRule(ruleName, ruleType);
-    }
-
     public static ParserRule and_rule(String ruleName) {
-        return of(ruleName, RuleType.Conjunction);
+        return new ParserRule(ruleName, RuleType.Conjunction, false);
     }
 
     public static ParserRule or_rule(String ruleName) {
-        return of(ruleName, RuleType.Disjunction);
+        return new ParserRule(ruleName, RuleType.Disjunction, false);
     }
+
+    public static ParserRule leftrec_rule(String ruleName) {
+        return new ParserRule(ruleName, RuleType.Disjunction, true);
+    }
+
 }
