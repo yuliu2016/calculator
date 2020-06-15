@@ -181,14 +181,23 @@ public class ClassField {
     private String getRequiredLoopParser() {
         var resultExpr = getResultExpr(false);
         var rule_name = className.getRuleName().replace(":", "_");
-        var testExpr = delimiter == null ? "!" + resultExpr :
-                "!(t.skip(\"" + delimiter + "\") && " + resultExpr + ")";
+
+        String whileBody;
+        if (delimiter == null) {
+            whileBody = "            if (!" + resultExpr + ") break;\n";
+        } else {
+            whileBody = "            var p = t.position();\n" +
+                    "            if (t.skip(\"" + delimiter + "\") && "
+                    + resultExpr + ") continue;\n" +
+                    "            t.reset(p);\n" +
+                    "            break;\n";
+        }
 
         return "\n    private static boolean " + rule_name + "_loop(ParseTree t) {\n" +
                 "        t.enterLoop();\n" +
                 "        var r = " + resultExpr + ";\n" +
                 "        if (r) while (true) {\n" +
-                "            if (" + testExpr + ") break;\n" +
+                whileBody +
                 "        }\n" +
                 "        t.exitLoop();\n" +
                 "        return r;\n" +

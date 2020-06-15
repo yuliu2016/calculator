@@ -75,6 +75,15 @@ public interface ParseTree {
     int position();
 
     /**
+     * Reset the current position of the parser. i.e. the index to the stream
+     * of tokens that it's currently parsing.
+     * @param position the position to reset to. It must be less than the current
+     *                 position returned by {@link #position()}. The behaviour
+     *                 is not defined if it is bigger.
+     */
+    void reset(int position);
+
+    /**
      * Set the parse tree's state to *test* mode. When in *test* mode, a successful
      * frame or element will not be added to the parse tree if it succeeds or failed.
      * However, the memoization cache is still updated after a result is found.

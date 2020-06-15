@@ -141,7 +141,10 @@ public class FugaParser {
         t.enterLoop();
         var r = small_stmt(t);
         if (r) while (true) {
-            if (!(t.skip(";") && small_stmt(t))) break;
+            var p = t.position();
+            if (t.skip(";") && small_stmt(t)) continue;
+            t.reset(p);
+            break;
         }
         t.exitLoop();
         return r;
@@ -254,7 +257,10 @@ public class FugaParser {
         t.enterLoop();
         var r = t.consume(TokenType.NAME);
         if (r) while (true) {
-            if (!(t.skip(",") && t.consume(TokenType.NAME))) break;
+            var p = t.position();
+            if (t.skip(",") && t.consume(TokenType.NAME)) continue;
+            t.reset(p);
+            break;
         }
         t.exitLoop();
         return r;
@@ -320,7 +326,10 @@ public class FugaParser {
         t.enterLoop();
         var r = expr(t);
         if (r) while (true) {
-            if (!(t.skip(",") && expr(t))) break;
+            var p = t.position();
+            if (t.skip(",") && expr(t)) continue;
+            t.reset(p);
+            break;
         }
         t.exitLoop();
         return r;
@@ -508,7 +517,10 @@ public class FugaParser {
         t.enterLoop();
         var r = target(t);
         if (r) while (true) {
-            if (!(t.skip(",") && target(t))) break;
+            var p = t.position();
+            if (t.skip(",") && target(t)) continue;
+            t.reset(p);
+            break;
         }
         t.exitLoop();
         return r;
@@ -547,7 +559,10 @@ public class FugaParser {
         t.enterLoop();
         var r = expr_or_star(t);
         if (r) while (true) {
-            if (!(t.skip(",") && expr_or_star(t))) break;
+            var p = t.position();
+            if (t.skip(",") && expr_or_star(t)) continue;
+            t.reset(p);
+            break;
         }
         t.exitLoop();
         return r;
@@ -586,7 +601,10 @@ public class FugaParser {
         t.enterLoop();
         var r = named_expr_star(t);
         if (r) while (true) {
-            if (!(t.skip(",") && named_expr_star(t))) break;
+            var p = t.position();
+            if (t.skip(",") && named_expr_star(t)) continue;
+            t.reset(p);
+            break;
         }
         t.exitLoop();
         return r;
@@ -625,7 +643,10 @@ public class FugaParser {
         t.enterLoop();
         var r = slice(t);
         if (r) while (true) {
-            if (!(t.skip(",") && slice(t))) break;
+            var p = t.position();
+            if (t.skip(",") && slice(t)) continue;
+            t.reset(p);
+            break;
         }
         t.exitLoop();
         return r;
@@ -734,7 +755,10 @@ public class FugaParser {
         t.enterLoop();
         var r = dict_item(t);
         if (r) while (true) {
-            if (!(t.skip(",") && dict_item(t))) break;
+            var p = t.position();
+            if (t.skip(",") && dict_item(t)) continue;
+            t.reset(p);
+            break;
         }
         t.exitLoop();
         return r;
@@ -1105,7 +1129,10 @@ public class FugaParser {
         t.enterLoop();
         var r = import_as_name(t);
         if (r) while (true) {
-            if (!(t.skip(",") && import_as_name(t))) break;
+            var p = t.position();
+            if (t.skip(",") && import_as_name(t)) continue;
+            t.reset(p);
+            break;
         }
         t.exitLoop();
         return r;
@@ -1128,7 +1155,10 @@ public class FugaParser {
         t.enterLoop();
         var r = dotted_as_name(t);
         if (r) while (true) {
-            if (!(t.skip(",") && dotted_as_name(t))) break;
+            var p = t.position();
+            if (t.skip(",") && dotted_as_name(t)) continue;
+            t.reset(p);
+            break;
         }
         t.exitLoop();
         return r;
@@ -1151,7 +1181,10 @@ public class FugaParser {
         t.enterLoop();
         var r = t.consume(TokenType.NAME);
         if (r) while (true) {
-            if (!(t.skip(".") && t.consume(TokenType.NAME))) break;
+            var p = t.position();
+            if (t.skip(".") && t.consume(TokenType.NAME)) continue;
+            t.reset(p);
+            break;
         }
         t.exitLoop();
         return r;
@@ -1299,7 +1332,10 @@ public class FugaParser {
         t.enterLoop();
         var r = expr_as_name(t);
         if (r) while (true) {
-            if (!(t.skip(",") && expr_as_name(t))) break;
+            var p = t.position();
+            if (t.skip(",") && expr_as_name(t)) continue;
+            t.reset(p);
+            break;
         }
         t.exitLoop();
         return r;
@@ -1502,7 +1538,10 @@ public class FugaParser {
         t.enterLoop();
         var r = argument(t);
         if (r) while (true) {
-            if (!(t.skip(",") && argument(t))) break;
+            var p = t.position();
+            if (t.skip(",") && argument(t)) continue;
+            t.reset(p);
+            break;
         }
         t.exitLoop();
         return r;
@@ -1618,7 +1657,10 @@ public class FugaParser {
         t.enterLoop();
         var r = default_arg(t);
         if (r) while (true) {
-            if (!(t.skip(",") && default_arg(t))) break;
+            var p = t.position();
+            if (t.skip(",") && default_arg(t)) continue;
+            t.reset(p);
+            break;
         }
         t.exitLoop();
         return r;

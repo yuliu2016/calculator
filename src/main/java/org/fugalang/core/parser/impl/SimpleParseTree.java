@@ -93,6 +93,7 @@ public class SimpleParseTree implements ParseTree {
         }
 
         Map<ParserRule, Memo> memo_at_pos;
+
         if (memo.containsKey(pos)) {
             memo_at_pos = memo.get(pos);
 
@@ -111,9 +112,6 @@ public class SimpleParseTree implements ParseTree {
                     return true;
                 } else {
                     addNode(IndexNode.NULL);
-                    // don't change the position
-                    // because the frame would fail
-                    if (pos != value.getEndPos()) throw new ParserException();
                     return false;
                 }
             }
@@ -134,6 +132,11 @@ public class SimpleParseTree implements ParseTree {
         return null;
     }
 
+    private static void putMemo(Frame frame, int pos, ParseTreeNode result) {
+        var memo = new Memo(pos, result);
+        frame.memo_at_pos.put(frame.rule, memo);
+    }
+
     @Override
     public void exit(boolean success) {
         var frame = frame_deque.pop();
@@ -152,7 +155,13 @@ public class SimpleParseTree implements ParseTree {
         }
 
         if (success) {
+            // there is a case when in test mode, the node object does not
+            // need to be created from the frame. But realistically,
+            // predicates are likely to be used so that they can be picked
+            // up by another rule using memoization, so there's no need
+            // to optimize this
             var node_from_frame = IndexNode.fromFrame(frame);
+
             if (parent_frame != null && parent_frame.isTest) {
                 // already tested, changing the state back
                 parent_frame.isTest = false;
@@ -163,7 +172,7 @@ public class SimpleParseTree implements ParseTree {
                 addNode(node_from_frame);
             }
             if (enable_memo) {
-                frame.memo_at_pos.put(frame.rule, new Memo(pos, node_from_frame));
+                putMemo(frame, pos, node_from_frame);
             }
         } else {
             if (parent_frame != null && parent_frame.isTest) {
@@ -174,7 +183,7 @@ public class SimpleParseTree implements ParseTree {
             }
             pos = frame.position;
             if (enable_memo) {
-                frame.memo_at_pos.put(frame.rule, new Memo(pos, null));
+                putMemo(frame, frame.position, null);
             }
         }
         level--;
@@ -186,15 +195,23 @@ public class SimpleParseTree implements ParseTree {
 
         if (success) {
             var node_from_frame = IndexNode.fromFrame(frame);
-            frame.memo_at_pos.put(frame.rule, new Memo(pos, node_from_frame));
+            putMemo(frame, pos, node_from_frame);
         } else {
-            frame.memo_at_pos.put(frame.rule, new Memo(frame.position, null));
+            putMemo(frame, frame.position, null);
+        }
+
+        List<ParseTreeNode> recycled_list;
+        if (frame.left_recursion_nodes != null) {
+            recycled_list = frame.left_recursion_nodes;
+            recycled_list.clear();
+        } else {
+            recycled_list = new ArrayList<>();
         }
 
         // remember the previous nodes, because when the left-recursion rule
         // cannot parse a longer string, it needs to be restored
         frame.left_recursion_nodes = frame.nodes;
-        frame.nodes = new ArrayList<>();
+        frame.nodes = recycled_list;
         pos = frame.position;
     }
 
@@ -225,28 +242,18 @@ public class SimpleParseTree implements ParseTree {
     }
 
     @Override
+    public void reset(int position) {
+        pos = position;
+    }
+
+    @Override
     public ParseTree test() {
         peekFrame().isTest = true;
         return this;
     }
 
-    @Override
-    public boolean consume(ElementType type) {
-        if (context.didFinish(pos)) {
-            return false;
-        }
-        var token = context.getElem(pos);
+    private void consumeToken(boolean success, ParserElement token) {
         var frame = peekFrame();
-
-        boolean success = token.getType() == type;
-        if (success && type.isLiteral()) {
-            throw new ParserException("The type " + type +
-                    " can only be parsed with literals");
-        }
-
-        if (profiler != null) {
-            profiler.markElement(success, level, type, token);
-        }
         if (frame.isTest) {
             // already tested, changing the state back
             frame.isTest = false;
@@ -258,7 +265,19 @@ public class SimpleParseTree implements ParseTree {
                 addNode(IndexNode.NULL);
             }
         }
+    }
 
+    @Override
+    public boolean consume(ElementType type) {
+        if (context.didFinish(pos)) {
+            return false;
+        }
+        var token = context.getElem(pos);
+        boolean success = token.getType() == type;
+        if (profiler != null) {
+            profiler.markElement(success, level, type, token);
+        }
+        consumeToken(success, token);
         return success;
     }
 
@@ -268,26 +287,12 @@ public class SimpleParseTree implements ParseTree {
             return false;
         }
         var token = context.getElem(pos);
-        var frame = peekFrame();
-
         var success = token.getType().isLiteral() &&
                 token.getValue().equals(literal);
-
         if (profiler != null) {
             profiler.markLiteral(success, level, literal, token);
         }
-        if (frame.isTest) {
-            // already tested, changing the state back
-            frame.isTest = false;
-        } else {
-            if (success) {
-                addNode(IndexNode.ofElement(token));
-                pos++;
-            } else {
-                addNode(IndexNode.NULL);
-            }
-        }
-
+        consumeToken(success, token);
         return success;
     }
 

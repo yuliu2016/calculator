@@ -287,7 +287,10 @@ public class CalculatorParser {
         t.enterLoop();
         var r = sum(t);
         if (r) while (true) {
-            if (!(t.skip(",") && sum(t))) break;
+            var p = t.position();
+            if (t.skip(",") && sum(t)) continue;
+            t.reset(p);
+            break;
         }
         t.exitLoop();
         return r;
