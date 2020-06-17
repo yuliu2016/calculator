@@ -1,10 +1,8 @@
 package org.fugalang.core.object;
 
-
 import org.fugalang.core.eval.FEval;
-import org.fugalang.core.opcode.CmpOpType;
+import org.fugalang.core.opcode.CompareOp;
 
-@SuppressWarnings("unused")
 public final class FObject {
 
     public final FType<Object> type;
@@ -39,6 +37,6 @@ public final class FObject {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj.getClass() == FObject.class)) return false;
-        return FEval.isTrue(type.compare_op(value, obj, CmpOpType.CMP_EQ));
+        return FEval.isTrue(type.compare_op(value, obj, CompareOp.CMP_EQ));
     }
 }

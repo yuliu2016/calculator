@@ -1,11 +1,13 @@
 package org.fugalang.core.object;
 
 import org.fugalang.core.eval.FEval;
-import org.fugalang.core.opcode.CmpOpType;
+import org.fugalang.core.opcode.BinaryOp;
 
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.StringJoiner;
+
+import static org.fugalang.core.opcode.CompareOp.*;
 
 public final class FTuple implements FType<Object[]> {
 
@@ -13,7 +15,6 @@ public final class FTuple implements FType<Object[]> {
 
     private FTuple() {
     }
-
 
     @Override
     public Object __repr__(Object[] a) {
@@ -47,7 +48,7 @@ public final class FTuple implements FType<Object[]> {
         return a.length != 0;
     }
 
-    private static Object arrayCompare(Object[] a, Object b, CmpOpType cmp_op) {
+    private static Object arrayCompare(Object[] a, Object b, int cmp_op) {
         if (!(b instanceof Object[])) return null;
         var c = (Object[]) b;
         int m = Math.max(a.length, c.length);
@@ -80,7 +81,7 @@ public final class FTuple implements FType<Object[]> {
 
     private static boolean arrayContains(Object[] a, Object b) {
         for (Object o : a) {
-            if (b.equals(o)) {
+            if (FEval.isEqual(o, b)) {
                 return true;
             }
         }
@@ -88,23 +89,23 @@ public final class FTuple implements FType<Object[]> {
     }
 
     @Override
-    public Object compare_op(Object[] a, Object b, CmpOpType cmp_op) {
-        switch (cmp_op) {
+    public Object compare_op(Object[] a, Object o, int compare_op) {
+        switch (compare_op) {
             case CMP_LT:
             case CMP_LE:
             case CMP_GT:
             case CMP_GE:
-                return arrayCompare(a, b, cmp_op);
+                return arrayCompare(a, o, compare_op);
             case CMP_EQ:
-                if (!(b instanceof Object[])) return null;
-                return arrayEquals(a, (Object[]) b);
+                if (!(o instanceof Object[])) return null;
+                return arrayEquals(a, (Object[]) o);
             case CMP_NE:
-                if (!(b instanceof Object[])) return null;
-                return !arrayEquals(a, (Object[]) b);
+                if (!(o instanceof Object[])) return null;
+                return !arrayEquals(a, (Object[]) o);
             case CMP_IN:
-                return arrayContains(a, b);
-            case CMP_NI:
-                return !arrayContains(a, b);
+                return arrayContains(a, o);
+            case CMP_NOT_IN:
+                return !arrayContains(a, o);
             default:
                 return null;
         }
@@ -178,219 +179,26 @@ public final class FTuple implements FType<Object[]> {
     }
 
     @Override
-    public Object __add__(Object[] a, Object o) {
-        if (o instanceof Object[]) {
-            var b = ((Object[]) o);
-            var c = new Object[a.length + b.length];
-            System.arraycopy(a, 0, c, 0, a.length);
-            System.arraycopy(b, 0, c, a.length, b.length);
-            return c;
+    public Object binary_op(Object[] a, Object o, int binary_op) {
+        if (binary_op == BinaryOp.BINOP_ADD) {
+            if (o instanceof Object[]) {
+                var b = ((Object[]) o);
+                var c = new Object[a.length + b.length];
+                System.arraycopy(a, 0, c, 0, a.length);
+                System.arraycopy(b, 0, c, a.length, b.length);
+                return c;
+            }
         }
         return null;
     }
 
     @Override
-    public Object __sub__(Object[] a, Object o) {
+    public Object rh_binary_op(Object[] a, Object b, int binary_op) {
         return null;
     }
 
     @Override
-    public Object __mul__(Object[] a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __matmul__(Object[] a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __truediv__(Object[] a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __floordiv__(Object[] a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __mod__(Object[] a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __divmod__(Object[] a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __pow__(Object[] a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __lshift__(Object[] a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rshift__(Object[] a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __and__(Object[] a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __xor__(Object[] a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __or__(Object[] a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __radd__(Object[] a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rsub__(Object[] a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rmul__(Object[] a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rmatmul__(Object[] a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rtruediv__(Object[] a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rfloordiv__(Object[] a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rmod__(Object[] a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rdivmod__(Object[] a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rpow__(Object[] a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rlshift__(Object[] a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rrshift__(Object[] a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rand__(Object[] a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rxor__(Object[] a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __ror__(Object[] a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __iadd__(Object[] a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __isub__(Object[] a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __imul__(Object[] a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __imatmul__(Object[] a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __itruediv__(Object[] a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __ifloordiv__(Object[] a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __imod__(Object[] a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __idivmod__(Object[] a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __ipow__(Object[] a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __ilshift__(Object[] a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __irshift__(Object[] a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __iand__(Object[] a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __ixor__(Object[] a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __ior__(Object[] a, Object o) {
+    public Object inplace_binary_op(Object[] a, Object b, int binary_op) {
         return null;
     }
 

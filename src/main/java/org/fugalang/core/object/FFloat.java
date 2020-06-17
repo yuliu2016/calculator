@@ -1,9 +1,10 @@
 package org.fugalang.core.object;
 
 import org.fugalang.core.eval.FEval;
-import org.fugalang.core.opcode.CmpOpType;
 
 import java.math.BigInteger;
+
+import static org.fugalang.core.opcode.BinaryOp.*;
 
 public final class FFloat implements FType<Double> {
 
@@ -48,12 +49,12 @@ public final class FFloat implements FType<Double> {
     }
 
     @Override
-    public Object compare_op(Double a, Object b, CmpOpType cmp_op) {
+    public Object compare_op(Double a, Object o, int compare_op) {
         double y;
-        if (b.getClass() == Double.class) y = (double) b;
-        else if (b.getClass() == BigInteger.class) y = ((BigInteger) b).doubleValue();
+        if (o.getClass() == Double.class) y = (double) o;
+        else if (o.getClass() == BigInteger.class) y = ((BigInteger) o).doubleValue();
         else return null;
-        return FEval.compareOp(cmp_op, Double.compare(a, y));
+        return FEval.compareOp(compare_op, Double.compare(a, y));
     }
 
     @Override
@@ -117,221 +118,45 @@ public final class FFloat implements FType<Double> {
     }
 
     @Override
-    public Object __add__(Double a, Object o) {
+    public Object binary_op(Double a, Object o, int binary_op) {
         var b = asDouble(o);
-        return b == null ? null : a + b;
+        if (b == null) return null;
+        switch (binary_op) {
+            case BINOP_ADD:
+                return a + b;
+            case BINOP_SUBTRACT:
+                return a - b;
+            case BINOP_MULTIPLY:
+                return a * b;
+            case BINOP_DIVIDE:
+                return a / b;
+            case BINOP_FLOORDIV:
+                return (int) Math.floor(a / b);
+            case BINOP_MOD:
+                return a % b;
+            case BINOP_DIVMOD:
+                return new Object[]{a / b, a % b};
+            case BINOP_POW:
+                return Math.pow(a, b);
+            case BINOP_LSHIFT:
+            case BINOP_RSHIFT:
+            case BINOP_AND:
+            case BINOP_OR:
+            case BINOP_XOR:
+            case BINOP_MATMUL:
+            default:
+                return null;
+        }
     }
 
     @Override
-    public Object __sub__(Double a, Object o) {
-        var b = asDouble(o);
-        return b == null ? null : a - b;
+    public Object rh_binary_op(Double a, Object b, int binary_op) {
+        return binary_op(a, b, binary_op);
     }
 
     @Override
-    public Object __mul__(Double a, Object o) {
-        var b = asDouble(o);
-        return b == null ? null : a * b;
-    }
-
-    @Override
-    public Object __matmul__(Double a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __truediv__(Double a, Object o) {
-        var b = asDouble(o);
-        return b == null ? null : a / b;
-    }
-
-    @Override
-    public Object __floordiv__(Double a, Object o) {
-        var b = asDouble(o);
-        return b == null ? null : (int) Math.floor(a / b);
-    }
-
-    @Override
-    public Object __mod__(Double a, Object o) {
-        var b = asDouble(o);
-        return b == null ? null : a % b;
-    }
-
-    @Override
-    public Object __divmod__(Double a, Object o) {
-        var b = asDouble(o);
-        return b == null ? null : new Double[]{a / b, a % b};
-    }
-
-    @Override
-    public Object __pow__(Double a, Object o) {
-        var b = asDouble(o);
-        return b == null ? null : Math.pow(a, b);
-    }
-
-    @Override
-    public Object __lshift__(Double a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rshift__(Double a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __and__(Double a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __xor__(Double a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __or__(Double a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __radd__(Double a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rsub__(Double a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rmul__(Double a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rmatmul__(Double a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rtruediv__(Double a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rfloordiv__(Double a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rmod__(Double a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rdivmod__(Double a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rpow__(Double a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rlshift__(Double a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rrshift__(Double a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rand__(Double a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rxor__(Double a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __ror__(Double a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __iadd__(Double a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __isub__(Double a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __imul__(Double a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __imatmul__(Double a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __itruediv__(Double a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __ifloordiv__(Double a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __imod__(Double a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __idivmod__(Double a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __ipow__(Double a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __ilshift__(Double a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __irshift__(Double a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __iand__(Double a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __ixor__(Double a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __ior__(Double a, Object o) {
-        return null;
+    public Object inplace_binary_op(Double a, Object b, int binary_op) {
+        return binary_op(a, b, binary_op);
     }
 
     @Override

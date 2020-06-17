@@ -1,9 +1,10 @@
 package org.fugalang.core.object;
 
 import org.fugalang.core.eval.FEval;
-import org.fugalang.core.opcode.CmpOpType;
 
 import java.math.BigInteger;
+
+import static org.fugalang.core.opcode.BinaryOp.*;
 
 
 public final class FLong implements FType<BigInteger> {
@@ -39,16 +40,16 @@ public final class FLong implements FType<BigInteger> {
     }
 
     @Override
-    public Object compare_op(BigInteger a, Object b, CmpOpType cmp_op) {
+    public Object compare_op(BigInteger a, Object o, int compare_op) {
         int cmp_result;
-        if (b.getClass() == BigInteger.class) {
-            cmp_result = a.compareTo((BigInteger) b);
-        } else if (b.getClass() == Double.class) {
-            cmp_result = Double.compare(a.doubleValue(), (Double) b);
+        if (o.getClass() == BigInteger.class) {
+            cmp_result = a.compareTo((BigInteger) o);
+        } else if (o.getClass() == Double.class) {
+            cmp_result = Double.compare(a.doubleValue(), (Double) o);
         } else {
             return null;
         }
-        return FEval.compareOp(cmp_op, cmp_result);
+        return FEval.compareOp(compare_op, cmp_result);
     }
 
     @Override
@@ -112,229 +113,49 @@ public final class FLong implements FType<BigInteger> {
     }
 
     @Override
-    public Object __add__(BigInteger a, Object o) {
-        if (o.getClass() == BigInteger.class) return a.add((BigInteger) o);
-        if (o.getClass() == Double.class) return FConst.FloatType.__add__(a.doubleValue(), o);
+    public Object binary_op(BigInteger a, Object o, int binary_op) {
+        if (o.getClass() != BigInteger.class) return null;
+        var b = ((BigInteger) o);
+        switch (binary_op) {
+            case BINOP_ADD:
+                return a.add(b);
+            case BINOP_SUBTRACT:
+                return a.subtract(b);
+            case BINOP_MULTIPLY:
+                return a.multiply(b);
+            case BINOP_DIVIDE:
+                return a.doubleValue() / b.doubleValue();
+            case BINOP_FLOORDIV:
+                return a.divide(b);
+            case BINOP_MOD:
+                return a.mod(b);
+            case BINOP_DIVMOD:
+                return a.divideAndRemainder(b);
+            case BINOP_POW:
+                return a.pow(b.intValue());
+            case BINOP_LSHIFT:
+                return a.shiftLeft(b.intValue());
+            case BINOP_RSHIFT:
+                return a.shiftRight(b.intValue());
+            case BINOP_AND:
+                return a.and(b);
+            case BINOP_OR:
+                return a.or(b);
+            case BINOP_XOR:
+                return a.xor(b);
+            case BINOP_MATMUL:
+            default:
+                return null;
+        }
+    }
+
+    @Override
+    public Object rh_binary_op(BigInteger a, Object b, int binary_op) {
         return null;
     }
 
     @Override
-    public Object __sub__(BigInteger a, Object o) {
-        if (o.getClass() == BigInteger.class) return a.subtract((BigInteger) o);
-        if (o.getClass() == Double.class) return FConst.FloatType.__sub__(a.doubleValue(), o);
-        return null;
-    }
-
-    @Override
-    public Object __mul__(BigInteger a, Object o) {
-        if (o.getClass() == BigInteger.class) return a.multiply((BigInteger) o);
-        if (o.getClass() == Double.class) return FConst.FloatType.__mul__(a.doubleValue(), o);
-        return null;
-    }
-
-    @Override
-    public Object __matmul__(BigInteger a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __truediv__(BigInteger a, Object o) {
-        return FConst.FloatType.__truediv__(a.doubleValue(), o);
-    }
-
-    @Override
-    public Object __floordiv__(BigInteger a, Object o) {
-        return FConst.FloatType.__floordiv__(a.doubleValue(), o);
-    }
-
-    @Override
-    public Object __mod__(BigInteger a, Object o) {
-        if (o.getClass() == BigInteger.class) return a.mod((BigInteger) o);
-        if (o.getClass() == Double.class) return FConst.FloatType.__mod__(a.doubleValue(), o);
-        return null;
-    }
-
-    @Override
-    public Object __divmod__(BigInteger a, Object o) {
-        if (o.getClass() == BigInteger.class) return a.divideAndRemainder((BigInteger) o);
-        if (o.getClass() == Double.class) return FConst.FloatType.__mod__(a.doubleValue(), o);
-        return null;
-    }
-
-    @Override
-    public Object __pow__(BigInteger a, Object o) {
-        if (o.getClass() == BigInteger.class) return a.pow(((BigInteger) o).intValueExact());
-        if (o.getClass() == Double.class) return FConst.FloatType.__pow__((Double) o, a);
-        return null;
-    }
-
-    @Override
-    public Object __lshift__(BigInteger a, Object o) {
-        if (o.getClass() == BigInteger.class) return a.shiftLeft(((BigInteger) o).intValueExact());
-        return null;
-    }
-
-    @Override
-    public Object __rshift__(BigInteger a, Object o) {
-        if (o.getClass() == BigInteger.class) return a.shiftRight(((BigInteger) o).intValueExact());
-        return null;
-    }
-
-    @Override
-    public Object __and__(BigInteger a, Object o) {
-        if (o.getClass() == BigInteger.class) return a.and((BigInteger) o);
-        return null;
-    }
-
-    @Override
-    public Object __xor__(BigInteger a, Object o) {
-        if (o.getClass() == BigInteger.class) return a.xor((BigInteger) o);
-        return null;
-    }
-
-    @Override
-    public Object __or__(BigInteger a, Object o) {
-        if (o.getClass() == BigInteger.class) return a.or((BigInteger) o);
-        return null;
-    }
-
-    @Override
-    public Object __radd__(BigInteger a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rsub__(BigInteger a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rmul__(BigInteger a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rmatmul__(BigInteger a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rtruediv__(BigInteger a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rfloordiv__(BigInteger a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rmod__(BigInteger a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rdivmod__(BigInteger a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rpow__(BigInteger a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rlshift__(BigInteger a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rrshift__(BigInteger a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rand__(BigInteger a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rxor__(BigInteger a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __ror__(BigInteger a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __iadd__(BigInteger a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __isub__(BigInteger a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __imul__(BigInteger a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __imatmul__(BigInteger a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __itruediv__(BigInteger a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __ifloordiv__(BigInteger a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __imod__(BigInteger a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __idivmod__(BigInteger a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __ipow__(BigInteger a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __ilshift__(BigInteger a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __irshift__(BigInteger a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __iand__(BigInteger a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __ixor__(BigInteger a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __ior__(BigInteger a, Object o) {
+    public Object inplace_binary_op(BigInteger a, Object b, int binary_op) {
         return null;
     }
 

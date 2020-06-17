@@ -2,11 +2,14 @@ package org.fugalang.core.eval;
 
 import org.fugalang.core.object.FObject;
 import org.fugalang.core.object.FType;
-import org.fugalang.core.opcode.CmpOpType;
 
 import java.math.BigInteger;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static org.fugalang.core.object.FConst.*;
+import static org.fugalang.core.opcode.CompareOp.*;
 
 public class FEval {
     @SuppressWarnings("unchecked")
@@ -19,6 +22,9 @@ public class FEval {
         if (cls == FObject.class) return ((FObject) o).type;
         if (cls == BigInteger.class) return LongType;
         if (cls == Double.class) return FloatType;
+        if (o instanceof List) return ListType;
+        if (o instanceof Map) return MapType;
+        if (o instanceof Set) return SetType;
         if (o instanceof Object[]) return TupleType;
         return null;
     }
@@ -31,7 +37,7 @@ public class FEval {
         return r == null || r.getClass() != Boolean.class || (boolean) r;
     }
 
-    public static Boolean compareOp(CmpOpType cmp_op, int cmp_result) {
+    public static Boolean compareOp(int cmp_op, int cmp_result) {
         switch (cmp_op) {
             case CMP_LT:
                 return cmp_result < 0;
@@ -46,17 +52,23 @@ public class FEval {
             case CMP_GE:
                 return cmp_result >= 0;
             case CMP_IN:
-            case CMP_NI:
+            case CMP_NOT_IN:
+            case CMP_IS:
+            case CMP_IS_NOT:
             default:
                 return null;
         }
     }
 
-    public static Object compare(Object a, Object b, CmpOpType cmp_op) {
+    public static Object compare(Object a, Object b, int cmp_op) {
         return typeOfObject(a).compare_op(a, b, cmp_op);
     }
 
+    /**
+     * Check if two objects are equal
+     * Use this instead of {@link Object#equals(Object)}
+     */
     public static boolean isEqual(Object a, Object b) {
-        return isTrue(compare(a, b, CmpOpType.CMP_EQ));
+        return isTrue(compare(a, b, CMP_EQ));
     }
 }

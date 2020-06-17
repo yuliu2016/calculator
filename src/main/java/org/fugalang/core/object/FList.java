@@ -1,10 +1,14 @@
 package org.fugalang.core.object;
 
-import org.fugalang.core.opcode.CmpOpType;
-
 import java.util.List;
 
-public class FList implements FType<List<Object>>  {
+public class FList implements FType<List<Object>> {
+
+    static FList INSTANCE = new FList();
+
+    private FList() {
+    }
+
     @Override
     public Object __repr__(List<Object> a) {
         return null;
@@ -31,7 +35,7 @@ public class FList implements FType<List<Object>>  {
     }
 
     @Override
-    public Object compare_op(List<Object> a, Object b, CmpOpType cmp_op) {
+    public Object compare_op(List<Object> a, Object o, int compare_op) {
         return null;
     }
 
@@ -96,212 +100,17 @@ public class FList implements FType<List<Object>>  {
     }
 
     @Override
-    public Object __add__(List<Object> a, Object o) {
+    public Object binary_op(List<Object> a, Object o, int binary_op) {
         return null;
     }
 
     @Override
-    public Object __sub__(List<Object> a, Object o) {
+    public Object rh_binary_op(List<Object> a, Object b, int binary_op) {
         return null;
     }
 
     @Override
-    public Object __mul__(List<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __matmul__(List<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __truediv__(List<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __floordiv__(List<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __mod__(List<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __divmod__(List<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __pow__(List<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __lshift__(List<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rshift__(List<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __and__(List<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __xor__(List<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __or__(List<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __radd__(List<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rsub__(List<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rmul__(List<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rmatmul__(List<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rtruediv__(List<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rfloordiv__(List<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rmod__(List<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rdivmod__(List<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rpow__(List<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rlshift__(List<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rrshift__(List<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rand__(List<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rxor__(List<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __ror__(List<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __iadd__(List<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __isub__(List<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __imul__(List<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __imatmul__(List<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __itruediv__(List<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __ifloordiv__(List<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __imod__(List<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __idivmod__(List<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __ipow__(List<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __ilshift__(List<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __irshift__(List<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __iand__(List<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __ixor__(List<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __ior__(List<Object> a, Object o) {
+    public Object inplace_binary_op(List<Object> a, Object b, int binary_op) {
         return null;
     }
 

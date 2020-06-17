@@ -1,7 +1,5 @@
 package org.fugalang.core.object;
 
-import org.fugalang.core.opcode.CmpOpType;
-
 public class FString implements FType<String> {
 
     @Override
@@ -30,7 +28,7 @@ public class FString implements FType<String> {
     }
 
     @Override
-    public Object compare_op(String a, Object b, CmpOpType cmp_op) {
+    public Object compare_op(String a, Object o, int compare_op) {
         return null;
     }
 
@@ -95,212 +93,17 @@ public class FString implements FType<String> {
     }
 
     @Override
-    public Object __add__(String s, Object o) {
+    public Object binary_op(String a, Object o, int binary_op) {
         return null;
     }
 
     @Override
-    public Object __sub__(String s, Object o) {
+    public Object rh_binary_op(String a, Object b, int binary_op) {
         return null;
     }
 
     @Override
-    public Object __mul__(String s, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __matmul__(String s, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __truediv__(String s, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __floordiv__(String s, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __mod__(String s, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __divmod__(String s, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __pow__(String s, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __lshift__(String s, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rshift__(String s, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __and__(String s, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __xor__(String s, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __or__(String s, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __radd__(String s, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rsub__(String s, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rmul__(String s, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rmatmul__(String s, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rtruediv__(String s, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rfloordiv__(String s, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rmod__(String s, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rdivmod__(String s, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rpow__(String s, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rlshift__(String s, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rrshift__(String s, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rand__(String s, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rxor__(String s, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __ror__(String s, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __iadd__(String s, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __isub__(String s, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __imul__(String s, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __imatmul__(String s, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __itruediv__(String s, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __ifloordiv__(String s, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __imod__(String s, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __idivmod__(String s, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __ipow__(String s, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __ilshift__(String s, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __irshift__(String s, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __iand__(String s, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __ixor__(String s, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __ior__(String s, Object o) {
+    public Object inplace_binary_op(String a, Object b, int binary_op) {
         return null;
     }
 

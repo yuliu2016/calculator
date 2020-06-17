@@ -1,10 +1,14 @@
 package org.fugalang.core.object;
 
-import org.fugalang.core.opcode.CmpOpType;
-
 import java.util.Set;
 
 public class FSet implements FType<Set<Object>> {
+
+    static FSet INSTANCE = new FSet();
+
+    private FSet() {
+
+    }
 
     @Override
     public Object __repr__(Set<Object> a) {
@@ -32,7 +36,7 @@ public class FSet implements FType<Set<Object>> {
     }
 
     @Override
-    public Object compare_op(Set<Object> a, Object b, CmpOpType cmp_op) {
+    public Object compare_op(Set<Object> a, Object o, int compare_op) {
         return null;
     }
 
@@ -97,212 +101,17 @@ public class FSet implements FType<Set<Object>> {
     }
 
     @Override
-    public Object __add__(Set<Object> a, Object o) {
+    public Object binary_op(Set<Object> a, Object o, int binary_op) {
         return null;
     }
 
     @Override
-    public Object __sub__(Set<Object> a, Object o) {
+    public Object rh_binary_op(Set<Object> a, Object b, int binary_op) {
         return null;
     }
 
     @Override
-    public Object __mul__(Set<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __matmul__(Set<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __truediv__(Set<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __floordiv__(Set<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __mod__(Set<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __divmod__(Set<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __pow__(Set<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __lshift__(Set<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rshift__(Set<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __and__(Set<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __xor__(Set<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __or__(Set<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __radd__(Set<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rsub__(Set<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rmul__(Set<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rmatmul__(Set<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rtruediv__(Set<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rfloordiv__(Set<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rmod__(Set<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rdivmod__(Set<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rpow__(Set<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rlshift__(Set<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rrshift__(Set<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rand__(Set<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __rxor__(Set<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __ror__(Set<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __iadd__(Set<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __isub__(Set<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __imul__(Set<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __imatmul__(Set<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __itruediv__(Set<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __ifloordiv__(Set<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __imod__(Set<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __idivmod__(Set<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __ipow__(Set<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __ilshift__(Set<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __irshift__(Set<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __iand__(Set<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __ixor__(Set<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __ior__(Set<Object> a, Object o) {
+    public Object inplace_binary_op(Set<Object> a, Object b, int binary_op) {
         return null;
     }
 

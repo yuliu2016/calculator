@@ -1,7 +1,6 @@
 package org.fugalang.core.opcode;
 
-@SuppressWarnings("unused")
-public class CmpOp {
+public class CompareOp {
     public static final int CMP_LT = 0;
     public static final int CMP_LE = 1;
     public static final int CMP_EQ = 2;

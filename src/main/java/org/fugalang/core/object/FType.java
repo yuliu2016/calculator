@@ -1,7 +1,5 @@
 package org.fugalang.core.object;
 
-import org.fugalang.core.opcode.CmpOpType;
-
 @SuppressWarnings("unused")
 public interface FType<T> {
 
@@ -13,7 +11,7 @@ public interface FType<T> {
     Object __bool__(T a);
 
     // Comparision Operators
-    Object compare_op(T a, Object b, CmpOpType cmp_op);
+    Object compare_op(T a, Object o, int compare_op);
 
     // Customizing attribute acces
     Object __getattr__(T a, Object o);
@@ -34,52 +32,13 @@ public interface FType<T> {
     Object __contains__(T a, Object o);
 
     // Number Operators
-    Object __add__(T a, Object o);
-    Object __sub__(T a, Object o);
-    Object __mul__(T a, Object o);
-    Object __matmul__(T a, Object o);
-    Object __truediv__(T a, Object o);
-    Object __floordiv__(T a, Object o);
-    Object __mod__(T a, Object o);
-    Object __divmod__(T a, Object o);
-    Object __pow__(T a, Object o);
-    Object __lshift__(T a, Object o);
-    Object __rshift__(T a, Object o);
-    Object __and__(T a, Object o);
-    Object __xor__(T a, Object o);
-    Object __or__(T a, Object o);
+    Object binary_op(T a, Object o, int binary_op);
 
     // Number Operators (right hand operand)
-    Object __radd__(T a, Object o);
-    Object __rsub__(T a, Object o);
-    Object __rmul__(T a, Object o);
-    Object __rmatmul__(T a, Object o);
-    Object __rtruediv__(T a, Object o);
-    Object __rfloordiv__(T a, Object o);
-    Object __rmod__(T a, Object o);
-    Object __rdivmod__(T a, Object o);
-    Object __rpow__(T a, Object o);
-    Object __rlshift__(T a, Object o);
-    Object __rrshift__(T a, Object o);
-    Object __rand__(T a, Object o);
-    Object __rxor__(T a, Object o);
-    Object __ror__(T a, Object o);
+    Object rh_binary_op(T a, Object b, int binary_op);
 
     // Number Operators (in-place)
-    Object __iadd__(T a, Object o);
-    Object __isub__(T a, Object o);
-    Object __imul__(T a, Object o);
-    Object __imatmul__(T a, Object o);
-    Object __itruediv__(T a, Object o);
-    Object __ifloordiv__(T a, Object o);
-    Object __imod__(T a, Object o);
-    Object __idivmod__(T a, Object o);
-    Object __ipow__(T a, Object o);
-    Object __ilshift__(T a, Object o);
-    Object __irshift__(T a, Object o);
-    Object __iand__(T a, Object o);
-    Object __ixor__(T a, Object o);
-    Object __ior__(T a, Object o);
+    Object inplace_binary_op(T a, Object b, int binary_op);
 
     // Unary operators
     Object __neg__(T a);
