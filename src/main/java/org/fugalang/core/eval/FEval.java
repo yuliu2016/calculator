@@ -10,6 +10,7 @@ import java.util.Set;
 
 import static org.fugalang.core.object.FConst.*;
 import static org.fugalang.core.opcode.CompareOp.*;
+import static org.fugalang.core.opcode.UnaryOp.UNARY_BOOL;
 
 public class FEval {
     @SuppressWarnings("unchecked")
@@ -22,6 +23,7 @@ public class FEval {
         if (cls == FObject.class) return ((FObject) o).type;
         if (cls == BigInteger.class) return LongType;
         if (cls == Double.class) return FloatType;
+        if (cls == String.class) return StringType;
         if (o instanceof List) return ListType;
         if (o instanceof Map) return MapType;
         if (o instanceof Set) return SetType;
@@ -33,7 +35,7 @@ public class FEval {
         if (o == null) return false;
         var cls = o.getClass();
         if (cls == Boolean.class) return (boolean) o;
-        var r = typeOfObject(o).__bool__(o);
+        var r = typeOfObject(o).unary_op(o, UNARY_BOOL);
         return r == null || r.getClass() != Boolean.class || (boolean) r;
     }
 

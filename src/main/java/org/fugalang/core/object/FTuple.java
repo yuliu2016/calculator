@@ -8,44 +8,13 @@ import java.util.Arrays;
 import java.util.StringJoiner;
 
 import static org.fugalang.core.opcode.CompareOp.*;
+import static org.fugalang.core.opcode.UnaryOp.*;
 
 public final class FTuple implements FType<Object[]> {
 
     static FTuple INSTANCE = new FTuple();
 
     private FTuple() {
-    }
-
-    @Override
-    public Object __repr__(Object[] a) {
-        if (a.length == 0) {
-            return "()";
-        }
-        var sj = new StringJoiner(", ", "(", ")");
-        for (Object o : a) {
-            sj.add(o.toString());
-        }
-        return sj.toString();
-    }
-
-    @Override
-    public Object __str__(Object[] a) {
-        return __repr__(a);
-    }
-
-    @Override
-    public Object __format__(Object[] a) {
-        return __repr__(a);
-    }
-
-    @Override
-    public Object __hash__(Object[] a) {
-        return Arrays.hashCode(a);
-    }
-
-    @Override
-    public Object __bool__(Object[] a) {
-        return a.length != 0;
     }
 
     private static Object arrayCompare(Object[] a, Object b, int cmp_op) {
@@ -174,8 +143,35 @@ public final class FTuple implements FType<Object[]> {
     }
 
     @Override
-    public Object __contains__(Object[] a, Object o) {
-        return null;
+    public Object unary_op(Object[] a, int unary_op) {
+        switch (unary_op) {
+            case UNARY_BOOL:
+                return a.length != 0;
+            case UNARY_HASH:
+                return Arrays.hashCode(a);
+            case UNARY_STR:
+            case UNARY_REPR:
+                if (a.length == 0) {
+                    return "()";
+                }
+                var sj = new StringJoiner(", ", "(", ")");
+                for (Object o : a) {
+                    sj.add(o.toString());
+                }
+                return sj.toString();
+            case UNARY_INVERT:
+            case UNARY_TRUNK:
+            case UNARY_NEG:
+            case UNARY_POS:
+            case UNARY_FLOAT:
+            case UNARY_ABS:
+            case UNARY_INT:
+            case UNARY_ROUND:
+            case UNARY_FLOOR:
+            case UNARY_CEIL:
+            default:
+                return null;
+        }
     }
 
     @Override
@@ -199,56 +195,6 @@ public final class FTuple implements FType<Object[]> {
 
     @Override
     public Object inplace_binary_op(Object[] a, Object b, int binary_op) {
-        return null;
-    }
-
-    @Override
-    public Object __neg__(Object[] a) {
-        return null;
-    }
-
-    @Override
-    public Object __pos__(Object[] a) {
-        return null;
-    }
-
-    @Override
-    public Object __abs__(Object[] a) {
-        return null;
-    }
-
-    @Override
-    public Object __invert__(Object[] a) {
-        return null;
-    }
-
-    @Override
-    public Object __int__(Object[] a) {
-        return null;
-    }
-
-    @Override
-    public Object __float__(Object[] a) {
-        return null;
-    }
-
-    @Override
-    public Object __round__(Object[] a) {
-        return null;
-    }
-
-    @Override
-    public Object __trunk__(Object[] a) {
-        return null;
-    }
-
-    @Override
-    public Object __floor__(Object[] a) {
-        return null;
-    }
-
-    @Override
-    public Object __ceil__(Object[] a) {
         return null;
     }
 

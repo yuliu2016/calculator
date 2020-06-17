@@ -5,6 +5,7 @@ import org.fugalang.core.eval.FEval;
 import java.math.BigInteger;
 
 import static org.fugalang.core.opcode.BinaryOp.*;
+import static org.fugalang.core.opcode.UnaryOp.*;
 
 public final class FFloat implements FType<Double> {
 
@@ -21,31 +22,6 @@ public final class FFloat implements FType<Double> {
             return ((BigInteger) o).doubleValue();
         }
         return null;
-    }
-
-    @Override
-    public Object __repr__(Double a) {
-        return Double.toString(a);
-    }
-
-    @Override
-    public Object __str__(Double a) {
-        return __repr__(a);
-    }
-
-    @Override
-    public Object __format__(Double a) {
-        return __repr__(a);
-    }
-
-    @Override
-    public Object __hash__(Double a) {
-        return a.hashCode();
-    }
-
-    @Override
-    public Object __bool__(Double a) {
-        return !Double.isNaN(a) && a != 0;
     }
 
     @Override
@@ -113,8 +89,35 @@ public final class FFloat implements FType<Double> {
     }
 
     @Override
-    public Object __contains__(Double a, Object o) {
-        return null;
+    public Object unary_op(Double a, int unary_op) {
+        switch (unary_op) {
+            case UNARY_NEG:
+                return -a;
+            case UNARY_POS:
+            case UNARY_FLOAT:
+                return a;
+            case UNARY_ABS:
+                return Math.abs(a);
+            case UNARY_INT:
+            case UNARY_INVERT:
+            case UNARY_TRUNK:
+                return a.intValue();
+            case UNARY_ROUND:
+                return Math.round(a);
+            case UNARY_FLOOR:
+                return Math.floor(a);
+            case UNARY_CEIL:
+                return Math.ceil(a);
+            case UNARY_BOOL:
+                return !Double.isNaN(a) && a != 0;
+            case UNARY_HASH:
+                return a.hashCode();
+            case UNARY_STR:
+            case UNARY_REPR:
+                return a.toString();
+            default:
+                return null;
+        }
     }
 
     @Override
@@ -157,56 +160,6 @@ public final class FFloat implements FType<Double> {
     @Override
     public Object inplace_binary_op(Double a, Object b, int binary_op) {
         return binary_op(a, b, binary_op);
-    }
-
-    @Override
-    public Object __neg__(Double a) {
-        return -a;
-    }
-
-    @Override
-    public Object __pos__(Double a) {
-        return a;
-    }
-
-    @Override
-    public Object __abs__(Double a) {
-        return Math.abs(a);
-    }
-
-    @Override
-    public Object __invert__(Double a) {
-        return null;
-    }
-
-    @Override
-    public Object __int__(Double a) {
-        return a.intValue();
-    }
-
-    @Override
-    public Object __float__(Double a) {
-        return a;
-    }
-
-    @Override
-    public Object __round__(Double a) {
-        return Math.round(a);
-    }
-
-    @Override
-    public Object __trunk__(Double a) {
-        return null;
-    }
-
-    @Override
-    public Object __floor__(Double a) {
-        return Math.floor(a);
-    }
-
-    @Override
-    public Object __ceil__(Double a) {
-        return Math.ceil(a);
     }
 
     @Override

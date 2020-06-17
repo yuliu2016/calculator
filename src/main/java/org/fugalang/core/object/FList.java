@@ -9,30 +9,6 @@ public class FList implements FType<List<Object>> {
     private FList() {
     }
 
-    @Override
-    public Object __repr__(List<Object> a) {
-        return null;
-    }
-
-    @Override
-    public Object __str__(List<Object> a) {
-        return null;
-    }
-
-    @Override
-    public Object __format__(List<Object> a) {
-        return null;
-    }
-
-    @Override
-    public Object __hash__(List<Object> a) {
-        return null;
-    }
-
-    @Override
-    public Object __bool__(List<Object> a) {
-        return null;
-    }
 
     @Override
     public Object compare_op(List<Object> a, Object o, int compare_op) {
@@ -95,7 +71,7 @@ public class FList implements FType<List<Object>> {
     }
 
     @Override
-    public Object __contains__(List<Object> a, Object o) {
+    public Object unary_op(List<Object> a, int unary_op) {
         return null;
     }
 
@@ -111,56 +87,6 @@ public class FList implements FType<List<Object>> {
 
     @Override
     public Object inplace_binary_op(List<Object> a, Object b, int binary_op) {
-        return null;
-    }
-
-    @Override
-    public Object __neg__(List<Object> a) {
-        return null;
-    }
-
-    @Override
-    public Object __pos__(List<Object> a) {
-        return null;
-    }
-
-    @Override
-    public Object __abs__(List<Object> a) {
-        return null;
-    }
-
-    @Override
-    public Object __invert__(List<Object> a) {
-        return null;
-    }
-
-    @Override
-    public Object __int__(List<Object> a) {
-        return null;
-    }
-
-    @Override
-    public Object __float__(List<Object> a) {
-        return null;
-    }
-
-    @Override
-    public Object __round__(List<Object> a) {
-        return null;
-    }
-
-    @Override
-    public Object __trunk__(List<Object> a) {
-        return null;
-    }
-
-    @Override
-    public Object __floor__(List<Object> a) {
-        return null;
-    }
-
-    @Override
-    public Object __ceil__(List<Object> a) {
         return null;
     }
 

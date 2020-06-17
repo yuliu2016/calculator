@@ -10,30 +10,6 @@ public class FMap implements FType<Map<Object, Object>> {
 
     }
 
-    @Override
-    public Object __repr__(Map<Object, Object> a) {
-        return null;
-    }
-
-    @Override
-    public Object __str__(Map<Object, Object> a) {
-        return null;
-    }
-
-    @Override
-    public Object __format__(Map<Object, Object> a) {
-        return null;
-    }
-
-    @Override
-    public Object __hash__(Map<Object, Object> a) {
-        return null;
-    }
-
-    @Override
-    public Object __bool__(Map<Object, Object> a) {
-        return null;
-    }
 
     @Override
     public Object compare_op(Map<Object, Object> a, Object o, int compare_op) {
@@ -96,7 +72,7 @@ public class FMap implements FType<Map<Object, Object>> {
     }
 
     @Override
-    public Object __contains__(Map<Object, Object> a, Object o) {
+    public Object unary_op(Map<Object, Object> a, int unary_op) {
         return null;
     }
 
@@ -112,56 +88,6 @@ public class FMap implements FType<Map<Object, Object>> {
 
     @Override
     public Object inplace_binary_op(Map<Object, Object> a, Object b, int binary_op) {
-        return null;
-    }
-
-    @Override
-    public Object __neg__(Map<Object, Object> a) {
-        return null;
-    }
-
-    @Override
-    public Object __pos__(Map<Object, Object> a) {
-        return null;
-    }
-
-    @Override
-    public Object __abs__(Map<Object, Object> a) {
-        return null;
-    }
-
-    @Override
-    public Object __invert__(Map<Object, Object> a) {
-        return null;
-    }
-
-    @Override
-    public Object __int__(Map<Object, Object> a) {
-        return null;
-    }
-
-    @Override
-    public Object __float__(Map<Object, Object> a) {
-        return null;
-    }
-
-    @Override
-    public Object __round__(Map<Object, Object> a) {
-        return null;
-    }
-
-    @Override
-    public Object __trunk__(Map<Object, Object> a) {
-        return null;
-    }
-
-    @Override
-    public Object __floor__(Map<Object, Object> a) {
-        return null;
-    }
-
-    @Override
-    public Object __ceil__(Map<Object, Object> a) {
         return null;
     }
 

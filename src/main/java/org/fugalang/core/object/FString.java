@@ -2,29 +2,9 @@ package org.fugalang.core.object;
 
 public class FString implements FType<String> {
 
-    @Override
-    public Object __repr__(String s) {
-        return null;
-    }
+    static FString INSTANCE = new FString();
 
-    @Override
-    public Object __str__(String s) {
-        return null;
-    }
-
-    @Override
-    public Object __format__(String s) {
-        return null;
-    }
-
-    @Override
-    public Object __hash__(String s) {
-        return null;
-    }
-
-    @Override
-    public Object __bool__(String s) {
-        return null;
+    private FString() {
     }
 
     @Override
@@ -88,7 +68,7 @@ public class FString implements FType<String> {
     }
 
     @Override
-    public Object __contains__(String s, Object o) {
+    public Object unary_op(String a, int unary_op) {
         return null;
     }
 
@@ -104,56 +84,6 @@ public class FString implements FType<String> {
 
     @Override
     public Object inplace_binary_op(String a, Object b, int binary_op) {
-        return null;
-    }
-
-    @Override
-    public Object __neg__(String s) {
-        return null;
-    }
-
-    @Override
-    public Object __pos__(String s) {
-        return null;
-    }
-
-    @Override
-    public Object __abs__(String s) {
-        return null;
-    }
-
-    @Override
-    public Object __invert__(String s) {
-        return null;
-    }
-
-    @Override
-    public Object __int__(String s) {
-        return null;
-    }
-
-    @Override
-    public Object __float__(String s) {
-        return null;
-    }
-
-    @Override
-    public Object __round__(String s) {
-        return null;
-    }
-
-    @Override
-    public Object __trunk__(String s) {
-        return null;
-    }
-
-    @Override
-    public Object __floor__(String s) {
-        return null;
-    }
-
-    @Override
-    public Object __ceil__(String s) {
         return null;
     }
 

@@ -2,6 +2,7 @@ package org.fugalang.core.object;
 
 import org.fugalang.core.eval.FEval;
 import org.fugalang.core.opcode.CompareOp;
+import org.fugalang.core.opcode.UnaryOp;
 
 public final class FObject {
 
@@ -23,20 +24,23 @@ public final class FObject {
 
     @Override
     public String toString() {
-        String str = (String) type.__str__(value);
-        return str == null ? super.toString() : str;
+        var str = type.unary_op(value, UnaryOp.UNARY_STR);
+        return (str == null || str.getClass() != String.class) ?
+                super.toString() : (String) str;
     }
 
     @Override
     public int hashCode() {
-        Integer hash = (Integer) type.__hash__(value);
-        return hash == null ? super.hashCode() : hash;
+        var hash = type.unary_op(value, UnaryOp.UNARY_HASH);
+        return (hash == null || hash.getClass() != Integer.class) ?
+                super.hashCode() : (int) hash;
     }
 
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj.getClass() == FObject.class)) return false;
-        return FEval.isTrue(type.compare_op(value, obj, CompareOp.CMP_EQ));
+        var eq = type.compare_op(value, obj, CompareOp.CMP_EQ);
+        return FEval.isTrue(eq);
     }
 }

@@ -5,6 +5,7 @@ import org.fugalang.core.eval.FEval;
 import java.math.BigInteger;
 
 import static org.fugalang.core.opcode.BinaryOp.*;
+import static org.fugalang.core.opcode.UnaryOp.*;
 
 
 public final class FLong implements FType<BigInteger> {
@@ -12,31 +13,6 @@ public final class FLong implements FType<BigInteger> {
     static FLong INSTANCE = new FLong();
 
     private FLong() {
-    }
-
-    @Override
-    public Object __repr__(BigInteger a) {
-        return a.toString();
-    }
-
-    @Override
-    public Object __str__(BigInteger a) {
-        return __repr__(a);
-    }
-
-    @Override
-    public Object __format__(BigInteger a) {
-        return __repr__(a);
-    }
-
-    @Override
-    public Object __hash__(BigInteger a) {
-        return a.hashCode();
-    }
-
-    @Override
-    public Object __bool__(BigInteger a) {
-        return a.signum() != 0;
     }
 
     @Override
@@ -108,8 +84,33 @@ public final class FLong implements FType<BigInteger> {
     }
 
     @Override
-    public Object __contains__(BigInteger a, Object o) {
-        return null;
+    public Object unary_op(BigInteger a, int unary_op) {
+        switch (unary_op) {
+            case UNARY_NEG:
+                return a.negate();
+            case UNARY_POS:
+            case UNARY_INT:
+            case UNARY_FLOOR:
+            case UNARY_CEIL:
+                return a;
+            case UNARY_ROUND:
+            case UNARY_FLOAT:
+                return a.doubleValue();
+            case UNARY_ABS:
+                return a.abs();
+            case UNARY_BOOL:
+                return a.signum() != 0;
+            case UNARY_HASH:
+                return a.hashCode();
+            case UNARY_STR:
+            case UNARY_REPR:
+                return a.toString();
+            case UNARY_INVERT:
+                return a.not();
+            case UNARY_TRUNK:
+            default:
+                return null;
+        }
     }
 
     @Override
@@ -157,56 +158,6 @@ public final class FLong implements FType<BigInteger> {
     @Override
     public Object inplace_binary_op(BigInteger a, Object b, int binary_op) {
         return null;
-    }
-
-    @Override
-    public Object __neg__(BigInteger a) {
-        return a.negate();
-    }
-
-    @Override
-    public Object __pos__(BigInteger a) {
-        return a;
-    }
-
-    @Override
-    public Object __abs__(BigInteger a) {
-        return a.abs();
-    }
-
-    @Override
-    public Object __invert__(BigInteger a) {
-        return a.not();
-    }
-
-    @Override
-    public Object __int__(BigInteger a) {
-        return a;
-    }
-
-    @Override
-    public Object __float__(BigInteger a) {
-        return a.doubleValue();
-    }
-
-    @Override
-    public Object __round__(BigInteger a) {
-        return a.doubleValue();
-    }
-
-    @Override
-    public Object __trunk__(BigInteger a) {
-        return a;
-    }
-
-    @Override
-    public Object __floor__(BigInteger a) {
-        return a;
-    }
-
-    @Override
-    public Object __ceil__(BigInteger a) {
-        return a;
     }
 
     @Override
