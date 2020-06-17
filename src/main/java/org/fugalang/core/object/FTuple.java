@@ -1,6 +1,7 @@
 package org.fugalang.core.object;
 
 import org.fugalang.core.eval.FEval;
+import org.fugalang.core.opcode.CmpOpType;
 
 import java.math.BigInteger;
 import java.util.Arrays;
@@ -46,37 +47,21 @@ public final class FTuple implements FType<Object[]> {
         return a.length != 0;
     }
 
-    @Override
-    public Object __lt__(Object[] a, Object b) {
+    private static Object arrayCompare(Object[] a, Object b, CmpOpType cmp_op) {
         if (!(b instanceof Object[])) return null;
         var c = (Object[]) b;
         int m = Math.max(a.length, c.length);
         for (int i = 0; i < m; i++) {
             var x = a[i];
             var y = c[i];
-            if (!FEval.compareEqIsTrue(x, y)) {
-                return FEval.compareLt(x, y);
+            if (!FEval.isEqual(x, y)) {
+                return FEval.isTrue(FEval.compare(x, y, cmp_op));
             }
         }
-        return a.length < c.length;
+        return FEval.compareOp(cmp_op, Integer.compare(a.length, c.length));
     }
 
-    @Override
-    public Object __le__(Object[] a, Object b) {
-        if (!(b instanceof Object[])) return null;
-        var c = (Object[]) b;
-        int m = Math.max(a.length, c.length);
-        for (int i = 0; i < m; i++) {
-            var x = a[i];
-            var y = c[i];
-            if (!FEval.compareEqIsTrue(x, y)) {
-                return FEval.compareLe(x, y);
-            }
-        }
-        return a.length <= c.length;
-    }
-
-    private static boolean tupleEquals(Object[] a, Object[] c) {
+    private static boolean arrayEquals(Object[] a, Object[] c) {
         if (a.length != c.length) {
             return false;
         }
@@ -84,7 +69,7 @@ public final class FTuple implements FType<Object[]> {
         while (i < a.length) {
             var x = a[i];
             var y = c[i];
-            if (FEval.compareEqIsTrue(x, y)) {
+            if (FEval.isEqual(x, y)) {
                 i++;
             } else {
                 return false;
@@ -93,46 +78,36 @@ public final class FTuple implements FType<Object[]> {
         return true;
     }
 
-    @Override
-    public Object __eq__(Object[] a, Object b) {
-        if (!(b instanceof Object[])) return null;
-        return tupleEquals(a, (Object[]) b);
-    }
-
-    @Override
-    public Object __ne__(Object[] a, Object b) {
-        if (!(b instanceof Object[])) return null;
-        return !tupleEquals(a, (Object[]) b);
-    }
-
-    @Override
-    public Object __gt__(Object[] a, Object b) {
-        if (!(b instanceof Object[])) return null;
-        var c = (Object[]) b;
-        int m = Math.max(a.length, c.length);
-        for (int i = 0; i < m; i++) {
-            var x = a[i];
-            var y = c[i];
-            if (!FEval.compareEqIsTrue(x, y)) {
-                return FEval.compareGt(x, y);
+    private static boolean arrayContains(Object[] a, Object b) {
+        for (Object o : a) {
+            if (b.equals(o)) {
+                return true;
             }
         }
-        return a.length > c.length;
+        return false;
     }
 
     @Override
-    public Object __ge__(Object[] a, Object b) {
-        if (!(b instanceof Object[])) return null;
-        var c = (Object[]) b;
-        int m = Math.max(a.length, c.length);
-        for (int i = 0; i < m; i++) {
-            var x = a[i];
-            var y = c[i];
-            if (!FEval.compareEqIsTrue(x, y)) {
-                return FEval.compareGe(x, y);
-            }
+    public Object compare_op(Object[] a, Object b, CmpOpType cmp_op) {
+        switch (cmp_op) {
+            case CMP_LT:
+            case CMP_LE:
+            case CMP_GT:
+            case CMP_GE:
+                return arrayCompare(a, b, cmp_op);
+            case CMP_EQ:
+                if (!(b instanceof Object[])) return null;
+                return arrayEquals(a, (Object[]) b);
+            case CMP_NE:
+                if (!(b instanceof Object[])) return null;
+                return !arrayEquals(a, (Object[]) b);
+            case CMP_IN:
+                return arrayContains(a, b);
+            case CMP_NI:
+                return !arrayContains(a, b);
+            default:
+                return null;
         }
-        return a.length >= c.length;
     }
 
     @Override

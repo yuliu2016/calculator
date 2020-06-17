@@ -2,6 +2,7 @@ package org.fugalang.core.eval;
 
 import org.fugalang.core.object.FObject;
 import org.fugalang.core.object.FType;
+import org.fugalang.core.opcode.CmpOpType;
 
 import java.math.BigInteger;
 
@@ -30,51 +31,32 @@ public class FEval {
         return r == null || r.getClass() != Boolean.class || (boolean) r;
     }
 
-    public static Object compareLt(Object a, Object b) {
-        return typeOfObject(a).__lt__(a, b);
+    public static Boolean compareOp(CmpOpType cmp_op, int cmp_result) {
+        switch (cmp_op) {
+            case CMP_LT:
+                return cmp_result < 0;
+            case CMP_LE:
+                return cmp_result <= 0;
+            case CMP_EQ:
+                return cmp_result == 0;
+            case CMP_NE:
+                return cmp_result != 0;
+            case CMP_GT:
+                return cmp_result > 0;
+            case CMP_GE:
+                return cmp_result >= 0;
+            case CMP_IN:
+            case CMP_NI:
+            default:
+                return null;
+        }
     }
 
-    public static boolean compareLtIsTrue(Object a, Object b) {
-        return isTrue(compareLt(a, b));
+    public static Object compare(Object a, Object b, CmpOpType cmp_op) {
+        return typeOfObject(a).compare_op(a, b, cmp_op);
     }
 
-    public static Object compareLe(Object a, Object b) {
-        return typeOfObject(a).__le__(a, b);
-    }
-
-    public static boolean compareLeIsTrue(Object a, Object b) {
-        return isTrue(compareLe(a, b));
-    }
-
-    public static Object compareEq(Object a, Object b) {
-        return typeOfObject(a).__eq__(a, b);
-    }
-
-    public static boolean compareEqIsTrue(Object a, Object b) {
-        return isTrue(compareEq(a, b));
-    }
-
-    public static Object compareNe(Object a, Object b) {
-        return typeOfObject(a).__ne__(a, b);
-    }
-
-    public static boolean compareNeIsTrue(Object a, Object b) {
-        return isTrue(compareNe(a, b));
-    }
-
-    public static Object compareGt(Object a, Object b) {
-        return typeOfObject(a).__gt__(a, b);
-    }
-
-    public static boolean compareGtIsTrue(Object a, Object b) {
-        return isTrue(compareGt(a, b));
-    }
-
-    public static Object compareGe(Object a, Object b) {
-        return typeOfObject(a).__ge__(a, b);
-    }
-
-    public static boolean compareGeIsTrue(Object a, Object b) {
-        return isTrue(compareGe(a, b));
+    public static boolean isEqual(Object a, Object b) {
+        return isTrue(compare(a, b, CmpOpType.CMP_EQ));
     }
 }

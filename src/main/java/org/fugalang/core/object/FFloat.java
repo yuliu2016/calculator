@@ -1,5 +1,8 @@
 package org.fugalang.core.object;
 
+import org.fugalang.core.eval.FEval;
+import org.fugalang.core.opcode.CmpOpType;
+
 import java.math.BigInteger;
 
 public final class FFloat implements FType<Double> {
@@ -45,39 +48,12 @@ public final class FFloat implements FType<Double> {
     }
 
     @Override
-    public Object __lt__(Double a, Object b) {
-        var c = asDouble(b);
-        return c == null ? null : a < c;
-    }
-
-    @Override
-    public Object __le__(Double a, Object b) {
-        var c = asDouble(b);
-        return c == null ? null : a <= c;
-    }
-
-    @Override
-    public Object __eq__(Double a, Object b) {
-        var c = asDouble(b);
-        return c == null ? null : a == (double) c;
-    }
-
-    @Override
-    public Object __ne__(Double a, Object b) {
-        var c = asDouble(b);
-        return c == null ? null : a != (double) c;
-    }
-
-    @Override
-    public Object __gt__(Double a, Object b) {
-        var c = asDouble(b);
-        return c == null ? null : a > c;
-    }
-
-    @Override
-    public Object __ge__(Double a, Object b) {
-        var c = asDouble(b);
-        return c == null ? null : a >= c;
+    public Object compare_op(Double a, Object b, CmpOpType cmp_op) {
+        double y;
+        if (b.getClass() == Double.class) y = (double) b;
+        else if (b.getClass() == BigInteger.class) y = ((BigInteger) b).doubleValue();
+        else return null;
+        return FEval.compareOp(cmp_op, Double.compare(a, y));
     }
 
     @Override

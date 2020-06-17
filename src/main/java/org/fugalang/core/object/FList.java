@@ -1,5 +1,7 @@
 package org.fugalang.core.object;
 
+import org.fugalang.core.opcode.CmpOpType;
+
 import java.util.List;
 
 public class FList implements FType<List<Object>>  {
@@ -29,32 +31,7 @@ public class FList implements FType<List<Object>>  {
     }
 
     @Override
-    public Object __lt__(List<Object> a, Object b) {
-        return null;
-    }
-
-    @Override
-    public Object __le__(List<Object> a, Object b) {
-        return null;
-    }
-
-    @Override
-    public Object __eq__(List<Object> a, Object b) {
-        return null;
-    }
-
-    @Override
-    public Object __ne__(List<Object> a, Object b) {
-        return null;
-    }
-
-    @Override
-    public Object __gt__(List<Object> a, Object b) {
-        return null;
-    }
-
-    @Override
-    public Object __ge__(List<Object> a, Object b) {
+    public Object compare_op(List<Object> a, Object b, CmpOpType cmp_op) {
         return null;
     }
 

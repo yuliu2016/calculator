@@ -1,5 +1,7 @@
 package org.fugalang.core.object;
 
+import org.fugalang.core.opcode.CmpOpType;
+
 public class FString implements FType<String> {
 
     @Override
@@ -28,32 +30,7 @@ public class FString implements FType<String> {
     }
 
     @Override
-    public Object __lt__(String a, Object b) {
-        return null;
-    }
-
-    @Override
-    public Object __le__(String a, Object b) {
-        return null;
-    }
-
-    @Override
-    public Object __eq__(String a, Object b) {
-        return null;
-    }
-
-    @Override
-    public Object __ne__(String a, Object b) {
-        return null;
-    }
-
-    @Override
-    public Object __gt__(String a, Object b) {
-        return null;
-    }
-
-    @Override
-    public Object __ge__(String a, Object b) {
+    public Object compare_op(String a, Object b, CmpOpType cmp_op) {
         return null;
     }
 

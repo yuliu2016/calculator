@@ -1,5 +1,7 @@
 package org.fugalang.core.object;
 
+import org.fugalang.core.opcode.CmpOpType;
+
 import java.util.Map;
 
 public class FMap implements FType<Map<Object, Object>> {
@@ -30,32 +32,7 @@ public class FMap implements FType<Map<Object, Object>> {
     }
 
     @Override
-    public Object __lt__(Map<Object, Object> a, Object b) {
-        return null;
-    }
-
-    @Override
-    public Object __le__(Map<Object, Object> a, Object b) {
-        return null;
-    }
-
-    @Override
-    public Object __eq__(Map<Object, Object> a, Object b) {
-        return null;
-    }
-
-    @Override
-    public Object __ne__(Map<Object, Object> a, Object b) {
-        return null;
-    }
-
-    @Override
-    public Object __gt__(Map<Object, Object> a, Object b) {
-        return null;
-    }
-
-    @Override
-    public Object __ge__(Map<Object, Object> a, Object b) {
+    public Object compare_op(Map<Object, Object> a, Object b, CmpOpType cmp_op) {
         return null;
     }
 

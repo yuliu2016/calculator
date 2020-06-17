@@ -1,7 +1,7 @@
-package org.fugalang.core.compile;
+package org.fugalang.core.opcode;
 
 @SuppressWarnings("unused")
-public class Opcode {
+public class FrameOp {
     // STACK OPERATIONS
     public static final byte                 NOP =  1;
     public static final byte             POP_TOP =  2;
@@ -27,6 +27,6 @@ public class Opcode {
     public static final byte          INPLACE_OP = 11;
     public static final byte          PRINT_EXPR = 24;
 
-    private Opcode() {
+    private FrameOp() {
     }
 }

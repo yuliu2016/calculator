@@ -1,5 +1,7 @@
 package org.fugalang.core.object;
 
+import org.fugalang.core.opcode.CmpOpType;
+
 @SuppressWarnings("unused")
 public interface FType<T> {
 
@@ -11,12 +13,7 @@ public interface FType<T> {
     Object __bool__(T a);
 
     // Comparision Operators
-    Object __lt__(T a, Object b);
-    Object __le__(T a, Object b);
-    Object __eq__(T a, Object b);
-    Object __ne__(T a, Object b);
-    Object __gt__(T a, Object b);
-    Object __ge__(T a, Object b);
+    Object compare_op(T a, Object b, CmpOpType cmp_op);
 
     // Customizing attribute acces
     Object __getattr__(T a, Object o);

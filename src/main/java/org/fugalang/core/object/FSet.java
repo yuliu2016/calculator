@@ -1,5 +1,7 @@
 package org.fugalang.core.object;
 
+import org.fugalang.core.opcode.CmpOpType;
+
 import java.util.Set;
 
 public class FSet implements FType<Set<Object>> {
@@ -30,32 +32,7 @@ public class FSet implements FType<Set<Object>> {
     }
 
     @Override
-    public Object __lt__(Set<Object> a, Object b) {
-        return null;
-    }
-
-    @Override
-    public Object __le__(Set<Object> a, Object b) {
-        return null;
-    }
-
-    @Override
-    public Object __eq__(Set<Object> a, Object b) {
-        return null;
-    }
-
-    @Override
-    public Object __ne__(Set<Object> a, Object b) {
-        return null;
-    }
-
-    @Override
-    public Object __gt__(Set<Object> a, Object b) {
-        return null;
-    }
-
-    @Override
-    public Object __ge__(Set<Object> a, Object b) {
+    public Object compare_op(Set<Object> a, Object b, CmpOpType cmp_op) {
         return null;
     }
 

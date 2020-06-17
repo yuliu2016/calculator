@@ -1,5 +1,8 @@
 package org.fugalang.core.object;
 
+import org.fugalang.core.eval.FEval;
+import org.fugalang.core.opcode.CmpOpType;
+
 import java.math.BigInteger;
 
 
@@ -36,45 +39,16 @@ public final class FLong implements FType<BigInteger> {
     }
 
     @Override
-    public Object __lt__(BigInteger a, Object b) {
-        if (b.getClass() == BigInteger.class) return a.compareTo((BigInteger) b) < 0;
-        if (b.getClass() == Double.class) return a.doubleValue() < (Double) b;
-        return null;
-    }
-
-    @Override
-    public Object __le__(BigInteger a, Object b) {
-        if (b.getClass() == BigInteger.class) return a.compareTo((BigInteger) b) < 0;
-        if (b.getClass() == Double.class) return a.doubleValue() <= (Double) b;
-        return null;
-    }
-
-    @Override
-    public Object __eq__(BigInteger a, Object b) {
-        if (b.getClass() == BigInteger.class) return a.compareTo((BigInteger) b) < 0;
-        if (b.getClass() == Double.class) return a.doubleValue() == (Double) b;
-        return null;
-    }
-
-    @Override
-    public Object __ne__(BigInteger a, Object b) {
-        if (b.getClass() == BigInteger.class) return a.compareTo((BigInteger) b) < 0;
-        if (b.getClass() == Double.class) return a.doubleValue() != (Double) b;
-        return null;
-    }
-
-    @Override
-    public Object __gt__(BigInteger a, Object b) {
-        if (b.getClass() == BigInteger.class) return a.compareTo((BigInteger) b) < 0;
-        if (b.getClass() == Double.class) return a.doubleValue() > (Double) b;
-        return null;
-    }
-
-    @Override
-    public Object __ge__(BigInteger a, Object b) {
-        if (b.getClass() == BigInteger.class) return a.compareTo((BigInteger) b) < 0;
-        if (b.getClass() == Double.class) return a.doubleValue() >= (Double) b;
-        return null;
+    public Object compare_op(BigInteger a, Object b, CmpOpType cmp_op) {
+        int cmp_result;
+        if (b.getClass() == BigInteger.class) {
+            cmp_result = a.compareTo((BigInteger) b);
+        } else if (b.getClass() == Double.class) {
+            cmp_result = Double.compare(a.doubleValue(), (Double) b);
+        } else {
+            return null;
+        }
+        return FEval.compareOp(cmp_op, cmp_result);
     }
 
     @Override
