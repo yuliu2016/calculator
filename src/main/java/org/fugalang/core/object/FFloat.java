@@ -39,7 +39,7 @@ public final class FFloat implements FType<Double> {
     }
 
     @Override
-    public Object __setattr__(Double a, Object o) {
+    public Object __setattr__(Double a, Object o, Object v) {
         return null;
     }
 
@@ -54,11 +54,6 @@ public final class FFloat implements FType<Double> {
     }
 
     @Override
-    public Object __call__(Double a, Object o) {
-        return null;
-    }
-
-    @Override
     public Object __len__(Double a) {
         return null;
     }
@@ -69,7 +64,7 @@ public final class FFloat implements FType<Double> {
     }
 
     @Override
-    public Object __setitem__(Double a, Object o) {
+    public Object __setitem__(Double a, Object o, Object v) {
         return null;
     }
 
@@ -79,12 +74,12 @@ public final class FFloat implements FType<Double> {
     }
 
     @Override
-    public Object __iter__(Double a, Object o) {
+    public Object iterator(Double a) {
         return null;
     }
 
     @Override
-    public Object __reversed__(Double a, Object o) {
+    public Object reversed(Double a) {
         return null;
     }
 
@@ -163,12 +158,12 @@ public final class FFloat implements FType<Double> {
     }
 
     @Override
-    public Object __enter__(Double a, Object o) {
+    public Object context_enter(Double a) {
         return null;
     }
 
     @Override
-    public Object __exit__(Double a, Object o) {
+    public Object context_exit(Double a, Object o) {
         return null;
     }
 }

@@ -22,7 +22,7 @@ public class FMap implements FType<Map<Object, Object>> {
     }
 
     @Override
-    public Object __setattr__(Map<Object, Object> a, Object o) {
+    public Object __setattr__(Map<Object, Object> a, Object o, Object v) {
         return null;
     }
 
@@ -37,11 +37,6 @@ public class FMap implements FType<Map<Object, Object>> {
     }
 
     @Override
-    public Object __call__(Map<Object, Object> a, Object o) {
-        return null;
-    }
-
-    @Override
     public Object __len__(Map<Object, Object> a) {
         return null;
     }
@@ -52,7 +47,7 @@ public class FMap implements FType<Map<Object, Object>> {
     }
 
     @Override
-    public Object __setitem__(Map<Object, Object> a, Object o) {
+    public Object __setitem__(Map<Object, Object> a, Object o, Object v) {
         return null;
     }
 
@@ -62,12 +57,12 @@ public class FMap implements FType<Map<Object, Object>> {
     }
 
     @Override
-    public Object __iter__(Map<Object, Object> a, Object o) {
+    public Object iterator(Map<Object, Object> a) {
         return null;
     }
 
     @Override
-    public Object __reversed__(Map<Object, Object> a, Object o) {
+    public Object reversed(Map<Object, Object> a) {
         return null;
     }
 
@@ -92,12 +87,12 @@ public class FMap implements FType<Map<Object, Object>> {
     }
 
     @Override
-    public Object __enter__(Map<Object, Object> a, Object o) {
+    public Object context_enter(Map<Object, Object> a) {
         return null;
     }
 
     @Override
-    public Object __exit__(Map<Object, Object> a, Object o) {
+    public Object context_exit(Map<Object, Object> a, Object o) {
         return null;
     }
 }

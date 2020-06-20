@@ -18,7 +18,7 @@ public class FString implements FType<String> {
     }
 
     @Override
-    public Object __setattr__(String s, Object o) {
+    public Object __setattr__(String s, Object o, Object v) {
         return null;
     }
 
@@ -33,11 +33,6 @@ public class FString implements FType<String> {
     }
 
     @Override
-    public Object __call__(String s, Object o) {
-        return null;
-    }
-
-    @Override
     public Object __len__(String s) {
         return null;
     }
@@ -48,7 +43,7 @@ public class FString implements FType<String> {
     }
 
     @Override
-    public Object __setitem__(String s, Object o) {
+    public Object __setitem__(String s, Object o, Object v) {
         return null;
     }
 
@@ -58,12 +53,12 @@ public class FString implements FType<String> {
     }
 
     @Override
-    public Object __iter__(String s, Object o) {
+    public Object iterator(String s) {
         return null;
     }
 
     @Override
-    public Object __reversed__(String s, Object o) {
+    public Object reversed(String s) {
         return null;
     }
 
@@ -88,12 +83,12 @@ public class FString implements FType<String> {
     }
 
     @Override
-    public Object __enter__(String s, Object o) {
+    public Object context_enter(String s) {
         return null;
     }
 
     @Override
-    public Object __exit__(String s, Object o) {
+    public Object context_exit(String s, Object o) {
         return null;
     }
 }

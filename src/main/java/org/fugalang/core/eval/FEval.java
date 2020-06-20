@@ -53,10 +53,10 @@ public class FEval {
                 return cmp_result > 0;
             case CMP_GE:
                 return cmp_result >= 0;
-            case CMP_IN:
-            case CMP_NOT_IN:
-            case CMP_IS:
-            case CMP_IS_NOT:
+//            case CMP_IN:
+//            case CMP_NOT_IN:
+//            case CMP_IS:
+//            case CMP_IS_NOT:
             default:
                 return null;
         }

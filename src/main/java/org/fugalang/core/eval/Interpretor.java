@@ -364,6 +364,18 @@ public class Interpretor implements FugaVisitor<Object> {
      */
     @Override
     public Object visitAssignment(Assignment assignment) {
+        if (assignment.hasPubassign()) {
+            return visitPubassign(assignment.pubassign());
+        }
+        if (assignment.hasAnnassign()) {
+            return visitAnnassign(assignment.annassign());
+        }
+        if (assignment.hasAugassign()) {
+            return visitAugassign(assignment.augassign());
+        }
+        if (assignment.hasSimpleAssign()) {
+            return visitSimpleAssign(assignment.simpleAssign());
+        }
         return null;
     }
 

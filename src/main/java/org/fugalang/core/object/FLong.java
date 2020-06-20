@@ -34,7 +34,7 @@ public final class FLong implements FType<BigInteger> {
     }
 
     @Override
-    public Object __setattr__(BigInteger a, Object o) {
+    public Object __setattr__(BigInteger a, Object o, Object v) {
         return null;
     }
 
@@ -49,11 +49,6 @@ public final class FLong implements FType<BigInteger> {
     }
 
     @Override
-    public Object __call__(BigInteger a, Object o) {
-        return null;
-    }
-
-    @Override
     public Object __len__(BigInteger a) {
         return null;
     }
@@ -64,7 +59,7 @@ public final class FLong implements FType<BigInteger> {
     }
 
     @Override
-    public Object __setitem__(BigInteger a, Object o) {
+    public Object __setitem__(BigInteger a, Object o, Object v) {
         return null;
     }
 
@@ -74,12 +69,12 @@ public final class FLong implements FType<BigInteger> {
     }
 
     @Override
-    public Object __iter__(BigInteger a, Object o) {
+    public Object iterator(BigInteger a) {
         return null;
     }
 
     @Override
-    public Object __reversed__(BigInteger a, Object o) {
+    public Object reversed(BigInteger a) {
         return null;
     }
 
@@ -161,12 +156,12 @@ public final class FLong implements FType<BigInteger> {
     }
 
     @Override
-    public Object __enter__(BigInteger a, Object o) {
+    public Object context_enter(BigInteger a) {
         return null;
     }
 
     @Override
-    public Object __exit__(BigInteger a, Object o) {
+    public Object context_exit(BigInteger a, Object o) {
         return null;
     }
 }

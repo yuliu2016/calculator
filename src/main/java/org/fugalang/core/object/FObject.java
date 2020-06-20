@@ -39,7 +39,7 @@ public final class FObject {
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (!(obj.getClass() == FObject.class)) return false;
+        if (!(obj.getClass() == Object.class)) return false;
         var eq = type.compare_op(value, obj, CompareOp.CMP_EQ);
         return FEval.isTrue(eq);
     }

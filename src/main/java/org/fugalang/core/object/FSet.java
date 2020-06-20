@@ -21,7 +21,7 @@ public class FSet implements FType<Set<Object>> {
     }
 
     @Override
-    public Object __setattr__(Set<Object> a, Object o) {
+    public Object __setattr__(Set<Object> a, Object o, Object v) {
         return null;
     }
 
@@ -36,11 +36,6 @@ public class FSet implements FType<Set<Object>> {
     }
 
     @Override
-    public Object __call__(Set<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
     public Object __len__(Set<Object> a) {
         return null;
     }
@@ -51,7 +46,7 @@ public class FSet implements FType<Set<Object>> {
     }
 
     @Override
-    public Object __setitem__(Set<Object> a, Object o) {
+    public Object __setitem__(Set<Object> a, Object o, Object v) {
         return null;
     }
 
@@ -61,12 +56,12 @@ public class FSet implements FType<Set<Object>> {
     }
 
     @Override
-    public Object __iter__(Set<Object> a, Object o) {
+    public Object iterator(Set<Object> a) {
         return null;
     }
 
     @Override
-    public Object __reversed__(Set<Object> a, Object o) {
+    public Object reversed(Set<Object> a) {
         return null;
     }
 
@@ -91,12 +86,12 @@ public class FSet implements FType<Set<Object>> {
     }
 
     @Override
-    public Object __enter__(Set<Object> a, Object o) {
+    public Object context_enter(Set<Object> a) {
         return null;
     }
 
     @Override
-    public Object __exit__(Set<Object> a, Object o) {
+    public Object context_exit(Set<Object> a, Object o) {
         return null;
     }
 }

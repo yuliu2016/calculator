@@ -48,6 +48,7 @@ public final class FTuple implements FType<Object[]> {
         return true;
     }
 
+    @SuppressWarnings("unused")
     private static boolean arrayContains(Object[] a, Object b) {
         for (Object o : a) {
             if (FEval.isEqual(o, b)) {
@@ -71,10 +72,10 @@ public final class FTuple implements FType<Object[]> {
             case CMP_NE:
                 if (!(o instanceof Object[])) return null;
                 return !arrayEquals(a, (Object[]) o);
-            case CMP_IN:
-                return arrayContains(a, o);
-            case CMP_NOT_IN:
-                return !arrayContains(a, o);
+//            case CMP_IN:
+//                return arrayContains(a, o);
+//            case CMP_NOT_IN:
+//                return !arrayContains(a, o);
             default:
                 return null;
         }
@@ -86,7 +87,7 @@ public final class FTuple implements FType<Object[]> {
     }
 
     @Override
-    public Object __setattr__(Object[] a, Object o) {
+    public Object __setattr__(Object[] a, Object o, Object v) {
         return null;
     }
 
@@ -97,11 +98,6 @@ public final class FTuple implements FType<Object[]> {
 
     @Override
     public Object __dir__(Object[] a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __call__(Object[] a, Object o) {
         return null;
     }
 
@@ -123,7 +119,7 @@ public final class FTuple implements FType<Object[]> {
     }
 
     @Override
-    public Object __setitem__(Object[] a, Object o) {
+    public Object __setitem__(Object[] a, Object o, Object v) {
         return null;
     }
 
@@ -133,12 +129,12 @@ public final class FTuple implements FType<Object[]> {
     }
 
     @Override
-    public Object __iter__(Object[] a, Object o) {
+    public Object iterator(Object[] a) {
         return null;
     }
 
     @Override
-    public Object __reversed__(Object[] a, Object o) {
+    public Object reversed(Object[] a) {
         return null;
     }
 
@@ -199,12 +195,12 @@ public final class FTuple implements FType<Object[]> {
     }
 
     @Override
-    public Object __enter__(Object[] a, Object o) {
+    public Object context_enter(Object[] a) {
         return null;
     }
 
     @Override
-    public Object __exit__(Object[] a, Object o) {
+    public Object context_exit(Object[] a, Object o) {
         return null;
     }
 }
