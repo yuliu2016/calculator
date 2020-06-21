@@ -1,5 +1,8 @@
 package org.fugalang.core.object;
 
+import org.fugalang.core.object.type.FMetaType;
+import org.fugalang.core.object.type.FType;
+
 import java.util.Set;
 
 public class FSet implements FType<Set<Object>> {
@@ -16,42 +19,37 @@ public class FSet implements FType<Set<Object>> {
     }
 
     @Override
-    public Object __getattr__(Set<Object> a, Object o) {
+    public Object getattr(Set<Object> a, Object o) {
         return null;
     }
 
     @Override
-    public Object __setattr__(Set<Object> a, Object o, Object v) {
+    public Object setattr(Set<Object> a, Object o, Object v) {
         return null;
     }
 
     @Override
-    public Object __delattr__(Set<Object> a, Object o) {
+    public Object delattr(Set<Object> a, Object o) {
         return null;
     }
 
     @Override
-    public Object __dir__(Set<Object> a, Object o) {
+    public Object length(Set<Object> a) {
         return null;
     }
 
     @Override
-    public Object __len__(Set<Object> a) {
+    public Object get(Set<Object> a, Object o) {
         return null;
     }
 
     @Override
-    public Object __getitem__(Set<Object> a, Object o) {
+    public Object set(Set<Object> a, Object o, Object v) {
         return null;
     }
 
     @Override
-    public Object __setitem__(Set<Object> a, Object o, Object v) {
-        return null;
-    }
-
-    @Override
-    public Object __delitem__(Set<Object> a, Object o) {
+    public Object del(Set<Object> a, Object o) {
         return null;
     }
 
@@ -92,6 +90,11 @@ public class FSet implements FType<Set<Object>> {
 
     @Override
     public Object context_exit(Set<Object> a, Object o) {
+        return null;
+    }
+
+    @Override
+    public FMetaType meta() {
         return null;
     }
 }

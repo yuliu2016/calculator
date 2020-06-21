@@ -1,6 +1,8 @@
 package org.fugalang.core.object;
 
-import org.fugalang.core.eval.FEval;
+import org.fugalang.core.eval.FAbstract;
+import org.fugalang.core.object.type.FMetaType;
+import org.fugalang.core.object.type.FType;
 
 import java.math.BigInteger;
 
@@ -25,46 +27,41 @@ public final class FLong implements FType<BigInteger> {
         } else {
             return null;
         }
-        return FEval.compareOp(compare_op, cmp_result);
+        return FAbstract.compareOp(compare_op, cmp_result);
     }
 
     @Override
-    public Object __getattr__(BigInteger a, Object o) {
+    public Object getattr(BigInteger a, Object o) {
         return null;
     }
 
     @Override
-    public Object __setattr__(BigInteger a, Object o, Object v) {
+    public Object setattr(BigInteger a, Object o, Object v) {
         return null;
     }
 
     @Override
-    public Object __delattr__(BigInteger a, Object o) {
+    public Object delattr(BigInteger a, Object o) {
         return null;
     }
 
     @Override
-    public Object __dir__(BigInteger a, Object o) {
+    public Object length(BigInteger a) {
         return null;
     }
 
     @Override
-    public Object __len__(BigInteger a) {
+    public Object get(BigInteger a, Object o) {
         return null;
     }
 
     @Override
-    public Object __getitem__(BigInteger a, Object o) {
+    public Object set(BigInteger a, Object o, Object v) {
         return null;
     }
 
     @Override
-    public Object __setitem__(BigInteger a, Object o, Object v) {
-        return null;
-    }
-
-    @Override
-    public Object __delitem__(BigInteger a, Object o) {
+    public Object del(BigInteger a, Object o) {
         return null;
     }
 
@@ -162,6 +159,11 @@ public final class FLong implements FType<BigInteger> {
 
     @Override
     public Object context_exit(BigInteger a, Object o) {
+        return null;
+    }
+
+    @Override
+    public FMetaType meta() {
         return null;
     }
 }

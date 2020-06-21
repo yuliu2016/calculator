@@ -1,4 +1,4 @@
-package org.fugalang.core;
+package org.fugalang.core.eval;
 
 /* A Java program to evaluate a given expression where tokens are separated
    by space. 

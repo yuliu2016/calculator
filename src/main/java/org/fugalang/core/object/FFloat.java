@@ -1,6 +1,8 @@
 package org.fugalang.core.object;
 
-import org.fugalang.core.eval.FEval;
+import org.fugalang.core.eval.FAbstract;
+import org.fugalang.core.object.type.FMetaType;
+import org.fugalang.core.object.type.FType;
 
 import java.math.BigInteger;
 
@@ -30,46 +32,41 @@ public final class FFloat implements FType<Double> {
         if (o.getClass() == Double.class) y = (double) o;
         else if (o.getClass() == BigInteger.class) y = ((BigInteger) o).doubleValue();
         else return null;
-        return FEval.compareOp(compare_op, Double.compare(a, y));
+        return FAbstract.compareOp(compare_op, Double.compare(a, y));
     }
 
     @Override
-    public Object __getattr__(Double a, Object o) {
+    public Object getattr(Double a, Object o) {
         return null;
     }
 
     @Override
-    public Object __setattr__(Double a, Object o, Object v) {
+    public Object setattr(Double a, Object o, Object v) {
         return null;
     }
 
     @Override
-    public Object __delattr__(Double a, Object o) {
+    public Object delattr(Double a, Object o) {
         return null;
     }
 
     @Override
-    public Object __dir__(Double a, Object o) {
+    public Object length(Double a) {
         return null;
     }
 
     @Override
-    public Object __len__(Double a) {
+    public Object get(Double a, Object o) {
         return null;
     }
 
     @Override
-    public Object __getitem__(Double a, Object o) {
+    public Object set(Double a, Object o, Object v) {
         return null;
     }
 
     @Override
-    public Object __setitem__(Double a, Object o, Object v) {
-        return null;
-    }
-
-    @Override
-    public Object __delitem__(Double a, Object o) {
+    public Object del(Double a, Object o) {
         return null;
     }
 
@@ -164,6 +161,11 @@ public final class FFloat implements FType<Double> {
 
     @Override
     public Object context_exit(Double a, Object o) {
+        return null;
+    }
+
+    @Override
+    public FMetaType meta() {
         return null;
     }
 }

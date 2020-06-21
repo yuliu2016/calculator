@@ -1,46 +1,39 @@
 package org.fugalang.core.object;
 
-import org.fugalang.core.eval.FEval;
-import org.fugalang.core.opcode.CompareOp;
-import org.fugalang.core.opcode.UnaryOp;
+import org.fugalang.core.eval.FAbstract;
+import org.fugalang.core.object.type.FType;
 
-public final class FObject {
+@SuppressWarnings("EqualsWhichDoesntCheckParameterClass")
+public final class FObject<T> {
 
-    public final FType<Object> type;
-    public final Object value;
+    public final FType<T> type;
+    public final T value;
 
-    public FObject(FType<Object> type, Object ob_value) {
+    public FObject(FType<T> type, T value) {
         this.type = type;
-        this.value = ob_value;
+        this.value = value;
     }
 
-    public FType<Object> getType() {
+    public FType<T> getType() {
         return type;
     }
 
-    public Object getValue() {
+    public T getValue() {
         return value;
     }
 
     @Override
     public String toString() {
-        var str = type.unary_op(value, UnaryOp.UNARY_STR);
-        return (str == null || str.getClass() != String.class) ?
-                super.toString() : (String) str;
+        return FAbstract.toString(type, value);
     }
 
     @Override
     public int hashCode() {
-        var hash = type.unary_op(value, UnaryOp.UNARY_HASH);
-        return (hash == null || hash.getClass() != Integer.class) ?
-                super.hashCode() : (int) hash;
+        return FAbstract.hashCode(type, value);
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (!(obj.getClass() == Object.class)) return false;
-        var eq = type.compare_op(value, obj, CompareOp.CMP_EQ);
-        return FEval.isTrue(eq);
+        return FAbstract.equals(type, value, obj);
     }
 }

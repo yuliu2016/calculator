@@ -1,6 +1,8 @@
 package org.fugalang.core.object;
 
-import org.fugalang.core.eval.FEval;
+import org.fugalang.core.eval.FAbstract;
+import org.fugalang.core.object.type.FMetaType;
+import org.fugalang.core.object.type.FType;
 import org.fugalang.core.opcode.BinaryOp;
 
 import java.math.BigInteger;
@@ -24,11 +26,11 @@ public final class FTuple implements FType<Object[]> {
         for (int i = 0; i < m; i++) {
             var x = a[i];
             var y = c[i];
-            if (!FEval.isEqual(x, y)) {
-                return FEval.isTrue(FEval.compare(x, y, cmp_op));
+            if (!FAbstract.equals(x, y)) {
+                return FAbstract.isTrue(FAbstract.compare(x, y, cmp_op));
             }
         }
-        return FEval.compareOp(cmp_op, Integer.compare(a.length, c.length));
+        return FAbstract.compareOp(cmp_op, Integer.compare(a.length, c.length));
     }
 
     private static boolean arrayEquals(Object[] a, Object[] c) {
@@ -39,7 +41,7 @@ public final class FTuple implements FType<Object[]> {
         while (i < a.length) {
             var x = a[i];
             var y = c[i];
-            if (FEval.isEqual(x, y)) {
+            if (FAbstract.equals(x, y)) {
                 i++;
             } else {
                 return false;
@@ -51,7 +53,7 @@ public final class FTuple implements FType<Object[]> {
     @SuppressWarnings("unused")
     private static boolean arrayContains(Object[] a, Object b) {
         for (Object o : a) {
-            if (FEval.isEqual(o, b)) {
+            if (FAbstract.equals(o, b)) {
                 return true;
             }
         }
@@ -82,32 +84,27 @@ public final class FTuple implements FType<Object[]> {
     }
 
     @Override
-    public Object __getattr__(Object[] a, Object o) {
+    public Object getattr(Object[] a, Object o) {
         return null;
     }
 
     @Override
-    public Object __setattr__(Object[] a, Object o, Object v) {
+    public Object setattr(Object[] a, Object o, Object v) {
         return null;
     }
 
     @Override
-    public Object __delattr__(Object[] a, Object o) {
+    public Object delattr(Object[] a, Object o) {
         return null;
     }
 
     @Override
-    public Object __dir__(Object[] a, Object o) {
-        return null;
-    }
-
-    @Override
-    public Object __len__(Object[] a) {
+    public Object length(Object[] a) {
         return a.length;
     }
 
     @Override
-    public Object __getitem__(Object[] a, Object o) {
+    public Object get(Object[] a, Object o) {
         if (o.getClass() == BigInteger.class) {
             var index = ((BigInteger) o).intValue();
             if (index < 0 || index >= a.length) {
@@ -119,12 +116,12 @@ public final class FTuple implements FType<Object[]> {
     }
 
     @Override
-    public Object __setitem__(Object[] a, Object o, Object v) {
+    public Object set(Object[] a, Object o, Object v) {
         return null;
     }
 
     @Override
-    public Object __delitem__(Object[] a, Object o) {
+    public Object del(Object[] a, Object o) {
         return null;
     }
 
@@ -201,6 +198,11 @@ public final class FTuple implements FType<Object[]> {
 
     @Override
     public Object context_exit(Object[] a, Object o) {
+        return null;
+    }
+
+    @Override
+    public FMetaType meta() {
         return null;
     }
 }

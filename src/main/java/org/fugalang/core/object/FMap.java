@@ -1,10 +1,27 @@
 package org.fugalang.core.object;
 
+import org.fugalang.core.object.type.FMetaType;
+import org.fugalang.core.object.type.FType;
+
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class FMap implements FType<Map<Object, Object>> {
 
     static FMap INSTANCE = new FMap();
+
+    public static Object fromMap(Map<?, ?> m) {
+        return new LinkedHashMap<Object, Object>(m);
+    }
+
+    public static Object newMap() {
+        return new LinkedHashMap<>();
+    }
+
+    public static Object emptyMap() {
+        return Collections.emptyMap();
+    }
 
     private FMap() {
 
@@ -17,42 +34,37 @@ public class FMap implements FType<Map<Object, Object>> {
     }
 
     @Override
-    public Object __getattr__(Map<Object, Object> a, Object o) {
+    public Object getattr(Map<Object, Object> a, Object o) {
         return null;
     }
 
     @Override
-    public Object __setattr__(Map<Object, Object> a, Object o, Object v) {
+    public Object setattr(Map<Object, Object> a, Object o, Object v) {
         return null;
     }
 
     @Override
-    public Object __delattr__(Map<Object, Object> a, Object o) {
+    public Object delattr(Map<Object, Object> a, Object o) {
         return null;
     }
 
     @Override
-    public Object __dir__(Map<Object, Object> a, Object o) {
+    public Object length(Map<Object, Object> a) {
         return null;
     }
 
     @Override
-    public Object __len__(Map<Object, Object> a) {
+    public Object get(Map<Object, Object> a, Object o) {
         return null;
     }
 
     @Override
-    public Object __getitem__(Map<Object, Object> a, Object o) {
+    public Object set(Map<Object, Object> a, Object o, Object v) {
         return null;
     }
 
     @Override
-    public Object __setitem__(Map<Object, Object> a, Object o, Object v) {
-        return null;
-    }
-
-    @Override
-    public Object __delitem__(Map<Object, Object> a, Object o) {
+    public Object del(Map<Object, Object> a, Object o) {
         return null;
     }
 
@@ -93,6 +105,11 @@ public class FMap implements FType<Map<Object, Object>> {
 
     @Override
     public Object context_exit(Map<Object, Object> a, Object o) {
+        return null;
+    }
+
+    @Override
+    public FMetaType meta() {
         return null;
     }
 }

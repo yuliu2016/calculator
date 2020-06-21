@@ -1,5 +1,8 @@
 package org.fugalang.core.object;
 
+import org.fugalang.core.object.type.FMetaType;
+import org.fugalang.core.object.type.FType;
+
 public class FString implements FType<String> {
 
     static FString INSTANCE = new FString();
@@ -13,42 +16,37 @@ public class FString implements FType<String> {
     }
 
     @Override
-    public Object __getattr__(String s, Object o) {
+    public Object getattr(String s, Object o) {
         return null;
     }
 
     @Override
-    public Object __setattr__(String s, Object o, Object v) {
+    public Object setattr(String s, Object o, Object v) {
         return null;
     }
 
     @Override
-    public Object __delattr__(String s, Object o) {
+    public Object delattr(String s, Object o) {
         return null;
     }
 
     @Override
-    public Object __dir__(String s, Object o) {
+    public Object length(String s) {
         return null;
     }
 
     @Override
-    public Object __len__(String s) {
+    public Object get(String s, Object o) {
         return null;
     }
 
     @Override
-    public Object __getitem__(String s, Object o) {
+    public Object set(String s, Object o, Object v) {
         return null;
     }
 
     @Override
-    public Object __setitem__(String s, Object o, Object v) {
-        return null;
-    }
-
-    @Override
-    public Object __delitem__(String s, Object o) {
+    public Object del(String s, Object o) {
         return null;
     }
 
@@ -89,6 +87,11 @@ public class FString implements FType<String> {
 
     @Override
     public Object context_exit(String s, Object o) {
+        return null;
+    }
+
+    @Override
+    public FMetaType meta() {
         return null;
     }
 }

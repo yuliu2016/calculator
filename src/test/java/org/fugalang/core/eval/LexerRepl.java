@@ -1,17 +1,13 @@
-package org.fugalang.core;
+package org.fugalang.core.eval;
 
 import org.fugalang.core.parser.SyntaxError;
-import org.fugalang.core.parser.impl.LazyParserContext;
-import org.fugalang.core.parser.impl.LexingVisitor;
-import org.fugalang.core.parser.impl.SimpleParseTree;
-import org.fugalang.core.peg.parser.FugaParser;
-import org.fugalang.core.peg.wrapper.SingleInput;
 import org.fugalang.core.pprint.ConsoleColor;
-import org.fugalang.core.token.SimpleLexer;
+import org.fugalang.core.pprint.TokenPPrint;
+import org.fugalang.core.token.LexerTests;
 
 import java.util.Scanner;
 
-public class ParserRepl {
+public class LexerRepl {
     public static void main(String[] args) {
         var scanner = new Scanner(System.in);
         String s;
@@ -22,13 +18,8 @@ public class ParserRepl {
                 continue;
             }
             try {
-                var visitor = LexingVisitor.of(s);
-                var lexer = SimpleLexer.of(visitor);
-                var context = LazyParserContext.of(lexer, visitor);
-                var node = SimpleParseTree.parse(context, FugaParser::single_input);
-                var singleInput = new SingleInput(node);
-
-                System.out.println(singleInput.prettyFormat(2));
+                var result = LexerTests.tokenize(s);
+                System.out.print(TokenPPrint.format(result));
             } catch (SyntaxError e) {
                 System.out.print(ConsoleColor.RED);
                 System.out.println(e.getMessage());

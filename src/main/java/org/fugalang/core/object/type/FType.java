@@ -1,19 +1,18 @@
-package org.fugalang.core.object;
+package org.fugalang.core.object.type;
 
 @SuppressWarnings("unused")
 public interface FType<T> {
 
     // Customizing attribute acces
-    Object __getattr__(T a, Object o);
-    Object __setattr__(T a, Object o, Object v);
-    Object __delattr__(T a, Object o);
-    Object __dir__(T a, Object o);
+    Object getattr(T a, Object o);
+    Object setattr(T a, Object o, Object v);
+    Object delattr(T a, Object o);
 
-    // Sequences
-    Object __len__(T a);
-    Object __getitem__(T a, Object o);
-    Object __setitem__(T a, Object o, Object v);
-    Object __delitem__(T a, Object o);
+    // Sequences/Maps
+    Object length(T a);
+    Object get(T a, Object o);
+    Object set(T a, Object o, Object v);
+    Object del(T a, Object o);
     Object iterator(T a);
     Object reversed(T a);
 
@@ -35,4 +34,6 @@ public interface FType<T> {
     // Context managers
     Object context_enter(T a);
     Object context_exit(T a, Object o);
+
+    FMetaType meta();
 }

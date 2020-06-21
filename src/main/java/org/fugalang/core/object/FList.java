@@ -1,6 +1,8 @@
 package org.fugalang.core.object;
 
-import org.fugalang.core.eval.FEval;
+import org.fugalang.core.eval.FAbstract;
+import org.fugalang.core.object.type.FMetaType;
+import org.fugalang.core.object.type.FType;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -21,11 +23,11 @@ public class FList implements FType<List<Object>> {
         for (int i = 0; i < m; i++) {
             var x = a.get(i);
             var y = c.get(i);
-            if (!FEval.isEqual(x, y)) {
-                return FEval.isTrue(FEval.compare(x, y, cmp_op));
+            if (!FAbstract.equals(x, y)) {
+                return FAbstract.isTrue(FAbstract.compare(x, y, cmp_op));
             }
         }
-        return FEval.compareOp(cmp_op, Integer.compare(a.size(), c.size()));
+        return FAbstract.compareOp(cmp_op, Integer.compare(a.size(), c.size()));
     }
 
     private static boolean listEquals(List<Object> a, List<?> c) {
@@ -36,7 +38,7 @@ public class FList implements FType<List<Object>> {
         while (i < a.size()) {
             var x = a.get(i);
             var y = c.get(i);
-            if (FEval.isEqual(x, y)) {
+            if (FAbstract.equals(x, y)) {
                 i++;
             } else {
                 return false;
@@ -48,7 +50,7 @@ public class FList implements FType<List<Object>> {
     @SuppressWarnings("unused")
     private static boolean listContains(List<Object> a, Object b) {
         for (Object o : a) {
-            if (FEval.isEqual(o, b)) {
+            if (FAbstract.equals(o, b)) {
                 return true;
             }
         }
@@ -80,32 +82,27 @@ public class FList implements FType<List<Object>> {
     }
 
     @Override
-    public Object __getattr__(List<Object> a, Object o) {
+    public Object getattr(List<Object> a, Object o) {
         return null;
     }
 
     @Override
-    public Object __setattr__(List<Object> a, Object o, Object v) {
+    public Object setattr(List<Object> a, Object o, Object v) {
         return null;
     }
 
     @Override
-    public Object __delattr__(List<Object> a, Object o) {
+    public Object delattr(List<Object> a, Object o) {
         return null;
     }
 
     @Override
-    public Object __dir__(List<Object> a, Object o) {
+    public Object length(List<Object> a) {
         return null;
     }
 
     @Override
-    public Object __len__(List<Object> a) {
-        return null;
-    }
-
-    @Override
-    public Object __getitem__(List<Object> a, Object o) {
+    public Object get(List<Object> a, Object o) {
         if (o.getClass() == BigInteger.class) {
             var index = ((BigInteger) o).intValue();
             if (index < 0 || index >= a.size()) {
@@ -117,12 +114,12 @@ public class FList implements FType<List<Object>> {
     }
 
     @Override
-    public Object __setitem__(List<Object> a, Object o, Object v) {
+    public Object set(List<Object> a, Object o, Object v) {
         return null;
     }
 
     @Override
-    public Object __delitem__(List<Object> a, Object o) {
+    public Object del(List<Object> a, Object o) {
         return null;
     }
 
@@ -163,6 +160,11 @@ public class FList implements FType<List<Object>> {
 
     @Override
     public Object context_exit(List<Object> a, Object o) {
+        return null;
+    }
+
+    @Override
+    public FMetaType meta() {
         return null;
     }
 }
