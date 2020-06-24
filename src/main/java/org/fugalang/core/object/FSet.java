@@ -29,7 +29,7 @@ public class FSet implements FType<Set<Object>> {
     }
 
     @Override
-    public Object delattr(Set<Object> a, Object o) {
+    public Object contains(Set<Object> a, Object o) {
         return null;
     }
 
@@ -74,27 +74,17 @@ public class FSet implements FType<Set<Object>> {
     }
 
     @Override
-    public Object rh_binary_op(Set<Object> a, Object b, int binary_op) {
+    public Object rh_binary_op(Set<Object> a, Object o, int binary_op) {
         return null;
     }
 
     @Override
-    public Object inplace_binary_op(Set<Object> a, Object b, int binary_op) {
+    public Object inplace_binary_op(Set<Object> a, Object o, int binary_op) {
         return null;
     }
 
     @Override
-    public Object context_enter(Set<Object> a) {
-        return null;
-    }
-
-    @Override
-    public Object context_exit(Set<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public FMetaType meta() {
+    public FMetaType metaType() {
         return null;
     }
 }

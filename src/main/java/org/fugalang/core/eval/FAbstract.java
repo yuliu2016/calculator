@@ -37,7 +37,7 @@ public class FAbstract {
     public static boolean isTrue(Object o) {
         if (o == null) return false;
         if (o.getClass() == Boolean.class) return (boolean) o;
-        var r = typeOf(o).unary_op(o, UNARY_BOOL);
+        var r = unary_op(o, UNARY_BOOL);
         return r == null || r.getClass() != Boolean.class || (boolean) r;
     }
 
@@ -55,10 +55,6 @@ public class FAbstract {
                 return cmp_result > 0;
             case CMP_GE:
                 return cmp_result >= 0;
-//            case CMP_IN:
-//            case CMP_NOT_IN:
-//            case CMP_IS:
-//            case CMP_IS_NOT:
             default:
                 return null;
         }
@@ -76,6 +72,10 @@ public class FAbstract {
     public static <T> boolean equals(FType<T> type, T value, Object obj) {
         if (value == obj) return true;
         return isTrue(type.compare_op(value, obj, CMP_EQ));
+    }
+
+    public static Object unary_op(Object a, int unary_op) {
+        return typeOf(a).unary_op(a, unary_op);
     }
 
     public static Object binary_op(Object a, Object b, int binary_op) {

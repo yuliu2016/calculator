@@ -26,7 +26,7 @@ public class FString implements FType<String> {
     }
 
     @Override
-    public Object delattr(String s, Object o) {
+    public Object contains(String s, Object o) {
         return null;
     }
 
@@ -71,27 +71,17 @@ public class FString implements FType<String> {
     }
 
     @Override
-    public Object rh_binary_op(String a, Object b, int binary_op) {
+    public Object rh_binary_op(String a, Object o, int binary_op) {
         return null;
     }
 
     @Override
-    public Object inplace_binary_op(String a, Object b, int binary_op) {
+    public Object inplace_binary_op(String a, Object o, int binary_op) {
         return null;
     }
 
     @Override
-    public Object context_enter(String s) {
-        return null;
-    }
-
-    @Override
-    public Object context_exit(String s, Object o) {
-        return null;
-    }
-
-    @Override
-    public FMetaType meta() {
+    public FMetaType metaType() {
         return null;
     }
 }

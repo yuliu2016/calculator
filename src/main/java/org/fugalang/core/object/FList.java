@@ -47,17 +47,6 @@ public class FList implements FType<List<Object>> {
         return true;
     }
 
-    @SuppressWarnings("unused")
-    private static boolean listContains(List<Object> a, Object b) {
-        for (Object o : a) {
-            if (FAbstract.equals(o, b)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-
     @Override
     public Object compare_op(List<Object> a, Object o, int compare_op) {
         switch (compare_op) {
@@ -92,8 +81,13 @@ public class FList implements FType<List<Object>> {
     }
 
     @Override
-    public Object delattr(List<Object> a, Object o) {
-        return null;
+    public Object contains(List<Object> a, Object o) {
+        for (Object o1 : a) {
+            if (FAbstract.equals(o1, o)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -144,27 +138,17 @@ public class FList implements FType<List<Object>> {
     }
 
     @Override
-    public Object rh_binary_op(List<Object> a, Object b, int binary_op) {
+    public Object rh_binary_op(List<Object> a, Object o, int binary_op) {
         return null;
     }
 
     @Override
-    public Object inplace_binary_op(List<Object> a, Object b, int binary_op) {
+    public Object inplace_binary_op(List<Object> a, Object o, int binary_op) {
         return null;
     }
 
     @Override
-    public Object context_enter(List<Object> a) {
-        return null;
-    }
-
-    @Override
-    public Object context_exit(List<Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public FMetaType meta() {
+    public FMetaType metaType() {
         return null;
     }
 }

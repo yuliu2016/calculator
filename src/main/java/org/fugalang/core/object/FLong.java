@@ -41,7 +41,7 @@ public final class FLong implements FType<BigInteger> {
     }
 
     @Override
-    public Object delattr(BigInteger a, Object o) {
+    public Object contains(BigInteger a, Object o) {
         return null;
     }
 
@@ -143,27 +143,17 @@ public final class FLong implements FType<BigInteger> {
     }
 
     @Override
-    public Object rh_binary_op(BigInteger a, Object b, int binary_op) {
+    public Object rh_binary_op(BigInteger a, Object o, int binary_op) {
         return null;
     }
 
     @Override
-    public Object inplace_binary_op(BigInteger a, Object b, int binary_op) {
+    public Object inplace_binary_op(BigInteger a, Object o, int binary_op) {
         return null;
     }
 
     @Override
-    public Object context_enter(BigInteger a) {
-        return null;
-    }
-
-    @Override
-    public Object context_exit(BigInteger a, Object o) {
-        return null;
-    }
-
-    @Override
-    public FMetaType meta() {
+    public FMetaType metaType() {
         return null;
     }
 }

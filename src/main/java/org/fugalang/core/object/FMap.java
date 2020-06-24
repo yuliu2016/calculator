@@ -44,7 +44,7 @@ public class FMap implements FType<Map<Object, Object>> {
     }
 
     @Override
-    public Object delattr(Map<Object, Object> a, Object o) {
+    public Object contains(Map<Object, Object> a, Object o) {
         return null;
     }
 
@@ -89,27 +89,17 @@ public class FMap implements FType<Map<Object, Object>> {
     }
 
     @Override
-    public Object rh_binary_op(Map<Object, Object> a, Object b, int binary_op) {
+    public Object rh_binary_op(Map<Object, Object> a, Object o, int binary_op) {
         return null;
     }
 
     @Override
-    public Object inplace_binary_op(Map<Object, Object> a, Object b, int binary_op) {
+    public Object inplace_binary_op(Map<Object, Object> a, Object o, int binary_op) {
         return null;
     }
 
     @Override
-    public Object context_enter(Map<Object, Object> a) {
-        return null;
-    }
-
-    @Override
-    public Object context_exit(Map<Object, Object> a, Object o) {
-        return null;
-    }
-
-    @Override
-    public FMetaType meta() {
+    public FMetaType metaType() {
         return null;
     }
 }

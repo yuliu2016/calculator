@@ -46,7 +46,7 @@ public final class FFloat implements FType<Double> {
     }
 
     @Override
-    public Object delattr(Double a, Object o) {
+    public Object contains(Double a, Object o) {
         return null;
     }
 
@@ -145,27 +145,17 @@ public final class FFloat implements FType<Double> {
     }
 
     @Override
-    public Object rh_binary_op(Double a, Object b, int binary_op) {
-        return binary_op(a, b, binary_op);
+    public Object rh_binary_op(Double a, Object o, int binary_op) {
+        return binary_op(a, o, binary_op);
     }
 
     @Override
-    public Object inplace_binary_op(Double a, Object b, int binary_op) {
-        return binary_op(a, b, binary_op);
+    public Object inplace_binary_op(Double a, Object o, int binary_op) {
+        return binary_op(a, o, binary_op);
     }
 
     @Override
-    public Object context_enter(Double a) {
-        return null;
-    }
-
-    @Override
-    public Object context_exit(Double a, Object o) {
-        return null;
-    }
-
-    @Override
-    public FMetaType meta() {
+    public FMetaType metaType() {
         return null;
     }
 }

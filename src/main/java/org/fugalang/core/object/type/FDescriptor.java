@@ -2,7 +2,7 @@ package org.fugalang.core.object.type;
 
 public class FDescriptor implements FType<FMetaType> {
     @Override
-    public FMetaType meta() {
+    public FMetaType metaType() {
         return null;
     }
 
@@ -17,7 +17,7 @@ public class FDescriptor implements FType<FMetaType> {
     }
 
     @Override
-    public Object delattr(FMetaType a, Object o) {
+    public Object contains(FMetaType a, Object o) {
         return null;
     }
 
@@ -67,22 +67,13 @@ public class FDescriptor implements FType<FMetaType> {
     }
 
     @Override
-    public Object rh_binary_op(FMetaType a, Object b, int binary_op) {
+    public Object rh_binary_op(FMetaType a, Object o, int binary_op) {
         return null;
     }
 
     @Override
-    public Object inplace_binary_op(FMetaType a, Object b, int binary_op) {
+    public Object inplace_binary_op(FMetaType a, Object o, int binary_op) {
         return null;
     }
 
-    @Override
-    public Object context_enter(FMetaType a) {
-        return null;
-    }
-
-    @Override
-    public Object context_exit(FMetaType a, Object o) {
-        return null;
-    }
 }
