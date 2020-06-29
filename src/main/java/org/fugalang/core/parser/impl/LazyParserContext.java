@@ -4,7 +4,7 @@ import org.fugalang.core.parser.LexingContext;
 import org.fugalang.core.parser.ParserContext;
 import org.fugalang.core.parser.ParserElement;
 import org.fugalang.core.parser.SyntaxError;
-import org.fugalang.core.util.LazyArrayList;
+import org.fugalang.core.collection.LazyArrayList;
 
 import java.util.Iterator;
 

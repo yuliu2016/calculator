@@ -70,12 +70,12 @@ public final class FTuple implements FType<Object[]> {
     }
 
     @Override
-    public Object getattr(Object[] a, Object o) {
+    public Object get(Object[] a, int index) {
         return null;
     }
 
     @Override
-    public Object setattr(Object[] a, Object o, Object v) {
+    public Object set(Object[] a, int index, Object v) {
         return null;
     }
 

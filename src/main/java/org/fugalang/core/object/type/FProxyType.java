@@ -13,12 +13,12 @@ public class FProxyType<T> implements FType<T> {
     }
 
     @Override
-    public Object getattr(T a, Object o) {
+    public Object get(T a, int index) {
         return null;
     }
 
     @Override
-    public Object setattr(T a, Object o, Object v) {
+    public Object set(T a, int index, Object v) {
         return null;
     }
 

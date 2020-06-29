@@ -31,12 +31,12 @@ public final class FLong implements FType<BigInteger> {
     }
 
     @Override
-    public Object getattr(BigInteger a, Object o) {
+    public Object get(BigInteger a, int index) {
         return null;
     }
 
     @Override
-    public Object setattr(BigInteger a, Object o, Object v) {
+    public Object set(BigInteger a, int index, Object v) {
         return null;
     }
 

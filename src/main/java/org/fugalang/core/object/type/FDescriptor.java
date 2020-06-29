@@ -1,18 +1,21 @@
 package org.fugalang.core.object.type;
 
 public class FDescriptor implements FType<FMetaType> {
+
+    public static final FDescriptor INSTANCE = new FDescriptor();
+
     @Override
     public FMetaType metaType() {
         return null;
     }
 
     @Override
-    public Object getattr(FMetaType a, Object o) {
+    public Object get(FMetaType a, int index) {
         return null;
     }
 
     @Override
-    public Object setattr(FMetaType a, Object o, Object v) {
+    public Object set(FMetaType a, int index, Object v) {
         return null;
     }
 

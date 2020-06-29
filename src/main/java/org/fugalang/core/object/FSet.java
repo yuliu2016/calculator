@@ -19,12 +19,12 @@ public class FSet implements FType<Set<Object>> {
     }
 
     @Override
-    public Object getattr(Set<Object> a, Object o) {
+    public Object get(Set<Object> a, int index) {
         return null;
     }
 
     @Override
-    public Object setattr(Set<Object> a, Object o, Object v) {
+    public Object set(Set<Object> a, int index, Object v) {
         return null;
     }
 

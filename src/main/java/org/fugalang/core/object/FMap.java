@@ -34,12 +34,12 @@ public class FMap implements FType<Map<Object, Object>> {
     }
 
     @Override
-    public Object getattr(Map<Object, Object> a, Object o) {
+    public Object get(Map<Object, Object> a, int index) {
         return null;
     }
 
     @Override
-    public Object setattr(Map<Object, Object> a, Object o, Object v) {
+    public Object set(Map<Object, Object> a, int index, Object v) {
         return null;
     }
 

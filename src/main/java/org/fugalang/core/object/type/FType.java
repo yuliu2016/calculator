@@ -7,8 +7,8 @@ public interface FType<T> {
     FMetaType metaType();
 
     // Customizing attribute acces
-    Object getattr(T a, Object o);
-    Object setattr(T a, Object o, Object v);
+    Object get(T a, int index);
+    Object set(T a, int index, Object v);
 
     // Sequences/Maps
     Object length(T a);

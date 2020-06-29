@@ -1,4 +1,4 @@
-package org.fugalang.core.util;
+package org.fugalang.core.collection;
 
 import java.util.ArrayList;
 import java.util.Iterator;

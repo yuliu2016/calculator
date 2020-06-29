@@ -36,12 +36,12 @@ public final class FFloat implements FType<Double> {
     }
 
     @Override
-    public Object getattr(Double a, Object o) {
+    public Object get(Double a, int index) {
         return null;
     }
 
     @Override
-    public Object setattr(Double a, Object o, Object v) {
+    public Object set(Double a, int index, Object v) {
         return null;
     }
 

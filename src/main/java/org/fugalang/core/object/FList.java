@@ -71,12 +71,12 @@ public class FList implements FType<List<Object>> {
     }
 
     @Override
-    public Object getattr(List<Object> a, Object o) {
+    public Object get(List<Object> a, int index) {
         return null;
     }
 
     @Override
-    public Object setattr(List<Object> a, Object o, Object v) {
+    public Object set(List<Object> a, int index, Object v) {
         return null;
     }
 

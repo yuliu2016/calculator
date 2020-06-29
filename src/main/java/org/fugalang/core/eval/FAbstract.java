@@ -1,6 +1,7 @@
 package org.fugalang.core.eval;
 
 import org.fugalang.core.object.FObject;
+import org.fugalang.core.object.type.FDescriptor;
 import org.fugalang.core.object.type.FType;
 
 import java.math.BigInteger;
@@ -27,6 +28,7 @@ public class FAbstract {
         if (cls == BigInteger.class) return LongType;
         if (cls == Double.class) return FloatType;
         if (cls == String.class) return StringType;
+        if (cls == FDescriptor.class) return MetaType;
         if (o instanceof List) return ListType;
         if (o instanceof Map) return MapType;
         if (o instanceof Set) return SetType;

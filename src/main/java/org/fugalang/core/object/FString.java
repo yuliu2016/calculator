@@ -16,12 +16,12 @@ public class FString implements FType<String> {
     }
 
     @Override
-    public Object getattr(String s, Object o) {
+    public Object get(String s, int index) {
         return null;
     }
 
     @Override
-    public Object setattr(String s, Object o, Object v) {
+    public Object set(String s, int index, Object v) {
         return null;
     }
 
