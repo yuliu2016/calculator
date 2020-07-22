@@ -5,7 +5,6 @@ import org.fugalang.core.object.type.FMetaType;
 import org.fugalang.core.object.type.FType;
 import org.fugalang.core.opcode.BinaryOp;
 
-import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.StringJoiner;
 
@@ -96,8 +95,8 @@ public final class FTuple implements FType<Object[]> {
 
     @Override
     public Object get(Object[] a, Object o) {
-        if (o.getClass() == BigInteger.class) {
-            var index = ((BigInteger) o).intValue();
+        if (o.getClass() == Long.class) {
+            var index = (int) (long) o;
             if (index < 0 || index >= a.length) {
                 throw new IndexOutOfBoundsException();
             }

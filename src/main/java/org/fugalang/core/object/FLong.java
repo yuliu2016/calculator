@@ -4,13 +4,11 @@ import org.fugalang.core.eval.FAbstract;
 import org.fugalang.core.object.type.FMetaType;
 import org.fugalang.core.object.type.FType;
 
-import java.math.BigInteger;
-
 import static org.fugalang.core.opcode.BinaryOp.*;
 import static org.fugalang.core.opcode.UnaryOp.*;
 
 
-public final class FLong implements FType<BigInteger> {
+public final class FLong implements FType<Long> {
 
     static FLong INSTANCE = new FLong();
 
@@ -18,10 +16,10 @@ public final class FLong implements FType<BigInteger> {
     }
 
     @Override
-    public Object compare_op(BigInteger a, Object o, int compare_op) {
+    public Object compare_op(Long a, Object o, int compare_op) {
         int cmp_result;
-        if (o.getClass() == BigInteger.class) {
-            cmp_result = a.compareTo((BigInteger) o);
+        if (o.getClass() == Long.class) {
+            cmp_result = Long.compare(a, (Long) o);
         } else if (o.getClass() == Double.class) {
             cmp_result = Double.compare(a.doubleValue(), (Double) o);
         } else {
@@ -31,55 +29,55 @@ public final class FLong implements FType<BigInteger> {
     }
 
     @Override
-    public Object get(BigInteger a, int index) {
+    public Object get(Long a, int index) {
         return null;
     }
 
     @Override
-    public Object set(BigInteger a, int index, Object v) {
+    public Object set(Long a, int index, Object v) {
         return null;
     }
 
     @Override
-    public Object contains(BigInteger a, Object o) {
+    public Object contains(Long a, Object o) {
         return null;
     }
 
     @Override
-    public Object length(BigInteger a) {
+    public Object length(Long a) {
         return null;
     }
 
     @Override
-    public Object get(BigInteger a, Object o) {
+    public Object get(Long a, Object o) {
         return null;
     }
 
     @Override
-    public Object set(BigInteger a, Object o, Object v) {
+    public Object set(Long a, Object o, Object v) {
         return null;
     }
 
     @Override
-    public Object del(BigInteger a, Object o) {
+    public Object del(Long a, Object o) {
         return null;
     }
 
     @Override
-    public Object iterator(BigInteger a) {
+    public Object iterator(Long a) {
         return null;
     }
 
     @Override
-    public Object reversed(BigInteger a) {
+    public Object reversed(Long a) {
         return null;
     }
 
     @Override
-    public Object unary_op(BigInteger a, int unary_op) {
+    public Object unary_op(Long a, int unary_op) {
         switch (unary_op) {
             case UNARY_NEG:
-                return a.negate();
+                return -a;
             case UNARY_POS:
             case UNARY_INT:
             case UNARY_FLOOR:
@@ -89,16 +87,16 @@ public final class FLong implements FType<BigInteger> {
             case UNARY_FLOAT:
                 return a.doubleValue();
             case UNARY_ABS:
-                return a.abs();
+                return Math.abs(a);
             case UNARY_BOOL:
-                return a.signum() != 0;
+                return a != 0;
             case UNARY_HASH:
                 return a.hashCode();
             case UNARY_STR:
             case UNARY_REPR:
                 return a.toString();
             case UNARY_INVERT:
-                return a.not();
+                return ~a;
             case UNARY_TRUNK:
             default:
                 return null;
@@ -106,36 +104,36 @@ public final class FLong implements FType<BigInteger> {
     }
 
     @Override
-    public Object binary_op(BigInteger a, Object o, int binary_op) {
-        if (o.getClass() != BigInteger.class) return null;
-        var b = ((BigInteger) o);
+    public Object binary_op(Long a, Object o, int binary_op) {
+        if (o.getClass() != Long.class) return null;
+        var b = ((Long) o);
         switch (binary_op) {
             case BINOP_ADD:
-                return a.add(b);
+                return a + b;
             case BINOP_SUBTRACT:
-                return a.subtract(b);
+                return a - b;
             case BINOP_MULTIPLY:
-                return a.multiply(b);
+                return a * b;
             case BINOP_DIVIDE:
                 return a.doubleValue() / b.doubleValue();
             case BINOP_FLOORDIV:
-                return a.divide(b);
+                return a / b;
             case BINOP_MOD:
-                return a.mod(b);
+                return a % b;
             case BINOP_DIVMOD:
-                return a.divideAndRemainder(b);
+                return new Object[]{a / b, a % b};
             case BINOP_POW:
-                return a.pow(b.intValue());
+                return Math.pow(a, b);
             case BINOP_LSHIFT:
-                return a.shiftLeft(b.intValue());
+                return a << b;
             case BINOP_RSHIFT:
-                return a.shiftRight(b.intValue());
+                return a >> b;
             case BINOP_AND:
-                return a.and(b);
+                return a & b;
             case BINOP_OR:
-                return a.or(b);
+                return a | b;
             case BINOP_XOR:
-                return a.xor(b);
+                return a ^ b;
             case BINOP_MATMUL:
             default:
                 return null;
@@ -143,12 +141,12 @@ public final class FLong implements FType<BigInteger> {
     }
 
     @Override
-    public Object rh_binary_op(BigInteger a, Object o, int binary_op) {
+    public Object rh_binary_op(Long a, Object o, int binary_op) {
         return null;
     }
 
     @Override
-    public Object inplace_binary_op(BigInteger a, Object o, int binary_op) {
+    public Object inplace_binary_op(Long a, Object o, int binary_op) {
         return null;
     }
 

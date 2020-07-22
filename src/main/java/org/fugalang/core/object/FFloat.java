@@ -4,8 +4,6 @@ import org.fugalang.core.eval.FAbstract;
 import org.fugalang.core.object.type.FMetaType;
 import org.fugalang.core.object.type.FType;
 
-import java.math.BigInteger;
-
 import static org.fugalang.core.opcode.BinaryOp.*;
 import static org.fugalang.core.opcode.UnaryOp.*;
 
@@ -20,8 +18,8 @@ public final class FFloat implements FType<Double> {
         if (o.getClass() == Double.class) {
             return (double) o;
         }
-        if (o.getClass() == BigInteger.class) {
-            return ((BigInteger) o).doubleValue();
+        if (o.getClass() == Long.class) {
+            return ((Long) o).doubleValue();
         }
         return null;
     }
@@ -30,7 +28,7 @@ public final class FFloat implements FType<Double> {
     public Object compare_op(Double a, Object o, int compare_op) {
         double y;
         if (o.getClass() == Double.class) y = (double) o;
-        else if (o.getClass() == BigInteger.class) y = ((BigInteger) o).doubleValue();
+        else if (o.getClass() == Long.class) y = ((Long) o).doubleValue();
         else return null;
         return FAbstract.compareOp(compare_op, Double.compare(a, y));
     }

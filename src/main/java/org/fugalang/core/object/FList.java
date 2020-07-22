@@ -4,12 +4,11 @@ import org.fugalang.core.eval.FAbstract;
 import org.fugalang.core.object.type.FMetaType;
 import org.fugalang.core.object.type.FType;
 
-import java.math.BigInteger;
 import java.util.List;
 
 import static org.fugalang.core.opcode.CompareOp.*;
 
-public class FList implements FType<List<Object>> {
+public final class FList implements FType<List<Object>> {
 
     static FList INSTANCE = new FList();
 
@@ -97,8 +96,8 @@ public class FList implements FType<List<Object>> {
 
     @Override
     public Object get(List<Object> a, Object o) {
-        if (o.getClass() == BigInteger.class) {
-            var index = ((BigInteger) o).intValue();
+        if (o.getClass() == Long.class) {
+            var index = (int) (long) o;
             if (index < 0 || index >= a.size()) {
                 throw new IndexOutOfBoundsException();
             }

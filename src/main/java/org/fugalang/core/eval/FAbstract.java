@@ -4,7 +4,6 @@ import org.fugalang.core.object.FObject;
 import org.fugalang.core.object.type.FDescriptor;
 import org.fugalang.core.object.type.FType;
 
-import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -25,7 +24,7 @@ public class FAbstract {
     private static FType<?> rawTypeOf(Object o) {
         var cls = o.getClass();
         if (cls == FObject.class) return ((FObject<?>) o).type;
-        if (cls == BigInteger.class) return LongType;
+        if (cls == Long.class) return LongType;
         if (cls == Double.class) return FloatType;
         if (cls == String.class) return StringType;
         if (cls == FDescriptor.class) return MetaType;

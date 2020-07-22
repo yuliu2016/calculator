@@ -3,7 +3,7 @@ package org.fugalang.core.object;
 import org.fugalang.core.object.type.FMetaType;
 import org.fugalang.core.object.type.FType;
 
-public class FString implements FType<String> {
+public final class FString implements FType<String> {
 
     static FString INSTANCE = new FString();
 

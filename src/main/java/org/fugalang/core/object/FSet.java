@@ -5,7 +5,7 @@ import org.fugalang.core.object.type.FType;
 
 import java.util.Set;
 
-public class FSet implements FType<Set<Object>> {
+public final class FSet implements FType<Set<Object>> {
 
     static FSet INSTANCE = new FSet();
 
