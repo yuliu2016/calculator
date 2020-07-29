@@ -241,28 +241,15 @@ public class FugaParser {
 
     /**
      * nonlocal_stmt:
-     * *   | 'nonlocal' ','.NAME+
+     * *   | 'nonlocal' name_list
      */
     public static boolean nonlocal_stmt(ParseTree t) {
         var m = t.enter(NONLOCAL_STMT);
         if (m != null) return m;
         boolean r;
         r = t.consume("nonlocal");
-        r = r && nonlocal_stmt_name_loop(t);
+        r = r && name_list(t);
         t.exit(r);
-        return r;
-    }
-
-    private static boolean nonlocal_stmt_name_loop(ParseTree t) {
-        t.enterLoop();
-        var r = t.consume(TokenType.NAME);
-        if (r) while (true) {
-            var p = t.position();
-            if (t.skip(",") && t.consume(TokenType.NAME)) continue;
-            t.reset(p);
-            break;
-        }
-        t.exitLoop();
         return r;
     }
 
@@ -291,6 +278,32 @@ public class FugaParser {
         r = t.consume(",");
         r = r && expr(t);
         t.exit(r);
+        return r;
+    }
+
+    /**
+     * name_list:
+     * *   | ','.NAME+
+     */
+    public static boolean name_list(ParseTree t) {
+        var m = t.enter(NAME_LIST);
+        if (m != null) return m;
+        boolean r;
+        r = name_list_name_loop(t);
+        t.exit(r);
+        return r;
+    }
+
+    private static boolean name_list_name_loop(ParseTree t) {
+        t.enterLoop();
+        var r = t.consume(TokenType.NAME);
+        if (r) while (true) {
+            var p = t.position();
+            if (t.skip(",") && t.consume(TokenType.NAME)) continue;
+            t.reset(p);
+            break;
+        }
+        t.exitLoop();
         return r;
     }
 
@@ -1840,14 +1853,14 @@ public class FugaParser {
 
     /**
      * func_type_hint:
-     * *   | '<' expr '>'
+     * *   | '<' name_list '>'
      */
     public static boolean func_type_hint(ParseTree t) {
         var m = t.enter(FUNC_TYPE_HINT);
         if (m != null) return m;
         boolean r;
         r = t.consume("<");
-        r = r && expr(t);
+        r = r && name_list(t);
         r = r && t.consume(">");
         t.exit(r);
         return r;

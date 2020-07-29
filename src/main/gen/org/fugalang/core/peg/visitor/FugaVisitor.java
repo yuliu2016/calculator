@@ -91,7 +91,7 @@ public interface FugaVisitor<T> {
 
     /**
      * nonlocal_stmt:
-     * *   | 'nonlocal' ','.NAME+
+     * *   | 'nonlocal' name_list
      */
     default T visitNonlocalStmt(NonlocalStmt nonlocalStmt) {
         return null;
@@ -102,6 +102,14 @@ public interface FugaVisitor<T> {
      * *   | 'assert' expr [',' expr]
      */
     default T visitAssertStmt(AssertStmt assertStmt) {
+        return null;
+    }
+
+    /**
+     * name_list:
+     * *   | ','.NAME+
+     */
+    default T visitNameList(NameList nameList) {
         return null;
     }
 
@@ -629,7 +637,7 @@ public interface FugaVisitor<T> {
 
     /**
      * func_type_hint:
-     * *   | '<' expr '>'
+     * *   | '<' name_list '>'
      */
     default T visitFuncTypeHint(FuncTypeHint funcTypeHint) {
         return null;

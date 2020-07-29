@@ -5,7 +5,7 @@ import org.fugalang.core.parser.ParseTreeNode;
 
 /**
  * func_type_hint:
- * *   | '<' expr '>'
+ * *   | '<' name_list '>'
  */
 public final class FuncTypeHint extends NodeWrapper {
 
@@ -13,7 +13,7 @@ public final class FuncTypeHint extends NodeWrapper {
         super(node);
     }
 
-    public Expr expr() {
-        return new Expr(get(1));
+    public NameList nameList() {
+        return new NameList(get(1));
     }
 }

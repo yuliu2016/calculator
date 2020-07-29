@@ -21,6 +21,7 @@ public class FugaRules {
     public static final ParserRule NONLOCAL_STMT = and_rule("nonlocal_stmt");
     public static final ParserRule ASSERT_STMT = and_rule("assert_stmt");
     public static final ParserRule ASSERT_STMT_3 = and_rule("assert_stmt:3");
+    public static final ParserRule NAME_LIST = and_rule("name_list");
     public static final ParserRule STAR_EXPR = and_rule("star_expr");
     public static final ParserRule EXPRLIST = and_rule("exprlist");
     public static final ParserRule TARGET = or_rule("target");

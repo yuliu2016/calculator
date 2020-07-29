@@ -36,12 +36,13 @@ return_stmt:
 raise_stmt:
     | 'raise' expr ['from' expr]
 nonlocal_stmt:
-    | 'nonlocal' ','.NAME+
+    | 'nonlocal' name_list
 assert_stmt:
     | 'assert' expr [',' expr]
 
 # Expression groups
-
+name_list:
+    | ','.NAME+
 star_expr:
     | '*' bitwise_or
 exprlist:
@@ -227,7 +228,7 @@ typed_arg:
 simple_arg:
     | NAME ['=' expr]
 func_type_hint:
-    | '<' expr '>'
+    | '<' name_list '>'
 func_args:
     | simple_arg+
     | '(' [typed_arg_list] ')'
