@@ -6,7 +6,7 @@ import org.fugalang.core.token.TokenType;
 
 /**
  * builder:
- * *   | NAME [builder_hint] builder_args ':' expr
+ * *   | NAME simple_args ':' expr
  * *   | NAME [builder_hint] [builder_args] block_suite
  */
 public final class Builder extends NodeWrapper {
@@ -32,7 +32,7 @@ public final class Builder extends NodeWrapper {
     }
 
     /**
-     * NAME [builder_hint] builder_args ':' expr
+     * NAME simple_args ':' expr
      */
     public static final class Builder1 extends NodeWrapper {
 
@@ -44,20 +44,12 @@ public final class Builder extends NodeWrapper {
             return get(0, TokenType.NAME);
         }
 
-        public BuilderHint builderHint() {
-            return new BuilderHint(get(1));
-        }
-
-        public boolean hasBuilderHint() {
-            return has(1);
-        }
-
-        public BuilderArgs builderArgs() {
-            return new BuilderArgs(get(2));
+        public SimpleArgs simpleArgs() {
+            return new SimpleArgs(get(1));
         }
 
         public Expr expr() {
-            return new Expr(get(4));
+            return new Expr(get(3));
         }
     }
 

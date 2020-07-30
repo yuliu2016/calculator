@@ -95,6 +95,9 @@ PersonWithAge = Person + dataclass(age: int) {}
 a_person = Person("John", "123 Sesame Street")
 same_person = PersonWithAge("John", "123 Sesame Street", 30)
 
+# current grammar does not allow self to have paren around it
+property self : __abs__(self)
+
 /*
 4. The code block
 

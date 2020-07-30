@@ -7,7 +7,7 @@ import org.fugalang.core.token.TokenType;
 /**
  * t_primary:
  * *   | t_primary '.' NAME &t_lookahead
- * *   | t_primary parameters &t_lookahead
+ * *   | t_primary invocation &t_lookahead
  * *   | t_primary subscript &t_lookahead
  * *   | atom &t_lookahead
  */
@@ -25,11 +25,11 @@ public final class TPrimary extends NodeWrapper {
         return has(0);
     }
 
-    public TPrimary2 tPrimaryParametersTLookahead() {
+    public TPrimary2 tPrimaryInvocationTLookahead() {
         return new TPrimary2(get(1));
     }
 
-    public boolean hasTPrimaryParametersTLookahead() {
+    public boolean hasTPrimaryInvocationTLookahead() {
         return has(1);
     }
 
@@ -68,7 +68,7 @@ public final class TPrimary extends NodeWrapper {
     }
 
     /**
-     * t_primary parameters &t_lookahead
+     * t_primary invocation &t_lookahead
      */
     public static final class TPrimary2 extends NodeWrapper {
 
@@ -80,8 +80,8 @@ public final class TPrimary extends NodeWrapper {
             return new TPrimary(get(0));
         }
 
-        public Parameters parameters() {
-            return new Parameters(get(1));
+        public Invocation invocation() {
+            return new Invocation(get(1));
         }
     }
 

@@ -7,7 +7,7 @@ import org.fugalang.core.token.TokenType;
 /**
  * primary:
  * *   | primary '.' NAME
- * *   | primary parameters
+ * *   | primary invocation
  * *   | primary subscript
  * *   | atom
  */
@@ -25,11 +25,11 @@ public final class Primary extends NodeWrapper {
         return has(0);
     }
 
-    public Primary2 primaryParameters() {
+    public Primary2 primaryInvocation() {
         return new Primary2(get(1));
     }
 
-    public boolean hasPrimaryParameters() {
+    public boolean hasPrimaryInvocation() {
         return has(1);
     }
 
@@ -68,7 +68,7 @@ public final class Primary extends NodeWrapper {
     }
 
     /**
-     * primary parameters
+     * primary invocation
      */
     public static final class Primary2 extends NodeWrapper {
 
@@ -80,8 +80,8 @@ public final class Primary extends NodeWrapper {
             return new Primary(get(0));
         }
 
-        public Parameters parameters() {
-            return new Parameters(get(1));
+        public Invocation invocation() {
+            return new Invocation(get(1));
         }
     }
 

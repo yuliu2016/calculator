@@ -143,7 +143,7 @@ public interface FugaVisitor<T> {
     /**
      * t_primary:
      * *   | t_primary '.' NAME &t_lookahead
-     * *   | t_primary parameters &t_lookahead
+     * *   | t_primary invocation &t_lookahead
      * *   | t_primary subscript &t_lookahead
      * *   | atom &t_lookahead
      */
@@ -542,30 +542,30 @@ public interface FugaVisitor<T> {
     }
 
     /**
-     * parameters:
-     * *   | '(' [arglist] ')'
+     * invocation:
+     * *   | '(' [call_arg_list] ')'
      */
-    default T visitParameters(Parameters parameters) {
+    default T visitInvocation(Invocation invocation) {
         return null;
     }
 
     /**
-     * arglist:
-     * *   | ','.argument+ [',']
+     * call_arg_list:
+     * *   | ','.call_arg+ [',']
      */
-    default T visitArglist(Arglist arglist) {
+    default T visitCallArgList(CallArgList callArgList) {
         return null;
     }
 
     /**
-     * argument:
+     * call_arg:
      * *   | NAME ':=' expr
      * *   | NAME '=' expr
      * *   | '**' expr
      * *   | '*' expr
      * *   | expr
      */
-    default T visitArgument(Argument argument) {
+    default T visitCallArg(CallArg callArg) {
         return null;
     }
 
@@ -628,6 +628,14 @@ public interface FugaVisitor<T> {
     }
 
     /**
+     * simple_args:
+     * *   | ','.simple_arg+
+     */
+    default T visitSimpleArgs(SimpleArgs simpleArgs) {
+        return null;
+    }
+
+    /**
      * builder_hint:
      * *   | '<' name_list '>'
      */
@@ -637,7 +645,7 @@ public interface FugaVisitor<T> {
 
     /**
      * builder_args:
-     * *   | simple_arg+
+     * *   | simple_args
      * *   | '(' [typed_arg_list] ')'
      */
     default T visitBuilderArgs(BuilderArgs builderArgs) {
@@ -815,7 +823,7 @@ public interface FugaVisitor<T> {
     /**
      * primary:
      * *   | primary '.' NAME
-     * *   | primary parameters
+     * *   | primary invocation
      * *   | primary subscript
      * *   | atom
      */
@@ -873,7 +881,7 @@ public interface FugaVisitor<T> {
 
     /**
      * builder:
-     * *   | NAME [builder_hint] builder_args ':' expr
+     * *   | NAME simple_args ':' expr
      * *   | NAME [builder_hint] [builder_args] block_suite
      */
     default T visitBuilder(Builder builder) {

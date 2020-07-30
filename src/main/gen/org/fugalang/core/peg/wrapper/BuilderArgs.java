@@ -3,11 +3,9 @@ package org.fugalang.core.peg.wrapper;
 import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
-import java.util.List;
-
 /**
  * builder_args:
- * *   | simple_arg+
+ * *   | simple_args
  * *   | '(' [typed_arg_list] ')'
  */
 public final class BuilderArgs extends NodeWrapper {
@@ -16,8 +14,12 @@ public final class BuilderArgs extends NodeWrapper {
         super(node);
     }
 
-    public List<SimpleArg> simpleArgs() {
-        return getList(0, SimpleArg::new);
+    public SimpleArgs simpleArgs() {
+        return new SimpleArgs(get(0));
+    }
+
+    public boolean hasSimpleArgs() {
+        return has(0);
     }
 
     public BuilderArgs2 builderArgs2() {

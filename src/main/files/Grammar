@@ -54,7 +54,7 @@ target:
     | '(' targetlist ')'
 t_primary:
     | t_primary '.' NAME &t_lookahead
-    | t_primary parameters &t_lookahead
+    | t_primary invocation &t_lookahead
     | t_primary subscript &t_lookahead
     | atom &t_lookahead
 t_lookahead:
@@ -196,11 +196,11 @@ except_suite:
 
 # Function calls
 
-parameters:
-    | '(' [arglist] ')'
-arglist:
-    | ','.argument+  [',']
-argument:
+invocation:
+    | '(' [call_arg_list] ')'
+call_arg_list:
+    | ','.call_arg+  [',']
+call_arg:
     | NAME ':=' expr
     | NAME '=' expr
     | '**' expr
@@ -226,7 +226,7 @@ typed_arg:
 simple_arg:
     | NAME ['=' expr]
 simple_args:
-    | simple_arg+
+    | ",".simple_arg+
 builder_hint:
     | '<' name_list '>'
 builder_args:
@@ -303,7 +303,7 @@ power:
     | primary
 primary:
     | primary '.' NAME
-    | primary parameters
+    | primary invocation
     | primary subscript
     | atom
 tuple_atom:

@@ -141,7 +141,7 @@ class IndexNode implements ParseTreeNode {
                 var chosenComponent = children.get(chosenIndex);
 
                 builder.setName(rule.getRuleName() + "#" + chosenIndex);
-                addNode(chosenComponent, builder);
+                addNode(chosenComponent, builder, true);
             } else if (rule.getRuleType() == RuleType.Conjunction) {
                 builder.setName(rule.getRuleName());
                 addChildren(builder);
@@ -149,21 +149,25 @@ class IndexNode implements ParseTreeNode {
         }
     }
 
-    private void addNode(ParseTreeNode node, TreeStringBuilder builder) {
+    private static void addNode(ParseTreeNode node, TreeStringBuilder builder, boolean collapsible) {
         // this accounts for empty lists
         if (node != null && node.isPresent()) {
             // need to make sure that for a leaf, it doesn't add another set of brackets
             if (node.isLeaf()) {
                 builder.addString(node.asString());
             } else {
-                builder.addElem(node);
+                if (collapsible) {
+                    node.buildString(builder);
+                } else {
+                    builder.addElem(node);
+                }
             }
         }
     }
 
     private void addChildren(TreeStringBuilder builder) {
         for (var node : children) {
-            addNode(node, builder);
+            addNode(node, builder, false);
         }
     }
 }

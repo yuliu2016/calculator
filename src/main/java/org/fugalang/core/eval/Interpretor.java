@@ -652,37 +652,6 @@ public class Interpretor implements FugaVisitor<Object> {
     }
 
     /**
-     * parameters:
-     * *   | '(' [arglist] ')'
-     */
-    @Override
-    public Object visitParameters(Parameters parameters) {
-        return null;
-    }
-
-    /**
-     * arglist:
-     * *   | ','.argument+ [',']
-     */
-    @Override
-    public Object visitArglist(Arglist arglist) {
-        return null;
-    }
-
-    /**
-     * argument:
-     * *   | NAME ':=' expr
-     * *   | NAME '=' expr
-     * *   | '**' expr
-     * *   | '*' expr
-     * *   | expr
-     */
-    @Override
-    public Object visitArgument(Argument argument) {
-        return null;
-    }
-
-    /**
      * typed_arg_list:
      * *   | kwargs
      * *   | args_kwargs
