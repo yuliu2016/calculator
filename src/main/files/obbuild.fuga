@@ -49,27 +49,104 @@ builder_expr:
 
 Compared with the old function syntax, builders just replaced
 the set `def` with an arbitrary NAME
+*/
 
+/*
 1. Named builders
 Builders can be named or anonymous, depending if it's is being
 assigned to a name immediately when it's created.
 
 e.g.
-is_odd = def num: num % 2 != 0
-# the function is being assigned to a name, so it's a named function
-# printed as <function 'is_odd'>
-
-sorted([1,7,2], def x: -x)
-# the function is being passed to another expression. Here it's
-# not a named function, printed as <function ?>
-
-2. Type hints
 */
 
+# this function is being assigned to a name, so it's a named function
+# printed as <function 'is_odd'>
 is_odd = def num: num % 2 != 0
+
+# this function is being passed to another expression. Here it's
+# not a named function, printed as <function ?>
 sorted([1,7,2], def x: -x)
 
+/*
+2. Type hints
+Builder expressions can have type hints
+e.g.
+*/
 
+# specifies that the function returns an int
+is_odd = def<int> num: num % 2 != 0
+
+/*
+3. Function Parameters
+
+A builder can make use of a parameter system.
+
+Parameters have two forms.
+The simple form does not require parentheses, it
+can have parameter names and default-values
+
+The complex form do require parentheses. In addition,
+it allows type annotations, variable arguments, and
+variable keyword arguments
+
+e.g.
+*/
+
+# Simple parameters with enum builders
+Color = enum red, blue, green {}
+Flags = enum x=1, y=2, z=3 {}
+
+# Example of a dataclass builder
+Person = dataclass(name: str, address: str) {}
+# Extending the data class
+PersonWithAge = Person + dataclass(age: int) {}
+# Using the classes
+a_person = Person("John", "123 Sesame Street")
+same_person = PersonWithAge("John", "123 Sesame Street", 30)
+
+/*
+4. The code block
+
+A builder always have a code block.
+It is either a single expression, following a colon,
+or a block surrounded by braces
+
+The builder controls the scope of the block.
+It can:
+- allow or disallow non-local name lookups
+- pre-inject variables into the local scope
+- inspect the resulting block
+
+the nonlocal keyword will allow names to be assigned
+to a scope outside the builder, in addition to reading
+it, if the builder allows that name to be accessed.
+
+Return statements can be made inside blocks as well
+*/
+
+# an example block showing a function
+fib = def(n) {
+    if n <= 2: return 1
+    return fib(n - 1) + fib(n - 2)
+}
+
+Point = dataclass(x:float, y: float) {
+    __abs__ = def self {
+        # self is an injected variable pointing to
+        # an instance of this class
+        return math.hypot(self.x, self.y)
+    }
+
+    @property
+    magnitude = def self {
+        return __abs__(self)
+    }
+
+    @property
+    angle = def self {
+        return math.atan2(self.y, self.x)
+    }
+}
 
 # https://kotlinlang.org/docs/reference/type-safe-builders.html
 html_text = build_html {
@@ -101,4 +178,58 @@ html_text = build_html {
     }
 } -> html_as_text
 
+
+/*
+Kw 1:
+and
+as
+async
+await
+break
+continue
+def
+else
+except
+finally
+for
+from
+if
+import
+in
+is
+not
+or
+pass
+raise
+return
+try
+when
+while
+
+Kw 2:
+False
+None
+True
+array
+class
+complex
+dict
+enum
+ext
+filter
+float
+impl
+int
+list
+map
+print
+property
+protocol
+range
+self
+str
+sum
+zip
+dataclass
+*/
 

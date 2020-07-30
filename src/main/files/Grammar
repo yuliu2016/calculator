@@ -181,6 +181,7 @@ expr_as_name:
 
 block_suite:
     | '{' NEWLINE stmt+ '}'
+    | '{' '}'
 suite:
     | ':' simple_stmt
     | block_suite
@@ -308,7 +309,7 @@ primary:
     | primary '.' NAME
     | primary parameters
     | primary subscript
-    | primary block_suite
+    | primary block_suite !block_suite
     | atom
 tuple_atom:
     | '(' [named_expr_list] ')'

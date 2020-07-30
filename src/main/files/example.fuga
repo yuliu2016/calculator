@@ -94,7 +94,7 @@ class = def(classdef, metaclass=ClassFactory) {
 mul = def(x,y) { return x * y }
 mul = def(x,y): return x * y
 mul = def x, y: x * y
-call(def x, y"" x * y)
+call(def x, y: x * y)
 
 /*
 Pipe operator - precedence

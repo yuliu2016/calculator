@@ -1371,9 +1371,23 @@ public class FugaParser {
     /**
      * block_suite:
      * *   | '{' NEWLINE stmt+ '}'
+     * *   | '{' '}'
      */
     public static boolean block_suite(ParseTree t) {
         var m = t.enter(BLOCK_SUITE);
+        if (m != null) return m;
+        boolean r;
+        r = block_suite_1(t);
+        r = r || block_suite_2(t);
+        t.exit(r);
+        return r;
+    }
+
+    /**
+     * '{' NEWLINE stmt+ '}'
+     */
+    private static boolean block_suite_1(ParseTree t) {
+        var m = t.enter(BLOCK_SUITE_1);
         if (m != null) return m;
         boolean r;
         r = t.consume("{");
@@ -1391,6 +1405,19 @@ public class FugaParser {
             if (!stmt(t)) break;
         }
         t.exitLoop();
+        return r;
+    }
+
+    /**
+     * '{' '}'
+     */
+    private static boolean block_suite_2(ParseTree t) {
+        var m = t.enter(BLOCK_SUITE_2);
+        if (m != null) return m;
+        boolean r;
+        r = t.consume("{");
+        r = r && t.consume("}");
+        t.exit(r);
         return r;
     }
 
@@ -2660,7 +2687,7 @@ public class FugaParser {
      * *   | primary '.' NAME
      * *   | primary parameters
      * *   | primary subscript
-     * *   | primary block_suite
+     * *   | primary block_suite !block_suite
      * *   | atom
      */
     public static boolean primary(ParseTree t) {
@@ -2727,7 +2754,7 @@ public class FugaParser {
     }
 
     /**
-     * primary block_suite
+     * primary block_suite !block_suite
      */
     private static boolean primary_4(ParseTree t) {
         var m = t.enter(PRIMARY_4);
@@ -2735,6 +2762,7 @@ public class FugaParser {
         boolean r;
         r = primary(t);
         r = r && block_suite(t);
+        r = r && !block_suite(t.test());
         t.exit(r);
         return r;
     }

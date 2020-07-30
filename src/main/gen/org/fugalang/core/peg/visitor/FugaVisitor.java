@@ -494,6 +494,7 @@ public interface FugaVisitor<T> {
     /**
      * block_suite:
      * *   | '{' NEWLINE stmt+ '}'
+     * *   | '{' '}'
      */
     default T visitBlockSuite(BlockSuite blockSuite) {
         return null;
@@ -834,7 +835,7 @@ public interface FugaVisitor<T> {
      * *   | primary '.' NAME
      * *   | primary parameters
      * *   | primary subscript
-     * *   | primary block_suite
+     * *   | primary block_suite !block_suite
      * *   | atom
      */
     default T visitPrimary(Primary primary) {
