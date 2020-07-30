@@ -87,8 +87,6 @@ public class FugaRules {
     public static final ParserRule SUITE_1 = and_rule("suite:1");
     public static final ParserRule ELSE_SUITE = and_rule("else_suite");
     public static final ParserRule FINALLY_SUITE = and_rule("finally_suite");
-    public static final ParserRule FUNC_SUITE = or_rule("func_suite");
-    public static final ParserRule FUNC_SUITE_1 = and_rule("func_suite:1");
     public static final ParserRule EXCEPT_CLAUSE = and_rule("except_clause");
     public static final ParserRule EXCEPT_SUITE = and_rule("except_suite");
     public static final ParserRule PARAMETERS = and_rule("parameters");
@@ -112,10 +110,9 @@ public class FugaRules {
     public static final ParserRule TYPED_ARG_2 = and_rule("typed_arg:2");
     public static final ParserRule SIMPLE_ARG = and_rule("simple_arg");
     public static final ParserRule SIMPLE_ARG_2 = and_rule("simple_arg:2");
-    public static final ParserRule FUNC_TYPE_HINT = and_rule("func_type_hint");
-    public static final ParserRule FUNC_ARGS = or_rule("func_args");
-    public static final ParserRule FUNC_ARGS_2 = and_rule("func_args:2");
-    public static final ParserRule FUNCDEF = and_rule("funcdef");
+    public static final ParserRule BUILDER_HINT = and_rule("builder_hint");
+    public static final ParserRule BUILDER_ARGS = or_rule("builder_args");
+    public static final ParserRule BUILDER_ARGS_2 = and_rule("builder_args:2");
     public static final ParserRule NAMED_EXPR = or_rule("named_expr");
     public static final ParserRule NAMED_EXPR_1 = and_rule("named_expr:1");
     public static final ParserRule CONDITIONAL = and_rule("conditional");
@@ -162,12 +159,14 @@ public class FugaRules {
     public static final ParserRule PRIMARY_1 = and_rule("primary:1");
     public static final ParserRule PRIMARY_2 = and_rule("primary:2");
     public static final ParserRule PRIMARY_3 = and_rule("primary:3");
-    public static final ParserRule PRIMARY_4 = and_rule("primary:4");
     public static final ParserRule TUPLE_ATOM = and_rule("tuple_atom");
     public static final ParserRule LIST_ITER = and_rule("list_iter");
     public static final ParserRule LIST_ATOM = and_rule("list_atom");
     public static final ParserRule SET_ATOM = and_rule("set_atom");
     public static final ParserRule DICT_ITER = and_rule("dict_iter");
     public static final ParserRule DICT_ATOM = and_rule("dict_atom");
+    public static final ParserRule BUILDER = or_rule("builder");
+    public static final ParserRule BUILDER_1 = and_rule("builder:1");
+    public static final ParserRule BUILDER_2 = and_rule("builder:2");
     public static final ParserRule ATOM = or_rule("atom");
 }

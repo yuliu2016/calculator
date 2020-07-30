@@ -12,6 +12,7 @@ import org.fugalang.core.token.TokenType;
  * *   | set_atom
  * *   | dict_iter
  * *   | dict_atom
+ * *   | builder
  * *   | NAME
  * *   | NUMBER
  * *   | STRING
@@ -73,39 +74,47 @@ public final class Atom extends NodeWrapper {
         return has(5);
     }
 
-    public String name() {
-        return get(6, TokenType.NAME);
+    public Builder builder() {
+        return new Builder(get(6));
     }
 
-    public boolean hasName() {
+    public boolean hasBuilder() {
         return has(6);
     }
 
-    public String number() {
-        return get(7, TokenType.NUMBER);
+    public String name() {
+        return get(7, TokenType.NAME);
     }
 
-    public boolean hasNumber() {
+    public boolean hasName() {
         return has(7);
     }
 
-    public String string() {
-        return get(8, TokenType.STRING);
+    public String number() {
+        return get(8, TokenType.NUMBER);
     }
 
-    public boolean hasString() {
+    public boolean hasNumber() {
         return has(8);
     }
 
-    public boolean isNone() {
-        return is(9);
+    public String string() {
+        return get(9, TokenType.STRING);
     }
 
-    public boolean isTrue() {
+    public boolean hasString() {
+        return has(9);
+    }
+
+    public boolean isNone() {
         return is(10);
     }
 
-    public boolean isFalse() {
+    public boolean isTrue() {
         return is(11);
+    }
+
+    public boolean isFalse() {
+        return is(12);
     }
 }

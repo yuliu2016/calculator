@@ -6,7 +6,7 @@ public class Keyword {
 
     public static final List<String> ALL_KEYWORDS = List.of(
             // Functional keywords
-            "return", "def", "nonlocal",
+            "return", "nonlocal",
             // Condition keywords
             "if", "elif", "else",
             // Boolean comparisons

@@ -189,9 +189,6 @@ else_suite:
     | 'else' suite
 finally_suite:
     | 'finally' suite
-func_suite:
-    | ':' expr
-    | block_suite
 except_clause:
     | 'except' [expr_as_name] suite
 except_suite:
@@ -210,7 +207,7 @@ argument:
     | '*' expr
     | expr
 
-# Function definitions
+# Builder definitions
 
 typed_arg_list:
     | kwargs
@@ -228,13 +225,13 @@ typed_arg:
     | NAME [':' expr]
 simple_arg:
     | NAME ['=' expr]
-func_type_hint:
-    | '<' name_list '>'
-func_args:
+simple_args:
     | simple_arg+
+builder_hint:
+    | '<' name_list '>'
+builder_args:
+    | simple_args
     | '(' [typed_arg_list] ')'
-funcdef:
-    | 'def' [func_type_hint] [func_args] func_suite
 
 # Expressions
 
@@ -245,7 +242,6 @@ conditional:
     | 'if' disjunction '?' disjunction ':' expr
 expr:
     | conditional
-    | funcdef
     | disjunction
 disjunction:
     | disjunction 'or' conjunction
@@ -309,7 +305,6 @@ primary:
     | primary '.' NAME
     | primary parameters
     | primary subscript
-    | primary block_suite !block_suite
     | atom
 tuple_atom:
     | '(' [named_expr_list] ')'
@@ -323,6 +318,9 @@ dict_iter:
     | '{' dict_item iterator '}'
 dict_atom:
     | '{' [dict_items] '}'
+builder:
+    | NAME simple_args ':' expr
+    | NAME [builder_hint] [builder_args] block_suite
 atom:
     | tuple_atom
     | list_iter
@@ -330,6 +328,7 @@ atom:
     | set_atom
     | dict_iter
     | dict_atom
+    | builder
     | NAME
     | NUMBER
     | STRING

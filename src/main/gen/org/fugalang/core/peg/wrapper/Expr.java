@@ -6,7 +6,6 @@ import org.fugalang.core.parser.ParseTreeNode;
 /**
  * expr:
  * *   | conditional
- * *   | funcdef
  * *   | disjunction
  */
 public final class Expr extends NodeWrapper {
@@ -23,19 +22,11 @@ public final class Expr extends NodeWrapper {
         return has(0);
     }
 
-    public Funcdef funcdef() {
-        return new Funcdef(get(1));
-    }
-
-    public boolean hasFuncdef() {
-        return has(1);
-    }
-
     public Disjunction disjunction() {
-        return new Disjunction(get(2));
+        return new Disjunction(get(1));
     }
 
     public boolean hasDisjunction() {
-        return has(2);
+        return has(1);
     }
 }

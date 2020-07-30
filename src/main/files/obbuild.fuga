@@ -1,27 +1,3 @@
-# Coroutines design
-
-[1, 2, 3] -> [x * x for x] -> 3
-
-# Recursion
-
-fib = def n {
-    if n <= 2: return 1
-    return fib(n - 1) + fib(n - 2)
-}
-
-# Generator coroutine
-
-fib_seq = def {
-    a = 1
-    b = 1
-    while True {
-        yield(a)
-        a, b = b, a + b
-    }
-}
-
-
-
 /*
 Object Builders
 
@@ -48,7 +24,15 @@ builder_expr:
     | NAME [func_type_hint] [func_args] func_suite
 
 Compared with the old function syntax, builders just replaced
-the set `def` with an arbitrary NAME
+the set `def` with an arbitrary NAME.
+
+A special case: the colon form is not allowed when the
+parameter list is empty.
+Allowed:
+def x: pass
+Not Allowed:
+def: pass
+Instead `def {}` must be used instead
 */
 
 /*
@@ -69,12 +53,16 @@ sorted([1,7,2], def x: -x)
 
 /*
 2. Type hints
-Builder expressions can have type hints
+Builder expressions can have type hints.
+
+Only Allowed when there is a block
 e.g.
 */
 
 # specifies that the function returns an int
-is_odd = def<int> num: num % 2 != 0
+is_odd = def<int> num {
+    return num % 2 != 0
+}
 
 /*
 3. Function Parameters
@@ -89,6 +77,9 @@ The complex form do require parentheses. In addition,
 it allows type annotations, variable arguments, and
 variable keyword arguments
 
+The simple form and complex form are distinguished,
+because in some cases it doesn't make sense to
+allow names without parentheses, such as 'property self {}'
 e.g.
 */
 
@@ -127,26 +118,68 @@ Return statements can be made inside blocks as well
 # an example block showing a function
 fib = def(n) {
     if n <= 2: return 1
+    # Recursion is ok here, because names are looked up
+    # at runtime
     return fib(n - 1) + fib(n - 2)
 }
 
+# example showing a dataclass with methods
 Point = dataclass(x:float, y: float) {
     __abs__ = def self {
-        # self is an injected variable pointing to
-        # an instance of this class
         return math.hypot(self.x, self.y)
     }
 
-    @property
-    magnitude = def self {
+    magnitude = property(self) {
         return __abs__(self)
     }
 
-    @property
-    angle = def self {
+    angle = property(self) {
         return math.atan2(self.y, self.x)
     }
 }
+
+
+/*
+Operator Precedence
+
+Evaluated *first* just on the line of primarh
+*/
+
+add = def a, b: a + b
+# equals to
+add = def a, b: (a + b)
+
+# evaluates first
+A = dataclass(a) + dataclass(b)
+
+# do something to an expression after
+# here the function is evaluated first
+myLabel = Label() -> def lb {
+    lb.text = "Hello World"
+    lb.textsize = 18
+}
+
+# also evaluates last
+myLabel = Label() -> def x: x + 1
+
+# since a colon-delimited block parses expr,
+# it may be necessary to put the builder
+# inside parentheses
+y = (def x: x * x)(12)
+
+# the grammar does not allow arbitrary expressions
+# as the builder, it must be a NAME
+# therefore it's the most appropriate to
+# make it an alternative to atom
+
+# this would parse successfully
+if b ? def x: x + 1 : def x: x - 1
+# preferred
+if b ? (def x: x + 1) : (def x: x - 1)
+
+/*
+Object Builder Syntax
+*/
 
 # https://kotlinlang.org/docs/reference/type-safe-builders.html
 html_text = build_html {
@@ -177,6 +210,28 @@ html_text = build_html {
         }
     }
 } -> html_as_text
+
+# Coroutines design
+
+[1, 2, 3] -> [x * x for x] -> 3
+
+# Recursion
+
+fib = def n {
+    if n <= 2: return 1
+    return fib(n - 1) + fib(n - 2)
+}
+
+# Generator coroutine
+
+fib_seq = def {
+    a = 1
+    b = 1
+    while True {
+        yield(a)
+        a, b = b, a + b
+    }
+}
 
 
 /*

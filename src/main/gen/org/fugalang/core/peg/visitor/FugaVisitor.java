@@ -526,15 +526,6 @@ public interface FugaVisitor<T> {
     }
 
     /**
-     * func_suite:
-     * *   | ':' expr
-     * *   | block_suite
-     */
-    default T visitFuncSuite(FuncSuite funcSuite) {
-        return null;
-    }
-
-    /**
      * except_clause:
      * *   | 'except' [expr_as_name] suite
      */
@@ -637,27 +628,19 @@ public interface FugaVisitor<T> {
     }
 
     /**
-     * func_type_hint:
+     * builder_hint:
      * *   | '<' name_list '>'
      */
-    default T visitFuncTypeHint(FuncTypeHint funcTypeHint) {
+    default T visitBuilderHint(BuilderHint builderHint) {
         return null;
     }
 
     /**
-     * func_args:
+     * builder_args:
      * *   | simple_arg+
      * *   | '(' [typed_arg_list] ')'
      */
-    default T visitFuncArgs(FuncArgs funcArgs) {
-        return null;
-    }
-
-    /**
-     * funcdef:
-     * *   | 'def' [func_type_hint] [func_args] func_suite
-     */
-    default T visitFuncdef(Funcdef funcdef) {
+    default T visitBuilderArgs(BuilderArgs builderArgs) {
         return null;
     }
 
@@ -681,7 +664,6 @@ public interface FugaVisitor<T> {
     /**
      * expr:
      * *   | conditional
-     * *   | funcdef
      * *   | disjunction
      */
     default T visitExpr(Expr expr) {
@@ -835,7 +817,6 @@ public interface FugaVisitor<T> {
      * *   | primary '.' NAME
      * *   | primary parameters
      * *   | primary subscript
-     * *   | primary block_suite !block_suite
      * *   | atom
      */
     default T visitPrimary(Primary primary) {
@@ -891,6 +872,15 @@ public interface FugaVisitor<T> {
     }
 
     /**
+     * builder:
+     * *   | NAME [builder_hint] builder_args ':' expr
+     * *   | NAME [builder_hint] [builder_args] block_suite
+     */
+    default T visitBuilder(Builder builder) {
+        return null;
+    }
+
+    /**
      * atom:
      * *   | tuple_atom
      * *   | list_iter
@@ -898,6 +888,7 @@ public interface FugaVisitor<T> {
      * *   | set_atom
      * *   | dict_iter
      * *   | dict_atom
+     * *   | builder
      * *   | NAME
      * *   | NUMBER
      * *   | STRING

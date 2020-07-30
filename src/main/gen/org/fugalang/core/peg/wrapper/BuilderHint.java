@@ -4,12 +4,12 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * func_type_hint:
+ * builder_hint:
  * *   | '<' name_list '>'
  */
-public final class FuncTypeHint extends NodeWrapper {
+public final class BuilderHint extends NodeWrapper {
 
-    public FuncTypeHint(ParseTreeNode node) {
+    public BuilderHint(ParseTreeNode node) {
         super(node);
     }
 

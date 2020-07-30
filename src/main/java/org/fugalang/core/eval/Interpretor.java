@@ -634,16 +634,6 @@ public class Interpretor implements FugaVisitor<Object> {
     }
 
     /**
-     * func_suite:
-     * *   | ':' expr
-     * *   | block_suite
-     */
-    @Override
-    public Object visitFuncSuite(FuncSuite funcSuite) {
-        return null;
-    }
-
-    /**
      * except_clause:
      * *   | 'except' [expr_as_name] suite
      */
@@ -754,34 +744,6 @@ public class Interpretor implements FugaVisitor<Object> {
      */
     @Override
     public Object visitSimpleArg(SimpleArg simpleArg) {
-        return null;
-    }
-
-    /**
-     * func_type_hint:
-     * *   | '<' expr '>'
-     */
-    @Override
-    public Object visitFuncTypeHint(FuncTypeHint funcTypeHint) {
-        return null;
-    }
-
-    /**
-     * func_args:
-     * *   | simple_arg+
-     * *   | '(' [typed_arg_list] ')'
-     */
-    @Override
-    public Object visitFuncArgs(FuncArgs funcArgs) {
-        return null;
-    }
-
-    /**
-     * funcdef:
-     * *   | 'def' [func_type_hint] [func_args] func_suite
-     */
-    @Override
-    public Object visitFuncdef(Funcdef funcdef) {
         return null;
     }
 

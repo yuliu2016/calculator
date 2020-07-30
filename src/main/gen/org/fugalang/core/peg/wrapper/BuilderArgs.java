@@ -6,13 +6,13 @@ import org.fugalang.core.parser.ParseTreeNode;
 import java.util.List;
 
 /**
- * func_args:
+ * builder_args:
  * *   | simple_arg+
  * *   | '(' [typed_arg_list] ')'
  */
-public final class FuncArgs extends NodeWrapper {
+public final class BuilderArgs extends NodeWrapper {
 
-    public FuncArgs(ParseTreeNode node) {
+    public BuilderArgs(ParseTreeNode node) {
         super(node);
     }
 
@@ -20,20 +20,20 @@ public final class FuncArgs extends NodeWrapper {
         return getList(0, SimpleArg::new);
     }
 
-    public FuncArgs2 funcArgs2() {
-        return new FuncArgs2(get(1));
+    public BuilderArgs2 builderArgs2() {
+        return new BuilderArgs2(get(1));
     }
 
-    public boolean hasFuncArgs2() {
+    public boolean hasBuilderArgs2() {
         return has(1);
     }
 
     /**
      * '(' [typed_arg_list] ')'
      */
-    public static final class FuncArgs2 extends NodeWrapper {
+    public static final class BuilderArgs2 extends NodeWrapper {
 
-        public FuncArgs2(ParseTreeNode node) {
+        public BuilderArgs2(ParseTreeNode node) {
             super(node);
         }
 
