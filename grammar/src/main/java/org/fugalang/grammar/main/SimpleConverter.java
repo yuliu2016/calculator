@@ -5,7 +5,7 @@ import org.fugalang.core.token.Operator;
 import org.fugalang.core.token.TokenType;
 import org.fugalang.grammar.gen.ConvertedValue;
 import org.fugalang.grammar.gen.TokenConverter;
-import org.fugalang.grammar.util.ParserStringUtil;
+import org.fugalang.grammar.util.StringUtil;
 
 public class SimpleConverter implements TokenConverter {
     @Override
@@ -15,7 +15,7 @@ public class SimpleConverter implements TokenConverter {
             return new ConvertedValue("boolean", s, s);
         }
         if (Operator.CODE_TO_NAME.containsKey(s)) {
-            var name = ParserStringUtil.convertCase(Operator.CODE_TO_NAME.get(s));
+            var name = StringUtil.convertCase(Operator.CODE_TO_NAME.get(s));
             return new ConvertedValue("boolean", name, s);
         }
 

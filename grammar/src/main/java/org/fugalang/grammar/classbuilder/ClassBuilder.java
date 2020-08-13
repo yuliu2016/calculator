@@ -3,7 +3,7 @@ package org.fugalang.grammar.classbuilder;
 import org.fugalang.core.parser.RuleType;
 import org.fugalang.grammar.gen.PackageOutput;
 import org.fugalang.grammar.util.FirstAndMore;
-import org.fugalang.grammar.util.ParserStringUtil;
+import org.fugalang.grammar.util.StringUtil;
 
 import java.util.*;
 
@@ -102,7 +102,7 @@ public class ClassBuilder {
 
         for (ClassBuilder componentClass : components) {
             var classDef = componentClass.generateClassBody(true);
-            sb.append(ParserStringUtil.indent(classDef, 4));
+            sb.append(StringUtil.indent(classDef, 4));
         }
 
         // add final closing bracket
@@ -119,7 +119,7 @@ public class ClassBuilder {
         }
 
         if (headerComments != null && !headerComments.isBlank()) {
-            sb.append(ParserStringUtil.javadoc(headerComments, 0));
+            sb.append(StringUtil.javadoc(headerComments, 0));
         }
 
         if (isStaticInnerClass) {
@@ -172,7 +172,7 @@ public class ClassBuilder {
     public void generateVisitor(StringBuilder sb) {
         sb.append("\n");
         if (headerComments != null && !headerComments.isBlank()) {
-            sb.append(ParserStringUtil.javadoc(headerComments, 4));
+            sb.append(StringUtil.javadoc(headerComments, 4));
         }
         sb.append("    default T visit")
                 .append(className.getType())
@@ -204,7 +204,7 @@ public class ClassBuilder {
         // rule name constant
 
         if (headerComments != null && !headerComments.isBlank()) {
-            sb.append(ParserStringUtil.javadoc(headerComments, 4));
+            sb.append(StringUtil.javadoc(headerComments, 4));
         }
 
         var visibility = isNamedRule ? "public" : "private";

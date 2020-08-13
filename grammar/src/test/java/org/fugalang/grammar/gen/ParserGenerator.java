@@ -3,7 +3,7 @@ package org.fugalang.grammar.gen;
 import org.fugalang.core.parser.RuleType;
 import org.fugalang.grammar.classbuilder.*;
 import org.fugalang.grammar.psi.*;
-import org.fugalang.grammar.util.ParserStringUtil;
+import org.fugalang.grammar.util.StringUtil;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -118,7 +118,7 @@ public class ParserGenerator {
     public void generateClasses() {
         // do this first because each rule needs to lookup the types of previous rules
         for (var entry : ruleMap.entrySet()) {
-            classNameMap.put(entry.getKey(), ParserStringUtil.convertCase(entry.getKey()));
+            classNameMap.put(entry.getKey(), StringUtil.convertCase(entry.getKey()));
         }
 
         for (var entry : ruleMap.entrySet()) {
@@ -269,7 +269,7 @@ public class ParserGenerator {
             var className = ClassName.of(classType, null);
 
             if (classType.equals("boolean")) {
-                var fieldName = ParserStringUtil
+                var fieldName = StringUtil
                         .prefixCap("isToken", convertedValue.getFieldName());
                 var resultSource = ResultSource.ofTokenLiteral(convertedValue.getSourceLiteral());
 

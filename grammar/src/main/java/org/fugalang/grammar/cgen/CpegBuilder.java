@@ -1,12 +1,11 @@
 package org.fugalang.grammar.cgen;
 
-import org.fugalang.core.parser.RuleType;
+import org.fugalang.grammar.common.PEGUtil;
 import org.fugalang.grammar.gen.PEGBuilder;
-import org.fugalang.grammar.gen.Stringifier;
 import org.fugalang.grammar.gen.TokenConverter;
 import org.fugalang.grammar.peg.wrapper.Grammar;
 import org.fugalang.grammar.peg.wrapper.Rule;
-import org.fugalang.grammar.util.ParserStringUtil;
+import org.fugalang.grammar.util.StringUtil;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -45,11 +44,11 @@ public class CpegBuilder {
     private void generateRuleSet() {
         // do this first because each rule needs to lookup the types of previous rules
         for (var rule : rules) {
-            classNameMap.put(rule.name(), ParserStringUtil.convertCase(rule.name()));
+            classNameMap.put(rule.name(), StringUtil.convertCase(rule.name()));
         }
 
         for (var rule : rules) {
-            var left_recursive = PEGBuilder.isLeftRecursive(rule.name(), rule.altList());
+            var left_recursive = PEGUtil.isLeftRecursive(rule.name(), rule.altList());
 
             var realClassName = classNameMap.get(rule.name());
 //            var className = ClassName.of(realClassName, rule.name());

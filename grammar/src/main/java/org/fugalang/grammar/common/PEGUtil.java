@@ -1,4 +1,4 @@
-package org.fugalang.grammar.gen;
+package org.fugalang.grammar.common;
 
 import org.fugalang.grammar.peg.wrapper.AltList;
 import org.fugalang.grammar.peg.wrapper.Item;
@@ -6,7 +6,7 @@ import org.fugalang.grammar.peg.wrapper.Primary;
 import org.fugalang.grammar.peg.wrapper.Sequence;
 import org.fugalang.grammar.util.FirstAndMore;
 
-import static org.fugalang.grammar.gen.Modifier.*;
+import static org.fugalang.grammar.common.Modifier.*;
 
 public class PEGUtil {
 
@@ -56,5 +56,16 @@ public class PEGUtil {
             return it.hasString() || it.hasName();
         }
         return false;
+    }
+
+    private static String getFirstName(AltList altList) {
+        var primaries = altList.sequence().primarys();
+        if (primaries.isEmpty()) return null;
+        var sub = getModifierItem(primaries.get(0));
+        return sub.hasName() ? sub.name() : null;
+    }
+
+    public static boolean isLeftRecursive(String name, AltList altList) {
+        return !altList.altList2s().isEmpty() && name.equals(getFirstName(altList));
     }
 }

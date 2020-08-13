@@ -1,6 +1,6 @@
-package org.fugalang.grammar.gen;
+package org.fugalang.grammar.common;
 
-public enum  Modifier {
+public enum Modifier {
     TestTrue,
     TestFalse,
     OnceOrMore,

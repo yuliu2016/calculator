@@ -2,8 +2,11 @@ package org.fugalang.grammar.gen;
 
 import org.fugalang.core.parser.RuleType;
 import org.fugalang.grammar.classbuilder.*;
+import org.fugalang.grammar.common.Modifier;
+import org.fugalang.grammar.common.PEGUtil;
+import org.fugalang.grammar.util.StringUtil;
+import org.fugalang.grammar.common.ReprConstructor;
 import org.fugalang.grammar.peg.wrapper.*;
-import org.fugalang.grammar.util.ParserStringUtil;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -44,11 +47,11 @@ public class PEGBuilder {
     public void generateClasses() {
         // do this first because each rule needs to lookup the types of previous rules
         for (var rule : rules) {
-            classNameMap.put(rule.name(), ParserStringUtil.convertCase(rule.name()));
+            classNameMap.put(rule.name(), StringUtil.convertCase(rule.name()));
         }
 
         for (var rule : rules) {
-            var left_recursive = isLeftRecursive(rule.name(), rule.altList());
+            var left_recursive = PEGUtil.isLeftRecursive(rule.name(), rule.altList());
 
             var realClassName = classNameMap.get(rule.name());
             var className = ClassName.of(realClassName, rule.name());
@@ -56,7 +59,7 @@ public class PEGBuilder {
             // use a root class to reduce files
             ClassBuilder cb = classSet.createRootClass(className, left_recursive);
 
-            var rule_repr = Stringifier.INSTANCE.visitRule(rule);
+            var rule_repr = ReprConstructor.INSTANCE.visitRule(rule);
             cb.setHeaderComments(rule_repr);
             cb.setRuleType(RuleType.Disjunction);
 
@@ -103,7 +106,7 @@ public class PEGBuilder {
                     // a list can't hold multiple-ly typed objects
                     var component_cb = classSet.createComponentClass(newClassName);
 
-                    var rule_repr = Stringifier.INSTANCE.visitSequence(sequence);
+                    var rule_repr = ReprConstructor.INSTANCE.visitSequence(sequence);
                     component_cb.setHeaderComments(rule_repr);
                     component_cb.setRuleType(RuleType.Conjunction);
 
@@ -201,7 +204,7 @@ public class PEGBuilder {
         } else {
 
             var component_cb = classSet.createComponentClass(className);
-            var rule_repr = Stringifier.INSTANCE.visitAltList(rule);
+            var rule_repr = ReprConstructor.INSTANCE.visitAltList(rule);
             component_cb.setHeaderComments(rule_repr);
             component_cb.setRuleType(RuleType.Disjunction);
 
@@ -258,7 +261,7 @@ public class PEGBuilder {
             var className = ClassName.of(classType, ruleName);
 
             if (classType.equals("boolean")) {
-                var fieldName = ParserStringUtil
+                var fieldName = StringUtil
                         .prefixCap("is", convertedValue.getFieldName());
                 var resultSource = ResultSource.ofTokenLiteral(convertedValue.getSourceLiteral());
 
@@ -349,14 +352,14 @@ public class PEGBuilder {
             for (var primary : primaries) {
                 var itemString = PEGUtil.getItemString(PEGUtil.getModifierItem(primary));
                 if (sb == null) sb = new StringBuilder();
-                if (ParserStringUtil.isWord(itemString)) {
-                    sb.append(ParserStringUtil.convertCase(itemString));
+                if (StringUtil.isWord(itemString)) {
+                    sb.append(StringUtil.convertCase(itemString));
                 } else {
                     sb.append(converter.checkToken(itemString).getFieldName());
                 }
             }
             if (sb != null) {
-                return ParserStringUtil.decap(sb.toString());
+                return StringUtil.decap(sb.toString());
             }
             throw new IllegalArgumentException();
         }
@@ -371,21 +374,11 @@ public class PEGBuilder {
         }
         if (andList.size() == 1) {
             return getSmartName(className, altList.sequence()) +
-                    "Or" + ParserStringUtil.capitalizeFirstChar(
+                    "Or" + StringUtil.capitalizeFirstChar(
                     getSmartName(className, andList.get(0).sequence())
             );
         }
         return className.decapName();
     }
 
-    private static String getFirstName(AltList altList) {
-        var primaries = altList.sequence().primarys();
-        if (primaries.isEmpty()) return null;
-        var sub = PEGUtil.getModifierItem(primaries.get(0));
-        return sub.hasName() ? sub.name() : null;
-    }
-
-    public static boolean isLeftRecursive(String name, AltList altList) {
-        return !altList.altList2s().isEmpty() && name.equals(getFirstName(altList));
-    }
 }

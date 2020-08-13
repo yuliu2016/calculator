@@ -2,7 +2,7 @@ package org.fugalang.grammar.classbuilder;
 
 
 import org.fugalang.core.parser.RuleType;
-import org.fugalang.grammar.util.ParserStringUtil;
+import org.fugalang.grammar.util.StringUtil;
 
 import static org.fugalang.grammar.classbuilder.FieldType.*;
 
@@ -94,7 +94,7 @@ public class ClassField {
             return null;
         }
         return "\n    public boolean has" +
-                ParserStringUtil.capitalizeFirstChar(fieldName) +
+                StringUtil.capitalizeFirstChar(fieldName) +
                 "() {\n" + body + "    }\n";
     }
 

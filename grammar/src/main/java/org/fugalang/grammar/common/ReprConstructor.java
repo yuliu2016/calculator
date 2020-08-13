@@ -1,15 +1,15 @@
-package org.fugalang.grammar.gen;
+package org.fugalang.grammar.common;
 
 import org.fugalang.grammar.peg.visitor.MetaVisitor;
 import org.fugalang.grammar.peg.wrapper.*;
 
 import java.util.StringJoiner;
 
-public class Stringifier implements MetaVisitor<String> {
+public class ReprConstructor implements MetaVisitor<String> {
 
-    public static final Stringifier INSTANCE = new Stringifier();
+    public static final ReprConstructor INSTANCE = new ReprConstructor();
 
-    private Stringifier() {
+    private ReprConstructor() {
     }
 
     public String stringifyAltList(AltList altList, boolean named) {

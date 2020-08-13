@@ -1,6 +1,6 @@
 package org.fugalang.grammar.common;
 
-import org.fugalang.grammar.util.ParserStringUtil;
+import org.fugalang.grammar.util.StringUtil;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -31,11 +31,11 @@ public class RuleName {
     }
 
     public String getPascalCase() {
-        return ParserStringUtil.convertCase(ruleName);
+        return StringUtil.convertCase(ruleName);
     }
 
     public String getCamelCase() {
-        return ParserStringUtil.decap(getPascalCase());
+        return StringUtil.decap(getPascalCase());
     }
 
     public boolean isSequence() {

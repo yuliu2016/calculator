@@ -1,6 +1,6 @@
 package org.fugalang.grammar.classbuilder;
 
-import org.fugalang.grammar.util.ParserStringUtil;
+import org.fugalang.grammar.util.StringUtil;
 
 public class ClassName {
     private final String realClassName;
@@ -17,7 +17,7 @@ public class ClassName {
 
     private String computeType() {
         if (isList) {
-            return "List<" + ParserStringUtil.capitalizeFirstChar(realClassName) + ">";
+            return "List<" + StringUtil.capitalizeFirstChar(realClassName) + ">";
         }
         return realClassName;
     }
@@ -49,7 +49,7 @@ public class ClassName {
     }
 
     public String decapName() {
-        return ParserStringUtil.decap(typeStr);
+        return StringUtil.decap(typeStr);
     }
 
     @Override
