@@ -1,4 +1,7 @@
-package org.fugalang.grammar.gen;
+package org.fugalang.grammar.main;
+
+import org.fugalang.grammar.gen.PEGBuilder;
+import org.fugalang.grammar.gen.PackageOutput;
 
 public class MetaGenerator {
     private static final String USER_DIR = System.getProperty("user.dir");

@@ -1,8 +1,10 @@
-package org.fugalang.grammar.gen;
+package org.fugalang.grammar.main;
 
 import org.fugalang.core.token.Keyword;
 import org.fugalang.core.token.Operator;
 import org.fugalang.core.token.TokenType;
+import org.fugalang.grammar.gen.ConvertedValue;
+import org.fugalang.grammar.gen.TokenConverter;
 import org.fugalang.grammar.util.ParserStringUtil;
 
 public class SimpleConverter implements TokenConverter {
