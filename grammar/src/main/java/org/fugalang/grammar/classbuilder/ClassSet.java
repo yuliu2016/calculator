@@ -68,7 +68,7 @@ public class ClassSet {
         var current = currentClass;
 
         var dupError = false;
-        for (var builder : current.components) {
+        for (var builder : current.getComponents()) {
             if (builder.getClassName().equals(className.getType())) {
                 dupError = true;
                 break;
@@ -76,7 +76,7 @@ public class ClassSet {
         }
 
         if (dupError) {
-            for (var builder : current.components) {
+            for (var builder : current.getComponents()) {
                 System.out.println(builder.generateClassCode());
             }
             throw new IllegalArgumentException("Duplicate inner class: " + className);
@@ -84,7 +84,7 @@ public class ClassSet {
 
         var builder = new ClassBuilder(packageOutput, className, false);
 
-        current.components.add(builder);
+        current.getComponents().add(builder);
 
         return builder;
     }

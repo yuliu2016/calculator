@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NamedClass {
-    public final ClassBuilder rootClass;
-    public final List<ClassBuilder> components;
+    private final ClassBuilder rootClass;
+    private final List<ClassBuilder> components;
 
     public NamedClass(ClassBuilder rootClass) {
         this.rootClass = rootClass;
@@ -40,5 +40,13 @@ public class NamedClass {
 
     public boolean isLeftRecursive() {
         return rootClass.isLeftRecursive();
+    }
+
+    public ClassBuilder getRootClass() {
+        return rootClass;
+    }
+
+    public List<ClassBuilder> getComponents() {
+        return components;
     }
 }
