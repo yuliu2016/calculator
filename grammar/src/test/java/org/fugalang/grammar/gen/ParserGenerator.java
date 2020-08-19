@@ -2,6 +2,7 @@ package org.fugalang.grammar.gen;
 
 import org.fugalang.core.parser.RuleType;
 import org.fugalang.grammar.classbuilder.*;
+import org.fugalang.grammar.common.FieldType;
 import org.fugalang.grammar.psi.*;
 import org.fugalang.grammar.util.StringUtil;
 

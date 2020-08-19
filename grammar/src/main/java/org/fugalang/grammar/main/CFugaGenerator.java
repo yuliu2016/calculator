@@ -10,8 +10,7 @@ public class CFugaGenerator {
     public static void main(String[] args) throws Exception{
         new CpegBuilder(
                 GeneratorUtil.readGrammar("/", ""),
-                GeneratorUtil.simpleConverter(),
-                CONFIG
+                GeneratorUtil.simpleConverter()
         ).generate(true);
     }
 }

@@ -201,6 +201,32 @@ enum = builder(name, types, args, code) {
     code.eval()
 }
 
+/**
+Native Interface
+examples
+*/
+
+print_impl = jvm.compile(s: str) {
+    return java.lang.System.out.print(s)
+}
+
+print = def(*args, end="\n") {
+    return print_impl("".joint(args) + end)
+}
+
+/**
+Proposal
+
+Make parse tree available instead of function
+e.g.
+*/
+
+A = matrix {
+    (1,2,3) -> row[1]
+    (4,5,6) -> row[2]
+    (7,8,9) -> row[3]
+}
+
 # https://kotlinlang.org/docs/reference/type-safe-builders.html
 html_text = build_html {
     head {

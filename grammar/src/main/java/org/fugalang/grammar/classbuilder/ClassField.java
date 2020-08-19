@@ -2,9 +2,10 @@ package org.fugalang.grammar.classbuilder;
 
 
 import org.fugalang.core.parser.RuleType;
+import org.fugalang.grammar.common.FieldType;
 import org.fugalang.grammar.util.StringUtil;
 
-import static org.fugalang.grammar.classbuilder.FieldType.*;
+import static org.fugalang.grammar.common.FieldType.*;
 
 public class ClassField {
     private final ClassName className;

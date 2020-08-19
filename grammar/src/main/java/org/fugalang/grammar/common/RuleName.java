@@ -53,7 +53,22 @@ public class RuleName {
         return new RuleName(ruleName, suffixArray, true);
     }
 
-    public RuleName of(String ruleName) {
+    public static RuleName of(String ruleName) {
         return new RuleName(ruleName, new int[]{}, false);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        RuleName ruleName1 = (RuleName) o;
+
+        return ruleName.equals(ruleName1.ruleName);
+    }
+
+    @Override
+    public int hashCode() {
+        return ruleName.hashCode();
     }
 }

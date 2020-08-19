@@ -7,22 +7,22 @@ import java.util.List;
  * Rule that has a name, corresponding to
  * {@link org.fugalang.grammar.classbuilder.NamedClass}
  * <p>
- * having multiple {@link CpegFrame}s
+ * having multiple {@link UnitRule}s
  */
-public class CpegNamedRule {
-    private final CpegFrame rootClass;
-    private final List<CpegFrame> components;
+public class NamedRule {
+    private final UnitRule rootClass;
+    private final List<UnitRule> components;
 
-    public CpegNamedRule(CpegFrame root) {
+    public NamedRule(UnitRule root) {
         this.rootClass = root;
         components = new ArrayList<>();
     }
 
-    public CpegFrame getRoot() {
+    public UnitRule getRoot() {
         return rootClass;
     }
 
-    public List<CpegFrame> getComponents() {
+    public List<UnitRule> getComponents() {
         return components;
     }
 

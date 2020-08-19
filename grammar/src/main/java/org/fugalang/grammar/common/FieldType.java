@@ -1,4 +1,4 @@
-package org.fugalang.grammar.classbuilder;
+package org.fugalang.grammar.common;
 
 public enum FieldType {
     Required,
