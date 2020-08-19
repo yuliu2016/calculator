@@ -7,31 +7,31 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class RuleName {
-    private final String ruleName;
+    private final String ruleNameStr;
     private final int[] suffixArray;
     private final boolean isSequence;
 
-    public RuleName(String ruleName, int[] suffixArray, boolean isSequence) {
-        assert ruleName != null;
+    public RuleName(String ruleNameStr, int[] suffixArray, boolean isSequence) {
+        assert ruleNameStr != null;
         assert suffixArray != null;
-        this.ruleName = ruleName;
+        this.ruleNameStr = ruleNameStr;
         this.suffixArray = suffixArray;
         this.isSequence = isSequence;
     }
 
-    public String getRuleName() {
-        return ruleName;
+    public String getRuleNameStr() {
+        return ruleNameStr;
     }
 
     public String getRuleNameFull() {
-        return ruleName + IntStream
+        return ruleNameStr + IntStream
                 .of(suffixArray)
                 .mapToObj(Integer::toString)
                 .collect(Collectors.joining(":", ":", ""));
     }
 
     public String getPascalCase() {
-        return StringUtil.convertCase(ruleName);
+        return StringUtil.convertCase(ruleNameStr);
     }
 
     public String getCamelCase() {
@@ -46,11 +46,11 @@ public class RuleName {
         int currentLen = suffixArray.length;
         int[] newArray = Arrays.copyOf(suffixArray, currentLen + 1);
         newArray[currentLen] = suffix;
-        return new RuleName(ruleName, newArray, isSequence);
+        return new RuleName(ruleNameStr, newArray, isSequence);
     }
 
     public RuleName asSequence() {
-        return new RuleName(ruleName, suffixArray, true);
+        return new RuleName(ruleNameStr, suffixArray, true);
     }
 
     public static RuleName of(String ruleName) {
@@ -64,11 +64,11 @@ public class RuleName {
 
         RuleName ruleName1 = (RuleName) o;
 
-        return ruleName.equals(ruleName1.ruleName);
+        return ruleNameStr.equals(ruleName1.ruleNameStr);
     }
 
     @Override
     public int hashCode() {
-        return ruleName.hashCode();
+        return ruleNameStr.hashCode();
     }
 }

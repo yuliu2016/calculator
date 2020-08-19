@@ -13,7 +13,7 @@ import java.util.Map;
 /**
  * The C version of {@link org.fugalang.grammar.gen.PEGBuilder}
  */
-public class CpegBuilder {
+public class RuleSetBuilder {
 
     // make arguments clear
     private static final boolean REQUIRED = false;
@@ -24,7 +24,7 @@ public class CpegBuilder {
     private final Map<String, RuleName> ruleNameMap = new LinkedHashMap<>();
     private final RuleSet ruleSet;
 
-    public CpegBuilder(
+    public RuleSetBuilder(
             Grammar grammar,
             TokenConverter converter) {
         this.rules = grammar.rules();
@@ -32,14 +32,11 @@ public class CpegBuilder {
         this.ruleSet = new RuleSet();
     }
 
-    public RuleSet generate(boolean toFiles) {
-        if (!ruleSet.getNamedRules().isEmpty()) {
-            throw new IllegalStateException("Cannot repeat generation");
-        }
-
-        generateRuleSet();
-
-        return ruleSet;
+    @SuppressWarnings("UnusedReturnValue")
+    public static RuleSet generateRuleSet(Grammar grammar, TokenConverter converter) {
+        var builder = new RuleSetBuilder(grammar, converter);
+        builder.generateRuleSet();
+        return builder.ruleSet;
     }
 
     private void generateRuleSet() {
@@ -54,11 +51,11 @@ public class CpegBuilder {
 
             var ruleName = ruleNameMap.get(rule.name());
 
-            // use a root class to reduce files
-            UnitRule unit = ruleSet.createRootClass(ruleName, left_recursive);
+            // use a root named rule to reduce files
+            UnitRule unit = ruleSet.createNamedRule(ruleName, left_recursive);
 
-            var rule_repr = ReprConstructor.INSTANCE.visitRule(rule);
-            unit.setHeaderComments(rule_repr);
+            var ruleRepr = ReprConstructor.INSTANCE.visitRule(rule);
+            unit.setHeaderComments(ruleRepr);
             unit.setRuleType(RuleType.Disjunction);
 
             addAltList(ruleName, unit, rule.altList());
@@ -67,77 +64,77 @@ public class CpegBuilder {
             unit.guardMatchEmptyString();
 
             // for checking invariant state
-            ruleSet.markRootClassDone();
+            ruleSet.namedRuleDone();
         }
     }
 
 
     private void addAltList(
-            RuleName className,
-            UnitRule cb,
+            RuleName ruleName,
+            UnitRule unit,
             AltList altList
     ) {
         if (altList.altList2s().isEmpty()) {
-            // only one rule - can propagate fields of this class
+            // only one rule - can propagate fields of this rule
             // but need to change the type here
-            cb.setRuleType(RuleType.Conjunction);
-            addSequence(className, cb, altList.sequence(), REQUIRED);
+            unit.setRuleType(RuleType.Conjunction);
+            addSequence(ruleName, unit, altList.sequence(), REQUIRED);
         } else {
 
-            // For counting component classes
-            int class_count = 1;
+            // For counting component sequences
+            int sequenceCount = 1;
 
-            // must create new classes for AND rules that have more than one
+            // must create new sub rules for AND rules that have more than one
             // REPEAT rule
             for (var sequence : PEGUtil.allSequences(altList)) {
 
-                // add class count to the name, even if not used, because
-                // otherwise could result in the same class names later,
+                // add sequence count to the name, even if not used, because
+                // otherwise could result in the same rule names later,
                 // when there are two branches
-                var newClassName = className.suffix(class_count);
-                class_count++;
+                var newRuleName = ruleName.suffix(sequenceCount);
+                sequenceCount++;
 
                 if (sequence.primarys().size() == 1) {
-                    // only one repeat rule - can propagate fields of this class
-                    addSequence(newClassName, cb, sequence, REQUIRED);
+                    // only one repeat rule - can propagate fields of this unit
+                    addSequence(newRuleName, unit, sequence, REQUIRED);
                 } else {
-                    // need to make a new class for this, because
+                    // need to make a new unit for this, because
                     // a list can't hold multiple-ly typed objects
-                    var component_cb = ruleSet.createComponentClass(newClassName);
+                    var subUnit = ruleSet.createUnnamedSubRule(newRuleName);
 
-                    var rule_repr = ReprConstructor.INSTANCE.visitSequence(sequence);
-                    component_cb.setHeaderComments(rule_repr);
-                    component_cb.setRuleType(RuleType.Conjunction);
+                    var ruleRepr = ReprConstructor.INSTANCE.visitSequence(sequence);
+                    subUnit.setHeaderComments(ruleRepr);
+                    subUnit.setRuleType(RuleType.Conjunction);
 
-                    var smart_name = getSmartName(newClassName, sequence);
+                    var smartName = getSmartName(newRuleName, sequence);
 
-                    // Add a field to the class set
+                    // Add a field to the rule set
                     // The reason to do this first is that if adding the rule fails,
-                    // this class can still show that this point was reached
-                    addField(newClassName,
-                            cb,
-                            smart_name,
+                    // this field can still show that this point was reached
+                    addField(newRuleName,
+                            unit,
+                            smartName,
                             Modifier.Once,
                             REQUIRED,
-                            ResultSource.ofClass(newClassName),
+                            ResultSource.ofUnitRule(newRuleName),
                             null);
 
-                    addSequence(newClassName, component_cb, sequence, REQUIRED);
+                    addSequence(newRuleName, subUnit, sequence, REQUIRED);
                 }
             }
         }
     }
 
     private void addSequence(
-            RuleName className,
-            UnitRule cb,
-            Sequence rule,
+            RuleName ruleName,
+            UnitRule unit,
+            Sequence sequence,
             boolean isOptional
     ) {
-        if (rule.primarys().size() == 1) {
-            addPrimary(className, cb, rule.primarys().get(0), isOptional);
+        if (sequence.primarys().size() == 1) {
+            addPrimary(ruleName, unit, sequence.primarys().get(0), isOptional);
         } else {
-            // don't need to check for component classes - every Primary
+            // don't need to check for subrules - every Primary
             // can be on a single field
 
             // still need to change the names though, since there may be two
@@ -146,20 +143,20 @@ public class CpegBuilder {
             // it's also why there's an if condition: if only one rule, there
             // shouldn't be numbering
 
-            int class_count = 1;
+            int primaryCount = 1;
 
-            for (var primary : rule.primarys()) {
-                var classWithCount = className.suffix(class_count);
-                class_count++;
+            for (var primary : sequence.primarys()) {
+                var ruleNameWithCount = ruleName.suffix(primaryCount);
+                primaryCount++;
 
-                addPrimary(classWithCount, cb, primary, isOptional);
+                addPrimary(ruleNameWithCount, unit, primary, isOptional);
             }
         }
     }
 
     private void addPrimary(
-            RuleName className,
-            UnitRule cb,
+            RuleName ruleName,
+            UnitRule unit,
             Primary primary,
             boolean isOptional
     ) {
@@ -170,102 +167,98 @@ public class CpegBuilder {
 
         switch (PEGUtil.getRuleType(item)) {
             case Group:
-                addAltListAsComponent(className, cb, item.group().altList(),
+                addAltListAsComponent(ruleName, unit, item.group().altList(),
                         modifier, REQUIRED, delimiter);
                 break;
             case Optional:
-                addAltListAsComponent(className, cb,
+                addAltListAsComponent(ruleName, unit,
                         item.optional().altList(), modifier, OPTIONAL, delimiter);
                 break;
             case Token:
-                addToken(cb, modifier, PEGUtil.getItemString(item), isOptional, delimiter);
+                addToken(unit, modifier, PEGUtil.getItemString(item), isOptional, delimiter);
                 break;
         }
     }
 
     private void addAltListAsComponent(
-            RuleName className,
-            UnitRule cb,
-            AltList rule,
+            RuleName ruleName,
+            UnitRule unit,
+            AltList altList,
             Modifier modifier,
             boolean isOptional,
             String delimiter
     ) {
-        // maybe this can just be added to this class
-        // but maybe there needs to be a separate class
+        // maybe this can just be added to this unit rule
+        // but maybe there needs to be a separate sub-rule
 
-        if (rule.altList2s().isEmpty() && rule.sequence().primarys().size() == 1 &&
+        if (altList.altList2s().isEmpty() && altList.sequence().primarys().size() == 1 &&
                 modifier == Modifier.Once) {
             // ^fix - single-char repeats
 
             // just add all the repeat rules and be done with it
-            addSequence(className, cb, rule.sequence(), isOptional);
+            addSequence(ruleName, unit, altList.sequence(), isOptional);
         } else {
 
-            var component_cb = ruleSet.createComponentClass(className);
-            var rule_repr = ReprConstructor.INSTANCE.visitAltList(rule);
+            var component_cb = ruleSet.createUnnamedSubRule(ruleName);
+            var rule_repr = ReprConstructor.INSTANCE.visitAltList(altList);
             component_cb.setHeaderComments(rule_repr);
             component_cb.setRuleType(RuleType.Disjunction);
 
-            var smart_name = getSmartName(className, rule);
+            var smart_name = getSmartName(ruleName, altList);
 
-            // Add a field to the class set
+            // Add a field to the rule set
             // The reason to do this first is that if adding the rule fails,
-            // this class can still show that this point was reached
-            addField(className,
-                    cb,
+            // this field can still show that this point was reached
+            addField(ruleName,
+                    unit,
                     smart_name,
                     modifier,
                     isOptional,
-                    ResultSource.ofClass(className),
+                    ResultSource.ofUnitRule(ruleName),
                     delimiter);
 
-            addAltList(className, component_cb, rule);
+            addAltList(ruleName, component_cb, altList);
         }
     }
 
     private void addToken(
-            UnitRule cb,
+            UnitRule unit,
             Modifier modifier,
             String token,
             boolean isOptional,
             String delimiter
     ) {
 
-        if (classNameMap.containsKey(token)) {
-            // it is referring to another class.
-
-            var classType = classNameMap.get(token);
-            var className = ClassName.of(classType, token);
+        if (ruleNameMap.containsKey(token)) {
+            // it is referring to another named rule.
+            var ruleName = ruleNameMap.get(token);
 
             // fix - need to add repeat rules here
-            addField(className,
-                    cb,
-                    className.decapName(),
+            addField(ruleName,
+                    unit,
+                    ruleName.getCamelCase(),
                     modifier,
                     isOptional,
-                    ResultSource.ofClass(className),
+                    ResultSource.ofUnitRule(ruleName),
                     delimiter);
         } else {
 
-            // not another class generated by the parser
+            // not another named rule generated by the parser
             // add a token value instead
 
             var convertedValue = converter.checkToken(token);
 
             var classType = convertedValue.getClassName();
 
-            // this is used to unambiguously refer to two list references of the same token
-            var ruleName = cb.getRuleName() + ":" + convertedValue.getFieldName().toLowerCase();
-            var className = ClassName.of(classType, ruleName);
+            var ruleName = unit.getRuleName();
 
             if (classType.equals("boolean")) {
                 var fieldName = StringUtil
                         .prefixCap("is", convertedValue.getFieldName());
                 var resultSource = ResultSource.ofTokenLiteral(convertedValue.getSourceLiteral());
 
-                addField(className,
-                        cb,
+                addField(ruleName,
+                        unit,
                         fieldName,
                         modifier,
                         isOptional,
@@ -273,12 +266,12 @@ public class CpegBuilder {
                         delimiter);
             } else {
                 var fieldName = convertedValue.getFieldName();
-                cb.addImport(converter.getTokenTypeClass());
+                unit.setContainsTokenType(true);
                 var resultSource = ResultSource.ofTokenType(converter.getTokenTypeShort() +
                         "." + convertedValue.getSourceLiteral());
 
-                addField(className,
-                        cb,
+                addField(ruleName,
+                        unit,
                         fieldName,
                         modifier,
                         isOptional,
@@ -289,42 +282,42 @@ public class CpegBuilder {
     }
 
     private void addField(
-            RuleName className,
-            UnitRule cb,
+            RuleName ruleName,
+            UnitRule unit,
             String fieldName,
             Modifier modifier,
             boolean isOptional,
             ResultSource resultSource,
             String delimiter
     ) {
-        RuleName newClassName;
+        RuleName newRuleName;
         String newFieldName;
         FieldType fieldType;
         switch (modifier) {
             case TestTrue:
                 newFieldName = fieldName;
-                newClassName = className;
+                newRuleName = ruleName;
                 fieldType = FieldType.RequireTrue;
                 break;
             case TestFalse:
                 newFieldName = fieldName;
-                newClassName = className;
+                newRuleName = ruleName;
                 fieldType = FieldType.RequireFalse;
                 break;
             case OnceOrMore:
-                cb.addImport("java.util.List");
-                newClassName = className.asSequence();
+                unit.setContainsList(true);
+                newRuleName = ruleName.asSequence();
                 newFieldName = fieldName + "s";
                 fieldType = FieldType.RequiredList;
                 break;
             case NoneOrMore:
-                cb.addImport("java.util.List");
-                newClassName = className.asSequence();
+                unit.setContainsList(true);
+                newRuleName = ruleName.asSequence();
                 newFieldName = fieldName + "s";
                 fieldType = FieldType.OptionalList;
                 break;
             case Once:
-                newClassName = className;
+                newRuleName = ruleName;
                 newFieldName = fieldName;
                 fieldType = isOptional ? FieldType.Optional : FieldType.Required;
                 break;
@@ -332,17 +325,17 @@ public class CpegBuilder {
                 throw new IllegalArgumentException();
         }
 
-        var field = new ClassField(
-                newClassName,
+        var field = new UnitField(
+                newRuleName,
                 newFieldName,
                 fieldType,
                 resultSource,
                 delimiter);
 
-        cb.addField(field);
+        unit.addField(field);
     }
 
-    public String getSmartName(RuleName className, Sequence sequence) {
+    public String getSmartName(RuleName ruleName, Sequence sequence) {
         var primaries = sequence.primarys();
         if (primaries.size() <= 3 &&
                 primaries.stream().allMatch(PEGUtil::isSingle)) {
@@ -362,21 +355,21 @@ public class CpegBuilder {
             }
             throw new IllegalArgumentException();
         }
-        return className.getCamelCase();
+        return ruleName.getCamelCase();
     }
 
 
-    public String getSmartName(RuleName className, AltList altList) {
+    public String getSmartName(RuleName ruleName, AltList altList) {
         var andList = altList.altList2s();
         if (andList.isEmpty()) {
-            return getSmartName(className, altList.sequence());
+            return getSmartName(ruleName, altList.sequence());
         }
         if (andList.size() == 1) {
-            return getSmartName(className, altList.sequence()) +
+            return getSmartName(ruleName, altList.sequence()) +
                     "Or" + StringUtil.capitalizeFirstChar(
-                    getSmartName(className, andList.get(0).sequence())
+                    getSmartName(ruleName, andList.get(0).sequence())
             );
         }
-        return className.getCamelCase();
+        return ruleName.getCamelCase();
     }
 }

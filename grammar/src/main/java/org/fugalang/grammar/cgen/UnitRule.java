@@ -1,6 +1,7 @@
 package org.fugalang.grammar.cgen;
 
 import org.fugalang.core.parser.RuleType;
+import org.fugalang.grammar.common.RuleName;
 
 /**
  * The simplest unit of a rule, corresponding to
@@ -12,6 +13,9 @@ import org.fugalang.core.parser.RuleType;
  * It might have another function to gather loop functions
  */
 public class UnitRule {
+    private boolean containsList;
+    private boolean containsTokenType;
+
     public boolean isLeftRecursive() {
         return false;
     }
@@ -29,5 +33,29 @@ public class UnitRule {
     }
 
     public void guardMatchEmptyString() {
+    }
+
+    public RuleName getRuleName() {
+        return null;
+    }
+
+    public boolean isContainsList() {
+        return containsList;
+    }
+
+    public void setContainsList(boolean containsList) {
+        this.containsList = containsList;
+    }
+
+    public boolean isContainsTokenType() {
+        return containsTokenType;
+    }
+
+    public void setContainsTokenType(boolean containsTokenType) {
+        this.containsTokenType = containsTokenType;
+    }
+
+    public void addField(UnitField field) {
+
     }
 }

@@ -20,15 +20,15 @@ public class RuleSet {
 
     }
 
-    public UnitRule createRootClass(RuleName ruleName, boolean isLeftRecursive) {
+    public UnitRule createNamedRule(RuleName ruleName, boolean isLeftRecursive) {
         return null;
     }
 
-    public UnitRule createComponentClass(RuleName ruleName) {
+    public UnitRule createUnnamedSubRule(RuleName ruleName) {
         return null;
     }
 
-    public void markRootClassDone() {
+    public void namedRuleDone() {
 
     }
 }
