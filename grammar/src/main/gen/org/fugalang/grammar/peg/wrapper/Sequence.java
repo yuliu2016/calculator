@@ -15,7 +15,7 @@ public final class Sequence extends NodeWrapper {
         super(node);
     }
 
-    public List<Primary> primarys() {
+    public List<Primary> primaries() {
         return getList(0, Primary::new);
     }
 }

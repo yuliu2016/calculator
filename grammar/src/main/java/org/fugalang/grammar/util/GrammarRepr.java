@@ -52,7 +52,7 @@ public class GrammarRepr implements MetaVisitor<String> {
     @Override
     public String visitSequence(Sequence sequence) {
         StringJoiner joiner = new StringJoiner(" ");
-        for (var primary : sequence.primarys()) {
+        for (var primary : sequence.primaries()) {
             joiner.add(visitPrimary(primary));
         }
         return joiner.toString();

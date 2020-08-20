@@ -99,7 +99,7 @@ public class PEGBuilder {
                 var newClassName = className.suffix(class_count);
                 class_count++;
 
-                if (sequence.primarys().size() == 1) {
+                if (sequence.primaries().size() == 1) {
                     // only one repeat rule - can propagate fields of this class
                     addSequence(newClassName, cb, sequence, REQUIRED);
                 } else {
@@ -136,8 +136,8 @@ public class PEGBuilder {
             Sequence rule,
             boolean isOptional
     ) {
-        if (rule.primarys().size() == 1) {
-            addPrimary(className, cb, rule.primarys().get(0), isOptional);
+        if (rule.primaries().size() == 1) {
+            addPrimary(className, cb, rule.primaries().get(0), isOptional);
         } else {
             // don't need to check for component classes - every Primary
             // can be on a single field
@@ -150,7 +150,7 @@ public class PEGBuilder {
 
             int class_count = 1;
 
-            for (var primary : rule.primarys()) {
+            for (var primary : rule.primaries()) {
                 var classWithCount = className.suffix(class_count);
                 class_count++;
 
@@ -196,7 +196,7 @@ public class PEGBuilder {
         // maybe this can just be added to this class
         // but maybe there needs to be a separate class
 
-        if (rule.altList2s().isEmpty() && rule.sequence().primarys().size() == 1 &&
+        if (rule.altList2s().isEmpty() && rule.sequence().primaries().size() == 1 &&
                 modifier == Modifier.Once) {
             // ^fix - single-char repeats
 
@@ -316,13 +316,13 @@ public class PEGBuilder {
             case OnceOrMore:
                 cb.addImport("java.util.List");
                 newClassName = className.asList();
-                newFieldName = fieldName + "s";
+                newFieldName = StringUtil.pluralize(fieldName);
                 fieldType = FieldType.RequiredList;
                 break;
             case NoneOrMore:
                 cb.addImport("java.util.List");
                 newClassName = className.asList();
-                newFieldName = fieldName + "s";
+                newFieldName = StringUtil.pluralize(fieldName);
                 fieldType = FieldType.OptionalList;
                 break;
             case Once:
@@ -345,7 +345,7 @@ public class PEGBuilder {
     }
 
     public String getSmartName(ClassName className, Sequence sequence) {
-        var primaries = sequence.primarys();
+        var primaries = sequence.primaries();
         if (primaries.size() <= 3 &&
                 primaries.stream().allMatch(PEGUtil::isSingle)) {
 

@@ -60,7 +60,7 @@ public class PEGUtil {
     }
 
     private static String getFirstName(AltList altList) {
-        var primaries = altList.sequence().primarys();
+        var primaries = altList.sequence().primaries();
         if (primaries.isEmpty()) return null;
         var sub = getModifierItem(primaries.get(0));
         return sub.hasName() ? sub.name() : null;

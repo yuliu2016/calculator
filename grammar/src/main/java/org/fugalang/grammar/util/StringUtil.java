@@ -88,4 +88,11 @@ public class StringUtil {
         }
         return true;
     }
+
+    public static String pluralize(String s) {
+        if (s.endsWith("y")) {
+            return s.substring(0, s.length() - 1) + "ies";
+        }
+        return s + "s";
+    }
 }

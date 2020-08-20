@@ -22,11 +22,11 @@ public class ResultSource {
         return new ResultSource(SourceKind.UnitRule, ruleName);
     }
 
-    public static ResultSource ofTokenType(String tokenType) {
+    public static ResultSource ofTokenType(TokenEntry tokenType) {
         return new ResultSource(SourceKind.TokenType, tokenType);
     }
 
-    public static ResultSource ofTokenLiteral(String literal) {
+    public static ResultSource ofTokenLiteral(TokenEntry literal) {
         return new ResultSource(SourceKind.TokenLiteral, literal);
     }
 }

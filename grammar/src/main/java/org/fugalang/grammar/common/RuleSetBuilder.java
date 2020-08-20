@@ -91,7 +91,7 @@ public class RuleSetBuilder {
                 var newRuleName = ruleName.suffix(sequenceCount);
                 sequenceCount++;
 
-                if (sequence.primarys().size() == 1) {
+                if (sequence.primaries().size() == 1) {
                     // only one repeat rule - can propagate fields of this unit
                     addSequence(newRuleName, unit, sequence, REQUIRED);
                 } else {
@@ -128,8 +128,8 @@ public class RuleSetBuilder {
             Sequence sequence,
             boolean isOptional
     ) {
-        if (sequence.primarys().size() == 1) {
-            addPrimary(ruleName, unit, sequence.primarys().get(0), isOptional);
+        if (sequence.primaries().size() == 1) {
+            addPrimary(ruleName, unit, sequence.primaries().get(0), isOptional);
         } else {
             // don't need to check for subrules - every Primary
             // can be on a single field
@@ -142,7 +142,7 @@ public class RuleSetBuilder {
 
             int primaryCount = 1;
 
-            for (var primary : sequence.primarys()) {
+            for (var primary : sequence.primaries()) {
                 var ruleNameWithCount = ruleName.suffix(primaryCount);
                 primaryCount++;
 
@@ -188,7 +188,7 @@ public class RuleSetBuilder {
         // maybe this can just be added to this unit rule
         // but maybe there needs to be a separate sub-rule
 
-        if (altList.altList2s().isEmpty() && altList.sequence().primarys().size() == 1 &&
+        if (altList.altList2s().isEmpty() && altList.sequence().primaries().size() == 1 &&
                 modifier == Modifier.Once) {
             // ^fix - single-char repeats
 
@@ -247,9 +247,8 @@ public class RuleSetBuilder {
             var ruleName = unit.getRuleName();
 
             if (tokenEntry.isLiteral()) {
-                var fieldName = StringUtil
-                        .prefixCap("is", tokenEntry.getNameSnakeCase());
-                var resultSource = ResultSource.ofTokenLiteral(tokenEntry.getLiteralValue());
+                var fieldName = "is_" + tokenEntry.getNameSnakeCase();
+                var resultSource = ResultSource.ofTokenLiteral(tokenEntry);
 
                 addField(ruleName,
                         unit,
@@ -261,7 +260,7 @@ public class RuleSetBuilder {
             } else {
                 var fieldName = tokenEntry.getNameSnakeCase();
                 unit.setContainsTokenType(true);
-                var resultSource = ResultSource.ofTokenType(token);
+                var resultSource = ResultSource.ofTokenType(tokenEntry);
 
                 addField(ruleName,
                         unit,
@@ -300,13 +299,13 @@ public class RuleSetBuilder {
             case OnceOrMore:
                 unit.setContainsList(true);
                 newRuleName = ruleName.asSequence();
-                newFieldName = fieldName + "s";
+                newFieldName = StringUtil.pluralize(fieldName);
                 fieldType = FieldType.RequiredList;
                 break;
             case NoneOrMore:
                 unit.setContainsList(true);
                 newRuleName = ruleName.asSequence();
-                newFieldName = fieldName + "s";
+                newFieldName = StringUtil.pluralize(fieldName);
                 fieldType = FieldType.OptionalList;
                 break;
             case Once:
@@ -329,16 +328,18 @@ public class RuleSetBuilder {
     }
 
     public String getSmartName(RuleName ruleName, Sequence sequence) {
-        var primaries = sequence.primarys();
+        var primaries = sequence.primaries();
         if (primaries.size() <= 3 &&
                 primaries.stream().allMatch(PEGUtil::isSingle)) {
 
             StringBuilder sb = null;
             for (var primary : primaries) {
                 var itemString = PEGUtil.getItemString(PEGUtil.getModifierItem(primary));
+                if (itemString == null) throw new IllegalStateException();
                 if (sb == null) sb = new StringBuilder();
                 if (StringUtil.isWord(itemString)) {
-                    sb.append(StringUtil.convertCase(itemString));
+                    // make lowercase in case it's a token type
+                    sb.append(itemString.toLowerCase());
                 } else {
                     sb.append(tokenMap.lookupOrThrow(itemString).getNameSnakeCase());
                 }
