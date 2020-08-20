@@ -1,7 +1,6 @@
-package org.fugalang.grammar.cgen;
+package org.fugalang.grammar.common;
 
 import org.fugalang.core.parser.RuleType;
-import org.fugalang.grammar.common.RuleName;
 
 /**
  * The simplest unit of a rule, corresponding to

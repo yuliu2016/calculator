@@ -1,10 +1,11 @@
-package org.fugalang.grammar.common;
+package org.fugalang.grammar.util;
 
+import org.fugalang.grammar.common.Modifier;
+import org.fugalang.grammar.common.SubRuleType;
 import org.fugalang.grammar.peg.wrapper.AltList;
 import org.fugalang.grammar.peg.wrapper.Item;
 import org.fugalang.grammar.peg.wrapper.Primary;
 import org.fugalang.grammar.peg.wrapper.Sequence;
-import org.fugalang.grammar.util.FirstAndMore;
 
 import static org.fugalang.grammar.common.Modifier.*;
 

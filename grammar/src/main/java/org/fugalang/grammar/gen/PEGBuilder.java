@@ -4,9 +4,9 @@ import org.fugalang.core.parser.RuleType;
 import org.fugalang.grammar.classbuilder.*;
 import org.fugalang.grammar.common.FieldType;
 import org.fugalang.grammar.common.Modifier;
-import org.fugalang.grammar.common.PEGUtil;
+import org.fugalang.grammar.util.PEGUtil;
 import org.fugalang.grammar.util.StringUtil;
-import org.fugalang.grammar.common.ReprConstructor;
+import org.fugalang.grammar.util.ReprConstructor;
 import org.fugalang.grammar.peg.wrapper.*;
 
 import java.util.LinkedHashMap;

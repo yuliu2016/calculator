@@ -1,6 +1,4 @@
-package org.fugalang.grammar.cgen;
-
-import org.fugalang.grammar.common.RuleName;
+package org.fugalang.grammar.common;
 
 import java.util.ArrayList;
 import java.util.List;

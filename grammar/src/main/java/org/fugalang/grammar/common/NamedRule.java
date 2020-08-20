@@ -1,4 +1,4 @@
-package org.fugalang.grammar.cgen;
+package org.fugalang.grammar.common;
 
 import java.util.ArrayList;
 import java.util.List;

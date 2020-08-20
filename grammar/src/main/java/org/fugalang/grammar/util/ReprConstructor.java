@@ -1,4 +1,4 @@
-package org.fugalang.grammar.common;
+package org.fugalang.grammar.util;
 
 import org.fugalang.grammar.peg.visitor.MetaVisitor;
 import org.fugalang.grammar.peg.wrapper.*;
@@ -33,7 +33,7 @@ public class ReprConstructor implements MetaVisitor<String> {
 
     @Override
     public String visitGrammar(Grammar grammar) {
-        return null;
+        throw new RuntimeException();
     }
 
     @Override

@@ -1,6 +1,6 @@
 package org.fugalang.grammar.main;
 
-import org.fugalang.grammar.cgen.RuleSetBuilder;
+import org.fugalang.grammar.common.RuleSetBuilder;
 
 public class CFugaGenerator {
 

@@ -1,9 +1,10 @@
-package org.fugalang.grammar.cgen;
+package org.fugalang.grammar.common;
 
 import org.fugalang.core.parser.RuleType;
-import org.fugalang.grammar.common.*;
 import org.fugalang.grammar.gen.TokenConverter;
 import org.fugalang.grammar.peg.wrapper.*;
+import org.fugalang.grammar.util.PEGUtil;
+import org.fugalang.grammar.util.ReprConstructor;
 import org.fugalang.grammar.util.StringUtil;
 
 import java.util.LinkedHashMap;

@@ -1,8 +1,4 @@
-package org.fugalang.grammar.cgen;
-
-import org.fugalang.grammar.common.FieldType;
-import org.fugalang.grammar.common.ResultSource;
-import org.fugalang.grammar.common.RuleName;
+package org.fugalang.grammar.common;
 
 public class UnitField {
     public UnitField(RuleName ruleName,
