@@ -3,16 +3,13 @@ package org.fugalang.grammar.common;
 import org.fugalang.core.parser.RuleType;
 import org.fugalang.grammar.peg.wrapper.*;
 import org.fugalang.grammar.util.PEGUtil;
-import org.fugalang.grammar.util.ReprConstructor;
+import org.fugalang.grammar.util.GrammarRepr;
 import org.fugalang.grammar.util.StringUtil;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * The C version of {@link org.fugalang.grammar.gen.PEGBuilder}
- */
 public class RuleSetBuilder {
 
     // make arguments clear
@@ -54,8 +51,8 @@ public class RuleSetBuilder {
             // use a root named rule to reduce files
             UnitRule unit = ruleSet.createNamedRule(ruleName, left_recursive);
 
-            var ruleRepr = ReprConstructor.INSTANCE.visitRule(rule);
-            unit.setHeaderComments(ruleRepr);
+            var ruleRepr = GrammarRepr.INSTANCE.visitRule(rule);
+            unit.setGrammarString(ruleRepr);
             unit.setRuleType(RuleType.Disjunction);
 
             addAltList(ruleName, unit, rule.altList());
@@ -102,8 +99,8 @@ public class RuleSetBuilder {
                     // a list can't hold multiple-ly typed objects
                     var subUnit = ruleSet.createUnnamedSubRule(newRuleName);
 
-                    var ruleRepr = ReprConstructor.INSTANCE.visitSequence(sequence);
-                    subUnit.setHeaderComments(ruleRepr);
+                    var ruleRepr = GrammarRepr.INSTANCE.visitSequence(sequence);
+                    subUnit.setGrammarString(ruleRepr);
                     subUnit.setRuleType(RuleType.Conjunction);
 
                     var smartName = getSmartName(newRuleName, sequence);
@@ -200,8 +197,8 @@ public class RuleSetBuilder {
         } else {
 
             var component_cb = ruleSet.createUnnamedSubRule(ruleName);
-            var rule_repr = ReprConstructor.INSTANCE.visitAltList(altList);
-            component_cb.setHeaderComments(rule_repr);
+            var rule_repr = GrammarRepr.INSTANCE.visitAltList(altList);
+            component_cb.setGrammarString(rule_repr);
             component_cb.setRuleType(RuleType.Disjunction);
 
             var smart_name = getSmartName(ruleName, altList);

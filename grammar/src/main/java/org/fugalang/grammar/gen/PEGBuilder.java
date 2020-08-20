@@ -6,7 +6,7 @@ import org.fugalang.grammar.common.FieldType;
 import org.fugalang.grammar.common.Modifier;
 import org.fugalang.grammar.util.PEGUtil;
 import org.fugalang.grammar.util.StringUtil;
-import org.fugalang.grammar.util.ReprConstructor;
+import org.fugalang.grammar.util.GrammarRepr;
 import org.fugalang.grammar.peg.wrapper.*;
 
 import java.util.LinkedHashMap;
@@ -60,7 +60,7 @@ public class PEGBuilder {
             // use a root class to reduce files
             ClassBuilder cb = classSet.createRootClass(className, left_recursive);
 
-            var rule_repr = ReprConstructor.INSTANCE.visitRule(rule);
+            var rule_repr = GrammarRepr.INSTANCE.visitRule(rule);
             cb.setHeaderComments(rule_repr);
             cb.setRuleType(RuleType.Disjunction);
 
@@ -107,7 +107,7 @@ public class PEGBuilder {
                     // a list can't hold multiple-ly typed objects
                     var component_cb = classSet.createComponentClass(newClassName);
 
-                    var rule_repr = ReprConstructor.INSTANCE.visitSequence(sequence);
+                    var rule_repr = GrammarRepr.INSTANCE.visitSequence(sequence);
                     component_cb.setHeaderComments(rule_repr);
                     component_cb.setRuleType(RuleType.Conjunction);
 
@@ -205,7 +205,7 @@ public class PEGBuilder {
         } else {
 
             var component_cb = classSet.createComponentClass(className);
-            var rule_repr = ReprConstructor.INSTANCE.visitAltList(rule);
+            var rule_repr = GrammarRepr.INSTANCE.visitAltList(rule);
             component_cb.setHeaderComments(rule_repr);
             component_cb.setRuleType(RuleType.Disjunction);
 

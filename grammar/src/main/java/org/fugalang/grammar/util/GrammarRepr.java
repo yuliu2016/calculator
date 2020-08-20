@@ -5,11 +5,11 @@ import org.fugalang.grammar.peg.wrapper.*;
 
 import java.util.StringJoiner;
 
-public class ReprConstructor implements MetaVisitor<String> {
+public class GrammarRepr implements MetaVisitor<String> {
 
-    public static final ReprConstructor INSTANCE = new ReprConstructor();
+    public static final GrammarRepr INSTANCE = new GrammarRepr();
 
-    private ReprConstructor() {
+    private GrammarRepr() {
     }
 
     public String stringifyAltList(AltList altList, boolean named) {

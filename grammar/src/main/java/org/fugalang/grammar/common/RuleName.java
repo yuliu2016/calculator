@@ -71,4 +71,9 @@ public class RuleName {
     public int hashCode() {
         return snakeCase.hashCode();
     }
+
+    @Override
+    public String toString() {
+        return getRuleNameFull();
+    }
 }
