@@ -4,6 +4,7 @@ import org.fugalang.core.parser.impl.LazyParserContext;
 import org.fugalang.core.parser.impl.LexingVisitor;
 import org.fugalang.core.parser.impl.SimpleParseTree;
 import org.fugalang.core.token.SimpleLexer;
+import org.fugalang.grammar.common.TokenMap;
 import org.fugalang.grammar.gen.TokenConverter;
 import org.fugalang.grammar.peg.parser.MetaParser;
 import org.fugalang.grammar.peg.wrapper.Grammar;
@@ -25,5 +26,9 @@ public class GeneratorUtil {
 
     public static TokenConverter simpleConverter() {
         return new SimpleConverter();
+    }
+
+    public static TokenMap createTokenMap() {
+        return new TokenMapImpl();
     }
 }

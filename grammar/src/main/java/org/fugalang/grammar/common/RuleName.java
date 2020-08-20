@@ -7,31 +7,31 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class RuleName {
-    private final String ruleNameStr;
+    private final String snakeCase;
     private final int[] suffixArray;
     private final boolean isSequence;
 
-    public RuleName(String ruleNameStr, int[] suffixArray, boolean isSequence) {
-        assert ruleNameStr != null;
+    public RuleName(String snakeCase, int[] suffixArray, boolean isSequence) {
+        assert snakeCase != null;
         assert suffixArray != null;
-        this.ruleNameStr = ruleNameStr;
+        this.snakeCase = snakeCase;
         this.suffixArray = suffixArray;
         this.isSequence = isSequence;
     }
 
-    public String getRuleNameStr() {
-        return ruleNameStr;
+    public String getSnakeCase() {
+        return snakeCase;
     }
 
     public String getRuleNameFull() {
-        return ruleNameStr + IntStream
+        return snakeCase + IntStream
                 .of(suffixArray)
                 .mapToObj(Integer::toString)
                 .collect(Collectors.joining(":", ":", ""));
     }
 
     public String getPascalCase() {
-        return StringUtil.convertCase(ruleNameStr);
+        return StringUtil.convertCase(snakeCase);
     }
 
     public String getCamelCase() {
@@ -46,11 +46,11 @@ public class RuleName {
         int currentLen = suffixArray.length;
         int[] newArray = Arrays.copyOf(suffixArray, currentLen + 1);
         newArray[currentLen] = suffix;
-        return new RuleName(ruleNameStr, newArray, isSequence);
+        return new RuleName(snakeCase, newArray, isSequence);
     }
 
     public RuleName asSequence() {
-        return new RuleName(ruleNameStr, suffixArray, true);
+        return new RuleName(snakeCase, suffixArray, true);
     }
 
     public static RuleName of(String ruleName) {
@@ -64,11 +64,11 @@ public class RuleName {
 
         RuleName ruleName1 = (RuleName) o;
 
-        return ruleNameStr.equals(ruleName1.ruleNameStr);
+        return snakeCase.equals(ruleName1.snakeCase);
     }
 
     @Override
     public int hashCode() {
-        return ruleNameStr.hashCode();
+        return snakeCase.hashCode();
     }
 }
