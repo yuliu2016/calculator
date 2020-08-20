@@ -37,7 +37,10 @@ public class StringUtil {
         String idt = " ".repeat(indentation);
         return splitLines(block)
                 .stream()
-                .map(ln -> idt + " * " + ln)
+                // add an extra asterisk to save the indentation
+                // then add indentation
+                .map(ln -> idt + " * " +
+                        (ln.startsWith(" ") ? "*" + ln.substring(1) : ln))
                 .collect(Collectors.joining(
                         "\n",
                         idt + "/**\n",

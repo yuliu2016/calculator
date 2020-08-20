@@ -17,7 +17,7 @@ public class GrammarRepr implements MetaVisitor<String> {
         StringJoiner joiner;
 
         if (named) {
-            joiner = new StringJoiner("\n*   | ", "\n*   | ", "");
+            joiner = new StringJoiner("\n    | ", "\n    | ", "");
         } else {
             joiner = new StringJoiner(" | ");
         }
