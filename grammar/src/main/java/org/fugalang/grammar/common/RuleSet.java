@@ -7,6 +7,7 @@ import java.util.List;
 public class RuleSet {
     private final List<NamedRule> namedRules;
     private NamedRule currentRule;
+    private int ruleIndexCounter = 0;
 
     public RuleSet() {
         this.namedRules = new ArrayList<>();
@@ -19,7 +20,7 @@ public class RuleSet {
     public UnitRule createNamedRule(RuleName ruleName, boolean leftRecursive) {
         var dupError = false;
         for (var namedRule : namedRules) {
-            if (namedRule.getRoot().getRuleName().equals(ruleName)) {
+            if (namedRule.getRoot().getRuleName().compareExact(ruleName)) {
                 dupError = true;
                 break;
             }
@@ -29,7 +30,7 @@ public class RuleSet {
             throw new IllegalStateException("Duplicate named rule: " + ruleName);
         }
 
-        var unit = new UnitRule(ruleName, leftRecursive);
+        var unit = new UnitRule(++ruleIndexCounter, ruleName, leftRecursive);
 
         currentRule = new NamedRule(unit);
         namedRules.add(currentRule);
@@ -54,7 +55,7 @@ public class RuleSet {
 
         var dupError = false;
         for (var builder : current.getComponents()) {
-            if (builder.getRuleName().equals(ruleName)) {
+            if (builder.getRuleName().compareExact(ruleName)) {
                 dupError = true;
                 break;
             }
@@ -64,7 +65,7 @@ public class RuleSet {
             throw new IllegalStateException("Duplicate inner rule: " + ruleName);
         }
 
-        var unit = new UnitRule(ruleName, false);
+        var unit = new UnitRule(++ruleIndexCounter, ruleName, false);
 
         current.getComponents().add(unit);
 

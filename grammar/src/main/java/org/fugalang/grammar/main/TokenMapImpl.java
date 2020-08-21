@@ -40,19 +40,20 @@ public class TokenMapImpl implements TokenMap {
 
         int typeIdx = nonLiteralTypes.indexOf(s);
         if (typeIdx >= 0) {
-            return new TokenEntry(1 + typeIdx, false, s.toLowerCase(), null);
+            return new TokenEntry(1 + typeIdx, false, s.toLowerCase(), s);
         }
 
         int opIdx = operatorIndexOf(s);
         if (opIdx >= 0) {
             var op = operators.get(opIdx);
-            return new TokenEntry(1 + nTypes + opIdx, true, op.name(), op.getCode());
+            var lower = op.name().toLowerCase();
+            return new TokenEntry(1 + nTypes + opIdx, true, lower, op.getCode());
         }
 
         int kwIdx = Keyword.ALL_KEYWORDS.indexOf(s);
         if (kwIdx >= 0) {
-            var kw = s.toLowerCase();
-            return new TokenEntry(1 + nTypes + nOperators, true, kw, kw);
+            var lower = s.toLowerCase();
+            return new TokenEntry(1 + nTypes + nOperators + kwIdx, true, lower, s);
         }
 
         return null;

@@ -1,6 +1,6 @@
 package org.fugalang.grammar.common;
 
-enum SourceKind {
+public enum SourceKind {
     UnitRule,
     TokenType,
     TokenLiteral

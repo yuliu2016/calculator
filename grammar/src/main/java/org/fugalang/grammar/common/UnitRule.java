@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 public class UnitRule {
+    private final int ruleIndex;
     private final RuleName ruleName;
     private final boolean leftRecursive;
 
@@ -19,9 +20,18 @@ public class UnitRule {
     private final List<UnitField> fields = new ArrayList<>();
     private final Map<String, Integer> fieldNameCounter = new HashMap<>();
 
-    public UnitRule(RuleName ruleName, boolean leftRecursive) {
+    public UnitRule(int ruleIndex, RuleName ruleName, boolean leftRecursive) {
+        this.ruleIndex = ruleIndex;
         this.ruleName = ruleName;
         this.leftRecursive = leftRecursive;
+    }
+
+    public int getRuleIndex() {
+        return ruleIndex;
+    }
+
+    public List<UnitField> getFields() {
+        return fields;
     }
 
     public boolean isLeftRecursive() {

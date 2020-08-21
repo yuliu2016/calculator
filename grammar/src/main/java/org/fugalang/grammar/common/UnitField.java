@@ -48,8 +48,11 @@ public class UnitField {
         return delimiter;
     }
 
-    public int getFieldSuffix() {
-        return fieldSuffix;
+    public String getProperFieldName() {
+        if (fieldSuffix != -1) {
+            return getFieldName() + "_" + fieldSuffix;
+        }
+        return getFieldName();
     }
 
     public void setFieldSuffix(int fieldSuffix) {

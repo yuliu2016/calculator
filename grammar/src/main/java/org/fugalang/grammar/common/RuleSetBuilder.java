@@ -2,13 +2,14 @@ package org.fugalang.grammar.common;
 
 import org.fugalang.core.parser.RuleType;
 import org.fugalang.grammar.peg.wrapper.*;
-import org.fugalang.grammar.util.PEGUtil;
 import org.fugalang.grammar.util.GrammarRepr;
+import org.fugalang.grammar.util.PEGUtil;
 import org.fugalang.grammar.util.StringUtil;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.StringJoiner;
 
 public class RuleSetBuilder {
 
@@ -233,7 +234,7 @@ public class RuleSetBuilder {
             // fix - need to add repeat rules here
             addField(ruleName,
                     unit,
-                    ruleName.getCamelCase(),
+                    ruleName.getSnakeCase(),
                     modifier,
                     isOptional,
                     ResultSource.ofUnitRule(ruleName),
@@ -332,24 +333,20 @@ public class RuleSetBuilder {
         if (primaries.size() <= 3 &&
                 primaries.stream().allMatch(PEGUtil::isSingle)) {
 
-            StringBuilder sb = null;
+            StringJoiner joiner = new StringJoiner("_");
             for (var primary : primaries) {
                 var itemString = PEGUtil.getItemString(PEGUtil.getModifierItem(primary));
                 if (itemString == null) throw new IllegalStateException();
-                if (sb == null) sb = new StringBuilder();
                 if (StringUtil.isWord(itemString)) {
                     // make lowercase in case it's a token type
-                    sb.append(itemString.toLowerCase());
+                    joiner.add(itemString.toLowerCase());
                 } else {
-                    sb.append(tokenMap.lookupOrThrow(itemString).getNameSnakeCase());
+                    joiner.add(tokenMap.lookupOrThrow(itemString).getNameSnakeCase());
                 }
             }
-            if (sb != null) {
-                return StringUtil.decap(sb.toString());
-            }
-            throw new IllegalArgumentException();
+            return StringUtil.decap(joiner.toString());
         }
-        return ruleName.getCamelCase();
+        return ruleName.getSnakeCase();
     }
 
 
@@ -364,6 +361,6 @@ public class RuleSetBuilder {
                     getSmartName(ruleName, andList.get(0).sequence())
             );
         }
-        return ruleName.getCamelCase();
+        return ruleName.getSnakeCase();
     }
 }

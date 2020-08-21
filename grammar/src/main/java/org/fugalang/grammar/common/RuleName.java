@@ -24,10 +24,19 @@ public class RuleName {
     }
 
     public String getRuleNameFull() {
-        return snakeCase + IntStream
+        String suffix = (suffixArray.length == 0 ? "" : IntStream
                 .of(suffixArray)
                 .mapToObj(Integer::toString)
-                .collect(Collectors.joining(":", ":", ""));
+                .collect(Collectors.joining(":", ":", "")));
+        return snakeCase + suffix;
+    }
+
+    public String getRuleNameSymbolic() {
+        String suffix = (suffixArray.length == 0 ? "" : IntStream
+                .of(suffixArray)
+                .mapToObj(Integer::toString)
+                .collect(Collectors.joining("_", "_", "")));
+        return snakeCase + suffix;
     }
 
     public String getPascalCase() {
@@ -65,6 +74,17 @@ public class RuleName {
         RuleName ruleName1 = (RuleName) o;
 
         return snakeCase.equals(ruleName1.snakeCase);
+    }
+
+    public boolean compareExact(RuleName o) {
+        if (this == o) return true;
+        return snakeCase.equals(o.snakeCase) &&
+                isSequence == o.isSequence &&
+                Arrays.equals(suffixArray, o.suffixArray);
+    }
+
+    public boolean hasSuffix() {
+        return suffixArray.length > 0;
     }
 
     @Override

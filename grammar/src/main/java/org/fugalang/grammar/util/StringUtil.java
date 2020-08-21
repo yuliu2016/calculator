@@ -48,6 +48,13 @@ public class StringUtil {
                 ));
     }
 
+    public static String inlinedoc(String block) {
+        return splitLines(block)
+                .stream()
+                .map(ln -> "// " + ln)
+                .collect(Collectors.joining("\n"));
+    }
+
     public static String indent(String block, int indentation) {
         String idt = " ".repeat(indentation);
         return splitLines(block).stream().map(ln -> ln.isBlank() ? ln : idt + ln)

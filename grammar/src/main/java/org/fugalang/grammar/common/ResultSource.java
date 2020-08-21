@@ -10,7 +10,7 @@ public class ResultSource {
         this.value = value;
     }
 
-    public SourceKind getType() {
+    public SourceKind getKind() {
         return sourceKind;
     }
 
