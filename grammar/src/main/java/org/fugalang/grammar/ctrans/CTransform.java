@@ -7,6 +7,11 @@ import org.fugalang.grammar.util.StringUtil;
 import java.util.StringJoiner;
 
 public class CTransform {
+    /*
+    todo
+    optionals in conj: need to initialize to 0
+    list optionals?
+     */
     public static String getParserFileContent(RuleSet ruleSet) {
         StringBuilder sb = new StringBuilder();
         addFuncDeclarations(ruleSet, sb);
@@ -28,10 +33,13 @@ public class CTransform {
         var rn = unit.getRuleName();
         sb.append("RULE(")
                 .append(rn.getRuleNameSymbolic());
-//        if (!rn.hasSuffix()) {
-//            sb.append("_rule");
-//        }
         sb.append(");\n");
+        for (UnitField field : unit.getFields()) {
+            if (field.isSingular() || field.isPredicate()) continue; // not a loop
+            sb.append("RULE(");
+            sb.append(field.getRuleName().getRuleNameSymbolic());
+            sb.append("_loop);\n");
+        }
     }
 
     private static void addFunctionBodies(RuleSet ruleSet, StringBuilder sb) {
@@ -48,9 +56,6 @@ public class CTransform {
         sb.append(StringUtil.inlinedoc(unit.getGrammarString()));
         sb.append("\nRULE(")
                 .append(rn.getRuleNameSymbolic());
-//        if (!rn.hasSuffix()) {
-//            sb.append("_rule");
-//        }
         sb.append(") {\n");
         sb.append("    ENTER_FRAME(p, ")
                 .append(unit.getRuleIndex())
@@ -71,6 +76,59 @@ public class CTransform {
         }
         sb.append("    EXIT_FRAME(p);\n");
         sb.append("}\n\n");
+
+        for (UnitField field : unit.getFields()) {
+            if (field.isSingular() || field.isPredicate()) continue; // not a loop
+            sb.append("RULE(");
+            sb.append(field.getRuleName().getRuleNameSymbolic());
+            sb.append("_loop) {\n");
+            addLoopFuncBody(field, sb);
+            sb.append("}\n\n");
+        }
+    }
+
+    private static void addLoopFuncBody(UnitField field, StringBuilder sb) {
+        if (field.getFieldType() == FieldType.RequiredList) {
+            addRequiredLoopParser(field, sb);
+        } else {
+            addOptionalLoopParser(field, sb);
+        }
+    }
+
+    private static void addRequiredLoopParser(UnitField field, StringBuilder sb) {
+        var resultExpr = getResultExpr(field);
+
+        String delimiter = field.getDelimiter();
+
+        String whileCondition;
+        if (delimiter == null) {
+            whileCondition = "(node = " + resultExpr + ")";
+        } else {
+            whileCondition = "pos = p->pos,\n" +
+                    "            (AST_CONSUME(p, 0, \"" + "delim" + "\")) &&\n" +
+                    "            (node = " + resultExpr + ")";
+        }
+
+        var body = "    FAstNode *node, *seq;\n" +
+                "    if (!(node = " + resultExpr + ")) { return 0; }\n" +
+                "    seq = AST_SEQ_NEW(p);\n" +
+                (delimiter == null ? "" : "    size_t pos;\n") +
+                "    do { AST_SEQ_APPEND(p, seq, node); } \n" +
+                "    while (" + whileCondition + ");\n" +
+                (delimiter == null ? "" : "    p->pos = pos;\n") +
+                "    return seq;\n";
+        sb.append(body);
+    }
+
+    private static void addOptionalLoopParser(UnitField field, StringBuilder sb) {
+        var resultExpr = getResultExpr(field);
+        var body = "    FAstNode *node, *seq = AST_SEQ_NEW(p);\n" +
+                "    while ((node = " + resultExpr + ")) {\n" +
+                "        AST_SEQ_APPEND(p, seq, node);\n" +
+                "    }\n" +
+                "    return seq;\n";
+
+        sb.append(body);
     }
 
     private static void addLeftRecursiveUnitRuleBody(UnitRule unit, StringBuilder sb) {
@@ -133,7 +191,7 @@ public class CTransform {
 
         sb.append("\n    ? (res = AST_NODE_");
         sb.append(importantCount);
-        sb.append("(p, ").append(unit.getRuleIndex());
+        sb.append("(p");
         for (UnitField field : unit.getFields()) {
             if (isImportantField(field)) {
                 sb.append(", ");
@@ -158,7 +216,7 @@ public class CTransform {
     private static String getParserFieldExpr(
             UnitField field, RuleType ruleType, boolean isLast) {
         switch (field.getFieldType()) {
-           case RequireTrue:
+            case RequireTrue:
                 return getRequiredExprPart(getTestExpr(field), ruleType, isLast);
             case RequireFalse:
                 var resultExpr = "!" + getTestExpr(field);
@@ -188,7 +246,7 @@ public class CTransform {
     private static String getRequiredExprPart(String resultExpr, RuleType ruleType, boolean isLast) {
         // N.W. there is no starting bracket because stuff can go before resultExpr
         return resultExpr + (isLast ? ")" :
-                ruleType ==RuleType.Conjunction ? ") &&\n" : ") ||\n");
+                ruleType == RuleType.Conjunction ? ") &&\n" : ") ||\n");
     }
 
     private static String getTestExpr(UnitField field) {
@@ -199,11 +257,11 @@ public class CTransform {
         var rs = field.getResultSource();
         switch (rs.getKind()) {
             case UnitRule:
-                return ((RuleName)rs.getValue()).getRuleNameSymbolic() + "(p)";
+                return ((RuleName) rs.getValue()).getRuleNameSymbolic() + "(p)";
             case TokenType:
             case TokenLiteral:
                 var te = (TokenEntry) rs.getValue();
-                return  "AST_CONSUME(p, " + te.getIndex() + ", \"" + te.getLiteralValue() + "\")";
+                return "AST_CONSUME(p, " + te.getIndex() + ", \"" + te.getLiteralValue() + "\")";
             default:
                 throw new IllegalArgumentException();
         }

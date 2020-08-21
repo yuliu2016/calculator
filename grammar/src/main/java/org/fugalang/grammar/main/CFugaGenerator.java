@@ -15,7 +15,7 @@ public class CFugaGenerator {
                 GeneratorUtil.createTokenMap()
         );
         String s = CTransform.getParserFileContent(ruleSet);
-        System.out.println("#include <peg_macros.h>");
+        System.out.println("#include <peg_macros.h>\n");
         System.out.println(s);
     }
 }
