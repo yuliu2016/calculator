@@ -161,7 +161,13 @@ public class RuleSetBuilder {
         var item = PEGUtil.getModifierItem(primary);
         var modifier = PEGUtil.getModifier(primary);
 
-        var delimiter = primary.hasDelimited() ? primary.delimited().string() : null;
+        TokenEntry delimiter;
+        if (primary.hasDelimited()) {
+            delimiter = tokenMap.lookupOrThrow(primary.delimited().string());
+            if (!delimiter.isLiteral()) throw new RuntimeException("Delimiter must be literal");
+        } else {
+            delimiter = null;
+        }
 
         switch (PEGUtil.getRuleType(item)) {
             case Group:
@@ -184,7 +190,7 @@ public class RuleSetBuilder {
             AltList altList,
             Modifier modifier,
             boolean isOptional,
-            String delimiter
+            TokenEntry delimiter
     ) {
         // maybe this can just be added to this unit rule
         // but maybe there needs to be a separate sub-rule
@@ -224,7 +230,7 @@ public class RuleSetBuilder {
             Modifier modifier,
             String token,
             boolean isOptional,
-            String delimiter
+            TokenEntry delimiter
     ) {
 
         if (ruleNameMap.containsKey(token)) {
@@ -281,7 +287,7 @@ public class RuleSetBuilder {
             Modifier modifier,
             boolean isOptional,
             ResultSource resultSource,
-            String delimiter
+            TokenEntry delimiter
     ) {
         RuleName newRuleName;
         String newFieldName;

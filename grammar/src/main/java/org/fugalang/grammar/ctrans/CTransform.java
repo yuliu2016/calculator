@@ -12,21 +12,16 @@ public class CTransform {
     optionals in conj: need to initialize to 0
     list optionals?
      */
-    public static String getParserFileContent(RuleSet ruleSet) {
-        StringBuilder sb = new StringBuilder();
-        addFuncDeclarations(ruleSet, sb);
-        sb.append("\n\n");
-        addFunctionBodies(ruleSet, sb);
-        return sb.toString();
-    }
 
-    private static void addFuncDeclarations(RuleSet ruleSet, StringBuilder sb) {
+    public static String getFuncDeclarations(RuleSet ruleSet) {
+        StringBuilder sb = new StringBuilder();
         for (NamedRule namedRule : ruleSet.getNamedRules()) {
             addUnitRuleDeclaration(namedRule.getRoot(), sb);
             for (UnitRule component : namedRule.getComponents()) {
                 addUnitRuleDeclaration(component, sb);
             }
         }
+        return sb.toString();
     }
 
     private static void addUnitRuleDeclaration(UnitRule unit, StringBuilder sb) {
@@ -42,18 +37,21 @@ public class CTransform {
         }
     }
 
-    private static void addFunctionBodies(RuleSet ruleSet, StringBuilder sb) {
+    public static String getFunctionBodies(RuleSet ruleSet) {
+        StringBuilder sb = new StringBuilder();
         for (NamedRule namedRule : ruleSet.getNamedRules()) {
+            sb.append("\n");
+            sb.append(StringUtil.inlinedoc(namedRule.getRoot().getGrammarString()));
             addUnitRuleBody(namedRule.getRoot(), sb);
             for (UnitRule component : namedRule.getComponents()) {
                 addUnitRuleBody(component, sb);
             }
         }
+        return sb.toString();
     }
 
     private static void addUnitRuleBody(UnitRule unit, StringBuilder sb) {
         var rn = unit.getRuleName();
-        sb.append(StringUtil.inlinedoc(unit.getGrammarString()));
         sb.append("\nRULE(")
                 .append(rn.getRuleNameSymbolic());
         sb.append(") {\n");
@@ -75,15 +73,15 @@ public class CTransform {
             }
         }
         sb.append("    EXIT_FRAME(p);\n");
-        sb.append("}\n\n");
+        sb.append("}\n");
 
         for (UnitField field : unit.getFields()) {
             if (field.isSingular() || field.isPredicate()) continue; // not a loop
-            sb.append("RULE(");
+            sb.append("\nRULE(");
             sb.append(field.getRuleName().getRuleNameSymbolic());
             sb.append("_loop) {\n");
             addLoopFuncBody(field, sb);
-            sb.append("}\n\n");
+            sb.append("}\n");
         }
     }
 
@@ -98,14 +96,15 @@ public class CTransform {
     private static void addRequiredLoopParser(UnitField field, StringBuilder sb) {
         var resultExpr = getResultExpr(field);
 
-        String delimiter = field.getDelimiter();
+        TokenEntry delimiter = field.getDelimiter();
 
         String whileCondition;
         if (delimiter == null) {
             whileCondition = "(node = " + resultExpr + ")";
         } else {
             whileCondition = "pos = p->pos,\n" +
-                    "            (AST_CONSUME(p, 0, \"" + "delim" + "\")) &&\n" +
+                    "            (AST_CONSUME(p, " + delimiter.getIndex() + ", \""
+                    + delimiter.getLiteralValue() + "\")) &&\n" +
                     "            (node = " + resultExpr + ")";
         }
 
@@ -113,7 +112,7 @@ public class CTransform {
                 "    if (!(node = " + resultExpr + ")) { return 0; }\n" +
                 "    seq = AST_SEQ_NEW(p);\n" +
                 (delimiter == null ? "" : "    size_t pos;\n") +
-                "    do { AST_SEQ_APPEND(p, seq, node); } \n" +
+                "    do { AST_SEQ_APPEND(p, seq, node); }\n" +
                 "    while (" + whileCondition + ");\n" +
                 (delimiter == null ? "" : "    p->pos = pos;\n") +
                 "    return seq;\n";
@@ -226,9 +225,8 @@ public class CTransform {
             case Optional:
                 return getOptionalExprPart(getResultExpr(field), ruleType, isLast);
             case RequiredList:
-                return getRequiredExprPart(getLoopExpr(field), ruleType, isLast);
             case OptionalList:
-                return getOptionalExprPart(getLoopExpr(field), ruleType, isLast);
+                return getRequiredExprPart(getLoopExpr(field), ruleType, isLast);
             default:
                 throw new IllegalArgumentException();
         }

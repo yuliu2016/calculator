@@ -8,7 +8,7 @@ public class UnitField {
     private final String fieldName;
     private final FieldType fieldType;
     private final ResultSource resultSource;
-    private final String delimiter;
+    private final TokenEntry delimiter;
 
     /**
      * Used for field name conflict resolution
@@ -20,7 +20,7 @@ public class UnitField {
             String fieldName,
             FieldType fieldType,
             ResultSource resultSource,
-            String delimiter) {
+            TokenEntry delimiter) {
         this.ruleName = ruleName;
         this.fieldName = fieldName;
         this.fieldType = fieldType;
@@ -44,7 +44,7 @@ public class UnitField {
         return resultSource;
     }
 
-    public String getDelimiter() {
+    public TokenEntry getDelimiter() {
         return delimiter;
     }
 
