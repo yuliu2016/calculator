@@ -136,7 +136,7 @@ public class CTransform {
 
         var fields = unit.getFields();
         for (int i = 0; i < fields.size(); i++) {
-            sb.append("    (res = ");
+            sb.append("    (r = ");
             var result = getParserFieldExpr(fields.get(i),
                     unit.getRuleType(), i == fields.size() - 1);
             sb.append(result);
@@ -158,8 +158,9 @@ public class CTransform {
         StringJoiner sj = new StringJoiner(", ");
         for (UnitField field : unit.getFields()) {
             if (isImportantField(field)) {
+                var fieldName = ((char) ('a' + importantCount)) + "";
                 importantCount++;
-                sj.add("*" + field.getProperFieldName() + "_");
+                sj.add("*" + fieldName);
             }
         }
 
@@ -169,14 +170,18 @@ public class CTransform {
             sb.append(";\n");
         }
 
+        importantCount = 0;
+
         var fields = unit.getFields();
         for (int i = 0; i < fields.size(); i++) {
             sb.append("    ");
             sb.append("(");
             var field = fields.get(i);
             if (isImportantField(field)) {
-                sb.append(field.getProperFieldName());
-                sb.append("_ = ");
+                var fieldName = ((char) ('a' + importantCount)) + "";
+                importantCount++;
+                sb.append(fieldName);
+                sb.append(" = ");
             }
             var result = getParserFieldExpr(field,
                     unit.getRuleType(), i == fields.size() - 1);
@@ -188,13 +193,17 @@ public class CTransform {
             return;
         }
 
-        sb.append("\n    ? (res = AST_NODE_");
+        sb.append("\n    ? (r = NODE_");
         sb.append(importantCount);
         sb.append("(p");
+
+        importantCount = 0;
         for (UnitField field : unit.getFields()) {
             if (isImportantField(field)) {
+                var fieldName = ((char) ('a' + importantCount)) + "";
+                importantCount++;
                 sb.append(", ");
-                sb.append(field.getProperFieldName()).append("_");
+                sb.append(fieldName);
             }
         }
         sb.append(")) : 0;\n");
@@ -204,7 +213,7 @@ public class CTransform {
         var fields = unit.getFields();
         for (int i = 0; i < fields.size(); i++) {
             sb.append("    ");
-            sb.append("(res = ");
+            sb.append("(r = ");
             var result = getParserFieldExpr(fields.get(i),
                     unit.getRuleType(), i == fields.size() - 1);
             sb.append(result);
@@ -259,7 +268,7 @@ public class CTransform {
             case TokenType:
             case TokenLiteral:
                 var te = (TokenEntry) rs.getValue();
-                return "AST_CONSUME(p, " + te.getIndex() + ", \"" + te.getLiteralValue() + "\")";
+                return "TOKEN(p, " + te.getIndex() + ", \"" + te.getLiteralValue() + "\")";
             default:
                 throw new IllegalArgumentException();
         }

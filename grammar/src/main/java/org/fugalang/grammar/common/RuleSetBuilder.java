@@ -363,8 +363,7 @@ public class RuleSetBuilder {
         }
         if (andList.size() == 1) {
             return getSmartName(ruleName, altList.sequence()) +
-                    "Or" + StringUtil.capitalizeFirstChar(
-                    getSmartName(ruleName, andList.get(0).sequence())
+                    "_or_" + getSmartName(ruleName, andList.get(0).sequence()
             );
         }
         return ruleName.getSnakeCase();
