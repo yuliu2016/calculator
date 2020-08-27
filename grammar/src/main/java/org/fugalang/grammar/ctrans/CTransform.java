@@ -7,11 +7,6 @@ import org.fugalang.grammar.util.StringUtil;
 import java.util.StringJoiner;
 
 public class CTransform {
-    /*
-    todo
-    optionals in conj: need to initialize to 0
-    list optionals?
-     */
 
     public static String getFuncDeclarations(RuleSet ruleSet) {
         StringBuilder sb = new StringBuilder();
@@ -103,7 +98,7 @@ public class CTransform {
             whileCondition = "(node = " + resultExpr + ")";
         } else {
             whileCondition = "pos = p->pos,\n" +
-                    "            (AST_CONSUME(p, " + delimiter.getIndex() + ", \""
+                    "            (TOKEN(p, " + delimiter.getIndex() + ", \""
                     + delimiter.getLiteralValue() + "\")) &&\n" +
                     "            (node = " + resultExpr + ")";
         }
@@ -272,5 +267,40 @@ public class CTransform {
             default:
                 throw new IllegalArgumentException();
         }
+    }
+
+    public static String getASTGen(RuleSet ruleSet, String name, String lowname, String macro) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("typedef union ").append(lowname).append(" ").append(name).append(";\n\n");
+
+        sb.append("#define ").append(macro).append("(node) ((").append(name).append(" *) &(node)->ast_v)\n\n");
+
+        sb.append("union ").append(lowname).append(" {\n");
+        for (NamedRule namedRule : ruleSet.getNamedRules()) {
+            addStructFields(namedRule.getRoot(), sb);
+            for (UnitRule component : namedRule.getComponents()) {
+                addStructFields(component, sb);
+            }
+        }
+        sb.append("} ").append(";\n");
+        return sb.toString();
+    }
+
+    private static void addStructFields(UnitRule unit, StringBuilder sb) {
+        sb.append("\n#define R_").append(unit.getRuleName().getRuleNameSymbolic().toUpperCase())
+                .append(" ").append(unit.getRuleIndex()).append("\n");
+
+        if (unit.isLeftRecursive() || unit.getRuleType() == RuleType.Disjunction) {
+            return;
+        }
+
+        sb.append("    struct {\n");
+        for (UnitField field : unit.getFields()) {
+            if (isImportantField(field)) {
+                sb.append("        FAstNode *").append(field.getProperFieldName()).append(";\n");
+            }
+        }
+        sb.append("    } ").append(unit.getRuleName().getRuleNameSymbolic()).append(";\n");
     }
 }
