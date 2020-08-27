@@ -4,8 +4,6 @@ import org.fugalang.core.parser.RuleType;
 import org.fugalang.grammar.common.*;
 import org.fugalang.grammar.util.StringUtil;
 
-import java.util.StringJoiner;
-
 public class CTransform {
 
     public static String getFuncDeclarations(RuleSet ruleSet) {
@@ -26,6 +24,7 @@ public class CTransform {
         sb.append(");\n");
         for (UnitField field : unit.getFields()) {
             if (field.isSingular() || field.isPredicate()) continue; // not a loop
+            if (field.getResultSource().getKind() == SourceKind.UnitRule) continue; // covered by macro
             sb.append("RULE(");
             sb.append(field.getRuleName().getRuleNameSymbolic());
             sb.append("_loop);\n");
@@ -72,6 +71,7 @@ public class CTransform {
 
         for (UnitField field : unit.getFields()) {
             if (field.isSingular() || field.isPredicate()) continue; // not a loop
+            if (field.getResultSource().getKind() == SourceKind.UnitRule) continue; // covered by macro
             sb.append("\nRULE(");
             sb.append(field.getRuleName().getRuleNameSymbolic());
             sb.append("_loop) {\n");
@@ -150,23 +150,6 @@ public class CTransform {
 
         int importantCount = 0;
 
-        StringJoiner sj = new StringJoiner(", ");
-        for (UnitField field : unit.getFields()) {
-            if (isImportantField(field)) {
-                var fieldName = ((char) ('a' + importantCount)) + "";
-                importantCount++;
-                sj.add("*" + fieldName);
-            }
-        }
-
-        if (importantCount > 0) {
-            sb.append("    FAstNode ");
-            sb.append(sj.toString());
-            sb.append(";\n");
-        }
-
-        importantCount = 0;
-
         var fields = unit.getFields();
         for (int i = 0; i < fields.size(); i++) {
             sb.append("    ");
@@ -237,6 +220,23 @@ public class CTransform {
     }
 
     private static String getLoopExpr(UnitField field) {
+        var rs = field.getResultSource();
+        if (rs.getKind() == SourceKind.UnitRule) {
+            // shortcut
+            var func = ((RuleName) rs.getValue()).getRuleNameSymbolic();
+            if (field.getFieldType() == FieldType.RequiredList) {
+                if (field.getDelimiter() == null) {
+                    return "SEQUENCE(p, " + func + ")";
+                } else {
+                    return "DELIMITED(p, " + field.getDelimiter().getIndex() +
+                            ", \"" + field.getDelimiter().getLiteralValue() +
+                            "\", " + func + ")";
+                }
+            } else if (field.getFieldType() == FieldType.OptionalList) {
+                return "SEQ_OR_NONE(p, " + func + ")";
+            }
+            throw new IllegalStateException();
+        }
         var rule_name = field.getRuleName().getRuleNameSymbolic();
         return rule_name + "_loop(p)";
     }
@@ -292,6 +292,10 @@ public class CTransform {
                 .append(" ").append(unit.getRuleIndex()).append("\n");
 
         if (unit.isLeftRecursive() || unit.getRuleType() == RuleType.Disjunction) {
+            return;
+        }
+
+        if (unit.getFields().stream().noneMatch(CTransform::isImportantField)) {
             return;
         }
 
