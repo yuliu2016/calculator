@@ -1,0 +1,1999 @@
+(grammar
+  '# Grammar for Fuga\n\n'
+  [
+    (rule
+      'single_input'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence [(item#2 'NEWLINE')])
+        [
+          (alt_list:2 '\n    ' '|' (sequence [(item#2 'simple_stmt')])),
+          (alt_list:2
+            '\n    '
+            '|'
+            (sequence
+              [
+                (item#2 'compound_stmt'),
+                (item#2 'NEWLINE')
+              ]
+            )
+          )
+        ]
+      )
+      '\n'
+    ),
+    (rule
+      'file_input'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (primary:4
+              (group
+                '('
+                (alt_list
+                  (sequence [(item#2 'NEWLINE')])
+                  [(alt_list:2 '|' (sequence [(item#2 'stmt')]))]
+                )
+                ')'
+              )
+              '*'
+            ),
+            (item#2 'ENDMARKER')
+          ]
+        )
+      )
+      '\n'
+    ),
+    (rule
+      'eval_input'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#2 'exprlist'),
+            (primary:4 (item#2 'NEWLINE') '*'),
+            (item#2 'ENDMARKER')
+          ]
+        )
+      )
+      '\n\n# Statements\n'
+    ),
+    (rule
+      'stmt'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (group
+              '('
+              (alt_list
+                (sequence [(item#2 'simple_stmt')])
+                [(alt_list:2 '|' (sequence [(item#2 'compound_stmt')]))]
+              )
+              ')'
+            ),
+            (item#2 'NEWLINE')
+          ]
+        )
+      )
+      '\n'
+    ),
+    (rule
+      'simple_stmt'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (delimited ';' '.' (item#2 'small_stmt') '+'),
+            (optional '[' (alt_list (sequence [(item#3 ';')])) ']')
+          ]
+        )
+      )
+      '\n\n# Small Statements\n'
+    ),
+    (rule
+      'small_stmt'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence [(item#3 'pass')])
+        [
+          (alt_list:2 '\n    ' '|' (sequence [(item#3 'break')])),
+          (alt_list:2 '\n    ' '|' (sequence [(item#3 'continue')])),
+          (alt_list:2 '\n    ' '|' (sequence [(item#2 'return_stmt')])),
+          (alt_list:2 '\n    ' '|' (sequence [(item#2 'raise_stmt')])),
+          (alt_list:2 '\n    ' '|' (sequence [(item#2 'del_stmt')])),
+          (alt_list:2 '\n    ' '|' (sequence [(item#2 'nonlocal_stmt')])),
+          (alt_list:2 '\n    ' '|' (sequence [(item#2 'assert_stmt')])),
+          (alt_list:2 '\n    ' '|' (sequence [(item#2 'import_name')])),
+          (alt_list:2 '\n    ' '|' (sequence [(item#2 'import_from')])),
+          (alt_list:2 '\n    ' '|' (sequence [(item#2 'assignment')]))
+        ]
+      )
+      '\n\n'
+    ),
+    (rule
+      'del_stmt'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#3 'del'),
+            (item#2 'targetlist')
+          ]
+        )
+      )
+      '\n'
+    ),
+    (rule
+      'return_stmt'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#3 'return'),
+            (optional '[' (alt_list (sequence [(item#2 'exprlist_star')])) ']')
+          ]
+        )
+      )
+      '\n'
+    ),
+    (rule
+      'raise_stmt'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#3 'raise'),
+            (item#2 'expr'),
+            (optional
+              '['
+              (alt_list
+                (sequence
+                  [
+                    (item#3 'from'),
+                    (item#2 'expr')
+                  ]
+                )
+              )
+              ']'
+            )
+          ]
+        )
+      )
+      '\n'
+    ),
+    (rule
+      'nonlocal_stmt'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#3 'nonlocal'),
+            (item#2 'name_list')
+          ]
+        )
+      )
+      '\n'
+    ),
+    (rule
+      'assert_stmt'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#3 'assert'),
+            (item#2 'expr'),
+            (optional
+              '['
+              (alt_list
+                (sequence
+                  [
+                    (item#3 ','),
+                    (item#2 'expr')
+                  ]
+                )
+              )
+              ']'
+            )
+          ]
+        )
+      )
+      '\n\n# Expression groups\n'
+    ),
+    (rule 'name_list' ':' '\n    ' '|' (alt_list (sequence [(delimited ',' '.' (item#2 'NAME') '+')])) '\n'),
+    (rule
+      'star_expr'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#3 '*'),
+            (item#2 'bitwise_or')
+          ]
+        )
+      )
+      '\n'
+    ),
+    (rule
+      'exprlist'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (delimited ',' '.' (item#2 'expr') '+'),
+            (optional '[' (alt_list (sequence [(item#3 ',')])) ']')
+          ]
+        )
+      )
+      '\n'
+    ),
+    (rule
+      'target'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#2 't_primary'),
+            (item#3 '.'),
+            (item#2 'NAME'),
+            (primary:3 '!' (item#2 't_lookahead'))
+          ]
+        )
+        [
+          (alt_list:2
+            '\n    '
+            '|'
+            (sequence
+              [
+                (item#2 't_primary'),
+                (item#2 'subscript'),
+                (primary:3 '!' (item#2 't_lookahead'))
+              ]
+            )
+          ),
+          (alt_list:2 '\n    ' '|' (sequence [(item#2 'NAME')])),
+          (alt_list:2
+            '\n    '
+            '|'
+            (sequence
+              [
+                (item#3 '('),
+                (item#2 'targetlist'),
+                (item#3 ')')
+              ]
+            )
+          )
+        ]
+      )
+      '\n'
+    ),
+    (rule
+      't_primary'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#2 't_primary'),
+            (item#3 '.'),
+            (item#2 'NAME'),
+            (primary:2 '&' (item#2 't_lookahead'))
+          ]
+        )
+        [
+          (alt_list:2
+            '\n    '
+            '|'
+            (sequence
+              [
+                (item#2 't_primary'),
+                (item#2 'invocation'),
+                (primary:2 '&' (item#2 't_lookahead'))
+              ]
+            )
+          ),
+          (alt_list:2
+            '\n    '
+            '|'
+            (sequence
+              [
+                (item#2 't_primary'),
+                (item#2 'subscript'),
+                (primary:2 '&' (item#2 't_lookahead'))
+              ]
+            )
+          ),
+          (alt_list:2
+            '\n    '
+            '|'
+            (sequence
+              [
+                (item#2 'atom'),
+                (primary:2 '&' (item#2 't_lookahead'))
+              ]
+            )
+          )
+        ]
+      )
+      '\n'
+    ),
+    (rule
+      't_lookahead'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence [(item#3 '.')])
+        [
+          (alt_list:2 '\n    ' '|' (sequence [(item#3 '(')])),
+          (alt_list:2 '\n    ' '|' (sequence [(item#3 '[')]))
+        ]
+      )
+      '\n'
+    ),
+    (rule
+      'targetlist'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (delimited ',' '.' (item#2 'target') '+'),
+            (optional '[' (alt_list (sequence [(item#3 ',')])) ']')
+          ]
+        )
+      )
+      '\n'
+    ),
+    (rule
+      'expr_or_star'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence [(item#2 'star_expr')])
+        [(alt_list:2 '\n    ' '|' (sequence [(item#2 'expr')]))]
+      )
+      '\n'
+    ),
+    (rule
+      'exprlist_star'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (delimited ',' '.' (item#2 'expr_or_star') '+'),
+            (optional '[' (alt_list (sequence [(item#3 ',')])) ']')
+          ]
+        )
+      )
+      '\n'
+    ),
+    (rule
+      'named_expr_star'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence [(item#2 'star_expr')])
+        [(alt_list:2 '\n    ' '|' (sequence [(item#2 'named_expr')]))]
+      )
+      '\n'
+    ),
+    (rule
+      'named_expr_list'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (delimited ',' '.' (item#2 'named_expr_star') '+'),
+            (optional '[' (alt_list (sequence [(item#3 ',')])) ']')
+          ]
+        )
+      )
+      '\n\n'
+    ),
+    (rule
+      'subscript'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#3 '['),
+            (item#2 'slicelist'),
+            (item#3 ']')
+          ]
+        )
+      )
+      '\n'
+    ),
+    (rule
+      'slicelist'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (delimited ',' '.' (item#2 'slice') '+'),
+            (optional '[' (alt_list (sequence [(item#3 ',')])) ']')
+          ]
+        )
+      )
+      '\n'
+    ),
+    (rule
+      'slice'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (optional '[' (alt_list (sequence [(item#2 'expr')])) ']'),
+            (item#2 'slice_expr'),
+            (optional '[' (alt_list (sequence [(item#2 'slice_expr')])) ']')
+          ]
+        )
+        [(alt_list:2 '\n    ' '|' (sequence [(item#2 'expr')]))]
+      )
+      '\n'
+    ),
+    (rule
+      'slice_expr'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#3 ':'),
+            (optional '[' (alt_list (sequence [(item#2 'expr')])) ']')
+          ]
+        )
+      )
+      '\n\n'
+    ),
+    (rule
+      'dict_item'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#2 'expr'),
+            (item#3 ':'),
+            (item#2 'expr')
+          ]
+        )
+        [
+          (alt_list:2
+            '\n    '
+            '|'
+            (sequence
+              [
+                (item#3 '**'),
+                (item#2 'bitwise_or')
+              ]
+            )
+          )
+        ]
+      )
+      '\n'
+    ),
+    (rule
+      'dict_items'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (delimited ',' '.' (item#2 'dict_item') '+'),
+            (optional '[' (alt_list (sequence [(item#3 ',')])) ']')
+          ]
+        )
+      )
+      '\n'
+    ),
+    (rule
+      'as_name'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#3 'as'),
+            (item#2 'NAME')
+          ]
+        )
+      )
+      '\n\n'
+    ),
+    (rule
+      'iter_for'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#3 'for'),
+            (item#2 'targetlist'),
+            (item#3 'in'),
+            (item#2 'disjunction'),
+            (optional '[' (alt_list (sequence [(item#2 'iter_if')])) ']')
+          ]
+        )
+      )
+      '\n'
+    ),
+    (rule
+      'iter_if'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#3 'if'),
+            (item#2 'named_expr')
+          ]
+        )
+      )
+      '\n'
+    ),
+    (rule
+      'iterator'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (primary:4 (item#2 'iter_for') '*'),
+            (item#3 'for'),
+            (item#2 'targetlist'),
+            (optional '[' (alt_list (sequence [(item#2 'iter_if')])) ']')
+          ]
+        )
+      )
+      '\n\n# Assignments\n\n'
+    ),
+    (rule
+      'assignment'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence [(item#2 'pubassign')])
+        [
+          (alt_list:2 '\n    ' '|' (sequence [(item#2 'annassign')])),
+          (alt_list:2 '\n    ' '|' (sequence [(item#2 'augassign')])),
+          (alt_list:2 '\n    ' '|' (sequence [(item#2 'simple_assign')]))
+        ]
+      )
+      '\n'
+    ),
+    (rule
+      'pubassign'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#3 '/'),
+            (item#2 'NAME'),
+            (item#3 '='),
+            (item#2 'exprlist')
+          ]
+        )
+      )
+      '\n'
+    ),
+    (rule
+      'annassign'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#2 'target'),
+            (item#3 ':'),
+            (item#2 'expr'),
+            (optional
+              '['
+              (alt_list
+                (sequence
+                  [
+                    (item#3 '='),
+                    (item#2 'exprlist')
+                  ]
+                )
+              )
+              ']'
+            )
+          ]
+        )
+      )
+      '\n'
+    ),
+    (rule
+      'augassign'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#2 'target'),
+            (item#2 'augassign_op'),
+            (item#2 'exprlist')
+          ]
+        )
+      )
+      '\n'
+    ),
+    (rule
+      'simple_assign'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (primary:4
+              (group
+                '('
+                (alt_list
+                  (sequence
+                    [
+                      (item#2 'targetlist'),
+                      (item#3 '=')
+                    ]
+                  )
+                )
+                ')'
+              )
+              '*'
+            ),
+            (item#2 'exprlist_star')
+          ]
+        )
+      )
+      '\n'
+    ),
+    (rule
+      'augassign_op'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence [(item#3 '+=')])
+        [
+          (alt_list:2 '\n    ' '|' (sequence [(item#3 '-=')])),
+          (alt_list:2 '\n    ' '|' (sequence [(item#3 '*=')])),
+          (alt_list:2 '\n    ' '|' (sequence [(item#3 '@=')])),
+          (alt_list:2 '\n    ' '|' (sequence [(item#3 '/=')])),
+          (alt_list:2 '\n    ' '|' (sequence [(item#3 '%=')])),
+          (alt_list:2 '\n    ' '|' (sequence [(item#3 '&=')])),
+          (alt_list:2 '\n    ' '|' (sequence [(item#3 '|=')])),
+          (alt_list:2 '\n    ' '|' (sequence [(item#3 '^=')])),
+          (alt_list:2 '\n    ' '|' (sequence [(item#3 '<<=')])),
+          (alt_list:2 '\n    ' '|' (sequence [(item#3 '>>=')])),
+          (alt_list:2 '\n    ' '|' (sequence [(item#3 '**=')])),
+          (alt_list:2 '\n    ' '|' (sequence [(item#3 '//=')]))
+        ]
+      )
+      '\n\n# Import Statments\n\n'
+    ),
+    (rule
+      'import_name'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#3 'import'),
+            (item#2 'dotted_as_names')
+          ]
+        )
+      )
+      '\n'
+    ),
+    (rule
+      'import_from'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#3 'from'),
+            (item#2 'import_from_names'),
+            (item#3 'import'),
+            (item#2 'import_from_items')
+          ]
+        )
+      )
+      '\n'
+    ),
+    (rule
+      'import_from_names'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence [(item#2 'dotted_name')])
+        [
+          (alt_list:2
+            '\n    '
+            '|'
+            (sequence
+              [
+                (primary:5 (item#3 '.') '+'),
+                (optional '[' (alt_list (sequence [(item#2 'dotted_name')])) ']')
+              ]
+            )
+          )
+        ]
+      )
+      '\n'
+    ),
+    (rule
+      'import_from_items'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence [(item#3 '*')])
+        [
+          (alt_list:2
+            '\n    '
+            '|'
+            (sequence
+              [
+                (item#3 '('),
+                (item#2 'import_as_names'),
+                (optional '[' (alt_list (sequence [(item#3 ',')])) ']'),
+                (item#3 ')')
+              ]
+            )
+          ),
+          (alt_list:2 '\n    ' '|' (sequence [(item#2 'import_as_names')]))
+        ]
+      )
+      '\n'
+    ),
+    (rule
+      'import_as_name'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#2 'NAME'),
+            (optional '[' (alt_list (sequence [(item#2 'as_name')])) ']')
+          ]
+        )
+      )
+      '\n'
+    ),
+    (rule
+      'dotted_as_name'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#2 'dotted_name'),
+            (optional '[' (alt_list (sequence [(item#2 'as_name')])) ']')
+          ]
+        )
+      )
+      '\n'
+    ),
+    (rule 'import_as_names' ':' '\n    ' '|' (alt_list (sequence [(delimited ',' '.' (item#2 'import_as_name') '+')])) '\n'),
+    (rule 'dotted_as_names' ':' '\n    ' '|' (alt_list (sequence [(delimited ',' '.' (item#2 'dotted_as_name') '+')])) '\n'),
+    (rule 'dotted_name' ':' '\n    ' '|' (alt_list (sequence [(delimited '.' '.' (item#2 'NAME') '+')])) '\n\n# Compound statements\n\n'),
+    (rule
+      'compound_stmt'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence [(item#2 'if_stmt')])
+        [
+          (alt_list:2 '\n    ' '|' (sequence [(item#2 'while_stmt')])),
+          (alt_list:2 '\n    ' '|' (sequence [(item#2 'for_stmt')])),
+          (alt_list:2 '\n    ' '|' (sequence [(item#2 'try_stmt')])),
+          (alt_list:2 '\n    ' '|' (sequence [(item#2 'with_stmt')]))
+        ]
+      )
+      '\n\n'
+    ),
+    (rule
+      'if_stmt'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#3 'if'),
+            (item#2 'named_expr'),
+            (item#2 'suite'),
+            (primary:4 (item#2 'elif_stmt') '*'),
+            (optional '[' (alt_list (sequence [(item#2 'else_suite')])) ']')
+          ]
+        )
+      )
+      '\n'
+    ),
+    (rule
+      'elif_stmt'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#3 'elif'),
+            (item#2 'named_expr'),
+            (item#2 'suite')
+          ]
+        )
+      )
+      '\n'
+    ),
+    (rule
+      'while_stmt'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#3 'while'),
+            (item#2 'named_expr'),
+            (item#2 'suite'),
+            (optional '[' (alt_list (sequence [(item#2 'else_suite')])) ']')
+          ]
+        )
+      )
+      '\n'
+    ),
+    (rule
+      'for_stmt'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#3 'for'),
+            (item#2 'targetlist'),
+            (item#3 'in'),
+            (item#2 'exprlist'),
+            (item#2 'suite'),
+            (optional '[' (alt_list (sequence [(item#2 'else_suite')])) ']')
+          ]
+        )
+      )
+      '\n'
+    ),
+    (rule
+      'try_stmt'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#3 'try'),
+            (item#2 'suite'),
+            (group
+              '('
+              (alt_list
+                (sequence [(item#2 'except_suite')])
+                [(alt_list:2 '|' (sequence [(item#2 'finally_suite')]))]
+              )
+              ')'
+            )
+          ]
+        )
+      )
+      '\n'
+    ),
+    (rule
+      'with_stmt'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#3 'with'),
+            (delimited ',' '.' (item#2 'expr_as_name') '+'),
+            (item#2 'suite')
+          ]
+        )
+      )
+      '\n'
+    ),
+    (rule
+      'expr_as_name'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#2 'expr'),
+            (optional '[' (alt_list (sequence [(item#2 'as_name')])) ']')
+          ]
+        )
+      )
+      '\n\n# Suites\n\n'
+    ),
+    (rule
+      'block_suite'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#3 '{'),
+            (item#2 'NEWLINE'),
+            (primary:5 (item#2 'stmt') '+'),
+            (item#3 '}')
+          ]
+        )
+        [
+          (alt_list:2
+            '\n    '
+            '|'
+            (sequence
+              [
+                (item#3 '{'),
+                (item#3 '}')
+              ]
+            )
+          )
+        ]
+      )
+      '\n'
+    ),
+    (rule
+      'suite'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#3 ':'),
+            (item#2 'simple_stmt')
+          ]
+        )
+        [(alt_list:2 '\n    ' '|' (sequence [(item#2 'block_suite')]))]
+      )
+      '\n'
+    ),
+    (rule
+      'else_suite'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#3 'else'),
+            (item#2 'suite')
+          ]
+        )
+      )
+      '\n'
+    ),
+    (rule
+      'finally_suite'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#3 'finally'),
+            (item#2 'suite')
+          ]
+        )
+      )
+      '\n'
+    ),
+    (rule
+      'except_clause'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#3 'except'),
+            (optional '[' (alt_list (sequence [(item#2 'expr_as_name')])) ']'),
+            (item#2 'suite')
+          ]
+        )
+      )
+      '\n'
+    ),
+    (rule
+      'except_suite'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (primary:5 (item#2 'except_clause') '+'),
+            (optional '[' (alt_list (sequence [(item#2 'else_suite')])) ']'),
+            (optional '[' (alt_list (sequence [(item#2 'finally_suite')])) ']')
+          ]
+        )
+      )
+      '\n\n# Function calls\n\n'
+    ),
+    (rule
+      'invocation'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#3 '('),
+            (optional '[' (alt_list (sequence [(item#2 'call_arg_list')])) ']'),
+            (item#3 ')')
+          ]
+        )
+      )
+      '\n'
+    ),
+    (rule
+      'call_arg_list'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (delimited ',' '.' (item#2 'call_arg') '+'),
+            (optional '[' (alt_list (sequence [(item#3 ',')])) ']')
+          ]
+        )
+      )
+      '\n'
+    ),
+    (rule
+      'call_arg'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#2 'NAME'),
+            (item#3 ':='),
+            (item#2 'expr')
+          ]
+        )
+        [
+          (alt_list:2
+            '\n    '
+            '|'
+            (sequence
+              [
+                (item#2 'NAME'),
+                (item#3 '='),
+                (item#2 'expr')
+              ]
+            )
+          ),
+          (alt_list:2
+            '\n    '
+            '|'
+            (sequence
+              [
+                (item#3 '**'),
+                (item#2 'expr')
+              ]
+            )
+          ),
+          (alt_list:2
+            '\n    '
+            '|'
+            (sequence
+              [
+                (item#3 '*'),
+                (item#2 'expr')
+              ]
+            )
+          ),
+          (alt_list:2 '\n    ' '|' (sequence [(item#2 'expr')]))
+        ]
+      )
+      '\n\n# Builder definitions\n\n'
+    ),
+    (rule
+      'typed_arg_list'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence [(item#2 'kwargs')])
+        [
+          (alt_list:2 '\n    ' '|' (sequence [(item#2 'args_kwargs')])),
+          (alt_list:2 '\n    ' '|' (sequence [(item#2 'full_arg_list')]))
+        ]
+      )
+      '\n'
+    ),
+    (rule
+      'full_arg_list'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (delimited ',' '.' (item#2 'default_arg') '+'),
+            (optional
+              '['
+              (alt_list
+                (sequence
+                  [
+                    (item#3 ','),
+                    (optional
+                      '['
+                      (alt_list
+                        (sequence [(item#2 'kwargs')])
+                        [(alt_list:2 '|' (sequence [(item#2 'args_kwargs')]))]
+                      )
+                      ']'
+                    )
+                  ]
+                )
+              )
+              ']'
+            )
+          ]
+        )
+      )
+      '\n'
+    ),
+    (rule
+      'args_kwargs'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#3 '*'),
+            (optional '[' (alt_list (sequence [(item#2 'typed_arg')])) ']'),
+            (primary:4
+              (group
+                '('
+                (alt_list
+                  (sequence
+                    [
+                      (item#3 ','),
+                      (item#2 'default_arg')
+                    ]
+                  )
+                )
+                ')'
+              )
+              '*'
+            ),
+            (optional
+              '['
+              (alt_list
+                (sequence
+                  [
+                    (item#3 ','),
+                    (optional '[' (alt_list (sequence [(item#2 'kwargs')])) ']')
+                  ]
+                )
+              )
+              ']'
+            )
+          ]
+        )
+      )
+      '\n'
+    ),
+    (rule
+      'kwargs'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#3 '**'),
+            (item#2 'typed_arg'),
+            (optional '[' (alt_list (sequence [(item#3 ',')])) ']')
+          ]
+        )
+      )
+      '\n'
+    ),
+    (rule
+      'default_arg'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#2 'typed_arg'),
+            (optional
+              '['
+              (alt_list
+                (sequence
+                  [
+                    (item#3 '='),
+                    (item#2 'expr')
+                  ]
+                )
+              )
+              ']'
+            )
+          ]
+        )
+      )
+      '\n'
+    ),
+    (rule
+      'typed_arg'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#2 'NAME'),
+            (optional
+              '['
+              (alt_list
+                (sequence
+                  [
+                    (item#3 ':'),
+                    (item#2 'expr')
+                  ]
+                )
+              )
+              ']'
+            )
+          ]
+        )
+      )
+      '\n'
+    ),
+    (rule
+      'simple_arg'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#2 'NAME'),
+            (optional
+              '['
+              (alt_list
+                (sequence
+                  [
+                    (item#3 '='),
+                    (item#2 'expr')
+                  ]
+                )
+              )
+              ']'
+            )
+          ]
+        )
+      )
+      '\n'
+    ),
+    (rule 'simple_args' ':' '\n    ' '|' (alt_list (sequence [(delimited ',' '.' (item#2 'simple_arg') '+')])) '\n'),
+    (rule
+      'builder_hint'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#3 '<'),
+            (item#2 'name_list'),
+            (item#3 '>')
+          ]
+        )
+      )
+      '\n'
+    ),
+    (rule
+      'builder_args'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence [(item#2 'simple_args')])
+        [
+          (alt_list:2
+            '\n    '
+            '|'
+            (sequence
+              [
+                (item#3 '('),
+                (optional '[' (alt_list (sequence [(item#2 'typed_arg_list')])) ']'),
+                (item#3 ')')
+              ]
+            )
+          )
+        ]
+      )
+      '\n\n# Expressions\n\n'
+    ),
+    (rule
+      'named_expr'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#2 'NAME'),
+            (item#3 ':='),
+            (item#2 'expr')
+          ]
+        )
+        [(alt_list:2 '\n    ' '|' (sequence [(item#2 'expr')]))]
+      )
+      '\n'
+    ),
+    (rule
+      'conditional'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#3 'if'),
+            (item#2 'disjunction'),
+            (item#3 '?'),
+            (item#2 'disjunction'),
+            (item#3 ':'),
+            (item#2 'expr')
+          ]
+        )
+      )
+      '\n'
+    ),
+    (rule
+      'expr'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence [(item#2 'conditional')])
+        [(alt_list:2 '\n    ' '|' (sequence [(item#2 'disjunction')]))]
+      )
+      '\n'
+    ),
+    (rule
+      'disjunction'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#2 'disjunction'),
+            (item#3 'or'),
+            (item#2 'conjunction')
+          ]
+        )
+        [(alt_list:2 '\n    ' '|' (sequence [(item#2 'conjunction')]))]
+      )
+      '\n'
+    ),
+    (rule
+      'conjunction'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#2 'conjunction'),
+            (item#3 'and'),
+            (item#2 'inversion')
+          ]
+        )
+        [(alt_list:2 '\n    ' '|' (sequence [(item#2 'inversion')]))]
+      )
+      '\n'
+    ),
+    (rule
+      'inversion'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#3 'not'),
+            (item#2 'inversion')
+          ]
+        )
+        [(alt_list:2 '\n    ' '|' (sequence [(item#2 'comparison')]))]
+      )
+      '\n'
+    ),
+    (rule
+      'comparison'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#2 'bitwise_or'),
+            (primary:5
+              (group
+                '('
+                (alt_list
+                  (sequence
+                    [
+                      (item#2 'comp_op'),
+                      (item#2 'bitwise_or')
+                    ]
+                  )
+                )
+                ')'
+              )
+              '+'
+            )
+          ]
+        )
+        [(alt_list:2 '\n    ' '|' (sequence [(item#2 'bitwise_or')]))]
+      )
+      '\n'
+    ),
+    (rule
+      'comp_op'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence [(item#3 '<')])
+        [
+          (alt_list:2 '\n    ' '|' (sequence [(item#3 '>')])),
+          (alt_list:2 '\n    ' '|' (sequence [(item#3 '==')])),
+          (alt_list:2 '\n    ' '|' (sequence [(item#3 '>=')])),
+          (alt_list:2 '\n    ' '|' (sequence [(item#3 '<=')])),
+          (alt_list:2 '\n    ' '|' (sequence [(item#3 '!=')])),
+          (alt_list:2 '\n    ' '|' (sequence [(item#3 'in')])),
+          (alt_list:2
+            '\n    '
+            '|'
+            (sequence
+              [
+                (item#3 'not'),
+                (item#3 'in')
+              ]
+            )
+          ),
+          (alt_list:2 '\n    ' '|' (sequence [(item#3 'is')])),
+          (alt_list:2
+            '\n    '
+            '|'
+            (sequence
+              [
+                (item#3 'is'),
+                (item#3 'not')
+              ]
+            )
+          )
+        ]
+      )
+      '\n'
+    ),
+    (rule
+      'bitwise_or'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#2 'bitwise_or'),
+            (item#3 '|'),
+            (item#2 'bitwise_xor')
+          ]
+        )
+        [(alt_list:2 '\n    ' '|' (sequence [(item#2 'bitwise_xor')]))]
+      )
+      '\n'
+    ),
+    (rule
+      'bitwise_xor'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#2 'bitwise_xor'),
+            (item#3 '^'),
+            (item#2 'bitwise_and')
+          ]
+        )
+        [(alt_list:2 '\n    ' '|' (sequence [(item#2 'bitwise_and')]))]
+      )
+      '\n'
+    ),
+    (rule
+      'bitwise_and'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#2 'bitwise_and'),
+            (item#3 '&'),
+            (item#2 'shift_expr')
+          ]
+        )
+        [(alt_list:2 '\n    ' '|' (sequence [(item#2 'shift_expr')]))]
+      )
+      '\n'
+    ),
+    (rule
+      'shift_expr'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#2 'shift_expr'),
+            (item#3 '<<'),
+            (item#2 'sum')
+          ]
+        )
+        [
+          (alt_list:2
+            '\n    '
+            '|'
+            (sequence
+              [
+                (item#2 'shift_expr'),
+                (item#3 '>>'),
+                (item#2 'sum')
+              ]
+            )
+          ),
+          (alt_list:2 '\n    ' '|' (sequence [(item#2 'sum')]))
+        ]
+      )
+      '\n'
+    ),
+    (rule
+      'sum'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#2 'sum'),
+            (item#3 '+'),
+            (item#2 'term')
+          ]
+        )
+        [
+          (alt_list:2
+            '\n    '
+            '|'
+            (sequence
+              [
+                (item#2 'sum'),
+                (item#3 '-'),
+                (item#2 'term')
+              ]
+            )
+          ),
+          (alt_list:2 '\n    ' '|' (sequence [(item#2 'term')]))
+        ]
+      )
+      '\n'
+    ),
+    (rule
+      'term'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#2 'term'),
+            (item#3 '*'),
+            (item#2 'pipe_expr')
+          ]
+        )
+        [
+          (alt_list:2
+            '\n    '
+            '|'
+            (sequence
+              [
+                (item#2 'term'),
+                (item#3 '/'),
+                (item#2 'pipe_expr')
+              ]
+            )
+          ),
+          (alt_list:2
+            '\n    '
+            '|'
+            (sequence
+              [
+                (item#2 'term'),
+                (item#3 '%'),
+                (item#2 'pipe_expr')
+              ]
+            )
+          ),
+          (alt_list:2
+            '\n    '
+            '|'
+            (sequence
+              [
+                (item#2 'term'),
+                (item#3 '//'),
+                (item#2 'pipe_expr')
+              ]
+            )
+          ),
+          (alt_list:2
+            '\n    '
+            '|'
+            (sequence
+              [
+                (item#2 'term'),
+                (item#3 '@'),
+                (item#2 'pipe_expr')
+              ]
+            )
+          ),
+          (alt_list:2 '\n    ' '|' (sequence [(item#2 'pipe_expr')]))
+        ]
+      )
+      '\n'
+    ),
+    (rule
+      'pipe_expr'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#2 'pipe_expr'),
+            (item#3 '->'),
+            (item#2 'factor')
+          ]
+        )
+        [(alt_list:2 '\n    ' '|' (sequence [(item#2 'factor')]))]
+      )
+      '\n'
+    ),
+    (rule
+      'factor'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#3 '+'),
+            (item#2 'factor')
+          ]
+        )
+        [
+          (alt_list:2
+            '\n    '
+            '|'
+            (sequence
+              [
+                (item#3 '-'),
+                (item#2 'factor')
+              ]
+            )
+          ),
+          (alt_list:2
+            '\n    '
+            '|'
+            (sequence
+              [
+                (item#3 '~'),
+                (item#2 'factor')
+              ]
+            )
+          ),
+          (alt_list:2 '\n    ' '|' (sequence [(item#2 'power')]))
+        ]
+      )
+      '\n'
+    ),
+    (rule
+      'power'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#2 'primary'),
+            (item#3 '**'),
+            (item#2 'factor')
+          ]
+        )
+        [(alt_list:2 '\n    ' '|' (sequence [(item#2 'primary')]))]
+      )
+      '\n'
+    ),
+    (rule
+      'primary'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#2 'primary'),
+            (item#3 '.'),
+            (item#2 'NAME')
+          ]
+        )
+        [
+          (alt_list:2
+            '\n    '
+            '|'
+            (sequence
+              [
+                (item#2 'primary'),
+                (item#2 'invocation')
+              ]
+            )
+          ),
+          (alt_list:2
+            '\n    '
+            '|'
+            (sequence
+              [
+                (item#2 'primary'),
+                (item#2 'subscript')
+              ]
+            )
+          ),
+          (alt_list:2 '\n    ' '|' (sequence [(item#2 'atom')]))
+        ]
+      )
+      '\n'
+    ),
+    (rule
+      'tuple_atom'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#3 '('),
+            (optional '[' (alt_list (sequence [(item#2 'named_expr_list')])) ']'),
+            (item#3 ')')
+          ]
+        )
+      )
+      '\n'
+    ),
+    (rule
+      'list_iter'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#3 '['),
+            (item#2 'expr_or_star'),
+            (item#2 'iterator'),
+            (item#3 ']')
+          ]
+        )
+      )
+      '\n'
+    ),
+    (rule
+      'list_atom'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#3 '['),
+            (optional '[' (alt_list (sequence [(item#2 'named_expr_list')])) ']'),
+            (item#3 ']')
+          ]
+        )
+      )
+      '\n'
+    ),
+    (rule
+      'set_atom'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#3 '{'),
+            (optional '[' (alt_list (sequence [(item#2 'exprlist_star')])) ']'),
+            (item#3 '}')
+          ]
+        )
+      )
+      '\n'
+    ),
+    (rule
+      'dict_iter'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#3 '{'),
+            (item#2 'dict_item'),
+            (item#2 'iterator'),
+            (item#3 '}')
+          ]
+        )
+      )
+      '\n'
+    ),
+    (rule
+      'dict_atom'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#3 '{'),
+            (optional '[' (alt_list (sequence [(item#2 'dict_items')])) ']'),
+            (item#3 '}')
+          ]
+        )
+      )
+      '\n'
+    ),
+    (rule
+      'builder'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence
+          [
+            (item#2 'NAME'),
+            (item#2 'simple_args'),
+            (item#3 ':'),
+            (item#2 'expr')
+          ]
+        )
+        [
+          (alt_list:2
+            '\n    '
+            '|'
+            (sequence
+              [
+                (item#2 'NAME'),
+                (optional '[' (alt_list (sequence [(item#2 'builder_hint')])) ']'),
+                (optional '[' (alt_list (sequence [(item#2 'builder_args')])) ']'),
+                (item#2 'block_suite')
+              ]
+            )
+          )
+        ]
+      )
+      '\n'
+    ),
+    (rule
+      'atom'
+      ':'
+      '\n    '
+      '|'
+      (alt_list
+        (sequence [(item#2 'tuple_atom')])
+        [
+          (alt_list:2 '\n    ' '|' (sequence [(item#2 'list_iter')])),
+          (alt_list:2 '\n    ' '|' (sequence [(item#2 'list_atom')])),
+          (alt_list:2 '\n    ' '|' (sequence [(item#2 'set_atom')])),
+          (alt_list:2 '\n    ' '|' (sequence [(item#2 'dict_iter')])),
+          (alt_list:2 '\n    ' '|' (sequence [(item#2 'dict_atom')])),
+          (alt_list:2 '\n    ' '|' (sequence [(item#2 'builder')])),
+          (alt_list:2 '\n    ' '|' (sequence [(item#2 'NAME')])),
+          (alt_list:2 '\n    ' '|' (sequence [(item#2 'NUMBER')])),
+          (alt_list:2 '\n    ' '|' (sequence [(item#2 'STRING')])),
+          (alt_list:2 '\n    ' '|' (sequence [(item#3 'None')])),
+          (alt_list:2 '\n    ' '|' (sequence [(item#3 'True')])),
+          (alt_list:2 '\n    ' '|' (sequence [(item#3 'False')]))
+        ]
+      )
+      '\n'
+    )
+  ]
+)

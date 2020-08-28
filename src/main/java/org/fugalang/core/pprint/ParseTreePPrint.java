@@ -73,7 +73,7 @@ public class ParseTreePPrint implements TreeStringBuilder {
 
     @Override
     public TreeStringBuilder addString(String token) {
-        elems.add("'" + token + "'");
+        elems.add("'" + token.replace(System.lineSeparator(), "\\n") + "'");
         return this;
     }
 
