@@ -3,18 +3,25 @@ package org.fugalang.grammar.common;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class RuleSet {
     private final List<NamedRule> namedRules;
+    private final Map<String, TokenEntry> tokenMap;
     private NamedRule currentRule;
     private int ruleIndexCounter = 0;
 
-    public RuleSet() {
+    public RuleSet(Map<String, TokenEntry> tokenMap) {
+        this.tokenMap = tokenMap;
         this.namedRules = new ArrayList<>();
     }
 
     public List<NamedRule> getNamedRules() {
         return namedRules;
+    }
+
+    public Map<String, TokenEntry> getTokenMap() {
+        return tokenMap;
     }
 
     public UnitRule createNamedRule(RuleName ruleName, boolean leftRecursive) {

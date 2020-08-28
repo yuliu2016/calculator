@@ -51,9 +51,7 @@ public class CTransform {
         sb.append(") {\n");
         sb.append("    ENTER_FRAME(p, ")
                 .append(unit.getRuleIndex())
-                .append(", \"")
-                .append(rn.getRuleNameFull())
-                .append("\");\n");
+                .append(");\n");
         if (unit.isLeftRecursive()) {
             addLeftRecursiveUnitRuleBody(unit, sb);
         } else {
@@ -131,7 +129,7 @@ public class CTransform {
 
         var fields = unit.getFields();
         for (int i = 0; i < fields.size(); i++) {
-            sb.append("    (r = ");
+            sb.append("    (a = ");
             var result = getParserFieldExpr(fields.get(i),
                     unit.getRuleType(), i == fields.size() - 1);
             sb.append(result);
@@ -191,12 +189,12 @@ public class CTransform {
         var fields = unit.getFields();
         for (int i = 0; i < fields.size(); i++) {
             sb.append("    ");
-            sb.append("(r = ");
+            sb.append("(a = ");
             var result = getParserFieldExpr(fields.get(i),
                     unit.getRuleType(), i == fields.size() - 1);
             sb.append(result);
         }
-        sb.append(";\n");
+        sb.append("\n    ? (r = NODE_1(p, a)) : 0;\n");
     }
 
     private static String getParserFieldExpr(
@@ -306,5 +304,19 @@ public class CTransform {
             }
         }
         sb.append("    } ").append(unit.getRuleName().getRuleNameSymbolic()).append(";\n");
+    }
+
+    public static String getTokenMap(RuleSet ruleSet) {
+        StringBuilder sb = new StringBuilder();
+        for (var tk : ruleSet.getTokenMap().values()) {
+            sb.append("#define T_")
+                    .append(tk.getNameSnakeCase().toUpperCase())
+                    .append(" ")
+                    .append(tk.getIndex())
+                    .append("  // ")
+                    .append(tk.getLiteralValue())
+                    .append("\n");
+        }
+        return sb.toString();
     }
 }
