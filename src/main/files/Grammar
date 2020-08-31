@@ -52,7 +52,7 @@ target:
     | t_primary subscript !t_lookahead
     | NAME
     | '(' targetlist ')'
-t_primary:
+t_primary (left_recursive):
     | t_primary '.' NAME &t_lookahead
     | t_primary invocation &t_lookahead
     | t_primary subscript &t_lookahead
@@ -129,7 +129,7 @@ augassign_op:
     | '**='
     | '//='
 
-# Import Statments
+# Import Statements
 
 import_name:
     | 'import' dotted_as_names
@@ -226,7 +226,7 @@ typed_arg:
 simple_arg:
     | NAME ['=' expr]
 simple_args:
-    | ",".simple_arg+
+    | ','.simple_arg+
 builder_hint:
     | '<' name_list '>'
 builder_args:
@@ -243,10 +243,10 @@ conditional:
 expr:
     | conditional
     | disjunction
-disjunction:
+disjunction (left_recursive):
     | disjunction 'or' conjunction
     | conjunction
-conjunction:
+conjunction (left_recursive):
     | conjunction 'and' inversion
     | inversion
 inversion:
@@ -266,31 +266,31 @@ comp_op:
     | 'not' 'in'
     | 'is'
     | 'is' 'not'
-bitwise_or:
+bitwise_or (left_recursive):
     | bitwise_or '|' bitwise_xor
     | bitwise_xor
-bitwise_xor:
+bitwise_xor (left_recursive):
     | bitwise_xor '^' bitwise_and
     | bitwise_and
-bitwise_and:
+bitwise_and (left_recursive):
     | bitwise_and '&' shift_expr
     | shift_expr
-shift_expr:
+shift_expr (left_recursive):
     | shift_expr '<<' sum
     | shift_expr '>>' sum
     | sum
-sum:
+sum (left_recursive):
     | sum '+' term
     | sum '-' term
     | term
-term:
+term (left_recursive):
     | term '*' pipe_expr
     | term '/' pipe_expr
     | term '%' pipe_expr
     | term '//' pipe_expr
     | term '@' pipe_expr
     | pipe_expr
-pipe_expr:
+pipe_expr (left_recursive):
     | pipe_expr '->' factor
     | factor
 factor:
@@ -301,7 +301,7 @@ factor:
 power:
     | primary '**' factor
     | primary
-primary:
+primary (left_recursive):
     | primary '.' NAME
     | primary invocation
     | primary subscript
