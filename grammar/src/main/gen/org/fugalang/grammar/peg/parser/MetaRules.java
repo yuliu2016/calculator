@@ -8,6 +8,10 @@ import static org.fugalang.core.parser.ParserRule.or_rule;
 public class MetaRules {
     public static final ParserRule GRAMMAR = and_rule("grammar");
     public static final ParserRule RULE = and_rule("rule");
+    public static final ParserRule RULE_ARGS = and_rule("rule_args");
+    public static final ParserRule RULE_ARG = and_rule("rule_arg");
+    public static final ParserRule RULE_ARG_2 = and_rule("rule_arg:2");
+    public static final ParserRule RULE_SUITE = and_rule("rule_suite");
     public static final ParserRule ALT_LIST = and_rule("alt_list");
     public static final ParserRule ALT_LIST_2 = and_rule("alt_list:2");
     public static final ParserRule SEQUENCE = and_rule("sequence");

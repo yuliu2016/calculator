@@ -45,7 +45,7 @@ public class RuleSetBuilder {
         }
 
         for (var rule : rules) {
-            var left_recursive = PEGUtil.isLeftRecursive(rule.name(), rule.altList());
+            var left_recursive = PEGUtil.isLeftRecursive(rule.name(), rule.ruleSuite().altList());
 
             var ruleName = ruleNameMap.get(rule.name());
 
@@ -56,7 +56,7 @@ public class RuleSetBuilder {
             unit.setGrammarString(ruleRepr);
             unit.setRuleType(RuleType.Disjunction);
 
-            addAltList(ruleName, unit, rule.altList());
+            addAltList(ruleName, unit, rule.ruleSuite().altList());
 
             // protect against not initializing result
             unit.guardMatchEmptyString();

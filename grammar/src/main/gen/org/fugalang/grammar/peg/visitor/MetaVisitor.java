@@ -15,9 +15,33 @@ public interface MetaVisitor<T> {
 
     /**
      * rule:
-     * *   | NAME ':' NEWLINE '|' alt_list NEWLINE
+     * *   | NAME [rule_args] rule_suite
      */
     default T visitRule(Rule rule) {
+        return null;
+    }
+
+    /**
+     * rule_args:
+     * *   | '(' ','.rule_arg+ ')'
+     */
+    default T visitRuleArgs(RuleArgs ruleArgs) {
+        return null;
+    }
+
+    /**
+     * rule_arg:
+     * *   | NAME ['=' NAME]
+     */
+    default T visitRuleArg(RuleArg ruleArg) {
+        return null;
+    }
+
+    /**
+     * rule_suite:
+     * *   | ':' NEWLINE '|' alt_list NEWLINE
+     */
+    default T visitRuleSuite(RuleSuite ruleSuite) {
         return null;
     }
 

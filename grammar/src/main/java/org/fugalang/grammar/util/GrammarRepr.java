@@ -39,7 +39,7 @@ public class GrammarRepr implements MetaVisitor<String> {
     @Override
     public String visitRule(Rule rule) {
         return rule.name() + ":" +
-                stringifyAltList(rule.altList(), true);
+                stringifyAltList(rule.ruleSuite().altList(), true);
     }
 
 

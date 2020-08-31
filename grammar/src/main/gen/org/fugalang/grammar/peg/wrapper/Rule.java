@@ -6,7 +6,7 @@ import org.fugalang.core.token.TokenType;
 
 /**
  * rule:
- * *   | NAME ':' NEWLINE '|' alt_list NEWLINE
+ * *   | NAME [rule_args] rule_suite
  */
 public final class Rule extends NodeWrapper {
 
@@ -18,15 +18,15 @@ public final class Rule extends NodeWrapper {
         return get(0, TokenType.NAME);
     }
 
-    public String newline() {
-        return get(2, TokenType.NEWLINE);
+    public RuleArgs ruleArgs() {
+        return new RuleArgs(get(1));
     }
 
-    public AltList altList() {
-        return new AltList(get(4));
+    public boolean hasRuleArgs() {
+        return has(1);
     }
 
-    public String newline1() {
-        return get(5, TokenType.NEWLINE);
+    public RuleSuite ruleSuite() {
+        return new RuleSuite(get(2));
     }
 }

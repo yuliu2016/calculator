@@ -34,14 +34,83 @@ public class MetaParser {
 
     /**
      * rule:
-     * *   | NAME ':' NEWLINE '|' alt_list NEWLINE
+     * *   | NAME [rule_args] rule_suite
      */
     public static boolean rule(ParseTree t) {
         var m = t.enter(RULE);
         if (m != null) return m;
         boolean r;
         r = t.consume(TokenType.NAME);
-        r = r && t.consume(":");
+        if (r) rule_args(t);
+        r = r && rule_suite(t);
+        t.exit(r);
+        return r;
+    }
+
+    /**
+     * rule_args:
+     * *   | '(' ','.rule_arg+ ')'
+     */
+    public static boolean rule_args(ParseTree t) {
+        var m = t.enter(RULE_ARGS);
+        if (m != null) return m;
+        boolean r;
+        r = t.consume("(");
+        r = r && rule_arg_loop(t);
+        r = r && t.consume(")");
+        t.exit(r);
+        return r;
+    }
+
+    private static boolean rule_arg_loop(ParseTree t) {
+        t.enterLoop();
+        var r = rule_arg(t);
+        if (r) while (true) {
+            var p = t.position();
+            if (t.skip(",") && rule_arg(t)) continue;
+            t.reset(p);
+            break;
+        }
+        t.exitLoop();
+        return r;
+    }
+
+    /**
+     * rule_arg:
+     * *   | NAME ['=' NAME]
+     */
+    public static boolean rule_arg(ParseTree t) {
+        var m = t.enter(RULE_ARG);
+        if (m != null) return m;
+        boolean r;
+        r = t.consume(TokenType.NAME);
+        if (r) rule_arg_2(t);
+        t.exit(r);
+        return r;
+    }
+
+    /**
+     * '=' NAME
+     */
+    private static boolean rule_arg_2(ParseTree t) {
+        var m = t.enter(RULE_ARG_2);
+        if (m != null) return m;
+        boolean r;
+        r = t.consume("=");
+        r = r && t.consume(TokenType.NAME);
+        t.exit(r);
+        return r;
+    }
+
+    /**
+     * rule_suite:
+     * *   | ':' NEWLINE '|' alt_list NEWLINE
+     */
+    public static boolean rule_suite(ParseTree t) {
+        var m = t.enter(RULE_SUITE);
+        if (m != null) return m;
+        boolean r;
+        r = t.consume(":");
         r = r && t.consume(TokenType.NEWLINE);
         r = r && t.consume("|");
         r = r && alt_list(t);

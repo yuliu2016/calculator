@@ -52,7 +52,7 @@ public class PEGBuilder {
         }
 
         for (var rule : rules) {
-            var left_recursive = PEGUtil.isLeftRecursive(rule.name(), rule.altList());
+            var left_recursive = PEGUtil.isLeftRecursive(rule.name(), rule.ruleSuite().altList());
 
             var realClassName = classNameMap.get(rule.name());
             var className = ClassName.of(realClassName, rule.name());
@@ -64,7 +64,7 @@ public class PEGBuilder {
             cb.setHeaderComments(rule_repr);
             cb.setRuleType(RuleType.Disjunction);
 
-            addAltList(className, cb, rule.altList());
+            addAltList(className, cb, rule.ruleSuite().altList());
 
             // protect against not initializing result
             cb.guardMatchEmptyString();
