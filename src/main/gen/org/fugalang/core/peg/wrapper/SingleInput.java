@@ -7,6 +7,7 @@ import org.fugalang.core.token.TokenType;
 /**
  * single_input:
  * *   | NEWLINE
+ * *   | ENDMARKER
  * *   | simple_stmt
  * *   | compound_stmt NEWLINE
  */
@@ -24,28 +25,36 @@ public final class SingleInput extends NodeWrapper {
         return has(0);
     }
 
-    public SimpleStmt simpleStmt() {
-        return new SimpleStmt(get(1));
+    public String endmarker() {
+        return get(1, TokenType.ENDMARKER);
     }
 
-    public boolean hasSimpleStmt() {
+    public boolean hasEndmarker() {
         return has(1);
     }
 
-    public SingleInput3 compoundStmtNewline() {
-        return new SingleInput3(get(2));
+    public SimpleStmt simpleStmt() {
+        return new SimpleStmt(get(2));
+    }
+
+    public boolean hasSimpleStmt() {
+        return has(2);
+    }
+
+    public SingleInput4 compoundStmtNewline() {
+        return new SingleInput4(get(3));
     }
 
     public boolean hasCompoundStmtNewline() {
-        return has(2);
+        return has(3);
     }
 
     /**
      * compound_stmt NEWLINE
      */
-    public static final class SingleInput3 extends NodeWrapper {
+    public static final class SingleInput4 extends NodeWrapper {
 
-        public SingleInput3(ParseTreeNode node) {
+        public SingleInput4(ParseTreeNode node) {
             super(node);
         }
 

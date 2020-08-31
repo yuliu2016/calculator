@@ -2,14 +2,17 @@
 
 single_input:
     | NEWLINE
+    | ENDMARKER
     | simple_stmt
     | compound_stmt NEWLINE
 file_input:
-    | (NEWLINE | stmt)* ENDMARKER
+    | [stmt_list] ENDMARKER
 eval_input:
     | exprlist NEWLINE* ENDMARKER
 
 # Statements
+stmt_list:
+    | stmt+
 stmt:
     | (simple_stmt | compound_stmt) NEWLINE
 simple_stmt:
@@ -191,8 +194,8 @@ expr_as_name:
 # Suites
 
 block_suite(allow_whitespace=false):
-    | '{' NEWLINE stmt+ '}'
-    | '{' '}'
+    | '{' NEWLINE stmt_list '}'
+    | '{' [simple_stmt] '}'
 suite:
     | ':' simple_stmt
     | block_suite

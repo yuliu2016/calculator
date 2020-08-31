@@ -8,6 +8,7 @@ public interface FugaVisitor<T> {
     /**
      * single_input:
      * *   | NEWLINE
+     * *   | ENDMARKER
      * *   | simple_stmt
      * *   | compound_stmt NEWLINE
      */
@@ -17,7 +18,7 @@ public interface FugaVisitor<T> {
 
     /**
      * file_input:
-     * *   | (NEWLINE | stmt)* ENDMARKER
+     * *   | [stmt_list] ENDMARKER
      */
     default T visitFileInput(FileInput fileInput) {
         return null;
@@ -28,6 +29,14 @@ public interface FugaVisitor<T> {
      * *   | exprlist NEWLINE* ENDMARKER
      */
     default T visitEvalInput(EvalInput evalInput) {
+        return null;
+    }
+
+    /**
+     * stmt_list:
+     * *   | stmt+
+     */
+    default T visitStmtList(StmtList stmtList) {
         return null;
     }
 
@@ -533,8 +542,8 @@ public interface FugaVisitor<T> {
 
     /**
      * block_suite (allow_whitespace=false):
-     * *   | '{' NEWLINE stmt+ '}'
-     * *   | '{' '}'
+     * *   | '{' NEWLINE stmt_list '}'
+     * *   | '{' [simple_stmt] '}'
      */
     default T visitBlockSuite(BlockSuite blockSuite) {
         return null;

@@ -4,11 +4,9 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 import org.fugalang.core.token.TokenType;
 
-import java.util.List;
-
 /**
  * file_input:
- * *   | (NEWLINE | stmt)* ENDMARKER
+ * *   | [stmt_list] ENDMARKER
  */
 public final class FileInput extends NodeWrapper {
 
@@ -16,37 +14,15 @@ public final class FileInput extends NodeWrapper {
         super(node);
     }
 
-    public List<FileInput1> newlineOrStmts() {
-        return getList(0, FileInput1::new);
+    public StmtList stmtList() {
+        return new StmtList(get(0));
+    }
+
+    public boolean hasStmtList() {
+        return has(0);
     }
 
     public String endmarker() {
         return get(1, TokenType.ENDMARKER);
-    }
-
-    /**
-     * NEWLINE | stmt
-     */
-    public static final class FileInput1 extends NodeWrapper {
-
-        public FileInput1(ParseTreeNode node) {
-            super(node);
-        }
-
-        public String newline() {
-            return get(0, TokenType.NEWLINE);
-        }
-
-        public boolean hasNewline() {
-            return has(0);
-        }
-
-        public Stmt stmt() {
-            return new Stmt(get(1));
-        }
-
-        public boolean hasStmt() {
-            return has(1);
-        }
     }
 }

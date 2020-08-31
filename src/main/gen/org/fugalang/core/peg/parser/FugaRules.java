@@ -6,10 +6,10 @@ import static org.fugalang.core.parser.ParserRule.*;
 
 public class FugaRules {
     public static final ParserRule SINGLE_INPUT = or_rule("single_input");
-    public static final ParserRule SINGLE_INPUT_3 = and_rule("single_input:3");
+    public static final ParserRule SINGLE_INPUT_4 = and_rule("single_input:4");
     public static final ParserRule FILE_INPUT = and_rule("file_input");
-    public static final ParserRule FILE_INPUT_1 = or_rule("file_input:1");
     public static final ParserRule EVAL_INPUT = and_rule("eval_input");
+    public static final ParserRule STMT_LIST = and_rule("stmt_list");
     public static final ParserRule STMT = and_rule("stmt");
     public static final ParserRule STMT_1 = or_rule("stmt:1");
     public static final ParserRule SIMPLE_STMT = and_rule("simple_stmt");

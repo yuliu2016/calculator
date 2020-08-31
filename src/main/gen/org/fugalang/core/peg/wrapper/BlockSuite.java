@@ -4,12 +4,10 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 import org.fugalang.core.token.TokenType;
 
-import java.util.List;
-
 /**
  * block_suite (allow_whitespace=false):
- * *   | '{' NEWLINE stmt+ '}'
- * *   | '{' '}'
+ * *   | '{' NEWLINE stmt_list '}'
+ * *   | '{' [simple_stmt] '}'
  */
 public final class BlockSuite extends NodeWrapper {
 
@@ -25,16 +23,16 @@ public final class BlockSuite extends NodeWrapper {
         return has(0);
     }
 
-    public BlockSuite2 lbraceRbrace() {
+    public BlockSuite2 blockSuite2() {
         return new BlockSuite2(get(1));
     }
 
-    public boolean hasLbraceRbrace() {
+    public boolean hasBlockSuite2() {
         return has(1);
     }
 
     /**
-     * '{' NEWLINE stmt+ '}'
+     * '{' NEWLINE stmt_list '}'
      */
     public static final class BlockSuite1 extends NodeWrapper {
 
@@ -46,18 +44,26 @@ public final class BlockSuite extends NodeWrapper {
             return get(1, TokenType.NEWLINE);
         }
 
-        public List<Stmt> stmts() {
-            return getList(2, Stmt::new);
+        public StmtList stmtList() {
+            return new StmtList(get(2));
         }
     }
 
     /**
-     * '{' '}'
+     * '{' [simple_stmt] '}'
      */
     public static final class BlockSuite2 extends NodeWrapper {
 
         public BlockSuite2(ParseTreeNode node) {
             super(node);
+        }
+
+        public SimpleStmt simpleStmt() {
+            return new SimpleStmt(get(1));
+        }
+
+        public boolean hasSimpleStmt() {
+            return has(1);
         }
     }
 }

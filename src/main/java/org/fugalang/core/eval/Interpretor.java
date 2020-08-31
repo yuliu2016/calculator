@@ -32,14 +32,6 @@ public class Interpretor implements FugaVisitor<Object> {
         return null;
     }
 
-    /**
-     * eval_input:
-     * *   | exprlist NEWLINE* ENDMARKER
-     */
-    @Override
-    public Object visitEvalInput(EvalInput evalInput) {
-        return null;
-    }
 
     /**
      * stmt:

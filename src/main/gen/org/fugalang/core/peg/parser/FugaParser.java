@@ -11,6 +11,7 @@ public class FugaParser {
     /**
      * single_input:
      * *   | NEWLINE
+     * *   | ENDMARKER
      * *   | simple_stmt
      * *   | compound_stmt NEWLINE
      */
@@ -19,8 +20,9 @@ public class FugaParser {
         if (m != null) return m;
         boolean r;
         r = t.consume(TokenType.NEWLINE);
+        r = r || t.consume(TokenType.ENDMARKER);
         r = r || simple_stmt(t);
-        r = r || single_input_3(t);
+        r = r || single_input_4(t);
         t.exit(r);
         return r;
     }
@@ -28,8 +30,8 @@ public class FugaParser {
     /**
      * compound_stmt NEWLINE
      */
-    private static boolean single_input_3(ParseTree t) {
-        var m = t.enter(SINGLE_INPUT_3);
+    private static boolean single_input_4(ParseTree t) {
+        var m = t.enter(SINGLE_INPUT_4);
         if (m != null) return m;
         boolean r;
         r = compound_stmt(t);
@@ -40,35 +42,14 @@ public class FugaParser {
 
     /**
      * file_input:
-     * *   | (NEWLINE | stmt)* ENDMARKER
+     * *   | [stmt_list] ENDMARKER
      */
     public static boolean file_input(ParseTree t) {
         var m = t.enter(FILE_INPUT);
         if (m != null) return m;
         boolean r;
-        file_input_1_loop(t);
+        stmt_list(t);
         r = t.consume(TokenType.ENDMARKER);
-        t.exit(r);
-        return r;
-    }
-
-    private static void file_input_1_loop(ParseTree t) {
-        t.enterLoop();
-        while (true) {
-            if (!file_input_1(t)) break;
-        }
-        t.exitLoop();
-    }
-
-    /**
-     * NEWLINE | stmt
-     */
-    private static boolean file_input_1(ParseTree t) {
-        var m = t.enter(FILE_INPUT_1);
-        if (m != null) return m;
-        boolean r;
-        r = t.consume(TokenType.NEWLINE);
-        r = r || stmt(t);
         t.exit(r);
         return r;
     }
@@ -94,6 +75,29 @@ public class FugaParser {
             if (!t.consume(TokenType.NEWLINE)) break;
         }
         t.exitLoop();
+    }
+
+    /**
+     * stmt_list:
+     * *   | stmt+
+     */
+    public static boolean stmt_list(ParseTree t) {
+        var m = t.enter(STMT_LIST);
+        if (m != null) return m;
+        boolean r;
+        r = stmt_loop(t);
+        t.exit(r);
+        return r;
+    }
+
+    private static boolean stmt_loop(ParseTree t) {
+        t.enterLoop();
+        var r = stmt(t);
+        if (r) while (true) {
+            if (!stmt(t)) break;
+        }
+        t.exitLoop();
+        return r;
     }
 
     /**
@@ -1425,8 +1429,8 @@ public class FugaParser {
 
     /**
      * block_suite (allow_whitespace=false):
-     * *   | '{' NEWLINE stmt+ '}'
-     * *   | '{' '}'
+     * *   | '{' NEWLINE stmt_list '}'
+     * *   | '{' [simple_stmt] '}'
      */
     public static boolean block_suite(ParseTree t) {
         var m = t.enter(BLOCK_SUITE);
@@ -1439,7 +1443,7 @@ public class FugaParser {
     }
 
     /**
-     * '{' NEWLINE stmt+ '}'
+     * '{' NEWLINE stmt_list '}'
      */
     private static boolean block_suite_1(ParseTree t) {
         var m = t.enter(BLOCK_SUITE_1);
@@ -1447,30 +1451,21 @@ public class FugaParser {
         boolean r;
         r = t.consume("{");
         r = r && t.consume(TokenType.NEWLINE);
-        r = r && stmt_loop(t);
+        r = r && stmt_list(t);
         r = r && t.consume("}");
         t.exit(r);
         return r;
     }
 
-    private static boolean stmt_loop(ParseTree t) {
-        t.enterLoop();
-        var r = stmt(t);
-        if (r) while (true) {
-            if (!stmt(t)) break;
-        }
-        t.exitLoop();
-        return r;
-    }
-
     /**
-     * '{' '}'
+     * '{' [simple_stmt] '}'
      */
     private static boolean block_suite_2(ParseTree t) {
         var m = t.enter(BLOCK_SUITE_2);
         if (m != null) return m;
         boolean r;
         r = t.consume("{");
+        if (r) simple_stmt(t);
         r = r && t.consume("}");
         t.exit(r);
         return r;
