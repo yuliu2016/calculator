@@ -2,7 +2,7 @@ package org.fugalang.grammar.main;
 
 import org.fugalang.grammar.common.RuleSet;
 import org.fugalang.grammar.common.RuleSetBuilder;
-import org.fugalang.grammar.ctrans.CTransform;
+import org.fugalang.grammar.transform.CTransform;
 
 import java.nio.file.Files;
 import java.nio.file.Path;

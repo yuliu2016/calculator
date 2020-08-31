@@ -1,4 +1,4 @@
-package org.fugalang.grammar.ctrans;
+package org.fugalang.grammar.transform;
 
 import org.fugalang.core.parser.RuleType;
 import org.fugalang.grammar.common.*;
