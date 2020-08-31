@@ -4,7 +4,7 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * sum:
+ * sum (left_recursive):
  * *   | sum '+' term
  * *   | sum '-' term
  * *   | term

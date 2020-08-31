@@ -6,7 +6,7 @@ import org.fugalang.core.parser.ParseTreeNode;
 import java.util.List;
 
 /**
- * list_items:
+ * list_items (allow_whitespace=true):
  * *   | ','.list_item+ [',']
  */
 public final class ListItems extends NodeWrapper {

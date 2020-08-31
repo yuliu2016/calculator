@@ -4,7 +4,7 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * set_items:
+ * set_items (allow_whitespace=true):
  * *   | exprlist_star
  */
 public final class SetItems extends NodeWrapper {

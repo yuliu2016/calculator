@@ -4,7 +4,7 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * shift_expr:
+ * shift_expr (left_recursive):
  * *   | shift_expr '<<' sum
  * *   | shift_expr '>>' sum
  * *   | sum

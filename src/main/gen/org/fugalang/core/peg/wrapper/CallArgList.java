@@ -6,7 +6,7 @@ import org.fugalang.core.parser.ParseTreeNode;
 import java.util.List;
 
 /**
- * call_arg_list:
+ * call_arg_list (allow_whitespace=true):
  * *   | ','.call_arg+ [',']
  */
 public final class CallArgList extends NodeWrapper {

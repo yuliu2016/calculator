@@ -4,7 +4,7 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * dict_iterator:
+ * dict_iterator (allow_whitespace=true):
  * *   | dict_item iterator
  */
 public final class DictIterator extends NodeWrapper {

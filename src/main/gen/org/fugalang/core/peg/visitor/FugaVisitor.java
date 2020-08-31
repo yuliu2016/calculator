@@ -141,7 +141,7 @@ public interface FugaVisitor<T> {
     }
 
     /**
-     * targetlist_sp:
+     * targetlist_sp (allow_whitespace=true):
      * *   | targetlist
      */
     default T visitTargetlistSp(TargetlistSp targetlistSp) {
@@ -149,7 +149,7 @@ public interface FugaVisitor<T> {
     }
 
     /**
-     * t_primary:
+     * t_primary (left_recursive):
      * *   | t_primary '.' NAME &t_lookahead
      * *   | t_primary invocation &t_lookahead
      * *   | t_primary subscript &t_lookahead
@@ -237,7 +237,7 @@ public interface FugaVisitor<T> {
     }
 
     /**
-     * dict_items:
+     * dict_items (allow_whitespace=true):
      * *   | ','.dict_item+ [',']
      */
     default T visitDictItems(DictItems dictItems) {
@@ -254,7 +254,7 @@ public interface FugaVisitor<T> {
     }
 
     /**
-     * list_items:
+     * list_items (allow_whitespace=true):
      * *   | ','.list_item+ [',']
      */
     default T visitListItems(ListItems listItems) {
@@ -262,7 +262,7 @@ public interface FugaVisitor<T> {
     }
 
     /**
-     * set_items:
+     * set_items (allow_whitespace=true):
      * *   | exprlist_star
      */
     default T visitSetItems(SetItems setItems) {
@@ -302,7 +302,7 @@ public interface FugaVisitor<T> {
     }
 
     /**
-     * list_iterator:
+     * list_iterator (allow_whitespace=true):
      * *   | expr_or_star iterator
      */
     default T visitListIterator(ListIterator listIterator) {
@@ -310,7 +310,7 @@ public interface FugaVisitor<T> {
     }
 
     /**
-     * dict_iterator:
+     * dict_iterator (allow_whitespace=true):
      * *   | dict_item iterator
      */
     default T visitDictIterator(DictIterator dictIterator) {
@@ -416,7 +416,7 @@ public interface FugaVisitor<T> {
     }
 
     /**
-     * import_as_names_sp:
+     * import_as_names_sp (allow_whitespace=true):
      * *   | '(' import_as_names [','] ')'
      */
     default T visitImportAsNamesSp(ImportAsNamesSp importAsNamesSp) {
@@ -532,7 +532,7 @@ public interface FugaVisitor<T> {
     }
 
     /**
-     * block_suite:
+     * block_suite (allow_whitespace=false):
      * *   | '{' NEWLINE stmt+ '}'
      * *   | '{' '}'
      */
@@ -590,7 +590,7 @@ public interface FugaVisitor<T> {
     }
 
     /**
-     * call_arg_list:
+     * call_arg_list (allow_whitespace=true):
      * *   | ','.call_arg+ [',']
      */
     default T visitCallArgList(CallArgList callArgList) {
@@ -610,7 +610,7 @@ public interface FugaVisitor<T> {
     }
 
     /**
-     * typed_arg_list:
+     * typed_arg_list (allow_whitespace=true):
      * *   | kwargs
      * *   | args_kwargs
      * *   | full_arg_list
@@ -719,7 +719,7 @@ public interface FugaVisitor<T> {
     }
 
     /**
-     * disjunction:
+     * disjunction (left_recursive):
      * *   | disjunction 'or' conjunction
      * *   | conjunction
      */
@@ -728,7 +728,7 @@ public interface FugaVisitor<T> {
     }
 
     /**
-     * conjunction:
+     * conjunction (left_recursive):
      * *   | conjunction 'and' inversion
      * *   | inversion
      */
@@ -772,7 +772,7 @@ public interface FugaVisitor<T> {
     }
 
     /**
-     * bitwise_or:
+     * bitwise_or (left_recursive):
      * *   | bitwise_or '|' bitwise_xor
      * *   | bitwise_xor
      */
@@ -781,7 +781,7 @@ public interface FugaVisitor<T> {
     }
 
     /**
-     * bitwise_xor:
+     * bitwise_xor (left_recursive):
      * *   | bitwise_xor '^' bitwise_and
      * *   | bitwise_and
      */
@@ -790,7 +790,7 @@ public interface FugaVisitor<T> {
     }
 
     /**
-     * bitwise_and:
+     * bitwise_and (left_recursive):
      * *   | bitwise_and '&' shift_expr
      * *   | shift_expr
      */
@@ -799,7 +799,7 @@ public interface FugaVisitor<T> {
     }
 
     /**
-     * shift_expr:
+     * shift_expr (left_recursive):
      * *   | shift_expr '<<' sum
      * *   | shift_expr '>>' sum
      * *   | sum
@@ -809,7 +809,7 @@ public interface FugaVisitor<T> {
     }
 
     /**
-     * sum:
+     * sum (left_recursive):
      * *   | sum '+' term
      * *   | sum '-' term
      * *   | term
@@ -819,7 +819,7 @@ public interface FugaVisitor<T> {
     }
 
     /**
-     * term:
+     * term (left_recursive):
      * *   | term '*' pipe_expr
      * *   | term '/' pipe_expr
      * *   | term '%' pipe_expr
@@ -832,7 +832,7 @@ public interface FugaVisitor<T> {
     }
 
     /**
-     * pipe_expr:
+     * pipe_expr (left_recursive):
      * *   | pipe_expr '->' factor
      * *   | factor
      */
@@ -861,7 +861,7 @@ public interface FugaVisitor<T> {
     }
 
     /**
-     * primary:
+     * primary (left_recursive):
      * *   | primary '.' NAME
      * *   | primary invocation
      * *   | primary subscript

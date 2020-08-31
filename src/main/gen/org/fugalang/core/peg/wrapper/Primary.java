@@ -5,7 +5,7 @@ import org.fugalang.core.parser.ParseTreeNode;
 import org.fugalang.core.token.TokenType;
 
 /**
- * primary:
+ * primary (left_recursive):
  * *   | primary '.' NAME
  * *   | primary invocation
  * *   | primary subscript

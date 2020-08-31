@@ -6,7 +6,7 @@ import org.fugalang.core.parser.ParseTreeNode;
 import java.util.List;
 
 /**
- * dict_items:
+ * dict_items (allow_whitespace=true):
  * *   | ','.dict_item+ [',']
  */
 public final class DictItems extends NodeWrapper {

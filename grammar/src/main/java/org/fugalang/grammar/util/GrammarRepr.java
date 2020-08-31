@@ -4,6 +4,7 @@ import org.fugalang.grammar.peg.visitor.MetaVisitor;
 import org.fugalang.grammar.peg.wrapper.*;
 
 import java.util.StringJoiner;
+import java.util.stream.Collectors;
 
 public class GrammarRepr implements MetaVisitor<String> {
 
@@ -38,10 +39,32 @@ public class GrammarRepr implements MetaVisitor<String> {
 
     @Override
     public String visitRule(Rule rule) {
-        return rule.name() + ":" +
-                stringifyAltList(rule.ruleSuite().altList(), true);
+        var ruleArgs = rule.hasRuleArgs() ? visitRuleArgs(rule.ruleArgs()) : "";
+        return rule.name() + ruleArgs + ":" +
+                visitRuleSuite(rule.ruleSuite());
     }
 
+    @Override
+    public String visitRuleArgs(RuleArgs ruleArgs) {
+        var args = ruleArgs.ruleArgs();
+        if (args.isEmpty()) {
+            return "";
+        }
+        return args
+                .stream()
+                .map(this::visitRuleArg)
+                .collect(Collectors.joining(", ", " (", ")"));
+    }
+
+    @Override
+    public String visitRuleArg(RuleArg ruleArg) {
+        return ruleArg.name() + (ruleArg.hasAssignName() ? "=" + ruleArg.assignName().name() : "");
+    }
+
+    @Override
+    public String visitRuleSuite(RuleSuite ruleSuite) {
+        return stringifyAltList(ruleSuite.altList(), true);
+    }
 
     @Override
     public String visitAltList(AltList altList) {

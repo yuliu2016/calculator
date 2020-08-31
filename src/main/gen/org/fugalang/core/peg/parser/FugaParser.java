@@ -411,7 +411,7 @@ public class FugaParser {
     }
 
     /**
-     * targetlist_sp:
+     * targetlist_sp (allow_whitespace=true):
      * *   | targetlist
      */
     public static boolean targetlist_sp(ParseTree t) {
@@ -424,7 +424,7 @@ public class FugaParser {
     }
 
     /**
-     * t_primary:
+     * t_primary (left_recursive):
      * *   | t_primary '.' NAME &t_lookahead
      * *   | t_primary invocation &t_lookahead
      * *   | t_primary subscript &t_lookahead
@@ -722,7 +722,7 @@ public class FugaParser {
     }
 
     /**
-     * dict_items:
+     * dict_items (allow_whitespace=true):
      * *   | ','.dict_item+ [',']
      */
     public static boolean dict_items(ParseTree t) {
@@ -764,7 +764,7 @@ public class FugaParser {
     }
 
     /**
-     * list_items:
+     * list_items (allow_whitespace=true):
      * *   | ','.list_item+ [',']
      */
     public static boolean list_items(ParseTree t) {
@@ -791,7 +791,7 @@ public class FugaParser {
     }
 
     /**
-     * set_items:
+     * set_items (allow_whitespace=true):
      * *   | exprlist_star
      */
     public static boolean set_items(ParseTree t) {
@@ -873,7 +873,7 @@ public class FugaParser {
     }
 
     /**
-     * list_iterator:
+     * list_iterator (allow_whitespace=true):
      * *   | expr_or_star iterator
      */
     public static boolean list_iterator(ParseTree t) {
@@ -887,7 +887,7 @@ public class FugaParser {
     }
 
     /**
-     * dict_iterator:
+     * dict_iterator (allow_whitespace=true):
      * *   | dict_item iterator
      */
     public static boolean dict_iterator(ParseTree t) {
@@ -1137,7 +1137,7 @@ public class FugaParser {
     }
 
     /**
-     * import_as_names_sp:
+     * import_as_names_sp (allow_whitespace=true):
      * *   | '(' import_as_names [','] ')'
      */
     public static boolean import_as_names_sp(ParseTree t) {
@@ -1424,7 +1424,7 @@ public class FugaParser {
     }
 
     /**
-     * block_suite:
+     * block_suite (allow_whitespace=false):
      * *   | '{' NEWLINE stmt+ '}'
      * *   | '{' '}'
      */
@@ -1588,7 +1588,7 @@ public class FugaParser {
     }
 
     /**
-     * call_arg_list:
+     * call_arg_list (allow_whitespace=true):
      * *   | ','.call_arg+ [',']
      */
     public static boolean call_arg_list(ParseTree t) {
@@ -1690,7 +1690,7 @@ public class FugaParser {
     }
 
     /**
-     * typed_arg_list:
+     * typed_arg_list (allow_whitespace=true):
      * *   | kwargs
      * *   | args_kwargs
      * *   | full_arg_list
@@ -2038,7 +2038,7 @@ public class FugaParser {
     }
 
     /**
-     * disjunction:
+     * disjunction (left_recursive):
      * *   | disjunction 'or' conjunction
      * *   | conjunction
      */
@@ -2077,7 +2077,7 @@ public class FugaParser {
     }
 
     /**
-     * conjunction:
+     * conjunction (left_recursive):
      * *   | conjunction 'and' inversion
      * *   | inversion
      */
@@ -2252,7 +2252,7 @@ public class FugaParser {
     }
 
     /**
-     * bitwise_or:
+     * bitwise_or (left_recursive):
      * *   | bitwise_or '|' bitwise_xor
      * *   | bitwise_xor
      */
@@ -2291,7 +2291,7 @@ public class FugaParser {
     }
 
     /**
-     * bitwise_xor:
+     * bitwise_xor (left_recursive):
      * *   | bitwise_xor '^' bitwise_and
      * *   | bitwise_and
      */
@@ -2330,7 +2330,7 @@ public class FugaParser {
     }
 
     /**
-     * bitwise_and:
+     * bitwise_and (left_recursive):
      * *   | bitwise_and '&' shift_expr
      * *   | shift_expr
      */
@@ -2369,7 +2369,7 @@ public class FugaParser {
     }
 
     /**
-     * shift_expr:
+     * shift_expr (left_recursive):
      * *   | shift_expr '<<' sum
      * *   | shift_expr '>>' sum
      * *   | sum
@@ -2424,7 +2424,7 @@ public class FugaParser {
     }
 
     /**
-     * sum:
+     * sum (left_recursive):
      * *   | sum '+' term
      * *   | sum '-' term
      * *   | term
@@ -2479,7 +2479,7 @@ public class FugaParser {
     }
 
     /**
-     * term:
+     * term (left_recursive):
      * *   | term '*' pipe_expr
      * *   | term '/' pipe_expr
      * *   | term '%' pipe_expr
@@ -2582,7 +2582,7 @@ public class FugaParser {
     }
 
     /**
-     * pipe_expr:
+     * pipe_expr (left_recursive):
      * *   | pipe_expr '->' factor
      * *   | factor
      */
@@ -2708,7 +2708,7 @@ public class FugaParser {
     }
 
     /**
-     * primary:
+     * primary (left_recursive):
      * *   | primary '.' NAME
      * *   | primary invocation
      * *   | primary subscript

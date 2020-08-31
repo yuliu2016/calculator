@@ -4,7 +4,7 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * typed_arg_list:
+ * typed_arg_list (allow_whitespace=true):
  * *   | kwargs
  * *   | args_kwargs
  * *   | full_arg_list

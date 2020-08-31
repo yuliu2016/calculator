@@ -4,7 +4,7 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * conjunction:
+ * conjunction (left_recursive):
  * *   | conjunction 'and' inversion
  * *   | inversion
  */

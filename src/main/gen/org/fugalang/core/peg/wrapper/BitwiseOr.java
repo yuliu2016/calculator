@@ -4,7 +4,7 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * bitwise_or:
+ * bitwise_or (left_recursive):
  * *   | bitwise_or '|' bitwise_xor
  * *   | bitwise_xor
  */

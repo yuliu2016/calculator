@@ -7,7 +7,7 @@ import org.fugalang.core.token.TokenType;
 import java.util.List;
 
 /**
- * block_suite:
+ * block_suite (allow_whitespace=false):
  * *   | '{' NEWLINE stmt+ '}'
  * *   | '{' '}'
  */

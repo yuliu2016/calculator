@@ -4,7 +4,7 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * bitwise_and:
+ * bitwise_and (left_recursive):
  * *   | bitwise_and '&' shift_expr
  * *   | shift_expr
  */

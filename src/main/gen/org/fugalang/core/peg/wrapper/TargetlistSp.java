@@ -4,7 +4,7 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * targetlist_sp:
+ * targetlist_sp (allow_whitespace=true):
  * *   | targetlist
  */
 public final class TargetlistSp extends NodeWrapper {
