@@ -6,17 +6,17 @@ import org.fugalang.core.parser.ParseTreeNode;
 import java.util.List;
 
 /**
- * named_expr_list:
- * *   | ','.named_expr_star+ [',']
+ * list_items:
+ * *   | ','.list_item+ [',']
  */
-public final class NamedExprList extends NodeWrapper {
+public final class ListItems extends NodeWrapper {
 
-    public NamedExprList(ParseTreeNode node) {
+    public ListItems(ParseTreeNode node) {
         super(node);
     }
 
-    public List<NamedExprStar> namedExprStars() {
-        return getList(0, NamedExprStar::new);
+    public List<ListItem> listItems() {
+        return getList(0, ListItem::new);
     }
 
     public boolean isComma() {

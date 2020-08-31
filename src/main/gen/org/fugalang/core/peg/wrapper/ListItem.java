@@ -4,13 +4,13 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * named_expr_star:
+ * list_item:
  * *   | star_expr
  * *   | named_expr
  */
-public final class NamedExprStar extends NodeWrapper {
+public final class ListItem extends NodeWrapper {
 
-    public NamedExprStar(ParseTreeNode node) {
+    public ListItem(ParseTreeNode node) {
         super(node);
     }
 

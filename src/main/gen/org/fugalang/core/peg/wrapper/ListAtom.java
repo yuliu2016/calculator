@@ -5,7 +5,7 @@ import org.fugalang.core.parser.ParseTreeNode;
 
 /**
  * list_atom:
- * *   | '[' [named_expr_list] ']'
+ * *   | '[' [list_items] ']'
  */
 public final class ListAtom extends NodeWrapper {
 
@@ -13,11 +13,11 @@ public final class ListAtom extends NodeWrapper {
         super(node);
     }
 
-    public NamedExprList namedExprList() {
-        return new NamedExprList(get(1));
+    public ListItems listItems() {
+        return new ListItems(get(1));
     }
 
-    public boolean hasNamedExprList() {
+    public boolean hasListItems() {
         return has(1);
     }
 }

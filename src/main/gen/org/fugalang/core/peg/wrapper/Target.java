@@ -9,7 +9,7 @@ import org.fugalang.core.token.TokenType;
  * *   | t_primary '.' NAME !t_lookahead
  * *   | t_primary subscript !t_lookahead
  * *   | NAME
- * *   | '(' targetlist ')'
+ * *   | '(' targetlist_sp ')'
  */
 public final class Target extends NodeWrapper {
 
@@ -41,11 +41,11 @@ public final class Target extends NodeWrapper {
         return has(2);
     }
 
-    public Target4 lparTargetlistRpar() {
+    public Target4 lparTargetlistSpRpar() {
         return new Target4(get(3));
     }
 
-    public boolean hasLparTargetlistRpar() {
+    public boolean hasLparTargetlistSpRpar() {
         return has(3);
     }
 
@@ -86,7 +86,7 @@ public final class Target extends NodeWrapper {
     }
 
     /**
-     * '(' targetlist ')'
+     * '(' targetlist_sp ')'
      */
     public static final class Target4 extends NodeWrapper {
 
@@ -94,8 +94,8 @@ public final class Target extends NodeWrapper {
             super(node);
         }
 
-        public Targetlist targetlist() {
-            return new Targetlist(get(1));
+        public TargetlistSp targetlistSp() {
+            return new TargetlistSp(get(1));
         }
     }
 }

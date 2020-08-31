@@ -7,10 +7,10 @@ import org.fugalang.core.token.TokenType;
 /**
  * atom:
  * *   | tuple_atom
- * *   | list_iter
+ * *   | list_iterable
  * *   | list_atom
  * *   | set_atom
- * *   | dict_iter
+ * *   | dict_iterable
  * *   | dict_atom
  * *   | builder
  * *   | NAME
@@ -34,11 +34,11 @@ public final class Atom extends NodeWrapper {
         return has(0);
     }
 
-    public ListIter listIter() {
-        return new ListIter(get(1));
+    public ListIterable listIterable() {
+        return new ListIterable(get(1));
     }
 
-    public boolean hasListIter() {
+    public boolean hasListIterable() {
         return has(1);
     }
 
@@ -58,11 +58,11 @@ public final class Atom extends NodeWrapper {
         return has(3);
     }
 
-    public DictIter dictIter() {
-        return new DictIter(get(4));
+    public DictIterable dictIterable() {
+        return new DictIterable(get(4));
     }
 
-    public boolean hasDictIter() {
+    public boolean hasDictIterable() {
         return has(4);
     }
 

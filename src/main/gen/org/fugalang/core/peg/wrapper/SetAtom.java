@@ -5,7 +5,7 @@ import org.fugalang.core.parser.ParseTreeNode;
 
 /**
  * set_atom:
- * *   | '{' [exprlist_star] '}'
+ * *   | '{' [set_items] '}'
  */
 public final class SetAtom extends NodeWrapper {
 
@@ -13,11 +13,11 @@ public final class SetAtom extends NodeWrapper {
         super(node);
     }
 
-    public ExprlistStar exprlistStar() {
-        return new ExprlistStar(get(1));
+    public SetItems setItems() {
+        return new SetItems(get(1));
     }
 
-    public boolean hasExprlistStar() {
+    public boolean hasSetItems() {
         return has(1);
     }
 }

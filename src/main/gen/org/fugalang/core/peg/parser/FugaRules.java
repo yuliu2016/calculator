@@ -28,6 +28,7 @@ public class FugaRules {
     public static final ParserRule TARGET_1 = and_rule("target:1");
     public static final ParserRule TARGET_2 = and_rule("target:2");
     public static final ParserRule TARGET_4 = and_rule("target:4");
+    public static final ParserRule TARGETLIST_SP = and_rule("targetlist_sp");
     public static final ParserRule T_PRIMARY = leftrec_rule("t_primary");
     public static final ParserRule T_PRIMARY_1 = and_rule("t_primary:1");
     public static final ParserRule T_PRIMARY_2 = and_rule("t_primary:2");
@@ -37,8 +38,6 @@ public class FugaRules {
     public static final ParserRule TARGETLIST = and_rule("targetlist");
     public static final ParserRule EXPR_OR_STAR = or_rule("expr_or_star");
     public static final ParserRule EXPRLIST_STAR = and_rule("exprlist_star");
-    public static final ParserRule NAMED_EXPR_STAR = or_rule("named_expr_star");
-    public static final ParserRule NAMED_EXPR_LIST = and_rule("named_expr_list");
     public static final ParserRule SUBSCRIPT = and_rule("subscript");
     public static final ParserRule SLICELIST = and_rule("slicelist");
     public static final ParserRule SLICE = or_rule("slice");
@@ -48,10 +47,15 @@ public class FugaRules {
     public static final ParserRule DICT_ITEM_1 = and_rule("dict_item:1");
     public static final ParserRule DICT_ITEM_2 = and_rule("dict_item:2");
     public static final ParserRule DICT_ITEMS = and_rule("dict_items");
+    public static final ParserRule LIST_ITEM = or_rule("list_item");
+    public static final ParserRule LIST_ITEMS = and_rule("list_items");
+    public static final ParserRule SET_ITEMS = and_rule("set_items");
     public static final ParserRule AS_NAME = and_rule("as_name");
     public static final ParserRule ITER_FOR = and_rule("iter_for");
     public static final ParserRule ITER_IF = and_rule("iter_if");
     public static final ParserRule ITERATOR = and_rule("iterator");
+    public static final ParserRule LIST_ITERATOR = and_rule("list_iterator");
+    public static final ParserRule DICT_ITERATOR = and_rule("dict_iterator");
     public static final ParserRule ASSIGNMENT = or_rule("assignment");
     public static final ParserRule PUBASSIGN = and_rule("pubassign");
     public static final ParserRule ANNASSIGN = and_rule("annassign");
@@ -65,7 +69,7 @@ public class FugaRules {
     public static final ParserRule IMPORT_FROM_NAMES = or_rule("import_from_names");
     public static final ParserRule IMPORT_FROM_NAMES_2 = and_rule("import_from_names:2");
     public static final ParserRule IMPORT_FROM_ITEMS = or_rule("import_from_items");
-    public static final ParserRule IMPORT_FROM_ITEMS_2 = and_rule("import_from_items:2");
+    public static final ParserRule IMPORT_AS_NAMES_SP = and_rule("import_as_names_sp");
     public static final ParserRule IMPORT_AS_NAME = and_rule("import_as_name");
     public static final ParserRule DOTTED_AS_NAME = and_rule("dotted_as_name");
     public static final ParserRule IMPORT_AS_NAMES = and_rule("import_as_names");
@@ -161,10 +165,10 @@ public class FugaRules {
     public static final ParserRule PRIMARY_2 = and_rule("primary:2");
     public static final ParserRule PRIMARY_3 = and_rule("primary:3");
     public static final ParserRule TUPLE_ATOM = and_rule("tuple_atom");
-    public static final ParserRule LIST_ITER = and_rule("list_iter");
+    public static final ParserRule LIST_ITERABLE = and_rule("list_iterable");
     public static final ParserRule LIST_ATOM = and_rule("list_atom");
     public static final ParserRule SET_ATOM = and_rule("set_atom");
-    public static final ParserRule DICT_ITER = and_rule("dict_iter");
+    public static final ParserRule DICT_ITERABLE = and_rule("dict_iterable");
     public static final ParserRule DICT_ATOM = and_rule("dict_atom");
     public static final ParserRule BUILDER = or_rule("builder");
     public static final ParserRule BUILDER_1 = and_rule("builder:1");

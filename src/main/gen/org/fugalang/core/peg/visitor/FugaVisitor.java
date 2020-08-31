@@ -134,9 +134,17 @@ public interface FugaVisitor<T> {
      * *   | t_primary '.' NAME !t_lookahead
      * *   | t_primary subscript !t_lookahead
      * *   | NAME
-     * *   | '(' targetlist ')'
+     * *   | '(' targetlist_sp ')'
      */
     default T visitTarget(Target target) {
+        return null;
+    }
+
+    /**
+     * targetlist_sp:
+     * *   | targetlist
+     */
+    default T visitTargetlistSp(TargetlistSp targetlistSp) {
         return null;
     }
 
@@ -183,23 +191,6 @@ public interface FugaVisitor<T> {
      * *   | ','.expr_or_star+ [',']
      */
     default T visitExprlistStar(ExprlistStar exprlistStar) {
-        return null;
-    }
-
-    /**
-     * named_expr_star:
-     * *   | star_expr
-     * *   | named_expr
-     */
-    default T visitNamedExprStar(NamedExprStar namedExprStar) {
-        return null;
-    }
-
-    /**
-     * named_expr_list:
-     * *   | ','.named_expr_star+ [',']
-     */
-    default T visitNamedExprList(NamedExprList namedExprList) {
         return null;
     }
 
@@ -254,6 +245,31 @@ public interface FugaVisitor<T> {
     }
 
     /**
+     * list_item:
+     * *   | star_expr
+     * *   | named_expr
+     */
+    default T visitListItem(ListItem listItem) {
+        return null;
+    }
+
+    /**
+     * list_items:
+     * *   | ','.list_item+ [',']
+     */
+    default T visitListItems(ListItems listItems) {
+        return null;
+    }
+
+    /**
+     * set_items:
+     * *   | exprlist_star
+     */
+    default T visitSetItems(SetItems setItems) {
+        return null;
+    }
+
+    /**
      * as_name:
      * *   | 'as' NAME
      */
@@ -282,6 +298,22 @@ public interface FugaVisitor<T> {
      * *   | iter_for* 'for' targetlist [iter_if]
      */
     default T visitIterator(Iterator iterator) {
+        return null;
+    }
+
+    /**
+     * list_iterator:
+     * *   | expr_or_star iterator
+     */
+    default T visitListIterator(ListIterator listIterator) {
+        return null;
+    }
+
+    /**
+     * dict_iterator:
+     * *   | dict_item iterator
+     */
+    default T visitDictIterator(DictIterator dictIterator) {
         return null;
     }
 
@@ -376,10 +408,18 @@ public interface FugaVisitor<T> {
     /**
      * import_from_items:
      * *   | '*'
-     * *   | '(' import_as_names [','] ')'
+     * *   | import_as_names_sp
      * *   | import_as_names
      */
     default T visitImportFromItems(ImportFromItems importFromItems) {
+        return null;
+    }
+
+    /**
+     * import_as_names_sp:
+     * *   | '(' import_as_names [','] ')'
+     */
+    default T visitImportAsNamesSp(ImportAsNamesSp importAsNamesSp) {
         return null;
     }
 
@@ -833,23 +873,23 @@ public interface FugaVisitor<T> {
 
     /**
      * tuple_atom:
-     * *   | '(' [named_expr_list] ')'
+     * *   | '(' [list_items] ')'
      */
     default T visitTupleAtom(TupleAtom tupleAtom) {
         return null;
     }
 
     /**
-     * list_iter:
-     * *   | '[' expr_or_star iterator ']'
+     * list_iterable:
+     * *   | '[' list_iterator ']'
      */
-    default T visitListIter(ListIter listIter) {
+    default T visitListIterable(ListIterable listIterable) {
         return null;
     }
 
     /**
      * list_atom:
-     * *   | '[' [named_expr_list] ']'
+     * *   | '[' [list_items] ']'
      */
     default T visitListAtom(ListAtom listAtom) {
         return null;
@@ -857,17 +897,17 @@ public interface FugaVisitor<T> {
 
     /**
      * set_atom:
-     * *   | '{' [exprlist_star] '}'
+     * *   | '{' [set_items] '}'
      */
     default T visitSetAtom(SetAtom setAtom) {
         return null;
     }
 
     /**
-     * dict_iter:
-     * *   | '{' dict_item iterator '}'
+     * dict_iterable:
+     * *   | '{' dict_iterator '}'
      */
-    default T visitDictIter(DictIter dictIter) {
+    default T visitDictIterable(DictIterable dictIterable) {
         return null;
     }
 
@@ -891,10 +931,10 @@ public interface FugaVisitor<T> {
     /**
      * atom:
      * *   | tuple_atom
-     * *   | list_iter
+     * *   | list_iterable
      * *   | list_atom
      * *   | set_atom
-     * *   | dict_iter
+     * *   | dict_iterable
      * *   | dict_atom
      * *   | builder
      * *   | NAME

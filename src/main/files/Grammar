@@ -51,7 +51,9 @@ target:
     | t_primary '.' NAME !t_lookahead
     | t_primary subscript !t_lookahead
     | NAME
-    | '(' targetlist ')'
+    | '(' targetlist_sp ')'
+targetlist_sp (allow_whitespace=true):
+    | targetlist
 t_primary (left_recursive):
     | t_primary '.' NAME &t_lookahead
     | t_primary invocation &t_lookahead
@@ -68,11 +70,6 @@ expr_or_star:
     | expr
 exprlist_star:
     | ','.expr_or_star+ [',']
-named_expr_star:
-    | star_expr
-    | named_expr
-named_expr_list:
-    | ','.named_expr_star+ [',']
 
 subscript:
     | '[' slicelist ']'
@@ -87,8 +84,15 @@ slice_expr:
 dict_item:
     | expr ':' expr
     | '**' bitwise_or
-dict_items:
+dict_items (allow_whitespace=true):
     | ','.dict_item+ [',']
+list_item:
+    | star_expr
+    | named_expr
+list_items (allow_whitespace=true):
+    | ','.list_item+ [',']
+set_items (allow_whitespace=true):
+    | exprlist_star
 as_name:
     | 'as' NAME
 
@@ -98,6 +102,11 @@ iter_if:
     | 'if' named_expr
 iterator:
     | iter_for* 'for' targetlist [iter_if]
+
+list_iterator (allow_whitespace=true):
+    | expr_or_star iterator
+dict_iterator (allow_whitespace=true):
+    | dict_item iterator
 
 # Assignments
 
@@ -140,8 +149,10 @@ import_from_names:
     | '.'+ [dotted_name]
 import_from_items:
     | '*'
-    | '(' import_as_names [','] ')'
+    | import_as_names_sp
     | import_as_names
+import_as_names_sp (allow_whitespace=true):
+    | '(' import_as_names [','] ')'
 import_as_name:
     | NAME [as_name]
 dotted_as_name:
@@ -179,7 +190,7 @@ expr_as_name:
 
 # Suites
 
-block_suite:
+block_suite(allow_whitespace=false):
     | '{' NEWLINE stmt+ '}'
     | '{' '}'
 suite:
@@ -198,7 +209,7 @@ except_suite:
 
 invocation:
     | '(' [call_arg_list] ')'
-call_arg_list:
+call_arg_list(allow_whitespace=true):
     | ','.call_arg+  [',']
 call_arg:
     | NAME ':=' expr
@@ -209,7 +220,7 @@ call_arg:
 
 # Builder definitions
 
-typed_arg_list:
+typed_arg_list(allow_whitespace=true):
     | kwargs
     | args_kwargs
     | full_arg_list
@@ -307,15 +318,15 @@ primary (left_recursive):
     | primary subscript
     | atom
 tuple_atom:
-    | '(' [named_expr_list] ')'
-list_iter:
-    | '[' expr_or_star iterator ']'
+    | '(' [list_items] ')'
+list_iterable:
+    | '[' list_iterator ']'
 list_atom:
-    | '[' [named_expr_list] ']'
+    | '[' [list_items] ']'
 set_atom:
-    | '{' [exprlist_star] '}'
-dict_iter:
-    | '{' dict_item iterator '}'
+    | '{' [set_items] '}'
+dict_iterable:
+    | '{' dict_iterator '}'
 dict_atom:
     | '{' [dict_items] '}'
 builder:
@@ -323,10 +334,10 @@ builder:
     | NAME [builder_hint] [builder_args] block_suite
 atom:
     | tuple_atom
-    | list_iter
+    | list_iterable
     | list_atom
     | set_atom
-    | dict_iter
+    | dict_iterable
     | dict_atom
     | builder
     | NAME

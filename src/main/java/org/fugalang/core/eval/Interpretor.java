@@ -244,24 +244,6 @@ public class Interpretor implements FugaVisitor<Object> {
         return null;
     }
 
-    /**
-     * named_expr_star:
-     * *   | star_expr
-     * *   | named_expr
-     */
-    @Override
-    public Object visitNamedExprStar(NamedExprStar namedExprStar) {
-        return null;
-    }
-
-    /**
-     * named_expr_list:
-     * *   | ','.named_expr_star+ [',']
-     */
-    @Override
-    public Object visitNamedExprList(NamedExprList namedExprList) {
-        return null;
-    }
 
     /**
      * subscript:
@@ -924,14 +906,6 @@ public class Interpretor implements FugaVisitor<Object> {
         return null;
     }
 
-    /**
-     * list_iter:
-     * *   | '[' expr_or_star iterator ']'
-     */
-    @Override
-    public Object visitListIter(ListIter listIter) {
-        return null;
-    }
 
     /**
      * list_atom:
@@ -951,14 +925,6 @@ public class Interpretor implements FugaVisitor<Object> {
         return null;
     }
 
-    /**
-     * dict_iter:
-     * *   | '{' dict_item iterator '}'
-     */
-    @Override
-    public Object visitDictIter(DictIter dictIter) {
-        return null;
-    }
 
     /**
      * dict_atom:

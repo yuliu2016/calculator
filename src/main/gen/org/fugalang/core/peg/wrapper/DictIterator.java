@@ -4,20 +4,20 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * dict_iter:
- * *   | '{' dict_item iterator '}'
+ * dict_iterator:
+ * *   | dict_item iterator
  */
-public final class DictIter extends NodeWrapper {
+public final class DictIterator extends NodeWrapper {
 
-    public DictIter(ParseTreeNode node) {
+    public DictIterator(ParseTreeNode node) {
         super(node);
     }
 
     public DictItem dictItem() {
-        return new DictItem(get(1));
+        return new DictItem(get(0));
     }
 
     public Iterator iterator() {
-        return new Iterator(get(2));
+        return new Iterator(get(1));
     }
 }

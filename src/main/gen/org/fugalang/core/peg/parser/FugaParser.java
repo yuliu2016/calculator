@@ -353,7 +353,7 @@ public class FugaParser {
      * *   | t_primary '.' NAME !t_lookahead
      * *   | t_primary subscript !t_lookahead
      * *   | NAME
-     * *   | '(' targetlist ')'
+     * *   | '(' targetlist_sp ')'
      */
     public static boolean target(ParseTree t) {
         var m = t.enter(TARGET);
@@ -397,15 +397,28 @@ public class FugaParser {
     }
 
     /**
-     * '(' targetlist ')'
+     * '(' targetlist_sp ')'
      */
     private static boolean target_4(ParseTree t) {
         var m = t.enter(TARGET_4);
         if (m != null) return m;
         boolean r;
         r = t.consume("(");
-        r = r && targetlist(t);
+        r = r && targetlist_sp(t);
         r = r && t.consume(")");
+        t.exit(r);
+        return r;
+    }
+
+    /**
+     * targetlist_sp:
+     * *   | targetlist
+     */
+    public static boolean targetlist_sp(ParseTree t) {
+        var m = t.enter(TARGETLIST_SP);
+        if (m != null) return m;
+        boolean r;
+        r = targetlist(t);
         t.exit(r);
         return r;
     }
@@ -582,48 +595,6 @@ public class FugaParser {
     }
 
     /**
-     * named_expr_star:
-     * *   | star_expr
-     * *   | named_expr
-     */
-    public static boolean named_expr_star(ParseTree t) {
-        var m = t.enter(NAMED_EXPR_STAR);
-        if (m != null) return m;
-        boolean r;
-        r = star_expr(t);
-        r = r || named_expr(t);
-        t.exit(r);
-        return r;
-    }
-
-    /**
-     * named_expr_list:
-     * *   | ','.named_expr_star+ [',']
-     */
-    public static boolean named_expr_list(ParseTree t) {
-        var m = t.enter(NAMED_EXPR_LIST);
-        if (m != null) return m;
-        boolean r;
-        r = named_expr_star_loop(t);
-        if (r) t.consume(",");
-        t.exit(r);
-        return r;
-    }
-
-    private static boolean named_expr_star_loop(ParseTree t) {
-        t.enterLoop();
-        var r = named_expr_star(t);
-        if (r) while (true) {
-            var p = t.position();
-            if (t.skip(",") && named_expr_star(t)) continue;
-            t.reset(p);
-            break;
-        }
-        t.exitLoop();
-        return r;
-    }
-
-    /**
      * subscript:
      * *   | '[' slicelist ']'
      */
@@ -778,6 +749,61 @@ public class FugaParser {
     }
 
     /**
+     * list_item:
+     * *   | star_expr
+     * *   | named_expr
+     */
+    public static boolean list_item(ParseTree t) {
+        var m = t.enter(LIST_ITEM);
+        if (m != null) return m;
+        boolean r;
+        r = star_expr(t);
+        r = r || named_expr(t);
+        t.exit(r);
+        return r;
+    }
+
+    /**
+     * list_items:
+     * *   | ','.list_item+ [',']
+     */
+    public static boolean list_items(ParseTree t) {
+        var m = t.enter(LIST_ITEMS);
+        if (m != null) return m;
+        boolean r;
+        r = list_item_loop(t);
+        if (r) t.consume(",");
+        t.exit(r);
+        return r;
+    }
+
+    private static boolean list_item_loop(ParseTree t) {
+        t.enterLoop();
+        var r = list_item(t);
+        if (r) while (true) {
+            var p = t.position();
+            if (t.skip(",") && list_item(t)) continue;
+            t.reset(p);
+            break;
+        }
+        t.exitLoop();
+        return r;
+    }
+
+    /**
+     * set_items:
+     * *   | exprlist_star
+     */
+    public static boolean set_items(ParseTree t) {
+        var m = t.enter(SET_ITEMS);
+        if (m != null) return m;
+        boolean r;
+        r = exprlist_star(t);
+        t.exit(r);
+        return r;
+    }
+
+    /**
      * as_name:
      * *   | 'as' NAME
      */
@@ -844,6 +870,34 @@ public class FugaParser {
             if (!iter_for(t)) break;
         }
         t.exitLoop();
+    }
+
+    /**
+     * list_iterator:
+     * *   | expr_or_star iterator
+     */
+    public static boolean list_iterator(ParseTree t) {
+        var m = t.enter(LIST_ITERATOR);
+        if (m != null) return m;
+        boolean r;
+        r = expr_or_star(t);
+        r = r && iterator(t);
+        t.exit(r);
+        return r;
+    }
+
+    /**
+     * dict_iterator:
+     * *   | dict_item iterator
+     */
+    public static boolean dict_iterator(ParseTree t) {
+        var m = t.enter(DICT_ITERATOR);
+        if (m != null) return m;
+        boolean r;
+        r = dict_item(t);
+        r = r && iterator(t);
+        t.exit(r);
+        return r;
     }
 
     /**
@@ -1068,7 +1122,7 @@ public class FugaParser {
     /**
      * import_from_items:
      * *   | '*'
-     * *   | '(' import_as_names [','] ')'
+     * *   | import_as_names_sp
      * *   | import_as_names
      */
     public static boolean import_from_items(ParseTree t) {
@@ -1076,17 +1130,18 @@ public class FugaParser {
         if (m != null) return m;
         boolean r;
         r = t.consume("*");
-        r = r || import_from_items_2(t);
+        r = r || import_as_names_sp(t);
         r = r || import_as_names(t);
         t.exit(r);
         return r;
     }
 
     /**
-     * '(' import_as_names [','] ')'
+     * import_as_names_sp:
+     * *   | '(' import_as_names [','] ')'
      */
-    private static boolean import_from_items_2(ParseTree t) {
-        var m = t.enter(IMPORT_FROM_ITEMS_2);
+    public static boolean import_as_names_sp(ParseTree t) {
+        var m = t.enter(IMPORT_AS_NAMES_SP);
         if (m != null) return m;
         boolean r;
         r = t.consume("(");
@@ -2723,30 +2778,29 @@ public class FugaParser {
 
     /**
      * tuple_atom:
-     * *   | '(' [named_expr_list] ')'
+     * *   | '(' [list_items] ')'
      */
     public static boolean tuple_atom(ParseTree t) {
         var m = t.enter(TUPLE_ATOM);
         if (m != null) return m;
         boolean r;
         r = t.consume("(");
-        if (r) named_expr_list(t);
+        if (r) list_items(t);
         r = r && t.consume(")");
         t.exit(r);
         return r;
     }
 
     /**
-     * list_iter:
-     * *   | '[' expr_or_star iterator ']'
+     * list_iterable:
+     * *   | '[' list_iterator ']'
      */
-    public static boolean list_iter(ParseTree t) {
-        var m = t.enter(LIST_ITER);
+    public static boolean list_iterable(ParseTree t) {
+        var m = t.enter(LIST_ITERABLE);
         if (m != null) return m;
         boolean r;
         r = t.consume("[");
-        r = r && expr_or_star(t);
-        r = r && iterator(t);
+        r = r && list_iterator(t);
         r = r && t.consume("]");
         t.exit(r);
         return r;
@@ -2754,14 +2808,14 @@ public class FugaParser {
 
     /**
      * list_atom:
-     * *   | '[' [named_expr_list] ']'
+     * *   | '[' [list_items] ']'
      */
     public static boolean list_atom(ParseTree t) {
         var m = t.enter(LIST_ATOM);
         if (m != null) return m;
         boolean r;
         r = t.consume("[");
-        if (r) named_expr_list(t);
+        if (r) list_items(t);
         r = r && t.consume("]");
         t.exit(r);
         return r;
@@ -2769,30 +2823,29 @@ public class FugaParser {
 
     /**
      * set_atom:
-     * *   | '{' [exprlist_star] '}'
+     * *   | '{' [set_items] '}'
      */
     public static boolean set_atom(ParseTree t) {
         var m = t.enter(SET_ATOM);
         if (m != null) return m;
         boolean r;
         r = t.consume("{");
-        if (r) exprlist_star(t);
+        if (r) set_items(t);
         r = r && t.consume("}");
         t.exit(r);
         return r;
     }
 
     /**
-     * dict_iter:
-     * *   | '{' dict_item iterator '}'
+     * dict_iterable:
+     * *   | '{' dict_iterator '}'
      */
-    public static boolean dict_iter(ParseTree t) {
-        var m = t.enter(DICT_ITER);
+    public static boolean dict_iterable(ParseTree t) {
+        var m = t.enter(DICT_ITERABLE);
         if (m != null) return m;
         boolean r;
         r = t.consume("{");
-        r = r && dict_item(t);
-        r = r && iterator(t);
+        r = r && dict_iterator(t);
         r = r && t.consume("}");
         t.exit(r);
         return r;
@@ -2861,10 +2914,10 @@ public class FugaParser {
     /**
      * atom:
      * *   | tuple_atom
-     * *   | list_iter
+     * *   | list_iterable
      * *   | list_atom
      * *   | set_atom
-     * *   | dict_iter
+     * *   | dict_iterable
      * *   | dict_atom
      * *   | builder
      * *   | NAME
@@ -2879,10 +2932,10 @@ public class FugaParser {
         if (m != null) return m;
         boolean r;
         r = tuple_atom(t);
-        r = r || list_iter(t);
+        r = r || list_iterable(t);
         r = r || list_atom(t);
         r = r || set_atom(t);
-        r = r || dict_iter(t);
+        r = r || dict_iterable(t);
         r = r || dict_atom(t);
         r = r || builder(t);
         r = r || t.consume(TokenType.NAME);

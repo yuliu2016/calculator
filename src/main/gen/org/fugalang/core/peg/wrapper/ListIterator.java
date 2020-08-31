@@ -4,20 +4,20 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * list_iter:
- * *   | '[' expr_or_star iterator ']'
+ * list_iterator:
+ * *   | expr_or_star iterator
  */
-public final class ListIter extends NodeWrapper {
+public final class ListIterator extends NodeWrapper {
 
-    public ListIter(ParseTreeNode node) {
+    public ListIterator(ParseTreeNode node) {
         super(node);
     }
 
     public ExprOrStar exprOrStar() {
-        return new ExprOrStar(get(1));
+        return new ExprOrStar(get(0));
     }
 
     public Iterator iterator() {
-        return new Iterator(get(2));
+        return new Iterator(get(1));
     }
 }
