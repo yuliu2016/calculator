@@ -22,13 +22,6 @@ public class CTransform {
         sb.append("RULE(")
                 .append(rn.getRuleNameSymbolic());
         sb.append(");\n");
-        for (UnitField field : unit.getFields()) {
-            if (field.isSingular() || field.isPredicate()) continue; // not a loop
-            if (field.getResultSource().getKind() == SourceKind.UnitRule) continue; // covered by macro
-            sb.append("RULE(");
-            sb.append(field.getRuleName().getRuleNameSymbolic());
-            sb.append("_loop);\n");
-        }
     }
 
     public static String getFunctionBodies(RuleSet ruleSet) {
@@ -66,61 +59,6 @@ public class CTransform {
         }
         sb.append("    EXIT_FRAME(p);\n");
         sb.append("}\n");
-
-        for (UnitField field : unit.getFields()) {
-            if (field.isSingular() || field.isPredicate()) continue; // not a loop
-            if (field.getResultSource().getKind() == SourceKind.UnitRule) continue; // covered by macro
-            sb.append("\nRULE(");
-            sb.append(field.getRuleName().getRuleNameSymbolic());
-            sb.append("_loop) {\n");
-            addLoopFuncBody(field, sb);
-            sb.append("}\n");
-        }
-    }
-
-    private static void addLoopFuncBody(UnitField field, StringBuilder sb) {
-        if (field.getFieldType() == FieldType.RequiredList) {
-            addRequiredLoopParser(field, sb);
-        } else {
-            addOptionalLoopParser(field, sb);
-        }
-    }
-
-    private static void addRequiredLoopParser(UnitField field, StringBuilder sb) {
-        var resultExpr = getResultExpr(field);
-
-        TokenEntry delimiter = field.getDelimiter();
-
-        String whileCondition;
-        if (delimiter == null) {
-            whileCondition = "(node = " + resultExpr + ")";
-        } else {
-            whileCondition = "pos = p->pos,\n" +
-                    "            (TOKEN(p, " + delimiter.getIndex() + ", \""
-                    + delimiter.getLiteralValue() + "\")) &&\n" +
-                    "            (node = " + resultExpr + ")";
-        }
-
-        var body = "    FAstNode *node, *seq;\n" +
-                "    if (!(node = " + resultExpr + ")) { return 0; }\n" +
-                "    seq = AST_SEQ_NEW(p);\n" +
-                (delimiter == null ? "" : "    size_t pos;\n") +
-                "    do { AST_SEQ_APPEND(p, seq, node); }\n" +
-                "    while (" + whileCondition + ");\n" +
-                (delimiter == null ? "" : "    p->pos = pos;\n") +
-                "    return seq;\n";
-        sb.append(body);
-    }
-
-    private static void addOptionalLoopParser(UnitField field, StringBuilder sb) {
-        var resultExpr = getResultExpr(field);
-        var body = "    FAstNode *node, *seq = AST_SEQ_NEW(p);\n" +
-                "    while ((node = " + resultExpr + ")) {\n" +
-                "        AST_SEQ_APPEND(p, seq, node);\n" +
-                "    }\n" +
-                "    return seq;\n";
-
-        sb.append(body);
     }
 
     private static void addLeftRecursiveUnitRuleBody(UnitRule unit, StringBuilder sb) {
@@ -234,9 +172,24 @@ public class CTransform {
                 return "SEQ_OR_NONE(p, " + func + ")";
             }
             throw new IllegalStateException();
+        } else if (rs.getKind() == SourceKind.TokenType || rs.getKind() == SourceKind.TokenLiteral) {
+            var te = (TokenEntry) rs.getValue();
+            var end = te.getIndex() + ", \"" + te.getLiteralValue() + "\")";
+            if (field.getFieldType() == FieldType.RequiredList) {
+                if (field.getDelimiter() == null) {
+                    return "TOKEN_SEQUENCE(p, " + end;
+                } else {
+                    var delim = field.getDelimiter();
+                    return "TOKEN_DELIMITED(p, " + +delim.getIndex() +
+                            ", \"" + delim.getLiteralValue() +
+                            "\", " + end;
+                }
+            } else if (field.getFieldType() == FieldType.OptionalList) {
+                return "TOKEN_SEQ_OR_NONE(p, " + end;
+            }
+            throw new IllegalArgumentException("optional list with token not supported");
         }
-        var rule_name = field.getRuleName().getRuleNameSymbolic();
-        return rule_name + "_loop(p)";
+        throw new IllegalArgumentException();
     }
 
     private static String getOptionalExprPart(String resultExpr, RuleType ruleType, boolean isLast) {
@@ -255,16 +208,13 @@ public class CTransform {
 
     private static String getResultExpr(UnitField field) {
         var rs = field.getResultSource();
-        switch (rs.getKind()) {
-            case UnitRule:
-                return ((RuleName) rs.getValue()).getRuleNameSymbolic() + "(p)";
-            case TokenType:
-            case TokenLiteral:
-                var te = (TokenEntry) rs.getValue();
-                return "TOKEN(p, " + te.getIndex() + ", \"" + te.getLiteralValue() + "\")";
-            default:
-                throw new IllegalArgumentException();
+        if (rs.getKind() == SourceKind.UnitRule) {
+            return ((RuleName) rs.getValue()).getRuleNameSymbolic() + "(p)";
+        } else if (rs.getKind() == SourceKind.TokenType || rs.getKind() == SourceKind.TokenLiteral) {
+            var te = (TokenEntry) rs.getValue();
+            return "TOKEN(p, " + te.getIndex() + ", \"" + te.getLiteralValue() + "\")";
         }
+        throw new IllegalArgumentException();
     }
 
     public static String getASTGen(RuleSet ruleSet, String name, String lowname, String macro) {
