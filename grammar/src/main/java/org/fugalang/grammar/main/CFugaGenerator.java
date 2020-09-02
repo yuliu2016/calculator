@@ -20,6 +20,7 @@ public class CFugaGenerator {
     private static final Path H_PATH = Paths.get(BASE_DIR, "include/parser.h");
     private static final Path AST_PATH = Paths.get(BASE_DIR, "include/astgen.h");
     private static final Path TM_PATH = Paths.get(BASE_DIR, "include/tokenmap.h");
+    private static final Path DC_PATH = Paths.get(BASE_DIR, "exclude/dummyc.c");
 
     private static String formatHeaderFile(String name, String content, String... includes) {
         var s = "#ifndef CPEG_" + name + "_H\n" +
@@ -53,11 +54,17 @@ public class CFugaGenerator {
         Files.writeString(C_PATH, c.replace("\n", System.lineSeparator()));
 
         String ast = formatHeaderFile("ASTGEN",
-                CTransform.getASTGen(ruleSet, "FAstGen", "ast_gen_t", "ASC"),
+                CTransform.getASTGen(ruleSet),
                 "peg.h");
         Files.writeString(AST_PATH, ast);
 
         String tokenMap = formatHeaderFile("TOKENMAP", CTransform.getTokenMap(ruleSet));
         Files.writeString(TM_PATH, tokenMap);
+
+        String dummy = "#include \"astgen.h\"\n" +
+                "#include \"tokenmap.h\"\n\n" +
+                CTransform.getDummyCompiler(ruleSet);
+
+        Files.writeString(DC_PATH, dummy.replace("\n", System.lineSeparator()));
     }
 }

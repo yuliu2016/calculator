@@ -53,7 +53,7 @@ public class CCalcGenerator {
         Files.writeString(C_PATH, c.replace("\n", System.lineSeparator()));
 
         String ast = formatHeaderFile("CALC2_ASTGEN",
-                CTransform.getASTGen(ruleSet, "FAstGen", "ast_gen_t", "ASC"),
+                CTransform.getASTGen(ruleSet),
                 "peg.h");
         Files.writeString(AST_PATH, ast);
 

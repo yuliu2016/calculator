@@ -217,7 +217,7 @@ public class CTransform {
         throw new IllegalArgumentException();
     }
 
-    public static String getASTGen(RuleSet ruleSet, String name, String lowname, String macro) {
+    public static String getASTGen(RuleSet ruleSet) {
         StringBuilder sb = new StringBuilder();
 
         sb.append("#define FVAR(name, node, i) FAstNode *name = (node)->ast_v.fields[i]\n");
@@ -275,5 +275,80 @@ public class CTransform {
                     .append("\n");
         }
         return sb.toString();
+    }
+
+    public static String getDummyCompiler(RuleSet ruleSet) {
+        StringBuilder sb = new StringBuilder();
+
+        for (NamedRule namedRule : ruleSet.getNamedRules()) {
+            addDummyDeclaration(sb, namedRule.getRoot());
+            for (UnitRule component : namedRule.getComponents()) {
+                addDummyDeclaration(sb, component);
+            }
+        }
+
+        for (NamedRule namedRule : ruleSet.getNamedRules()) {
+            sb.append("\n");
+            sb.append(StringUtil.inlinedoc(namedRule.getRoot().getGrammarString()));
+            addDummyFunction(sb, namedRule.getRoot());
+            for (UnitRule component : namedRule.getComponents()) {
+                addDummyFunction(sb, component);
+            }
+        }
+
+        return sb.toString();
+    }
+
+    private static void addDummyDeclaration(StringBuilder sb, UnitRule unit) {
+        sb.append("void dummy_").append(unit.getRuleName().getRuleNameSymbolic())
+                .append("(FAstNode *n);\n");
+    }
+
+    private static void addDummyFunction(StringBuilder sb, UnitRule unit) {
+
+        sb.append("\nvoid dummy_").append(unit.getRuleName().getRuleNameSymbolic())
+                .append("(FAstNode *n) {\n");
+        if (unit.isLeftRecursive() || unit.getRuleType() == RuleType.Disjunction) {
+            addDummyDisjunct(sb, unit);
+        } else {
+            addDummyUnpack(sb, unit);
+        }
+        sb.append("}\n");
+    }
+
+    private static void addDummyDisjunct(StringBuilder sb, UnitRule unit) {
+        sb.append("    FAstNode *o = n->ast_v.fields[0];\n");
+
+        for (UnitField field : unit.getFields()) {
+            if (field.getResultSource().getKind() == SourceKind.UnitRule) {
+                var rn = (RuleName) field.getResultSource().getValue();
+                sb.append("    if (o->ast_t == R_").append(rn.getRuleNameSymbolic().toUpperCase())
+                        .append(") {\n")
+                        .append("        dummy_").append(rn.getRuleNameSymbolic())
+                        .append("(o);\n        return;\n")
+                        .append("    }\n");
+            } else {
+                var te = (TokenEntry) field.getResultSource().getValue();
+                sb.append("    if (o->ast_t == 0 && o->ast_v.token->type == ")
+                        .append("T_").append(te.getNameSnakeCase().toUpperCase())
+                        .append(") {\n        return;\n    }\n");
+            }
+        }
+    }
+
+    private static void addDummyUnpack(StringBuilder sb, UnitRule unit) {
+        if (unit.getFields().stream().noneMatch(CTransform::isImportantField)) {
+            return;
+        }
+        sb.append("    UNPACK_").append(unit.getRuleName().getRuleNameSymbolic().toUpperCase())
+                .append("(n)\n");
+        for (UnitField field : unit.getFields()) {
+            if (isImportantField(field) &&
+                    field.getResultSource().getKind() == SourceKind.UnitRule) {
+                var rn = (RuleName) field.getResultSource().getValue();
+                sb.append("    dummy_").append(rn.getRuleNameSymbolic())
+                        .append("(").append(field.getProperFieldName()).append(");\n");
+            }
+        }
     }
 }
