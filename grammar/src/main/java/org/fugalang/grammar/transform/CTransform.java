@@ -220,23 +220,22 @@ public class CTransform {
     public static String getASTGen(RuleSet ruleSet, String name, String lowname, String macro) {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("typedef union ").append(lowname).append(" ").append(name).append(";\n\n");
+        sb.append("#define FVAR(name, node, i) FAstNode *name = (node)->ast_v.fields[i]\n");
+        sb.append("#define TVAR(name, node, i) FToken *name = (node)->ast_v.fields[i]->ast_v.token\n");
 
-        sb.append("#define ").append(macro).append("(node) ((").append(name).append(" *) &(node)->ast_v)\n\n");
-
-        sb.append("union ").append(lowname).append(" {\n");
         for (NamedRule namedRule : ruleSet.getNamedRules()) {
             addStructFields(namedRule.getRoot(), sb);
             for (UnitRule component : namedRule.getComponents()) {
                 addStructFields(component, sb);
             }
         }
-        sb.append("} ").append(";\n");
         return sb.toString();
     }
 
     private static void addStructFields(UnitRule unit, StringBuilder sb) {
-        sb.append("\n#define R_").append(unit.getRuleName().getRuleNameSymbolic().toUpperCase())
+        var upName = unit.getRuleName().getRuleNameSymbolic().toUpperCase();
+
+        sb.append("\n#define R_").append(upName)
                 .append(" ").append(unit.getRuleIndex()).append("\n");
 
         if (unit.isLeftRecursive() || unit.getRuleType() == RuleType.Disjunction) {
@@ -247,13 +246,21 @@ public class CTransform {
             return;
         }
 
-        sb.append("    struct {\n");
+        sb.append("#define UNPACK_").append(upName).append("(n) \\\n");
+        int i = 0;
         for (UnitField field : unit.getFields()) {
             if (isImportantField(field)) {
-                sb.append("        FAstNode *").append(field.getProperFieldName()).append(";\n");
+                if (field.getResultSource().getKind() == SourceKind.UnitRule) {
+                    sb.append("    FVAR(");
+                } else {
+                    sb.append("    TVAR(");
+                }
+
+                sb.append(field.getProperFieldName()).append(", n, ").append(i).append(")");
+                sb.append("; \\\n");
+                i++;
             }
         }
-        sb.append("    } ").append(unit.getRuleName().getRuleNameSymbolic()).append(";\n");
     }
 
     public static String getTokenMap(RuleSet ruleSet) {

@@ -10,16 +10,16 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-public class CFugaGenerator {
+public class CCalcGenerator {
 
     private static final String USER_DIR = System.getProperty("user.dir");
-    private static final String GRAMMAR_PATH = "src/main/files/Grammar";
+    private static final String GRAMMAR_PATH = "src/main/files/CalculatorGrammar";
     private static final String BASE_DIR = Paths.get(
             System.getProperty("user.home"), "ClionProjects/cpeg").toString();
-    private static final Path C_PATH = Paths.get(BASE_DIR, "parser.c");
-    private static final Path H_PATH = Paths.get(BASE_DIR, "include/parser.h");
-    private static final Path AST_PATH = Paths.get(BASE_DIR, "include/astgen.h");
-    private static final Path TM_PATH = Paths.get(BASE_DIR, "include/tokenmap.h");
+    private static final Path C_PATH = Paths.get(BASE_DIR, "exclude/calc2_parser.c");
+    private static final Path H_PATH = Paths.get(BASE_DIR, "exclude/calc2_parser.h");
+    private static final Path AST_PATH = Paths.get(BASE_DIR, "exclude/calc2_astgen.h");
+    private static final Path TM_PATH = Paths.get(BASE_DIR, "exclude/calc2_tokenmap.h");
 
     private static String formatHeaderFile(String name, String content, String... includes) {
         var s = "#ifndef CPEG_" + name + "_H\n" +
@@ -42,22 +42,22 @@ public class CFugaGenerator {
         );
 
         String h = formatHeaderFile(
-                "PARSER",
+                "CALC2_PARSER",
                 CTransform.getFuncDeclarations(ruleSet),
                 "peg.h");
         Files.writeString(H_PATH, h);
 
-        String c = "#include \"include/parser.h\"\n" +
-                "#include \"include/internal/peg_macros.h\"\n" +
+        String c = "#include \"calc2_parser.h\"\n" +
+                "#include \"peg_macros.h\"\n" +
                 CTransform.getFunctionBodies(ruleSet);
         Files.writeString(C_PATH, c.replace("\n", System.lineSeparator()));
 
-        String ast = formatHeaderFile("ASTGEN",
+        String ast = formatHeaderFile("CALC2_ASTGEN",
                 CTransform.getASTGen(ruleSet, "FAstGen", "ast_gen_t", "ASC"),
                 "peg.h");
         Files.writeString(AST_PATH, ast);
 
-        String tokenMap = formatHeaderFile("TOKENMAP", CTransform.getTokenMap(ruleSet));
+        String tokenMap = formatHeaderFile("CALC2_TOKENMAP", CTransform.getTokenMap(ruleSet));
         Files.writeString(TM_PATH, tokenMap);
     }
 }
