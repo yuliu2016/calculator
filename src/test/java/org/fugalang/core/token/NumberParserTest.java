@@ -65,4 +65,11 @@ public class NumberParserTest {
         assertType(result, 0, TokenType.NUMBER);
         assertValue(result, 0, "1.23E-5");
     }
+
+    @Test
+    public void testNonDecimalUnderscore() {
+        var result = LexerTests.tokenize("0x_1");
+        assertType(result, 0, TokenType.NUMBER);
+        assertValue(result, 0, "0x_1");
+    }
 }

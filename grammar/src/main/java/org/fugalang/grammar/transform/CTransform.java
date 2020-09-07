@@ -322,16 +322,16 @@ public class CTransform {
         for (UnitField field : unit.getFields()) {
             if (field.getResultSource().getKind() == SourceKind.UnitRule) {
                 var rn = (RuleName) field.getResultSource().getValue();
-                sb.append("    if (o->ast_t == R_").append(rn.getRuleNameSymbolic().toUpperCase())
-                        .append(") {\n")
+                sb.append("    if (R_CHECK(n, R_").append(rn.getRuleNameSymbolic().toUpperCase())
+                        .append(")) {\n")
                         .append("        dummy_").append(rn.getRuleNameSymbolic())
                         .append("(o);\n        return;\n")
                         .append("    }\n");
             } else {
                 var te = (TokenEntry) field.getResultSource().getValue();
-                sb.append("    if (o->ast_t == 0 && o->ast_v.token->type == ")
+                sb.append("    if (T_CHECK(n, ")
                         .append("T_").append(te.getNameSnakeCase().toUpperCase())
-                        .append(") {\n        return;\n    }\n");
+                        .append(")) {\n        return;\n    }\n");
             }
         }
     }
