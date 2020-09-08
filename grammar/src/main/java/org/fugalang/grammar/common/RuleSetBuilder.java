@@ -6,10 +6,7 @@ import org.fugalang.grammar.util.GrammarRepr;
 import org.fugalang.grammar.util.PEGUtil;
 import org.fugalang.grammar.util.StringUtil;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.StringJoiner;
+import java.util.*;
 
 public class RuleSetBuilder {
 
@@ -47,10 +44,20 @@ public class RuleSetBuilder {
         for (var rule : rules) {
             var left_recursive = PEGUtil.isLeftRecursive(rule.name(), rule.ruleSuite().altList());
 
+            Map<String, String> args;
+            if (rule.hasRuleArgs()) {
+                args = new LinkedHashMap<>();
+                for (RuleArg ruleArg : rule.ruleArgs().ruleArgs()) {
+                    args.put(ruleArg.name(), ruleArg.hasAssignName() ? ruleArg.assignName().name() : null);
+                }
+            } else {
+                args = Collections.emptyMap();
+            }
+
             var ruleName = ruleNameMap.get(rule.name());
 
             // use a root named rule to reduce files
-            UnitRule unit = ruleSet.createNamedRule(ruleName, left_recursive);
+            UnitRule unit = ruleSet.createNamedRule(ruleName, left_recursive, args);
 
             var ruleRepr = GrammarRepr.INSTANCE.visitRule(rule);
             unit.setGrammarString(ruleRepr);

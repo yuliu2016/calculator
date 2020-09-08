@@ -4,6 +4,9 @@ import org.fugalang.core.parser.RuleType;
 import org.fugalang.grammar.common.*;
 import org.fugalang.grammar.util.StringUtil;
 
+import java.util.Collections;
+import java.util.Map;
+
 public class CTransform {
 
     public static String getFuncDeclarations(RuleSet ruleSet) {
@@ -29,15 +32,16 @@ public class CTransform {
         for (NamedRule namedRule : ruleSet.getNamedRules()) {
             sb.append("\n");
             sb.append(StringUtil.inlinedoc(namedRule.getRoot().getGrammarString()));
-            addUnitRuleBody(namedRule.getRoot(), sb);
+            var args = namedRule.getArgs();
+            addUnitRuleBody(namedRule.getRoot(), sb, args);
             for (UnitRule component : namedRule.getComponents()) {
-                addUnitRuleBody(component, sb);
+                addUnitRuleBody(component, sb, Collections.emptyMap());
             }
         }
         return sb.toString();
     }
 
-    private static void addUnitRuleBody(UnitRule unit, StringBuilder sb) {
+    private static void addUnitRuleBody(UnitRule unit, StringBuilder sb, Map<String, String> args) {
         var rn = unit.getRuleName();
         sb.append("\nRULE(")
                 .append(rn.getRuleNameSymbolic());
@@ -45,9 +49,19 @@ public class CTransform {
         sb.append("    ENTER_FRAME(p, ")
                 .append(unit.getRuleIndex())
                 .append(");\n");
+        if (args.containsKey("memo")) {
+            sb.append("RETURN_IF_MEMOIZED(p);\n");
+        }
+        var ws = args.get("allow_whitespace");
+        if ("true".equals(ws)) {
+            sb.append("    WS_PUSH_1(p);\n");
+        } else if ("false".equals(ws)) {
+            sb.append("    WS_PUSH_0(p);\n");
+        }
         if (unit.isLeftRecursive()) {
             addLeftRecursiveUnitRuleBody(unit, sb);
         } else {
+
             switch (unit.getRuleType()) {
                 case Disjunction:
                     addDisjunctionBody(unit, sb);
@@ -56,6 +70,12 @@ public class CTransform {
                     addConjunctionBody(unit, sb);
                     break;
             }
+        }
+        if (ws != null) {
+            sb.append("    WS_POP(p);\n");
+        }
+        if (args.containsKey("memo")) {
+            sb.append("MEMOIZE(p);\n");
         }
         sb.append("    EXIT_FRAME(p);\n");
         sb.append("}\n");

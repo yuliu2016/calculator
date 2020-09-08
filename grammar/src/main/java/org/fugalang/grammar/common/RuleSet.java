@@ -24,7 +24,11 @@ public class RuleSet {
         return tokenMap;
     }
 
-    public UnitRule createNamedRule(RuleName ruleName, boolean leftRecursive) {
+    public UnitRule createNamedRule(
+            RuleName ruleName,
+            boolean leftRecursive,
+            Map<String, String> args
+    ) {
         var dupError = false;
         for (var namedRule : namedRules) {
             if (namedRule.getRoot().getRuleName().compareExact(ruleName)) {
@@ -39,7 +43,7 @@ public class RuleSet {
 
         var unit = new UnitRule(++ruleIndexCounter, ruleName, leftRecursive);
 
-        currentRule = new NamedRule(unit);
+        currentRule = new NamedRule(unit, args);
         namedRules.add(currentRule);
 
         return unit;
