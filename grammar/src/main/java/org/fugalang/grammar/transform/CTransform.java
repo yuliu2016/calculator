@@ -46,17 +46,17 @@ public class CTransform {
         sb.append("\nRULE(")
                 .append(rn.getRuleNameSymbolic());
         sb.append(") {\n");
-        sb.append("    ENTER_FRAME(p, ")
+        sb.append("    ENTER(")
                 .append(unit.getRuleIndex())
                 .append(");\n");
-        if (args.containsKey("memo")) {
-            sb.append("RETURN_IF_MEMOIZED(p);\n");
+        if (args.containsKey("memo") && !unit.isLeftRecursive()) {
+            sb.append("RETURN_IF_MEMOIZED();\n");
         }
         var ws = args.get("allow_whitespace");
         if ("true".equals(ws)) {
-            sb.append("    WS_PUSH_1(p);\n");
+            sb.append("    WS_PUSH_1();\n");
         } else if ("false".equals(ws)) {
-            sb.append("    WS_PUSH_0(p);\n");
+            sb.append("    WS_PUSH_0();\n");
         }
         if (unit.isLeftRecursive()) {
             addLeftRecursiveUnitRuleBody(unit, sb);
@@ -72,18 +72,18 @@ public class CTransform {
             }
         }
         if (ws != null) {
-            sb.append("    WS_POP(p);\n");
+            sb.append("    WS_POP();\n");
         }
-        if (args.containsKey("memo")) {
-            sb.append("MEMOIZE(p);\n");
+        if (args.containsKey("memo") && !unit.isLeftRecursive()) {
+            sb.append("MEMOIZE();\n");
         }
-        sb.append("    EXIT_FRAME(p);\n");
+        sb.append("    EXIT();\n");
         sb.append("}\n");
     }
 
     private static void addLeftRecursiveUnitRuleBody(UnitRule unit, StringBuilder sb) {
-        sb.append("    RETURN_IF_MEMOIZED(p);\n");
-        sb.append("    ENTER_LEFT_RECURSION(p);\n");
+        sb.append("    RETURN_IF_MEMOIZED();\n");
+        sb.append("    ENTER_LEFT_RECURSION();\n");
 
         var fields = unit.getFields();
         for (int i = 0; i < fields.size(); i++) {
@@ -94,7 +94,7 @@ public class CTransform {
         }
         sb.append(";\n");
 
-        sb.append("    EXIT_LEFT_RECURSION(p);\n");
+        sb.append("    EXIT_LEFT_RECURSION();\n");
     }
 
     private static boolean isImportantField(UnitField field) {
@@ -129,18 +129,7 @@ public class CTransform {
 
         sb.append("\n    ? (r = NODE_");
         sb.append(importantCount);
-        sb.append("(p");
-
-        importantCount = 0;
-        for (UnitField field : unit.getFields()) {
-            if (isImportantField(field)) {
-                var fieldName = ((char) ('a' + importantCount)) + "";
-                importantCount++;
-                sb.append(", ");
-                sb.append(fieldName);
-            }
-        }
-        sb.append(")) : 0;\n");
+        sb.append("()) : 0; \n");
     }
 
     private static void addDisjunctionBody(UnitRule unit, StringBuilder sb) {
@@ -152,7 +141,7 @@ public class CTransform {
                     unit.getRuleType(), i == fields.size() - 1);
             sb.append(result);
         }
-        sb.append("\n    ? (r = NODE_1(p, a)) : 0;\n");
+        sb.append("\n    ? (r = NODE_1()) : 0;\n");
     }
 
     private static String getParserFieldExpr(
@@ -223,7 +212,7 @@ public class CTransform {
     }
 
     private static String getTestExpr(UnitField field) {
-        return "TEST(p, " + getResultExpr(field) + ")";
+        return "TEST(" + getResultExpr(field) + ")";
     }
 
     private static String getResultExpr(UnitField field) {
@@ -232,7 +221,7 @@ public class CTransform {
             return ((RuleName) rs.getValue()).getRuleNameSymbolic() + "(p)";
         } else if (rs.getKind() == SourceKind.TokenType || rs.getKind() == SourceKind.TokenLiteral) {
             var te = (TokenEntry) rs.getValue();
-            return "TOKEN(p, " + te.getIndex() + ", \"" + te.getLiteralValue() + "\")";
+            return "TOKEN(" + te.getIndex() + ", \"" + te.getLiteralValue() + "\")";
         }
         throw new IllegalArgumentException();
     }
