@@ -1,0 +1,126 @@
+# Coroutines in Fuga
+
+
+/**
+The basic execution unit is the Thread.
+threads correspond to threads scheduled by the operating system.
+
+Each thread contains a Coroutine, which stores the current state
+of the call stack.
+
+Each coroutine belongs to a thread.
+
+Just like a call stack, coroutines also have a hierarchical structure
+of "continuations", which are other coroutines. When a coroutine yields
+execution, the continuation resumes. The continuation may hold
+a forward reference to the coroutine, that also allows it to resume
+*/
+
+/*
+There are 3 functions controlling these behaviours
+
+1. FCoroutine_create (or the coroutine function in Fuga code)
+create a new coroutine object for a given
+code function
+
+2. FCoroutine_suspend (or the suspend function in Fuga code)
+suspends the current coroutine in a thread by
+returning and continue execution from the
+coroutine in the *coro_continuation* field
+Can pass an object to assign to the caller
+of the function
+
+3. FCoroutine_resume (or the coro.resume function in Fuga code)
+Resumes a previously created/suspended coroutine.
+Can pass an object to assign to the caller
+of the function
+
+
+In addition, this is the function that evaluates a coroutine for result
+FCoroutine_evaluate()
+Evaluates all the code in a coroutine until it's either finished,
+errored, or suspended.
+*/
+
+/*
+When FCoroutine_evaluate calls functions, it passes a pointer to the
+result state in the following structure.
+
+typedef struct {
+    int rs_type;
+    void *rs_ptr;
+} FReturnState;
+
+rs_type can be the following:
+
+1. RETURN_STATE_OK
+This is used for native functions.
+The function has successfully been called.
+rs_ptr is the *return value* of the function.
+It gets pushed onto the stack of the frame.
+
+2. RETURN_STATE_ERROR
+This is used for native functions.
+The function raises an exception.
+rs_ptr is the exception object.
+The exception then gets propagated throught the coroutine
+
+3. RETURN_STATE_SUSPEND
+This is used for native functions.
+The function signals to *suspend* the current coroutine.
+rs_ptr is the object passed to the continuation
+The state of the current coroutine is saved
+FCoroutine_evaluate() returns with state COROUTINE_SUSPENDED
+The continuation coroutine (the caller of this coroutine)
+resumes its state
+
+4. RETURN_STATE_RESUME
+This is used for native functions.
+The function signals to *resume* a previously created or suspended
+coroutine.
+rs_ptr is the coroutine object being resumed.
+The state of the current coroutine is saved.
+rs_ptr is resumed.
+
+5. RETURN_STATE_FCODE
+This is for Fuga-defined functions.
+rs_ptr is the function definition of said function
+it is pushed onto the frame stack,
+and runs immediately
+*/
+
+# Simple example of generator
+fib = generator {
+    a = 1
+    b = 1
+    while True:
+        yield(a)
+        a, b = b, a + b
+}
+
+# implementation of the generator
+
+StopIteration = Exception {}
+
+_iterator = class(coro, _next=None) {
+    init {
+        self.coro = coroutine(code)
+    }
+
+    yield = def (next) {
+        self.next = _next
+        suspend()
+    }
+
+    __next__ = def {
+        self.coro.resume()
+        return self._next
+    }
+}
+
+generator = builder {
+    coro = coroutine(code)
+    it = _iterator(coro)
+    code.locals["yield"] = it.yield
+    return it
+}

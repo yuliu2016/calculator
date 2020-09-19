@@ -145,7 +145,7 @@ Point = dataclass(x:float, y: float) {
 /*
 Operator Precedence
 
-Evaluated *first* just on the line of primarh
+Evaluated *first* just on the line of primary
 */
 
 add = def a, b: a + b
@@ -212,6 +212,27 @@ print_impl = jvm.compile(s: str) {
 
 print = def(*args, end="\n") {
     return print_impl("".joint(args) + end)
+}
+
+_stdout_write = jvm.compile(s: str) {
+    java_str = jvm.cast(s, jvm._java.lang.String)
+    jvm._System.out.println(java_str)
+}
+
+_stdout = stdfile(read=None, write=_stdout_write)
+
+print = def(*args, sep=" ", end="\n", file=None) {
+    if not file: file = _stdout
+    len = args.len
+    if len {
+        for i in range(len) {
+            file.write(str(args[i]))
+            if i != len - 1 {
+                file.write(sep)
+            }
+        }
+    }
+    file.write(end)
 }
 
 /**
