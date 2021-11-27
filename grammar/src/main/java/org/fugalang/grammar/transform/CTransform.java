@@ -47,10 +47,10 @@ public class CTransform {
                 .append(rn.getRuleNameSymbolic());
         sb.append("(FParser *p) {\n");
         sb.append("    frame_t f;\n");
-        sb.append("    enter(p, &f, ")
-                .append(unit.getRuleIndex())
-                .append(", FUNC);\n");
-        sb.append("    FAstNode *a, *b, *c, *d, *r;\n");
+//        sb.append("    enter(p, &f, ")
+//                .append(unit.getRuleIndex())
+//                .append(", FUNC);\n");
+//        sb.append("    FAstNode *a, *b, *c, *d, *r;\n");
         if (args.containsKey("memo") && !unit.isLeftRecursive()) {
             sb.append("RETURN_IF_MEMOIZED();\n");
         }
@@ -80,10 +80,14 @@ public class CTransform {
     }
 
     private static void addLeftRecursiveUnitRuleBody(UnitRule unit, StringBuilder sb) {
+        sb.append("    enter(p, &f, ")
+            .append(unit.getRuleIndex())
+            .append(", FUNC);\n");
+        sb.append("    FAstNode *a, *r;\n");
         sb.append("    RETURN_IF_MEMOIZED();\n");
         sb.append("    ENTER_LEFT_RECURSION();\n");
 
-        sb.append("    r = (\n");
+        sb.append("    (\n");
 
         var fields = unit.getFields();
         for (int i = 0; i < fields.size(); i++) {
@@ -106,7 +110,23 @@ public class CTransform {
 
         int importantCount = 0;
 
-        sb.append("    r = !f.short_circuit && (\n");
+        int impCount = unit.getFields().stream()
+                .filter(CTransform::isImportantField)
+                .toList().size();
+        sb.append("    FAstNode ");
+        switch (impCount) {
+            case 0 -> sb.append("*r;\n");
+            case 1 -> sb.append("*a, *r;\n");
+            case 2 -> sb.append("*a, *b, *r;\n");
+            case 3 -> sb.append("*a, *b, *c, *r;\n");
+            case 4 -> sb.append("*a, *b, *c, *d, *r;\n");
+        }
+
+        sb.append("    r = enter(p, &f, ")
+                .append(unit.getRuleIndex())
+                .append(", FUNC)");
+
+        sb.append(" && (\n");
 
         var fields = unit.getFields();
         for (int i = 0; i < fields.size(); i++) {
@@ -124,13 +144,9 @@ public class CTransform {
             sb.append(result);
         }
 
-        if (importantCount == 0) {
-            sb.append("\n    );\n");
-            return;
-        }
-
         sb.append("\n    ) ? ");
         switch (importantCount) {
+            case 0 -> sb.append("node_0(p, &f)");
             case 1 -> sb.append("node_1(p, &f, a)");
             case 2 -> sb.append("node_2(p, &f, a, b)");
             case 3 -> sb.append("node_3(p, &f, a, b, c)");
@@ -140,7 +156,12 @@ public class CTransform {
     }
 
     private static void addDisjunctionBody(UnitRule unit, StringBuilder sb) {
-        sb.append("    r = !f.short_circuit && (\n");
+        sb.append("    FAstNode *a, *r;\n");
+        sb.append("    r = enter(p, &f, ")
+                .append(unit.getRuleIndex())
+                .append(", FUNC)");
+
+        sb.append(" && (\n");
         var fields = unit.getFields();
         for (int i = 0; i < fields.size(); i++) {
             sb.append("        ");
@@ -210,7 +231,7 @@ public class CTransform {
     }
 
     private static String getTestExpr(UnitField field) {
-        return "TEST(" + getResultExpr(field) + ")";
+        return "test_and_reset(p, &f, " + getResultExpr(field) + ")";
     }
 
     private static String getResultExpr(UnitField field) {
