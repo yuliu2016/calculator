@@ -46,7 +46,8 @@ public class CTransform {
         sb.append("\nstatic FAstNode *")
                 .append(rn.getRuleNameSymbolic());
         sb.append("(FParser *p) {\n");
-        sb.append("    frame_t f = enter(p, ")
+        sb.append("    frame_t f;\n");
+        sb.append("    enter(p, &f, ")
                 .append(unit.getRuleIndex())
                 .append(", FUNC);\n");
         sb.append("    FAstNode *a, *b, *c, *d, *r;\n");
@@ -74,7 +75,7 @@ public class CTransform {
         if (args.containsKey("memo") && !unit.isLeftRecursive()) {
             sb.append("MEMOIZE();\n");
         }
-        sb.append("    return exit(p, &f, r), r;\n");
+        sb.append("    return exit(p, &f, r);\n");
         sb.append("}\n");
     }
 
@@ -82,14 +83,16 @@ public class CTransform {
         sb.append("    RETURN_IF_MEMOIZED();\n");
         sb.append("    ENTER_LEFT_RECURSION();\n");
 
+        sb.append("    r = (\n");
+
         var fields = unit.getFields();
         for (int i = 0; i < fields.size(); i++) {
-            sb.append("    (a = ");
+            sb.append("        (a = ");
             var result = getParserFieldExpr(fields.get(i),
                     unit.getRuleType(), i == fields.size() - 1);
             sb.append(result);
         }
-        sb.append(";\n");
+        sb.append("\n    );\n");
 
         sb.append("    EXIT_LEFT_RECURSION();\n");
     }
@@ -103,9 +106,11 @@ public class CTransform {
 
         int importantCount = 0;
 
+        sb.append("    r = !f.short_circuit && (\n");
+
         var fields = unit.getFields();
         for (int i = 0; i < fields.size(); i++) {
-            sb.append("    ");
+            sb.append("        ");
             sb.append("(");
             var field = fields.get(i);
             if (isImportantField(field)) {
@@ -120,30 +125,31 @@ public class CTransform {
         }
 
         if (importantCount == 0) {
-            sb.append(";\n");
+            sb.append("\n    );\n");
             return;
         }
 
-        sb.append("\n    ? (r = ");
+        sb.append("\n    ) ? ");
         switch (importantCount) {
             case 1 -> sb.append("node_1(p, &f, a)");
             case 2 -> sb.append("node_2(p, &f, a, b)");
             case 3 -> sb.append("node_3(p, &f, a, b, c)");
             case 4 -> sb.append("node_4(p, &f, a, b, c, d)");
         }
-        sb.append(") : 0; \n");
+        sb.append(" : 0; \n");
     }
 
     private static void addDisjunctionBody(UnitRule unit, StringBuilder sb) {
+        sb.append("    r = !f.short_circuit && (\n");
         var fields = unit.getFields();
         for (int i = 0; i < fields.size(); i++) {
-            sb.append("    ");
+            sb.append("        ");
             sb.append("(a = ");
             var result = getParserFieldExpr(fields.get(i),
                     unit.getRuleType(), i == fields.size() - 1);
             sb.append(result);
         }
-        sb.append("\n    ? (r = node_1(p, &f, a)) : 0;\n");
+        sb.append("\n    ) ? node_1(p, &f, a) : 0;\n");
     }
 
     private static String getParserFieldExpr(
