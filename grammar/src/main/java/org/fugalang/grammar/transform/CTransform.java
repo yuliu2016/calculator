@@ -46,9 +46,10 @@ public class CTransform {
         sb.append("\nstatic FAstNode *")
                 .append(rn.getRuleNameSymbolic());
         sb.append("(FParser *p) {\n");
-        sb.append("    ENTER(")
+        sb.append("    frame_t f = enter(p, ")
                 .append(unit.getRuleIndex())
-                .append(");\n");
+                .append(", FUNC);\n");
+        sb.append("    FAstNode *a, *b, *c, *d, *r;\n");
         if (args.containsKey("memo") && !unit.isLeftRecursive()) {
             sb.append("RETURN_IF_MEMOIZED();\n");
         }
@@ -73,7 +74,7 @@ public class CTransform {
         if (args.containsKey("memo") && !unit.isLeftRecursive()) {
             sb.append("MEMOIZE();\n");
         }
-        sb.append("    return exit(p, pos, r), r;\n");
+        sb.append("    return exit(p, &f, r), r;\n");
         sb.append("}\n");
     }
 
@@ -123,9 +124,14 @@ public class CTransform {
             return;
         }
 
-        sb.append("\n    ? (r = NODE_");
-        sb.append(importantCount);
-        sb.append("()) : 0; \n");
+        sb.append("\n    ? (r = ");
+        switch (importantCount) {
+            case 1 -> sb.append("node_1(p, &f, a)");
+            case 2 -> sb.append("node_2(p, &f, a, b)");
+            case 3 -> sb.append("node_3(p, &f, a, b, c)");
+            case 4 -> sb.append("node_4(p, &f, a, b, c, d)");
+        }
+        sb.append(") : 0; \n");
     }
 
     private static void addDisjunctionBody(UnitRule unit, StringBuilder sb) {
@@ -137,7 +143,7 @@ public class CTransform {
                     unit.getRuleType(), i == fields.size() - 1);
             sb.append(result);
         }
-        sb.append("\n    ? (r = NODE_1()) : 0;\n");
+        sb.append("\n    ? (r = node_1(p, &f, a)) : 0;\n");
     }
 
     private static String getParserFieldExpr(
@@ -158,30 +164,29 @@ public class CTransform {
             var func = ((RuleName) rs.getValue()).getRuleNameSymbolic();
             if (field.getFieldType() == FieldType.RequiredList) {
                 if (field.getDelimiter() == null) {
-                    return "SEQUENCE(p, " + func + ")";
+                    return "sequence(p, " + func + ", 0)";
                 } else {
-                    return "DELIMITED(p, " + field.getDelimiter().getIndex() +
+                    return "delimited(p, " + field.getDelimiter().getIndex() +
                             ", \"" + field.getDelimiter().getLiteralValue() +
                             "\", " + func + ")";
                 }
             } else if (field.getFieldType() == FieldType.OptionalList) {
-                return "SEQ_OR_NONE(p, " + func + ")";
+                return "sequence(p, " + func + ", 1)";
             }
             throw new IllegalStateException();
         } else if (rs.getKind() == SourceKind.TokenType || rs.getKind() == SourceKind.TokenLiteral) {
             var te = (TokenEntry) rs.getValue();
-            var end = te.getIndex() + ", \"" + te.getLiteralValue() + "\")";
             if (field.getFieldType() == FieldType.RequiredList) {
                 if (field.getDelimiter() == null) {
-                    return "TOKEN_SEQUENCE(p, " + end;
+                    return "t_sequence(p, " + te.getIndex() + ", \"" + te.getLiteralValue() + "\",0)";
                 } else {
                     var delim = field.getDelimiter();
-                    return "TOKEN_DELIMITED(p, " + delim.getIndex() +
+                    return "t_delimited(p, " + delim.getIndex() +
                             ", \"" + delim.getLiteralValue() +
-                            "\", " + end;
+                            "\", " + te.getIndex() + ", \"" + te.getLiteralValue() + "\")";
                 }
             } else if (field.getFieldType() == FieldType.OptionalList) {
-                return "TOKEN_SEQ_OR_NONE(p, " + end;
+                return "t_sequence(p, " + te.getIndex() + ", \"" + te.getLiteralValue() + "\",1)";
             }
             throw new IllegalArgumentException("optional list with token not supported");
         }
@@ -189,7 +194,7 @@ public class CTransform {
     }
 
     private static String getOptionalExprPart(String resultExpr, RuleType ruleType, boolean isLast) {
-        return getRequiredExprPart("OPT(" + resultExpr + ")", ruleType, isLast);
+        return getRequiredExprPart(resultExpr + ", 1", ruleType, isLast);
     }
 
     private static String getRequiredExprPart(String resultExpr, RuleType ruleType, boolean isLast) {
@@ -208,7 +213,7 @@ public class CTransform {
             return ((RuleName) rs.getValue()).getRuleNameSymbolic() + "(p)";
         } else if (rs.getKind() == SourceKind.TokenType || rs.getKind() == SourceKind.TokenLiteral) {
             var te = (TokenEntry) rs.getValue();
-            return "TOKEN(" + te.getIndex() + ", \"" + te.getLiteralValue() + "\")";
+            return "consume(p, " + te.getIndex() + ", \"" + te.getLiteralValue() + "\")";
         }
         throw new IllegalArgumentException();
     }
