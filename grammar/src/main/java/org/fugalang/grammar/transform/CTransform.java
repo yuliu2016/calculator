@@ -4,7 +4,9 @@ import org.fugalang.core.parser.RuleType;
 import org.fugalang.grammar.common.*;
 import org.fugalang.grammar.util.StringUtil;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 public class CTransform {
@@ -43,23 +45,32 @@ public class CTransform {
 
     private static void addUnitRuleBody(UnitRule unit, StringBuilder sb, Map<String, String> args) {
         var rn = unit.getRuleName();
-        sb.append("\nstatic FAstNode *")
-                .append(rn.getRuleNameSymbolic());
-        sb.append("(FParser *p) {\n");
-        sb.append("    frame_t f;\n");
-//        sb.append("    enter(p, &f, ")
-//                .append(unit.getRuleIndex())
-//                .append(", FUNC);\n");
-//        sb.append("    FAstNode *a, *b, *c, *d, *r;\n");
+
+        List<String> flags = new ArrayList<>();
+
         if (args.containsKey("memo") && !unit.isLeftRecursive()) {
-            sb.append("RETURN_IF_MEMOIZED();\n");
+            flags.add("F_MEMO");
+        }
+        if (unit.isLeftRecursive()) {
+            flags.add("F_LR");
         }
         var ws = args.get("allow_whitespace");
         if ("true".equals(ws)) {
-            sb.append("    WS_PUSH_1();\n");
+            flags.add("F_ALLOW_SPACES");
         } else if ("false".equals(ws)) {
-            sb.append("    WS_PUSH_0();\n");
+            flags.add("F_DISALLOW_SPACES");
         }
+        var flagsStr = flags.isEmpty() ? "0" : String.join(" | ", flags);
+
+        sb.append("\nstatic FAstNode *")
+                .append(rn.getRuleNameSymbolic());
+        sb.append("(FParser *p) {\n");
+        sb.append("    frame_t f = {")
+                .append(unit.getRuleIndex())
+                .append(", p->pos, FUNC, 0, ")
+                .append(flagsStr)
+                .append("};\n");
+
         if (unit.isLeftRecursive()) {
             addLeftRecursiveUnitRuleBody(unit, sb);
         } else {
@@ -69,20 +80,13 @@ public class CTransform {
                 case Conjunction -> addConjunctionBody(unit, sb);
             }
         }
-        if (ws != null) {
-            sb.append("    WS_POP();\n");
-        }
-        if (args.containsKey("memo") && !unit.isLeftRecursive()) {
-            sb.append("MEMOIZE();\n");
-        }
+
         sb.append("    return exit(p, &f, r);\n");
         sb.append("}\n");
     }
 
     private static void addLeftRecursiveUnitRuleBody(UnitRule unit, StringBuilder sb) {
-        sb.append("    enter(p, &f, ")
-            .append(unit.getRuleIndex())
-            .append(", FUNC);\n");
+        sb.append("    enter(p, &f);\n");
         sb.append("    FAstNode *a, *r;\n");
         sb.append("    RETURN_IF_MEMOIZED();\n");
         sb.append("    ENTER_LEFT_RECURSION();\n");
@@ -122,11 +126,7 @@ public class CTransform {
             case 4 -> sb.append("*a, *b, *c, *d, *r;\n");
         }
 
-        sb.append("    r = enter(p, &f, ")
-                .append(unit.getRuleIndex())
-                .append(", FUNC)");
-
-        sb.append(" && (\n");
+        sb.append("    r = enter(p, &f) && (\n");
 
         var fields = unit.getFields();
         for (int i = 0; i < fields.size(); i++) {
@@ -152,16 +152,12 @@ public class CTransform {
             case 3 -> sb.append("node_3(p, &f, a, b, c)");
             case 4 -> sb.append("node_4(p, &f, a, b, c, d)");
         }
-        sb.append(" : 0; \n");
+        sb.append(" : 0;\n");
     }
 
     private static void addDisjunctionBody(UnitRule unit, StringBuilder sb) {
         sb.append("    FAstNode *a, *r;\n");
-        sb.append("    r = enter(p, &f, ")
-                .append(unit.getRuleIndex())
-                .append(", FUNC)");
-
-        sb.append(" && (\n");
+        sb.append("    r = enter(p, &f) && (\n");
         var fields = unit.getFields();
         for (int i = 0; i < fields.size(); i++) {
             sb.append("        ");
@@ -205,7 +201,7 @@ public class CTransform {
             var te = (TokenEntry) rs.getValue();
             if (field.getFieldType() == FieldType.RequiredList) {
                 if (field.getDelimiter() == null) {
-                    return "t_sequence(p, " + te.getIndex() + ", \"" + te.getLiteralValue() + "\",0)";
+                    return "t_sequence(p, " + te.getIndex() + ", \"" + te.getLiteralValue() + "\", 0)";
                 } else {
                     var delim = field.getDelimiter();
                     return "t_delimited(p, " + delim.getIndex() +
@@ -213,7 +209,7 @@ public class CTransform {
                             "\", " + te.getIndex() + ", \"" + te.getLiteralValue() + "\")";
                 }
             } else if (field.getFieldType() == FieldType.OptionalList) {
-                return "t_sequence(p, " + te.getIndex() + ", \"" + te.getLiteralValue() + "\",1)";
+                return "t_sequence(p, " + te.getIndex() + ", \"" + te.getLiteralValue() + "\", 1)";
             }
             throw new IllegalArgumentException("optional list with token not supported");
         }
