@@ -15,9 +15,8 @@ public class CFugaGenerator {
     private static final String USER_DIR = System.getProperty("user.dir");
     private static final String GRAMMAR_PATH = "src/main/files/Grammar";
     private static final String BASE_DIR = Paths.get(
-            System.getProperty("user.home"), "ClionProjects/cpeg").toString();
+            System.getProperty("user.home"), "vscode/cpeg").toString();
     private static final Path C_PATH = Paths.get(BASE_DIR, "parser.c");
-    private static final Path H_PATH = Paths.get(BASE_DIR, "include/parser.h");
     private static final Path AST_PATH = Paths.get(BASE_DIR, "include/astgen.h");
     private static final Path TM_PATH = Paths.get(BASE_DIR, "include/tokenmap.h");
     private static final Path DC_PATH = Paths.get(BASE_DIR, "exclude/dummyc.c");
@@ -42,14 +41,8 @@ public class CFugaGenerator {
                 GeneratorUtil.tokenMap
         );
 
-        String h = formatHeaderFile(
-                "PARSER",
-                CTransform.getFuncDeclarations(ruleSet),
-                "peg.h");
-        Files.writeString(H_PATH, h);
-
-        String c = "#include \"include/parser.h\"\n" +
-                "#include \"include/internal/peg_macros.h\"\n" +
+        String c = "#include \"include/internal/peg_macros.h\"\n\n\n" +
+                CTransform.getFuncDeclarations(ruleSet) + "\n\n" +
                 CTransform.getFunctionBodies(ruleSet);
         Files.writeString(C_PATH, c.replace("\n", System.lineSeparator()));
 

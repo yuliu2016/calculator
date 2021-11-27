@@ -22,9 +22,9 @@ public class CTransform {
 
     private static void addUnitRuleDeclaration(UnitRule unit, StringBuilder sb) {
         var rn = unit.getRuleName();
-        sb.append("RULE(")
+        sb.append("static FAstNode *")
                 .append(rn.getRuleNameSymbolic());
-        sb.append(");\n");
+        sb.append("(FParser *);\n");
     }
 
     public static String getFunctionBodies(RuleSet ruleSet) {
@@ -43,9 +43,9 @@ public class CTransform {
 
     private static void addUnitRuleBody(UnitRule unit, StringBuilder sb, Map<String, String> args) {
         var rn = unit.getRuleName();
-        sb.append("\nRULE(")
+        sb.append("\nstatic FAstNode *")
                 .append(rn.getRuleNameSymbolic());
-        sb.append(") {\n");
+        sb.append("(FParser *p) {\n");
         sb.append("    ENTER(")
                 .append(unit.getRuleIndex())
                 .append(");\n");
@@ -202,7 +202,7 @@ public class CTransform {
     }
 
     private static String getOptionalExprPart(String resultExpr, RuleType ruleType, boolean isLast) {
-        return getRequiredExprPart("OPTIONAL(" + resultExpr + ")", ruleType, isLast);
+        return getRequiredExprPart("OPT(" + resultExpr + ")", ruleType, isLast);
     }
 
     private static String getRequiredExprPart(String resultExpr, RuleType ruleType, boolean isLast) {
