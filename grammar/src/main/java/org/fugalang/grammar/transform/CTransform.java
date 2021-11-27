@@ -63,12 +63,8 @@ public class CTransform {
         } else {
 
             switch (unit.getRuleType()) {
-                case Disjunction:
-                    addDisjunctionBody(unit, sb);
-                    break;
-                case Conjunction:
-                    addConjunctionBody(unit, sb);
-                    break;
+                case Disjunction -> addDisjunctionBody(unit, sb);
+                case Conjunction -> addConjunctionBody(unit, sb);
             }
         }
         if (ws != null) {
@@ -77,7 +73,7 @@ public class CTransform {
         if (args.containsKey("memo") && !unit.isLeftRecursive()) {
             sb.append("MEMOIZE();\n");
         }
-        sb.append("    EXIT();\n");
+        sb.append("    return exit(p, pos, r), r;\n");
         sb.append("}\n");
     }
 
@@ -146,22 +142,13 @@ public class CTransform {
 
     private static String getParserFieldExpr(
             UnitField field, RuleType ruleType, boolean isLast) {
-        switch (field.getFieldType()) {
-            case RequireTrue:
-                return getRequiredExprPart(getTestExpr(field), ruleType, isLast);
-            case RequireFalse:
-                var resultExpr = "!" + getTestExpr(field);
-                return getRequiredExprPart(resultExpr, ruleType, isLast);
-            case Required:
-                return getRequiredExprPart(getResultExpr(field), ruleType, isLast);
-            case Optional:
-                return getOptionalExprPart(getResultExpr(field), ruleType, isLast);
-            case RequiredList:
-            case OptionalList:
-                return getRequiredExprPart(getLoopExpr(field), ruleType, isLast);
-            default:
-                throw new IllegalArgumentException();
-        }
+        return switch (field.getFieldType()) {
+            case RequireTrue -> getRequiredExprPart(getTestExpr(field), ruleType, isLast);
+            case RequireFalse -> getRequiredExprPart("!" + getTestExpr(field), ruleType, isLast);
+            case Required -> getRequiredExprPart(getResultExpr(field), ruleType, isLast);
+            case Optional -> getOptionalExprPart(getResultExpr(field), ruleType, isLast);
+            case RequiredList, OptionalList -> getRequiredExprPart(getLoopExpr(field), ruleType, isLast);
+        };
     }
 
     private static String getLoopExpr(UnitField field) {
@@ -189,7 +176,7 @@ public class CTransform {
                     return "TOKEN_SEQUENCE(p, " + end;
                 } else {
                     var delim = field.getDelimiter();
-                    return "TOKEN_DELIMITED(p, " + +delim.getIndex() +
+                    return "TOKEN_DELIMITED(p, " + delim.getIndex() +
                             ", \"" + delim.getLiteralValue() +
                             "\", " + end;
                 }
