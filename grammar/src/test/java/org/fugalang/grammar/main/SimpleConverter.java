@@ -7,6 +7,7 @@ import org.fugalang.grammar.gen.ConvertedValue;
 import org.fugalang.grammar.gen.TokenConverter;
 import org.fugalang.grammar.util.StringUtil;
 
+@Deprecated
 public class SimpleConverter implements TokenConverter {
     @Override
     public ConvertedValue checkToken(String s) {

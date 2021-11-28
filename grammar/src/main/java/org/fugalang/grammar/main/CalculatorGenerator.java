@@ -5,7 +5,7 @@ import org.fugalang.grammar.common.RuleSetBuilder;
 import org.fugalang.grammar.gen.PackageOutput;
 import org.fugalang.grammar.transform.JGenerator;
 
-public class CalculatorGenerator2 {
+public class CalculatorGenerator {
     private static final String USER_DIR = System.getProperty("user.dir");
     private static final String GRAMMAR_PATH = "src/main/files/CalculatorGrammar";
     private static final PackageOutput PACKAGE_OUTPUT = new PackageOutput(USER_DIR,

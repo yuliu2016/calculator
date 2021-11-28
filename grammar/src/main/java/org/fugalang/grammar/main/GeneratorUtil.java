@@ -9,7 +9,6 @@ import org.fugalang.core.token.Operator;
 import org.fugalang.core.token.SimpleLexer;
 import org.fugalang.core.token.TokenType;
 import org.fugalang.grammar.common.TokenEntry;
-import org.fugalang.grammar.gen.TokenConverter;
 import org.fugalang.grammar.peg.parser.MetaParser;
 import org.fugalang.grammar.peg.wrapper.Grammar;
 
@@ -23,6 +22,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class GeneratorUtil {
+
     public static Grammar readGrammar(String base, String grammarPath) throws IOException {
         String data;
         data = Files.readString(Paths.get(base, grammarPath));
@@ -32,11 +32,6 @@ public class GeneratorUtil {
         var node = SimpleParseTree.parse(context, MetaParser::grammar);
         return new Grammar(node);
     }
-
-    public static TokenConverter simpleConverter() {
-        return new SimpleConverter();
-    }
-
 
     public static final Map<String, TokenEntry> tokenMap = tokenMap("op_");
     public static final Map<String, TokenEntry> classicTokenMap = tokenMap("");
