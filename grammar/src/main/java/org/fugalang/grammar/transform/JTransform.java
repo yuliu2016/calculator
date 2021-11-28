@@ -2,7 +2,14 @@ package org.fugalang.grammar.transform;
 
 import org.fugalang.core.parser.RuleType;
 import org.fugalang.grammar.common.*;
+import org.fugalang.grammar.util.FirstAndMore;
 import org.fugalang.grammar.util.StringUtil;
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.TreeSet;
+
+import static org.fugalang.grammar.common.FieldType.*;
 
 public class JTransform {
     public static void generateParser(StringBuilder sb, NamedRule rule) {
@@ -228,10 +235,234 @@ public class JTransform {
     }
 
     public static void generateVisitor(StringBuilder sb, NamedRule rule) {
+        generateVisitor(sb, rule.getRoot());
+    }
 
+    private static void generateVisitor(StringBuilder sb, UnitRule rule) {
+        sb.append("\n");
+        var headerComments = rule.getGrammarString();
+        if (headerComments != null && !headerComments.isBlank()) {
+            sb.append(StringUtil.javadoc(headerComments, 4));
+        }
+        var name = rule.getRuleName();
+        sb.append("    default T visit")
+                .append(name.pascalCase())
+                .append("(")
+                .append(name.pascalCase())
+                .append(" ")
+                .append(name.camelCase())
+                .append(") {\n        return null;\n    }\n");
     }
 
     public static String generateWrapper(NamedRule rule, String wrapperPackage) {
-        return "";
+        return generateClassCode(rule, wrapperPackage);
+    }
+
+    private static String generateClassCode(NamedRule rule, String wrapperPackage) {
+        StringBuilder sb = new StringBuilder();
+
+        sb
+                .append("package ")
+                .append(wrapperPackage)
+                .append(";\n\n");
+
+        Set<String> userImports = new TreeSet<>();
+        Set<String> javaImports = new TreeSet<>();
+
+        var importIterator = rule.getComponents().stream().map(JTransform::classImports).iterator();
+
+        for (Set<String> importSet : FirstAndMore.of(classImports(rule.getRoot()), importIterator)) {
+            for (String theImport : importSet) {
+                if (theImport.startsWith("java")) {
+                    javaImports.add(theImport);
+                } else {
+                    userImports.add(theImport);
+                }
+            }
+        }
+
+        for (String classImport : userImports) {
+            sb.append("import ")
+                    .append(classImport)
+                    .append(";\n");
+        }
+
+        if (!userImports.isEmpty()) {
+            sb.append("\n");
+        }
+
+        for (String classImport : javaImports) {
+            sb.append("import ")
+                    .append(classImport)
+                    .append(";\n");
+        }
+
+        if (!javaImports.isEmpty()) {
+            sb.append("\n");
+        }
+
+        sb.append(generateClassBody(rule.getRoot(), false));
+
+        for (UnitRule subeRule : rule.getComponents()) {
+            var classDef = generateClassBody(subeRule, true);
+            sb.append(StringUtil.indent(classDef, 4));
+        }
+
+        // add final closing bracket
+        sb.append("}\n");
+
+        return sb.toString();
+    }
+
+    private static Set<String> classImports(UnitRule rule) {
+        // A hack to get the class imports...
+        Set<String> set = new HashSet<>();
+        set.add("org.fugalang.core.parser.NodeWrapper");
+        set.add("org.fugalang.core.parser.ParseTreeNode");
+        if (rule.getFields().stream().anyMatch(f -> f.getResultSource().kind() == SourceKind.TokenType)) {
+            set.add("org.fugalang.core.token.TokenType");
+        }
+        if (rule.getFields().stream().anyMatch(f ->
+                f.getFieldType() == RequiredList || f.getFieldType() == OptionalList)) {
+            set.add("java.util.List");
+        }
+        return set;
+    }
+
+    public static String generateClassBody(UnitRule rule, boolean isStaticInnerClass) {
+        StringBuilder sb = new StringBuilder();
+
+        if (isStaticInnerClass) {
+            sb.append("\n");
+        }
+
+        var headerComments = rule.getGrammarString();
+        if (headerComments != null && !headerComments.isBlank()) {
+            sb.append(StringUtil.javadoc(headerComments, 0));
+        }
+
+        if (isStaticInnerClass) {
+            sb.append("public static final class ");
+        } else {
+            sb.append("public final class ");
+        }
+
+        var className = rule.getRuleName().pascalCase();
+        sb.append(className);
+
+        // extends
+        var ruleType = rule.getRuleType();
+        if (ruleType != null) {
+            // add the parent classes
+            sb.append(" extends NodeWrapper");
+        } else {
+            throw new IllegalStateException("No Rule Type");
+        }
+
+        sb.append(" {\n\n");
+
+        sb.append("    public ")
+                .append(className);
+
+        sb.append("""
+                (ParseTreeNode node) {
+                        super(node);
+                    }
+                """);
+
+        for (int i = 0; i < rule.getFields().size(); i++) {
+            var field = rule.getFields().get(i);
+
+            var getter = asGetter(field, ruleType, i);
+            if (getter != null) {
+                sb.append(getter);
+            }
+
+            var absentCheck = asAbsentCheck(field, ruleType, i);
+            if (absentCheck != null) {
+                sb.append(absentCheck);
+            }
+        }
+
+        if (isStaticInnerClass) {
+            sb.append("}\n");
+        }
+        // else don't append, since external classes need
+        // to add the final quotes
+
+        return sb.toString();
+    }
+
+    private static String asGetter(UnitField field, RuleType ruleType, int index) {
+        var body = asGetterBody(field, ruleType, index);
+        if (body == null) {
+            return null;
+        }
+        return "\n    public " + field.getRuleName().pascalCase() +
+                " " + field.getFieldName() + "() {\n" +
+                body +
+                "    }\n";
+    }
+
+    private static String asGetterBody(UnitField field, RuleType ruleType, int index) {
+        if (field.isPredicate()) {
+            return null;
+        }
+        var resultSource = field.getResultSource();
+        switch (resultSource.kind()) {
+            case UnitRule -> {
+                var className = field.getRuleName();
+                if (field.isSingular()) {
+                    return "        return new " + className.pascalCase() + "(get(" + index + "));\n";
+                }
+                return "        return getList(" + index + ", " + className.pascalCase() + "::new);\n";
+            }
+            case TokenType -> {
+                if (field.isSingular()) {
+                    var type = ((TokenEntry) resultSource.value()).literalValue();
+                    return "        return get(" + index + ", TokenType." + type + ");\n";
+                }
+                return "        return getList(" + index + ", ParseTreeNode::asString);\n";
+            }
+            case TokenLiteral -> {
+                if (ruleType == RuleType.Conjunction && field.getFieldType() == Required) {
+                    return null;
+                }
+                if (field.isSingular()) {
+                    return "        return is(" + index + ");\n";
+                }
+                return "        return getList(" + index + ", ParseTreeNode::asBoolean);\n";
+            }
+            default -> throw new IllegalArgumentException();
+        }
+    }
+
+    private static String asAbsentCheck(UnitField field, RuleType ruleType, int index) {
+        var body = absentCheckBody(field, ruleType, index);
+        if (body == null) {
+            return null;
+        }
+        return "\n    public boolean has" +
+                StringUtil.capitalizeFirstChar(field.getFieldName()) +
+                "() {\n" + body + "    }\n";
+    }
+
+    private static String absentCheckBody(UnitField field, RuleType ruleType, int index) {
+        var resultSource = field.getResultSource();
+        switch (resultSource.kind()) {
+            case UnitRule:
+            case TokenType:
+                if (ruleType == RuleType.Conjunction && field.getFieldType() == Required) {
+                    return null;
+                }
+                if (field.isSingular()) {
+                    return "        return has(" + index + ");\n";
+                }
+                return null;
+            case TokenLiteral:
+                return null;
+            default:
+                throw new IllegalArgumentException();
+        }
     }
 }
