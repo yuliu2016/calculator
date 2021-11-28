@@ -48,7 +48,7 @@ public class JGenerator {
             var code = fixLineSep(JTransform
                     .generateWrapper(rule, packageOutput.getWrapperPackage()));
             Files.writeString(Paths.get(packageOutput.getWrapperPath().toString(),
-                    rule.getRoot().getRuleName().getPascalCase() + ".java"), code);
+                    rule.getRoot().getRuleName().pascalCase() + ".java"), code);
         }
 
         var lang = packageOutput.getLanguage();

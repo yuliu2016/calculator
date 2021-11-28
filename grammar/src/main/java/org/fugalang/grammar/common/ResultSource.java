@@ -1,22 +1,6 @@
 package org.fugalang.grammar.common;
 
-public class ResultSource {
-
-    private final SourceKind sourceKind;
-    private final Object value;
-
-    private ResultSource(SourceKind sourceKind, Object value) {
-        this.sourceKind = sourceKind;
-        this.value = value;
-    }
-
-    public SourceKind getKind() {
-        return sourceKind;
-    }
-
-    public Object getValue() {
-        return value;
-    }
+public record ResultSource(SourceKind kind, Object value) {
 
     public static ResultSource ofUnitRule(RuleName ruleName) {
         return new ResultSource(SourceKind.UnitRule, ruleName);

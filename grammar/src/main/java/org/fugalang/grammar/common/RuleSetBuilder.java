@@ -96,7 +96,7 @@ public class RuleSetBuilder {
                 // add sequence count to the name, even if not used, because
                 // otherwise could result in the same rule names later,
                 // when there are two branches
-                var newRuleName = ruleName.suffix(sequenceCount);
+                var newRuleName = ruleName.withSuffix(sequenceCount);
                 sequenceCount++;
 
                 if (sequence.primaries().size() == 1) {
@@ -151,7 +151,7 @@ public class RuleSetBuilder {
             int primaryCount = 1;
 
             for (var primary : sequence.primaries()) {
-                var ruleNameWithCount = ruleName.suffix(primaryCount);
+                var ruleNameWithCount = ruleName.withSuffix(primaryCount);
                 primaryCount++;
 
                 addPrimary(ruleNameWithCount, unit, primary, isOptional);
@@ -241,7 +241,7 @@ public class RuleSetBuilder {
             // fix - need to add repeat rules here
             addField(ruleName,
                     unit,
-                    ruleName.getSnakeCase(),
+                    ruleName.snakeCase(),
                     modifier,
                     isOptional,
                     ResultSource.ofUnitRule(ruleName),
@@ -255,7 +255,7 @@ public class RuleSetBuilder {
             var ruleName = unit.getRuleName();
 
             if (tokenEntry.isLiteral()) {
-                var fieldName = "is_" + tokenEntry.getNameSnakeCase();
+                var fieldName = "is_" + tokenEntry.snakeCase();
                 var resultSource = ResultSource.ofTokenLiteral(tokenEntry);
 
                 addField(ruleName,
@@ -266,7 +266,7 @@ public class RuleSetBuilder {
                         resultSource,
                         delimiter);
             } else {
-                var fieldName = tokenEntry.getNameSnakeCase();
+                var fieldName = tokenEntry.snakeCase();
                 unit.setContainsTokenType(true);
                 var resultSource = ResultSource.ofTokenType(tokenEntry);
 
@@ -347,12 +347,12 @@ public class RuleSetBuilder {
                     // make lowercase in case it's a token type
                     joiner.add(itemString.toLowerCase());
                 } else {
-                    joiner.add(tokenMap.get(itemString).getNameSnakeCase());
+                    joiner.add(tokenMap.get(itemString).snakeCase());
                 }
             }
             return StringUtil.decap(joiner.toString());
         }
-        return ruleName.getSnakeCase();
+        return ruleName.snakeCase();
     }
 
 
@@ -366,6 +366,6 @@ public class RuleSetBuilder {
                     "_or_" + getSmartName(ruleName, andList.get(0).sequence()
             );
         }
-        return ruleName.getSnakeCase();
+        return ruleName.snakeCase();
     }
 }

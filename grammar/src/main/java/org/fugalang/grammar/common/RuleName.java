@@ -6,52 +6,36 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class RuleName {
-    private final String snakeCase;
-    private final int[] suffixArray;
-    private final boolean isSequence;
-
-    public RuleName(String snakeCase, int[] suffixArray, boolean isSequence) {
+public record RuleName(String snakeCase, int[] suffixArray, boolean isSequence) {
+    public RuleName {
         assert snakeCase != null;
         assert suffixArray != null;
-        this.snakeCase = snakeCase;
-        this.suffixArray = suffixArray;
-        this.isSequence = isSequence;
     }
 
-    public String getSnakeCase() {
-        return snakeCase;
-    }
-
-    public String getRuleNameFull() {
-        String suffix = (suffixArray.length == 0 ? "" : IntStream
+    private String suffixJoin(String delimiter) {
+        return  (suffixArray.length == 0 ? "" : IntStream
                 .of(suffixArray)
                 .mapToObj(Integer::toString)
-                .collect(Collectors.joining(":", ":", "")));
-        return snakeCase + suffix;
+                .collect(Collectors.joining(delimiter, delimiter, "")));
     }
 
-    public String getRuleNameSymbolic() {
-        String suffix = (suffixArray.length == 0 ? "" : IntStream
-                .of(suffixArray)
-                .mapToObj(Integer::toString)
-                .collect(Collectors.joining("_", "_", "")));
-        return snakeCase + suffix;
+    public String fullName() {
+        return snakeCase + suffixJoin(":");
     }
 
-    public String getPascalCase() {
+    public String symbolicName() {
+        return snakeCase + suffixJoin("_");
+    }
+
+    public String pascalCase() {
         return StringUtil.convertCase(snakeCase);
     }
 
-    public String getCamelCase() {
-        return StringUtil.decap(getPascalCase());
+    public String camelCase() {
+        return StringUtil.decap(pascalCase());
     }
 
-    public boolean isSequence() {
-        return isSequence;
-    }
-
-    public RuleName suffix(int suffix) {
+    public RuleName withSuffix(int suffix) {
         int currentLen = suffixArray.length;
         int[] newArray = Arrays.copyOf(suffixArray, currentLen + 1);
         newArray[currentLen] = suffix;
@@ -94,6 +78,6 @@ public class RuleName {
 
     @Override
     public String toString() {
-        return getRuleNameFull();
+        return fullName();
     }
 }
