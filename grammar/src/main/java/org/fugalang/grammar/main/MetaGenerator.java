@@ -1,7 +1,9 @@
 package org.fugalang.grammar.main;
 
-import org.fugalang.grammar.gen.PEGBuilder;
+import org.fugalang.grammar.common.RuleSet;
+import org.fugalang.grammar.common.RuleSetBuilder;
 import org.fugalang.grammar.gen.PackageOutput;
+import org.fugalang.grammar.transform.JGenerator;
 
 public class MetaGenerator {
     private static final String USER_DIR = System.getProperty("user.dir");
@@ -10,10 +12,10 @@ public class MetaGenerator {
             "grammar/src/main/gen", "org.fugalang.grammar.peg", "Meta");
 
     public static void main(String[] args) throws Exception {
-        new PEGBuilder(
+        RuleSet ruleSet = RuleSetBuilder.generateRuleSet(
                 GeneratorUtil.readGrammar(USER_DIR, GRAMMAR_PATH),
-                GeneratorUtil.simpleConverter(),
-                PACKAGE_OUTPUT
-        ).generate(true);
+                GeneratorUtil.classicTokenMap
+        );
+        JGenerator.generateFiles(ruleSet, PACKAGE_OUTPUT);
     }
 }

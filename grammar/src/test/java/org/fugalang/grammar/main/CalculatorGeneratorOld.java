@@ -3,7 +3,8 @@ package org.fugalang.grammar.main;
 import org.fugalang.grammar.gen.PEGBuilder;
 import org.fugalang.grammar.gen.PackageOutput;
 
-public class CalculatorGenerator {
+@Deprecated
+public class CalculatorGeneratorOld {
     private static final String USER_DIR = System.getProperty("user.dir");
     private static final String GRAMMAR_PATH = "src/main/files/CalculatorGrammar";
     private static final PackageOutput PACKAGE_OUTPUT = new PackageOutput(USER_DIR,
