@@ -121,7 +121,7 @@ public class RuleSetBuilder {
                             smartName,
                             Modifier.Once,
                             REQUIRED,
-                            ResultSource.ofUnitRule(newRuleName),
+                            new ResultSource(SourceKind.UnitRule, newRuleName),
                             null);
 
                     addSequence(newRuleName, subUnit, sequence, REQUIRED);
@@ -219,7 +219,7 @@ public class RuleSetBuilder {
                     smart_name,
                     modifier,
                     isOptional,
-                    ResultSource.ofUnitRule(ruleName),
+                    new ResultSource(SourceKind.UnitRule, ruleName),
                     delimiter);
 
             addAltList(ruleName, component_cb, altList);
@@ -244,7 +244,7 @@ public class RuleSetBuilder {
                     ruleName.snakeCase(),
                     modifier,
                     isOptional,
-                    ResultSource.ofUnitRule(ruleName),
+                    new ResultSource(SourceKind.UnitRule, ruleName),
                     delimiter);
         } else {
 
@@ -256,7 +256,7 @@ public class RuleSetBuilder {
 
             if (tokenEntry.isLiteral()) {
                 var fieldName = "is_" + tokenEntry.snakeCase();
-                var resultSource = ResultSource.ofTokenLiteral(tokenEntry);
+                var resultSource = new ResultSource(SourceKind.TokenLiteral, tokenEntry);
 
                 addField(ruleName,
                         unit,
@@ -268,7 +268,7 @@ public class RuleSetBuilder {
             } else {
                 var fieldName = tokenEntry.snakeCase();
                 unit.setContainsTokenType(true);
-                var resultSource = ResultSource.ofTokenType(tokenEntry);
+                var resultSource = new ResultSource(SourceKind.TokenType, tokenEntry);
 
                 addField(ruleName,
                         unit,
