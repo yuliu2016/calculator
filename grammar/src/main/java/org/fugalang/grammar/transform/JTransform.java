@@ -46,7 +46,7 @@ public class JTransform {
         sb.append("    }\n");
 
         for (UnitField field : rule.getFields()) {
-            var loopParser = getLoopParser(field, rule);
+            var loopParser = getLoopParser(field);
             if (loopParser != null) {
                 sb.append(loopParser);
             }
@@ -121,13 +121,13 @@ public class JTransform {
             case RequireFalse -> getRequiredStmt("!" + getResultExpr(field, true), ruleType, isFirst);
             case Required -> getRequiredStmt(getResultExpr(field, false), ruleType, isFirst);
             case Optional -> getOptionalStmt(getResultExpr(field, false), ruleType, isFirst);
-            case RequiredList -> getRequiredStmt(getLoopExpr(rule), ruleType, isFirst);
-            case OptionalList -> getOptionalStmt(getLoopExpr(rule), ruleType, isFirst);
+            case RequiredList -> getRequiredStmt(getLoopExpr(field), ruleType, isFirst);
+            case OptionalList -> getOptionalStmt(getLoopExpr(field), ruleType, isFirst);
         };
     }
 
-    private static String getLoopExpr(UnitRule rule) {
-        var rule_name = rule.getRuleName().symbolicName();
+    private static String getLoopExpr(UnitField field) {
+        var rule_name = field.getRuleName().symbolicName();
         return rule_name + "_loop(t)";
     }
 
@@ -158,18 +158,18 @@ public class JTransform {
         };
     }
 
-    private static String getLoopParser(UnitField field, UnitRule rule) {
+    private static String getLoopParser(UnitField field) {
         if (field.isSingular() || field.isPredicate()) {
             return null;
         }
         return field.getFieldType() == FieldType.RequiredList ?
-                getRequiredLoopParser(field, rule) : getOptionalLoopParser(field, rule);
+                getRequiredLoopParser(field) : getOptionalLoopParser(field);
     }
 
 
-    private static String getRequiredLoopParser(UnitField field, UnitRule rule) {
+    private static String getRequiredLoopParser(UnitField field) {
         var resultExpr = getResultExpr(field, false);
-        var rule_name = rule.getRuleName().symbolicName();
+        var rule_name = field.getRuleName().symbolicName();
 
         String whileBody;
         TokenEntry delimiter = field.getDelimiter();
@@ -194,9 +194,9 @@ public class JTransform {
                 "    }\n";
     }
 
-    private static String getOptionalLoopParser(UnitField field, UnitRule rule) {
+    private static String getOptionalLoopParser(UnitField field) {
         var resultExpr = getResultExpr(field, false);
-        var rule_name = rule.getRuleName().symbolicName();
+        var rule_name = field.getRuleName().symbolicName();
         return "\n    private static void " + rule_name + "_loop(ParseTree t) {\n" +
                 "        t.enterLoop();\n" +
                 "        while (true) {\n" +
