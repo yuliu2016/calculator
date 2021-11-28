@@ -9,7 +9,7 @@ public class FugaGenerator2 {
     private static final String USER_DIR = System.getProperty("user.dir");
     private static final String GRAMMAR_PATH = "src/main/files/Grammar";
     private static final PackageOutput PACKAGE_OUTPUT = new PackageOutput(USER_DIR,
-            "src/main/gen", "org.fugalang.core.fuga2", "Fuga");
+            "src/main/gen", "org.fugalang.core.peg", "Fuga");
 
     public static void main(String[] args) throws Exception {
         RuleSet ruleSet = RuleSetBuilder.generateRuleSet(

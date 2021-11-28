@@ -28,7 +28,7 @@ public record RuleName(String snakeCase, int[] suffixArray, boolean isSequence) 
     }
 
     public String pascalCase() {
-        return StringUtil.convertCase(snakeCase);
+        return StringUtil.convertCase(symbolicName());
     }
 
     public String camelCase() {

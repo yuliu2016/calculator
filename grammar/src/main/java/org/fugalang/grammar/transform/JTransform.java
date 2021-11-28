@@ -398,10 +398,28 @@ public class JTransform {
         if (body == null) {
             return null;
         }
-        return "\n    public " + field.getRuleName().pascalCase() +
-                " " + field.getFieldName() + "() {\n" +
+        var f = StringUtil.decap(StringUtil.convertCase(field.getProperFieldName()));
+        return "\n    public " + getFieldTypeName(field) + " " + f + "() {\n" +
                 body +
                 "    }\n";
+    }
+
+    private static String getFieldTypeName(UnitField field) {
+        String source;
+        if (field.getFieldType() == RequiredList || field.getFieldType() == OptionalList) {
+            source = "List<" + switch (field.getResultSource().kind()) {
+                case UnitRule -> field.getRuleName().pascalCase();
+                case TokenType -> "String";
+                case TokenLiteral -> "Boolean";
+            } + ">";
+        } else {
+            source = switch (field.getResultSource().kind()) {
+                case UnitRule -> field.getRuleName().pascalCase();
+                case TokenType -> "String";
+                case TokenLiteral -> "boolean";
+            };
+        }
+        return source;
     }
 
     private static String asGetterBody(UnitField field, RuleType ruleType, int index) {
@@ -442,8 +460,8 @@ public class JTransform {
         if (body == null) {
             return null;
         }
-        return "\n    public boolean has" +
-                StringUtil.capitalizeFirstChar(field.getFieldName()) +
+        var f = StringUtil.convertCase(field.getProperFieldName());
+        return "\n    public boolean has" + f +
                 "() {\n" + body + "    }\n";
     }
 
