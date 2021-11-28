@@ -4,6 +4,7 @@ import org.fugalang.core.parser.RuleType;
 import org.fugalang.grammar.classbuilder.*;
 import org.fugalang.grammar.common.FieldType;
 import org.fugalang.grammar.psi.*;
+import org.fugalang.grammar.transform.JPackageOutput;
 import org.fugalang.grammar.util.StringUtil;
 
 import java.util.LinkedHashMap;
@@ -45,7 +46,7 @@ public class ParserGenerator {
     public ParserGenerator(
             Rules rules,
             TokenConverter converter,
-            PackageOutput packageOutput,
+            JPackageOutput packageOutput,
             String tokenTypeClass
     ) {
         ruleMap = new LinkedHashMap<>();

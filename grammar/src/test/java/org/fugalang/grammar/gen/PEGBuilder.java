@@ -5,6 +5,7 @@ import org.fugalang.grammar.classbuilder.*;
 import org.fugalang.grammar.common.FieldType;
 import org.fugalang.grammar.common.Modifier;
 import org.fugalang.grammar.util.PEGUtil;
+import org.fugalang.grammar.transform.JPackageOutput;
 import org.fugalang.grammar.util.StringUtil;
 import org.fugalang.grammar.util.GrammarRepr;
 import org.fugalang.grammar.peg.wrapper.*;
@@ -27,7 +28,7 @@ public class PEGBuilder {
     public PEGBuilder(
             Grammar grammar,
             TokenConverter converter,
-            PackageOutput packageOutput
+            JPackageOutput packageOutput
     ) {
         this.rules = grammar.rules();
         this.converter = converter;

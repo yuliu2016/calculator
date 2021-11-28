@@ -2,7 +2,6 @@ package org.fugalang.grammar.transform;
 
 import org.fugalang.grammar.common.NamedRule;
 import org.fugalang.grammar.common.RuleSet;
-import org.fugalang.grammar.gen.PackageOutput;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,7 +32,7 @@ public class JGenerator {
     }
 
 
-    public static void generateFiles(RuleSet ruleSet, PackageOutput packageOutput) {
+    public static void generateFiles(RuleSet ruleSet, JPackageOutput packageOutput) {
         try {
             generate(ruleSet, packageOutput);
         } catch (IOException e) {
@@ -41,7 +40,7 @@ public class JGenerator {
         }
     }
 
-    public static void generate(RuleSet ruleSet, PackageOutput packageOutput) throws IOException {
+    public static void generate(RuleSet ruleSet, JPackageOutput packageOutput) throws IOException {
         setupDir(packageOutput.getWrapperPath());
 
         for (var rule : ruleSet.getNamedRules()) {
@@ -71,7 +70,7 @@ public class JGenerator {
         Files.writeString(visitorPath, visitorCode);
     }
 
-    private static String generateParserClass(RuleSet ruleSet, PackageOutput packageOutput) {
+    private static String generateParserClass(RuleSet ruleSet, JPackageOutput packageOutput) {
         StringBuilder sb = new StringBuilder();
         sb.append("package ").append(packageOutput.getParserPackage()).append(";\n\n");
         sb.append("import org.fugalang.core.parser.ParseTree;\n");
@@ -96,7 +95,7 @@ public class JGenerator {
         return sb.toString();
     }
 
-    private static String generateRuleClass(RuleSet ruleSet, PackageOutput packageOutput) {
+    private static String generateRuleClass(RuleSet ruleSet, JPackageOutput packageOutput) {
         StringBuilder sb = new StringBuilder();
         sb.append("package ").append(packageOutput.getParserPackage()).append(";\n\n");
         sb.append("import org.fugalang.core.parser.ParserRule;\n\n");
@@ -123,7 +122,7 @@ public class JGenerator {
         return sb.toString();
     }
 
-    private static String generateVisitorClass(RuleSet ruleSet, PackageOutput packageOutput) {
+    private static String generateVisitorClass(RuleSet ruleSet, JPackageOutput packageOutput) {
         StringBuilder sb = new StringBuilder();
         sb.append("package ").append(packageOutput.getVisitorPackage()).append(";\n\n");
         sb.append("import ")

@@ -1,6 +1,6 @@
 package org.fugalang.grammar.classbuilder;
 
-import org.fugalang.grammar.gen.PackageOutput;
+import org.fugalang.grammar.transform.JPackageOutput;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,14 +13,14 @@ import java.util.List;
 @Deprecated
 public class ClassSet {
 
-    private final PackageOutput packageOutput;
+    private final JPackageOutput packageOutput;
 
     private final List<NamedClass> classes;
 
     // represents the working top-level class
     private NamedClass currentClass;
 
-    public ClassSet(PackageOutput packageOutput) {
+    public ClassSet(JPackageOutput packageOutput) {
         this.packageOutput = packageOutput;
         classes = new ArrayList<>();
     }

@@ -1,14 +1,14 @@
-package org.fugalang.grammar.gen;
+package org.fugalang.grammar.transform;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class PackageOutput {
+public class JPackageOutput {
     private final Path filePath;
     private final String packageName;
     private final String language;
 
-    public PackageOutput(String basePath, String relPath, String packageName, String language) {
+    public JPackageOutput(String basePath, String relPath, String packageName, String language) {
         this.packageName = packageName;
         this.filePath = Paths.get(basePath, relPath,
                 packageName.replace(".", "/"));

@@ -1,7 +1,7 @@
 package org.fugalang.grammar.classbuilder;
 
 import org.fugalang.core.parser.RuleType;
-import org.fugalang.grammar.gen.PackageOutput;
+import org.fugalang.grammar.transform.JPackageOutput;
 import org.fugalang.grammar.util.FirstAndMore;
 import org.fugalang.grammar.util.StringUtil;
 
@@ -9,7 +9,7 @@ import java.util.*;
 
 @Deprecated
 public class ClassBuilder {
-    private final PackageOutput packageOutput;
+    private final JPackageOutput packageOutput;
     private final ClassName className;
     private final boolean leftRecursive;
 
@@ -22,7 +22,7 @@ public class ClassBuilder {
 
     private RuleType ruleType = null;
 
-    public ClassBuilder(PackageOutput packageOutput,
+    public ClassBuilder(JPackageOutput packageOutput,
                         ClassName className, boolean leftRecursive) {
         this.packageOutput = packageOutput;
         this.className = className;
