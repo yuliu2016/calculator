@@ -7,6 +7,7 @@ import org.fugalang.grammar.util.StringUtil;
 
 import static org.fugalang.grammar.common.FieldType.*;
 
+@Deprecated
 public class ClassField {
     private final ClassName className;
     private final String fieldName;

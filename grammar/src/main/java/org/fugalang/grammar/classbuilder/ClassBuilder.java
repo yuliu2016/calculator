@@ -7,6 +7,7 @@ import org.fugalang.grammar.util.StringUtil;
 
 import java.util.*;
 
+@Deprecated
 public class ClassBuilder {
     private final PackageOutput packageOutput;
     private final ClassName className;

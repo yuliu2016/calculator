@@ -102,12 +102,14 @@ public class CTransform {
             sb.append(result);
         }
         sb.append(";\n");
-        sb.append("        if (p->pos <= i) break;\n");
-        sb.append("        m = a, i = p->pos;\n");
-        sb.append("    }\n");
-        sb.append("    p->pos = i;\n");
-        sb.append("    r = m ? node_1(p, &f, m) : 0;\n");
-        sb.append("exit:\n");
+        sb.append("""
+                        if (p->pos <= i) break;
+                        m = a, i = p->pos;
+                    }
+                    p->pos = i;
+                    r = m ? node_1(p, &f, m) : 0;
+                exit:
+                """);
     }
 
     private static boolean isImportantField(UnitField field) {

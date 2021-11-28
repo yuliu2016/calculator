@@ -1,6 +1,6 @@
 package org.fugalang.grammar.classbuilder;
 
-
+@Deprecated
 public class ResultSource {
 
     private final SourceType sourceType;

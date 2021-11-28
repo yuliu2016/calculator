@@ -3,6 +3,7 @@ package org.fugalang.grammar.classbuilder;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 public class NamedClass {
     private final ClassBuilder rootClass;
     private final List<ClassBuilder> components;

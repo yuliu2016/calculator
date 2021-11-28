@@ -2,6 +2,7 @@ package org.fugalang.grammar.classbuilder;
 
 import org.fugalang.grammar.util.StringUtil;
 
+@Deprecated
 public class ClassName {
     private final String realClassName;
     private final boolean isList;

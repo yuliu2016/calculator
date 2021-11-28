@@ -177,17 +177,11 @@ public class RuleSetBuilder {
         }
 
         switch (PEGUtil.getRuleType(item)) {
-            case Group:
-                addAltListAsComponent(ruleName, unit, item.group().altList(),
-                        modifier, REQUIRED, delimiter);
-                break;
-            case Optional:
-                addAltListAsComponent(ruleName, unit,
-                        item.optional().altList(), modifier, OPTIONAL, delimiter);
-                break;
-            case Token:
-                addToken(unit, modifier, PEGUtil.getItemString(item), isOptional, delimiter);
-                break;
+            case Group -> addAltListAsComponent(ruleName, unit, item.group().altList(),
+                    modifier, REQUIRED, delimiter);
+            case Optional -> addAltListAsComponent(ruleName, unit,
+                    item.optional().altList(), modifier, OPTIONAL, delimiter);
+            case Token -> addToken(unit, modifier, PEGUtil.getItemString(item), isOptional, delimiter);
         }
     }
 
@@ -300,35 +294,34 @@ public class RuleSetBuilder {
         String newFieldName;
         FieldType fieldType;
         switch (modifier) {
-            case TestTrue:
+            case TestTrue -> {
                 newFieldName = fieldName;
                 newRuleName = ruleName;
                 fieldType = FieldType.RequireTrue;
-                break;
-            case TestFalse:
+            }
+            case TestFalse -> {
                 newFieldName = fieldName;
                 newRuleName = ruleName;
                 fieldType = FieldType.RequireFalse;
-                break;
-            case OnceOrMore:
+            }
+            case OnceOrMore -> {
                 unit.setContainsList(true);
                 newRuleName = ruleName.asSequence();
                 newFieldName = StringUtil.pluralize(fieldName);
                 fieldType = FieldType.RequiredList;
-                break;
-            case NoneOrMore:
+            }
+            case NoneOrMore -> {
                 unit.setContainsList(true);
                 newRuleName = ruleName.asSequence();
                 newFieldName = StringUtil.pluralize(fieldName);
                 fieldType = FieldType.OptionalList;
-                break;
-            case Once:
+            }
+            case Once -> {
                 newRuleName = ruleName;
                 newFieldName = fieldName;
                 fieldType = isOptional ? FieldType.Optional : FieldType.Required;
-                break;
-            default:
-                throw new IllegalArgumentException();
+            }
+            default -> throw new IllegalArgumentException();
         }
 
         var field = new UnitField(

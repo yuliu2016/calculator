@@ -13,6 +13,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+@Deprecated
 public class PEGBuilder {
 
     private final List<Rule> rules;
@@ -171,17 +172,11 @@ public class PEGBuilder {
         var delimiter = primary.hasDelimited() ? primary.delimited().string() : null;
 
         switch (PEGUtil.getRuleType(item)) {
-            case Group:
-                addAltListAsComponent(className, cb, item.group().altList(),
-                        modifier, REQUIRED, delimiter);
-                break;
-            case Optional:
-                addAltListAsComponent(className, cb,
-                        item.optional().altList(), modifier, OPTIONAL, delimiter);
-                break;
-            case Token:
-                addToken(cb, modifier, PEGUtil.getItemString(item), isOptional, delimiter);
-                break;
+            case Group -> addAltListAsComponent(className, cb, item.group().altList(),
+                    modifier, REQUIRED, delimiter);
+            case Optional -> addAltListAsComponent(className, cb,
+                    item.optional().altList(), modifier, OPTIONAL, delimiter);
+            case Token -> addToken(cb, modifier, PEGUtil.getItemString(item), isOptional, delimiter);
         }
     }
 
@@ -303,35 +298,34 @@ public class PEGBuilder {
         String newFieldName;
         FieldType fieldType;
         switch (modifier) {
-            case TestTrue:
+            case TestTrue -> {
                 newFieldName = fieldName;
                 newClassName = className;
                 fieldType = FieldType.RequireTrue;
-                break;
-            case TestFalse:
+            }
+            case TestFalse -> {
                 newFieldName = fieldName;
                 newClassName = className;
                 fieldType = FieldType.RequireFalse;
-                break;
-            case OnceOrMore:
+            }
+            case OnceOrMore -> {
                 cb.addImport("java.util.List");
                 newClassName = className.asList();
                 newFieldName = StringUtil.pluralize(fieldName);
                 fieldType = FieldType.RequiredList;
-                break;
-            case NoneOrMore:
+            }
+            case NoneOrMore -> {
                 cb.addImport("java.util.List");
                 newClassName = className.asList();
                 newFieldName = StringUtil.pluralize(fieldName);
                 fieldType = FieldType.OptionalList;
-                break;
-            case Once:
+            }
+            case Once -> {
                 newClassName = className;
                 newFieldName = fieldName;
                 fieldType = isOptional ? FieldType.Optional : FieldType.Required;
-                break;
-            default:
-                throw new IllegalArgumentException();
+            }
+            default -> throw new IllegalArgumentException();
         }
 
         var field = new ClassField(

@@ -2,6 +2,7 @@ package org.fugalang.grammar.gen;
 
 import java.util.Objects;
 
+@Deprecated
 public class ConvertedValue {
     private final String className;
     private final String fieldName;
