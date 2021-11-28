@@ -86,12 +86,13 @@ public class CTransform {
     }
 
     private static void addLeftRecursiveUnitRuleBody(UnitRule unit, StringBuilder sb) {
-        sb.append("    enter(p, &f);\n");
-        sb.append("    FAstNode *a, *r;\n");
-        sb.append("    RETURN_IF_MEMOIZED();\n");
-        sb.append("    ENTER_LEFT_RECURSION();\n");
+        sb.append("    FAstNode *a = 0, *r = 0, *m = 0;\n");
+        sb.append("    if (!enter(p, &f)) goto exit;\n");
 
-        sb.append("    (\n");
+        sb.append("    size_t i = f.f_pos;\n");
+        sb.append("    while(1) {\n");
+        sb.append("        memoize(p, &f, m, i);\n");
+        sb.append("        p->pos = f.f_pos;\n");
 
         var fields = unit.getFields();
         for (int i = 0; i < fields.size(); i++) {
@@ -100,9 +101,13 @@ public class CTransform {
                     unit.getRuleType(), i == fields.size() - 1);
             sb.append(result);
         }
-        sb.append("\n    );\n");
-
-        sb.append("    EXIT_LEFT_RECURSION();\n");
+        sb.append(";\n");
+        sb.append("        if (p->pos <= i) break;\n");
+        sb.append("        m = a, i = p->pos;\n");
+        sb.append("    }\n");
+        sb.append("    p->pos = i;\n");
+        sb.append("    r = m ? node_1(p, &f, m) : 0;\n");
+        sb.append("exit:\n");
     }
 
     private static boolean isImportantField(UnitField field) {
