@@ -13,7 +13,7 @@ public class CalculatorGeneratorOld {
     public static void main(String[] args) throws Exception {
         new PEGBuilder(
                 GeneratorUtil.readGrammar(USER_DIR, GRAMMAR_PATH),
-                GeneratorUtil.simpleConverter(),
+                new SimpleConverter(),
                 PACKAGE_OUTPUT
         ).generate(true);
     }
