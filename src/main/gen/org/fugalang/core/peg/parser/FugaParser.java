@@ -63,13 +63,13 @@ public class FugaParser {
         if (m != null) return m;
         boolean r;
         r = exprlist(t);
-        if (r) eval_input_newline_loop(t);
+        if (r) eval_input_loop(t);
         r = r && t.consume(TokenType.ENDMARKER);
         t.exit(r);
         return r;
     }
 
-    private static void eval_input_newline_loop(ParseTree t) {
+    private static void eval_input_loop(ParseTree t) {
         t.enterLoop();
         while (true) {
             if (!t.consume(TokenType.NEWLINE)) break;
@@ -293,12 +293,12 @@ public class FugaParser {
         var m = t.enter(NAME_LIST);
         if (m != null) return m;
         boolean r;
-        r = name_list_name_loop(t);
+        r = name_list_loop(t);
         t.exit(r);
         return r;
     }
 
-    private static boolean name_list_name_loop(ParseTree t) {
+    private static boolean name_list_loop(ParseTree t) {
         t.enterLoop();
         var r = t.consume(TokenType.NAME);
         if (r) while (true) {
@@ -1107,13 +1107,13 @@ public class FugaParser {
         var m = t.enter(IMPORT_FROM_NAMES_2);
         if (m != null) return m;
         boolean r;
-        r = import_from_names_2_dot_loop(t);
+        r = import_from_names_2_loop(t);
         if (r) dotted_name(t);
         t.exit(r);
         return r;
     }
 
-    private static boolean import_from_names_2_dot_loop(ParseTree t) {
+    private static boolean import_from_names_2_loop(ParseTree t) {
         t.enterLoop();
         var r = t.consume(".");
         if (r) while (true) {
@@ -1244,12 +1244,12 @@ public class FugaParser {
         var m = t.enter(DOTTED_NAME);
         if (m != null) return m;
         boolean r;
-        r = dotted_name_name_loop(t);
+        r = dotted_name_loop(t);
         t.exit(r);
         return r;
     }
 
-    private static boolean dotted_name_name_loop(ParseTree t) {
+    private static boolean dotted_name_loop(ParseTree t) {
         t.enterLoop();
         var r = t.consume(TokenType.NAME);
         if (r) while (true) {

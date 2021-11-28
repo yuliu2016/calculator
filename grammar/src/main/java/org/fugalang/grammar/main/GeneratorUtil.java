@@ -38,9 +38,11 @@ public class GeneratorUtil {
     }
 
 
-    public static final Map<String, TokenEntry> tokenMap = new LinkedHashMap<>();
+    public static final Map<String, TokenEntry> tokenMap = tokenMap("op_");
+    public static final Map<String, TokenEntry> classicTokenMap = tokenMap("");
 
-    static {
+    private static Map<String, TokenEntry> tokenMap(String operator_prefix) {
+        Map<String, TokenEntry> tokenMap = new LinkedHashMap<>();
         List<String> nonLiteralTypes = TokenType
                 .ELEMENT_TYPES
                 .stream()
@@ -61,7 +63,7 @@ public class GeneratorUtil {
             var opCode = op.getCode();
             var lower = op.name().toLowerCase();
             var idx = 1 + nonLiteralTypes.size() + i;
-            var e = new TokenEntry(idx, true, "op_" + lower, opCode);
+            var e = new TokenEntry(idx, true, operator_prefix + lower, opCode);
             tokenMap.put(opCode, e);
         }
 
@@ -73,5 +75,6 @@ public class GeneratorUtil {
             var e = new TokenEntry(idx, true, lower, keyword);
             tokenMap.put(keyword, e);
         }
+        return tokenMap;
     }
 }

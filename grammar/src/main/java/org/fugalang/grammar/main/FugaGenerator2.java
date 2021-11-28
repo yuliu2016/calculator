@@ -14,7 +14,7 @@ public class FugaGenerator2 {
     public static void main(String[] args) throws Exception {
         RuleSet ruleSet = RuleSetBuilder.generateRuleSet(
                 GeneratorUtil.readGrammar(USER_DIR, GRAMMAR_PATH),
-                GeneratorUtil.tokenMap
+                GeneratorUtil.classicTokenMap
         );
         JGenerator.generateFiles(ruleSet, PACKAGE_OUTPUT);
     }

@@ -352,7 +352,7 @@ public class RuleSetBuilder {
             }
             return StringUtil.decap(joiner.toString());
         }
-        return ruleName.snakeCase();
+        return ruleName.symbolicName();
     }
 
 
@@ -366,6 +366,6 @@ public class RuleSetBuilder {
                     "_or_" + getSmartName(ruleName, andList.get(0).sequence()
             );
         }
-        return ruleName.snakeCase();
+        return ruleName.symbolicName();
     }
 }
