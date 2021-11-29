@@ -24,7 +24,7 @@ public class CTransform {
 
     private static void addUnitRuleDeclaration(UnitRule unit, StringBuilder sb) {
         var rn = unit.getRuleName();
-        sb.append("static FAstNode *")
+        sb.append("static void *")
                 .append(rn.symbolicName());
         sb.append("(FParser *);\n");
     }
@@ -62,7 +62,7 @@ public class CTransform {
         }
         var flagsStr = flags.isEmpty() ? "0" : String.join(" | ", flags);
 
-        sb.append("\nstatic FAstNode *")
+        sb.append("\nstatic void *")
                 .append(rn.symbolicName());
         sb.append("(FParser *p) {\n");
         sb.append("    frame_t f = {")
@@ -86,7 +86,7 @@ public class CTransform {
     }
 
     private static void addLeftRecursiveUnitRuleBody(UnitRule unit, StringBuilder sb) {
-        sb.append("    FAstNode *a = 0, *r = 0, *m = 0;\n");
+        sb.append("    void *a = 0, *r = 0, *m = 0;\n");
         sb.append("    if (!enter(p, &f)) goto exit;\n");
 
         sb.append("    size_t i = f.f_pos;\n");
@@ -123,7 +123,7 @@ public class CTransform {
         int impCount = unit.getFields().stream()
                 .filter(CTransform::isImportantField)
                 .toList().size();
-        sb.append("    FAstNode ");
+        sb.append("    void ");
         switch (impCount) {
             case 0 -> sb.append("*r;\n");
             case 1 -> sb.append("*a, *r;\n");
@@ -162,7 +162,7 @@ public class CTransform {
     }
 
     private static void addDisjunctionBody(UnitRule unit, StringBuilder sb) {
-        sb.append("    FAstNode *a, *r;\n");
+        sb.append("    void *a, *r;\n");
         sb.append("    r = enter(p, &f) && (\n");
         var fields = unit.getFields();
         for (int i = 0; i < fields.size(); i++) {
@@ -247,52 +247,6 @@ public class CTransform {
         throw new IllegalArgumentException();
     }
 
-    public static String getASTGen(RuleSet ruleSet) {
-        StringBuilder sb = new StringBuilder();
-
-        sb.append("#define FVAR(name, node, i) FAstNode *name = (node)->ast_v.fields[i]\n");
-        sb.append("#define TVAR(name, node, i) FToken *name = (node)->ast_v.fields[i]->ast_v.token\n");
-
-        for (NamedRule namedRule : ruleSet.getNamedRules()) {
-            addStructFields(namedRule.getRoot(), sb);
-            for (UnitRule component : namedRule.getComponents()) {
-                addStructFields(component, sb);
-            }
-        }
-        return sb.toString();
-    }
-
-    private static void addStructFields(UnitRule unit, StringBuilder sb) {
-        var upName = unit.getRuleName().symbolicName().toUpperCase();
-
-        sb.append("\n#define R_").append(upName)
-                .append(" ").append(unit.getRuleIndex()).append("\n");
-
-        if (unit.isLeftRecursive() || unit.getRuleType() == RuleType.Disjunction) {
-            return;
-        }
-
-        if (unit.getFields().stream().noneMatch(CTransform::isImportantField)) {
-            return;
-        }
-
-        sb.append("#define UNPACK_").append(upName).append("(n) \\\n");
-        int i = 0;
-        for (UnitField field : unit.getFields()) {
-            if (isImportantField(field)) {
-                if (field.getResultSource().kind() == SourceKind.UnitRule) {
-                    sb.append("    FVAR(");
-                } else {
-                    sb.append("    TVAR(");
-                }
-
-                sb.append(field.getProperFieldName()).append(", n, ").append(i).append(")");
-                sb.append("; \\\n");
-                i++;
-            }
-        }
-    }
-
     public static String getTokenMap(RuleSet ruleSet) {
         StringBuilder sb = new StringBuilder();
         for (var tk : ruleSet.getTokenMap().values()) {
@@ -305,80 +259,5 @@ public class CTransform {
                     .append("\n");
         }
         return sb.toString();
-    }
-
-    public static String getDummyCompiler(RuleSet ruleSet) {
-        StringBuilder sb = new StringBuilder();
-
-        for (NamedRule namedRule : ruleSet.getNamedRules()) {
-            addDummyDeclaration(sb, namedRule.getRoot());
-            for (UnitRule component : namedRule.getComponents()) {
-                addDummyDeclaration(sb, component);
-            }
-        }
-
-        for (NamedRule namedRule : ruleSet.getNamedRules()) {
-            sb.append("\n");
-            sb.append(StringUtil.inlinedoc(namedRule.getRoot().getGrammarString()));
-            addDummyFunction(sb, namedRule.getRoot());
-            for (UnitRule component : namedRule.getComponents()) {
-                addDummyFunction(sb, component);
-            }
-        }
-
-        return sb.toString();
-    }
-
-    private static void addDummyDeclaration(StringBuilder sb, UnitRule unit) {
-        sb.append("void dummy_").append(unit.getRuleName().symbolicName())
-                .append("(FAstNode *n);\n");
-    }
-
-    private static void addDummyFunction(StringBuilder sb, UnitRule unit) {
-
-        sb.append("\nvoid dummy_").append(unit.getRuleName().symbolicName())
-                .append("(FAstNode *n) {\n");
-        if (unit.isLeftRecursive() || unit.getRuleType() == RuleType.Disjunction) {
-            addDummyDisjunct(sb, unit);
-        } else {
-            addDummyUnpack(sb, unit);
-        }
-        sb.append("}\n");
-    }
-
-    private static void addDummyDisjunct(StringBuilder sb, UnitRule unit) {
-        sb.append("    FAstNode *o = n->ast_v.fields[0];\n");
-
-        for (UnitField field : unit.getFields()) {
-            if (field.getResultSource().kind() == SourceKind.UnitRule) {
-                var rn = (RuleName) field.getResultSource().value();
-                sb.append("    if (R_CHECK(n, R_").append(rn.symbolicName().toUpperCase())
-                        .append(")) {\n")
-                        .append("        dummy_").append(rn.symbolicName())
-                        .append("(o);\n        return;\n")
-                        .append("    }\n");
-            } else {
-                var te = (TokenEntry) field.getResultSource().value();
-                sb.append("    if (T_CHECK(n, ")
-                        .append("T_").append(te.snakeCase().toUpperCase())
-                        .append(")) {\n        return;\n    }\n");
-            }
-        }
-    }
-
-    private static void addDummyUnpack(StringBuilder sb, UnitRule unit) {
-        if (unit.getFields().stream().noneMatch(CTransform::isImportantField)) {
-            return;
-        }
-        sb.append("    UNPACK_").append(unit.getRuleName().symbolicName().toUpperCase())
-                .append("(n)\n");
-        for (UnitField field : unit.getFields()) {
-            if (isImportantField(field) &&
-                    field.getResultSource().kind() == SourceKind.UnitRule) {
-                var rn = (RuleName) field.getResultSource().value();
-                sb.append("    dummy_").append(rn.symbolicName())
-                        .append("(").append(field.getProperFieldName()).append(");\n");
-            }
-        }
     }
 }

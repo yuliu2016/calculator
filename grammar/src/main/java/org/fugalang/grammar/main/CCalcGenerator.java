@@ -18,7 +18,6 @@ public class CCalcGenerator {
             System.getProperty("user.home"), "vscode/cpeg").toString();
     private static final Path C_PATH = Paths.get(BASE_DIR, "exclude/calc2_parser.c");
     private static final Path H_PATH = Paths.get(BASE_DIR, "exclude/calc2_parser.h");
-    private static final Path AST_PATH = Paths.get(BASE_DIR, "exclude/calc2_astgen.h");
     private static final Path TM_PATH = Paths.get(BASE_DIR, "exclude/calc2_tokenmap.h");
 
     private static String formatHeaderFile(String name, String content, String... includes) {
@@ -51,11 +50,6 @@ public class CCalcGenerator {
                 "#include \"peg_macros.h\"\n" +
                 CTransform.getFunctionBodies(ruleSet);
         Files.writeString(C_PATH, c.replace("\n", System.lineSeparator()));
-
-        String ast = formatHeaderFile("CALC2_ASTGEN",
-                CTransform.getASTGen(ruleSet),
-                "peg.h");
-        Files.writeString(AST_PATH, ast);
 
         String tokenMap = formatHeaderFile("CALC2_TOKENMAP", CTransform.getTokenMap(ruleSet));
         Files.writeString(TM_PATH, tokenMap);
