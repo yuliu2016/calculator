@@ -39,9 +39,15 @@ public class GrammarRepr implements MetaVisitor<String> {
 
     @Override
     public String visitRule(Rule rule) {
+        var returnType = rule.hasReturnType() ? visitReturnType(rule.returnType()) : "";
         var ruleArgs = rule.hasRuleArgs() ? visitRuleArgs(rule.ruleArgs()) : "";
-        return rule.name() + ruleArgs + ":" +
+        return rule.name() + returnType + ruleArgs + ":" +
                 visitRuleSuite(rule.ruleSuite());
+    }
+
+    @Override
+    public String visitReturnType(ReturnType returnType) {
+        return returnType.name();
     }
 
     @Override

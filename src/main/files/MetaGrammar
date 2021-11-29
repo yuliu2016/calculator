@@ -3,7 +3,9 @@
 grammar:
     | [NEWLINE] rule+
 rule:
-    | NAME [rule_args] rule_suite
+    | NAME [return_type] [rule_args] rule_suite
+return_type:
+    | '[' NAME ']'
 rule_args:
     | '(' ','.rule_arg+ ')'
 rule_arg:

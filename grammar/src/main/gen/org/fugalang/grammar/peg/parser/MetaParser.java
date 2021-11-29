@@ -34,15 +34,31 @@ public class MetaParser {
 
     /**
      * rule:
-     * *   | NAME [rule_args] rule_suite
+     * *   | NAME [return_type] [rule_args] rule_suite
      */
     public static boolean rule(ParseTree t) {
         var m = t.enter(RULE);
         if (m != null) return m;
         boolean r;
         r = t.consume(TokenType.NAME);
+        if (r) return_type(t);
         if (r) rule_args(t);
         r = r && rule_suite(t);
+        t.exit(r);
+        return r;
+    }
+
+    /**
+     * return_type:
+     * *   | '[' NAME ']'
+     */
+    public static boolean return_type(ParseTree t) {
+        var m = t.enter(RETURN_TYPE);
+        if (m != null) return m;
+        boolean r;
+        r = t.consume("[");
+        r = r && t.consume(TokenType.NAME);
+        r = r && t.consume("]");
         t.exit(r);
         return r;
     }

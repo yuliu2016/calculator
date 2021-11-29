@@ -15,9 +15,17 @@ public interface MetaVisitor<T> {
 
     /**
      * rule:
-     * *   | NAME [rule_args] rule_suite
+     * *   | NAME [return_type] [rule_args] rule_suite
      */
     default T visitRule(Rule rule) {
+        return null;
+    }
+
+    /**
+     * return_type:
+     * *   | '[' NAME ']'
+     */
+    default T visitReturnType(ReturnType returnType) {
         return null;
     }
 

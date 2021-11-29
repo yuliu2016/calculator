@@ -6,7 +6,7 @@ import org.fugalang.core.token.TokenType;
 
 /**
  * rule:
- * *   | NAME [rule_args] rule_suite
+ * *   | NAME [return_type] [rule_args] rule_suite
  */
 public final class Rule extends NodeWrapper {
 
@@ -18,15 +18,23 @@ public final class Rule extends NodeWrapper {
         return get(0, TokenType.NAME);
     }
 
-    public RuleArgs ruleArgs() {
-        return new RuleArgs(get(1));
+    public ReturnType returnType() {
+        return new ReturnType(get(1));
     }
 
-    public boolean hasRuleArgs() {
+    public boolean hasReturnType() {
         return has(1);
     }
 
+    public RuleArgs ruleArgs() {
+        return new RuleArgs(get(2));
+    }
+
+    public boolean hasRuleArgs() {
+        return has(2);
+    }
+
     public RuleSuite ruleSuite() {
-        return new RuleSuite(get(2));
+        return new RuleSuite(get(3));
     }
 }
