@@ -15,7 +15,7 @@ public class CCalcGenerator {
     private static final String USER_DIR = System.getProperty("user.dir");
     private static final String GRAMMAR_PATH = "src/main/files/CalculatorGrammar";
     private static final String BASE_DIR = Paths.get(
-            System.getProperty("user.home"), "ClionProjects/cpeg").toString();
+            System.getProperty("user.home"), "vscode/cpeg").toString();
     private static final Path C_PATH = Paths.get(BASE_DIR, "exclude/calc2_parser.c");
     private static final Path H_PATH = Paths.get(BASE_DIR, "exclude/calc2_parser.h");
     private static final Path AST_PATH = Paths.get(BASE_DIR, "exclude/calc2_astgen.h");

@@ -90,8 +90,7 @@ public class CTransform {
         sb.append("    if (!enter(p, &f)) goto exit;\n");
 
         sb.append("    size_t i = f.f_pos;\n");
-        sb.append("    while(1) {\n");
-        sb.append("        memoize(p, &f, m, i);\n");
+        sb.append("    while(memoize(p, &f, m, i), 1) {\n");
         sb.append("        p->pos = f.f_pos;\n");
 
         var fields = unit.getFields();

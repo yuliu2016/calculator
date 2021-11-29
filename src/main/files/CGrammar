@@ -1,0 +1,351 @@
+# Grammar for Fuga
+
+single_input:
+    | NEWLINE
+    | ENDMARKER
+    | simple_stmt
+    | compound_stmt NEWLINE
+file_input:
+    | [stmt_list] ENDMARKER
+eval_input:
+    | exprlist NEWLINE* ENDMARKER
+
+# Statements
+stmt_list:
+    | stmt+
+stmt:
+    | (simple_stmt | compound_stmt) NEWLINE
+simple_stmt:
+    | ';'.small_stmt+ [';']
+
+# Small Statements
+small_stmt:
+    | 'pass'
+    | 'break'
+    | 'continue'
+    | return_stmt
+    | raise_stmt
+    | del_stmt
+    | nonlocal_stmt
+    | assert_stmt
+    | import_name
+    | import_from
+    | assignment
+
+del_stmt:
+    | 'del' targetlist
+return_stmt:
+    | 'return' [exprlist_star]
+raise_stmt:
+    | 'raise' expr ['from' expr]
+nonlocal_stmt:
+    | 'nonlocal' name_list
+assert_stmt:
+    | 'assert' expr [',' expr]
+
+# Expression groups
+name_list:
+    | ','.NAME+
+star_expr:
+    | '*' bitwise_or
+exprlist:
+    | ','.expr+ [',']
+target:
+    | t_primary '.' NAME !t_lookahead
+    | t_primary subscript !t_lookahead
+    | NAME
+    | '(' targetlist_sp ')'
+targetlist_sp (allow_whitespace=true):
+    | targetlist
+t_primary (left_recursive):
+    | t_primary '.' NAME &t_lookahead
+    | t_primary invocation &t_lookahead
+    | t_primary subscript &t_lookahead
+    | atom &t_lookahead
+t_lookahead:
+    | '.'
+    | '('
+    | '['
+targetlist:
+    | ','.target+ [',']
+expr_or_star:
+    | star_expr
+    | expr
+exprlist_star:
+    | ','.expr_or_star+ [',']
+
+subscript:
+    | '[' slicelist ']'
+slicelist:
+    | ','.slice+ [',']
+slice:
+    | [expr] slice_expr [slice_expr]
+    | expr
+slice_expr:
+    | ':' [expr]
+
+dict_item:
+    | expr ':' expr
+    | '**' bitwise_or
+dict_items (allow_whitespace=true):
+    | ','.dict_item+ [',']
+list_item:
+    | star_expr
+    | named_expr
+list_items (allow_whitespace=true):
+    | ','.list_item+ [',']
+set_items (allow_whitespace=true):
+    | exprlist_star
+as_name:
+    | 'as' NAME
+
+iter_for:
+    | 'for' targetlist 'in' disjunction [iter_if]
+iter_if:
+    | 'if' named_expr
+iterator:
+    | iter_for* 'for' targetlist [iter_if]
+
+list_iterator (allow_whitespace=true):
+    | expr_or_star iterator
+dict_iterator (allow_whitespace=true):
+    | dict_item iterator
+
+# Assignments
+
+assignment:
+    | pubassign
+    | annassign
+    | augassign
+    | simple_assign
+pubassign:
+    | '/' NAME '=' exprlist
+annassign:
+    | target ':' expr ['=' exprlist]
+augassign:
+    | target augassign_op exprlist
+simple_assign:
+    | (targetlist '=')* exprlist_star
+augassign_op:
+    | '+='
+    | '-='
+    | '*='
+    | '@='
+    | '/='
+    | '%='
+    | '&='
+    | '|='
+    | '^='
+    | '<<='
+    | '>>='
+    | '**='
+    | '//='
+
+# Import Statements
+
+import_name:
+    | 'import' dotted_as_names
+import_from:
+    | 'from' import_from_names 'import' import_from_items
+import_from_names:
+    | dotted_name
+    | '.'+ [dotted_name]
+import_from_items:
+    | '*'
+    | import_as_names_sp
+    | import_as_names
+import_as_names_sp (allow_whitespace=true):
+    | '(' import_as_names [','] ')'
+import_as_name:
+    | NAME [as_name]
+dotted_as_name:
+    | dotted_name [as_name]
+import_as_names:
+    | ','.import_as_name+
+dotted_as_names:
+    | ','.dotted_as_name+
+dotted_name:
+    | '.'.NAME+
+
+# Compound statements
+
+compound_stmt:
+    | if_stmt
+    | while_stmt
+    | for_stmt
+    | try_stmt
+    | with_stmt
+
+if_stmt:
+    | 'if' named_expr suite elif_stmt* [else_suite]
+elif_stmt:
+    | 'elif' named_expr suite
+while_stmt:
+    | 'while' named_expr suite [else_suite]
+for_stmt:
+    | 'for' targetlist 'in' exprlist suite [else_suite]
+try_stmt:
+    | 'try' suite (except_suite | finally_suite)
+with_stmt:
+    | 'with' ','.expr_as_name+ suite
+expr_as_name:
+    | expr [as_name]
+
+# Suites
+
+block_suite(allow_whitespace=false):
+    | '{' NEWLINE stmt_list '}'
+    | '{' [simple_stmt] '}'
+suite:
+    | ':' simple_stmt
+    | block_suite
+else_suite:
+    | 'else' suite
+finally_suite:
+    | 'finally' suite
+except_clause:
+    | 'except' [expr_as_name] suite
+except_suite:
+    | except_clause+ [else_suite] [finally_suite]
+
+# Function calls
+
+invocation:
+    | '(' [call_arg_list] ')'
+call_arg_list(allow_whitespace=true):
+    | ','.call_arg+  [',']
+call_arg:
+    | NAME ':=' expr
+    | NAME '=' expr
+    | '**' expr
+    | '*' expr
+    | expr
+
+# Builder definitions
+
+typed_arg_list(allow_whitespace=true):
+    | kwargs
+    | args_kwargs
+    | full_arg_list
+full_arg_list:
+    | ','.default_arg+ [','  [kwargs | args_kwargs]]
+args_kwargs:
+    | '*' [typed_arg] (','  default_arg)* [','  [kwargs]]
+kwargs:
+    | '**' typed_arg [',']
+default_arg:
+    | typed_arg ['=' expr]
+typed_arg:
+    | NAME [':' expr]
+simple_arg:
+    | NAME ['=' expr]
+simple_args:
+    | ','.simple_arg+
+builder_hint:
+    | '<' name_list '>'
+builder_args:
+    | simple_args
+    | '(' [typed_arg_list] ')'
+
+# Expressions
+
+named_expr:
+    | NAME ':=' expr
+    | expr
+conditional:
+    | 'if' disjunction '?' disjunction ':' expr
+expr:
+    | conditional
+    | disjunction
+disjunction (left_recursive):
+    | disjunction 'or' conjunction
+    | conjunction
+conjunction (left_recursive):
+    | conjunction 'and' inversion
+    | inversion
+inversion:
+    | 'not' inversion
+    | comparison
+comparison:
+    | bitwise_or (comp_op bitwise_or)+
+    | bitwise_or
+comp_op:
+    | '<'
+    | '>'
+    | '=='
+    | '>='
+    | '<='
+    | '!='
+    | 'in'
+    | 'not' 'in'
+    | 'is'
+    | 'is' 'not'
+bitwise_or (left_recursive):
+    | bitwise_or '|' bitwise_xor
+    | bitwise_xor
+bitwise_xor (left_recursive):
+    | bitwise_xor '^' bitwise_and
+    | bitwise_and
+bitwise_and (left_recursive):
+    | bitwise_and '&' shift_expr
+    | shift_expr
+shift_expr (left_recursive):
+    | shift_expr '<<' sum
+    | shift_expr '>>' sum
+    | sum
+sum (left_recursive):
+    | sum '+' term
+    | sum '-' term
+    | term
+term (left_recursive):
+    | term '*' pipe_expr
+    | term '/' pipe_expr
+    | term '%' pipe_expr
+    | term '//' pipe_expr
+    | term '@' pipe_expr
+    | pipe_expr
+pipe_expr (left_recursive):
+    | pipe_expr '->' factor
+    | factor
+factor:
+    | '+' factor
+    | '-' factor
+    | '~' factor
+    | power
+power:
+    | primary '**' factor
+    | primary
+primary (left_recursive):
+    | primary '.' NAME
+    | primary invocation
+    | primary subscript
+    | atom
+tuple_atom:
+    | '(' [list_items] ')'
+list_iterable:
+    | '[' list_iterator ']'
+list_atom:
+    | '[' [list_items] ']'
+set_atom:
+    | '{' [set_items] '}'
+dict_iterable:
+    | '{' dict_iterator '}'
+dict_atom:
+    | '{' [dict_items] '}'
+builder:
+    | NAME simple_args ':' expr
+    | NAME [builder_hint] [builder_args] block_suite
+atom:
+    | tuple_atom
+    | list_iterable
+    | list_atom
+    | set_atom
+    | dict_iterable
+    | dict_atom
+    | builder
+    | NAME
+    | NUMBER
+    | STRING
+    | 'None'
+    | 'True'
+    | 'False'
