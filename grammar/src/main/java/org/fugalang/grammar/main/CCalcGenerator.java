@@ -13,26 +13,20 @@ import java.util.stream.Collectors;
 public class CCalcGenerator {
 
     private static final String USER_DIR = System.getProperty("user.dir");
-    private static final String GRAMMAR_PATH = "src/main/files/CalculatorGrammar";
+    private static final String GRAMMAR_PATH = "src/main/files/CCalcGrammar";
     private static final String BASE_DIR = Paths.get(
             System.getProperty("user.home"), "vscode/cpeg").toString();
-    private static final Path C_PATH = Paths.get(BASE_DIR, "exclude/calc2_parser.c");
-    private static final Path H_PATH = Paths.get(BASE_DIR, "exclude/calc2_parser.h");
-    private static final Path TM_PATH = Paths.get(BASE_DIR, "exclude/calc2_tokenmap.h");
+    private static final Path C_PATH = Paths.get(BASE_DIR, "parser2.c");
 
-    private static String formatHeaderFile(String name, String content, String... includes) {
-        var s = "#ifndef CPEG_" + name + "_H\n" +
-                "#define CPEG_" + name + "_H\n" +
-                "\n" + Arrays
-                .stream(includes)
-                .map(x -> "#include \"" + x + "\"\n")
-                .collect(Collectors.joining()) +
-                "\n" +
-                content +
-                "\n" +
-                "#endif // CPEG_" + name + "_H\n";
-        return s.replace("\n", System.lineSeparator());
-    }
+    private static final String ENTRY_POINT = """
+            
+            
+            
+            // Parser Entry Point
+            void *parse_calc(FParser *p) {
+                return csum(p);
+            }
+            """;
 
     public static void main(String[] args) throws Exception {
         RuleSet ruleSet = RuleSetBuilder.generateRuleSet(
@@ -40,18 +34,10 @@ public class CCalcGenerator {
                 GeneratorUtil.tokenMap
         );
 
-        String h = formatHeaderFile(
-                "CALC2_PARSER",
-                CTransform.getFuncDeclarations(ruleSet),
-                "peg.h");
-        Files.writeString(H_PATH, h);
-
-        String c = "#include \"calc2_parser.h\"\n" +
-                "#include \"peg_macros.h\"\n" +
+        String c = "#include \"include/internal/parser.h\"\n\n\n" +
+                CTransform.getFuncDeclarations(ruleSet) +
+                ENTRY_POINT +
                 CTransform.getFunctionBodies(ruleSet);
         Files.writeString(C_PATH, c.replace("\n", System.lineSeparator()));
-
-        String tokenMap = formatHeaderFile("CALC2_TOKENMAP", CTransform.getTokenMap(ruleSet));
-        Files.writeString(TM_PATH, tokenMap);
     }
 }

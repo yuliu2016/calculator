@@ -1,0 +1,26 @@
+# Calculator Grammar
+
+csum:
+    | csum '+' cterm
+    | csum '-' cterm
+    | cterm
+cterm:
+    | cterm '*' cfactor
+    | cterm '/' cfactor
+    | cterm '%' cfactor
+    | cfactor
+cfactor:
+    | '+' cfactor
+    | '-' cfactor
+    | '~' cfactor
+    | cpower
+cpower:
+    | catom '**' cfactor
+    | catom
+catom:
+    | '(' csum ')'
+    | NAME '(' [cparameters] ')'
+    | NAME
+    | NUMBER
+cparameters:
+    | ','.csum+ [',']
