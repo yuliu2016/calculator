@@ -3,185 +3,283 @@
   [
     (rule
       'grammar'
-      ':'
-      '\n    '
-      '|'
-      (alt_list
-        (sequence
-          [
-            (optional '[' (alt_list (sequence [(item#2 'NEWLINE')])) ']'),
-            (primary:5 (item#2 'rule') '+')
-          ]
+      (rule_suite
+        ':'
+        '\n    '
+        '|'
+        (alt_list
+          (sequence
+            [
+              (optional '[' (alt_list (sequence [(item#2 'NEWLINE')])) ']'),
+              (primary:5 (item#2 'rule') '+')
+            ]
+          )
         )
+        '\n'
       )
-      '\n'
     ),
     (rule
       'rule'
-      ':'
-      '\n    '
-      '|'
-      (alt_list
-        (sequence
-          [
-            (item#2 'NAME'),
-            (item#3 ':'),
-            (item#2 'NEWLINE'),
-            (item#3 '|'),
-            (item#2 'alt_list'),
-            (item#2 'NEWLINE')
-          ]
+      (rule_suite
+        ':'
+        '\n    '
+        '|'
+        (alt_list
+          (sequence
+            [
+              (item#2 'NAME'),
+              (optional '[' (alt_list (sequence [(item#2 'return_type')])) ']'),
+              (optional '[' (alt_list (sequence [(item#2 'rule_args')])) ']'),
+              (item#2 'rule_suite')
+            ]
+          )
         )
+        '\n'
       )
-      '\n'
     ),
     (rule
-      'alt_list'
-      ':'
-      '\n    '
-      '|'
-      (alt_list
-        (sequence
-          [
-            (item#2 'sequence'),
-            (primary:4
-              (group
-                '('
+      'return_type'
+      (rule_suite
+        ':'
+        '\n    '
+        '|'
+        (alt_list
+          (sequence
+            [
+              (item#3 '['),
+              (item#2 'NAME'),
+              (item#3 ']')
+            ]
+          )
+        )
+        '\n'
+      )
+    ),
+    (rule
+      'rule_args'
+      (rule_suite
+        ':'
+        '\n    '
+        '|'
+        (alt_list
+          (sequence
+            [
+              (item#3 '('),
+              (delimited ',' '.' (item#2 'rule_arg') '+'),
+              (item#3 ')')
+            ]
+          )
+        )
+        '\n'
+      )
+    ),
+    (rule
+      'rule_arg'
+      (rule_suite
+        ':'
+        '\n    '
+        '|'
+        (alt_list
+          (sequence
+            [
+              (item#2 'NAME'),
+              (optional
+                '['
                 (alt_list
                   (sequence
                     [
-                      (optional '[' (alt_list (sequence [(item#2 'NEWLINE')])) ']'),
-                      (item#3 '|'),
-                      (item#2 'sequence')
+                      (item#3 '='),
+                      (item#2 'NAME')
                     ]
                   )
                 )
-                ')'
+                ']'
               )
-              '*'
-            )
-          ]
+            ]
+          )
         )
+        '\n'
       )
-      '\n'
     ),
-    (rule 'sequence' ':' '\n    ' '|' (alt_list (sequence [(primary:5 (item#2 'primary') '+')])) '\n'),
+    (rule
+      'rule_suite'
+      (rule_suite
+        ':'
+        '\n    '
+        '|'
+        (alt_list
+          (sequence
+            [
+              (item#3 ':'),
+              (item#2 'NEWLINE'),
+              (item#3 '|'),
+              (item#2 'alt_list'),
+              (item#2 'NEWLINE')
+            ]
+          )
+        )
+        '\n'
+      )
+    ),
+    (rule
+      'alt_list'
+      (rule_suite
+        ':'
+        '\n    '
+        '|'
+        (alt_list
+          (sequence
+            [
+              (item#2 'sequence'),
+              (primary:4
+                (group
+                  '('
+                  (alt_list
+                    (sequence
+                      [
+                        (optional '[' (alt_list (sequence [(item#2 'NEWLINE')])) ']'),
+                        (item#3 '|'),
+                        (item#2 'sequence')
+                      ]
+                    )
+                  )
+                  ')'
+                )
+                '*'
+              )
+            ]
+          )
+        )
+        '\n'
+      )
+    ),
+    (rule 'sequence' (rule_suite ':' '\n    ' '|' (alt_list (sequence [(primary:5 (item#2 'primary') '+')])) '\n')),
     (rule
       'primary'
-      ':'
-      '\n    '
-      '|'
-      (alt_list
-        (sequence [(item#2 'delimited')])
-        [
-          (alt_list:2
-            '\n    '
-            '|'
-            (sequence
-              [
-                (item#3 '&'),
-                (item#2 'item')
-              ]
-            )
-          ),
-          (alt_list:2
-            '\n    '
-            '|'
-            (sequence
-              [
-                (item#3 '!'),
-                (item#2 'item')
-              ]
-            )
-          ),
-          (alt_list:2
-            '\n    '
-            '|'
-            (sequence
-              [
-                (item#2 'item'),
-                (item#3 '*')
-              ]
-            )
-          ),
-          (alt_list:2
-            '\n    '
-            '|'
-            (sequence
-              [
-                (item#2 'item'),
-                (item#3 '+')
-              ]
-            )
-          ),
-          (alt_list:2 '\n    ' '|' (sequence [(item#2 'item')]))
-        ]
+      (rule_suite
+        ':'
+        '\n    '
+        '|'
+        (alt_list
+          (sequence [(item#2 'delimited')])
+          [
+            (alt_list:2
+              '\n    '
+              '|'
+              (sequence
+                [
+                  (item#3 '&'),
+                  (item#2 'item')
+                ]
+              )
+            ),
+            (alt_list:2
+              '\n    '
+              '|'
+              (sequence
+                [
+                  (item#3 '!'),
+                  (item#2 'item')
+                ]
+              )
+            ),
+            (alt_list:2
+              '\n    '
+              '|'
+              (sequence
+                [
+                  (item#2 'item'),
+                  (item#3 '*')
+                ]
+              )
+            ),
+            (alt_list:2
+              '\n    '
+              '|'
+              (sequence
+                [
+                  (item#2 'item'),
+                  (item#3 '+')
+                ]
+              )
+            ),
+            (alt_list:2 '\n    ' '|' (sequence [(item#2 'item')]))
+          ]
+        )
+        '\n'
       )
-      '\n'
     ),
     (rule
       'item'
-      ':'
-      '\n    '
-      '|'
-      (alt_list
-        (sequence [(item#2 'group')])
-        [
-          (alt_list:2 '\n    ' '|' (sequence [(item#2 'optional')])),
-          (alt_list:2 '\n    ' '|' (sequence [(item#2 'NAME')])),
-          (alt_list:2 '\n    ' '|' (sequence [(item#2 'STRING')]))
-        ]
+      (rule_suite
+        ':'
+        '\n    '
+        '|'
+        (alt_list
+          (sequence [(item#2 'group')])
+          [
+            (alt_list:2 '\n    ' '|' (sequence [(item#2 'optional')])),
+            (alt_list:2 '\n    ' '|' (sequence [(item#2 'NAME')])),
+            (alt_list:2 '\n    ' '|' (sequence [(item#2 'STRING')]))
+          ]
+        )
+        '\n'
       )
-      '\n'
     ),
     (rule
       'group'
-      ':'
-      '\n    '
-      '|'
-      (alt_list
-        (sequence
-          [
-            (item#3 '('),
-            (item#2 'alt_list'),
-            (item#3 ')')
-          ]
+      (rule_suite
+        ':'
+        '\n    '
+        '|'
+        (alt_list
+          (sequence
+            [
+              (item#3 '('),
+              (item#2 'alt_list'),
+              (item#3 ')')
+            ]
+          )
         )
+        '\n'
       )
-      '\n'
     ),
     (rule
       'optional'
-      ':'
-      '\n    '
-      '|'
-      (alt_list
-        (sequence
-          [
-            (item#3 '['),
-            (item#2 'alt_list'),
-            (item#3 ']')
-          ]
+      (rule_suite
+        ':'
+        '\n    '
+        '|'
+        (alt_list
+          (sequence
+            [
+              (item#3 '['),
+              (item#2 'alt_list'),
+              (item#3 ']')
+            ]
+          )
         )
+        '\n'
       )
-      '\n'
     ),
     (rule
       'delimited'
-      ':'
-      '\n    '
-      '|'
-      (alt_list
-        (sequence
-          [
-            (item#2 'STRING'),
-            (item#3 '.'),
-            (item#2 'item'),
-            (item#3 '+')
-          ]
+      (rule_suite
+        ':'
+        '\n    '
+        '|'
+        (alt_list
+          (sequence
+            [
+              (item#2 'STRING'),
+              (item#3 '.'),
+              (item#2 'item'),
+              (item#3 '+')
+            ]
+          )
         )
+        '\n'
       )
-      '\n'
     )
   ]
 )
