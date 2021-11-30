@@ -79,7 +79,7 @@ public class RuleSetBuilder {
             UnitRule unit,
             AltList altList
     ) {
-        if (altList.altList2s().isEmpty()) {
+        if (altList.alternatives().isEmpty()) {
             // only one rule - can propagate fields of this rule
             // but need to change the type here
             unit.setRuleType(RuleType.Conjunction);
@@ -196,7 +196,7 @@ public class RuleSetBuilder {
         // maybe this can just be added to this unit rule
         // but maybe there needs to be a separate sub-rule
 
-        if (altList.altList2s().isEmpty() && altList.sequence().primaries().size() == 1 &&
+        if (altList.alternatives().isEmpty() && altList.sequence().primaries().size() == 1 &&
                 modifier == Modifier.Once) {
             // ^fix - single-char repeats
 
@@ -357,7 +357,7 @@ public class RuleSetBuilder {
 
 
     public String getSmartName(RuleName ruleName, AltList altList) {
-        var andList = altList.altList2s();
+        var andList = altList.alternatives();
         if (andList.isEmpty()) {
             return getSmartName(ruleName, altList.sequence());
         }

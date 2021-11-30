@@ -2,10 +2,7 @@ package org.fugalang.grammar.util;
 
 import org.fugalang.grammar.common.Modifier;
 import org.fugalang.grammar.common.SubRuleType;
-import org.fugalang.grammar.peg.wrapper.AltList;
-import org.fugalang.grammar.peg.wrapper.Item;
-import org.fugalang.grammar.peg.wrapper.Primary;
-import org.fugalang.grammar.peg.wrapper.Sequence;
+import org.fugalang.grammar.peg.wrapper.*;
 
 import static org.fugalang.grammar.common.Modifier.*;
 
@@ -13,7 +10,7 @@ public class PEGUtil {
 
     public static Iterable<Sequence> allSequences(AltList altList) {
         return FirstAndMore.of(altList.sequence(),
-                altList.altList2s(), AltList.AltList2::sequence);
+                altList.alternatives(), Alternative::sequence);
     }
 
     public static SubRuleType getRuleType(Item item) {
@@ -67,6 +64,6 @@ public class PEGUtil {
     }
 
     public static boolean isLeftRecursive(String name, AltList altList) {
-        return !altList.altList2s().isEmpty() && name.equals(getFirstName(altList));
+        return !altList.alternatives().isEmpty() && name.equals(getFirstName(altList));
     }
 }

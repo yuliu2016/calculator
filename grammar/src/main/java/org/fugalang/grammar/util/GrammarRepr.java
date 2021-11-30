@@ -14,7 +14,7 @@ public class GrammarRepr implements MetaVisitor<String> {
     }
 
     public String stringifyAltList(AltList altList, boolean named) {
-        var sequenceList = altList.altList2s();
+        var sequenceList = altList.alternatives();
         StringJoiner joiner;
 
         if (named) {

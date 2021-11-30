@@ -55,9 +55,17 @@ public interface MetaVisitor<T> {
 
     /**
      * alt_list:
-     * *   | sequence ([NEWLINE] '|' sequence)*
+     * *   | sequence alternative*
      */
     default T visitAltList(AltList altList) {
+        return null;
+    }
+
+    /**
+     * alternative:
+     * *   | [NEWLINE] '|' sequence
+     */
+    default T visitAlternative(Alternative alternative) {
         return null;
     }
 

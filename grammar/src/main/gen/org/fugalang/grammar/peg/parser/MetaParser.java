@@ -137,31 +137,32 @@ public class MetaParser {
 
     /**
      * alt_list:
-     * *   | sequence ([NEWLINE] '|' sequence)*
+     * *   | sequence alternative*
      */
     public static boolean alt_list(ParseTree t) {
         var m = t.enter(ALT_LIST);
         if (m != null) return m;
         boolean r;
         r = sequence(t);
-        if (r) alt_list_2_loop(t);
+        if (r) alternative_loop(t);
         t.exit(r);
         return r;
     }
 
-    private static void alt_list_2_loop(ParseTree t) {
+    private static void alternative_loop(ParseTree t) {
         t.enterLoop();
         while (true) {
-            if (!alt_list_2(t)) break;
+            if (!alternative(t)) break;
         }
         t.exitLoop();
     }
 
     /**
-     * [NEWLINE] '|' sequence
+     * alternative:
+     * *   | [NEWLINE] '|' sequence
      */
-    private static boolean alt_list_2(ParseTree t) {
-        var m = t.enter(ALT_LIST_2);
+    public static boolean alternative(ParseTree t) {
+        var m = t.enter(ALTERNATIVE);
         if (m != null) return m;
         boolean r;
         t.consume(TokenType.NEWLINE);

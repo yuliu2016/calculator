@@ -13,7 +13,9 @@ rule_arg:
 rule_suite:
     | ':' NEWLINE '|' alt_list NEWLINE
 alt_list:
-    | sequence ([NEWLINE] '|' sequence)*
+    | sequence alternative*
+alternative:
+    | [NEWLINE] '|' sequence
 sequence:
     | primary+
 primary:
