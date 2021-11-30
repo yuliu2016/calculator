@@ -35,7 +35,7 @@ class WrapperDelegate implements NodeDelegate {
         if (didBuildRule) {
             computeRuleFail("Node has already been built");
         }
-        if (rule.getRuleType() == RuleType.Conjunction) {
+        if (rule.ruleType() == RuleType.Conjunction) {
             computeRuleFail("Cannot call addChoice with a conjunction rule");
         }
 
@@ -56,7 +56,7 @@ class WrapperDelegate implements NodeDelegate {
         if (didBuildRule) {
             computeRuleFail("Node has already been built");
         }
-        if (rule.getRuleType() == RuleType.Conjunction) {
+        if (rule.ruleType() == RuleType.Conjunction) {
             computeRuleFail("Cannot call addChoice with a conjunction rule");
         }
 
@@ -77,7 +77,7 @@ class WrapperDelegate implements NodeDelegate {
         if (didBuildRule) {
             computeRuleFail("Node has already been built");
         }
-        if (rule.getRuleType() == RuleType.Disjunction) {
+        if (rule.ruleType() == RuleType.Disjunction) {
             computeRuleFail("Cannot call addRequired with a disjunction rule");
         }
 
@@ -95,7 +95,7 @@ class WrapperDelegate implements NodeDelegate {
         if (didBuildRule) {
             computeRuleFail("Node has already been built");
         }
-        if (rule.getRuleType() == RuleType.Disjunction) {
+        if (rule.ruleType() == RuleType.Disjunction) {
             computeRuleFail("Cannot call addRequired with a disjunction rule");
         }
 
@@ -113,7 +113,7 @@ class WrapperDelegate implements NodeDelegate {
         if (didBuildRule) {
             computeRuleFail("Node has already been built");
         }
-        if (rule.getRuleType() == RuleType.Disjunction) {
+        if (rule.ruleType() == RuleType.Disjunction) {
             computeRuleFail("Cannot call addOptional with a disjunction rule");
         }
 
@@ -127,7 +127,7 @@ class WrapperDelegate implements NodeDelegate {
         if (didBuildRule) {
             computeRuleFail("Node has already been built");
         }
-        if (rule.getRuleType() == RuleType.Disjunction) {
+        if (rule.ruleType() == RuleType.Disjunction) {
             computeRuleFail("Cannot call addOptional with a disjunction rule");
         }
 
@@ -141,11 +141,11 @@ class WrapperDelegate implements NodeDelegate {
         if (repr != null) {
             return repr;
         }
-        if (rule.getRuleType() == RuleType.Disjunction) {
-            var maybeName = rule.getRuleName() + "#" + chosenIndex;
+        if (rule.ruleType() == RuleType.Disjunction) {
+            var maybeName = rule.ruleName() + "#" + chosenIndex;
             repr = "(" + maybeName + " " + chosenComponent + ")";
-        } else if (rule.getRuleType() == RuleType.Conjunction) {
-            var maybeName = rule.getRuleName() + " ";
+        } else if (rule.ruleType() == RuleType.Conjunction) {
+            var maybeName = rule.ruleName() + " ";
             var sb = new StringBuilder();
             sb.append("(");
             sb.append(maybeName);
@@ -168,8 +168,8 @@ class WrapperDelegate implements NodeDelegate {
 
     @Override
     public void buildString(TreeStringBuilder builder) {
-        if (rule.getRuleType() == RuleType.Disjunction) {
-            builder.setName(rule.getRuleName() + "#" + chosenIndex);
+        if (rule.ruleType() == RuleType.Disjunction) {
+            builder.setName(rule.ruleName() + "#" + chosenIndex);
 
             if (chosenComponent instanceof TreeStringElem) {
                 builder.addElem((TreeStringElem) chosenComponent);
@@ -178,8 +178,8 @@ class WrapperDelegate implements NodeDelegate {
             } else {
                 builder.addString(chosenComponent.toString());
             }
-        } else if (rule.getRuleType() == RuleType.Conjunction) {
-            builder.setName(rule.getRuleName());
+        } else if (rule.ruleType() == RuleType.Conjunction) {
+            builder.setName(rule.ruleName());
 
             for (Object component : components) {
                 if (component == null) {

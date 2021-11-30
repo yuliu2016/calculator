@@ -13,11 +13,11 @@ public abstract class DisjunctionRule implements TreeStringElem {
     protected abstract void buildRule();
 
     protected void setExplicitName(ParserRule ruleName){
-        computedRule.setRuleName(ruleName.getRuleName(), true);
+        computedRule.setRuleName(ruleName.ruleName(), true);
     }
 
     protected void setImpliedName(ParserRule ruleName){
-        computedRule.setRuleName(ruleName.getRuleName(), false);
+        computedRule.setRuleName(ruleName.ruleName(), false);
     }
 
     protected void addChoice(String name, Object choice) {

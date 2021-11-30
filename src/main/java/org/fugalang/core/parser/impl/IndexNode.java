@@ -132,7 +132,7 @@ class IndexNode implements ParseTreeNode {
             if (rule == null) {
                 throw new ParserException("Cannot build string without a rule");
             }
-            if (rule.getRuleType() == RuleType.Disjunction) {
+            if (rule.ruleType() == RuleType.Disjunction) {
                 int chosenIndex = 0;
                 for (ParseTreeNode node : children) {
                     if (node.isPresent()) break;
@@ -140,10 +140,10 @@ class IndexNode implements ParseTreeNode {
                 }
                 var chosenComponent = children.get(chosenIndex);
 
-                builder.setName(rule.getRuleName() + "#" + chosenIndex);
+                builder.setName(rule.ruleName() + "#" + chosenIndex);
                 addNode(chosenComponent, builder, true);
-            } else if (rule.getRuleType() == RuleType.Conjunction) {
-                builder.setName(rule.getRuleName());
+            } else if (rule.ruleType() == RuleType.Conjunction) {
+                builder.setName(rule.ruleName());
                 addChildren(builder);
             }
         }
