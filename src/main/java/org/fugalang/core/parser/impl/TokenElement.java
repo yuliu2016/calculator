@@ -16,7 +16,7 @@ public record TokenElement(
     @Override
     public String toString() {
         return "Token{" +
-                "type=" + type.getName() +
+                "type=" + type.name() +
                 ", value='" + value + '\'' +
                 '}';
     }

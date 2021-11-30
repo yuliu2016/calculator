@@ -19,7 +19,6 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class GeneratorUtil {
 
@@ -42,7 +41,7 @@ public class GeneratorUtil {
                 .ELEMENT_TYPES
                 .stream()
                 .filter(x -> !x.isLiteral())
-                .map(ElementType::getName).toList();
+                .map(ElementType::name).toList();
 
         for (int i = 0; i < nonLiteralTypes.size(); i++) {
             var s = nonLiteralTypes.get(i);

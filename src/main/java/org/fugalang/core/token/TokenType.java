@@ -28,5 +28,5 @@ public class TokenType {
             );
 
     public static final List<String> NAMES =
-            ELEMENT_TYPES.stream().map(ElementType::getName).collect(Collectors.toList());
+            ELEMENT_TYPES.stream().map(ElementType::name).collect(Collectors.toList());
 }

@@ -38,7 +38,7 @@ public class TokenPPrint {
             var col = formatRightWithZeroes(String.valueOf(token.getColumnStart() + 1), 2);
             sb.append(ConsoleColor.WHITE).append(":").append(col).append(ConsoleColor.END).append("  ");
 
-            var type_padded = formatLeftWithSpaces(type.getName(), 9);
+            var type_padded = formatLeftWithSpaces(type.name(), 9);
 
             if (type == NEWLINE) {
                 // type is a delimiter; fade out the token

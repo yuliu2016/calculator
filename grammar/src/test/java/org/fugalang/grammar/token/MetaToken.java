@@ -32,10 +32,10 @@ public class MetaToken implements ParserElement {
     @Override
     public String toString() {
         if (type == MetaTokenType.NEWLINE) {
-            return type.getName() + "\n";
+            return type.name() + "\n";
         }
         if (value == null) {
-            return type.getName() + " ";
+            return type.name() + " ";
         }
         return "'" + value + "' ";
     }
