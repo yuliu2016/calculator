@@ -101,14 +101,14 @@ public class SimpleParseTree implements ParseTree {
                 var value = memo_at_pos.get(rule);
 
                 if (profiler != null) {
-                    profiler.markMemoHit(level, pos, rule, value.getResult());
+                    profiler.markMemoHit(level, pos, rule, value.result());
                 }
 
                 // exit won't be called, so level must be decreased
                 level--;
                 if (value.hasResult()) {
-                    addNode(value.getResult());
-                    pos = value.getEndPos();
+                    addNode(value.result());
+                    pos = value.endPos();
                     return true;
                 } else {
                     addNode(IndexNode.NULL);

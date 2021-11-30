@@ -3,24 +3,15 @@ package org.fugalang.core.parser.impl;
 import org.fugalang.core.parser.ElementType;
 import org.fugalang.core.parser.ParserElement;
 
-public class TokenElement implements ParserElement {
-    private final ElementType type;
-    private final String value;
-    private final int index;
-    private final int lineStart;
-    private final int lineEnd;
-    private final int columnStart;
-    private final int columnEnd;
-
-    public TokenElement(ElementType type, String value, int index, int lineStart, int lineEnd, int columnStart, int columnEnd) {
-        this.type = type;
-        this.value = value;
-        this.index = index;
-        this.lineStart = lineStart;
-        this.lineEnd = lineEnd;
-        this.columnStart = columnStart;
-        this.columnEnd = columnEnd;
-    }
+public record TokenElement(
+        ElementType type,
+        String value,
+        int index,
+        int lineStart,
+        int lineEnd,
+        int columnStart,
+        int columnEnd
+) implements ParserElement {
 
     @Override
     public String toString() {
