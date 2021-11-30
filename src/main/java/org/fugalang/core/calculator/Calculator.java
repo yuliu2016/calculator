@@ -110,19 +110,14 @@ public class Calculator implements CalculatorVisitor<Double> {
     }
 
     private static double evalName(String name) {
-        switch (name) {
-            case "pi":
-                return Math.PI;
-            case "e":
-                return Math.E;
-            case "wau":
-                return 1;
-            case "phi":
-                return (1 + Math.sqrt(5)) / 2;
-            default:
-                throw new SyntaxError("Constant " + name +
-                        " not found. Did you mean " + name + "()?");
-        }
+        return switch (name) {
+            case "pi" -> Math.PI;
+            case "e" -> Math.E;
+            case "wau" -> 1;
+            case "phi" -> (1 + Math.sqrt(5)) / 2;
+            default -> throw new SyntaxError("Constant " + name +
+                    " not found. Did you mean " + name + "()?");
+        };
     }
 
     private static double evalDispatch(String name, double[] params) {

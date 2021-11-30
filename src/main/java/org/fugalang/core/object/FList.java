@@ -16,8 +16,7 @@ public final class FList implements FType<List<Object>> {
     }
 
     private static Object listCompare(List<Object> a, Object b, int cmp_op) {
-        if (!(b instanceof List)) return null;
-        var c = (List<?>) b;
+        if (!(b instanceof List<?> c)) return null;
         int m = Math.max(a.size(), c.size());
         for (int i = 0; i < m; i++) {
             var x = a.get(i);

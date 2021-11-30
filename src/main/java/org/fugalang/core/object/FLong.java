@@ -75,69 +75,40 @@ public final class FLong implements FType<Long> {
 
     @Override
     public Object unary_op(Long a, int unary_op) {
-        switch (unary_op) {
-            case UNARY_NEG:
-                return -a;
-            case UNARY_POS:
-            case UNARY_INT:
-            case UNARY_FLOOR:
-            case UNARY_CEIL:
-                return a;
-            case UNARY_ROUND:
-            case UNARY_FLOAT:
-                return a.doubleValue();
-            case UNARY_ABS:
-                return Math.abs(a);
-            case UNARY_BOOL:
-                return a != 0;
-            case UNARY_HASH:
-                return a.hashCode();
-            case UNARY_STR:
-            case UNARY_REPR:
-                return a.toString();
-            case UNARY_INVERT:
-                return ~a;
-            case UNARY_TRUNK:
-            default:
-                return null;
-        }
+        return switch (unary_op) {
+            case UNARY_NEG -> -a;
+            case UNARY_POS, UNARY_INT, UNARY_FLOOR, UNARY_CEIL -> a;
+            case UNARY_ROUND, UNARY_FLOAT -> a.doubleValue();
+            case UNARY_ABS -> Math.abs(a);
+            case UNARY_BOOL -> a != 0;
+            case UNARY_HASH -> a.hashCode();
+            case UNARY_STR, UNARY_REPR -> a.toString();
+            case UNARY_INVERT -> ~a;
+            case UNARY_TRUNK -> null;
+            default -> null;
+        };
     }
 
     @Override
     public Object binary_op(Long a, Object o, int binary_op) {
         if (o.getClass() != Long.class) return null;
         var b = ((Long) o);
-        switch (binary_op) {
-            case BINOP_ADD:
-                return a + b;
-            case BINOP_SUBTRACT:
-                return a - b;
-            case BINOP_MULTIPLY:
-                return a * b;
-            case BINOP_DIVIDE:
-                return a.doubleValue() / b.doubleValue();
-            case BINOP_FLOORDIV:
-                return a / b;
-            case BINOP_MOD:
-                return a % b;
-            case BINOP_DIVMOD:
-                return new Object[]{a / b, a % b};
-            case BINOP_POW:
-                return Math.pow(a, b);
-            case BINOP_LSHIFT:
-                return a << b;
-            case BINOP_RSHIFT:
-                return a >> b;
-            case BINOP_AND:
-                return a & b;
-            case BINOP_OR:
-                return a | b;
-            case BINOP_XOR:
-                return a ^ b;
-            case BINOP_MATMUL:
-            default:
-                return null;
-        }
+        return switch (binary_op) {
+            case BINOP_ADD -> a + b;
+            case BINOP_SUBTRACT -> a - b;
+            case BINOP_MULTIPLY -> a * b;
+            case BINOP_DIVIDE -> a.doubleValue() / b.doubleValue();
+            case BINOP_FLOORDIV -> a / b;
+            case BINOP_MOD -> a % b;
+            case BINOP_DIVMOD -> new Object[]{a / b, a % b};
+            case BINOP_POW -> Math.pow(a, b);
+            case BINOP_LSHIFT -> a << b;
+            case BINOP_RSHIFT -> a >> b;
+            case BINOP_AND -> a & b;
+            case BINOP_OR -> a | b;
+            case BINOP_XOR -> a ^ b;
+            default -> null;
+        };
     }
 
     @Override

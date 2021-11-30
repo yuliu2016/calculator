@@ -19,8 +19,7 @@ public final class FTuple implements FType<Object[]> {
     }
 
     private static Object arrayCompare(Object[] a, Object b, int cmp_op) {
-        if (!(b instanceof Object[])) return null;
-        var c = (Object[]) b;
+        if (!(b instanceof Object[] c)) return null;
         int m = Math.max(a.length, c.length);
         for (int i = 0; i < m; i++) {
             var x = a[i];
@@ -160,8 +159,7 @@ public final class FTuple implements FType<Object[]> {
     @Override
     public Object binary_op(Object[] a, Object o, int binary_op) {
         if (binary_op == BinaryOp.BINOP_ADD) {
-            if (o instanceof Object[]) {
-                var b = ((Object[]) o);
+            if (o instanceof Object[] b) {
                 var c = new Object[a.length + b.length];
                 System.arraycopy(a, 0, c, 0, a.length);
                 System.arraycopy(b, 0, c, a.length, b.length);

@@ -42,8 +42,7 @@ public class GeneratorUtil {
                 .ELEMENT_TYPES
                 .stream()
                 .filter(x -> !x.isLiteral())
-                .map(ElementType::getName)
-                .collect(Collectors.toList());
+                .map(ElementType::getName).toList();
 
         for (int i = 0; i < nonLiteralTypes.size(); i++) {
             var s = nonLiteralTypes.get(i);

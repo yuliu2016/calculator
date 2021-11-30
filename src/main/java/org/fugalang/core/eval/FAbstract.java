@@ -43,22 +43,15 @@ public class FAbstract {
     }
 
     public static Boolean compareOp(int cmp_op, int cmp_result) {
-        switch (cmp_op) {
-            case CMP_LT:
-                return cmp_result < 0;
-            case CMP_LE:
-                return cmp_result <= 0;
-            case CMP_EQ:
-                return cmp_result == 0;
-            case CMP_NE:
-                return cmp_result != 0;
-            case CMP_GT:
-                return cmp_result > 0;
-            case CMP_GE:
-                return cmp_result >= 0;
-            default:
-                return null;
-        }
+        return switch (cmp_op) {
+            case CMP_LT -> cmp_result < 0;
+            case CMP_LE -> cmp_result <= 0;
+            case CMP_EQ -> cmp_result == 0;
+            case CMP_NE -> cmp_result != 0;
+            case CMP_GT -> cmp_result > 0;
+            case CMP_GE -> cmp_result >= 0;
+            default -> null;
+        };
     }
 
     public static Object compare(Object a, Object b, int cmp_op) {
