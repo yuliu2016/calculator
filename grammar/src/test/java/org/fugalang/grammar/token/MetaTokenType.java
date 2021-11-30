@@ -4,14 +4,14 @@ import org.fugalang.core.parser.ElementType;
 
 @Deprecated
 public class MetaTokenType {
-    public static final ElementType NEWLINE = ElementType.of("NEWLINE", false);
-    public static final ElementType TOK = ElementType.of("TOK", false);
-    public static final ElementType COL = ElementType.of(":", false);
-    public static final ElementType LPAR = ElementType.of("(", false);
-    public static final ElementType RPAR = ElementType.of(")", false);
-    public static final ElementType LSQB = ElementType.of("[", false);
-    public static final ElementType RSQB = ElementType.of("]", false);
-    public static final ElementType PLUS = ElementType.of("+", false);
-    public static final ElementType STAR = ElementType.of("*", false);
-    public static final ElementType OR = ElementType.of("|", false);
+    public static final ElementType NEWLINE = new ElementType("NEWLINE", false);
+    public static final ElementType TOK = new ElementType("TOK", false);
+    public static final ElementType COL = new ElementType(":", false);
+    public static final ElementType LPAR = new ElementType("(", false);
+    public static final ElementType RPAR = new ElementType(")", false);
+    public static final ElementType LSQB = new ElementType("[", false);
+    public static final ElementType RSQB = new ElementType("]", false);
+    public static final ElementType PLUS = new ElementType("+", false);
+    public static final ElementType STAR = new ElementType("*", false);
+    public static final ElementType OR = new ElementType("|", false);
 }
