@@ -77,6 +77,10 @@ public class GrammarRepr implements MetaVisitor<String> {
         return stringifyAltList(altList, false);
     }
 
+    @Override
+    public String visitAlternative(Alternative alternative) {
+        return "";
+    }
 
     @Override
     public String visitSequence(Sequence sequence) {
@@ -85,6 +89,19 @@ public class GrammarRepr implements MetaVisitor<String> {
             joiner.add(visitPrimary(primary));
         }
         return joiner.toString();
+    }
+
+    @Override
+    public String visitResultClause(ResultClause resultClause) {
+        // the result clause is not shown in the comments
+        // so it doesn't need to be part of this grammar
+        // representation
+        return "";
+    }
+
+    @Override
+    public String visitResultExpr(ResultExpr resultExpr) {
+        return "";
     }
 
     @Override
