@@ -191,7 +191,61 @@ public class CTransform {
     }
 
     private static void getLoopParser(UnitField field, StringBuilder sb) {
+        if (field.isSingular() || field.isPredicate()) {
+            return;
+        }
+        String s = field.getFieldType() == FieldType.RequiredList ?
+                getRequiredLoopParser(field) : getOptionalLoopParser(field);
+        sb.append(s);
+    }
 
+    private static String getRequiredLoopParser(UnitField field) {
+        var resultExpr = getResultExpr(field);
+        var rule_name = field.getRuleName().symbolicName();
+
+        TokenEntry delimiter = field.getDelimiter();
+        if (delimiter == null) {
+            return  "\nstatic ast_list *" + rule_name + "_loop(FParser *p) {\n" +
+                    "    ast_list *s;\n" +
+                    "    void *a = " + resultExpr + ";\n" +
+                    "    if (!a) return 0;\n" +
+                    "    s = ast_list_new(p);\n" +
+                    "    do {\n" +
+                    "        ast_list_append(p, s, a);\n" +
+                    "    } while ((a = " + resultExpr + "));\n" +
+                    "    return s;\n" +
+                    "}\n";
+        } else {
+            var delimExpr = "consume(p, " + delimiter.index() + ", \"" + delimiter.literalValue() + "\")";
+            return "\nstatic ast_list *" + rule_name + "_delimited(FParser *p) {\n" +
+                    "    ast_list *s;\n" +
+                    "    void *a = " + resultExpr + ";\n" +
+                    "    if (!a) return 0;\n" +
+                    "    s = ast_list_new(p);\n" +
+                    "    size_t pos;\n" +
+                    "    do {\n" +
+                    "        ast_list_append(p, s, a);\n" +
+                    "        pos = p->pos;\n" +
+                    "    } while (" + delimExpr + " &&\n" +
+                    "            (a = " + resultExpr + "));\n" +
+                    "    p->pos = pos;\n" +
+                    "    return s;\n" +
+                    "}\n";
+        }
+    }
+
+    private static String getOptionalLoopParser(UnitField field) {
+        var resultExpr = getResultExpr(field);
+        var rule_name = field.getRuleName().symbolicName();
+
+        return "\nstatic ast_list *" + rule_name + "_loop(FParser *p) {\n" +
+                "    ast_list *s = ast_list_new(p);\n" +
+                "    void *a;\n" +
+                "    while ((a = " + resultExpr + ")) {\n" +
+                "        ast_list_append(p, s, a);\n" +
+                "    }\n" +
+                "    return s;\n" +
+                "}\n";
     }
 
     private static String getLoopExpr(UnitField field) {
