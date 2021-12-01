@@ -59,21 +59,7 @@ public class CTransform {
     private static void addUnitRuleBody(UnitRule unit, StringBuilder sb, Map<String, String> args) {
         var rn = unit.ruleName();
 
-        List<String> flags = new ArrayList<>();
-
-        if (args.containsKey("memo") && !unit.leftRecursive()) {
-            flags.add("F_MEMO");
-        }
-        if (unit.leftRecursive()) {
-            flags.add("F_LR");
-        }
-        var ws = args.get("allow_whitespace");
-        if ("true".equals(ws)) {
-            flags.add("F_ALLOW_SPACES");
-        } else if ("false".equals(ws)) {
-            flags.add("F_DISALLOW_SPACES");
-        }
-        var flagsStr = flags.isEmpty() ? "0" : String.join(" | ", flags);
+        boolean memoize = args.containsKey("memo") || unit.leftRecursive();
 
         sb.append("\nstatic void *")
                 .append(rn.symbolicName());
@@ -81,17 +67,29 @@ public class CTransform {
         sb.append("    frame_t f = {")
                 .append(unit.ruleIndex())
                 .append(", p->pos, FUNC, 0, ")
-                .append(flagsStr)
+                .append(memoize ? 1 : 0)
                 .append("};\n");
+
+        var ws = args.get("allow_whitespace");
+        if ("true".equals(ws)) {
+            sb.append("    int ws = p->ignore_whitespace;\n");
+            sb.append("    p->ignore_whitespace = 1;\n");
+        } else if ("false".equals(ws)) {
+            sb.append("    int ws = p->ignore_whitespace;\n");
+            sb.append("    p->ignore_whitespace=0;\n");
+        }
 
         if (unit.leftRecursive()) {
             addLeftRecursiveUnitRuleBody(unit, sb);
         } else {
-
             switch (unit.ruleType()) {
                 case Disjunction -> addDisjunctionBody(unit, sb);
                 case Conjunction -> addConjunctionBody(unit, sb);
             }
+        }
+
+        if (ws != null) {
+            sb.append("    p->ignore_whitespace = ws;\n");
         }
 
         sb.append("    return exit(p, &f, r);\n");
@@ -218,7 +216,7 @@ public class CTransform {
 
         TokenEntry delimiter = field.getDelimiter();
         if (delimiter == null) {
-            return  "\nstatic ast_list *" + rule_name + "_loop(FParser *p) {\n" +
+            return "\nstatic ast_list *" + rule_name + "_loop(FParser *p) {\n" +
                     "    ast_list *s;\n" +
                     "    void *a = " + resultExpr + ";\n" +
                     "    if (!a) return 0;\n" +
