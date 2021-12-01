@@ -20,13 +20,13 @@ public class JTransform {
     }
 
     public static void generateParsingFunc(StringBuilder sb, UnitRule rule, boolean isNamedRule) {
-        var small_name = rule.getRuleName().symbolicName();
+        var small_name = rule.ruleName().symbolicName();
         var cap_name = small_name.toUpperCase();
         sb.append("\n");
 
         // rule name constant
 
-        var headerComments = rule.getGrammarString();
+        var headerComments = rule.grammarString();
         if (headerComments != null && !headerComments.isBlank()) {
             sb.append(StringUtil.javadoc(headerComments, 4));
         }
@@ -40,7 +40,7 @@ public class JTransform {
                 .append(cap_name).append(");\n");
         sb.append("        if (m != null) return m;\n");
 
-        if (rule.isLeftRecursive()) {
+        if (rule.leftRecursive()) {
             if (!isNamedRule) {
                 throw new IllegalStateException(
                         "Cannot be left-recursive and not a named rule");
@@ -52,7 +52,7 @@ public class JTransform {
 
         sb.append("    }\n");
 
-        for (UnitField field : rule.getFields()) {
+        for (UnitField field : rule.fields()) {
             var loopParser = getLoopParser(field);
             if (loopParser != null) {
                 sb.append(loopParser);
@@ -64,7 +64,7 @@ public class JTransform {
         sb.append("        boolean r;\n");
 
         var first = true;
-        for (UnitField field : rule.getFields()) {
+        for (UnitField field : rule.fields()) {
             var result = getParserFieldStatement(field, rule, first);
             if (field.isRequired()) {
                 first = false;
@@ -74,7 +74,7 @@ public class JTransform {
         }
 
         if (first) {
-            throw new IllegalStateException("The rule " + rule.getRuleName() +
+            throw new IllegalStateException("The rule " + rule.ruleName() +
                     " may match an empty string");
         }
 
@@ -95,7 +95,7 @@ public class JTransform {
                             boolean r;
                 """);
         var first = true;
-        for (UnitField field : rule.getFields()) {
+        for (UnitField field : rule.fields()) {
             var result = getParserFieldStatement(field, rule, first);
             if (field.isRequired()) {
                 first = false;
@@ -105,7 +105,7 @@ public class JTransform {
         }
 
         if (first) {
-            throw new IllegalStateException("The rule " + rule.getRuleName() +
+            throw new IllegalStateException("The rule " + rule.ruleName() +
                     " may match an empty string");
         }
 
@@ -122,7 +122,7 @@ public class JTransform {
     }
 
     private static String getParserFieldStatement(UnitField field, UnitRule rule, boolean isFirst) {
-        var ruleType = rule.getRuleType();
+        var ruleType = rule.ruleType();
         return switch (field.getFieldType()) {
             case RequireTrue -> getRequiredStmt(getResultExpr(field, true), ruleType, isFirst);
             case RequireFalse -> getRequiredStmt("!" + getResultExpr(field, true), ruleType, isFirst);
@@ -222,15 +222,15 @@ public class JTransform {
     }
 
     private static void generateRuleDeclaration(StringBuilder sb, UnitRule rule) {
-        var small_name = rule.getRuleName().symbolicName();
+        var small_name = rule.ruleName().symbolicName();
         var cap_name = small_name.toUpperCase();
         sb.append("    public static final ParserRule ")
                 .append(cap_name)
                 .append(" = ")
-                .append(rule.getRuleType() == RuleType.Conjunction ? "and_rule" :
-                        rule.isLeftRecursive() ? "leftrec_rule" : "or_rule")
+                .append(rule.ruleType() == RuleType.Conjunction ? "and_rule" :
+                        rule.leftRecursive() ? "leftrec_rule" : "or_rule")
                 .append("(\"")
-                .append(rule.getRuleName().fullName())
+                .append(rule.ruleName().fullName())
                 .append("\");\n");
     }
 
@@ -240,11 +240,11 @@ public class JTransform {
 
     private static void generateVisitor(StringBuilder sb, UnitRule rule) {
         sb.append("\n");
-        var headerComments = rule.getGrammarString();
+        var headerComments = rule.grammarString();
         if (headerComments != null && !headerComments.isBlank()) {
             sb.append(StringUtil.javadoc(headerComments, 4));
         }
-        var name = rule.getRuleName();
+        var name = rule.ruleName();
         sb.append("    default T visit")
                 .append(name.pascalCase())
                 .append("(")
@@ -319,10 +319,10 @@ public class JTransform {
         Set<String> set = new HashSet<>();
         set.add("org.fugalang.core.parser.NodeWrapper");
         set.add("org.fugalang.core.parser.ParseTreeNode");
-        if (rule.getFields().stream().anyMatch(f -> f.getResultSource().kind() == SourceKind.TokenType)) {
+        if (rule.fields().stream().anyMatch(f -> f.getResultSource().kind() == SourceKind.TokenType)) {
             set.add("org.fugalang.core.token.TokenType");
         }
-        if (rule.getFields().stream().anyMatch(f ->
+        if (rule.fields().stream().anyMatch(f ->
                 f.getFieldType() == RequiredList || f.getFieldType() == OptionalList)) {
             set.add("java.util.List");
         }
@@ -336,7 +336,7 @@ public class JTransform {
             sb.append("\n");
         }
 
-        var headerComments = rule.getGrammarString();
+        var headerComments = rule.grammarString();
         if (headerComments != null && !headerComments.isBlank()) {
             sb.append(StringUtil.javadoc(headerComments, 0));
         }
@@ -347,11 +347,11 @@ public class JTransform {
             sb.append("public final class ");
         }
 
-        var className = rule.getRuleName().pascalCase();
+        var className = rule.ruleName().pascalCase();
         sb.append(className);
 
         // extends
-        var ruleType = rule.getRuleType();
+        var ruleType = rule.ruleType();
         if (ruleType != null) {
             // add the parent classes
             sb.append(" extends NodeWrapper");
@@ -370,8 +370,8 @@ public class JTransform {
                     }
                 """);
 
-        for (int i = 0; i < rule.getFields().size(); i++) {
-            var field = rule.getFields().get(i);
+        for (int i = 0; i < rule.fields().size(); i++) {
+            var field = rule.fields().get(i);
 
             var getter = asGetter(field, ruleType, i);
             if (getter != null) {

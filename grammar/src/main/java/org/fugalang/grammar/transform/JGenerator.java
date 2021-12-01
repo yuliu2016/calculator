@@ -43,11 +43,11 @@ public class JGenerator {
     public static void generate(RuleSet ruleSet, JPackageOutput packageOutput) throws IOException {
         setupDir(packageOutput.getWrapperPath());
 
-        for (var rule : ruleSet.getNamedRules()) {
+        for (var rule : ruleSet.namedRules()) {
             var code = fixLineSep(JTransform
                     .generateWrapper(rule, packageOutput.getWrapperPackage()));
             Files.writeString(Paths.get(packageOutput.getWrapperPath().toString(),
-                    rule.getRoot().getRuleName().pascalCase() + ".java"), code);
+                    rule.getRoot().ruleName().pascalCase() + ".java"), code);
         }
 
         var lang = packageOutput.getLanguage();
@@ -88,7 +88,7 @@ public class JGenerator {
                 public class\s""");
         sb.append(packageOutput.getLanguage());
         sb.append("Parser {\n");
-        for (var rule : ruleSet.getNamedRules()) {
+        for (var rule : ruleSet.namedRules()) {
             JTransform.generateParser(sb, rule);
         }
         sb.append("}\n");
@@ -100,8 +100,8 @@ public class JGenerator {
         sb.append("package ").append(packageOutput.getParserPackage()).append(";\n\n");
         sb.append("import org.fugalang.core.parser.ParserRule;\n\n");
 
-        var imports = ruleSet.getNamedRules().stream()
-                .anyMatch(namedRule -> namedRule.getRoot().isLeftRecursive()) ?
+        var imports = ruleSet.namedRules().stream()
+                .anyMatch(namedRule -> namedRule.getRoot().leftRecursive()) ?
                 "import static org.fugalang.core.parser.ParserRule.*;\n\n" :
                 """
                         import static org.fugalang.core.parser.ParserRule.and_rule;
@@ -114,7 +114,7 @@ public class JGenerator {
         sb.append(packageOutput.getLanguage());
         sb.append("Rules {\n");
 
-        for (NamedRule rule : ruleSet.getNamedRules()) {
+        for (NamedRule rule : ruleSet.namedRules()) {
             JTransform.generateRule(sb, rule);
         }
 
@@ -131,7 +131,7 @@ public class JGenerator {
         sb.append(packageOutput.getLanguage());
         sb.append("Visitor<T> {\n");
 
-        for (NamedRule rule : ruleSet.getNamedRules()) {
+        for (NamedRule rule : ruleSet.namedRules()) {
             JTransform.generateVisitor(sb, rule);
         }
 

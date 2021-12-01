@@ -13,7 +13,7 @@ public class CTransform {
 
     public static String getFuncDeclarations(RuleSet ruleSet) {
         StringBuilder sb = new StringBuilder();
-        for (NamedRule namedRule : ruleSet.getNamedRules()) {
+        for (NamedRule namedRule : ruleSet.namedRules()) {
             addUnitRuleDeclaration(namedRule.getRoot(), sb);
             for (UnitRule component : namedRule.getComponents()) {
                 addUnitRuleDeclaration(component, sb);
@@ -23,7 +23,7 @@ public class CTransform {
     }
 
     private static void addUnitRuleDeclaration(UnitRule unit, StringBuilder sb) {
-        var rn = unit.getRuleName();
+        var rn = unit.ruleName();
         sb.append("static void *")
                 .append(rn.symbolicName());
         sb.append("(FParser *);\n");
@@ -31,9 +31,9 @@ public class CTransform {
 
     public static String getFunctionBodies(RuleSet ruleSet) {
         StringBuilder sb = new StringBuilder();
-        for (NamedRule namedRule : ruleSet.getNamedRules()) {
+        for (NamedRule namedRule : ruleSet.namedRules()) {
             sb.append("\n");
-            sb.append(StringUtil.inlinedoc(namedRule.getRoot().getGrammarString()));
+            sb.append(StringUtil.inlinedoc(namedRule.getRoot().grammarString()));
             var args = namedRule.getArgs();
             addUnitRuleBody(namedRule.getRoot(), sb, args);
             for (UnitRule component : namedRule.getComponents()) {
@@ -44,14 +44,14 @@ public class CTransform {
     }
 
     private static void addUnitRuleBody(UnitRule unit, StringBuilder sb, Map<String, String> args) {
-        var rn = unit.getRuleName();
+        var rn = unit.ruleName();
 
         List<String> flags = new ArrayList<>();
 
-        if (args.containsKey("memo") && !unit.isLeftRecursive()) {
+        if (args.containsKey("memo") && !unit.leftRecursive()) {
             flags.add("F_MEMO");
         }
-        if (unit.isLeftRecursive()) {
+        if (unit.leftRecursive()) {
             flags.add("F_LR");
         }
         var ws = args.get("allow_whitespace");
@@ -66,16 +66,16 @@ public class CTransform {
                 .append(rn.symbolicName());
         sb.append("(FParser *p) {\n");
         sb.append("    frame_t f = {")
-                .append(unit.getRuleIndex())
+                .append(unit.ruleIndex())
                 .append(", p->pos, FUNC, 0, ")
                 .append(flagsStr)
                 .append("};\n");
 
-        if (unit.isLeftRecursive()) {
+        if (unit.leftRecursive()) {
             addLeftRecursiveUnitRuleBody(unit, sb);
         } else {
 
-            switch (unit.getRuleType()) {
+            switch (unit.ruleType()) {
                 case Disjunction -> addDisjunctionBody(unit, sb);
                 case Conjunction -> addConjunctionBody(unit, sb);
             }
@@ -83,6 +83,10 @@ public class CTransform {
 
         sb.append("    return exit(p, &f, r);\n");
         sb.append("}\n");
+
+        for (UnitField field : unit.fields()) {
+            getLoopParser(field, sb);
+        }
     }
 
     private static void addLeftRecursiveUnitRuleBody(UnitRule unit, StringBuilder sb) {
@@ -93,11 +97,11 @@ public class CTransform {
         sb.append("    while(memoize(p, &f, m, i), 1) {\n");
         sb.append("        p->pos = f.f_pos;\n");
 
-        var fields = unit.getFields();
+        var fields = unit.fields();
         for (int i = 0; i < fields.size(); i++) {
             sb.append("        (a = ");
             var result = getParserFieldExpr(fields.get(i),
-                    unit.getRuleType(), i == fields.size() - 1);
+                    unit.ruleType(), i == fields.size() - 1);
             sb.append(result);
         }
         sb.append(";\n");
@@ -120,7 +124,7 @@ public class CTransform {
 
         int importantCount = 0;
 
-        int impCount = unit.getFields().stream()
+        int impCount = unit.fields().stream()
                 .filter(CTransform::isImportantField)
                 .toList().size();
         sb.append("    void ");
@@ -134,7 +138,7 @@ public class CTransform {
 
         sb.append("    r = enter(p, &f) && (\n");
 
-        var fields = unit.getFields();
+        var fields = unit.fields();
         for (int i = 0; i < fields.size(); i++) {
             sb.append("        ");
             sb.append("(");
@@ -146,7 +150,7 @@ public class CTransform {
                 sb.append(" = ");
             }
             var result = getParserFieldExpr(field,
-                    unit.getRuleType(), i == fields.size() - 1);
+                    unit.ruleType(), i == fields.size() - 1);
             sb.append(result);
         }
 
@@ -164,12 +168,12 @@ public class CTransform {
     private static void addDisjunctionBody(UnitRule unit, StringBuilder sb) {
         sb.append("    void *a, *r;\n");
         sb.append("    r = enter(p, &f) && (\n");
-        var fields = unit.getFields();
+        var fields = unit.fields();
         for (int i = 0; i < fields.size(); i++) {
             sb.append("        ");
             sb.append("(a = ");
             var result = getParserFieldExpr(fields.get(i),
-                    unit.getRuleType(), i == fields.size() - 1);
+                    unit.ruleType(), i == fields.size() - 1);
             sb.append(result);
         }
         sb.append("\n    ) ? node_1(p, &f, a) : 0;\n");
@@ -184,6 +188,10 @@ public class CTransform {
             case Optional -> getOptionalExprPart(getResultExpr(field), ruleType, isLast);
             case RequiredList, OptionalList -> getRequiredExprPart(getLoopExpr(field), ruleType, isLast);
         };
+    }
+
+    private static void getLoopParser(UnitField field, StringBuilder sb) {
+
     }
 
     private static String getLoopExpr(UnitField field) {

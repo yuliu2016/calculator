@@ -16,7 +16,7 @@ public class RuleSet {
         this.namedRules = new ArrayList<>();
     }
 
-    public List<NamedRule> getNamedRules() {
+    public List<NamedRule> namedRules() {
         return namedRules;
     }
 
@@ -31,7 +31,7 @@ public class RuleSet {
     ) {
         var dupError = false;
         for (var namedRule : namedRules) {
-            if (namedRule.getRoot().getRuleName().compareExact(ruleName)) {
+            if (namedRule.getRoot().ruleName().compareExact(ruleName)) {
                 dupError = true;
                 break;
             }
@@ -66,7 +66,7 @@ public class RuleSet {
 
         var dupError = false;
         for (var builder : current.getComponents()) {
-            if (builder.getRuleName().compareExact(ruleName)) {
+            if (builder.ruleName().compareExact(ruleName)) {
                 dupError = true;
                 break;
             }

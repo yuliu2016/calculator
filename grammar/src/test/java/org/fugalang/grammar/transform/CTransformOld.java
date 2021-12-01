@@ -10,16 +10,16 @@ public class CTransformOld {
     public static String getDummyCompiler(RuleSet ruleSet) {
         StringBuilder sb = new StringBuilder();
 
-        for (NamedRule namedRule : ruleSet.getNamedRules()) {
+        for (NamedRule namedRule : ruleSet.namedRules()) {
             addDummyDeclaration(sb, namedRule.getRoot());
             for (UnitRule component : namedRule.getComponents()) {
                 addDummyDeclaration(sb, component);
             }
         }
 
-        for (NamedRule namedRule : ruleSet.getNamedRules()) {
+        for (NamedRule namedRule : ruleSet.namedRules()) {
             sb.append("\n");
-            sb.append(StringUtil.inlinedoc(namedRule.getRoot().getGrammarString()));
+            sb.append(StringUtil.inlinedoc(namedRule.getRoot().grammarString()));
             addDummyFunction(sb, namedRule.getRoot());
             for (UnitRule component : namedRule.getComponents()) {
                 addDummyFunction(sb, component);
@@ -30,15 +30,15 @@ public class CTransformOld {
     }
 
     private static void addDummyDeclaration(StringBuilder sb, UnitRule unit) {
-        sb.append("void dummy_").append(unit.getRuleName().symbolicName())
+        sb.append("void dummy_").append(unit.ruleName().symbolicName())
                 .append("(FAstNode *n);\n");
     }
 
     private static void addDummyFunction(StringBuilder sb, UnitRule unit) {
 
-        sb.append("\nvoid dummy_").append(unit.getRuleName().symbolicName())
+        sb.append("\nvoid dummy_").append(unit.ruleName().symbolicName())
                 .append("(FAstNode *n) {\n");
-        if (unit.isLeftRecursive() || unit.getRuleType() == RuleType.Disjunction) {
+        if (unit.leftRecursive() || unit.ruleType() == RuleType.Disjunction) {
             addDummyDisjunct(sb, unit);
         } else {
             addDummyUnpack(sb, unit);
@@ -49,7 +49,7 @@ public class CTransformOld {
     private static void addDummyDisjunct(StringBuilder sb, UnitRule unit) {
         sb.append("    FAstNode *o = n->ast_v.fields[0];\n");
 
-        for (UnitField field : unit.getFields()) {
+        for (UnitField field : unit.fields()) {
             if (field.getResultSource().kind() == SourceKind.UnitRule) {
                 var rn = (RuleName) field.getResultSource().value();
                 sb.append("    if (R_CHECK(n, R_").append(rn.symbolicName().toUpperCase())
@@ -67,12 +67,12 @@ public class CTransformOld {
     }
 
     private static void addDummyUnpack(StringBuilder sb, UnitRule unit) {
-        if (unit.getFields().stream().noneMatch(CTransformOld::isImportantField)) {
+        if (unit.fields().stream().noneMatch(CTransformOld::isImportantField)) {
             return;
         }
-        sb.append("    UNPACK_").append(unit.getRuleName().symbolicName().toUpperCase())
+        sb.append("    UNPACK_").append(unit.ruleName().symbolicName().toUpperCase())
                 .append("(n)\n");
-        for (UnitField field : unit.getFields()) {
+        for (UnitField field : unit.fields()) {
             if (isImportantField(field) &&
                     field.getResultSource().kind() == SourceKind.UnitRule) {
                 var rn = (RuleName) field.getResultSource().value();
@@ -94,7 +94,7 @@ public class CTransformOld {
         sb.append("#define FVAR(name, node, i) FAstNode *name = (node)->ast_v.fields[i]\n");
         sb.append("#define TVAR(name, node, i) FToken *name = (node)->ast_v.fields[i]->ast_v.token\n");
 
-        for (NamedRule namedRule : ruleSet.getNamedRules()) {
+        for (NamedRule namedRule : ruleSet.namedRules()) {
             addStructFields(namedRule.getRoot(), sb);
             for (UnitRule component : namedRule.getComponents()) {
                 addStructFields(component, sb);
@@ -104,22 +104,22 @@ public class CTransformOld {
     }
 
     private static void addStructFields(UnitRule unit, StringBuilder sb) {
-        var upName = unit.getRuleName().symbolicName().toUpperCase();
+        var upName = unit.ruleName().symbolicName().toUpperCase();
 
         sb.append("\n#define R_").append(upName)
-                .append(" ").append(unit.getRuleIndex()).append("\n");
+                .append(" ").append(unit.ruleIndex()).append("\n");
 
-        if (unit.isLeftRecursive() || unit.getRuleType() == RuleType.Disjunction) {
+        if (unit.leftRecursive() || unit.ruleType() == RuleType.Disjunction) {
             return;
         }
 
-        if (unit.getFields().stream().noneMatch(CTransformOld::isImportantField)) {
+        if (unit.fields().stream().noneMatch(CTransformOld::isImportantField)) {
             return;
         }
 
         sb.append("#define UNPACK_").append(upName).append("(n) \\\n");
         int i = 0;
-        for (UnitField field : unit.getFields()) {
+        for (UnitField field : unit.fields()) {
             if (isImportantField(field)) {
                 if (field.getResultSource().kind() == SourceKind.UnitRule) {
                     sb.append("    FVAR(");

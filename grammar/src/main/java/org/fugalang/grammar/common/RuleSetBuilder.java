@@ -68,7 +68,7 @@ public class RuleSetBuilder {
             // protect against not initializing result
             unit.guardMatchEmptyString();
 
-            // for checking invariant state
+            // for making sure that we don't accidentally add sub-rules
             ruleSet.namedRuleDone();
         }
     }
@@ -252,7 +252,7 @@ public class RuleSetBuilder {
             // add a token value instead
 
             var tokenEntry = tokenMap.get(token);
-            var ruleName = unit.getRuleName();
+            var ruleName = unit.ruleName();
 
             if (tokenEntry.isLiteral()) {
                 var fieldName = "is_" + tokenEntry.snakeCase();

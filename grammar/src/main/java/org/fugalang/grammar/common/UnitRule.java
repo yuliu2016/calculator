@@ -26,19 +26,19 @@ public class UnitRule {
         this.leftRecursive = leftRecursive;
     }
 
-    public int getRuleIndex() {
+    public int ruleIndex() {
         return ruleIndex;
     }
 
-    public List<UnitField> getFields() {
+    public List<UnitField> fields() {
         return fields;
     }
 
-    public boolean isLeftRecursive() {
+    public boolean leftRecursive() {
         return leftRecursive;
     }
 
-    public String getGrammarString() {
+    public String grammarString() {
         return grammarString;
     }
 
@@ -46,7 +46,7 @@ public class UnitRule {
         this.grammarString = s;
     }
 
-    public RuleType getRuleType() {
+    public RuleType ruleType() {
         return ruleType;
     }
 
@@ -61,11 +61,11 @@ public class UnitRule {
         }
     }
 
-    public RuleName getRuleName() {
+    public RuleName ruleName() {
         return ruleName;
     }
 
-    public boolean isContainsList() {
+    public boolean containsList() {
         return containsList;
     }
 
@@ -73,7 +73,7 @@ public class UnitRule {
         this.containsList = containsList;
     }
 
-    public boolean isContainsTokenType() {
+    public boolean containsTokenType() {
         return containsTokenType;
     }
 
