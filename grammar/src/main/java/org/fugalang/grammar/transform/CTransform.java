@@ -4,9 +4,7 @@ import org.fugalang.core.parser.RuleType;
 import org.fugalang.grammar.common.*;
 import org.fugalang.grammar.util.StringUtil;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 public class CTransform {
@@ -101,11 +99,13 @@ public class CTransform {
     }
 
     private static void addLeftRecursiveUnitRuleBody(UnitRule unit, StringBuilder sb) {
-        sb.append("    void *a = 0, *r = 0, *m = 0;\n");
+        sb.append("    void *a = 0, *r = 0, *max = 0;\n");
+        sb.append("    size_t maxpos;\n");
+
         sb.append("    if (!enter(p, &f)) goto exit;\n");
 
-        sb.append("    size_t i = f.f_pos;\n");
-        sb.append("    while(memoize(p, &f, m, i), 1) {\n");
+        sb.append("    do {\n");
+        sb.append("        memoize(p, &f, max = a, maxpos = p->pos);\n");
         sb.append("        p->pos = f.f_pos;\n");
 
         var fields = unit.fields();
@@ -117,11 +117,9 @@ public class CTransform {
         }
         sb.append(";\n");
         sb.append("""
-                        if (p->pos <= i) break;
-                        m = a, i = p->pos;
-                    }
-                    p->pos = i;
-                    r = m ? node_1(p, &f, m) : 0;
+                    } while (p->pos > maxpos);
+                    p->pos = maxpos;
+                    r = max ? node_1(p, &f, max) : 0;
                 exit:
                 """);
     }
