@@ -7,6 +7,43 @@ import org.fugalang.grammar.util.StringUtil;
 public class CTransformOld {
 
     @Deprecated
+    private static String getLoopExpr(UnitField field) {
+        var rs = field.getResultSource();
+        if (rs.kind() == SourceKind.UnitRule) {
+            // shortcut
+            var func = ((RuleName) rs.value()).symbolicName();
+            if (field.getFieldType() == FieldType.RequiredList) {
+                if (field.getDelimiter() == null) {
+                    return "sequence(p, " + func + ", 0)";
+                } else {
+                    return "delimited(p, " + field.getDelimiter().index() +
+                            ", \"" + field.getDelimiter().literalValue() +
+                            "\", " + func + ")";
+                }
+            } else if (field.getFieldType() == FieldType.OptionalList) {
+                return "sequence(p, " + func + ", 1)";
+            }
+            throw new IllegalStateException();
+        } else if (rs.kind() == SourceKind.TokenType || rs.kind() == SourceKind.TokenLiteral) {
+            var te = (TokenEntry) rs.value();
+            if (field.getFieldType() == FieldType.RequiredList) {
+                if (field.getDelimiter() == null) {
+                    return "t_sequence(p, " + te.index() + ", \"" + te.literalValue() + "\", 0)";
+                } else {
+                    var delim = field.getDelimiter();
+                    return "t_delimited(p, " + delim.index() +
+                            ", \"" + delim.literalValue() +
+                            "\", " + te.index() + ", \"" + te.literalValue() + "\")";
+                }
+            } else if (field.getFieldType() == FieldType.OptionalList) {
+                return "t_sequence(p, " + te.index() + ", \"" + te.literalValue() + "\", 1)";
+            }
+            throw new IllegalArgumentException("optional list with token not supported");
+        }
+        throw new IllegalArgumentException();
+    }
+
+    @Deprecated
     public static String getDummyCompiler(RuleSet ruleSet) {
         StringBuilder sb = new StringBuilder();
 

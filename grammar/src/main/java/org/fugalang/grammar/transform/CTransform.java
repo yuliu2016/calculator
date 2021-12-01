@@ -27,6 +27,19 @@ public class CTransform {
         sb.append("static void *")
                 .append(rn.symbolicName());
         sb.append("(FParser *);\n");
+        for (UnitField field : unit.fields()) {
+            if (field.isSingular() || field.isPredicate()) {
+                continue;
+            }
+            sb.append("static ast_list *");
+            sb.append(field.getRuleName().symbolicName());
+            if (field.getDelimiter() == null) {
+                sb.append("_loop");
+            } else {
+                sb.append("_delimited");
+            }
+            sb.append("(FParser *);\n");
+        }
     }
 
     public static String getFunctionBodies(RuleSet ruleSet) {
@@ -186,7 +199,7 @@ public class CTransform {
             case RequireFalse -> getRequiredExprPart("!" + getTestExpr(field), ruleType, isLast);
             case Required -> getRequiredExprPart(getResultExpr(field), ruleType, isLast);
             case Optional -> getOptionalExprPart(getResultExpr(field), ruleType, isLast);
-            case RequiredList, OptionalList -> getRequiredExprPart(getLoopExpr(field), ruleType, isLast);
+            case RequiredList, OptionalList -> getRequiredExprPart(getNewLoopExpr(field), ruleType, isLast);
         };
     }
 
@@ -248,40 +261,13 @@ public class CTransform {
                 "}\n";
     }
 
-    private static String getLoopExpr(UnitField field) {
-        var rs = field.getResultSource();
-        if (rs.kind() == SourceKind.UnitRule) {
-            // shortcut
-            var func = ((RuleName) rs.value()).symbolicName();
-            if (field.getFieldType() == FieldType.RequiredList) {
-                if (field.getDelimiter() == null) {
-                    return "sequence(p, " + func + ", 0)";
-                } else {
-                    return "delimited(p, " + field.getDelimiter().index() +
-                            ", \"" + field.getDelimiter().literalValue() +
-                            "\", " + func + ")";
-                }
-            } else if (field.getFieldType() == FieldType.OptionalList) {
-                return "sequence(p, " + func + ", 1)";
-            }
-            throw new IllegalStateException();
-        } else if (rs.kind() == SourceKind.TokenType || rs.kind() == SourceKind.TokenLiteral) {
-            var te = (TokenEntry) rs.value();
-            if (field.getFieldType() == FieldType.RequiredList) {
-                if (field.getDelimiter() == null) {
-                    return "t_sequence(p, " + te.index() + ", \"" + te.literalValue() + "\", 0)";
-                } else {
-                    var delim = field.getDelimiter();
-                    return "t_delimited(p, " + delim.index() +
-                            ", \"" + delim.literalValue() +
-                            "\", " + te.index() + ", \"" + te.literalValue() + "\")";
-                }
-            } else if (field.getFieldType() == FieldType.OptionalList) {
-                return "t_sequence(p, " + te.index() + ", \"" + te.literalValue() + "\", 1)";
-            }
-            throw new IllegalArgumentException("optional list with token not supported");
+    private static String getNewLoopExpr(UnitField field) {
+        var name = field.getRuleName().symbolicName();
+        if (field.getDelimiter() == null) {
+            return name + "_loop(p)";
+        } else {
+            return name + "_delimited(p)";
         }
-        throw new IllegalArgumentException();
     }
 
     private static String getOptionalExprPart(String resultExpr, RuleType ruleType, boolean isLast) {
