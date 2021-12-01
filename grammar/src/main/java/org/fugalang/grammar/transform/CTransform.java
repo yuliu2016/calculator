@@ -90,7 +90,7 @@ public class CTransform {
             sb.append("    p->ignore_whitespace = ws;\n");
         }
 
-        sb.append("    return exit(p, &f, r);\n");
+        sb.append("    return exit_frame(p, &f, r);\n");
         sb.append("}\n");
 
         for (UnitField field : unit.fields()) {
@@ -102,7 +102,7 @@ public class CTransform {
         sb.append("    void *a = 0, *r = 0, *max = 0;\n");
         sb.append("    size_t maxpos;\n");
 
-        sb.append("    if (!enter(p, &f)) goto exit;\n");
+        sb.append("    if (!enter_frame(p, &f)) goto exit;\n");
 
         sb.append("    do {\n");
         sb.append("        memoize(p, &f, max = a, maxpos = p->pos);\n");
@@ -133,19 +133,16 @@ public class CTransform {
 
         int importantCount = 0;
 
-        int impCount = unit.fields().stream()
-                .filter(CTransform::isImportantField)
-                .toList().size();
-        sb.append("    void ");
-        switch (impCount) {
-            case 0 -> sb.append("*r;\n");
-            case 1 -> sb.append("*a, *r;\n");
-            case 2 -> sb.append("*a, *b, *r;\n");
-            case 3 -> sb.append("*a, *b, *c, *r;\n");
-            case 4 -> sb.append("*a, *b, *c, *d, *r;\n");
+        int j = 0;
+        for (UnitField field : unit.fields()) {
+            if (isImportantField(field)) {
+                addFieldVarDeclaration(field, sb, j);
+                ++j;
+            }
         }
+        sb.append("    void *r;\n");
 
-        sb.append("    r = enter(p, &f) && (\n");
+        sb.append("    r = enter_frame(p, &f) && (\n");
 
         var fields = unit.fields();
         for (int i = 0; i < fields.size(); i++) {
@@ -174,9 +171,16 @@ public class CTransform {
         sb.append(" : 0;\n");
     }
 
+    private static void addFieldVarDeclaration(UnitField field, StringBuilder sb, int i) {
+        if (isImportantField(field)) {
+            sb.append("    void *").append((char)('a' + i)).append(";\n");
+        }
+    }
+
     private static void addDisjunctionBody(UnitRule unit, StringBuilder sb) {
-        sb.append("    void *a, *r;\n");
-        sb.append("    r = enter(p, &f) && (\n");
+        sb.append("    void *a;\n");
+        sb.append("    void *r;\n");
+        sb.append("    r = enter_frame(p, &f) && (\n");
         var fields = unit.fields();
         for (int i = 0; i < fields.size(); i++) {
             sb.append("        ");
