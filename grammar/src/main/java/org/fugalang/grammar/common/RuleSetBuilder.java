@@ -56,11 +56,9 @@ public class RuleSetBuilder {
 
             var ruleName = ruleNameMap.get(rule.name());
 
-            // use a root named rule to reduce files
-            UnitRule unit = ruleSet.createNamedRule(ruleName, left_recursive, args);
+            var grammarString = GrammarRepr.INSTANCE.visitRule(rule);
+            UnitRule unit = ruleSet.createNamedRule(ruleName, left_recursive, args, grammarString);
 
-            var ruleRepr = GrammarRepr.INSTANCE.visitRule(rule);
-            unit.setGrammarString(ruleRepr);
             unit.setRuleType(RuleType.Disjunction);
 
             addAltList(ruleName, unit, rule.ruleSuite().altList());
@@ -105,10 +103,9 @@ public class RuleSetBuilder {
                 } else {
                     // need to make a new unit for this, because
                     // a list can't hold multiple-ly typed objects
-                    var subUnit = ruleSet.createUnnamedSubRule(newRuleName);
+                    var grammarString = GrammarRepr.INSTANCE.visitSequence(sequence);
+                    var subUnit = ruleSet.createUnnamedSubRule(newRuleName, grammarString);
 
-                    var ruleRepr = GrammarRepr.INSTANCE.visitSequence(sequence);
-                    subUnit.setGrammarString(ruleRepr);
                     subUnit.setRuleType(RuleType.Conjunction);
 
                     var smartName = getSmartName(newRuleName, sequence);
@@ -203,26 +200,24 @@ public class RuleSetBuilder {
             // just add all the repeat rules and be done with it
             addSequence(ruleName, unit, altList.sequence(), isOptional);
         } else {
+            var grammarString = GrammarRepr.INSTANCE.visitAltList(altList);
+            var subUnit = ruleSet.createUnnamedSubRule(ruleName, grammarString);
+            subUnit.setRuleType(RuleType.Disjunction);
 
-            var component_cb = ruleSet.createUnnamedSubRule(ruleName);
-            var rule_repr = GrammarRepr.INSTANCE.visitAltList(altList);
-            component_cb.setGrammarString(rule_repr);
-            component_cb.setRuleType(RuleType.Disjunction);
-
-            var smart_name = getSmartName(ruleName, altList);
+            var smartName = getSmartName(ruleName, altList);
 
             // Add a field to the rule set
             // The reason to do this first is that if adding the rule fails,
             // this field can still show that this point was reached
             addField(ruleName,
                     unit,
-                    smart_name,
+                    smartName,
                     modifier,
                     isOptional,
                     new ResultSource(SourceKind.UnitRule, ruleName),
                     delimiter);
 
-            addAltList(ruleName, component_cb, altList);
+            addAltList(ruleName, subUnit, altList);
         }
     }
 
@@ -254,30 +249,24 @@ public class RuleSetBuilder {
             var tokenEntry = tokenMap.get(token);
             var ruleName = unit.ruleName();
 
+            String fieldName;
+            ResultSource resultSource;
+
             if (tokenEntry.isLiteral()) {
-                var fieldName = "is_" + tokenEntry.snakeCase();
-                var resultSource = new ResultSource(SourceKind.TokenLiteral, tokenEntry);
-
-                addField(ruleName,
-                        unit,
-                        fieldName,
-                        modifier,
-                        isOptional,
-                        resultSource,
-                        delimiter);
+                fieldName = "is_" + tokenEntry.snakeCase();
+                resultSource = new ResultSource(SourceKind.TokenLiteral, tokenEntry);
             } else {
-                var fieldName = tokenEntry.snakeCase();
-                unit.setContainsTokenType(true);
-                var resultSource = new ResultSource(SourceKind.TokenType, tokenEntry);
-
-                addField(ruleName,
-                        unit,
-                        fieldName,
-                        modifier,
-                        isOptional,
-                        resultSource,
-                        delimiter);
+                fieldName = tokenEntry.snakeCase();
+                resultSource = new ResultSource(SourceKind.TokenType, tokenEntry);
             }
+
+            addField(ruleName,
+                    unit,
+                    fieldName,
+                    modifier,
+                    isOptional,
+                    resultSource,
+                    delimiter);
         }
     }
 
@@ -305,13 +294,11 @@ public class RuleSetBuilder {
                 fieldType = FieldType.RequireFalse;
             }
             case OnceOrMore -> {
-                unit.setContainsList(true);
                 newRuleName = ruleName.asSequence();
                 newFieldName = StringUtil.pluralize(fieldName);
                 fieldType = FieldType.RequiredList;
             }
             case NoneOrMore -> {
-                unit.setContainsList(true);
                 newRuleName = ruleName.asSequence();
                 newFieldName = StringUtil.pluralize(fieldName);
                 fieldType = FieldType.OptionalList;

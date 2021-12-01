@@ -12,18 +12,22 @@ public class UnitRule {
     private final RuleName ruleName;
     private final boolean leftRecursive;
 
-    private boolean containsList;
-    private boolean containsTokenType;
     private RuleType ruleType;
-    private String grammarString = null;
+    private final String grammarString;
 
     private final List<UnitField> fields = new ArrayList<>();
     private final Map<String, Integer> fieldNameCounter = new HashMap<>();
 
-    public UnitRule(int ruleIndex, RuleName ruleName, boolean leftRecursive) {
+    public UnitRule(
+            int ruleIndex,
+            RuleName ruleName,
+            boolean leftRecursive,
+            String grammarString
+    ) {
         this.ruleIndex = ruleIndex;
         this.ruleName = ruleName;
         this.leftRecursive = leftRecursive;
+        this.grammarString = grammarString;
     }
 
     public int ruleIndex() {
@@ -40,10 +44,6 @@ public class UnitRule {
 
     public String grammarString() {
         return grammarString;
-    }
-
-    public void setGrammarString(String s) {
-        this.grammarString = s;
     }
 
     public RuleType ruleType() {
@@ -63,22 +63,6 @@ public class UnitRule {
 
     public RuleName ruleName() {
         return ruleName;
-    }
-
-    public boolean containsList() {
-        return containsList;
-    }
-
-    public void setContainsList(boolean containsList) {
-        this.containsList = containsList;
-    }
-
-    public boolean containsTokenType() {
-        return containsTokenType;
-    }
-
-    public void setContainsTokenType(boolean containsTokenType) {
-        this.containsTokenType = containsTokenType;
     }
 
     public void addField(UnitField field) {

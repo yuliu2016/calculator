@@ -27,7 +27,8 @@ public class RuleSet {
     public UnitRule createNamedRule(
             RuleName ruleName,
             boolean leftRecursive,
-            Map<String, String> args
+            Map<String, String> args,
+            String grammarString
     ) {
         var dupError = false;
         for (var namedRule : namedRules) {
@@ -41,7 +42,8 @@ public class RuleSet {
             throw new IllegalStateException("Duplicate named rule: " + ruleName);
         }
 
-        var unit = new UnitRule(++ruleIndexCounter, ruleName, leftRecursive);
+        var unit = new UnitRule(++ruleIndexCounter,
+                ruleName, leftRecursive, grammarString);
 
         currentRule = new NamedRule(unit, args);
         namedRules.add(currentRule);
@@ -57,7 +59,7 @@ public class RuleSet {
         currentRule = null;
     }
 
-    public UnitRule createUnnamedSubRule(RuleName ruleName) {
+    public UnitRule createUnnamedSubRule(RuleName ruleName, String grammarString) {
         if (currentRule == null) {
             throw new IllegalStateException("No named rule to add to");
         }
@@ -76,7 +78,7 @@ public class RuleSet {
             throw new IllegalStateException("Duplicate inner rule: " + ruleName);
         }
 
-        var unit = new UnitRule(++ruleIndexCounter, ruleName, false);
+        var unit = new UnitRule(++ruleIndexCounter, ruleName, false, grammarString);
 
         current.getComponents().add(unit);
 
