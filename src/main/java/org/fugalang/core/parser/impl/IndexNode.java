@@ -5,7 +5,13 @@ import org.fugalang.core.parser.*;
 import java.util.Collections;
 import java.util.List;
 
-class IndexNode implements ParseTreeNode {
+record IndexNode(
+        List<ParseTreeNode> children,
+        boolean isPresent,
+        boolean isCollection,
+        ParserRule rule,
+        ParserElement element
+) implements ParseTreeNode {
 
     static final ParseTreeNode NULL = new IndexNode(null, false,
             false, null, null);
@@ -29,25 +35,6 @@ class IndexNode implements ParseTreeNode {
                 false, null, element);
     }
 
-    private final List<ParseTreeNode> children;
-
-    private final boolean isPresent;
-    private final boolean isCollection;
-    private final ParserRule rule;
-    private final ParserElement element;
-
-    public IndexNode(List<ParseTreeNode> children,
-                     boolean isPresent,
-                     boolean isCollection,
-                     ParserRule rule,
-                     ParserElement element) {
-        this.children = children;
-        this.isPresent = isPresent;
-        this.isCollection = isCollection;
-        this.rule = rule;
-        this.element = element;
-    }
-
     @Override
     public ParseTreeNode getItem(int index) {
         // Fixes the OR problem
@@ -55,11 +42,6 @@ class IndexNode implements ParseTreeNode {
             return NULL;
         }
         return children.get(index);
-    }
-
-    @Override
-    public boolean isPresent() {
-        return isPresent;
     }
 
     @Override
