@@ -71,9 +71,26 @@ public interface MetaVisitor<T> {
 
     /**
      * sequence:
-     * *   | primary+
+     * *   | primary+ [result_clause]
      */
     default T visitSequence(Sequence sequence) {
+        return null;
+    }
+
+    /**
+     * result_clause:
+     * *   | '{' result_expr '}'
+     */
+    default T visitResultClause(ResultClause resultClause) {
+        return null;
+    }
+
+    /**
+     * result_expr:
+     * *   | NAME
+     * *   | STRING
+     */
+    default T visitResultExpr(ResultExpr resultExpr) {
         return null;
     }
 

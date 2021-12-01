@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * sequence:
- * *   | primary+
+ * *   | primary+ [result_clause]
  */
 public final class Sequence extends NodeWrapper {
 
@@ -17,5 +17,13 @@ public final class Sequence extends NodeWrapper {
 
     public List<Primary> primaries() {
         return getList(0, Primary::new);
+    }
+
+    public ResultClause resultClause() {
+        return new ResultClause(get(1));
+    }
+
+    public boolean hasResultClause() {
+        return has(1);
     }
 }

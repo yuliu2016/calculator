@@ -174,13 +174,14 @@ public class MetaParser {
 
     /**
      * sequence:
-     * *   | primary+
+     * *   | primary+ [result_clause]
      */
     public static boolean sequence(ParseTree t) {
         var m = t.enter(SEQUENCE);
         if (m != null) return m;
         boolean r;
         r = primary_loop(t);
+        if (r) result_clause(t);
         t.exit(r);
         return r;
     }
@@ -192,6 +193,36 @@ public class MetaParser {
             if (!primary(t)) break;
         }
         t.exitLoop();
+        return r;
+    }
+
+    /**
+     * result_clause:
+     * *   | '{' result_expr '}'
+     */
+    public static boolean result_clause(ParseTree t) {
+        var m = t.enter(RESULT_CLAUSE);
+        if (m != null) return m;
+        boolean r;
+        r = t.consume("{");
+        r = r && result_expr(t);
+        r = r && t.consume("}");
+        t.exit(r);
+        return r;
+    }
+
+    /**
+     * result_expr:
+     * *   | NAME
+     * *   | STRING
+     */
+    public static boolean result_expr(ParseTree t) {
+        var m = t.enter(RESULT_EXPR);
+        if (m != null) return m;
+        boolean r;
+        r = t.consume(TokenType.NAME);
+        r = r || t.consume(TokenType.STRING);
+        t.exit(r);
         return r;
     }
 
