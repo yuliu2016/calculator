@@ -99,10 +99,13 @@ public class CTransform {
     }
 
     private static void addLeftRecursiveUnitRuleBody(UnitRule unit, StringBuilder sb) {
-        sb.append("    void *a = 0, *r = 0, *max = 0;\n");
+        sb.append("    if (!enter_frame(p, &f)) {\n        return exit_frame(p, &f, 0);\n    }\n");
+
+        sb.append("    void *a = 0;\n");
+        sb.append("    void *r = 0;\n");
+        sb.append("    void *max = 0;\n");
         sb.append("    size_t maxpos;\n");
 
-        sb.append("    if (!enter_frame(p, &f)) goto exit;\n");
 
         sb.append("    do {\n");
         sb.append("        memoize(p, &f, max = a, maxpos = p->pos);\n");
@@ -120,7 +123,6 @@ public class CTransform {
                     } while (p->pos > maxpos);
                     p->pos = maxpos;
                     r = max ? node_1(p, &f, max) : 0;
-                exit:
                 """);
     }
 
