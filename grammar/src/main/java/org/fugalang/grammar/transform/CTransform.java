@@ -29,7 +29,7 @@ public class CTransform {
             if (field.isSingular() || field.isPredicate()) {
                 continue;
             }
-            sb.append("static ast_list *");
+            sb.append("static ast_list_t *");
             sb.append(field.getRuleName().symbolicName());
             if (field.getDelimiter() == null) {
                 sb.append("_loop");
@@ -173,12 +173,16 @@ public class CTransform {
 
     private static void addFieldVarDeclaration(UnitField field, StringBuilder sb, int i) {
         if (isImportantField(field)) {
-            var kind = field.getResultSource().kind();
-            String type = switch (kind) {
-                case TokenLiteral, TokenType -> "token_t";
-                default -> "void";
-            };
-            sb.append("    ").append(type).append(" *").append((char) ('a' + i)).append(";\n");
+            String type;
+            if (field.isSingular() || field.isPredicate()) {
+                var kind = field.getResultSource().kind();
+                type = switch (kind) {
+                    case TokenLiteral, TokenType -> "token_t";
+                    default -> "void";
+                };
+            } else type = "ast_list_t";
+            char letter = (char) ('a' + i);
+            sb.append("    ").append(type).append(" *").append(letter).append(";\n");
         }
     }
 
@@ -223,8 +227,8 @@ public class CTransform {
 
         TokenEntry delimiter = field.getDelimiter();
         if (delimiter == null) {
-            return "\nstatic ast_list *" + rule_name + "_loop(parser_t *p) {\n" +
-                    "    ast_list *s;\n" +
+            return "\nstatic ast_list_t *" + rule_name + "_loop(parser_t *p) {\n" +
+                    "    ast_list_t *s;\n" +
                     "    void *a = " + resultExpr + ";\n" +
                     "    if (!a) return 0;\n" +
                     "    s = ast_list_new(p);\n" +
@@ -235,8 +239,8 @@ public class CTransform {
                     "}\n";
         } else {
             var delimExpr = "consume(p, " + delimiter.index() + ", \"" + delimiter.literalValue() + "\")";
-            return "\nstatic ast_list *" + rule_name + "_delimited(parser_t *p) {\n" +
-                    "    ast_list *s;\n" +
+            return "\nstatic ast_list_t *" + rule_name + "_delimited(parser_t *p) {\n" +
+                    "    ast_list_t *s;\n" +
                     "    void *a = " + resultExpr + ";\n" +
                     "    if (!a) return 0;\n" +
                     "    s = ast_list_new(p);\n" +
@@ -256,8 +260,8 @@ public class CTransform {
         var resultExpr = getResultExpr(field);
         var rule_name = field.getRuleName().symbolicName();
 
-        return "\nstatic ast_list *" + rule_name + "_loop(parser_t *p) {\n" +
-                "    ast_list *s = ast_list_new(p);\n" +
+        return "\nstatic ast_list_t *" + rule_name + "_loop(parser_t *p) {\n" +
+                "    ast_list_t *s = ast_list_new(p);\n" +
                 "    void *a;\n" +
                 "    while ((a = " + resultExpr + ")) {\n" +
                 "        ast_list_append(p, s, a);\n" +
