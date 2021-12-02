@@ -109,13 +109,14 @@ public class RuleSetBuilder {
                     subUnit.setRuleType(RuleType.Conjunction);
 
                     var smartName = getSmartName(newRuleName, sequence);
+                    var fieldName = FieldName.of(smartName);
 
                     // Add a field to the rule set
                     // The reason to do this first is that if adding the rule fails,
                     // this field can still show that this point was reached
                     addField(newRuleName,
                             unit,
-                            smartName,
+                            fieldName,
                             Modifier.Once,
                             REQUIRED,
                             new ResultSource(SourceKind.UnitRule, newRuleName),
@@ -205,13 +206,14 @@ public class RuleSetBuilder {
             subUnit.setRuleType(RuleType.Disjunction);
 
             var smartName = getSmartName(ruleName, altList);
+            var fieldName = FieldName.of(smartName);
 
             // Add a field to the rule set
             // The reason to do this first is that if adding the rule fails,
             // this field can still show that this point was reached
             addField(ruleName,
                     unit,
-                    smartName,
+                    fieldName,
                     modifier,
                     isOptional,
                     new ResultSource(SourceKind.UnitRule, ruleName),
@@ -236,7 +238,7 @@ public class RuleSetBuilder {
             // fix - need to add repeat rules here
             addField(ruleName,
                     unit,
-                    ruleName.snakeCase(),
+                    FieldName.of(ruleName.snakeCase()),
                     modifier,
                     isOptional,
                     new ResultSource(SourceKind.UnitRule, ruleName),
@@ -262,7 +264,7 @@ public class RuleSetBuilder {
 
             addField(ruleName,
                     unit,
-                    fieldName,
+                    FieldName.of(fieldName),
                     modifier,
                     isOptional,
                     resultSource,
@@ -273,14 +275,14 @@ public class RuleSetBuilder {
     private void addField(
             RuleName ruleName,
             UnitRule unit,
-            String fieldName,
+            FieldName fieldName,
             Modifier modifier,
             boolean isOptional,
             ResultSource resultSource,
             TokenEntry delimiter
     ) {
         RuleName newRuleName;
-        String newFieldName;
+        FieldName newFieldName;
         FieldType fieldType;
         switch (modifier) {
             case TestTrue -> {
@@ -295,12 +297,12 @@ public class RuleSetBuilder {
             }
             case OnceOrMore -> {
                 newRuleName = ruleName.asSequence();
-                newFieldName = StringUtil.pluralize(fieldName);
+                newFieldName = fieldName.pluralize();
                 fieldType = FieldType.RequiredList;
             }
             case NoneOrMore -> {
                 newRuleName = ruleName.asSequence();
-                newFieldName = StringUtil.pluralize(fieldName);
+                newFieldName = fieldName.pluralize();
                 fieldType = FieldType.OptionalList;
             }
             case Once -> {

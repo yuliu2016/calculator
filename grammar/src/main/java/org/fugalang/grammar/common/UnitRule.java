@@ -71,16 +71,22 @@ public class UnitRule {
         // field name conflict resolution
         // eg. rule: subrule subrule would be made into
         // subrule and subrule1, respectively
-        if (fieldNameCounter.containsKey(fieldName)) {
-            int cnt = fieldNameCounter.get(fieldName) + 1;
-            fieldNameCounter.put(fieldName, cnt);
+        String name = fieldName.pluralized();
+        if (fieldNameCounter.containsKey(name)) {
+            int cnt = fieldNameCounter.get(name) + 1;
+            fieldNameCounter.put(name, cnt);
 
             // modify the field name with the field count
-            field.setFieldSuffix(cnt);
+            fields.add(new UnitField(
+                    field.ruleName(),
+                    field.fieldName().withSuffix(cnt),
+                    field.fieldType(),
+                    field.resultSource(),
+                    field.delimiter()
+            ));
         } else {
-            fieldNameCounter.put(fieldName, 0);
+            fieldNameCounter.put(name, 0);
+            fields.add(field);
         }
-
-        fields.add(field);
     }
 }

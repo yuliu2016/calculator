@@ -398,7 +398,7 @@ public class JTransform {
         if (body == null) {
             return null;
         }
-        var f = StringUtil.decap(StringUtil.convertCase(field.properFieldName()));
+        var f = StringUtil.decap(field.fieldName().fullCamelCase());
         return "\n    public " + getFieldTypeName(field) + " " + f + "() {\n" +
                 body +
                 "    }\n";
@@ -460,7 +460,7 @@ public class JTransform {
         if (body == null) {
             return null;
         }
-        var f = StringUtil.convertCase(field.properFieldName());
+        var f = field.fieldName().fullCamelCase();
         return "\n    public boolean has" + f +
                 "() {\n" + body + "    }\n";
     }

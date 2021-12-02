@@ -198,7 +198,7 @@ public class CTransform {
                     unit.ruleType(), i == fields.size() - 1);
             sb.append(result);
         }
-        sb.append("\n    ) ? node_1(p, &f, a) : 0;\n");
+        sb.append("\n    ) ? a : 0;\n");
     }
 
     private static String getParserFieldExpr(
