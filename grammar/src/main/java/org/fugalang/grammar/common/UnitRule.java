@@ -66,7 +66,7 @@ public class UnitRule {
     }
 
     public void addField(UnitField field) {
-        var fieldName = field.getFieldName();
+        var fieldName = field.fieldName();
 
         // field name conflict resolution
         // eg. rule: subrule subrule would be made into

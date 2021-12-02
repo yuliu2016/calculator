@@ -123,7 +123,7 @@ public class JTransform {
 
     private static String getParserFieldStatement(UnitField field, UnitRule rule, boolean isFirst) {
         var ruleType = rule.ruleType();
-        return switch (field.getFieldType()) {
+        return switch (field.fieldType()) {
             case RequireTrue -> getRequiredStmt(getResultExpr(field, true), ruleType, isFirst);
             case RequireFalse -> getRequiredStmt("!" + getResultExpr(field, true), ruleType, isFirst);
             case Required -> getRequiredStmt(getResultExpr(field, false), ruleType, isFirst);
@@ -134,7 +134,7 @@ public class JTransform {
     }
 
     private static String getLoopExpr(UnitField field) {
-        var rule_name = field.getRuleName().symbolicName();
+        var rule_name = field.ruleName().symbolicName();
         return rule_name + "_loop(t)";
     }
 
@@ -154,7 +154,7 @@ public class JTransform {
 
     private static String getResultExpr(UnitField field, boolean isPredicate) {
         var parseTreeInst = isPredicate ? "t.test()" : "t";
-        var resultSource = field.getResultSource();
+        var resultSource = field.resultSource();
         return switch (resultSource.kind()) {
             case UnitRule -> ((RuleName) resultSource.value()).symbolicName() +
                     "(" + parseTreeInst + ")";
@@ -169,17 +169,17 @@ public class JTransform {
         if (field.isSingular() || field.isPredicate()) {
             return null;
         }
-        return field.getFieldType() == FieldType.RequiredList ?
+        return field.fieldType() == FieldType.RequiredList ?
                 getRequiredLoopParser(field) : getOptionalLoopParser(field);
     }
 
 
     private static String getRequiredLoopParser(UnitField field) {
         var resultExpr = getResultExpr(field, false);
-        var rule_name = field.getRuleName().symbolicName();
+        var rule_name = field.ruleName().symbolicName();
 
         String whileBody;
-        TokenEntry delimiter = field.getDelimiter();
+        TokenEntry delimiter = field.delimiter();
         if (delimiter == null) {
             whileBody = "            if (!" + resultExpr + ") break;\n";
         } else {
@@ -203,7 +203,7 @@ public class JTransform {
 
     private static String getOptionalLoopParser(UnitField field) {
         var resultExpr = getResultExpr(field, false);
-        var rule_name = field.getRuleName().symbolicName();
+        var rule_name = field.ruleName().symbolicName();
         return "\n    private static void " + rule_name + "_loop(ParseTree t) {\n" +
                 "        t.enterLoop();\n" +
                 "        while (true) {\n" +
@@ -319,11 +319,11 @@ public class JTransform {
         Set<String> set = new HashSet<>();
         set.add("org.fugalang.core.parser.NodeWrapper");
         set.add("org.fugalang.core.parser.ParseTreeNode");
-        if (rule.fields().stream().anyMatch(f -> f.getResultSource().kind() == SourceKind.TokenType)) {
+        if (rule.fields().stream().anyMatch(f -> f.resultSource().kind() == SourceKind.TokenType)) {
             set.add("org.fugalang.core.token.TokenType");
         }
         if (rule.fields().stream().anyMatch(f ->
-                f.getFieldType() == RequiredList || f.getFieldType() == OptionalList)) {
+                f.fieldType() == RequiredList || f.fieldType() == OptionalList)) {
             set.add("java.util.List");
         }
         return set;
@@ -398,7 +398,7 @@ public class JTransform {
         if (body == null) {
             return null;
         }
-        var f = StringUtil.decap(StringUtil.convertCase(field.getProperFieldName()));
+        var f = StringUtil.decap(StringUtil.convertCase(field.properFieldName()));
         return "\n    public " + getFieldTypeName(field) + " " + f + "() {\n" +
                 body +
                 "    }\n";
@@ -406,15 +406,15 @@ public class JTransform {
 
     private static String getFieldTypeName(UnitField field) {
         String source;
-        if (field.getFieldType() == RequiredList || field.getFieldType() == OptionalList) {
-            source = "List<" + switch (field.getResultSource().kind()) {
-                case UnitRule -> field.getRuleName().pascalCase();
+        if (field.fieldType() == RequiredList || field.fieldType() == OptionalList) {
+            source = "List<" + switch (field.resultSource().kind()) {
+                case UnitRule -> field.ruleName().pascalCase();
                 case TokenType -> "String";
                 case TokenLiteral -> "Boolean";
             } + ">";
         } else {
-            source = switch (field.getResultSource().kind()) {
-                case UnitRule -> field.getRuleName().pascalCase();
+            source = switch (field.resultSource().kind()) {
+                case UnitRule -> field.ruleName().pascalCase();
                 case TokenType -> "String";
                 case TokenLiteral -> "boolean";
             };
@@ -426,10 +426,10 @@ public class JTransform {
         if (field.isPredicate()) {
             return null;
         }
-        var resultSource = field.getResultSource();
+        var resultSource = field.resultSource();
         switch (resultSource.kind()) {
             case UnitRule -> {
-                var className = field.getRuleName();
+                var className = field.ruleName();
                 if (field.isSingular()) {
                     return "        return new " + className.pascalCase() + "(get(" + index + "));\n";
                 }
@@ -443,7 +443,7 @@ public class JTransform {
                 return "        return getList(" + index + ", ParseTreeNode::asString);\n";
             }
             case TokenLiteral -> {
-                if (ruleType == RuleType.Conjunction && field.getFieldType() == Required) {
+                if (ruleType == RuleType.Conjunction && field.fieldType() == Required) {
                     return null;
                 }
                 if (field.isSingular()) {
@@ -460,17 +460,17 @@ public class JTransform {
         if (body == null) {
             return null;
         }
-        var f = StringUtil.convertCase(field.getProperFieldName());
+        var f = StringUtil.convertCase(field.properFieldName());
         return "\n    public boolean has" + f +
                 "() {\n" + body + "    }\n";
     }
 
     private static String absentCheckBody(UnitField field, RuleType ruleType, int index) {
-        var resultSource = field.getResultSource();
+        var resultSource = field.resultSource();
         switch (resultSource.kind()) {
             case UnitRule:
             case TokenType:
-                if (ruleType == RuleType.Conjunction && field.getFieldType() == Required) {
+                if (ruleType == RuleType.Conjunction && field.fieldType() == Required) {
                     return null;
                 }
                 if (field.isSingular()) {

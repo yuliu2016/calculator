@@ -30,8 +30,8 @@ public class CTransform {
                 continue;
             }
             sb.append("static ast_list_t *");
-            sb.append(field.getRuleName().symbolicName());
-            if (field.getDelimiter() == null) {
+            sb.append(field.ruleName().symbolicName());
+            if (field.delimiter() == null) {
                 sb.append("_loop");
             } else {
                 sb.append("_delimited");
@@ -125,7 +125,7 @@ public class CTransform {
     }
 
     private static boolean isImportantField(UnitField field) {
-        return !(field.isPredicate() || (field.getResultSource().kind()
+        return !(field.isPredicate() || (field.resultSource().kind()
                 == SourceKind.TokenLiteral && field.isRequired()));
     }
 
@@ -175,7 +175,7 @@ public class CTransform {
         if (isImportantField(field)) {
             String type;
             if (field.isSingular() || field.isPredicate()) {
-                var kind = field.getResultSource().kind();
+                var kind = field.resultSource().kind();
                 type = switch (kind) {
                     case TokenLiteral, TokenType -> "token_t";
                     default -> "void";
@@ -203,7 +203,7 @@ public class CTransform {
 
     private static String getParserFieldExpr(
             UnitField field, RuleType ruleType, boolean isLast) {
-        return switch (field.getFieldType()) {
+        return switch (field.fieldType()) {
             case RequireTrue -> getRequiredExprPart(getTestExpr(field), ruleType, isLast);
             case RequireFalse -> getRequiredExprPart("!" + getTestExpr(field), ruleType, isLast);
             case Required -> getRequiredExprPart(getResultExpr(field), ruleType, isLast);
@@ -216,18 +216,18 @@ public class CTransform {
         if (field.isSingular() || field.isPredicate()) {
             return;
         }
-        String s = field.getFieldType() == FieldType.RequiredList ?
+        String s = field.fieldType() == FieldType.RequiredList ?
                 getRequiredLoopParser(field) : getOptionalLoopParser(field);
         sb.append(s);
     }
 
     private static String getRequiredLoopParser(UnitField field) {
         var resultExpr = getResultExpr(field);
-        var rule_name = field.getRuleName().symbolicName();
+        var ruleName = field.ruleName().symbolicName();
 
-        TokenEntry delimiter = field.getDelimiter();
+        TokenEntry delimiter = field.delimiter();
         if (delimiter == null) {
-            return "\nstatic ast_list_t *" + rule_name + "_loop(parser_t *p) {\n" +
+            return "\nstatic ast_list_t *" + ruleName + "_loop(parser_t *p) {\n" +
                     "    ast_list_t *s;\n" +
                     "    void *a = " + resultExpr + ";\n" +
                     "    if (!a) return 0;\n" +
@@ -239,7 +239,7 @@ public class CTransform {
                     "}\n";
         } else {
             var delimExpr = "consume(p, " + delimiter.index() + ", \"" + delimiter.literalValue() + "\")";
-            return "\nstatic ast_list_t *" + rule_name + "_delimited(parser_t *p) {\n" +
+            return "\nstatic ast_list_t *" + ruleName + "_delimited(parser_t *p) {\n" +
                     "    ast_list_t *s;\n" +
                     "    void *a = " + resultExpr + ";\n" +
                     "    if (!a) return 0;\n" +
@@ -258,7 +258,7 @@ public class CTransform {
 
     private static String getOptionalLoopParser(UnitField field) {
         var resultExpr = getResultExpr(field);
-        var rule_name = field.getRuleName().symbolicName();
+        var rule_name = field.ruleName().symbolicName();
 
         return "\nstatic ast_list_t *" + rule_name + "_loop(parser_t *p) {\n" +
                 "    ast_list_t *s = ast_list_new(p);\n" +
@@ -271,8 +271,8 @@ public class CTransform {
     }
 
     private static String getNewLoopExpr(UnitField field) {
-        var name = field.getRuleName().symbolicName();
-        if (field.getDelimiter() == null) {
+        var name = field.ruleName().symbolicName();
+        if (field.delimiter() == null) {
             return name + "_loop(p)";
         } else {
             return name + "_delimited(p)";
@@ -294,7 +294,7 @@ public class CTransform {
     }
 
     private static String getResultExpr(UnitField field) {
-        var rs = field.getResultSource();
+        var rs = field.resultSource();
         if (rs.kind() == SourceKind.UnitRule) {
             return ((RuleName) rs.value()).symbolicName() + "(p)";
         } else if (rs.kind() == SourceKind.TokenType || rs.kind() == SourceKind.TokenLiteral) {

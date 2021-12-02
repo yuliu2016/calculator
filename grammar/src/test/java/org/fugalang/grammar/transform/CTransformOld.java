@@ -8,34 +8,34 @@ public class CTransformOld {
 
     @Deprecated
     private static String getLoopExpr(UnitField field) {
-        var rs = field.getResultSource();
+        var rs = field.resultSource();
         if (rs.kind() == SourceKind.UnitRule) {
             // shortcut
             var func = ((RuleName) rs.value()).symbolicName();
-            if (field.getFieldType() == FieldType.RequiredList) {
-                if (field.getDelimiter() == null) {
+            if (field.fieldType() == FieldType.RequiredList) {
+                if (field.delimiter() == null) {
                     return "sequence(p, " + func + ", 0)";
                 } else {
-                    return "delimited(p, " + field.getDelimiter().index() +
-                            ", \"" + field.getDelimiter().literalValue() +
+                    return "delimited(p, " + field.delimiter().index() +
+                            ", \"" + field.delimiter().literalValue() +
                             "\", " + func + ")";
                 }
-            } else if (field.getFieldType() == FieldType.OptionalList) {
+            } else if (field.fieldType() == FieldType.OptionalList) {
                 return "sequence(p, " + func + ", 1)";
             }
             throw new IllegalStateException();
         } else if (rs.kind() == SourceKind.TokenType || rs.kind() == SourceKind.TokenLiteral) {
             var te = (TokenEntry) rs.value();
-            if (field.getFieldType() == FieldType.RequiredList) {
-                if (field.getDelimiter() == null) {
+            if (field.fieldType() == FieldType.RequiredList) {
+                if (field.delimiter() == null) {
                     return "t_sequence(p, " + te.index() + ", \"" + te.literalValue() + "\", 0)";
                 } else {
-                    var delim = field.getDelimiter();
+                    var delim = field.delimiter();
                     return "t_delimited(p, " + delim.index() +
                             ", \"" + delim.literalValue() +
                             "\", " + te.index() + ", \"" + te.literalValue() + "\")";
                 }
-            } else if (field.getFieldType() == FieldType.OptionalList) {
+            } else if (field.fieldType() == FieldType.OptionalList) {
                 return "t_sequence(p, " + te.index() + ", \"" + te.literalValue() + "\", 1)";
             }
             throw new IllegalArgumentException("optional list with token not supported");
@@ -87,15 +87,15 @@ public class CTransformOld {
         sb.append("    FAstNode *o = n->ast_v.fields[0];\n");
 
         for (UnitField field : unit.fields()) {
-            if (field.getResultSource().kind() == SourceKind.UnitRule) {
-                var rn = (RuleName) field.getResultSource().value();
+            if (field.resultSource().kind() == SourceKind.UnitRule) {
+                var rn = (RuleName) field.resultSource().value();
                 sb.append("    if (R_CHECK(n, R_").append(rn.symbolicName().toUpperCase())
                         .append(")) {\n")
                         .append("        dummy_").append(rn.symbolicName())
                         .append("(o);\n        return;\n")
                         .append("    }\n");
             } else {
-                var te = (TokenEntry) field.getResultSource().value();
+                var te = (TokenEntry) field.resultSource().value();
                 sb.append("    if (T_CHECK(n, ")
                         .append("T_").append(te.snakeCase().toUpperCase())
                         .append(")) {\n        return;\n    }\n");
@@ -111,16 +111,16 @@ public class CTransformOld {
                 .append("(n)\n");
         for (UnitField field : unit.fields()) {
             if (isImportantField(field) &&
-                    field.getResultSource().kind() == SourceKind.UnitRule) {
-                var rn = (RuleName) field.getResultSource().value();
+                    field.resultSource().kind() == SourceKind.UnitRule) {
+                var rn = (RuleName) field.resultSource().value();
                 sb.append("    dummy_").append(rn.symbolicName())
-                        .append("(").append(field.getProperFieldName()).append(");\n");
+                        .append("(").append(field.properFieldName()).append(");\n");
             }
         }
     }
 
     private static boolean isImportantField(UnitField field) {
-        return !(field.isPredicate() || (field.getResultSource().kind()
+        return !(field.isPredicate() || (field.resultSource().kind()
                 == SourceKind.TokenLiteral && field.isRequired()));
     }
 
@@ -158,13 +158,13 @@ public class CTransformOld {
         int i = 0;
         for (UnitField field : unit.fields()) {
             if (isImportantField(field)) {
-                if (field.getResultSource().kind() == SourceKind.UnitRule) {
+                if (field.resultSource().kind() == SourceKind.UnitRule) {
                     sb.append("    FVAR(");
                 } else {
                     sb.append("    TVAR(");
                 }
 
-                sb.append(field.getProperFieldName()).append(", n, ").append(i).append(")");
+                sb.append(field.properFieldName()).append(", n, ").append(i).append(")");
                 sb.append("; \\\n");
                 i++;
             }

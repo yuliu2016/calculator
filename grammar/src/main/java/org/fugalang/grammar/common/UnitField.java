@@ -28,31 +28,31 @@ public class UnitField {
         this.delimiter = delimiter;
     }
 
-    public RuleName getRuleName() {
+    public RuleName ruleName() {
         return ruleName;
     }
 
-    public String getFieldName() {
+    public String fieldName() {
         return fieldName;
     }
 
-    public FieldType getFieldType() {
+    public FieldType fieldType() {
         return fieldType;
     }
 
-    public ResultSource getResultSource() {
+    public ResultSource resultSource() {
         return resultSource;
     }
 
-    public TokenEntry getDelimiter() {
+    public TokenEntry delimiter() {
         return delimiter;
     }
 
-    public String getProperFieldName() {
+    public String properFieldName() {
         if (fieldSuffix != -1) {
-            return getFieldName() + "_" + fieldSuffix;
+            return fieldName() + "_" + fieldSuffix;
         }
-        return getFieldName();
+        return fieldName();
     }
 
     public void setFieldSuffix(int fieldSuffix) {
