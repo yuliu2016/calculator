@@ -227,33 +227,38 @@ public class CTransform {
         var resultExpr = getResultExpr(field);
         var ruleName = field.ruleName().symbolicName();
 
+        var listName = "list";
+        var fname = "_" + field.fieldName().snakeCase();
+
         TokenEntry delimiter = field.delimiter();
         if (delimiter == null) {
             return "\nstatic ast_list_t *" + ruleName + "_loop(parser_t *p) {\n" +
-                    "    ast_list_t *s;\n" +
-                    "    void *a = " + resultExpr + ";\n" +
-                    "    if (!a) return 0;\n" +
-                    "    s = ast_list_new(p);\n" +
+                    "    void *" + fname + " = " + resultExpr + ";\n" +
+                    "    if (!" + fname + ") {\n" +
+                    "        return 0;\n" +
+                    "    }\n" +
+                    "    ast_list_t *" + listName + " = ast_list_new(p);\n" +
                     "    do {\n" +
-                    "        ast_list_append(p, s, a);\n" +
-                    "    } while ((a = " + resultExpr + "));\n" +
-                    "    return s;\n" +
+                    "        ast_list_append(p, " + listName + ", " + fname + ");\n" +
+                    "    } while ((" + fname + " = " + resultExpr + "));\n" +
+                    "    return " + listName + ";\n" +
                     "}\n";
         } else {
             var delimExpr = "consume(p, " + delimiter.index() + ", \"" + delimiter.literalValue() + "\")";
             return "\nstatic ast_list_t *" + ruleName + "_delimited(parser_t *p) {\n" +
-                    "    ast_list_t *s;\n" +
-                    "    void *a = " + resultExpr + ";\n" +
-                    "    if (!a) return 0;\n" +
-                    "    s = ast_list_new(p);\n" +
+                    "    void *" + fname + " = " + resultExpr + ";\n" +
+                    "    if (!" + fname + ") {\n" +
+                    "        return 0;\n" +
+                    "    }\n" +
+                    "    ast_list_t *" + listName + " = ast_list_new(p);\n" +
                     "    size_t pos;\n" +
                     "    do {\n" +
-                    "        ast_list_append(p, s, a);\n" +
+                    "        ast_list_append(p, " + listName + ", " + fname + ");\n" +
                     "        pos = p->pos;\n" +
                     "    } while (" + delimExpr + " &&\n" +
-                    "            (a = " + resultExpr + "));\n" +
+                    "            (" + fname + " = " + resultExpr + "));\n" +
                     "    p->pos = pos;\n" +
-                    "    return s;\n" +
+                    "    return " + listName + ";\n" +
                     "}\n";
         }
     }
@@ -262,13 +267,16 @@ public class CTransform {
         var resultExpr = getResultExpr(field);
         var rule_name = field.ruleName().symbolicName();
 
+        var listName = "list";
+        var fname = "_" + field.fieldName().snakeCase();
+
         return "\nstatic ast_list_t *" + rule_name + "_loop(parser_t *p) {\n" +
-                "    ast_list_t *s = ast_list_new(p);\n" +
-                "    void *a;\n" +
-                "    while ((a = " + resultExpr + ")) {\n" +
-                "        ast_list_append(p, s, a);\n" +
+                "    ast_list_t *" + listName + " = ast_list_new(p);\n" +
+                "    void *" + fname + ";\n" +
+                "    while ((" + fname + " = " + resultExpr + ")) {\n" +
+                "        ast_list_append(p, " + listName + ", " + fname + ");\n" +
                 "    }\n" +
-                "    return s;\n" +
+                "    return " + listName + ";\n" +
                 "}\n";
     }
 
