@@ -39,15 +39,14 @@ public class GrammarRepr implements MetaVisitor<String> {
 
     @Override
     public String visitRule(Rule rule) {
-        var returnType = rule.hasReturnType() ? visitReturnType(rule.returnType()) : "";
         var ruleArgs = rule.hasRuleArgs() ? visitRuleArgs(rule.ruleArgs()) : "";
-        return rule.name() + returnType + ruleArgs + ":" +
+        return rule.name() + ruleArgs + ":" +
                 visitRuleSuite(rule.ruleSuite());
     }
 
     @Override
     public String visitReturnType(ReturnType returnType) {
-        return returnType.name();
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -96,7 +95,7 @@ public class GrammarRepr implements MetaVisitor<String> {
         // the result clause is not shown in the comments
         // so it doesn't need to be part of this grammar
         // representation
-        return "";
+        throw new UnsupportedOperationException();
     }
 
     @Override
