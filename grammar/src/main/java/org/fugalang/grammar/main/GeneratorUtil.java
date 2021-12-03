@@ -32,9 +32,10 @@ public class GeneratorUtil {
         return new Grammar(node);
     }
 
-    public static final Map<String, TokenEntry> tokenMap = tokenMap("op_");
+    public static final Map<String, TokenEntry> tokenMap = tokenMap("");
     public static final Map<String, TokenEntry> classicTokenMap = tokenMap("");
 
+    @SuppressWarnings("SameParameterValue")
     private static Map<String, TokenEntry> tokenMap(String operator_prefix) {
         Map<String, TokenEntry> tokenMap = new LinkedHashMap<>();
         List<String> nonLiteralTypes = TokenType

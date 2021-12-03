@@ -173,16 +173,26 @@ public class CTransform {
         sb.append(" : 0;\n");
     }
 
+
+    private static String getRawParserFieldType(UnitField field) {
+        var kind = field.resultSource().kind();
+        return switch (kind) {
+            case TokenLiteral, TokenType -> "token_t";
+            default -> "void";
+        };
+    }
+
+    private static String getParserFieldType(UnitField field) {
+        String type;
+        if (field.isSingular() || field.isPredicate()) {
+            type = getRawParserFieldType(field);
+        } else type = "ast_list_t";
+        return type;
+    }
+
     private static void addFieldVarDeclaration(UnitField field, StringBuilder sb, int i) {
         if (isImportantField(field)) {
-            String type;
-            if (field.isSingular() || field.isPredicate()) {
-                var kind = field.resultSource().kind();
-                type = switch (kind) {
-                    case TokenLiteral, TokenType -> "token_t";
-                    default -> "void";
-                };
-            } else type = "ast_list_t";
+            var type = getParserFieldType(field);
             char letter = (char) ('a' + i);
             sb.append("    ").append(type).append(" *").append(letter).append(";\n");
         }
@@ -229,11 +239,12 @@ public class CTransform {
 
         var listName = "list";
         var fname = "_" + field.fieldName().snakeCase();
+        var rawType = getRawParserFieldType(field);
 
         TokenEntry delimiter = field.delimiter();
         if (delimiter == null) {
             return "\nstatic ast_list_t *" + ruleName + "_loop(parser_t *p) {\n" +
-                    "    void *" + fname + " = " + resultExpr + ";\n" +
+                    "    " + rawType + " *" + fname + " = " + resultExpr + ";\n" +
                     "    if (!" + fname + ") {\n" +
                     "        return 0;\n" +
                     "    }\n" +
@@ -246,7 +257,7 @@ public class CTransform {
         } else {
             var delimExpr = "consume(p, " + delimiter.index() + ", \"" + delimiter.literalValue() + "\")";
             return "\nstatic ast_list_t *" + ruleName + "_delimited(parser_t *p) {\n" +
-                    "    void *" + fname + " = " + resultExpr + ";\n" +
+                    "    " + rawType + " *" + fname + " = " + resultExpr + ";\n" +
                     "    if (!" + fname + ") {\n" +
                     "        return 0;\n" +
                     "    }\n" +
@@ -269,10 +280,11 @@ public class CTransform {
 
         var listName = "list";
         var fname = "_" + field.fieldName().snakeCase();
+        var rawType = getRawParserFieldType(field);
 
         return "\nstatic ast_list_t *" + rule_name + "_loop(parser_t *p) {\n" +
                 "    ast_list_t *" + listName + " = ast_list_new(p);\n" +
-                "    void *" + fname + ";\n" +
+                "    " + rawType + " *" + fname + ";\n" +
                 "    while ((" + fname + " = " + resultExpr + ")) {\n" +
                 "        ast_list_append(p, " + listName + ", " + fname + ");\n" +
                 "    }\n" +
