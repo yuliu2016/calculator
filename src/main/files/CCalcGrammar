@@ -1,26 +1,26 @@
 # Calculator Grammar
 
-csum:
-    | csum '+' cterm
-    | csum '-' cterm
-    | cterm
-cterm:
-    | cterm '*' cfactor
-    | cterm '/' cfactor
-    | cterm '%' cfactor
-    | cfactor
-cfactor:
-    | '+' cfactor
-    | '-' cfactor
-    | '~' cfactor
-    | cpower
-cpower:
-    | catom '**' cfactor
-    | catom
-catom:
-    | '(' csum ')'
-    | NAME '(' [cparameters] ')'
-    | NAME
-    | NUMBER
-cparameters:
-    | ','.csum+ [',']
+csum[double]:
+    | csum '+' cterm { "binop_add(%a, %b)" }
+    | csum '-' cterm { "binop_sub(%a, %b)" }
+    | cterm { a }
+cterm[double]:
+    | cterm '*' cfactor { "binop_mul(%a, %b)" }
+    | cterm '/' cfactor { "binop_div(%a, %b)" }
+    | cterm '%' cfactor { "binop_mod(%a, %b)" }
+    | cfactor { a }
+cfactor[double]:
+    | '+' cfactor { "unary_plus(%a)" }
+    | '-' cfactor { "unary_minus(%a)" }
+    | '~' cfactor { "unary_not(%a)" }
+    | cpower { a }
+cpower[double]:
+    | catom '**' cfactor { "binop_pow(%a, %b)" }
+    | catom { a }
+catom[double]:
+    | '(' csum ')' { a }
+    | NAME '(' [cparameters] ')' { "call_func(%a)" }
+    | NAME { "load_const(%a)" }
+    | NUMBER { a }
+cparameters[ast_list_t]:
+    | ','.csum+ [','] { a }
