@@ -4,7 +4,6 @@ import org.fugalang.core.parser.RuleType;
 import org.fugalang.grammar.peg.wrapper.*;
 import org.fugalang.grammar.util.GrammarRepr;
 import org.fugalang.grammar.util.PEGUtil;
-import org.fugalang.grammar.util.StringUtil;
 
 import java.util.*;
 
@@ -108,7 +107,7 @@ public class RuleSetBuilder {
 
                     subUnit.setRuleType(RuleType.Conjunction);
 
-                    var smartName = getSmartName(newRuleName, sequence);
+                    var smartName = PEGUtil.getSmartName(newRuleName, sequence, tokenMap);
                     var fieldName = FieldName.of(smartName);
 
                     // Add a field to the rule set
@@ -205,7 +204,7 @@ public class RuleSetBuilder {
             var subUnit = ruleSet.createUnnamedSubRule(ruleName, grammarString);
             subUnit.setRuleType(RuleType.Disjunction);
 
-            var smartName = getSmartName(ruleName, altList);
+            var smartName = PEGUtil.getSmartName(ruleName, altList, tokenMap);
             var fieldName = FieldName.of(smartName);
 
             // Add a field to the rule set
@@ -321,40 +320,5 @@ public class RuleSetBuilder {
                 delimiter);
 
         unit.addField(field);
-    }
-
-    public String getSmartName(RuleName ruleName, Sequence sequence) {
-        var primaries = sequence.primaries();
-        if (primaries.size() <= 3 &&
-                primaries.stream().allMatch(PEGUtil::isSingle)) {
-
-            StringJoiner joiner = new StringJoiner("_");
-            for (var primary : primaries) {
-                var itemString = PEGUtil.getItemString(PEGUtil.getModifierItem(primary));
-                if (itemString == null) throw new IllegalStateException();
-                if (StringUtil.isWord(itemString)) {
-                    // make lowercase in case it's a token type
-                    joiner.add(itemString.toLowerCase());
-                } else {
-                    joiner.add(tokenMap.get(itemString).snakeCase());
-                }
-            }
-            return StringUtil.decap(joiner.toString());
-        }
-        return ruleName.symbolicName();
-    }
-
-
-    public String getSmartName(RuleName ruleName, AltList altList) {
-        var andList = altList.alternatives();
-        if (andList.isEmpty()) {
-            return getSmartName(ruleName, altList.sequence());
-        }
-        if (andList.size() == 1) {
-            return getSmartName(ruleName, altList.sequence()) +
-                    "_or_" + getSmartName(ruleName, andList.get(0).sequence()
-            );
-        }
-        return ruleName.symbolicName();
     }
 }

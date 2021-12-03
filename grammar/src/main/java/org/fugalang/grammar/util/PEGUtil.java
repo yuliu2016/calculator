@@ -1,8 +1,13 @@
 package org.fugalang.grammar.util;
 
 import org.fugalang.grammar.common.Modifier;
+import org.fugalang.grammar.common.RuleName;
 import org.fugalang.grammar.common.SubRuleType;
+import org.fugalang.grammar.common.TokenEntry;
 import org.fugalang.grammar.peg.wrapper.*;
+
+import java.util.Map;
+import java.util.StringJoiner;
 
 import static org.fugalang.grammar.common.Modifier.*;
 
@@ -65,5 +70,40 @@ public class PEGUtil {
 
     public static boolean isLeftRecursive(String name, AltList altList) {
         return !altList.alternatives().isEmpty() && name.equals(getFirstName(altList));
+    }
+
+
+    public static String getSmartName(RuleName ruleName, Sequence sequence, Map<String, TokenEntry> tokenMap) {
+        var primaries = sequence.primaries();
+        if (primaries.size() <= 3 &&
+                primaries.stream().allMatch(PEGUtil::isSingle)) {
+
+            StringJoiner joiner = new StringJoiner("_");
+            for (var primary : primaries) {
+                var itemString = PEGUtil.getItemString(PEGUtil.getModifierItem(primary));
+                if (itemString == null) throw new IllegalStateException();
+                if (StringUtil.isWord(itemString)) {
+                    // make lowercase in case it's a token type
+                    joiner.add(itemString.toLowerCase());
+                } else {
+                    joiner.add(tokenMap.get(itemString).snakeCase());
+                }
+            }
+            return StringUtil.decap(joiner.toString());
+        }
+        return ruleName.symbolicName();
+    }
+
+
+    public static String getSmartName(RuleName ruleName, AltList altList, Map<String, TokenEntry> tokenMap) {
+        var andList = altList.alternatives();
+        if (andList.isEmpty()) {
+            return getSmartName(ruleName, altList.sequence(), tokenMap);
+        }
+        if (andList.size() == 1) {
+            return getSmartName(ruleName, altList.sequence(), tokenMap) +
+                    "_or_" + getSmartName(ruleName, andList.get(0).sequence(), tokenMap);
+        }
+        return ruleName.symbolicName();
     }
 }
