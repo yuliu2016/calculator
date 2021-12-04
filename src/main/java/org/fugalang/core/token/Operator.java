@@ -19,7 +19,7 @@ public enum Operator {
     ASSIGN("="),
     COLON(":"),
     TERNERY("?"),
-    NOT("!"),
+    EXCLAIM("!"),
     SEMICOLON(";"),
 
     // second most common - brackets
@@ -113,7 +113,7 @@ public enum Operator {
             COLON,
             TERNERY,
             SEMICOLON,
-            NOT,
+            EXCLAIM,
 
             LPAR,
             RPAR,

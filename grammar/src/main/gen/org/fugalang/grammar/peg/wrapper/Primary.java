@@ -34,11 +34,11 @@ public final class Primary extends NodeWrapper {
         return has(1);
     }
 
-    public Primary3 notItem() {
+    public Primary3 exclaimItem() {
         return new Primary3(get(2));
     }
 
-    public boolean hasNotItem() {
+    public boolean hasExclaimItem() {
         return has(2);
     }
 

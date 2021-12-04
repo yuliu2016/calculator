@@ -108,7 +108,7 @@ public class GrammarRepr implements MetaVisitor<String> {
         var item = visitItem(PEGUtil.getModifierItem(primary));
         if (primary.hasDelimited()) return "'" + primary.delimited().string() + "'." + item + "+";
         if (primary.hasBitAndItem()) return "&" + item;
-        if (primary.hasNotItem()) return "!" + item;
+        if (primary.hasExclaimItem()) return "!" + item;
         if (primary.hasItemTimes()) return item + "*";
         if (primary.hasItemPlus()) return item + "+";
         if (primary.hasItem()) return item;

@@ -27,7 +27,7 @@ public class PEGUtil {
     public static Modifier getModifier(Primary primary) {
         if (primary.hasDelimited()) return OnceOrMore;
         if (primary.hasBitAndItem()) return TestTrue;
-        if (primary.hasNotItem()) return TestFalse;
+        if (primary.hasExclaimItem()) return TestFalse;
         if (primary.hasItemTimes()) return NoneOrMore;
         if (primary.hasItemPlus()) return OnceOrMore;
         if (primary.hasItem()) return Once;
@@ -37,7 +37,7 @@ public class PEGUtil {
     public static Item getModifierItem(Primary primary) {
         if (primary.hasDelimited()) return primary.delimited().item();
         if (primary.hasBitAndItem()) return primary.bitAndItem().item();
-        if (primary.hasNotItem()) return primary.notItem().item();
+        if (primary.hasExclaimItem()) return primary.exclaimItem().item();
         if (primary.hasItemTimes()) return primary.itemTimes().item();
         if (primary.hasItemPlus()) return primary.itemPlus().item();
         if (primary.hasItem()) return primary.item();
