@@ -37,7 +37,8 @@ public class RuleSetBuilder {
         // do this first because each rule needs to lookup the types of previous rules
         for (var rule : rules) {
             var ruleName = rule.name();
-            ruleNameMap.put(ruleName, RuleName.of(ruleName));
+            var returnType = rule.hasReturnType() ? rule.returnType().name() : null;
+            ruleNameMap.put(ruleName, RuleName.of(ruleName, returnType));
         }
 
         for (var rule : rules) {
@@ -280,32 +281,26 @@ public class RuleSetBuilder {
             ResultSource resultSource,
             TokenEntry delimiter
     ) {
-        RuleName newRuleName;
         FieldName newFieldName;
         FieldType fieldType;
         switch (modifier) {
             case TestTrue -> {
                 newFieldName = fieldName;
-                newRuleName = ruleName;
                 fieldType = FieldType.RequireTrue;
             }
             case TestFalse -> {
                 newFieldName = fieldName;
-                newRuleName = ruleName;
                 fieldType = FieldType.RequireFalse;
             }
             case OnceOrMore -> {
-                newRuleName = ruleName.asSequence();
                 newFieldName = fieldName.pluralize();
                 fieldType = FieldType.RequiredList;
             }
             case NoneOrMore -> {
-                newRuleName = ruleName.asSequence();
                 newFieldName = fieldName.pluralize();
                 fieldType = FieldType.OptionalList;
             }
             case Once -> {
-                newRuleName = ruleName;
                 newFieldName = fieldName;
                 fieldType = isOptional ? FieldType.Optional : FieldType.Required;
             }
@@ -313,7 +308,7 @@ public class RuleSetBuilder {
         }
 
         var field = new UnitField(
-                newRuleName,
+                ruleName,
                 newFieldName,
                 fieldType,
                 resultSource,

@@ -22,7 +22,11 @@ public class CTransform {
 
     private static void addUnitRuleDeclaration(UnitRule unit, StringBuilder sb) {
         var rn = unit.ruleName();
-        sb.append("static void *")
+
+        var rt = rn.returnType();
+        var type = rt == null ? "void" : rt;
+
+        sb.append("static ").append(type).append(" *")
                 .append(rn.symbolicName());
         sb.append("(parser_t *);\n");
         for (UnitField field : unit.fields()) {
@@ -59,8 +63,13 @@ public class CTransform {
 
         boolean memoize = args.containsKey("memo") || unit.leftRecursive();
 
-        sb.append("\nstatic void *")
+
+        var rt = rn.returnType();
+        var type = rt == null ? "void" : rt;
+
+        sb.append("\nstatic ").append(type).append(" *")
                 .append(rn.symbolicName());
+
         sb.append("(parser_t *p) {\n");
         sb.append("    frame_t f = {")
                 .append(unit.ruleIndex())

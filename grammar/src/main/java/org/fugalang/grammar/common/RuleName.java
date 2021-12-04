@@ -6,14 +6,14 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public record RuleName(String snakeCase, int[] suffixArray, boolean isSequence) {
+public record RuleName(String snakeCase, String returnType, int[] suffixArray) {
     public RuleName {
         assert snakeCase != null;
         assert suffixArray != null;
     }
 
     private String suffixJoin(String delimiter) {
-        return  (suffixArray.length == 0 ? "" : IntStream
+        return (suffixArray.length == 0 ? "" : IntStream
                 .of(suffixArray)
                 .mapToObj(Integer::toString)
                 .collect(Collectors.joining(delimiter, delimiter, "")));
@@ -39,15 +39,11 @@ public record RuleName(String snakeCase, int[] suffixArray, boolean isSequence) 
         int currentLen = suffixArray.length;
         int[] newArray = Arrays.copyOf(suffixArray, currentLen + 1);
         newArray[currentLen] = suffix;
-        return new RuleName(snakeCase, newArray, isSequence);
+        return new RuleName(snakeCase, returnType, newArray);
     }
 
-    public RuleName asSequence() {
-        return new RuleName(snakeCase, suffixArray, true);
-    }
-
-    public static RuleName of(String ruleName) {
-        return new RuleName(ruleName, new int[]{}, false);
+    public static RuleName of(String ruleName, String returnType) {
+        return new RuleName(ruleName, returnType, new int[]{});
     }
 
     @Override
@@ -63,12 +59,7 @@ public record RuleName(String snakeCase, int[] suffixArray, boolean isSequence) 
     public boolean compareExact(RuleName o) {
         if (this == o) return true;
         return snakeCase.equals(o.snakeCase) &&
-                isSequence == o.isSequence &&
                 Arrays.equals(suffixArray, o.suffixArray);
-    }
-
-    public boolean hasSuffix() {
-        return suffixArray.length > 0;
     }
 
     @Override
