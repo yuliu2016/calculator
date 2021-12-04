@@ -35,6 +35,10 @@ public record RuleName(String snakeCase, String returnType, int[] suffixArray) {
         return StringUtil.decap(pascalCase());
     }
 
+    public String returnTypeOr(String defaultType) {
+        return returnType != null ? returnType : defaultType;
+    }
+
     public RuleName withSuffix(int suffix) {
         int currentLen = suffixArray.length;
         int[] newArray = Arrays.copyOf(suffixArray, currentLen + 1);

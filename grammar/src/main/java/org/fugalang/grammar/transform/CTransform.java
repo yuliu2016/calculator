@@ -23,10 +23,7 @@ public class CTransform {
     private static void addUnitRuleDeclaration(UnitRule unit, StringBuilder sb) {
         var rn = unit.ruleName();
 
-        var rt = rn.returnType();
-        var type = rt == null ? "void" : rt;
-
-        sb.append("static ").append(type).append(" *")
+        sb.append("static ").append(rn.returnTypeOr("void")).append(" *")
                 .append(rn.symbolicName());
         sb.append("(parser_t *);\n");
         for (UnitField field : unit.fields()) {
@@ -63,11 +60,7 @@ public class CTransform {
 
         boolean memoize = args.containsKey("memo") || unit.leftRecursive();
 
-
-        var rt = rn.returnType();
-        var type = rt == null ? "void" : rt;
-
-        sb.append("\nstatic ").append(type).append(" *")
+        sb.append("\nstatic ").append(rn.returnTypeOr("void")).append(" *")
                 .append(rn.symbolicName());
 
         sb.append("(parser_t *p) {\n");
@@ -110,9 +103,11 @@ public class CTransform {
     private static void addLeftRecursiveUnitRuleBody(UnitRule unit, StringBuilder sb) {
         sb.append("    if (!enter_frame(p, &f)) {\n        return exit_frame(p, &f, 0);\n    }\n");
 
-        sb.append("    void *a = 0;\n");
-        sb.append("    void *r = 0;\n");
-        sb.append("    void *max = 0;\n");
+        var rtype = unit.ruleName().returnTypeOr("void");
+
+        sb.append("    ").append(rtype).append(" *a = 0;\n");
+        sb.append("    ").append(rtype).append(" *r = 0;\n");
+        sb.append("    ").append(rtype).append(" *max = 0;\n");
         sb.append("    size_t maxpos;\n");
 
 
@@ -141,6 +136,7 @@ public class CTransform {
     }
 
     private static void addConjunctionBody(UnitRule unit, StringBuilder sb) {
+        var rtype = unit.ruleName().returnTypeOr("void");
 
         int importantCount = 0;
 
@@ -151,7 +147,7 @@ public class CTransform {
                 ++j;
             }
         }
-        sb.append("    void *r;\n");
+        sb.append("    ").append(rtype).append(" *r;\n");
 
         sb.append("    r = enter_frame(p, &f) && (\n");
 
@@ -187,7 +183,7 @@ public class CTransform {
         var kind = field.resultSource().kind();
         return switch (kind) {
             case TokenLiteral, TokenType -> "token_t";
-            default -> "void";
+            case UnitRule -> ((RuleName) field.resultSource().value()).returnTypeOr("void");
         };
     }
 
@@ -208,8 +204,9 @@ public class CTransform {
     }
 
     private static void addDisjunctionBody(UnitRule unit, StringBuilder sb) {
-        sb.append("    void *a;\n");
-        sb.append("    void *r;\n");
+        var rtype = unit.ruleName().returnTypeOr("void");
+        sb.append("    ").append(rtype).append(" *a;\n");
+        sb.append("    ").append(rtype).append(" *r;\n");
         sb.append("    r = enter_frame(p, &f) && (\n");
         var fields = unit.fields();
         for (int i = 0; i < fields.size(); i++) {
