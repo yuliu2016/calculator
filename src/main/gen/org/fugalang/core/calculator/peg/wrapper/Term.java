@@ -4,7 +4,7 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 
 /**
- * term:
+ * term (left_recursive):
  * *   | term '*' factor
  * *   | term '/' factor
  * *   | term '%' factor

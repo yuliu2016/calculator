@@ -9,7 +9,7 @@ import static org.fugalang.core.calculator.peg.parser.CalculatorRules.*;
 public class CalculatorParser {
 
     /**
-     * sum:
+     * sum (left_recursive):
      * *   | sum '+' term
      * *   | sum '-' term
      * *   | term
@@ -64,7 +64,7 @@ public class CalculatorParser {
     }
 
     /**
-     * term:
+     * term (left_recursive):
      * *   | term '*' factor
      * *   | term '/' factor
      * *   | term '%' factor

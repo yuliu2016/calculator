@@ -6,7 +6,7 @@ import org.fugalang.core.calculator.peg.wrapper.*;
 public interface CalculatorVisitor<T> {
 
     /**
-     * sum:
+     * sum (left_recursive):
      * *   | sum '+' term
      * *   | sum '-' term
      * *   | term
@@ -16,7 +16,7 @@ public interface CalculatorVisitor<T> {
     }
 
     /**
-     * term:
+     * term (left_recursive):
      * *   | term '*' factor
      * *   | term '/' factor
      * *   | term '%' factor

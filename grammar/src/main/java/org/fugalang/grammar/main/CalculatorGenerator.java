@@ -9,7 +9,7 @@ public class CalculatorGenerator {
     private static final String USER_DIR = System.getProperty("user.dir");
     private static final String GRAMMAR_PATH = "src/main/files/CalculatorGrammar";
     private static final JPackageOutput PACKAGE_OUTPUT = new JPackageOutput(USER_DIR,
-            "src/main/gen", "org.fugalang.core.calculator2.peg", "Calculator");
+            "src/main/gen", "org.fugalang.core.calculator.peg", "Calculator");
 
     public static void main(String[] args) throws Exception {
         RuleSet ruleSet = RuleSetBuilder.generateRuleSet(
