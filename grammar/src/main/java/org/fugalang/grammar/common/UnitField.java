@@ -7,7 +7,8 @@ public record UnitField(
         FieldName fieldName,
         FieldType fieldType,
         ResultSource resultSource,
-        TokenEntry delimiter
+        TokenEntry delimiter,
+        ResultClause resultClause
 ) {
 
     public boolean isRequired() {

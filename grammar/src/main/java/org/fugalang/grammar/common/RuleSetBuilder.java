@@ -77,6 +77,7 @@ public class RuleSetBuilder {
             // but need to change the type here
             unit.setRuleType(RuleType.Conjunction);
             addSequence(ruleName, unit, altList.sequence(), REQUIRED);
+            // todo result clause: goes to the unit rule
         } else {
             // Multiple alternatives
 
@@ -93,7 +94,8 @@ public class RuleSetBuilder {
 
                 if (sequence.primaries().size() == 1) {
                     // only one primary - can propagate fields of this unit
-                    addSequence(newRuleName, unit, sequence, REQUIRED);
+                    addPrimary(ruleName, unit, sequence.primaries().get(0), REQUIRED);
+                    // todo result clause: goes to the field
                 } else {
                     // need to make a new unit for this, because
                     // a list can't hold multiple typed objects
@@ -115,6 +117,7 @@ public class RuleSetBuilder {
                             REQUIRED,
                             new ResultSource(Kind.UnitRule, newRuleName),
                             null);
+                    // todo result clause: goes to the *new* unit rule
 
                     addSequence(newRuleName, subUnit, sequence, REQUIRED);
                 }
@@ -194,9 +197,8 @@ public class RuleSetBuilder {
         if (altList.alternatives().isEmpty() &&
                 altList.sequence().primaries().size() == 1 &&
                 fieldType == FieldType.Required) {
-
-            // just add all the repeat rules and be done with it
-            addSequence(ruleName, unit, altList.sequence(), isOptional);
+            // todo result clause: goes to the field
+            addPrimary(ruleName, unit, altList.sequence().primaries().get(0), isOptional);
         } else {
             var grammarString = GrammarRepr.INSTANCE.visitAltList(altList);
             var subUnit = createUnnamedRule(ruleName, grammarString);
@@ -299,7 +301,8 @@ public class RuleSetBuilder {
                 newFieldName,
                 newFieldType,
                 resultSource,
-                delimiter);
+                delimiter,
+                null);
 
         unit.addField(field);
     }

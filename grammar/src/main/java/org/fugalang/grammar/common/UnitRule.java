@@ -13,6 +13,7 @@ public class UnitRule {
     private final boolean leftRecursive;
 
     private RuleType ruleType;
+    private ResultClause resultClause;
     private final String grammarString;
 
     private final List<UnitField> fields = new ArrayList<>();
@@ -54,6 +55,14 @@ public class UnitRule {
         this.ruleType = ruleType;
     }
 
+    public ResultClause resultClause() {
+        return resultClause;
+    }
+
+    public void setResultClause(ResultClause resultClause) {
+        this.resultClause = resultClause;
+    }
+
     public void guardMatchEmptyString() {
         if (fields.stream().noneMatch(UnitField::isRequired)) {
             throw new IllegalStateException("The rule" + ruleName +
@@ -82,7 +91,8 @@ public class UnitRule {
                     field.fieldName().withSuffix(cnt),
                     field.fieldType(),
                     field.resultSource(),
-                    field.delimiter()
+                    field.delimiter(),
+                    field.resultClause()
             ));
         } else {
             fieldNameCounter.put(name, 0);
