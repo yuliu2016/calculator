@@ -129,4 +129,15 @@ public class PEGUtil {
         }
         return args;
     }
+
+    public static TokenEntry getDelimiter(Primary primary, Map<String, TokenEntry> tokenMap) {
+        TokenEntry delimiter;
+        if (primary.hasDelimited()) {
+            delimiter = tokenMap.get(primary.delimited().string());
+            if (!delimiter.isLiteral()) throw new RuntimeException("Delimiter must be literal");
+        } else {
+            delimiter = null;
+        }
+        return delimiter;
+    }
 }
