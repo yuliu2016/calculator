@@ -13,8 +13,8 @@ import static org.fugalang.grammar.common.FieldType.*;
 
 public class JTransform {
     public static void generateParser(StringBuilder sb, NamedRule rule) {
-        generateParsingFunc(sb, rule.getRoot(), true);
-        for (var subRule : rule.getComponents()) {
+        generateParsingFunc(sb, rule.root(), true);
+        for (var subRule : rule.components()) {
             generateParsingFunc(sb, subRule, false);
         }
     }
@@ -215,8 +215,8 @@ public class JTransform {
 
 
     public static void generateRule(StringBuilder sb, NamedRule rule) {
-        generateRuleDeclaration(sb, rule.getRoot());
-        for (var subRule : rule.getComponents()) {
+        generateRuleDeclaration(sb, rule.root());
+        for (var subRule : rule.components()) {
             generateRuleDeclaration(sb, subRule);
         }
     }
@@ -235,7 +235,7 @@ public class JTransform {
     }
 
     public static void generateVisitor(StringBuilder sb, NamedRule rule) {
-        generateVisitor(sb, rule.getRoot());
+        generateVisitor(sb, rule.root());
     }
 
     private static void generateVisitor(StringBuilder sb, UnitRule rule) {
@@ -269,9 +269,9 @@ public class JTransform {
         Set<String> userImports = new TreeSet<>();
         Set<String> javaImports = new TreeSet<>();
 
-        var importIterator = rule.getComponents().stream().map(JTransform::classImports).iterator();
+        var importIterator = rule.components().stream().map(JTransform::classImports).iterator();
 
-        for (Set<String> importSet : FirstAndMore.of(classImports(rule.getRoot()), importIterator)) {
+        for (Set<String> importSet : FirstAndMore.of(classImports(rule.root()), importIterator)) {
             for (String theImport : importSet) {
                 if (theImport.startsWith("java")) {
                     javaImports.add(theImport);
@@ -301,9 +301,9 @@ public class JTransform {
             sb.append("\n");
         }
 
-        sb.append(generateClassBody(rule.getRoot(), false));
+        sb.append(generateClassBody(rule.root(), false));
 
-        for (UnitRule subeRule : rule.getComponents()) {
+        for (UnitRule subeRule : rule.components()) {
             var classDef = generateClassBody(subeRule, true);
             sb.append(StringUtil.indent(classDef, 4));
         }

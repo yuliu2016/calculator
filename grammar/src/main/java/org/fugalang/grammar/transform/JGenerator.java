@@ -47,7 +47,7 @@ public class JGenerator {
             var code = fixLineSep(JTransform
                     .generateWrapper(rule, packageOutput.getWrapperPackage()));
             Files.writeString(Paths.get(packageOutput.getWrapperPath().toString(),
-                    rule.getRoot().ruleName().pascalCase() + ".java"), code);
+                    rule.root().ruleName().pascalCase() + ".java"), code);
         }
 
         var lang = packageOutput.getLanguage();
@@ -101,7 +101,7 @@ public class JGenerator {
         sb.append("import org.fugalang.core.parser.ParserRule;\n\n");
 
         var imports = ruleSet.namedRules().stream()
-                .anyMatch(namedRule -> namedRule.getRoot().leftRecursive()) ?
+                .anyMatch(namedRule -> namedRule.root().leftRecursive()) ?
                 "import static org.fugalang.core.parser.ParserRule.*;\n\n" :
                 """
                         import static org.fugalang.core.parser.ParserRule.and_rule;

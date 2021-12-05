@@ -313,7 +313,7 @@ public class RuleSetBuilder {
     ) {
         var dupError = false;
         for (var namedRule : ruleSet.namedRules()) {
-            if (namedRule.getRoot().ruleName().compareExact(ruleName)) {
+            if (namedRule.root().ruleName().compareExact(ruleName)) {
                 dupError = true;
                 break;
             }
@@ -326,7 +326,7 @@ public class RuleSetBuilder {
         var unit = new UnitRule(++ruleIndexCounter,
                 ruleName, leftRecursive, grammarString);
 
-        currentRule = new NamedRule(unit, args);
+        currentRule = new NamedRule(unit, new ArrayList<>(), args);
         ruleSet.namedRules().add(currentRule);
 
         return unit;
@@ -348,7 +348,7 @@ public class RuleSetBuilder {
         var current = currentRule;
 
         var dupError = false;
-        for (var builder : current.getComponents()) {
+        for (var builder : current.components()) {
             if (builder.ruleName().compareExact(ruleName)) {
                 dupError = true;
                 break;
@@ -361,7 +361,7 @@ public class RuleSetBuilder {
 
         var unit = new UnitRule(++ruleIndexCounter, ruleName, false, grammarString);
 
-        current.getComponents().add(unit);
+        current.components().add(unit);
 
         return unit;
     }

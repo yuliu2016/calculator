@@ -12,8 +12,8 @@ public class CTransform {
     public static String getFuncDeclarations(RuleSet ruleSet) {
         StringBuilder sb = new StringBuilder();
         for (NamedRule namedRule : ruleSet.namedRules()) {
-            addUnitRuleDeclaration(namedRule.getRoot(), sb);
-            for (UnitRule component : namedRule.getComponents()) {
+            addUnitRuleDeclaration(namedRule.root(), sb);
+            for (UnitRule component : namedRule.components()) {
                 addUnitRuleDeclaration(component, sb);
             }
         }
@@ -45,10 +45,10 @@ public class CTransform {
         StringBuilder sb = new StringBuilder();
         for (NamedRule namedRule : ruleSet.namedRules()) {
             sb.append("\n");
-            sb.append(StringUtil.inlinedoc(namedRule.getRoot().grammarString()));
-            var args = namedRule.getArgs();
-            addUnitRuleBody(namedRule.getRoot(), sb, args);
-            for (UnitRule component : namedRule.getComponents()) {
+            sb.append(StringUtil.inlinedoc(namedRule.root().grammarString()));
+            var args = namedRule.args();
+            addUnitRuleBody(namedRule.root(), sb, args);
+            for (UnitRule component : namedRule.components()) {
                 addUnitRuleBody(component, sb, Collections.emptyMap());
             }
         }

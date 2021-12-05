@@ -48,17 +48,17 @@ public class CTransformOld {
         StringBuilder sb = new StringBuilder();
 
         for (NamedRule namedRule : ruleSet.namedRules()) {
-            addDummyDeclaration(sb, namedRule.getRoot());
-            for (UnitRule component : namedRule.getComponents()) {
+            addDummyDeclaration(sb, namedRule.root());
+            for (UnitRule component : namedRule.components()) {
                 addDummyDeclaration(sb, component);
             }
         }
 
         for (NamedRule namedRule : ruleSet.namedRules()) {
             sb.append("\n");
-            sb.append(StringUtil.inlinedoc(namedRule.getRoot().grammarString()));
-            addDummyFunction(sb, namedRule.getRoot());
-            for (UnitRule component : namedRule.getComponents()) {
+            sb.append(StringUtil.inlinedoc(namedRule.root().grammarString()));
+            addDummyFunction(sb, namedRule.root());
+            for (UnitRule component : namedRule.components()) {
                 addDummyFunction(sb, component);
             }
         }
@@ -132,8 +132,8 @@ public class CTransformOld {
         sb.append("#define TVAR(name, node, i) FToken *name = (node)->ast_v.fields[i]->ast_v.token\n");
 
         for (NamedRule namedRule : ruleSet.namedRules()) {
-            addStructFields(namedRule.getRoot(), sb);
-            for (UnitRule component : namedRule.getComponents()) {
+            addStructFields(namedRule.root(), sb);
+            for (UnitRule component : namedRule.components()) {
                 addStructFields(component, sb);
             }
         }
