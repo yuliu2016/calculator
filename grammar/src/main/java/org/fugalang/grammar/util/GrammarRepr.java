@@ -91,14 +91,6 @@ public class GrammarRepr implements MetaVisitor<String> {
     }
 
     @Override
-    public String visitResultClause(ResultClause resultClause) {
-        // the result clause is not shown in the comments
-        // so it doesn't need to be part of this grammar
-        // representation
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public String visitResultExpr(ResultExpr resultExpr) {
         return "";
     }

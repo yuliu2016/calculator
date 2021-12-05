@@ -16,7 +16,7 @@ public class MetaRules {
     public static final ParserRule ALT_LIST = and_rule("alt_list");
     public static final ParserRule ALTERNATIVE = and_rule("alternative");
     public static final ParserRule SEQUENCE = and_rule("sequence");
-    public static final ParserRule RESULT_CLAUSE = and_rule("result_clause");
+    public static final ParserRule SEQUENCE_2 = and_rule("sequence:2");
     public static final ParserRule RESULT_EXPR = or_rule("result_expr");
     public static final ParserRule PRIMARY = or_rule("primary");
     public static final ParserRule PRIMARY_2 = and_rule("primary:2");

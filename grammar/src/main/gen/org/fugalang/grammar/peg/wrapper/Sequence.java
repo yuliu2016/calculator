@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * sequence:
- * *   | primary+ [result_clause]
+ * *   | primary+ ['{' result_expr '}']
  */
 public final class Sequence extends NodeWrapper {
 
@@ -19,11 +19,25 @@ public final class Sequence extends NodeWrapper {
         return getList(0, Primary::new);
     }
 
-    public ResultClause resultClause() {
-        return new ResultClause(get(1));
+    public Sequence2 lbraceResultExprRbrace() {
+        return new Sequence2(get(1));
     }
 
-    public boolean hasResultClause() {
+    public boolean hasLbraceResultExprRbrace() {
         return has(1);
+    }
+
+    /**
+     * '{' result_expr '}'
+     */
+    public static final class Sequence2 extends NodeWrapper {
+
+        public Sequence2(ParseTreeNode node) {
+            super(node);
+        }
+
+        public ResultExpr resultExpr() {
+            return new ResultExpr(get(1));
+        }
     }
 }

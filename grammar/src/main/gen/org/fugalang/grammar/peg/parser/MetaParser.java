@@ -174,14 +174,14 @@ public class MetaParser {
 
     /**
      * sequence:
-     * *   | primary+ [result_clause]
+     * *   | primary+ ['{' result_expr '}']
      */
     public static boolean sequence(ParseTree t) {
         var m = t.enter(SEQUENCE);
         if (m != null) return m;
         boolean r;
         r = primary_loop(t);
-        if (r) result_clause(t);
+        if (r) sequence_2(t);
         t.exit(r);
         return r;
     }
@@ -197,11 +197,10 @@ public class MetaParser {
     }
 
     /**
-     * result_clause:
-     * *   | '{' result_expr '}'
+     * '{' result_expr '}'
      */
-    public static boolean result_clause(ParseTree t) {
-        var m = t.enter(RESULT_CLAUSE);
+    private static boolean sequence_2(ParseTree t) {
+        var m = t.enter(SEQUENCE_2);
         if (m != null) return m;
         boolean r;
         r = t.consume("{");

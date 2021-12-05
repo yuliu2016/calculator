@@ -73,17 +73,16 @@ public class RuleSetBuilder {
             AltList altList
     ) {
         if (altList.alternatives().isEmpty()) {
-            // only one rule - can propagate fields of this rule
+            // only one alternative - can propagate fields of this rule
             // but need to change the type here
             unit.setRuleType(RuleType.Conjunction);
             addSequence(ruleName, unit, altList.sequence(), REQUIRED);
         } else {
+            // Multiple alternatives
 
-            // For counting component sequences
+            // For counting sequences
             int sequenceCount = 1;
 
-            // must create new sub rules for AND rules that have more than one
-            // REPEAT rule
             for (var sequence : PEGUtil.allSequences(altList)) {
 
                 // add sequence count to the name, even if not used, because
@@ -93,13 +92,13 @@ public class RuleSetBuilder {
                 sequenceCount++;
 
                 if (sequence.primaries().size() == 1) {
-                    // only one repeat rule - can propagate fields of this unit
+                    // only one primary - can propagate fields of this unit
                     addSequence(newRuleName, unit, sequence, REQUIRED);
                 } else {
                     // need to make a new unit for this, because
-                    // a list can't hold multiple-ly typed objects
+                    // a list can't hold multiple typed objects
                     var grammarString = GrammarRepr.INSTANCE.visitSequence(sequence);
-                    var subUnit = createUnnamedSubRule(newRuleName, grammarString);
+                    var subUnit = createUnnamedRule(newRuleName, grammarString);
 
                     subUnit.setRuleType(RuleType.Conjunction);
 
@@ -200,7 +199,7 @@ public class RuleSetBuilder {
             addSequence(ruleName, unit, altList.sequence(), isOptional);
         } else {
             var grammarString = GrammarRepr.INSTANCE.visitAltList(altList);
-            var subUnit = createUnnamedSubRule(ruleName, grammarString);
+            var subUnit = createUnnamedRule(ruleName, grammarString);
             subUnit.setRuleType(RuleType.Disjunction);
 
             var smartName = PEGUtil.getSmartName(ruleName, altList, tokenMap);
@@ -311,15 +310,8 @@ public class RuleSetBuilder {
             Map<String, String> args,
             String grammarString
     ) {
-        var dupError = false;
-        for (var namedRule : ruleSet.namedRules()) {
-            if (namedRule.root().ruleName().compareExact(ruleName)) {
-                dupError = true;
-                break;
-            }
-        }
-
-        if (dupError) {
+        if (ruleSet.namedRules().stream()
+                .anyMatch(nr -> nr.root().ruleName().compareExact(ruleName))) {
             throw new IllegalStateException("Duplicate named rule: " + ruleName);
         }
 
@@ -340,22 +332,14 @@ public class RuleSetBuilder {
         currentRule = null;
     }
 
-    public UnitRule createUnnamedSubRule(RuleName ruleName, String grammarString) {
+    public UnitRule createUnnamedRule(RuleName ruleName, String grammarString) {
         if (currentRule == null) {
             throw new IllegalStateException("No named rule to add to");
         }
 
         var current = currentRule;
-
-        var dupError = false;
-        for (var builder : current.components()) {
-            if (builder.ruleName().compareExact(ruleName)) {
-                dupError = true;
-                break;
-            }
-        }
-
-        if (dupError) {
+        if (current.components().stream()
+                .anyMatch(c -> c.ruleName().compareExact(ruleName))) {
             throw new IllegalStateException("Duplicate inner rule: " + ruleName);
         }
 

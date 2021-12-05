@@ -17,9 +17,7 @@ alt_list:
 alternative:
     | [NEWLINE] '|' sequence
 sequence:
-    | primary+ [result_clause]
-result_clause:
-    | '{' result_expr '}'
+    | primary+ ['{' result_expr '}']
 result_expr:
     | NAME
     | STRING

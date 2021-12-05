@@ -1,6 +1,7 @@
 package org.fugalang.grammar.util;
 
 import org.fugalang.grammar.common.FieldType;
+import org.fugalang.grammar.common.ResultClause;
 import org.fugalang.grammar.common.RuleName;
 import org.fugalang.grammar.common.TokenEntry;
 import org.fugalang.grammar.peg.wrapper.*;
@@ -132,5 +133,17 @@ public class PEGUtil {
             delimiter = null;
         }
         return delimiter;
+    }
+
+    public static ResultClause getResultClause(Sequence sequence) {
+        if (!sequence.hasLbraceResultExprRbrace()) return null;
+        ResultExpr expr = sequence.lbraceResultExprRbrace().resultExpr();
+        String template;
+        if (expr.hasName()) {
+            template = "%" + expr.name();
+        } else if (expr.hasString()) {
+            template = expr.string();
+        } else throw new IllegalStateException();
+        return new ResultClause(template);
     }
 }
