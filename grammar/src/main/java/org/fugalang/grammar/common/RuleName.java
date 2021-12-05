@@ -55,15 +55,9 @@ public record RuleName(String snakeCase, String returnType, int[] suffixArray) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        RuleName ruleName1 = (RuleName) o;
-
-        return snakeCase.equals(ruleName1.snakeCase);
-    }
-
-    public boolean compareExact(RuleName o) {
-        if (this == o) return true;
-        return snakeCase.equals(o.snakeCase) &&
-                Arrays.equals(suffixArray, o.suffixArray);
+        RuleName rn = (RuleName) o;
+        return snakeCase.equals(rn.snakeCase) &&
+                Arrays.equals(suffixArray, rn.suffixArray);
     }
 
     @Override

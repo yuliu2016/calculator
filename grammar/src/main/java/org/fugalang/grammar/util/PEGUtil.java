@@ -146,4 +146,10 @@ public class PEGUtil {
         } else throw new IllegalStateException();
         return new ResultClause(template);
     }
+
+    public static RuleName getRuleName(Rule rule) {
+        var ruleName = rule.name();
+        var returnType = rule.hasReturnType() ? rule.returnType().name() : null;
+        return RuleName.of(ruleName, returnType);
+    }
 }
