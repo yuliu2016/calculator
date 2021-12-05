@@ -1,6 +1,7 @@
 package org.fugalang.grammar.common;
 
 import org.fugalang.core.parser.RuleType;
+import org.fugalang.grammar.common.ResultSource.Kind;
 import org.fugalang.grammar.peg.wrapper.*;
 import org.fugalang.grammar.util.GrammarRepr;
 import org.fugalang.grammar.util.PEGUtil;
@@ -110,7 +111,7 @@ public class RuleSetBuilder {
                             fieldName,
                             Modifier.Once,
                             REQUIRED,
-                            new ResultSource(SourceKind.UnitRule, newRuleName),
+                            new ResultSource(Kind.UnitRule, newRuleName),
                             null);
 
                     addSequence(newRuleName, subUnit, sequence, REQUIRED);
@@ -210,7 +211,7 @@ public class RuleSetBuilder {
                     fieldName,
                     modifier,
                     isOptional,
-                    new ResultSource(SourceKind.UnitRule, ruleName),
+                    new ResultSource(Kind.UnitRule, ruleName),
                     null);
 
             addAltList(ruleName, subUnit, altList);
@@ -235,7 +236,7 @@ public class RuleSetBuilder {
                     FieldName.of(ruleName.snakeCase()),
                     modifier,
                     isOptional,
-                    new ResultSource(SourceKind.UnitRule, ruleName),
+                    new ResultSource(Kind.UnitRule, ruleName),
                     delimiter);
         } else {
 
@@ -253,10 +254,10 @@ public class RuleSetBuilder {
 
             if (tokenEntry.isLiteral()) {
                 fieldName = "is_" + tokenEntry.snakeCase();
-                resultSource = new ResultSource(SourceKind.TokenLiteral, tokenEntry);
+                resultSource = new ResultSource(Kind.TokenLiteral, tokenEntry);
             } else {
                 fieldName = tokenEntry.snakeCase();
-                resultSource = new ResultSource(SourceKind.TokenType, tokenEntry);
+                resultSource = new ResultSource(Kind.TokenType, tokenEntry);
             }
 
             addField(ruleName,

@@ -156,12 +156,12 @@ public class JTransform {
         var parseTreeInst = isPredicate ? "t.test()" : "t";
         var resultSource = field.resultSource();
         return switch (resultSource.kind()) {
-            case UnitRule -> ((RuleName) resultSource.value()).symbolicName() +
+            case UnitRule -> resultSource.asRuleName().symbolicName() +
                     "(" + parseTreeInst + ")";
             case TokenType -> parseTreeInst + ".consume(TokenType." +
-                    ((TokenEntry)resultSource.value()).literalValue() + ")";
+                    resultSource.asTokenEntry().literalValue() + ")";
             case TokenLiteral -> parseTreeInst + ".consume(\"" +
-                    ((TokenEntry) resultSource.value()).literalValue() + "\")";
+                    resultSource.asTokenEntry().literalValue() + "\")";
         };
     }
 
@@ -319,7 +319,7 @@ public class JTransform {
         Set<String> set = new HashSet<>();
         set.add("org.fugalang.core.parser.NodeWrapper");
         set.add("org.fugalang.core.parser.ParseTreeNode");
-        if (rule.fields().stream().anyMatch(f -> f.resultSource().kind() == SourceKind.TokenType)) {
+        if (rule.fields().stream().anyMatch(f -> f.resultSource().isTokenType())) {
             set.add("org.fugalang.core.token.TokenType");
         }
         if (rule.fields().stream().anyMatch(f ->
@@ -437,7 +437,7 @@ public class JTransform {
             }
             case TokenType -> {
                 if (field.isSingular()) {
-                    var type = ((TokenEntry) resultSource.value()).literalValue();
+                    var type = resultSource.asTokenEntry().literalValue();
                     return "        return get(" + index + ", TokenType." + type + ");\n";
                 }
                 return "        return getList(" + index + ", ParseTreeNode::asString);\n";

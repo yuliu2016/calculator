@@ -131,8 +131,8 @@ public class CTransform {
     }
 
     private static boolean isImportantField(UnitField field) {
-        return !(field.isPredicate() || (field.resultSource().kind()
-                == SourceKind.TokenLiteral && field.isRequired()));
+        return !(field.isPredicate() ||
+                (field.resultSource().isTokenLiteral() && field.isRequired()));
     }
 
     private static void addConjunctionBody(UnitRule unit, StringBuilder sb) {
@@ -183,7 +183,7 @@ public class CTransform {
         var kind = field.resultSource().kind();
         return switch (kind) {
             case TokenLiteral, TokenType -> "token_t";
-            case UnitRule -> ((RuleName) field.resultSource().value()).returnTypeOr("void");
+            case UnitRule -> field.resultSource().asRuleName().returnTypeOr("void");
         };
     }
 
@@ -323,10 +323,10 @@ public class CTransform {
 
     private static String getResultExpr(UnitField field) {
         var rs = field.resultSource();
-        if (rs.kind() == SourceKind.UnitRule) {
-            return ((RuleName) rs.value()).symbolicName() + "(p)";
-        } else if (rs.kind() == SourceKind.TokenType || rs.kind() == SourceKind.TokenLiteral) {
-            var te = (TokenEntry) rs.value();
+        if (rs.isUnitRule()) {
+            return rs.asRuleName().symbolicName() + "(p)";
+        } else if (rs.isTokenType() || rs.isTokenLiteral()) {
+            var te = rs.asTokenEntry();
             return "consume(p, " + te.index() + ", \"" + te.literalValue() + "\")";
         }
         throw new IllegalArgumentException();

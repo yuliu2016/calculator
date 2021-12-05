@@ -9,9 +9,9 @@ public class CTransformOld {
     @Deprecated
     private static String getLoopExpr(UnitField field) {
         var rs = field.resultSource();
-        if (rs.kind() == SourceKind.UnitRule) {
+        if (rs.isUnitRule()) {
             // shortcut
-            var func = ((RuleName) rs.value()).symbolicName();
+            var func = rs.asRuleName().symbolicName();
             if (field.fieldType() == FieldType.RequiredList) {
                 if (field.delimiter() == null) {
                     return "sequence(p, " + func + ", 0)";
@@ -24,8 +24,8 @@ public class CTransformOld {
                 return "sequence(p, " + func + ", 1)";
             }
             throw new IllegalStateException();
-        } else if (rs.kind() == SourceKind.TokenType || rs.kind() == SourceKind.TokenLiteral) {
-            var te = (TokenEntry) rs.value();
+        } else if (rs.isTokenType() || rs.isTokenLiteral()) {
+            var te = rs.asTokenEntry();
             if (field.fieldType() == FieldType.RequiredList) {
                 if (field.delimiter() == null) {
                     return "t_sequence(p, " + te.index() + ", \"" + te.literalValue() + "\", 0)";
@@ -87,15 +87,15 @@ public class CTransformOld {
         sb.append("    FAstNode *o = n->ast_v.fields[0];\n");
 
         for (UnitField field : unit.fields()) {
-            if (field.resultSource().kind() == SourceKind.UnitRule) {
-                var rn = (RuleName) field.resultSource().value();
+            if (field.resultSource().isUnitRule()) {
+                var rn = field.resultSource().asRuleName();
                 sb.append("    if (R_CHECK(n, R_").append(rn.symbolicName().toUpperCase())
                         .append(")) {\n")
                         .append("        dummy_").append(rn.symbolicName())
                         .append("(o);\n        return;\n")
                         .append("    }\n");
             } else {
-                var te = (TokenEntry) field.resultSource().value();
+                var te = field.resultSource().asTokenEntry();
                 sb.append("    if (T_CHECK(n, ")
                         .append("T_").append(te.snakeCase().toUpperCase())
                         .append(")) {\n        return;\n    }\n");
@@ -111,17 +111,17 @@ public class CTransformOld {
                 .append("(n)\n");
         for (UnitField field : unit.fields()) {
             if (isImportantField(field) &&
-                    field.resultSource().kind() == SourceKind.UnitRule) {
-                var rn = (RuleName) field.resultSource().value();
+                    field.resultSource().isUnitRule()) {
+                var rn = field.resultSource().asRuleName();
                 sb.append("    dummy_").append(rn.symbolicName())
-                        .append("(").append(field.properFieldName()).append(");\n");
+                        .append("(").append(field.fieldName().fullSnakeCase()).append(");\n");
             }
         }
     }
 
     private static boolean isImportantField(UnitField field) {
-        return !(field.isPredicate() || (field.resultSource().kind()
-                == SourceKind.TokenLiteral && field.isRequired()));
+        return !(field.isPredicate() ||
+                (field.resultSource().isTokenLiteral() && field.isRequired()));
     }
 
     @Deprecated
@@ -158,13 +158,13 @@ public class CTransformOld {
         int i = 0;
         for (UnitField field : unit.fields()) {
             if (isImportantField(field)) {
-                if (field.resultSource().kind() == SourceKind.UnitRule) {
+                if (field.resultSource().isUnitRule()) {
                     sb.append("    FVAR(");
                 } else {
                     sb.append("    TVAR(");
                 }
 
-                sb.append(field.properFieldName()).append(", n, ").append(i).append(")");
+                sb.append(field.fieldName().fullSnakeCase()).append(", n, ").append(i).append(")");
                 sb.append("; \\\n");
                 i++;
             }
