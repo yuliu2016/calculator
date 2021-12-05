@@ -6,6 +6,8 @@ import org.fugalang.grammar.common.SubRuleType;
 import org.fugalang.grammar.common.TokenEntry;
 import org.fugalang.grammar.peg.wrapper.*;
 
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.StringJoiner;
 
@@ -105,5 +107,18 @@ public class PEGUtil {
                     "_or_" + getSmartName(ruleName, andList.get(0).sequence(), tokenMap);
         }
         return ruleName.symbolicName();
+    }
+
+    public static Map<String, String> extractRuleArgs(Rule rule) {
+        Map<String, String> args;
+        if (rule.hasRuleArgs()) {
+            args = new LinkedHashMap<>();
+            for (RuleArg ruleArg : rule.ruleArgs().ruleArgs()) {
+                args.put(ruleArg.name(), ruleArg.hasAssignName() ? ruleArg.assignName().name() : null);
+            }
+        } else {
+            args = Collections.emptyMap();
+        }
+        return args;
     }
 }

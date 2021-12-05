@@ -44,15 +44,7 @@ public class RuleSetBuilder {
         for (var rule : rules) {
             var left_recursive = PEGUtil.isLeftRecursive(rule.name(), rule.ruleSuite().altList());
 
-            Map<String, String> args;
-            if (rule.hasRuleArgs()) {
-                args = new LinkedHashMap<>();
-                for (RuleArg ruleArg : rule.ruleArgs().ruleArgs()) {
-                    args.put(ruleArg.name(), ruleArg.hasAssignName() ? ruleArg.assignName().name() : null);
-                }
-            } else {
-                args = Collections.emptyMap();
-            }
+            var args = PEGUtil.extractRuleArgs(rule);
 
             var ruleName = ruleNameMap.get(rule.name());
 
