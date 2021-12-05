@@ -1,7 +1,6 @@
 package org.fugalang.grammar.util;
 
 import org.fugalang.grammar.common.FieldType;
-import org.fugalang.grammar.common.Modifier;
 import org.fugalang.grammar.common.RuleName;
 import org.fugalang.grammar.common.TokenEntry;
 import org.fugalang.grammar.peg.wrapper.*;

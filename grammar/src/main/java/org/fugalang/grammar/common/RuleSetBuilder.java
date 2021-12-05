@@ -189,9 +189,9 @@ public class RuleSetBuilder {
         // maybe this can just be added to this unit rule
         // but maybe there needs to be a separate sub-rule
 
-        if (altList.alternatives().isEmpty() && altList.sequence().primaries().size() == 1 &&
+        if (altList.alternatives().isEmpty() &&
+                altList.sequence().primaries().size() == 1 &&
                 fieldType == FieldType.Required) {
-            // ^fix - single-char repeats
 
             // just add all the repeat rules and be done with it
             addSequence(ruleName, unit, altList.sequence(), isOptional);
@@ -274,41 +274,28 @@ public class RuleSetBuilder {
             RuleName ruleName,
             UnitRule unit,
             FieldName fieldName,
-            FieldType modifier,
+            FieldType fieldType,
             boolean isOptional,
             ResultSource resultSource,
             TokenEntry delimiter
     ) {
-        FieldName newFieldName;
-        FieldType fieldType;
-        switch (modifier) {
-            case RequireTrue -> {
-                newFieldName = fieldName;
-                fieldType = FieldType.RequireTrue;
-            }
-            case RequireFalse -> {
-                newFieldName = fieldName;
-                fieldType = FieldType.RequireFalse;
-            }
-            case RequiredList -> {
-                newFieldName = fieldName.pluralize();
-                fieldType = FieldType.RequiredList;
-            }
-            case OptionalList -> {
-                newFieldName = fieldName.pluralize();
-                fieldType = FieldType.OptionalList;
-            }
-            case Required -> {
-                newFieldName = fieldName;
-                fieldType = isOptional ? FieldType.Optional : FieldType.Required;
-            }
-            default -> throw new IllegalArgumentException();
+
+        var newFieldName = switch (fieldType) {
+            case RequiredList, OptionalList -> fieldName.pluralize();
+            default -> fieldName;
+        };
+
+        FieldType newFieldType;
+        if (fieldType == FieldType.Required) {
+            newFieldType = isOptional ?  FieldType.Optional : FieldType.Required;
+        } else {
+            newFieldType = fieldType;
         }
 
         var field = new UnitField(
                 ruleName,
                 newFieldName,
-                fieldType,
+                newFieldType,
                 resultSource,
                 delimiter);
 
