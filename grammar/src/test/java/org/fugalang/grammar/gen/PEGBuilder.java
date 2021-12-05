@@ -54,7 +54,7 @@ public class PEGBuilder {
         }
 
         for (var rule : rules) {
-            var left_recursive = PEGUtil.isLeftRecursive(rule.name(), rule.ruleSuite().altList());
+            var left_recursive = PEGUtil.checkLeftRecursive(rule, Map.of());
 
             var realClassName = classNameMap.get(rule.name());
             var className = ClassName.of(realClassName, rule.name());

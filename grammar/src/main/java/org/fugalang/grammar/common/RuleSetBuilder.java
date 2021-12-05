@@ -42,14 +42,13 @@ public class RuleSetBuilder {
         }
 
         for (var rule : rules) {
-            var left_recursive = PEGUtil.isLeftRecursive(rule.name(), rule.ruleSuite().altList());
-
             var args = PEGUtil.extractRuleArgs(rule);
+            var leftRecursive = PEGUtil.checkLeftRecursive(rule, args);
 
             var ruleName = ruleNameMap.get(rule.name());
 
             var grammarString = GrammarRepr.INSTANCE.visitRule(rule);
-            UnitRule unit = ruleSet.createNamedRule(ruleName, left_recursive, args, grammarString);
+            UnitRule unit = ruleSet.createNamedRule(ruleName, leftRecursive, args, grammarString);
 
             unit.setRuleType(RuleType.Disjunction);
 

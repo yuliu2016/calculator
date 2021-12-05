@@ -70,8 +70,16 @@ public class PEGUtil {
         return sub.hasName() ? sub.name() : null;
     }
 
-    public static boolean isLeftRecursive(String name, AltList altList) {
-        return !altList.alternatives().isEmpty() && name.equals(getFirstName(altList));
+    public static boolean checkLeftRecursive(Rule rule, Map<String, String> args) {
+        var altList = rule.ruleSuite().altList();
+        var name = rule.name();
+        var expected = !altList.alternatives().isEmpty() && name.equals(getFirstName(altList));
+        if (args.containsKey("left_recursive")) {
+            return true;
+        } else {
+            if (expected) throw new IllegalStateException();
+            return false;
+        }
     }
 
 
