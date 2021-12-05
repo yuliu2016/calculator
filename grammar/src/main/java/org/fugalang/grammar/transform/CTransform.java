@@ -334,7 +334,7 @@ public class CTransform {
 
     public static String getTokenMap(RuleSet ruleSet) {
         StringBuilder sb = new StringBuilder();
-        for (var tk : ruleSet.getTokenMap().values()) {
+        for (var tk : ruleSet.tokenMap().values()) {
             sb.append("#define T_")
                     .append(tk.snakeCase().toUpperCase())
                     .append(" ")

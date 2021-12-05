@@ -19,12 +19,15 @@ public class RuleSetBuilder {
     private final Map<String, RuleName> ruleNameMap = new LinkedHashMap<>();
     private final RuleSet ruleSet;
 
+    private NamedRule currentRule;
+    private int ruleIndexCounter = 0;
+
     public RuleSetBuilder(
             Grammar grammar,
             Map<String, TokenEntry> tokenMap) {
         this.rules = grammar.rules();
         this.tokenMap = tokenMap;
-        this.ruleSet = new RuleSet(tokenMap);
+        this.ruleSet = new RuleSet(new ArrayList<>(), tokenMap);
     }
 
     @SuppressWarnings("UnusedReturnValue")
@@ -49,7 +52,7 @@ public class RuleSetBuilder {
             var ruleName = ruleNameMap.get(rule.name());
 
             var grammarString = GrammarRepr.INSTANCE.visitRule(rule);
-            UnitRule unit = ruleSet.createNamedRule(ruleName, leftRecursive, args, grammarString);
+            UnitRule unit = createNamedRule(ruleName, leftRecursive, args, grammarString);
 
             unit.setRuleType(RuleType.Disjunction);
 
@@ -59,7 +62,7 @@ public class RuleSetBuilder {
             unit.guardMatchEmptyString();
 
             // for making sure that we don't accidentally add sub-rules
-            ruleSet.namedRuleDone();
+            namedRuleDone();
         }
     }
 
@@ -96,7 +99,7 @@ public class RuleSetBuilder {
                     // need to make a new unit for this, because
                     // a list can't hold multiple-ly typed objects
                     var grammarString = GrammarRepr.INSTANCE.visitSequence(sequence);
-                    var subUnit = ruleSet.createUnnamedSubRule(newRuleName, grammarString);
+                    var subUnit = createUnnamedSubRule(newRuleName, grammarString);
 
                     subUnit.setRuleType(RuleType.Conjunction);
 
@@ -197,7 +200,7 @@ public class RuleSetBuilder {
             addSequence(ruleName, unit, altList.sequence(), isOptional);
         } else {
             var grammarString = GrammarRepr.INSTANCE.visitAltList(altList);
-            var subUnit = ruleSet.createUnnamedSubRule(ruleName, grammarString);
+            var subUnit = createUnnamedSubRule(ruleName, grammarString);
             subUnit.setRuleType(RuleType.Disjunction);
 
             var smartName = PEGUtil.getSmartName(ruleName, altList, tokenMap);
@@ -287,7 +290,7 @@ public class RuleSetBuilder {
 
         FieldType newFieldType;
         if (fieldType == FieldType.Required) {
-            newFieldType = isOptional ?  FieldType.Optional : FieldType.Required;
+            newFieldType = isOptional ? FieldType.Optional : FieldType.Required;
         } else {
             newFieldType = fieldType;
         }
@@ -300,5 +303,66 @@ public class RuleSetBuilder {
                 delimiter);
 
         unit.addField(field);
+    }
+
+    public UnitRule createNamedRule(
+            RuleName ruleName,
+            boolean leftRecursive,
+            Map<String, String> args,
+            String grammarString
+    ) {
+        var dupError = false;
+        for (var namedRule : ruleSet.namedRules()) {
+            if (namedRule.getRoot().ruleName().compareExact(ruleName)) {
+                dupError = true;
+                break;
+            }
+        }
+
+        if (dupError) {
+            throw new IllegalStateException("Duplicate named rule: " + ruleName);
+        }
+
+        var unit = new UnitRule(++ruleIndexCounter,
+                ruleName, leftRecursive, grammarString);
+
+        currentRule = new NamedRule(unit, args);
+        ruleSet.namedRules().add(currentRule);
+
+        return unit;
+    }
+
+
+    public void namedRuleDone() {
+        if (currentRule == null) {
+            throw new IllegalStateException("No named rule set");
+        }
+        currentRule = null;
+    }
+
+    public UnitRule createUnnamedSubRule(RuleName ruleName, String grammarString) {
+        if (currentRule == null) {
+            throw new IllegalStateException("No named rule to add to");
+        }
+
+        var current = currentRule;
+
+        var dupError = false;
+        for (var builder : current.getComponents()) {
+            if (builder.ruleName().compareExact(ruleName)) {
+                dupError = true;
+                break;
+            }
+        }
+
+        if (dupError) {
+            throw new IllegalStateException("Duplicate inner rule: " + ruleName);
+        }
+
+        var unit = new UnitRule(++ruleIndexCounter, ruleName, false, grammarString);
+
+        current.getComponents().add(unit);
+
+        return unit;
     }
 }

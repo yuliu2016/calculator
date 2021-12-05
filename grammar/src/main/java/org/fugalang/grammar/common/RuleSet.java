@@ -1,88 +1,10 @@
 package org.fugalang.grammar.common;
 
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class RuleSet {
-    private final List<NamedRule> namedRules;
-    private final Map<String, TokenEntry> tokenMap;
-    private NamedRule currentRule;
-    private int ruleIndexCounter = 0;
-
-    public RuleSet(Map<String, TokenEntry> tokenMap) {
-        this.tokenMap = tokenMap;
-        this.namedRules = new ArrayList<>();
-    }
-
-    public List<NamedRule> namedRules() {
-        return namedRules;
-    }
-
-    public Map<String, TokenEntry> getTokenMap() {
-        return tokenMap;
-    }
-
-    public UnitRule createNamedRule(
-            RuleName ruleName,
-            boolean leftRecursive,
-            Map<String, String> args,
-            String grammarString
-    ) {
-        var dupError = false;
-        for (var namedRule : namedRules) {
-            if (namedRule.getRoot().ruleName().compareExact(ruleName)) {
-                dupError = true;
-                break;
-            }
-        }
-
-        if (dupError) {
-            throw new IllegalStateException("Duplicate named rule: " + ruleName);
-        }
-
-        var unit = new UnitRule(++ruleIndexCounter,
-                ruleName, leftRecursive, grammarString);
-
-        currentRule = new NamedRule(unit, args);
-        namedRules.add(currentRule);
-
-        return unit;
-    }
-
-
-    public void namedRuleDone() {
-        if (currentRule == null) {
-            throw new IllegalStateException("No named rule set");
-        }
-        currentRule = null;
-    }
-
-    public UnitRule createUnnamedSubRule(RuleName ruleName, String grammarString) {
-        if (currentRule == null) {
-            throw new IllegalStateException("No named rule to add to");
-        }
-
-        var current = currentRule;
-
-        var dupError = false;
-        for (var builder : current.getComponents()) {
-            if (builder.ruleName().compareExact(ruleName)) {
-                dupError = true;
-                break;
-            }
-        }
-
-        if (dupError) {
-            throw new IllegalStateException("Duplicate inner rule: " + ruleName);
-        }
-
-        var unit = new UnitRule(++ruleIndexCounter, ruleName, false, grammarString);
-
-        current.getComponents().add(unit);
-
-        return unit;
-    }
-
+public record RuleSet(
+        List<NamedRule> namedRules,
+        Map<String, TokenEntry> tokenMap
+) {
 }
