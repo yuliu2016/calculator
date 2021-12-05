@@ -1,10 +1,10 @@
 # Calculator Grammar
 
-csum[double]:
+csum[double] (left_recursive):
     | csum '+' cterm { "binop_add(%a, %b)" }
     | csum '-' cterm { "binop_sub(%a, %b)" }
     | cterm { a }
-cterm[double]:
+cterm[double] (left_recursive):
     | cterm '*' cfactor { "binop_mul(%a, %b)" }
     | cterm '/' cfactor { "binop_div(%a, %b)" }
     | cterm '%' cfactor { "binop_mod(%a, %b)" }

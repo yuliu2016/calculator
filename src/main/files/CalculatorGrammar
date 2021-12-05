@@ -1,10 +1,10 @@
 # Calculator Grammar
 
-sum:
+sum (left_recursive):
     | sum '+' term
     | sum '-' term
     | term
-term:
+term (left_recursive):
     | term '*' factor
     | term '/' factor
     | term '%' factor
