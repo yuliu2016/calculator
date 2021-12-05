@@ -1,5 +1,6 @@
 package org.fugalang.grammar.util;
 
+import org.fugalang.grammar.common.FieldType;
 import org.fugalang.grammar.common.Modifier;
 import org.fugalang.grammar.common.RuleName;
 import org.fugalang.grammar.common.TokenEntry;
@@ -10,7 +11,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.StringJoiner;
 
-import static org.fugalang.grammar.common.Modifier.*;
+import static org.fugalang.grammar.common.FieldType.*;
 
 public class PEGUtil {
 
@@ -19,13 +20,13 @@ public class PEGUtil {
                 altList.alternatives(), Alternative::sequence);
     }
 
-    public static Modifier getModifier(Primary primary) {
-        if (primary.hasDelimited()) return OnceOrMore;
-        if (primary.hasBitAndItem()) return TestTrue;
-        if (primary.hasExclaimItem()) return TestFalse;
-        if (primary.hasItemTimes()) return NoneOrMore;
-        if (primary.hasItemPlus()) return OnceOrMore;
-        if (primary.hasItem()) return Once;
+    public static FieldType getFieldType(Primary primary) {
+        if (primary.hasDelimited()) return RequiredList;
+        if (primary.hasBitAndItem()) return RequireTrue;
+        if (primary.hasExclaimItem()) return RequireFalse;
+        if (primary.hasItemTimes()) return OptionalList;
+        if (primary.hasItemPlus()) return RequiredList;
+        if (primary.hasItem()) return Required;
         throw new IllegalArgumentException();
     }
 

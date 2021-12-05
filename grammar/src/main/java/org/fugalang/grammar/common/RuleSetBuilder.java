@@ -109,7 +109,7 @@ public class RuleSetBuilder {
                     addField(newRuleName,
                             unit,
                             fieldName,
-                            Modifier.Once,
+                            FieldType.Required,
                             REQUIRED,
                             new ResultSource(Kind.UnitRule, newRuleName),
                             null);
@@ -156,23 +156,23 @@ public class RuleSetBuilder {
             boolean isOptional
     ) {
         var item = PEGUtil.getModifierItem(primary);
-        var modifier = PEGUtil.getModifier(primary);
+        var fieldType = PEGUtil.getFieldType(primary);
 
         if (item.hasGroup()) {
             addAltListAsComponent(ruleName,
                     unit,
                     item.group().altList(),
-                    modifier,
+                    fieldType,
                     REQUIRED);
         } else if (item.hasOptional()) {
             addAltListAsComponent(ruleName,
                     unit,
                     item.optional().altList(),
-                    modifier,
+                    fieldType,
                     OPTIONAL);
         } else {
             addSimplePrimary(unit,
-                    modifier,
+                    fieldType,
                     PEGUtil.getItemString(item),
                     isOptional,
                     PEGUtil.getDelimiter(primary, tokenMap));
@@ -183,14 +183,14 @@ public class RuleSetBuilder {
             RuleName ruleName,
             UnitRule unit,
             AltList altList,
-            Modifier modifier,
+            FieldType fieldType,
             boolean isOptional
     ) {
         // maybe this can just be added to this unit rule
         // but maybe there needs to be a separate sub-rule
 
         if (altList.alternatives().isEmpty() && altList.sequence().primaries().size() == 1 &&
-                modifier == Modifier.Once) {
+                fieldType == FieldType.Required) {
             // ^fix - single-char repeats
 
             // just add all the repeat rules and be done with it
@@ -209,7 +209,7 @@ public class RuleSetBuilder {
             addField(ruleName,
                     unit,
                     fieldName,
-                    modifier,
+                    fieldType,
                     isOptional,
                     new ResultSource(Kind.UnitRule, ruleName),
                     null);
@@ -220,7 +220,7 @@ public class RuleSetBuilder {
 
     private void addSimplePrimary(
             UnitRule unit,
-            Modifier modifier,
+            FieldType fieldType,
             String primaryName,
             boolean isOptional,
             TokenEntry delimiter
@@ -234,7 +234,7 @@ public class RuleSetBuilder {
             addField(ruleName,
                     unit,
                     FieldName.of(ruleName.snakeCase()),
-                    modifier,
+                    fieldType,
                     isOptional,
                     new ResultSource(Kind.UnitRule, ruleName),
                     delimiter);
@@ -263,7 +263,7 @@ public class RuleSetBuilder {
             addField(ruleName,
                     unit,
                     FieldName.of(fieldName),
-                    modifier,
+                    fieldType,
                     isOptional,
                     resultSource,
                     delimiter);
@@ -274,7 +274,7 @@ public class RuleSetBuilder {
             RuleName ruleName,
             UnitRule unit,
             FieldName fieldName,
-            Modifier modifier,
+            FieldType modifier,
             boolean isOptional,
             ResultSource resultSource,
             TokenEntry delimiter
@@ -282,23 +282,23 @@ public class RuleSetBuilder {
         FieldName newFieldName;
         FieldType fieldType;
         switch (modifier) {
-            case TestTrue -> {
+            case RequireTrue -> {
                 newFieldName = fieldName;
                 fieldType = FieldType.RequireTrue;
             }
-            case TestFalse -> {
+            case RequireFalse -> {
                 newFieldName = fieldName;
                 fieldType = FieldType.RequireFalse;
             }
-            case OnceOrMore -> {
+            case RequiredList -> {
                 newFieldName = fieldName.pluralize();
                 fieldType = FieldType.RequiredList;
             }
-            case NoneOrMore -> {
+            case OptionalList -> {
                 newFieldName = fieldName.pluralize();
                 fieldType = FieldType.OptionalList;
             }
-            case Once -> {
+            case Required -> {
                 newFieldName = fieldName;
                 fieldType = isOptional ? FieldType.Optional : FieldType.Required;
             }
