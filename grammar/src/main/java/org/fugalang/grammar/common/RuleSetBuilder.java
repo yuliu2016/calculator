@@ -66,7 +66,7 @@ public class RuleSetBuilder {
             // Only one alternative - the entire rule is a sequence
             unit.setRuleType(RuleType.Conjunction);
             addSequence(ruleName, unit, altList.sequence());
-            // todo result clause: goes to the unit rule
+            unit.setResultClause(PEGUtil.getResultClause(altList.sequence()));
         } else {
             // Multiple alternatives, which need numbering to avoid conflicts
             int sequenceCount = 1;
@@ -76,13 +76,14 @@ public class RuleSetBuilder {
 
                 if (sequence.primaries().size() == 1) {
                     // only one primary - can propagate fields of this unit
-                    addPrimary(ruleName, unit, sequence.primaries().get(0), REQUIRED);
-                    // todo result clause: goes to the field
+                    addPrimary(ruleName, unit, sequence.primaries().get(0),
+                            REQUIRED, PEGUtil.getResultClause(sequence));
                 } else {
                     // Need to make a new unit rule to hold the sequence
                     var grammarString = GrammarRepr.INSTANCE.visitSequence(sequence);
                     var subUnit = createUnnamedRule(newRuleName, grammarString);
                     subUnit.setRuleType(RuleType.Conjunction);
+                    subUnit.setResultClause(PEGUtil.getResultClause(sequence));
 
                     var smartName = PEGUtil.getSmartName(newRuleName, sequence, tokenMap);
                     var fieldName = FieldName.of(smartName);
@@ -93,8 +94,8 @@ public class RuleSetBuilder {
                             FieldType.Required,
                             REQUIRED,
                             new ResultSource(Kind.UnitRule, newRuleName),
-                            null);
-                    // todo result clause: goes to the *new* unit rule
+                            null,
+                            new ResultClause("%a"));
 
                     addSequence(newRuleName, subUnit, sequence);
                 }
@@ -105,13 +106,13 @@ public class RuleSetBuilder {
     private void addSequence(RuleName ruleName, UnitRule unit, Sequence sequence) {
         if (sequence.primaries().size() == 1) {
             // No numbering required - just add the field
-            addPrimary(ruleName, unit, sequence.primaries().get(0), REQUIRED);
+            addPrimary(ruleName, unit, sequence.primaries().get(0), REQUIRED, null);
         } else {
             // Every Primary can be on a single field
             // Need to add numbering to avoid naming conflicts
             int primaryCount = 1;
             for (var primary : sequence.primaries()) {
-                addPrimary(ruleName.withSuffix(primaryCount++), unit, primary, REQUIRED);
+                addPrimary(ruleName.withSuffix(primaryCount++), unit, primary, REQUIRED, null);
             }
         }
     }
@@ -120,7 +121,8 @@ public class RuleSetBuilder {
             RuleName ruleName,
             UnitRule unit,
             Primary primary,
-            boolean isOptional
+            boolean isOptional,
+            ResultClause resultClause
     ) {
         var item = PEGUtil.getModifierItem(primary);
         var fieldType = PEGUtil.getFieldType(primary);
@@ -136,7 +138,8 @@ public class RuleSetBuilder {
                     fieldType,
                     PEGUtil.getItemString(item),
                     isOptional,
-                    PEGUtil.getDelimiter(primary, tokenMap));
+                    PEGUtil.getDelimiter(primary, tokenMap),
+                    resultClause);
         }
     }
 
@@ -151,8 +154,8 @@ public class RuleSetBuilder {
                 altList.sequence().primaries().size() == 1 &&
                 fieldType == FieldType.Required) {
             // Only one (non-special) primary in the altlist - add it directly
-            // todo result clause: goes to the field
-            addPrimary(ruleName, unit, altList.sequence().primaries().get(0), isOptional);
+            addPrimary(ruleName, unit, altList.sequence().primaries().get(0),
+                    isOptional, PEGUtil.getResultClause(altList.sequence()));
         } else {
             // Create a separate unit rule for the altlist
             var grammarString = GrammarRepr.INSTANCE.visitAltList(altList);
@@ -168,7 +171,8 @@ public class RuleSetBuilder {
                     fieldType,
                     isOptional,
                     new ResultSource(Kind.UnitRule, ruleName),
-                    null);
+                    null,
+                    new ResultClause("%a"));
 
             addAltList(ruleName, subUnit, altList);
         }
@@ -179,7 +183,8 @@ public class RuleSetBuilder {
             FieldType fieldType,
             String primaryName,
             boolean isOptional,
-            TokenEntry delimiter
+            TokenEntry delimiter,
+            ResultClause resultClause
     ) {
         if (ruleNameMap.containsKey(primaryName)) {
             // The primary name is referring to another named rule.
@@ -191,7 +196,7 @@ public class RuleSetBuilder {
                     fieldType,
                     isOptional,
                     new ResultSource(Kind.UnitRule, ruleName),
-                    delimiter);
+                    delimiter, resultClause);
         } else {
             // The primary name is referring to a token in the token map
 
@@ -212,13 +217,8 @@ public class RuleSetBuilder {
                 resultSource = new ResultSource(Kind.TokenType, tokenEntry);
             }
 
-            addField(ruleName,
-                    unit,
-                    FieldName.of(fieldName),
-                    fieldType,
-                    isOptional,
-                    resultSource,
-                    delimiter);
+            addField(ruleName, unit, FieldName.of(fieldName), fieldType,
+                    isOptional, resultSource, delimiter, resultClause);
         }
     }
 
@@ -229,7 +229,8 @@ public class RuleSetBuilder {
             FieldType fieldType,
             boolean isOptional,
             ResultSource resultSource,
-            TokenEntry delimiter
+            TokenEntry delimiter,
+            ResultClause resultClause
     ) {
         var newFName = switch (fieldType) {
             case RequiredList, OptionalList -> fieldName.pluralize();
@@ -243,8 +244,8 @@ public class RuleSetBuilder {
             newFType = fieldType;
         }
 
-        var field = new UnitField(ruleName, newFName, newFType, resultSource, delimiter, null);
-        unit.addField(field);
+        unit.addField(new UnitField(ruleName, newFName, newFType,
+                resultSource, delimiter, resultClause));
     }
 
     public UnitRule createNamedRule(
