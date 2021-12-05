@@ -42,15 +42,9 @@ public class RuleSetBuilder {
         }
 
         for (Rule rule : rules) {
-            var args = PEGUtil.extractRuleArgs(rule);
-            var leftRecursive = PEGUtil.checkLeftRecursive(rule, args);
-
             var ruleName = ruleNameMap.get(rule.name());
-
-            var grammarString = GrammarRepr.INSTANCE.visitRule(rule);
-            UnitRule unit = createNamedRule(ruleName, leftRecursive, args, grammarString);
+            UnitRule unit = createNamedRule(ruleName, rule);
             unit.setRuleType(RuleType.Disjunction);
-
             addAltList(ruleName, unit, rule.ruleSuite().altList());
 
             // Protect against not initializing result
@@ -134,12 +128,8 @@ public class RuleSetBuilder {
             var altList = item.optional().altList();
             addAltListAsComponent(ruleName, unit, altList, fieldType, OPTIONAL);
         } else {
-            addSimplePrimary(unit,
-                    fieldType,
-                    PEGUtil.getItemString(item),
-                    isOptional,
-                    PEGUtil.getDelimiter(primary, tokenMap),
-                    resultClause);
+            addSimplePrimary(unit, fieldType, PEGUtil.getItemString(item),
+                    isOptional, PEGUtil.getDelimiter(primary, tokenMap), resultClause);
         }
     }
 
@@ -165,14 +155,8 @@ public class RuleSetBuilder {
             var smartName = PEGUtil.getSmartName(ruleName, altList, tokenMap);
             var fieldName = FieldName.of(smartName);
 
-            addField(ruleName,
-                    unit,
-                    fieldName,
-                    fieldType,
-                    isOptional,
-                    new ResultSource(Kind.UnitRule, ruleName),
-                    null,
-                    new ResultClause("%a"));
+            addField(ruleName, unit, fieldName, fieldType, isOptional,
+                    new ResultSource(Kind.UnitRule, ruleName), null, new ResultClause("%a"));
 
             addAltList(ruleName, subUnit, altList);
         }
@@ -248,15 +232,13 @@ public class RuleSetBuilder {
                 resultSource, delimiter, resultClause));
     }
 
-    public UnitRule createNamedRule(
-            RuleName ruleName,
-            boolean leftRecursive,
-            Map<String, String> args,
-            String grammarString
-    ) {
+    public UnitRule createNamedRule(RuleName ruleName, Rule rule) {
         if (ruleSet.namedRules().stream().anyMatch(nr -> nr.root().ruleName().equals(ruleName))) {
             throw new IllegalStateException("Duplicate named rule: " + ruleName);
         }
+        var args = PEGUtil.extractRuleArgs(rule);
+        var leftRecursive = PEGUtil.checkLeftRecursive(rule, args);
+        var grammarString = GrammarRepr.INSTANCE.visitRule(rule);
         var unit = new UnitRule(++ruleCounter, ruleName, leftRecursive, grammarString);
         currentNamedRule = new NamedRule(unit, new ArrayList<>(), args);
         ruleSet.namedRules().add(currentNamedRule);
