@@ -157,20 +157,20 @@ public class RuleSetBuilder {
         var item = PEGUtil.getModifierItem(primary);
         var modifier = PEGUtil.getModifier(primary);
 
-        switch (PEGUtil.getRuleType(item)) {
-            case Group -> addAltListAsComponent(ruleName,
+        if (item.hasGroup()) {
+            addAltListAsComponent(ruleName,
                     unit,
                     item.group().altList(),
                     modifier,
                     REQUIRED);
-
-            case Optional -> addAltListAsComponent(ruleName,
+        } else if (item.hasOptional()) {
+            addAltListAsComponent(ruleName,
                     unit,
                     item.optional().altList(),
                     modifier,
                     OPTIONAL);
-
-            case Token -> addSimplePrimary(unit,
+        } else {
+            addSimplePrimary(unit,
                     modifier,
                     PEGUtil.getItemString(item),
                     isOptional,
@@ -243,7 +243,7 @@ public class RuleSetBuilder {
             // add a token value instead
 
             var tokenEntry = tokenMap.get(primaryName);
-            if (tokenEntry == null){
+            if (tokenEntry == null) {
                 throw new RuntimeException("'" + primaryName + "' is neither a rule or a token");
             }
             var ruleName = unit.ruleName();

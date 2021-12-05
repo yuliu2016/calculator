@@ -4,6 +4,7 @@ import org.fugalang.core.parser.RuleType;
 import org.fugalang.grammar.classbuilder.*;
 import org.fugalang.grammar.common.FieldType;
 import org.fugalang.grammar.common.Modifier;
+import org.fugalang.grammar.common.SubRuleType;
 import org.fugalang.grammar.util.PEGUtil;
 import org.fugalang.grammar.transform.JPackageOutput;
 import org.fugalang.grammar.util.StringUtil;
@@ -161,6 +162,12 @@ public class PEGBuilder {
         }
     }
 
+    public static SubRuleType getRuleType(Item item) {
+        return item.hasGroup() ? SubRuleType.Group :
+                item.hasOptional() ? SubRuleType.Optional :
+                        SubRuleType.Token;
+    }
+
     private void addPrimary(
             ClassName className,
             ClassBuilder cb,
@@ -172,7 +179,7 @@ public class PEGBuilder {
 
         var delimiter = primary.hasDelimited() ? primary.delimited().string() : null;
 
-        switch (PEGUtil.getRuleType(item)) {
+        switch (getRuleType(item)) {
             case Group -> addAltListAsComponent(className, cb, item.group().altList(),
                     modifier, REQUIRED, delimiter);
             case Optional -> addAltListAsComponent(className, cb,

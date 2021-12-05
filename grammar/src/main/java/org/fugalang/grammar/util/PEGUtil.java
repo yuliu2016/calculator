@@ -2,7 +2,6 @@ package org.fugalang.grammar.util;
 
 import org.fugalang.grammar.common.Modifier;
 import org.fugalang.grammar.common.RuleName;
-import org.fugalang.grammar.common.SubRuleType;
 import org.fugalang.grammar.common.TokenEntry;
 import org.fugalang.grammar.peg.wrapper.*;
 
@@ -18,12 +17,6 @@ public class PEGUtil {
     public static Iterable<Sequence> allSequences(AltList altList) {
         return FirstAndMore.of(altList.sequence(),
                 altList.alternatives(), Alternative::sequence);
-    }
-
-    public static SubRuleType getRuleType(Item item) {
-        return item.hasGroup() ? SubRuleType.Group :
-                item.hasOptional() ? SubRuleType.Optional :
-                        SubRuleType.Token;
     }
 
     public static Modifier getModifier(Primary primary) {
