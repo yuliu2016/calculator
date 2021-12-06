@@ -92,7 +92,8 @@ public class CTransform {
             sb.append("    p->ignore_whitespace = ws;\n");
         }
 
-        sb.append("    return exit_frame(p, &f, r);\n");
+        var resultName = "_" + rn.symbolicName();
+        sb.append("    return exit_frame(p, &f, ").append(resultName).append(");\n");
         sb.append("}\n");
 
         for (UnitField field : unit.fields()) {
@@ -104,9 +105,10 @@ public class CTransform {
         sb.append("    if (!enter_frame(p, &f)) {\n        return exit_frame(p, &f, 0);\n    }\n");
 
         var rtype = unit.ruleName().returnTypeOr("void");
+        var resultName = "_" + unit.ruleName().symbolicName();
 
         sb.append("    ").append(rtype).append(" *a = 0;\n");
-        sb.append("    ").append(rtype).append(" *r = 0;\n");
+        sb.append("    ").append(rtype).append(" *").append(resultName).append(" = 0;\n");
         sb.append("    ").append(rtype).append(" *max = 0;\n");
         sb.append("    size_t maxpos;\n");
 
@@ -127,7 +129,7 @@ public class CTransform {
                     } while (p->pos > maxpos);
                     p->pos = maxpos;
                     r = max ? node_1(p, &f, max) : 0;
-                """);
+                """.replace("r", resultName));
     }
 
     private static boolean isImportantField(UnitField field) {
@@ -147,9 +149,10 @@ public class CTransform {
                 ++j;
             }
         }
-        sb.append("    ").append(rtype).append(" *r;\n");
+        var rName = "_" + unit.ruleName().symbolicName();
+        sb.append("    ").append(rtype).append(" *").append(rName).append(";\n");
 
-        sb.append("    r = enter_frame(p, &f) && (\n");
+        sb.append("    ").append(rName).append(" = enter_frame(p, &f) && (\n");
 
         var fields = unit.fields();
         for (int i = 0; i < fields.size(); i++) {
@@ -214,9 +217,11 @@ public class CTransform {
 
     private static void addDisjunctionBody(UnitRule unit, StringBuilder sb) {
         var rtype = unit.ruleName().returnTypeOr("void");
+        var rName = "_" + unit.ruleName().symbolicName();
+
         sb.append("    ").append(rtype).append(" *a;\n");
-        sb.append("    ").append(rtype).append(" *r;\n");
-        sb.append("    r = enter_frame(p, &f) && (\n");
+        sb.append("    ").append(rtype).append(" *").append(rName).append(";\n");
+        sb.append("    ").append(rName).append(" = enter_frame(p, &f) && (\n");
         var fields = unit.fields();
         for (int i = 0; i < fields.size(); i++) {
             sb.append("        ");
@@ -332,13 +337,18 @@ public class CTransform {
 
     private static String getResultExpr(UnitField field) {
         var rs = field.resultSource();
+        String innerName;
         if (rs.isUnitRule()) {
-            return rs.asRuleName().symbolicName() + "(p)";
+            innerName = rs.asRuleName().symbolicName() + "(p)";
         } else if (rs.isTokenType() || rs.isTokenLiteral()) {
             var te = rs.asTokenEntry();
-            return "consume(p, " + te.index() + ", \"" + te.literalValue() + "\")";
+            innerName = "consume(p, " + te.index() + ", \"" + te.literalValue() + "\")";
+        } else throw new IllegalArgumentException();
+        if (field.resultClause() == null) {
+            return innerName;
+        } else {
+            return field.resultClause().template().replace("%a", innerName);
         }
-        throw new IllegalArgumentException();
     }
 
     public static String getTokenMap(RuleSet ruleSet) {
