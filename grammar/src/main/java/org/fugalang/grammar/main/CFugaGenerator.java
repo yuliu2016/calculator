@@ -24,7 +24,7 @@ public class CFugaGenerator {
             
             
             // Parser Entry Point
-            void *parse_grammar(FParser *p, int entry_point) {
+            void *parse_grammar(parser_t *p, int entry_point) {
                 switch (entry_point) {
                 case 0:
                     return single_input(p);

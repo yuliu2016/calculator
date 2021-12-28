@@ -114,7 +114,9 @@ public class CTransform {
 
 
         sb.append("    do {\n");
-        sb.append("        memoize(p, &f, max = a, maxpos = p->pos);\n");
+        sb.append("        maxpos = p->pos;\n");
+        sb.append("        max = a;\n");
+        sb.append("        memoize(p, &f, max, maxpos);\n");
         sb.append("        p->pos = f.f_pos;\n");
 
         var fields = unit.fields();
@@ -128,7 +130,7 @@ public class CTransform {
         sb.append("""
                     } while (p->pos > maxpos);
                     p->pos = maxpos;
-                    r = max ? node_1(p, &f, max) : 0;
+                    r = max;
                 """.replace("r", resultName));
     }
 
