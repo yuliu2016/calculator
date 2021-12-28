@@ -174,13 +174,7 @@ public class CTransform {
 
         sb.append("\n    ) ? ");
         if (unit.resultClause() == null) {
-            switch (importantCount) {
-                case 0 -> sb.append("node_0(p, &f)");
-                case 1 -> sb.append("node_1(p, &f, a)");
-                case 2 -> sb.append("node_2(p, &f, a, b)");
-                case 3 -> sb.append("node_3(p, &f, a, b, c)");
-                case 4 -> sb.append("node_4(p, &f, a, b, c, d)");
-            }
+            sb.append("node(p, &f)");
         } else {
             var resultClause = unit.resultClause().template()
                     .replace("%a", "a")

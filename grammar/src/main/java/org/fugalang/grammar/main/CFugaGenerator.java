@@ -17,7 +17,7 @@ public class CFugaGenerator {
     private static final String BASE_DIR = Paths.get(
             System.getProperty("user.home"), "vscode/cpeg").toString();
     private static final Path C_PATH = Paths.get(BASE_DIR, "parser.c");
-    private static final Path TM_PATH = Paths.get(BASE_DIR, "include/tokenmap.h");
+    private static final Path TM_PATH = Paths.get(BASE_DIR, "include/internal/tokenmap.h");
 
     private static final String ENTRY_POINT = """
             

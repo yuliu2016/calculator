@@ -22,7 +22,7 @@ public class CCalcGenerator {
             
             // Parser Entry Point
             double *parse_calc(parser_t *p) {
-                return csum(p);
+                return sum(p);
             }
             """;
 

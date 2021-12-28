@@ -1,26 +1,26 @@
 # Calculator Grammar
 
-csum[double] (left_recursive):
-    | csum '+' cterm { "binop_add(p, %a, %b)" }
-    | csum '-' cterm { "binop_sub(p, %a, %b)" }
-    | cterm { a }
-cterm[double] (left_recursive):
-    | cterm '*' cfactor { "binop_mul(p, %a, %b)" }
-    | cterm '/' cfactor { "binop_div(p, %a, %b)" }
-    | cterm '%' cfactor { "binop_mod(p, %a, %b)" }
-    | cfactor { a }
-cfactor[double]:
-    | '+' cfactor { "unary_plus(p, %a)" }
-    | '-' cfactor { "unary_minus(p, %a)" }
-    | '~' cfactor { "unary_not(p, %a)" }
-    | cpower { a }
-cpower[double]:
-    | catom '**' cfactor { "binop_pow(p, %a, %b)" }
-    | catom { a }
-catom[double]:
-    | '(' csum ')' { a }
-    | NAME '(' [cparameters] ')' { "call_func(p, %a, %b)" }
+sum[double] (left_recursive):
+    | sum '+' term { "binop_add(p, %a, %b)" }
+    | sum '-' term { "binop_sub(p, %a, %b)" }
+    | term { a }
+term[double] (left_recursive):
+    | term '*' factor { "binop_mul(p, %a, %b)" }
+    | term '/' factor { "binop_div(p, %a, %b)" }
+    | term '%' factor { "binop_mod(p, %a, %b)" }
+    | factor { a }
+factor[double]:
+    | '+' factor { "unary_plus(p, %a)" }
+    | '-' factor { "unary_minus(p, %a)" }
+    | '~' factor { "unary_not(p, %a)" }
+    | power { a }
+power[double]:
+    | atom '**' factor { "binop_pow(p, %a, %b)" }
+    | atom { a }
+atom[double]:
+    | '(' sum ')' { a }
+    | NAME '(' [parameters] ')' { "call_func(p, %a, %b)" }
     | NAME { "load_const(p, %a)" }
     | NUMBER { "to_double(p, %a)" }
-cparameters[ast_list_t]:
-    | ','.csum+ [','] { a }
+parameters[ast_list_t]:
+    | ','.sum+ [','] { a }
