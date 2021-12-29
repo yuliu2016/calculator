@@ -222,15 +222,29 @@ public class CTransform {
         sb.append("    ").append(resultType).append(" *").append(altName).append(";\n");
         sb.append("    ").append(resultType).append(" *").append(resultName).append(";\n");
         sb.append("    ").append(resultName).append(" = enter_frame(p, &f) && (\n");
+
         var fields = unit.fields();
         for (int i = 0; i < fields.size(); i++) {
             var field = fields.get(i);
+            var fieldName = field.fieldName().snakeCaseUnconflicted();
             sb.append("        ");
+
+            sb.append("(").append(fieldName).append(" = ");
+            sb.append(getParserFieldExpr(field)).append(") &&\n");
+
+            sb.append("            ");
             sb.append("(").append(altName).append(" = ");
+
+            if (field.resultClause() == null) {
+                sb.append(fieldName);
+            } else {
+                sb.append(field.resultClause().template().replace("%a", fieldName));
+            }
+
             boolean isLast = i == fields.size() - 1;
-            var result = getParserFieldExpr(field) + getLogicOperator(unit.ruleType(), isLast);
-            sb.append(result);
+            sb.append(getLogicOperator(unit.ruleType(), isLast));
         }
+
         sb.append("\n    ) ? ").append(altName).append(" : 0;\n");
     }
 
@@ -339,11 +353,7 @@ public class CTransform {
             var te = rs.asTokenEntry();
             innerName = "consume(p, " + te.index() + ", \"" + te.literalValue() + "\")";
         } else throw new IllegalArgumentException();
-        if (field.resultClause() == null) {
-            return innerName;
-        } else {
-            return field.resultClause().template().replace("%a", innerName);
-        }
+        return innerName;
     }
 
     public static String getTokenMap(RuleSet ruleSet) {
