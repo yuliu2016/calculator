@@ -4,7 +4,9 @@ import org.fugalang.core.parser.RuleType;
 import org.fugalang.grammar.common.*;
 import org.fugalang.grammar.util.StringUtil;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 public class CTransform {
@@ -92,7 +94,7 @@ public class CTransform {
             sb.append("    p->ignore_whitespace = ws;\n");
         }
 
-        var resultName = "_" + rn.symbolicName();
+        var resultName = "res_" + unit.ruleIndex();
         sb.append("    return exit_frame(p, &f, ").append(resultName).append(");\n");
         sb.append("}\n");
 
@@ -105,7 +107,7 @@ public class CTransform {
         sb.append("    if (!enter_frame(p, &f)) {\n        return exit_frame(p, &f, 0);\n    }\n");
 
         var rtype = unit.ruleName().returnTypeOr("void");
-        var resultName = "_" + unit.ruleName().symbolicName();
+        var resultName = "res_" + unit.ruleIndex();
 
         sb.append("    ").append(rtype).append(" *a = 0;\n");
         sb.append("    ").append(rtype).append(" *").append(resultName).append(" = 0;\n");
@@ -142,19 +144,21 @@ public class CTransform {
     private static void addConjunctionBody(UnitRule unit, StringBuilder sb) {
         var rtype = unit.ruleName().returnTypeOr("void");
 
-        int importantCount = 0;
+        List<String> fieldNames = new ArrayList<>();
 
-        int j = 0;
         for (UnitField field : unit.fields()) {
             if (isImportantField(field)) {
-                addFieldVarDeclaration(field, sb, j);
-                ++j;
+                var type = getParserFieldType(field);
+                var name = field.fieldName().snakeCaseUnconflicted();
+                fieldNames.add(name);
+                sb.append("    ").append(type).append(" *").append(name).append(";\n");
             }
         }
-        var rName = "_" + unit.ruleName().symbolicName();
-        sb.append("    ").append(rtype).append(" *").append(rName).append(";\n");
 
-        sb.append("    ").append(rName).append(" = enter_frame(p, &f) && (\n");
+        var resultName = "res_" + unit.ruleIndex();
+        sb.append("    ").append(rtype).append(" *").append(resultName).append(";\n");
+
+        sb.append("    ").append(resultName).append(" = enter_frame(p, &f) && (\n");
 
         var fields = unit.fields();
         for (int i = 0; i < fields.size(); i++) {
@@ -162,8 +166,7 @@ public class CTransform {
             sb.append("(");
             var field = fields.get(i);
             if (isImportantField(field)) {
-                var fieldName = ((char) ('a' + importantCount)) + "";
-                importantCount++;
+                var fieldName = field.fieldName().snakeCaseUnconflicted();
                 sb.append(fieldName);
                 sb.append(" = ");
             }
@@ -176,11 +179,12 @@ public class CTransform {
         if (unit.resultClause() == null) {
             sb.append("node(p, &f)");
         } else {
-            var resultClause = unit.resultClause().template()
-                    .replace("%a", "a")
-                    .replace("%b", "b")
-                    .replace("%c", "c")
-                    .replace("%d", "d");
+            var resultClause = unit.resultClause().template();
+            for (int i = 0; i < fieldNames.size(); i++) {
+                var name = fieldNames.get(i);
+                var templateName = "%" + ((char) ('a' + i));
+                resultClause = resultClause.replace(templateName, name);
+            }
             sb.append(resultClause);
         }
         sb.append(" : 0;\n");
@@ -203,21 +207,13 @@ public class CTransform {
         return type;
     }
 
-    private static void addFieldVarDeclaration(UnitField field, StringBuilder sb, int i) {
-        if (isImportantField(field)) {
-            var type = getParserFieldType(field);
-            char letter = (char) ('a' + i);
-            sb.append("    ").append(type).append(" *").append(letter).append(";\n");
-        }
-    }
-
     private static void addDisjunctionBody(UnitRule unit, StringBuilder sb) {
-        var rtype = unit.ruleName().returnTypeOr("void");
-        var rName = "_" + unit.ruleName().symbolicName();
+        var resultType = unit.ruleName().returnTypeOr("void");
+        var resultName = "res_" + unit.ruleIndex();
 
-        sb.append("    ").append(rtype).append(" *a;\n");
-        sb.append("    ").append(rtype).append(" *").append(rName).append(";\n");
-        sb.append("    ").append(rName).append(" = enter_frame(p, &f) && (\n");
+        sb.append("    ").append(resultType).append(" *a;\n");
+        sb.append("    ").append(resultType).append(" *").append(resultName).append(";\n");
+        sb.append("    ").append(resultName).append(" = enter_frame(p, &f) && (\n");
         var fields = unit.fields();
         for (int i = 0; i < fields.size(); i++) {
             sb.append("        ");
