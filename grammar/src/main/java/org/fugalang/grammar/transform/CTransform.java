@@ -124,7 +124,7 @@ public class CTransform {
         var fields = unit.fields();
         for (int i = 0; i < fields.size(); i++) {
             sb.append("        (a = ");
-            var result = getParserFieldExpr(fields.get(i),
+            var result = getParserFieldExpr(fields.get(i)) + getLogicOperator(
                     unit.ruleType(), i == fields.size() - 1);
             sb.append(result);
         }
@@ -170,7 +170,7 @@ public class CTransform {
                 sb.append(fieldName);
                 sb.append(" = ");
             }
-            var result = getParserFieldExpr(field,
+            var result = getParserFieldExpr(field) + getLogicOperator(
                     unit.ruleType(), i == fields.size() - 1);
             sb.append(result);
         }
@@ -224,23 +224,27 @@ public class CTransform {
         sb.append("    ").append(resultName).append(" = enter_frame(p, &f) && (\n");
         var fields = unit.fields();
         for (int i = 0; i < fields.size(); i++) {
+            var field = fields.get(i);
             sb.append("        ");
             sb.append("(").append(altName).append(" = ");
-            var result = getParserFieldExpr(fields.get(i),
-                    unit.ruleType(), i == fields.size() - 1);
+            boolean isLast = i == fields.size() - 1;
+            var result = getParserFieldExpr(field) + getLogicOperator(unit.ruleType(), isLast);
             sb.append(result);
         }
         sb.append("\n    ) ? ").append(altName).append(" : 0;\n");
     }
 
-    private static String getParserFieldExpr(
-            UnitField field, RuleType ruleType, boolean isLast) {
+    private static String getLogicOperator(RuleType ruleType, boolean isLast) {
+        return (isLast ? ")" : ruleType == RuleType.Conjunction ? ") &&\n" : ") ||\n");
+    }
+
+    private static String getParserFieldExpr(UnitField field) {
         return switch (field.fieldType()) {
-            case RequireTrue -> getRequiredExprPart(getTestExpr(field), ruleType, isLast);
-            case RequireFalse -> getRequiredExprPart("!" + getTestExpr(field), ruleType, isLast);
-            case Required -> getRequiredExprPart(getResultExpr(field), ruleType, isLast);
-            case Optional -> getOptionalExprPart(getResultExpr(field), ruleType, isLast);
-            case RequiredList, OptionalList -> getRequiredExprPart(getNewLoopExpr(field), ruleType, isLast);
+            case RequireTrue -> getTestExpr(field);
+            case RequireFalse -> "!" + getTestExpr(field);
+            case Required -> getResultExpr(field);
+            case Optional -> getResultExpr(field) + ", 1";
+            case RequiredList, OptionalList -> getNewLoopExpr(field);
         };
     }
 
@@ -321,15 +325,6 @@ public class CTransform {
         }
     }
 
-    private static String getOptionalExprPart(String resultExpr, RuleType ruleType, boolean isLast) {
-        return getRequiredExprPart(resultExpr + ", 1", ruleType, isLast);
-    }
-
-    private static String getRequiredExprPart(String resultExpr, RuleType ruleType, boolean isLast) {
-        // N.W. there is no starting bracket because stuff can go before resultExpr
-        return resultExpr + (isLast ? ")" :
-                ruleType == RuleType.Conjunction ? ") &&\n" : ") ||\n");
-    }
 
     private static String getTestExpr(UnitField field) {
         return "test_and_reset(p, &f, " + getResultExpr(field) + ")";
