@@ -208,21 +208,29 @@ public class CTransform {
     }
 
     private static void addDisjunctionBody(UnitRule unit, StringBuilder sb) {
+
+        for (UnitField field : unit.fields()) {
+            var type = getParserFieldType(field);
+            var name = field.fieldName().snakeCaseUnconflicted();
+            sb.append("    ").append(type).append(" *").append(name).append(";\n");
+        }
+
         var resultType = unit.ruleName().returnTypeOr("void");
         var resultName = "res_" + unit.ruleIndex();
+        var altName = "alt_" + unit.ruleIndex();
 
-        sb.append("    ").append(resultType).append(" *a;\n");
+        sb.append("    ").append(resultType).append(" *").append(altName).append(";\n");
         sb.append("    ").append(resultType).append(" *").append(resultName).append(";\n");
         sb.append("    ").append(resultName).append(" = enter_frame(p, &f) && (\n");
         var fields = unit.fields();
         for (int i = 0; i < fields.size(); i++) {
             sb.append("        ");
-            sb.append("(a = ");
+            sb.append("(").append(altName).append(" = ");
             var result = getParserFieldExpr(fields.get(i),
                     unit.ruleType(), i == fields.size() - 1);
             sb.append(result);
         }
-        sb.append("\n    ) ? a : 0;\n");
+        sb.append("\n    ) ? ").append(altName).append(" : 0;\n");
     }
 
     private static String getParserFieldExpr(
