@@ -1,13 +1,18 @@
 package org.fugalang.grammar.main;
 
+import org.fugalang.core.token.Keyword;
+import org.fugalang.core.token.Operator;
 import org.fugalang.grammar.common.RuleSet;
 import org.fugalang.grammar.common.RuleSetBuilder;
+import org.fugalang.grammar.common.TokenEntry;
 import org.fugalang.grammar.transform.CTransform;
+import org.fugalang.grammar.util.StringUtil;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class CFugaGenerator {
@@ -38,6 +43,15 @@ public class CFugaGenerator {
             }
             """;
 
+    private static final String TKL_TYPE = """
+            
+            struct token_literal {
+                const char *literal;
+                size_t tkl_type;
+            };
+            
+            """;
+
     @SuppressWarnings("SameParameterValue")
     private static String formatHeaderFile(String name, String content, String... includes) {
         var s = "#ifndef CPEG_" + name + "_H\n" +
@@ -53,6 +67,40 @@ public class CFugaGenerator {
         return s.replace("\n", System.lineSeparator());
     }
 
+    private static String formatLiterals() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("static struct token_literal keywords[] = {\n");
+        var keywords = Keyword.ALL_KEYWORDS;
+        for (String keyword : keywords) {
+            sb.append("    {\"");
+            sb.append(keyword);
+            sb.append("\",");
+            sb.append(" ".repeat(9 - keyword.length()));
+            sb.append("T_");
+            sb.append(keyword.toUpperCase());
+            sb.append("},\n");
+        }
+        sb.append("};\n\n");
+
+        sb.append("static struct token_literal operators[] = {\n");
+
+        var operators = Operator.values();
+        for (Operator op : operators) {
+            sb.append("    {\"");
+            sb.append(op.getCode());
+            sb.append("\",");
+            sb.append(" ".repeat(4 - op.getCode().length()));
+            sb.append("T_");
+            sb.append(op.name());
+            sb.append("},\n");
+        }
+
+        sb.append("};");
+        sb.append("\n\n");
+        return sb.toString();
+    }
+
     public static void main(String[] args) throws Exception {
         RuleSet ruleSet = RuleSetBuilder.generateRuleSet(
                 GeneratorUtil.readGrammar(USER_DIR, GRAMMAR_PATH),
@@ -65,7 +113,10 @@ public class CFugaGenerator {
                 CTransform.getFunctionBodies(ruleSet);
         Files.writeString(C_PATH, c.replace("\n", System.lineSeparator()));
 
-        String tokenMap = formatHeaderFile("TOKENMAP", CTransform.getTokenMap(ruleSet));
+        String tokenHeader = CTransform.getTokenMap(ruleSet) +
+                TKL_TYPE + formatLiterals();
+
+        String tokenMap = formatHeaderFile("TOKENMAP", tokenHeader);
         Files.writeString(TM_PATH, tokenMap);
     }
 }
