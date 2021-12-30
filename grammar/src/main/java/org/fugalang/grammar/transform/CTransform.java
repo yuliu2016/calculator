@@ -210,9 +210,11 @@ public class CTransform {
     private static void addDisjunctionBody(UnitRule unit, StringBuilder sb) {
 
         for (UnitField field : unit.fields()) {
-            var type = getParserFieldType(field);
-            var name = field.fieldName().snakeCaseUnconflicted();
-            sb.append("    ").append(type).append(" *").append(name).append(";\n");
+            if (!field.resultClause().template().strip().equals("%a")) {
+                var type = getParserFieldType(field);
+                var name = field.fieldName().snakeCaseUnconflicted();
+                sb.append("    ").append(type).append(" *").append(name).append(";\n");
+            }
         }
 
         var resultType = unit.ruleName().returnTypeOr("void");
@@ -229,15 +231,20 @@ public class CTransform {
             var fieldName = field.fieldName().snakeCaseUnconflicted();
             sb.append("        ");
 
-            sb.append("(").append(fieldName).append(" = ");
-            sb.append(getParserFieldExpr(field)).append(") &&\n");
+            if (field.resultClause() == null)
+                throw new IllegalStateException();
 
-            sb.append("            ");
-            sb.append("(").append(altName).append(" = ");
-
-            if (field.resultClause() == null) {
-                sb.append(fieldName);
+            if (field.resultClause().template().strip().equals("%a")) {
+                // Fall-through; no extra variables needed
+                sb.append("(").append(altName).append(" = ")
+                        .append(getParserFieldExpr(field));
             } else {
+                sb.append("(").append(fieldName).append(" = ");
+                sb.append(getParserFieldExpr(field)).append(") &&\n");
+
+                sb.append("            ");
+                sb.append("(").append(altName).append(" = ");
+
                 sb.append(field.resultClause().template().replace("%a", fieldName));
             }
 

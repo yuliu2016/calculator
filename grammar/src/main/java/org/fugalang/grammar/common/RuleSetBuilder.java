@@ -70,8 +70,12 @@ public class RuleSetBuilder {
 
                 if (sequence.primaries().size() == 1) {
                     // only one primary - can propagate fields of this unit
+                    // also set the result clause to be "fall-through" if unspecified
+                    var resultClause = PEGUtil.getResultClause(sequence);
+                    if (resultClause == null) resultClause = new ResultClause("%a");
+
                     addPrimary(ruleName, unit, sequence.primaries().get(0),
-                            REQUIRED, PEGUtil.getResultClause(sequence));
+                            REQUIRED, resultClause);
                 } else {
                     // Need to make a new unit rule to hold the sequence
                     var grammarString = GrammarRepr.INSTANCE.visitSequence(sequence);
