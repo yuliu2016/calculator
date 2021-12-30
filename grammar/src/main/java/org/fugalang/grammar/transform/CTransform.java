@@ -230,35 +230,39 @@ public class CTransform {
 
         sb.append("    ").append(resultType).append(" *").append(altName).append(";\n");
         sb.append("    ").append(resultType).append(" *").append(resultName).append(";\n");
-        sb.append("    ").append(resultName).append(" = enter_frame(p, &f) && (\n");
+        sb.append("    ").append(resultName).append(" = enter_frame(p, &f) && (");
 
         var fields = unit.fields();
         for (int i = 0; i < fields.size(); i++) {
             var field = fields.get(i);
             var fieldName = field.fieldName().snakeCaseUnconflicted();
-            sb.append("        ");
 
             if (field.resultClause() == null)
                 throw new IllegalStateException();
 
             if (field.resultClause().template().strip().equals("%a")) {
                 // Fall-through; no extra variables needed
-                sb.append("(").append(altName).append(" = ")
+                sb.append("\n        (").append(altName).append(" = ")
                         .append(getParserFieldExpr(field));
             } else {
-                sb.append("(").append(fieldName).append(" = ");
+                sb.append(" (\n            (").append(fieldName).append(" = ");
                 sb.append(getParserFieldExpr(field)).append(") &&\n");
 
                 sb.append("            ");
                 sb.append("(").append(altName).append(" = ");
 
                 sb.append(field.resultClause().template().replace("%a", fieldName));
+                if (i == fields.size() - 1) {
+                    sb.append(")");
+                } else {
+                    sb.append(")\n        ");
+                }
             }
 
             if (i == fields.size() - 1) {
                 sb.append(")");
             } else {
-                sb.append(") ||\n");
+                sb.append(") ||");
             }
         }
 
