@@ -103,7 +103,7 @@ public class CTransform {
     }
 
     private static void addLeftRecursiveUnitRuleBody(UnitRule unit, StringBuilder sb) {
-        sb.append("    if (!enter_frame(p, &f)) {\n        return exit_frame(p, &f, 0);\n    }\n");
+//        sb.append("    if (!enter_frame(p, &f)) {\n        return exit_frame(p, &f, 0);\n    }\n");
 
         var rtype = unit.ruleName().returnTypeOr("void");
         var resultName = "res_" + unit.ruleIndex();
@@ -114,17 +114,17 @@ public class CTransform {
         sb.append("    size_t maxpos;\n");
         sb.append("    ").append(rtype).append(" *max;\n");
 
-
-        sb.append("    do {\n");
-        sb.append("        maxpos = p->pos;\n");
-        sb.append("        max = ").append(resultName).append(";\n");
-        sb.append("        memoize(p, &f, max, maxpos);\n");
-        sb.append("        p->pos = f.f_pos;\n");
-        sb.append("        ").append(resultName).append(" = (\n");
+        sb.append("    if (enter_frame(p, &f)) {\n");
+        sb.append("        do {\n");
+        sb.append("            maxpos = p->pos;\n");
+        sb.append("            max = ").append(resultName).append(";\n");
+        sb.append("            memoize(p, &f, max, maxpos);\n");
+        sb.append("            p->pos = f.f_pos;\n");
+        sb.append("            ").append(resultName).append(" = (\n");
 
         var fields = unit.fields();
         for (int i = 0; i < fields.size(); i++) {
-            sb.append("            (").append(altName).append(" = ");
+            sb.append("                (").append(altName).append(" = ");
             sb.append(getParserFieldExpr(fields.get(i)));
 
             if (i == fields.size() - 1) {
@@ -133,11 +133,12 @@ public class CTransform {
                 sb.append(") ||\n");
             }
         }
-        sb.append("\n        ) ? ").append(altName).append(" : 0;\n");
+        sb.append("\n            ) ? ").append(altName).append(" : 0;\n");
         sb.append("""
-                    } while (p->pos > maxpos);
-                    p->pos = maxpos;
-                    r = max;
+                        } while (p->pos > maxpos);
+                        p->pos = maxpos;
+                        r = max;
+                    }
                 """.replace("r", resultName));
     }
 
