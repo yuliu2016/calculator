@@ -1,6 +1,5 @@
 package org.fugalang.grammar.transform;
 
-import org.fugalang.core.parser.RuleType;
 import org.fugalang.grammar.common.*;
 import org.fugalang.grammar.util.StringUtil;
 
@@ -124,9 +123,13 @@ public class CTransform {
         var fields = unit.fields();
         for (int i = 0; i < fields.size(); i++) {
             sb.append("        (a = ");
-            var result = getParserFieldExpr(fields.get(i)) + getLogicOperator(
-                    unit.ruleType(), i == fields.size() - 1);
-            sb.append(result);
+            sb.append(getParserFieldExpr(fields.get(i)));
+
+            if (i == fields.size() - 1) {
+                sb.append(")");
+            } else {
+                sb.append(") ||\n");
+            }
         }
         sb.append(";\n");
         sb.append("""
@@ -170,9 +173,13 @@ public class CTransform {
                 sb.append(fieldName);
                 sb.append(" = ");
             }
-            var result = getParserFieldExpr(field) + getLogicOperator(
-                    unit.ruleType(), i == fields.size() - 1);
-            sb.append(result);
+            sb.append(getParserFieldExpr(field));
+
+            if (i == fields.size() - 1) {
+                sb.append(")");
+            } else {
+                sb.append(") &&\n");
+            }
         }
 
         sb.append("\n    ) ? ");
@@ -248,15 +255,14 @@ public class CTransform {
                 sb.append(field.resultClause().template().replace("%a", fieldName));
             }
 
-            boolean isLast = i == fields.size() - 1;
-            sb.append(getLogicOperator(unit.ruleType(), isLast));
+            if (i == fields.size() - 1) {
+                sb.append(")");
+            } else {
+                sb.append(") ||\n");
+            }
         }
 
         sb.append("\n    ) ? ").append(altName).append(" : 0;\n");
-    }
-
-    private static String getLogicOperator(RuleType ruleType, boolean isLast) {
-        return (isLast ? ")" : ruleType == RuleType.Conjunction ? ") &&\n" : ") ||\n");
     }
 
     private static String getParserFieldExpr(UnitField field) {
