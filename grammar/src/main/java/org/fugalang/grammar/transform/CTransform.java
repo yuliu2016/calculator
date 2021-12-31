@@ -248,7 +248,8 @@ public class CTransform {
                 sb.append("\n        (").append(altName).append(" = ")
                         .append(getParserFieldExpr(field));
             } else {
-                sb.append(" (\n            (").append(fieldName).append(" = ");
+                if (i != 0) sb.append(" ");
+                sb.append("(\n            (").append(fieldName).append(" = ");
                 sb.append(getParserFieldExpr(field)).append(") &&\n");
 
                 sb.append("            ");
