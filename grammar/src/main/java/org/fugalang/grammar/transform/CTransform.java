@@ -152,13 +152,24 @@ public class CTransform {
 
         List<String> fieldNames = new ArrayList<>();
 
+        int j = 0;
         for (UnitField field : unit.fields()) {
-            if (isImportantField(field)) {
-                var type = getParserFieldType(field);
-                var name = field.fieldName().snakeCaseUnconflicted();
-                fieldNames.add(name);
-                sb.append("    ").append(type).append(" *").append(name).append(";\n");
+            if (!isImportantField(field)) continue;
+
+            if (unit.resultClause() != null) {
+                var template = unit.resultClause().template();
+                var varName = "%" + ((char) ('a' + j));
+                if (!template.contains(varName)) {
+                    j++;
+                    continue;
+                }
             }
+            j++;
+
+            var type = getParserFieldType(field);
+            var name = field.fieldName().snakeCaseUnconflicted();
+            fieldNames.add(name);
+            sb.append("    ").append(type).append(" *").append(name).append(";\n");
         }
 
         var resultName = "res_" + unit.ruleIndex();
@@ -167,14 +178,26 @@ public class CTransform {
         sb.append("    ").append(resultName).append(" = enter_frame(p, &f) && (\n");
 
         var fields = unit.fields();
+        j = 0;
         for (int i = 0; i < fields.size(); i++) {
             sb.append("        ");
             sb.append("(");
             var field = fields.get(i);
             if (isImportantField(field)) {
                 var fieldName = field.fieldName().snakeCaseUnconflicted();
-                sb.append(fieldName);
-                sb.append(" = ");
+
+                if (unit.resultClause() != null) {
+                    var template = unit.resultClause().template();
+                    var varName = "%" + ((char) ('a' + j));
+                    if (template.contains(varName)) {
+                        sb.append(fieldName);
+                        sb.append(" = ");
+                    }
+                } else {
+                    sb.append(fieldName);
+                    sb.append(" = ");
+                }
+                j++;
             }
             sb.append(getParserFieldExpr(field));
 
