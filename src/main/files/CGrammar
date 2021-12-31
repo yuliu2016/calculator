@@ -280,41 +280,41 @@ comp_op[int]:
     | 'not' 'in' { "&CMP_NI" }
     | 'is' { "&CMP_IS" }
     | 'is' 'not' { "&CMP_NS" }
-bitwise_or (left_recursive):
-    | bitwise_or '|' bitwise_xor
-    | bitwise_xor
-bitwise_xor (left_recursive):
-    | bitwise_xor '^' bitwise_and
-    | bitwise_and
-bitwise_and (left_recursive):
-    | bitwise_and '&' shift_expr
-    | shift_expr
-shift_expr (left_recursive):
-    | shift_expr '<<' sum
-    | shift_expr '>>' sum
-    | sum
-sum (left_recursive):
-    | sum '+' term
-    | sum '-' term
-    | term
-term (left_recursive):
-    | term '*' pipe_expr
-    | term '/' pipe_expr
-    | term '%' pipe_expr
-    | term '//' pipe_expr
-    | term '@' pipe_expr
-    | pipe_expr
-pipe_expr (left_recursive):
-    | pipe_expr '->' factor
-    | factor
-factor:
-    | '+' factor
-    | '-' factor
-    | '~' factor
-    | power
-power:
-    | primary '**' factor
-    | primary
+bitwise_or[ast_expr_t] (left_recursive):
+    | bitwise_or '|' bitwise_xor { "ast_binary(p, %a, %b, BINOP_IOR)" }
+    | bitwise_xor { a }
+bitwise_xor[ast_expr_t] (left_recursive):
+    | bitwise_xor '^' bitwise_and { "ast_binary(p, %a, %b, BINOP_XOR)" }
+    | bitwise_and { a }
+bitwise_and[ast_expr_t] (left_recursive):
+    | bitwise_and '&' shift_expr { "ast_binary(p, %a, %b, BINOP_AND)" }
+    | shift_expr { a }
+shift_expr[ast_expr_t] (left_recursive):
+    | shift_expr '<<' sum { "ast_binary(p, %a, %b, BINOP_SHL)" }
+    | shift_expr '>>' sum { "ast_binary(p, %a, %b, BINOP_SHR)" }
+    | sum { a }
+sum[ast_expr_t] (left_recursive):
+    | sum '+' term { "ast_binary(p, %a, %b, BINOP_PLS)" }
+    | sum '-' term { "ast_binary(p, %a, %b, BINOP_MIN)" }
+    | term { a }
+term[ast_expr_t] (left_recursive):
+    | term '*' pipe_expr { "ast_binary(p, %a, %b, BINOP_MUL)" }
+    | term '/' pipe_expr { "ast_binary(p, %a, %b, BINOP_DIV)" }
+    | term '%' pipe_expr { "ast_binary(p, %a, %b, BINOP_MOD)" }
+    | term '//' pipe_expr { "ast_binary(p, %a, %b, BINOP_FDV)" }
+    | term '@' pipe_expr { "ast_binary(p, %a, %b, BINOP_MML)" }
+    | pipe_expr { a }
+pipe_expr[ast_expr_t] (left_recursive):
+    | pipe_expr '->' factor { "ast_binary(p, %a, %b, BINOP_PIP)" }
+    | factor { a }
+factor[ast_expr_t]:
+    | '+' factor { "ast_unary(p, %a, UNARY_PLS)" }
+    | '-' factor { "ast_unary(p, %a, UNARY_MIN)" }
+    | '~' factor { "ast_unary(p, %a, UNARY_INV)" }
+    | power { a }
+power[ast_expr_t]:
+    | primary '**' factor { "ast_binary(p, %a, %b, BINOP_POW)" }
+    | primary { "ast_primary_expr(p, %a)" }
 primary (left_recursive):
     | primary '.' NAME
     | primary invocation
