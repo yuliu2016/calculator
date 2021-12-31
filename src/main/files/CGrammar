@@ -130,16 +130,16 @@ augassign_op[int]:
     | '+='  { "ast_integer(p, BINOP_PLS)" }
     | '-='  { "ast_integer(p, BINOP_MIN)" }
     | '*='  { "ast_integer(p, BINOP_MUL)" }
-    | '@='  { "ast_integer(p, BINOP_MML)" }
     | '/='  { "ast_integer(p, BINOP_DIV)" }
     | '%='  { "ast_integer(p, BINOP_MOD)" }
-    | '&='  { "ast_integer(p, BINOP_AND)" }
+    | '@='  { "ast_integer(p, BINOP_MML)" }
     | '|='  { "ast_integer(p, BINOP_IOR)" }
+    | '&='  { "ast_integer(p, BINOP_AND)" }
     | '^='  { "ast_integer(p, BINOP_XOR)" }
+    | '//=' { "ast_integer(p, BINOP_FDV)" }
+    | '**=' { "ast_integer(p, BINOP_POW)" }
     | '<<=' { "ast_integer(p, BINOP_SHL)" }
     | '>>=' { "ast_integer(p, BINOP_SHR)" }
-    | '**=' { "ast_integer(p, BINOP_POW)" }
-    | '//=' { "ast_integer(p, BINOP_FDV)" }
 
 # Import Statements
 

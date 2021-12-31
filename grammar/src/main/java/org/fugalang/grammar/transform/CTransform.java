@@ -220,11 +220,15 @@ public class CTransform {
     private static void addDisjunctionBody(UnitRule unit, StringBuilder sb) {
 
         for (UnitField field : unit.fields()) {
-            if (!field.resultClause().template().strip().equals("%a")) {
-                var type = getParserFieldType(field);
-                var name = field.fieldName().snakeCaseUnconflicted();
-                sb.append("    ").append(type).append(" *").append(name).append(";\n");
-            }
+            var template = field.resultClause().template().strip();
+            // Direct fallthrough
+            if (template.equals("%a")) continue;
+            // Still need to AND the result, but don't need separate variable
+            if (!template.contains("%a")) continue;
+
+            var type = getParserFieldType(field);
+            var name = field.fieldName().snakeCaseUnconflicted();
+            sb.append("    ").append(type).append(" *").append(name).append(";\n");
         }
 
         var resultType = unit.ruleName().returnTypeOr("void");
@@ -243,13 +247,21 @@ public class CTransform {
             if (field.resultClause() == null)
                 throw new IllegalStateException();
 
-            if (field.resultClause().template().strip().equals("%a")) {
+            var template = field.resultClause().template().strip();
+
+            if (template.equals("%a")) {
                 // Fall-through; no extra variables needed
                 sb.append("\n        (").append(altName).append(" = ")
                         .append(getParserFieldExpr(field));
             } else {
                 if (i != 0) sb.append(" ");
-                sb.append("(\n            (").append(fieldName).append(" = ");
+                sb.append("(\n            (");
+
+                if (template.contains("%a")) {
+                    // Only assign to variable if it's actually used
+                    sb.append(fieldName).append(" = ");
+                }
+
                 sb.append(getParserFieldExpr(field)).append(") &&\n");
 
                 sb.append("            ");
