@@ -269,17 +269,17 @@ inversion:
 comparison:
     | bitwise_or (comp_op bitwise_or)+
     | bitwise_or
-comp_op:
-    | '<'
-    | '>'
-    | '=='
-    | '>='
-    | '<='
-    | '!='
-    | 'in'
-    | 'not' 'in'
-    | 'is'
-    | 'is' 'not'
+comp_op[int]:
+    | '<' { "&CMP_LT" }
+    | '>' { "&CMP_GT" }
+    | '==' { "&CMP_EQ" }
+    | '>=' { "&CMP_GE" }
+    | '<=' { "&CMP_LE" }
+    | '!=' { "&CMP_NE" }
+    | 'in' { "&CMP_IN" }
+    | 'not' 'in' { "&CMP_NI" }
+    | 'is' { "&CMP_IS" }
+    | 'is' 'not' { "&CMP_NS" }
 bitwise_or (left_recursive):
     | bitwise_or '|' bitwise_xor
     | bitwise_xor

@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class CFugaGenerator {
 
     private static final String USER_DIR = System.getProperty("user.dir");
-    private static final String GRAMMAR_PATH = "src/main/files/Grammar";
+    private static final String GRAMMAR_PATH = "src/main/files/CGrammar";
     private static final String BASE_DIR = Paths.get(
             System.getProperty("user.home"), "vscode/cpeg").toString();
     private static final Path C_PATH = Paths.get(BASE_DIR, "parser.c");
@@ -107,7 +107,7 @@ public class CFugaGenerator {
                 GeneratorUtil.tokenMap
         );
 
-        String c = "#include \"include/internal/parser.h\"\n\n\n" +
+        String c = "#include \"include/ast.h\"\n\n\n" +
                 CTransform.getFuncDeclarations(ruleSet) +
                 ENTRY_POINT +
                 CTransform.getFunctionBodies(ruleSet);

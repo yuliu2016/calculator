@@ -32,7 +32,7 @@ public class CCalcGenerator {
                 GeneratorUtil.tokenMap
         );
 
-        String c = "#include \"include/internal/parser.h\"\n\n\n" +
+        String c = "#include \"include/ast2.h\"\n\n\n" +
                 CTransform.getFuncDeclarations(ruleSet) +
                 ENTRY_POINT +
                 CTransform.getFunctionBodies(ruleSet);

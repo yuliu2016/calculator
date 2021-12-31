@@ -248,6 +248,35 @@ A = matrix {
     (7,8,9) -> row[3]
 }
 
+# Dictionary literals can be constructed here as well
+# This requires defining a custom grammar
+
+D = dict {
+    "John": (12, 14, 37),
+    "Jane": (1, 2)
+}
+
+J = json {
+    "Hi": 3
+}
+
+# Compile-time parsing (preprocessor):
+# allows builder expressions to be evaluated at compile time
+# this is necessary to create function code objects
+test = regex {hello.+}
+
+# this requires that the builder names are not changed or assigned
+# to change it dynamically (requires higher privilege)
+vm.setdynamic {regex = None}
+
+# Updated list
+def {}
+dict {}
+regex {}
+class {}
+matrix {}
+# iterators
+
 # https://kotlinlang.org/docs/reference/type-safe-builders.html
 html_text = build_html {
     head {
