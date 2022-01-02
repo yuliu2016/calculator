@@ -55,7 +55,7 @@ target:
     | t_primary subscript !t_lookahead
     | NAME
     | '(' targetlist_sp ')'
-targetlist_sp (allow_whitespace=true):
+targetlist_sp:
     | targetlist
 t_primary (left_recursive):
     | t_primary '.' NAME &t_lookahead
@@ -87,14 +87,14 @@ slice_expr:
 dict_item:
     | expr ':' expr
     | '**' bitwise_or
-dict_items (allow_whitespace=true):
+dict_items:
     | ','.dict_item+ [',']
 list_item:
     | star_expr
     | named_expr
-list_items (allow_whitespace=true):
+list_items:
     | ','.list_item+ [',']
-set_items (allow_whitespace=true):
+set_items:
     | exprlist_star
 as_name:
     | 'as' NAME
@@ -106,9 +106,9 @@ iter_if:
 iterator:
     | iter_for* 'for' targetlist [iter_if]
 
-list_iterator (allow_whitespace=true):
+list_iterator:
     | expr_or_star iterator
-dict_iterator (allow_whitespace=true):
+dict_iterator:
     | dict_item iterator
 
 # Assignments
@@ -154,7 +154,7 @@ import_from_items:
     | '*'
     | import_as_names_sp
     | import_as_names
-import_as_names_sp (allow_whitespace=true):
+import_as_names_sp:
     | '(' import_as_names [','] ')'
 import_as_name:
     | NAME [as_name]
@@ -193,7 +193,7 @@ expr_as_name:
 
 # Suites
 
-block_suite(allow_whitespace=false):
+block_suite:
     | '{' NEWLINE stmt_list '}'
     | '{' [simple_stmt] '}'
 suite:
@@ -212,7 +212,7 @@ except_suite:
 
 invocation:
     | '(' [call_arg_list] ')'
-call_arg_list(allow_whitespace=true):
+call_arg_list:
     | ','.call_arg+  [',']
 call_arg:
     | NAME ':=' expr
@@ -223,7 +223,7 @@ call_arg:
 
 # Builder definitions
 
-typed_arg_list(allow_whitespace=true):
+typed_arg_list:
     | kwargs
     | args_kwargs
     | full_arg_list

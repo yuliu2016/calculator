@@ -65,11 +65,9 @@ public class CTransform {
                 .append(rn.symbolicName());
 
         sb.append("(parser_t *p) {\n");
-        sb.append("    frame_t f = {")
+        sb.append("    const frame_t f = {")
                 .append(unit.ruleIndex())
-                .append(", p->pos, FUNC, 0, ")
-                .append(memoize ? 1 : 0)
-                .append("};\n");
+                .append(", p->pos, FUNC};\n");
 
         var rtype = rn.returnTypeOr("void");
         var resultName = "res_" + unit.ruleIndex();
@@ -78,7 +76,8 @@ public class CTransform {
         sb.append(unit.leftRecursive() ? " = 0;\n" : ";\n");
 
         if (memoize) {
-            sb.append("    if (is_memoized(p, &f, &").append(resultName).append(")) {\n");
+            sb.append("    if (is_memoized(p, &f, (void **) &")
+                    .append(resultName).append(")) {\n");
             sb.append("        return ").append(resultName).append(";\n");
             sb.append("    }\n");
         }
@@ -217,7 +216,7 @@ public class CTransform {
 
         sb.append("\n    ) ? ");
         if (unit.resultClause() == null) {
-            sb.append("node(p, &f)");
+            sb.append("node(p)");
         } else {
             var resultClause = unit.resultClause().template();
             for (int i = 0; i < fieldNames.size(); i++) {
