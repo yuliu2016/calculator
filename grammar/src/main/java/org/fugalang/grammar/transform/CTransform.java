@@ -71,6 +71,12 @@ public class CTransform {
                 .append(memoize ? 1 : 0)
                 .append("};\n");
 
+        var rtype = unit.ruleName().returnTypeOr("void");
+        var resultName = "res_" + unit.ruleIndex();
+        var rdec = "    " + rtype + " *" + resultName;
+        sb.append(rdec);
+        sb.append(unit.leftRecursive() ? " = 0;\n" : ";\n");
+
         var ws = args.get("allow_whitespace");
         if ("true".equals(ws)) {
             sb.append("    int ws = p->ignore_whitespace;\n");
@@ -93,7 +99,6 @@ public class CTransform {
             sb.append("    p->ignore_whitespace = ws;\n");
         }
 
-        var resultName = "res_" + unit.ruleIndex();
         sb.append("    return exit_frame(p, &f, ").append(resultName).append(");\n");
         sb.append("}\n");
 
@@ -103,13 +108,10 @@ public class CTransform {
     }
 
     private static void addLeftRecursiveUnitRuleBody(UnitRule unit, StringBuilder sb) {
-//        sb.append("    if (!enter_frame(p, &f)) {\n        return exit_frame(p, &f, 0);\n    }\n");
-
         var rtype = unit.ruleName().returnTypeOr("void");
         var resultName = "res_" + unit.ruleIndex();
         var altName = "alt_" + unit.ruleIndex();
 
-        sb.append("    ").append(rtype).append(" *").append(resultName).append(" = 0;\n");
         sb.append("    ").append(rtype).append(" *").append(altName).append(";\n");
         sb.append("    size_t maxpos;\n");
         sb.append("    ").append(rtype).append(" *max;\n");
@@ -148,8 +150,6 @@ public class CTransform {
     }
 
     private static void addConjunctionBody(UnitRule unit, StringBuilder sb) {
-        var rtype = unit.ruleName().returnTypeOr("void");
-
         List<String> fieldNames = new ArrayList<>();
 
         int j = 0;
@@ -173,8 +173,6 @@ public class CTransform {
         }
 
         var resultName = "res_" + unit.ruleIndex();
-        sb.append("    ").append(rtype).append(" *").append(resultName).append(";\n");
-
         sb.append("    ").append(resultName).append(" = enter_frame(p, &f) && (\n");
 
         var fields = unit.fields();
@@ -259,7 +257,6 @@ public class CTransform {
         var altName = "alt_" + unit.ruleIndex();
 
         sb.append("    ").append(resultType).append(" *").append(altName).append(";\n");
-        sb.append("    ").append(resultType).append(" *").append(resultName).append(";\n");
         sb.append("    ").append(resultName).append(" = enter_frame(p, &f) && (");
 
         var fields = unit.fields();
