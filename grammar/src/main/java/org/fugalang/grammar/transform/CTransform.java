@@ -71,11 +71,17 @@ public class CTransform {
                 .append(memoize ? 1 : 0)
                 .append("};\n");
 
-        var rtype = unit.ruleName().returnTypeOr("void");
+        var rtype = rn.returnTypeOr("void");
         var resultName = "res_" + unit.ruleIndex();
         var rdec = "    " + rtype + " *" + resultName;
         sb.append(rdec);
         sb.append(unit.leftRecursive() ? " = 0;\n" : ";\n");
+
+        if (memoize) {
+            sb.append("    if (is_memoized(p, &f, &").append(resultName).append(")) {\n");
+            sb.append("        return ").append(resultName).append(";\n");
+            sb.append("    }\n");
+        }
 
         var ws = args.get("allow_whitespace");
         if ("true".equals(ws)) {
@@ -97,6 +103,9 @@ public class CTransform {
 
         if (ws != null) {
             sb.append("    p->ignore_whitespace = ws;\n");
+        }
+        if (memoize) {
+            sb.append("    insert_memo(p, &f, ").append(resultName).append(");\n");
         }
 
         sb.append("    return exit_frame(p, &f, ").append(resultName).append(");\n");
@@ -120,7 +129,7 @@ public class CTransform {
         sb.append("        do {\n");
         sb.append("            maxpos = p->pos;\n");
         sb.append("            max = ").append(resultName).append(";\n");
-        sb.append("            memoize(p, &f, max, maxpos);\n");
+        sb.append("            insert_memo(p, &f, max);\n");
         sb.append("            p->pos = f.f_pos;\n");
         sb.append("            ").append(resultName).append(" = (\n");
 
