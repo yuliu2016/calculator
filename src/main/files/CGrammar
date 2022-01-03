@@ -54,9 +54,7 @@ target:
     | t_primary '.' NAME !t_lookahead
     | t_primary subscript !t_lookahead
     | NAME
-    | '(' targetlist_sp ')'
-targetlist_sp:
-    | targetlist
+    | '(' targetlist ')'
 t_primary (left_recursive):
     | t_primary '.' NAME &t_lookahead
     | t_primary invocation &t_lookahead
@@ -114,12 +112,9 @@ dict_iterator:
 # Assignments
 
 assignment:
-    | pubassign
     | annassign
     | augassign
     | simple_assign
-pubassign:
-    | '/' NAME '=' exprlist
 annassign:
     | target ':' expr ['=' exprlist]
 augassign:
@@ -249,26 +244,26 @@ builder_args:
 
 # Expressions
 
-named_expr:
-    | NAME ':=' expr
-    | expr
-conditional:
-    | 'if' disjunction '?' disjunction ':' expr
-expr:
-    | conditional
-    | disjunction
-disjunction (left_recursive):
-    | disjunction 'or' conjunction
-    | conjunction
-conjunction (left_recursive):
-    | conjunction 'and' inversion
-    | inversion
-inversion:
-    | 'not' inversion
-    | comparison
-comparison:
-    | bitwise_or (comp_op bitwise_or)+
-    | bitwise_or
+named_expr[ast_named_t]:
+    | NAME ':=' expr { "ast_named(%a)" }
+    | expr { "ast_unnamed(%a)" }
+conditional[ast_expr_t]:
+    | 'if' disjunction '?' disjunction ':' expr { "ast_conditional(p, %a, %b, %c)"}
+expr[ast_expr_t]:
+    | conditional { a }
+    | disjunction { a }
+disjunction[ast_expr_t] (left_recursive):
+    | disjunction 'or' conjunction { "ast_binary(p, %a, %b, LOGIC_OR)" }
+    | conjunction { a }
+conjunction[ast_expr_t] (left_recursive):
+    | conjunction 'and' inversion { "ast_binary(p, %a, %b, LOGIC_AND)" }
+    | inversion { a }
+inversion[ast_expr_t]:
+    | 'not' inversion { "ast_unary(p, %a, LOGIC_NOT)"}
+    | comparison { a }
+comparison[ast_expr_t]:
+    | bitwise_or (comp_op bitwise_or { "ast_comp_term(p, %a, %b)" })+ { "ast_comparison(p, %a, %b)" }
+    | bitwise_or { a }
 comp_op[int]:
     | '<' { "ast_integer(p, CMP_LT)" }
     | '>' { "ast_integer(p, CMP_GT)" }
