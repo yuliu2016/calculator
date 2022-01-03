@@ -82,32 +82,14 @@ slice:
 slice_expr:
     | ':' [expr]
 
-dict_item:
-    | expr ':' expr
-    | '**' bitwise_or
-dict_items:
-    | ','.dict_item+ [',']
 list_item:
     | star_expr
     | named_expr
 list_items:
     | ','.list_item+ [',']
-set_items:
-    | exprlist_star
 as_name:
     | 'as' NAME
 
-iter_for:
-    | 'for' targetlist 'in' disjunction [iter_if]
-iter_if:
-    | 'if' named_expr
-iterator:
-    | iter_for* 'for' targetlist [iter_if]
-
-list_iterator:
-    | expr_or_star iterator
-dict_iterator:
-    | dict_item iterator
 
 # Assignments
 
@@ -245,8 +227,8 @@ builder_args:
 # Expressions
 
 named_expr[ast_named_t]:
-    | NAME ':=' expr { "ast_named(%a)" }
-    | expr { "ast_unnamed(%a)" }
+    | NAME ':=' expr { "ast_named(p, %a, %b)" }
+    | expr { "ast_unnamed(p, %a)" }
 conditional[ast_expr_t]:
     | 'if' disjunction '?' disjunction ':' expr { "ast_conditional(p, %a, %b, %c)"}
 expr[ast_expr_t]:
@@ -317,26 +299,14 @@ primary (left_recursive):
     | atom
 tuple_atom:
     | '(' [list_items] ')'
-list_iterable:
-    | '[' list_iterator ']'
 list_atom:
     | '[' [list_items] ']'
-set_atom:
-    | '{' [set_items] '}'
-dict_iterable:
-    | '{' dict_iterator '}'
-dict_atom:
-    | '{' [dict_items] '}'
 builder:
     | NAME simple_args ':' expr
     | NAME [builder_hint] [builder_args] block_suite
 atom:
     | tuple_atom
-    | list_iterable
     | list_atom
-    | set_atom
-    | dict_iterable
-    | dict_atom
     | builder
     | NAME
     | NUMBER
