@@ -28,8 +28,6 @@ small_stmt:
     | del_stmt
     | nonlocal_stmt
     | assert_stmt
-    | import_name
-    | import_from
     | assignment
 
 del_stmt:
@@ -118,31 +116,6 @@ augassign_op[int]:
     | '<<=' { "ast_integer(p, BINOP_SHL)" }
     | '>>=' { "ast_integer(p, BINOP_SHR)" }
 
-# Import Statements
-
-import_name:
-    | 'import' dotted_as_names
-import_from:
-    | 'from' import_from_names 'import' import_from_items
-import_from_names:
-    | dotted_name
-    | '.'+ [dotted_name]
-import_from_items:
-    | '*'
-    | import_as_names_sp
-    | import_as_names
-import_as_names_sp:
-    | '(' import_as_names [','] ')'
-import_as_name:
-    | NAME [as_name]
-dotted_as_name:
-    | dotted_name [as_name]
-import_as_names:
-    | ','.import_as_name+
-dotted_as_names:
-    | ','.dotted_as_name+
-dotted_name:
-    | '.'.NAME+
 
 # Compound statements
 
