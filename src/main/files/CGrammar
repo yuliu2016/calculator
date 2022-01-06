@@ -1,27 +1,27 @@
 # Grammar for Fuga
 
-single_input:
-    | NEWLINE { "ast_nop(p)" }
-    | simple_stmt { a }
-    | compound_stmt NEWLINE { a }
-file_input:
+single_input[ast_list_t]:
+    | NEWLINE { "ast_list_of(p, ast_nop(p))" }
+    | simple_stmt { "ast_list_of(p, %a)" }
+    | compound_stmt NEWLINE { "ast_list_of(p, %a)" }
+file_input[ast_list_t]:
     | stmt_list { a }
-eval_input:
+eval_input[ast_list_t]:
     | exprlist [NEWLINE] { a }
 
 # Statements
-stmt_list:
-    | stmt+
-stmt:
-    | (simple_stmt | compound_stmt) NEWLINE
+stmt_list[ast_list_t]:
+    | stmt+ { a }
+stmt[ast_stmt_t]:
+    | (simple_stmt | compound_stmt) NEWLINE { a }
 simple_stmt[ast_list_t]:
     | ';'.small_stmt+ [';'] { a }
 
 # Small Statements
-small_stmt:
+small_stmt[ast_stmt_t]:
     | 'pass' { "ast_nop(p)" }
-    | 'break'
-    | 'continue'
+    | 'break' { "ast_break(p)" }
+    | 'continue' { "ast_continue(p)" }
     | return_stmt
     | raise_stmt
     | del_stmt
@@ -29,22 +29,22 @@ small_stmt:
     | assert_stmt
     | assignment
 
-del_stmt:
+del_stmt[ast_stmt_t]:
     | 'del' targetlist
-return_stmt:
+return_stmt[ast_stmt_t]:
     | 'return' [exprlist_star]
-raise_stmt:
+raise_stmt[ast_stmt_t]:
     | 'raise' expr ['from' expr]
-nonlocal_stmt:
+nonlocal_stmt[ast_stmt_t]:
     | 'nonlocal' name_list
-assert_stmt:
+assert_stmt[ast_stmt_t]:
     | 'assert' expr [',' expr]
 
 # Expression groups
-name_list:
-    | ','.NAME+
-star_expr:
-    | '*' bitwise_or
+name_list[ast_list_t]:
+    | ','.NAME+ { a }
+star_expr[ast_expr_t]:
+    | '*' bitwise_or { a }
 exprlist[ast_list_t]:
     | ','.expr+ [','] { a }
 target:
@@ -52,12 +52,12 @@ target:
     | t_primary subscript !t_lookahead
     | NAME
     | '(' targetlist ')'
-t_primary (left_recursive):
+t_primary[ast_primary_t] (left_recursive):
     | t_primary '.' NAME &t_lookahead
     | t_primary invocation &t_lookahead
     | t_primary subscript &t_lookahead
     | atom &t_lookahead
-t_lookahead:
+t_lookahead[void]:
     | '.'
     | '('
     | '['
@@ -69,7 +69,7 @@ expr_or_star:
 exprlist_star[ast_list_t]:
     | ','.expr_or_star+ [','] { a }
 
-subscript:
+subscript[ast_list_t]:
     | '[' slicelist ']'
 slicelist[ast_list_t]:
     | ','.slice+ [','] { a }
@@ -190,8 +190,8 @@ simple_arg:
     | NAME ['=' expr]
 simple_args[ast_list_t]:
     | ','.simple_arg+ { a }
-builder_hint:
-    | '<' name_list '>'
+builder_hint[ast_list_t]:
+    | '<' name_list '>' { a }
 builder_args:
     | simple_args
     | '(' [typed_arg_list] ')'
@@ -262,21 +262,21 @@ factor[ast_expr_t]:
     | '~' factor { "ast_unary(p, %a, UNARY_INV)" }
     | power { a }
 power[ast_expr_t]:
-    | primary '**' factor { "ast_binary(p, %a, %b, BINOP_POW)" }
+    | primary '**' factor { "ast_binary(p, ast_primary_expr(p, %a), %b, BINOP_POW)" }
     | primary { "ast_primary_expr(p, %a)" }
-primary (left_recursive):
+primary[ast_primary_t] (left_recursive):
     | primary '.' NAME
     | primary invocation
     | primary subscript
     | atom
-tuple_atom:
+tuple_atom[ast_atom_t]:
     | '(' [list_items] ')'
-list_atom:
+list_atom[ast_atom_t]:
     | '[' [list_items] ']'
-builder:
+builder[ast_atom_t]:
     | NAME simple_args ':' expr
     | NAME [builder_hint] [builder_args] block_suite
-atom:
+atom[ast_atom_t]:
     | tuple_atom
     | list_atom
     | builder
