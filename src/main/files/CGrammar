@@ -1,26 +1,25 @@
 # Grammar for Fuga
 
 single_input:
-    | NEWLINE
-    | ENDMARKER
-    | simple_stmt
-    | compound_stmt NEWLINE
+    | NEWLINE { "ast_nop(p)" }
+    | simple_stmt { a }
+    | compound_stmt NEWLINE { a }
 file_input:
-    | [stmt_list] ENDMARKER
+    | stmt_list { a }
 eval_input:
-    | exprlist NEWLINE* ENDMARKER
+    | exprlist [NEWLINE] { a }
 
 # Statements
 stmt_list:
     | stmt+
 stmt:
     | (simple_stmt | compound_stmt) NEWLINE
-simple_stmt:
-    | ';'.small_stmt+ [';']
+simple_stmt[ast_list_t]:
+    | ';'.small_stmt+ [';'] { a }
 
 # Small Statements
 small_stmt:
-    | 'pass'
+    | 'pass' { "ast_nop(p)" }
     | 'break'
     | 'continue'
     | return_stmt
@@ -46,8 +45,8 @@ name_list:
     | ','.NAME+
 star_expr:
     | '*' bitwise_or
-exprlist:
-    | ','.expr+ [',']
+exprlist[ast_list_t]:
+    | ','.expr+ [','] { a }
 target:
     | t_primary '.' NAME !t_lookahead
     | t_primary subscript !t_lookahead
@@ -62,18 +61,18 @@ t_lookahead:
     | '.'
     | '('
     | '['
-targetlist:
-    | ','.target+ [',']
+targetlist[ast_list_t]:
+    | ','.target+ [','] { a }
 expr_or_star:
     | star_expr
     | expr
-exprlist_star:
-    | ','.expr_or_star+ [',']
+exprlist_star[ast_list_t]:
+    | ','.expr_or_star+ [','] { a }
 
 subscript:
     | '[' slicelist ']'
-slicelist:
-    | ','.slice+ [',']
+slicelist[ast_list_t]:
+    | ','.slice+ [','] { a }
 slice:
     | [expr] slice_expr [slice_expr]
     | expr
@@ -83,8 +82,8 @@ slice_expr:
 list_item:
     | star_expr
     | named_expr
-list_items:
-    | ','.list_item+ [',']
+list_items[ast_list_t]:
+    | ','.list_item+ [','] { a }
 as_name:
     | 'as' NAME
 
@@ -162,8 +161,8 @@ except_suite:
 
 invocation:
     | '(' [call_arg_list] ')'
-call_arg_list:
-    | ','.call_arg+  [',']
+call_arg_list[ast_list_t]:
+    | ','.call_arg+  [','] { a }
 call_arg:
     | NAME ':=' expr
     | NAME '=' expr
@@ -182,15 +181,15 @@ full_arg_list:
 args_kwargs:
     | '*' [typed_arg] (','  default_arg)* [','  [kwargs]]
 kwargs:
-    | '**' typed_arg [',']
+    | '**' typed_arg [','] { a }
 default_arg:
     | typed_arg ['=' expr]
 typed_arg:
     | NAME [':' expr]
 simple_arg:
     | NAME ['=' expr]
-simple_args:
-    | ','.simple_arg+
+simple_args[ast_list_t]:
+    | ','.simple_arg+ { a }
 builder_hint:
     | '<' name_list '>'
 builder_args:
