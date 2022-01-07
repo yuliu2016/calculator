@@ -35,8 +35,6 @@ raise_stmt[ast_stmt_t]:
     | 'raise' expr ['from' expr]
 
 # Expression groups
-name_list[ast_list_t]:
-    | ','.NAME+ { a }
 star_expr[ast_expr_t]:
     | '*' bitwise_or { a }
 exprlist[ast_list_t]:
@@ -64,9 +62,7 @@ exprlist_star[ast_list_t]:
     | ','.expr_or_star+ [','] { a }
 
 subscript[ast_list_t]:
-    | '[' slicelist ']'
-slicelist[ast_list_t]:
-    | ','.slice+ [','] { a }
+    | '[' ','.slice+ [','] ']' { a }
 slice:
     | [expr] slice_expr [slice_expr]
     | expr
@@ -78,8 +74,6 @@ list_item:
     | named_expr
 list_items[ast_list_t]:
     | ','.list_item+ [','] { a }
-as_name:
-    | 'as' NAME
 
 
 # Assignments
@@ -132,7 +126,7 @@ try_stmt:
 with_stmt:
     | 'with' ','.expr_as_name+ suite
 expr_as_name:
-    | expr [as_name]
+    | expr ['as' NAME { a }]
 
 # Suites
 
@@ -140,12 +134,12 @@ block_suite:
     | '{' NEWLINE stmt_list '}'
     | '{' [simple_stmt] '}'
 suite:
-    | ':' simple_stmt
-    | block_suite
+    | ':' simple_stmt { a }
+    | block_suite { a }
 else_suite:
-    | 'else' suite
+    | 'else' suite { a }
 finally_suite:
-    | 'finally' suite
+    | 'finally' suite { a }
 except_clause:
     | 'except' [expr_as_name] suite
 except_suite:
@@ -154,9 +148,7 @@ except_suite:
 # Function calls
 
 invocation:
-    | '(' [call_arg_list] ')'
-call_arg_list[ast_list_t]:
-    | ','.call_arg+  [','] { a }
+    | '(' [','.call_arg+  [','] { a } ] ')' { a }
 call_arg:
     | NAME ':=' expr
     | NAME '=' expr
@@ -185,9 +177,8 @@ simple_arg:
 simple_args[ast_list_t]:
     | ','.simple_arg+ { a }
 builder_hint[ast_list_t]:
-    | '<' name_list '>' { a }
+    | '<' ','.NAME+ '>' { a }
 builder_args:
-    | simple_args
     | '(' [typed_arg_list] ')'
 
 # Expressions
