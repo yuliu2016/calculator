@@ -25,8 +25,6 @@ small_stmt[ast_stmt_t]:
     | return_stmt
     | raise_stmt
     | del_stmt
-    | nonlocal_stmt
-    | assert_stmt
     | assignment
 
 del_stmt[ast_stmt_t]:
@@ -35,10 +33,6 @@ return_stmt[ast_stmt_t]:
     | 'return' [exprlist_star]
 raise_stmt[ast_stmt_t]:
     | 'raise' expr ['from' expr]
-nonlocal_stmt[ast_stmt_t]:
-    | 'nonlocal' name_list
-assert_stmt[ast_stmt_t]:
-    | 'assert' expr [',' expr]
 
 # Expression groups
 name_list[ast_list_t]:
@@ -280,9 +274,9 @@ atom[ast_atom_t]:
     | tuple_atom
     | list_atom
     | builder
-    | NAME
-    | NUMBER
-    | STRING
-    | 'None'
-    | 'True'
-    | 'False'
+    | NAME { "ast_name_atom(p, %a)"}
+    | NUMBER { "ast_number_atom(p, %a)"}
+    | STRING { "ast_string_atom(p, %a)"}
+    | 'None' { "ast_none(p)"}
+    | 'True' { "ast_true(p)"}
+    | 'False' { "ast_false(p)"}
