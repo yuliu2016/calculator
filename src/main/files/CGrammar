@@ -12,8 +12,8 @@ eval_input[ast_list_t]:
 # Statements
 stmt_list[ast_list_t]:
     | stmt+ { a }
-stmt[ast_stmt_t]:
-    | (simple_stmt | compound_stmt) NEWLINE { a }
+stmt[ast_list_t]:
+    | (simple_stmt | compound_stmt { "ast_list_of(p, %a)" }) NEWLINE { a }
 simple_stmt[ast_list_t]:
     | ';'.small_stmt+ [';'] { a }
 
@@ -22,15 +22,15 @@ small_stmt[ast_stmt_t]:
     | 'pass' { "ast_nop(p)" }
     | 'break' { "ast_break(p)" }
     | 'continue' { "ast_continue(p)" }
-    | return_stmt
-    | raise_stmt
-    | del_stmt
-    | assignment
+    | return_stmt { a }
+    | raise_stmt { a }
+    | del_stmt { a }
+    | assignment { a }
 
 del_stmt[ast_stmt_t]:
-    | 'del' targetlist
+    | 'del' targetlist { "ast_del(p, %a)" }
 return_stmt[ast_stmt_t]:
-    | 'return' [exprlist_star]
+    | 'return' [exprlist_star] { "ast_return(p, %a)" }
 raise_stmt[ast_stmt_t]:
     | 'raise' expr ['from' expr]
 
@@ -132,7 +132,7 @@ expr_as_name:
 
 block_suite:
     | '{' NEWLINE stmt_list '}'
-    | '{' [simple_stmt] '}'
+    | '{' [simple_stmt] '}' { a }
 suite:
     | ':' simple_stmt { a }
     | block_suite { a }
@@ -165,15 +165,15 @@ typed_arg_list:
 full_arg_list:
     | ','.default_arg+ [','  [kwargs | args_kwargs]]
 args_kwargs:
-    | '*' [typed_arg] (','  default_arg)* [','  [kwargs]]
+    | '*' [typed_arg] (','  default_arg { a })* [','  [kwargs]]
 kwargs:
     | '**' typed_arg [','] { a }
 default_arg:
-    | typed_arg ['=' expr]
+    | typed_arg ['=' expr { a }]
 typed_arg:
-    | NAME [':' expr]
+    | NAME [':' expr { a }]
 simple_arg:
-    | NAME ['=' expr]
+    | NAME ['=' expr { a }]
 simple_args[ast_list_t]:
     | ','.simple_arg+ { a }
 builder_hint[ast_list_t]:
@@ -254,14 +254,14 @@ primary[ast_primary_t] (left_recursive):
     | primary invocation
     | primary subscript
     | atom
-tuple_atom[ast_atom_t]:
+tuple_atom[ast_primary_t]:
     | '(' [list_items] ')'
-list_atom[ast_atom_t]:
+list_atom[ast_primary_t]:
     | '[' [list_items] ']'
-builder[ast_atom_t]:
+builder[ast_primary_t]:
     | NAME simple_args ':' expr
     | NAME [builder_hint] [builder_args] block_suite
-atom[ast_atom_t]:
+atom[ast_primary_t]:
     | tuple_atom
     | list_atom
     | builder
