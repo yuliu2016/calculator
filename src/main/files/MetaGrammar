@@ -18,7 +18,16 @@ alternative:
     | [NEWLINE] '|' sequence
 sequence:
     | primary+ ['{' result_expr '}']
+expr_name:
+    | '.'.NAME+
+expr_arg:
+    | '%' NAME
+    | NUMBER
+    | expr_name
+expr_call:
+    | expr_name '(' ','.expr_arg+ ')'
 result_expr:
+    | expr_call
     | NAME
     | STRING
 primary:

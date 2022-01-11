@@ -211,7 +211,93 @@ public class MetaParser {
     }
 
     /**
+     * expr_name:
+     * *   | '.'.NAME+
+     */
+    public static boolean expr_name(ParseTree t) {
+        var m = t.enter(EXPR_NAME);
+        if (m != null) return m;
+        boolean r;
+        r = expr_name_loop(t);
+        t.exit(r);
+        return r;
+    }
+
+    private static boolean expr_name_loop(ParseTree t) {
+        t.enterLoop();
+        var r = t.consume(TokenType.NAME);
+        if (r) while (true) {
+            var p = t.position();
+            if (t.skip(".") && t.consume(TokenType.NAME)) continue;
+            t.reset(p);
+            break;
+        }
+        t.exitLoop();
+        return r;
+    }
+
+    /**
+     * expr_arg:
+     * *   | '%' NAME
+     * *   | NUMBER
+     * *   | expr_name
+     */
+    public static boolean expr_arg(ParseTree t) {
+        var m = t.enter(EXPR_ARG);
+        if (m != null) return m;
+        boolean r;
+        r = expr_arg_1(t);
+        r = r || t.consume(TokenType.NUMBER);
+        r = r || expr_name(t);
+        t.exit(r);
+        return r;
+    }
+
+    /**
+     * '%' NAME
+     */
+    private static boolean expr_arg_1(ParseTree t) {
+        var m = t.enter(EXPR_ARG_1);
+        if (m != null) return m;
+        boolean r;
+        r = t.consume("%");
+        r = r && t.consume(TokenType.NAME);
+        t.exit(r);
+        return r;
+    }
+
+    /**
+     * expr_call:
+     * *   | expr_name '(' ','.expr_arg+ ')'
+     */
+    public static boolean expr_call(ParseTree t) {
+        var m = t.enter(EXPR_CALL);
+        if (m != null) return m;
+        boolean r;
+        r = expr_name(t);
+        r = r && t.consume("(");
+        r = r && expr_arg_loop(t);
+        r = r && t.consume(")");
+        t.exit(r);
+        return r;
+    }
+
+    private static boolean expr_arg_loop(ParseTree t) {
+        t.enterLoop();
+        var r = expr_arg(t);
+        if (r) while (true) {
+            var p = t.position();
+            if (t.skip(",") && expr_arg(t)) continue;
+            t.reset(p);
+            break;
+        }
+        t.exitLoop();
+        return r;
+    }
+
+    /**
      * result_expr:
+     * *   | expr_call
      * *   | NAME
      * *   | STRING
      */
@@ -219,7 +305,8 @@ public class MetaParser {
         var m = t.enter(RESULT_EXPR);
         if (m != null) return m;
         boolean r;
-        r = t.consume(TokenType.NAME);
+        r = expr_call(t);
+        r = r || t.consume(TokenType.NAME);
         r = r || t.consume(TokenType.STRING);
         t.exit(r);
         return r;

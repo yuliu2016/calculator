@@ -78,7 +78,34 @@ public interface MetaVisitor<T> {
     }
 
     /**
+     * expr_name:
+     * *   | '.'.NAME+
+     */
+    default T visitExprName(ExprName exprName) {
+        return null;
+    }
+
+    /**
+     * expr_arg:
+     * *   | '%' NAME
+     * *   | NUMBER
+     * *   | expr_name
+     */
+    default T visitExprArg(ExprArg exprArg) {
+        return null;
+    }
+
+    /**
+     * expr_call:
+     * *   | expr_name '(' ','.expr_arg+ ')'
+     */
+    default T visitExprCall(ExprCall exprCall) {
+        return null;
+    }
+
+    /**
      * result_expr:
+     * *   | expr_call
      * *   | NAME
      * *   | STRING
      */

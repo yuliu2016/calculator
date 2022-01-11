@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.StringJoiner;
+import java.util.stream.Collectors;
 
 import static org.fugalang.grammar.common.FieldType.*;
 
@@ -135,11 +136,34 @@ public class PEGUtil {
         return delimiter;
     }
 
+    private static String exprNameJoin(ExprName name) {
+        return String.join(".", name.names());
+    }
+
+    private static String exprArgToString(ExprArg arg) {
+        if (arg.hasExprName()) {
+            return exprNameJoin(arg.exprName());
+        } else if (arg.hasNumber()) {
+            return arg.number();
+        } else if (arg.hasModulusName()) {
+            return "%" + arg.modulusName().name();
+        } else throw new IllegalStateException();
+    }
+
+    private static String exprCallToString(ExprCall call) {
+        return exprNameJoin(call.exprName()) + "(" +
+                call.exprArgs().stream()
+                        .map(PEGUtil::exprArgToString)
+                        .collect(Collectors.joining(", ")) + ")";
+    }
+
     public static ResultClause getResultClause(Sequence sequence) {
         if (!sequence.hasLbraceResultExprRbrace()) return null;
         ResultExpr expr = sequence.lbraceResultExprRbrace().resultExpr();
         String template;
-        if (expr.hasName()) {
+        if (expr.hasExprCall()) {
+            template = exprCallToString(expr.exprCall());
+        } else if (expr.hasName()) {
             template = "%" + expr.name();
         } else if (expr.hasString()) {
             template = expr.string();
