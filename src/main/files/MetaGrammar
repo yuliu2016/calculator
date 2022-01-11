@@ -17,7 +17,7 @@ alt_list:
 alternative:
     | [NEWLINE] '|' sequence
 sequence:
-    | primary+ ['{' result_expr '}']
+    | primary+ [[NEWLINE] '{' result_expr '}']
 expr_name:
     | '.'.NAME+
 expr_arg:

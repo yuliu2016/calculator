@@ -71,7 +71,7 @@ public interface MetaVisitor<T> {
 
     /**
      * sequence:
-     * *   | primary+ ['{' result_expr '}']
+     * *   | primary+ [[NEWLINE] '{' result_expr '}']
      */
     default T visitSequence(Sequence sequence) {
         return null;

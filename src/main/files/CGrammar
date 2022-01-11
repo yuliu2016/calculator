@@ -187,7 +187,8 @@ named_expr[ast_named_t]:
     | NAME ':=' expr { ast_named(p, %a, %b) }
     | expr { ast_unnamed(p, %a) }
 conditional[ast_expr_t]:
-    | 'if' disjunction '?' disjunction ':' expr { ast_conditional(p, %a, %b, %c) }
+    | 'if' disjunction '?' disjunction ':' expr
+        { ast_conditional(p, %a, %b, %c) }
 expr[ast_expr_t]:
     | conditional { a }
     | disjunction { a }
@@ -201,7 +202,8 @@ inversion[ast_expr_t]:
     | 'not' inversion { ast_unary(p, %a, LOGIC_NOT) }
     | comparison { a }
 comparison[ast_expr_t]:
-    | bitwise_or (comp_op bitwise_or { ast_comp_term(p, %a, %b) })+ { ast_comparison(p, %a, %b) }
+    | bitwise_or (comp_op bitwise_or { ast_comp_term(p, %a, %b) })+
+        { ast_comparison(p, %a, %b) }
     | bitwise_or { a }
 comp_op[int]:
     | '<' { ast_integer(p, CMP_LT) }
@@ -247,7 +249,8 @@ factor[ast_expr_t]:
     | '~' factor { ast_unary(p, %a, UNARY_INV) }
     | power { a }
 power[ast_expr_t]:
-    | primary '**' factor { "ast_binary(p, ast_primary_expr(p, %a), %b, BINOP_POW)" }
+    | primary '**' factor
+        { "ast_binary(p, ast_primary_expr(p, %a), %b, BINOP_POW)" }
     | primary { ast_primary_expr(p, %a) }
 primary[ast_primary_t] (left_recursive):
     | primary '.' NAME

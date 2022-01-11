@@ -174,7 +174,7 @@ public class MetaParser {
 
     /**
      * sequence:
-     * *   | primary+ ['{' result_expr '}']
+     * *   | primary+ [[NEWLINE] '{' result_expr '}']
      */
     public static boolean sequence(ParseTree t) {
         var m = t.enter(SEQUENCE);
@@ -197,12 +197,13 @@ public class MetaParser {
     }
 
     /**
-     * '{' result_expr '}'
+     * [NEWLINE] '{' result_expr '}'
      */
     private static boolean sequence_2(ParseTree t) {
         var m = t.enter(SEQUENCE_2);
         if (m != null) return m;
         boolean r;
+        t.consume(TokenType.NEWLINE);
         r = t.consume("{");
         r = r && result_expr(t);
         r = r && t.consume("}");
