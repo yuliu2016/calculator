@@ -2,8 +2,8 @@
 
 single_input[ast_list_t]:
     | NEWLINE { "ast_list_of(p, ast_nop(p))" }
-    | simple_stmt { "ast_list_of(p, %a)" }
-    | compound_stmt NEWLINE { "ast_list_of(p, %a)" }
+    | simple_stmt { ast_list_of(p, %a) }
+    | compound_stmt NEWLINE { ast_list_of(p, %a) }
 file_input[ast_list_t]:
     | stmt_list { a }
 eval_input[ast_list_t]:
@@ -13,24 +13,24 @@ eval_input[ast_list_t]:
 stmt_list[ast_list_t]:
     | stmt+ { a }
 stmt[ast_list_t]:
-    | (simple_stmt | compound_stmt { "ast_list_of(p, %a)" }) NEWLINE { a }
+    | (simple_stmt | compound_stmt { ast_list_of(p, %a) }) NEWLINE { a }
 simple_stmt[ast_list_t]:
     | ';'.small_stmt+ [';'] { a }
 
 # Small Statements
 small_stmt[ast_stmt_t]:
-    | 'pass' { "ast_nop(p)" }
-    | 'break' { "ast_break(p)" }
-    | 'continue' { "ast_continue(p)" }
+    | 'pass' { ast_nop(p) }
+    | 'break' { ast_break(p) }
+    | 'continue' { ast_continue(p) }
     | return_stmt { a }
     | raise_stmt { a }
     | del_stmt { a }
     | assignment { a }
 
 del_stmt[ast_stmt_t]:
-    | 'del' targetlist { "ast_del(p, %a)" }
+    | 'del' targetlist { ast_del(p, %a) }
 return_stmt[ast_stmt_t]:
-    | 'return' [exprlist_star] { "ast_return(p, %a)" }
+    | 'return' [exprlist_star] { ast_return(p, %a) }
 raise_stmt[ast_stmt_t]:
     | 'raise' expr ['from' expr]
 
@@ -89,19 +89,19 @@ augassign:
 simple_assign:
     | (targetlist '=')* exprlist_star
 augassign_op[int]:
-    | '+='  { "ast_integer(p, BINOP_PLS)" }
-    | '-='  { "ast_integer(p, BINOP_MIN)" }
-    | '*='  { "ast_integer(p, BINOP_MUL)" }
-    | '/='  { "ast_integer(p, BINOP_DIV)" }
-    | '%='  { "ast_integer(p, BINOP_MOD)" }
-    | '@='  { "ast_integer(p, BINOP_MML)" }
-    | '|='  { "ast_integer(p, BINOP_IOR)" }
-    | '&='  { "ast_integer(p, BINOP_AND)" }
-    | '^='  { "ast_integer(p, BINOP_XOR)" }
-    | '//=' { "ast_integer(p, BINOP_FDV)" }
-    | '**=' { "ast_integer(p, BINOP_POW)" }
-    | '<<=' { "ast_integer(p, BINOP_SHL)" }
-    | '>>=' { "ast_integer(p, BINOP_SHR)" }
+    | '+='  { ast_integer(p, BINOP_PLS) }
+    | '-='  { ast_integer(p, BINOP_MIN) }
+    | '*='  { ast_integer(p, BINOP_MUL) }
+    | '/='  { ast_integer(p, BINOP_DIV) }
+    | '%='  { ast_integer(p, BINOP_MOD) }
+    | '@='  { ast_integer(p, BINOP_MML) }
+    | '|='  { ast_integer(p, BINOP_IOR) }
+    | '&='  { ast_integer(p, BINOP_AND) }
+    | '^='  { ast_integer(p, BINOP_XOR) }
+    | '//=' { ast_integer(p, BINOP_FDV) }
+    | '**=' { ast_integer(p, BINOP_POW) }
+    | '<<=' { ast_integer(p, BINOP_SHL) }
+    | '>>=' { ast_integer(p, BINOP_SHR) }
 
 
 # Compound statements
@@ -184,71 +184,71 @@ builder_args:
 # Expressions
 
 named_expr[ast_named_t]:
-    | NAME ':=' expr { "ast_named(p, %a, %b)" }
-    | expr { "ast_unnamed(p, %a)" }
+    | NAME ':=' expr { ast_named(p, %a, %b) }
+    | expr { ast_unnamed(p, %a) }
 conditional[ast_expr_t]:
-    | 'if' disjunction '?' disjunction ':' expr { "ast_conditional(p, %a, %b, %c)"}
+    | 'if' disjunction '?' disjunction ':' expr { ast_conditional(p, %a, %b, %c) }
 expr[ast_expr_t]:
     | conditional { a }
     | disjunction { a }
 disjunction[ast_expr_t] (left_recursive):
-    | disjunction 'or' conjunction { "ast_binary(p, %a, %b, LOGIC_OR)" }
+    | disjunction 'or' conjunction { ast_binary(p, %a, %b, LOGIC_OR) }
     | conjunction { a }
 conjunction[ast_expr_t] (left_recursive):
-    | conjunction 'and' inversion { "ast_binary(p, %a, %b, LOGIC_AND)" }
+    | conjunction 'and' inversion { ast_binary(p, %a, %b, LOGIC_AND) }
     | inversion { a }
 inversion[ast_expr_t]:
-    | 'not' inversion { "ast_unary(p, %a, LOGIC_NOT)"}
+    | 'not' inversion { ast_unary(p, %a, LOGIC_NOT) }
     | comparison { a }
 comparison[ast_expr_t]:
-    | bitwise_or (comp_op bitwise_or { "ast_comp_term(p, %a, %b)" })+ { "ast_comparison(p, %a, %b)" }
+    | bitwise_or (comp_op bitwise_or { ast_comp_term(p, %a, %b) })+ { ast_comparison(p, %a, %b) }
     | bitwise_or { a }
 comp_op[int]:
-    | '<' { "ast_integer(p, CMP_LT)" }
-    | '>' { "ast_integer(p, CMP_GT)" }
-    | '==' { "ast_integer(p, CMP_EQ)" }
-    | '>=' { "ast_integer(p, CMP_GE)" }
-    | '<=' { "ast_integer(p, CMP_LE)" }
-    | '!=' { "ast_integer(p, CMP_NE)" }
-    | 'in' { "ast_integer(p, CMP_IN)" }
-    | 'not' 'in' { "ast_integer(p, CMP_NI)" }
-    | 'is' { "ast_integer(p, CMP_IS)" }
-    | 'is' 'not' { "ast_integer(p, CMP_NS)" }
+    | '<' { ast_integer(p, CMP_LT) }
+    | '>' { ast_integer(p, CMP_GT) }
+    | '==' { ast_integer(p, CMP_EQ) }
+    | '>=' { ast_integer(p, CMP_GE) }
+    | '<=' { ast_integer(p, CMP_LE) }
+    | '!=' { ast_integer(p, CMP_NE) }
+    | 'in' { ast_integer(p, CMP_IN) }
+    | 'not' 'in' { ast_integer(p, CMP_NI) }
+    | 'is' { ast_integer(p, CMP_IS) }
+    | 'is' 'not' { ast_integer(p, CMP_NS) }
 bitwise_or[ast_expr_t] (left_recursive):
-    | bitwise_or '|' bitwise_xor { "ast_binary(p, %a, %b, BINOP_IOR)" }
+    | bitwise_or '|' bitwise_xor { ast_binary(p, %a, %b, BINOP_IOR) }
     | bitwise_xor { a }
 bitwise_xor[ast_expr_t] (left_recursive):
-    | bitwise_xor '^' bitwise_and { "ast_binary(p, %a, %b, BINOP_XOR)" }
+    | bitwise_xor '^' bitwise_and { ast_binary(p, %a, %b, BINOP_XOR) }
     | bitwise_and { a }
 bitwise_and[ast_expr_t] (left_recursive):
-    | bitwise_and '&' shift_expr { "ast_binary(p, %a, %b, BINOP_AND)" }
+    | bitwise_and '&' shift_expr { ast_binary(p, %a, %b, BINOP_AND) }
     | shift_expr { a }
 shift_expr[ast_expr_t] (left_recursive):
-    | shift_expr '<<' sum { "ast_binary(p, %a, %b, BINOP_SHL)" }
-    | shift_expr '>>' sum { "ast_binary(p, %a, %b, BINOP_SHR)" }
+    | shift_expr '<<' sum { ast_binary(p, %a, %b, BINOP_SHL) }
+    | shift_expr '>>' sum { ast_binary(p, %a, %b, BINOP_SHR) }
     | sum { a }
 sum[ast_expr_t] (left_recursive):
-    | sum '+' term { "ast_binary(p, %a, %b, BINOP_PLS)" }
-    | sum '-' term { "ast_binary(p, %a, %b, BINOP_MIN)" }
+    | sum '+' term { ast_binary(p, %a, %b, BINOP_PLS) }
+    | sum '-' term { ast_binary(p, %a, %b, BINOP_MIN) }
     | term { a }
 term[ast_expr_t] (left_recursive):
-    | term '*' pipe_expr { "ast_binary(p, %a, %b, BINOP_MUL)" }
-    | term '/' pipe_expr { "ast_binary(p, %a, %b, BINOP_DIV)" }
-    | term '%' pipe_expr { "ast_binary(p, %a, %b, BINOP_MOD)" }
-    | term '//' pipe_expr { "ast_binary(p, %a, %b, BINOP_FDV)" }
-    | term '@' pipe_expr { "ast_binary(p, %a, %b, BINOP_MML)" }
+    | term '*' pipe_expr { ast_binary(p, %a, %b, BINOP_MUL) }
+    | term '/' pipe_expr { ast_binary(p, %a, %b, BINOP_DIV) }
+    | term '%' pipe_expr { ast_binary(p, %a, %b, BINOP_MOD) }
+    | term '//' pipe_expr { ast_binary(p, %a, %b, BINOP_FDV) }
+    | term '@' pipe_expr { ast_binary(p, %a, %b, BINOP_MML) }
     | pipe_expr { a }
 pipe_expr[ast_expr_t] (left_recursive):
-    | pipe_expr '->' factor { "ast_binary(p, %a, %b, BINOP_PIP)" }
+    | pipe_expr '->' factor { ast_binary(p, %a, %b, BINOP_PIP) }
     | factor { a }
 factor[ast_expr_t]:
-    | '+' factor { "ast_unary(p, %a, UNARY_PLS)" }
-    | '-' factor { "ast_unary(p, %a, UNARY_MIN)" }
-    | '~' factor { "ast_unary(p, %a, UNARY_INV)" }
+    | '+' factor { ast_unary(p, %a, UNARY_PLS) }
+    | '-' factor { ast_unary(p, %a, UNARY_MIN) }
+    | '~' factor { ast_unary(p, %a, UNARY_INV) }
     | power { a }
 power[ast_expr_t]:
     | primary '**' factor { "ast_binary(p, ast_primary_expr(p, %a), %b, BINOP_POW)" }
-    | primary { "ast_primary_expr(p, %a)" }
+    | primary { ast_primary_expr(p, %a) }
 primary[ast_primary_t] (left_recursive):
     | primary '.' NAME
     | primary invocation
@@ -265,9 +265,9 @@ atom[ast_primary_t]:
     | tuple_atom
     | list_atom
     | builder
-    | NAME { "ast_name_atom(p, %a)"}
-    | NUMBER { "ast_number_atom(p, %a)"}
-    | STRING { "ast_string_atom(p, %a)"}
-    | 'None' { "ast_none(p)"}
-    | 'True' { "ast_true(p)"}
-    | 'False' { "ast_false(p)"}
+    | NAME { ast_name_atom(p, %a) }
+    | NUMBER { ast_number_atom(p, %a) }
+    | STRING { ast_string_atom(p, %a) }
+    | 'None' { ast_none(p) }
+    | 'True' { ast_true(p) }
+    | 'False' { ast_false(p) }
