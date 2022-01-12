@@ -174,14 +174,14 @@ public class MetaParser {
 
     /**
      * sequence:
-     * *   | primary+ [[NEWLINE] '{' result_expr '}']
+     * *   | primary+ [result_expr]
      */
     public static boolean sequence(ParseTree t) {
         var m = t.enter(SEQUENCE);
         if (m != null) return m;
         boolean r;
         r = primary_loop(t);
-        if (r) sequence_2(t);
+        if (r) result_expr(t);
         t.exit(r);
         return r;
     }
@@ -197,15 +197,16 @@ public class MetaParser {
     }
 
     /**
-     * [NEWLINE] '{' result_expr '}'
+     * result_expr:
+     * *   | [NEWLINE] '{' expression '}'
      */
-    private static boolean sequence_2(ParseTree t) {
-        var m = t.enter(SEQUENCE_2);
+    public static boolean result_expr(ParseTree t) {
+        var m = t.enter(RESULT_EXPR);
         if (m != null) return m;
         boolean r;
         t.consume(TokenType.NEWLINE);
         r = t.consume("{");
-        r = r && result_expr(t);
+        r = r && expression(t);
         r = r && t.consume("}");
         t.exit(r);
         return r;
@@ -299,13 +300,13 @@ public class MetaParser {
     }
 
     /**
-     * result_expr:
+     * expression:
      * *   | expr_call
      * *   | NAME
      * *   | STRING
      */
-    public static boolean result_expr(ParseTree t) {
-        var m = t.enter(RESULT_EXPR);
+    public static boolean expression(ParseTree t) {
+        var m = t.enter(EXPRESSION);
         if (m != null) return m;
         boolean r;
         r = expr_call(t);

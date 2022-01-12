@@ -71,9 +71,17 @@ public interface MetaVisitor<T> {
 
     /**
      * sequence:
-     * *   | primary+ [[NEWLINE] '{' result_expr '}']
+     * *   | primary+ [result_expr]
      */
     default T visitSequence(Sequence sequence) {
+        return null;
+    }
+
+    /**
+     * result_expr:
+     * *   | [NEWLINE] '{' expression '}'
+     */
+    default T visitResultExpr(ResultExpr resultExpr) {
         return null;
     }
 
@@ -105,12 +113,12 @@ public interface MetaVisitor<T> {
     }
 
     /**
-     * result_expr:
+     * expression:
      * *   | expr_call
      * *   | NAME
      * *   | STRING
      */
-    default T visitResultExpr(ResultExpr resultExpr) {
+    default T visitExpression(Expression expression) {
         return null;
     }
 

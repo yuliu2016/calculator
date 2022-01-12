@@ -160,8 +160,8 @@ public class PEGUtil {
     }
 
     public static ResultClause getResultClause(Sequence sequence) {
-        if (!sequence.hasSequence2()) return null;
-        ResultExpr expr = sequence.sequence2().resultExpr();
+        if (!sequence.hasResultExpr()) return null;
+        Expression expr = sequence.resultExpr().expression();
         String template;
         if (expr.hasExprCall()) {
             template = exprCallToString(expr.exprCall());

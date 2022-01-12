@@ -17,7 +17,10 @@ alt_list:
 alternative:
     | [NEWLINE] '|' sequence
 sequence:
-    | primary+ [[NEWLINE] '{' result_expr '}']
+    | primary+ [result_expr]
+
+result_expr:
+    | [NEWLINE] '{' expression '}'
 expr_name:
     | '.'.NAME+
 expr_arg:
@@ -27,10 +30,11 @@ expr_arg:
     | expr_name
 expr_call:
     | expr_name '(' ','.expr_arg+ ')'
-result_expr:
+expression:
     | expr_call
     | NAME
     | STRING
+
 primary:
     | delimited
     | '&' item

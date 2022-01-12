@@ -6,9 +6,7 @@ import org.fugalang.core.token.TokenType;
 
 /**
  * result_expr:
- * *   | expr_call
- * *   | NAME
- * *   | STRING
+ * *   | [NEWLINE] '{' expression '}'
  */
 public final class ResultExpr extends NodeWrapper {
 
@@ -16,27 +14,15 @@ public final class ResultExpr extends NodeWrapper {
         super(node);
     }
 
-    public ExprCall exprCall() {
-        return new ExprCall(get(0));
+    public String newline() {
+        return get(0, TokenType.NEWLINE);
     }
 
-    public boolean hasExprCall() {
+    public boolean hasNewline() {
         return has(0);
     }
 
-    public String name() {
-        return get(1, TokenType.NAME);
-    }
-
-    public boolean hasName() {
-        return has(1);
-    }
-
-    public String string() {
-        return get(2, TokenType.STRING);
-    }
-
-    public boolean hasString() {
-        return has(2);
+    public Expression expression() {
+        return new Expression(get(2));
     }
 }
