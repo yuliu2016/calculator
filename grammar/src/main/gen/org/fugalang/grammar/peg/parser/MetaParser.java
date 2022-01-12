@@ -241,6 +241,7 @@ public class MetaParser {
      * expr_arg:
      * *   | '%' NAME
      * *   | NUMBER
+     * *   | expr_call
      * *   | expr_name
      */
     public static boolean expr_arg(ParseTree t) {
@@ -249,6 +250,7 @@ public class MetaParser {
         boolean r;
         r = expr_arg_1(t);
         r = r || t.consume(TokenType.NUMBER);
+        r = r || expr_call(t);
         r = r || expr_name(t);
         t.exit(r);
         return r;

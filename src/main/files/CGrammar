@@ -1,7 +1,7 @@
 # Grammar for Fuga
 
 single_input[ast_list_t]:
-    | NEWLINE { "ast_list_of(p, ast_nop(p))" }
+    | NEWLINE { ast_list_of(p, ast_nop(p)) }
     | simple_stmt { ast_list_of(p, %a) }
     | compound_stmt NEWLINE { ast_list_of(p, %a) }
 file_input[ast_list_t]:
@@ -250,7 +250,7 @@ factor[ast_expr_t]:
     | power { a }
 power[ast_expr_t]:
     | primary '**' factor
-        { "ast_binary(p, ast_primary_expr(p, %a), %b, BINOP_POW)" }
+        { ast_binary(p, ast_primary_expr(p, %a), %b, BINOP_POW) }
     | primary { ast_primary_expr(p, %a) }
 primary[ast_primary_t] (left_recursive):
     | primary '.' NAME

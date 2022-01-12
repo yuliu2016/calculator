@@ -89,6 +89,7 @@ public interface MetaVisitor<T> {
      * expr_arg:
      * *   | '%' NAME
      * *   | NUMBER
+     * *   | expr_call
      * *   | expr_name
      */
     default T visitExprArg(ExprArg exprArg) {

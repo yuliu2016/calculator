@@ -147,6 +147,8 @@ public class PEGUtil {
             return arg.number();
         } else if (arg.hasModulusName()) {
             return "%" + arg.modulusName().name();
+        } else if (arg.hasExprCall()) {
+            return exprCallToString(arg.exprCall());
         } else throw new IllegalStateException();
     }
 

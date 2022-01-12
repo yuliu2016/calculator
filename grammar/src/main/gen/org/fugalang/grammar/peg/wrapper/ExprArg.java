@@ -8,6 +8,7 @@ import org.fugalang.core.token.TokenType;
  * expr_arg:
  * *   | '%' NAME
  * *   | NUMBER
+ * *   | expr_call
  * *   | expr_name
  */
 public final class ExprArg extends NodeWrapper {
@@ -32,12 +33,20 @@ public final class ExprArg extends NodeWrapper {
         return has(1);
     }
 
+    public ExprCall exprCall() {
+        return new ExprCall(get(2));
+    }
+
+    public boolean hasExprCall() {
+        return has(2);
+    }
+
     public ExprName exprName() {
-        return new ExprName(get(2));
+        return new ExprName(get(3));
     }
 
     public boolean hasExprName() {
-        return has(2);
+        return has(3);
     }
 
     /**

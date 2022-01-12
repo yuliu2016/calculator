@@ -23,6 +23,7 @@ expr_name:
 expr_arg:
     | '%' NAME
     | NUMBER
+    | expr_call
     | expr_name
 expr_call:
     | expr_name '(' ','.expr_arg+ ')'
