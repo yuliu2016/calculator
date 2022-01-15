@@ -101,6 +101,46 @@ public class CFugaGenerator {
         return sb.toString();
     }
 
+    private static String formatIndices() {
+        StringBuilder sb = new StringBuilder();
+        var tmap = GeneratorUtil.tokenMap;
+
+        sb.append("\n\nstatic char *indices[] = {\n    \"\",\n");
+        int i = 0;
+        for (var tk : tmap.values()) {
+            if (!tk.isLiteral()) {
+                sb.append("    \"").append(tk.literalValue()).append("\",\n");
+            } else {
+                if (i % 5 == 0) {
+                    sb.append("    ");
+                }
+                sb.append("\"").append(tk.literalValue()).append("\", ");
+                if (i % 5 == 4) {
+                    sb.append("\n");
+                }
+                i++;
+            }
+        }
+
+        sb.append("\"\"\n};");
+        sb.append("\n\n");
+        return sb.toString();
+    }
+
+    private static String getTokenMap() {
+        StringBuilder sb = new StringBuilder();
+        for (var tk : GeneratorUtil.tokenMap.values()) {
+            sb.append("#define T_")
+                    .append(tk.snakeCase().toUpperCase())
+                    .append(" ")
+                    .append(tk.index())
+                    .append("  // ")
+                    .append(tk.literalValue())
+                    .append("\n");
+        }
+        return sb.toString();
+    }
+
     public static void main(String[] args) throws Exception {
         RuleSet ruleSet = RuleSetBuilder.generateRuleSet(
                 GeneratorUtil.readGrammar(USER_DIR, GRAMMAR_PATH),
@@ -113,7 +153,7 @@ public class CFugaGenerator {
                 CTransform.getFunctionBodies(ruleSet);
         Files.writeString(C_PATH, c.replace("\n", System.lineSeparator()));
 
-        String tokenHeader = CTransform.getTokenMap(ruleSet) +
+        String tokenHeader = getTokenMap() + formatIndices() +
                 TKL_TYPE + formatLiterals();
 
         String tokenMap = formatHeaderFile("TOKENMAP", tokenHeader);

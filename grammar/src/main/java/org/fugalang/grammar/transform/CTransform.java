@@ -424,18 +424,4 @@ public class CTransform {
         } else throw new IllegalArgumentException();
         return innerName;
     }
-
-    public static String getTokenMap(RuleSet ruleSet) {
-        StringBuilder sb = new StringBuilder();
-        for (var tk : ruleSet.tokenMap().values()) {
-            sb.append("#define T_")
-                    .append(tk.snakeCase().toUpperCase())
-                    .append(" ")
-                    .append(tk.index())
-                    .append("  // ")
-                    .append(tk.literalValue())
-                    .append("\n");
-        }
-        return sb.toString();
-    }
 }
