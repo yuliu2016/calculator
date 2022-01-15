@@ -3,10 +3,7 @@ package org.fugalang.grammar.transform;
 import org.fugalang.grammar.common.*;
 import org.fugalang.grammar.util.StringUtil;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class CTransform {
 
@@ -42,8 +39,11 @@ public class CTransform {
         }
     }
 
+    private static final List<Integer> hashes = new ArrayList<>();
+
     public static String getFunctionBodies(RuleSet ruleSet) {
         StringBuilder sb = new StringBuilder();
+        hashes.clear();
         for (NamedRule namedRule : ruleSet.namedRules()) {
             sb.append("\n");
             sb.append(StringUtil.inlinedoc(namedRule.root().grammarString()));
@@ -64,13 +64,21 @@ public class CTransform {
         sb.append("\nstatic ").append(rn.returnTypeOr("void")).append(" *")
                 .append(rn.symbolicName());
 
+        int rawHash = rn.symbolicName().hashCode();
+        int hash = Math.floorMod(rawHash, 1000);
+        while (hashes.contains(hash)) {
+            hash++;
+        }
+        String hashStr = Integer.toString(hash);
+        hashes.add(hash);
+
         sb.append("(parser_t *p) {\n");
         sb.append("    const frame_t f = {")
-                .append(unit.ruleIndex())
+                .append(hashStr)
                 .append(", p->pos, FUNC};\n");
 
         var rtype = rn.returnTypeOr("void");
-        var resultName = "res_" + unit.ruleIndex();
+        var resultName = "res_" + hashStr;
         var rdec = "    " + rtype + " *" + resultName;
         sb.append(rdec);
         sb.append(unit.leftRecursive() ? " = 0;\n" : ";\n");
@@ -92,11 +100,11 @@ public class CTransform {
         }
 
         if (unit.leftRecursive()) {
-            addLeftRecursiveUnitRuleBody(unit, sb);
+            addLeftRecursiveUnitRuleBody(unit, hashStr, sb);
         } else {
             switch (unit.ruleType()) {
-                case Disjunction -> addDisjunctionBody(unit, sb);
-                case Conjunction -> addConjunctionBody(unit, sb);
+                case Disjunction -> addDisjunctionBody(unit, hashStr, sb);
+                case Conjunction -> addConjunctionBody(unit, hashStr, sb);
             }
         }
 
@@ -115,10 +123,10 @@ public class CTransform {
         }
     }
 
-    private static void addLeftRecursiveUnitRuleBody(UnitRule unit, StringBuilder sb) {
+    private static void addLeftRecursiveUnitRuleBody(UnitRule unit,  String hashStr, StringBuilder sb) {
         var rtype = unit.ruleName().returnTypeOr("void");
-        var resultName = "res_" + unit.ruleIndex();
-        var altName = "alt_" + unit.ruleIndex();
+        var resultName = "res_" + hashStr;
+        var altName = "alt_" + hashStr;
 
         sb.append("    ").append(rtype).append(" *").append(altName).append(";\n");
         sb.append("    size_t maxpos;\n");
@@ -157,7 +165,7 @@ public class CTransform {
                 (field.resultSource().isTokenLiteral() && field.isRequired()));
     }
 
-    private static void addConjunctionBody(UnitRule unit, StringBuilder sb) {
+    private static void addConjunctionBody(UnitRule unit, String hashStr, StringBuilder sb) {
         List<String> fieldNames = new ArrayList<>();
 
         int j = 0;
@@ -180,7 +188,7 @@ public class CTransform {
             sb.append("    ").append(type).append(" *").append(name).append(";\n");
         }
 
-        var resultName = "res_" + unit.ruleIndex();
+        var resultName = "res_" + hashStr;
         sb.append("    ").append(resultName).append(" = enter_frame(p, &f) && (\n");
 
         var fields = unit.fields();
@@ -246,7 +254,7 @@ public class CTransform {
         return type;
     }
 
-    private static void addDisjunctionBody(UnitRule unit, StringBuilder sb) {
+    private static void addDisjunctionBody(UnitRule unit, String hashStr, StringBuilder sb) {
 
         for (UnitField field : unit.fields()) {
             var template = field.resultClause().template().strip();
@@ -261,8 +269,8 @@ public class CTransform {
         }
 
         var resultType = unit.ruleName().returnTypeOr("void");
-        var resultName = "res_" + unit.ruleIndex();
-        var altName = "alt_" + unit.ruleIndex();
+        var resultName = "res_" + hashStr;
+        var altName = "alt_" + hashStr;
 
         sb.append("    ").append(resultType).append(" *").append(altName).append(";\n");
         sb.append("    ").append(resultName).append(" = enter_frame(p, &f) && (");
