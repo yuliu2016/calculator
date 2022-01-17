@@ -1,25 +1,25 @@
 # Calculator Grammar
 
 sum[double] (left_recursive):
-    | sum '+' term { binop_add(p, %a, %b) }
-    | sum '-' term { binop_sub(p, %a, %b) }
+    | sum '+' term >> { binop_add(p, %a, %b) }
+    | sum '-' term >> { binop_sub(p, %a, %b) }
     | term { a }
 term[double] (left_recursive):
-    | term '*' factor { binop_mul(p, %a, %b) }
-    | term '/' factor { binop_div(p, %a, %b) }
-    | term '%' factor { binop_mod(p, %a, %b) }
+    | term '*' factor >> { binop_mul(p, %a, %b) }
+    | term '/' factor >> { binop_div(p, %a, %b) }
+    | term '%' factor >> { binop_mod(p, %a, %b) }
     | factor { a }
 factor[double]:
-    | '+' factor { unary_plus(p, %a) }
-    | '-' factor { unary_minus(p, %a) }
-    | '~' factor { unary_not(p, %a) }
+    | '+' factor >> { a }
+    | '-' factor >> { unary_minus(p, %a) }
+    | '~' factor >> { unary_not(p, %a) }
     | power { a }
 power[double]:
-    | atom '**' factor { binop_pow(p, %a, %b) }
+    | atom '**' factor >> { binop_pow(p, %a, %b) }
     | atom { a }
 atom[double]:
-    | '(' sum ')' { a }
-    | NAME '(' [parameters] ')' { call_func(p, %a, %b) }
+    | '(' sum ')' >> { a }
+    | NAME '(' [parameters] ')' >> { call_func(p, %a, %b) }
     | NAME { load_const(p, %a) }
     | NUMBER { to_double(p, %a) }
 parameters[ast_list_t]:

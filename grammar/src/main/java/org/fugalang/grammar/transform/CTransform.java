@@ -45,10 +45,7 @@ public class CTransform {
         StringBuilder sb = new StringBuilder();
         hashes.clear();
         for (NamedRule namedRule : ruleSet.namedRules()) {
-            sb.append("\n");
-            sb.append(StringUtil.inlinedoc(namedRule.root().grammarString()));
-            var args = namedRule.args();
-            addUnitRuleBody(namedRule.root(), sb, args);
+            addUnitRuleBody(namedRule.root(), sb, namedRule.args());
             for (UnitRule component : namedRule.components()) {
                 addUnitRuleBody(component, sb, Collections.emptyMap());
             }
@@ -57,10 +54,10 @@ public class CTransform {
     }
 
     private static void addUnitRuleBody(UnitRule unit, StringBuilder sb, Map<String, String> args) {
+        sb.append("\n");
+        sb.append(StringUtil.inlinedoc(unit.grammarString()));
+
         var rn = unit.ruleName();
-
-        boolean memoize = args.containsKey("memo") || unit.leftRecursive();
-
         sb.append("\nstatic ").append(rn.returnTypeOr("void")).append(" *")
                 .append(rn.symbolicName());
 
@@ -83,6 +80,7 @@ public class CTransform {
         sb.append(rdec);
         sb.append(unit.leftRecursive() ? " = 0;\n" : ";\n");
 
+        boolean memoize = args.containsKey("memo") || unit.leftRecursive();
         if (memoize) {
             sb.append("    if (is_memoized(p, &f, (void **) &")
                     .append(resultName).append(")) {\n");

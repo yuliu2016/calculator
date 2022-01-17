@@ -97,23 +97,23 @@ augmented_assign[int]:
 # Compound statements
 
 compound_statement:
-    | if_stmt
-    | while_stmt
-    | for_stmt
-    | try_stmt
-    | with_stmt
+    | if_statement
+    | while_statement
+    | for_statement
+    | try_statement
+    | with_statement
 
-if_stmt:
-    | 'if' named_expression suite elif_stmt* [else_suite]
-elif_stmt:
+if_statement (inline):
+    | 'if' named_expression suite elif_statement* [else_suite]
+elif_statement:
     | 'elif' named_expression suite
-while_stmt:
+while_statement:
     | 'while' named_expression suite [else_suite]
-for_stmt:
+for_statement:
     | 'for' targetlist 'in' exprlist suite [else_suite]
-try_stmt:
+try_statement:
     | 'try' suite (except_suite | finally_suite)
-with_stmt:
+with_statement:
     | 'with' ','.expr_as_name+ suite
 expr_as_name:
     | expr ['as' NAME >> [token_t]{ a }]
