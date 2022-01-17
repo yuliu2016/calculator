@@ -88,15 +88,6 @@ public class CTransform {
             sb.append("    }\n");
         }
 
-        var ws = args.get("allow_whitespace");
-        if ("true".equals(ws)) {
-            sb.append("    int ws = p->ignore_whitespace;\n");
-            sb.append("    p->ignore_whitespace = 1;\n");
-        } else if ("false".equals(ws)) {
-            sb.append("    int ws = p->ignore_whitespace;\n");
-            sb.append("    p->ignore_whitespace=0;\n");
-        }
-
         if (unit.leftRecursive()) {
             addLeftRecursiveUnitRuleBody(unit, hashStr, sb);
         } else {
@@ -106,14 +97,13 @@ public class CTransform {
             }
         }
 
-        if (ws != null) {
-            sb.append("    p->ignore_whitespace = ws;\n");
-        }
         if (memoize) {
             sb.append("    insert_memo(p, &f, ").append(resultName).append(");\n");
         }
 
-        sb.append("    return exit_frame(p, &f, ").append(resultName).append(");\n");
+        var exitFunc = unit.isInline() ? "exit_inline" : "exit_frame";
+
+        sb.append("    return ").append(exitFunc).append("(p, &f, ").append(resultName).append(");\n");
         sb.append("}\n");
 
         for (UnitField field : unit.fields()) {
@@ -129,6 +119,8 @@ public class CTransform {
         sb.append("    ").append(rtype).append(" *").append(altName).append(";\n");
         sb.append("    size_t maxpos;\n");
         sb.append("    ").append(rtype).append(" *max;\n");
+
+        if (unit.isInline()) throw new IllegalStateException();
 
         sb.append("    if (enter_frame(p, &f)) {\n");
         sb.append("        do {\n");
@@ -187,7 +179,8 @@ public class CTransform {
         }
 
         var resultName = "res_" + hashStr;
-        sb.append("    ").append(resultName).append(" = enter_frame(p, &f) && (\n");
+        var enterFunc = unit.isInline() ? "enter_inline" : "enter_frame";
+        sb.append("    ").append(resultName).append(" = ").append(enterFunc).append("(p, &f) && (\n");
 
         var fields = unit.fields();
         j = 0;
@@ -269,9 +262,10 @@ public class CTransform {
         var resultType = unit.ruleName().returnTypeOr("void");
         var resultName = "res_" + hashStr;
         var altName = "alt_" + hashStr;
+        var enterFunc = unit.isInline() ? "enter_inline" : "enter_frame";
 
         sb.append("    ").append(resultType).append(" *").append(altName).append(";\n");
-        sb.append("    ").append(resultName).append(" = enter_frame(p, &f) && (");
+        sb.append("    ").append(resultName).append(" = ").append(enterFunc).append("(p, &f) && (");
 
         var fields = unit.fields();
         for (int i = 0; i < fields.size(); i++) {
