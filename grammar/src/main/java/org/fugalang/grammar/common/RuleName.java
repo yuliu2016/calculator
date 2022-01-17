@@ -46,6 +46,10 @@ public record RuleName(String snakeCase, String returnType, int[] suffixArray) {
         return new RuleName(snakeCase, returnType, newArray);
     }
 
+    public RuleName withReturn(String returnType) {
+        return new RuleName(snakeCase, returnType, suffixArray);
+    }
+
     public static RuleName of(String ruleName, String returnType) {
         return new RuleName(ruleName, returnType, new int[]{});
     }

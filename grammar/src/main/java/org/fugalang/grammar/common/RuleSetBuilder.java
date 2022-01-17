@@ -13,6 +13,8 @@ public class RuleSetBuilder {
     private static final boolean REQUIRED = false;
     private static final boolean OPTIONAL = true;
 
+    private static final GrammarRepr REPR = GrammarRepr.INSTANCE;
+
     private final List<Rule> rules;
     private final Map<String, TokenEntry> tokenMap;
     private final Map<String, RuleName> ruleNameMap = new LinkedHashMap<>();
@@ -45,10 +47,22 @@ public class RuleSetBuilder {
             var ruleName = ruleNameMap.get(rule.name());
             UnitRule unit = createNamedRule(ruleName, rule);
             unit.setRuleType(RuleType.Disjunction);
-            addAltList(ruleName, unit, rule.ruleSuite().altList());
+
+            var altList = rule.ruleSuite().altList();
+            if (altList.alternatives().isEmpty() &&
+                    altList.sequence().hasInlineHint()) {
+                throw new IllegalStateException(ruleName +
+                        ": No direct inline hint allowed for named rules");
+            }
+
+            addAltList(ruleName, unit, altList);
 
             // Protect against not initializing result
-            unit.guardMatchEmptyString();
+            // (works only in the direct case against typos)
+            if (unit.fields().stream().noneMatch(UnitField::isRequired)) {
+                throw new IllegalStateException("The named rule " + ruleName +
+                        " may match an empty string");
+            }
             // Make sure that we don't accidentally add sub-rules
             currentNamedRule = null;
         }
@@ -59,27 +73,36 @@ public class RuleSetBuilder {
         if (altList.alternatives().isEmpty()) {
             // Only one alternative - the entire rule is a sequence
             unit.setRuleType(RuleType.Conjunction);
-            addSequence(ruleName, unit, altList.sequence());
-            unit.setResultClause(PEGUtil.getResultClause(altList.sequence()));
+            // The inline hint is already been taken care of
+            var sequence = altList.sequence();
+            unit.setResultClause(PEGUtil.getResultClause(sequence));
+            addSequence(ruleName, unit, sequence);
         } else {
             // Multiple alternatives, which need numbering to avoid conflicts
             int sequenceCount = 1;
 
             for (var sequence : PEGUtil.allSequences(altList)) {
-                var newRuleName = ruleName.withSuffix(sequenceCount++);
-
                 if (sequence.primaries().size() == 1) {
                     // only one primary - can propagate fields of this unit
                     // also set the result clause to be "fall-through" if unspecified
-                    var resultClause = PEGUtil.getResultClause(sequence);
-                    if (resultClause == null) resultClause = new ResultClause("%a");
+                    var resultClause = PEGUtil.resultClauseOrElse(sequence, "%a");
+
+                    if (sequence.hasInlineHint())
+                        throw new IllegalStateException("A one-item sequence can't be marked inline");
 
                     addPrimary(ruleName, unit, sequence.primaries().get(0),
                             REQUIRED, resultClause);
                 } else {
+                    var newRuleName = ruleName.withSuffix(sequenceCount);
+                    boolean isInline = sequence.hasInlineHint();
+                    if (isInline && sequence.inlineHint().hasReturnType()) {
+                        newRuleName = newRuleName.withReturn(
+                                sequence.inlineHint().returnType().name());
+                    }
+
                     // Need to make a new unit rule to hold the sequence
-                    var grammarString = GrammarRepr.INSTANCE.visitSequence(sequence);
-                    var subUnit = createUnnamedRule(newRuleName, grammarString);
+                    var grammarString = REPR.visitSequence(sequence);
+                    var subUnit = createUnnamedRule(newRuleName, grammarString, isInline);
                     subUnit.setRuleType(RuleType.Conjunction);
                     subUnit.setResultClause(PEGUtil.getResultClause(sequence));
 
@@ -97,6 +120,7 @@ public class RuleSetBuilder {
 
                     addSequence(newRuleName, subUnit, sequence);
                 }
+                sequenceCount++;
             }
         }
     }
@@ -110,7 +134,8 @@ public class RuleSetBuilder {
             // Need to add numbering to avoid naming conflicts
             int primaryCount = 1;
             for (var primary : sequence.primaries()) {
-                addPrimary(ruleName.withSuffix(primaryCount++), unit, primary, REQUIRED, null);
+                addPrimary(ruleName.withSuffix(primaryCount), unit, primary, REQUIRED, null);
+                primaryCount++;
             }
         }
     }
@@ -152,17 +177,33 @@ public class RuleSetBuilder {
                     isOptional, PEGUtil.getResultClause(altList.sequence()));
         } else {
             // Create a separate unit rule for the altlist
-            var grammarString = GrammarRepr.INSTANCE.visitAltList(altList);
-            var subUnit = createUnnamedRule(ruleName, grammarString);
+            var grammarString = REPR.visitAltList(altList);
+
+            // Potentially change the return type here
+            RuleName newRuleName;
+            boolean isInline;
+            if (altList.alternatives().isEmpty()) {
+                var sequence = altList.sequence();
+                isInline = sequence.hasInlineHint();
+                if (isInline && sequence.inlineHint().hasReturnType()) {
+                    newRuleName = ruleName.withReturn(
+                            sequence.inlineHint().returnType().name());
+                } else newRuleName = ruleName;
+            } else {
+                isInline = false;
+                newRuleName = ruleName;
+            }
+
+            var subUnit = createUnnamedRule(newRuleName, grammarString, isInline);
             subUnit.setRuleType(RuleType.Disjunction);
 
-            var smartName = PEGUtil.getSmartName(ruleName, altList, tokenMap);
+            var smartName = PEGUtil.getSmartName(newRuleName, altList, tokenMap);
             var fieldName = FieldName.of(smartName);
 
-            addField(ruleName, unit, fieldName, fieldType, isOptional,
-                    new ResultSource(Kind.UnitRule, ruleName), null, new ResultClause("%a"));
+            addField(newRuleName, unit, fieldName, fieldType, isOptional,
+                    new ResultSource(Kind.UnitRule, newRuleName), null, new ResultClause("%a"));
 
-            addAltList(ruleName, subUnit, altList);
+            addAltList(newRuleName, subUnit, altList);
         }
     }
 
@@ -243,14 +284,18 @@ public class RuleSetBuilder {
         }
         var args = PEGUtil.extractRuleArgs(rule);
         var leftRecursive = PEGUtil.checkLeftRecursive(rule, args);
-        var grammarString = GrammarRepr.INSTANCE.visitRule(rule);
-        var unit = new UnitRule(++ruleCounter, ruleName, leftRecursive, grammarString);
+        var grammarString = REPR.visitRule(rule);
+        var isInline = args.containsKey("inline");
+
+        ruleCounter++;
+        var unit = new UnitRule(ruleCounter, ruleName, leftRecursive, isInline, grammarString);
+
         currentNamedRule = new NamedRule(unit, new ArrayList<>(), args);
         ruleSet.namedRules().add(currentNamedRule);
         return unit;
     }
 
-    public UnitRule createUnnamedRule(RuleName ruleName, String grammarString) {
+    public UnitRule createUnnamedRule(RuleName ruleName, String grammarString, boolean isInline) {
         if (currentNamedRule == null) {
             throw new IllegalStateException("No named rule to add to");
         }
@@ -258,7 +303,8 @@ public class RuleSetBuilder {
         if (current.components().stream().anyMatch(c -> c.ruleName().equals(ruleName))) {
             throw new IllegalStateException("Duplicate inner rule: " + ruleName);
         }
-        var unit = new UnitRule(++ruleCounter, ruleName, false, grammarString);
+        ruleCounter++;
+        var unit = new UnitRule(ruleCounter, ruleName, false, isInline, grammarString);
         current.components().add(unit);
         return unit;
     }

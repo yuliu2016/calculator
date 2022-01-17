@@ -11,6 +11,7 @@ public class UnitRule {
     private final int ruleIndex;
     private final RuleName ruleName;
     private final boolean leftRecursive;
+    private final boolean isInline;
 
     private RuleType ruleType;
     private ResultClause resultClause;
@@ -23,11 +24,13 @@ public class UnitRule {
             int ruleIndex,
             RuleName ruleName,
             boolean leftRecursive,
+            boolean isInline,
             String grammarString
     ) {
         this.ruleIndex = ruleIndex;
         this.ruleName = ruleName;
         this.leftRecursive = leftRecursive;
+        this.isInline = isInline;
         this.grammarString = grammarString;
     }
 
@@ -41,6 +44,10 @@ public class UnitRule {
 
     public boolean leftRecursive() {
         return leftRecursive;
+    }
+
+    public boolean isInline() {
+        return isInline;
     }
 
     public String grammarString() {
@@ -61,13 +68,6 @@ public class UnitRule {
 
     public void setResultClause(ResultClause resultClause) {
         this.resultClause = resultClause;
-    }
-
-    public void guardMatchEmptyString() {
-        if (fields.stream().noneMatch(UnitField::isRequired)) {
-            throw new IllegalStateException("The rule" + ruleName +
-                    " may match an empty string");
-        }
     }
 
     public RuleName ruleName() {

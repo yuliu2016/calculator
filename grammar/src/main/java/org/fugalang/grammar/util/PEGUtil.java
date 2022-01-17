@@ -173,6 +173,14 @@ public class PEGUtil {
         return new ResultClause(template);
     }
 
+    public static ResultClause resultClauseOrElse(
+            Sequence sequence, String elseTemplate) {
+        if (sequence.hasResultExpr()) {
+            return getResultClause(sequence);
+        }
+        return new ResultClause(elseTemplate);
+    }
+
     public static RuleName getRuleName(Rule rule) {
         var ruleName = rule.name();
         var returnType = rule.hasReturnType() ? rule.returnType().name() : null;
