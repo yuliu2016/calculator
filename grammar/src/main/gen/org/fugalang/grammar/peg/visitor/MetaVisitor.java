@@ -71,9 +71,17 @@ public interface MetaVisitor<T> {
 
     /**
      * sequence:
-     * *   | primary+ [result_expr]
+     * *   | primary+ [inline_hint] [result_expr]
      */
     default T visitSequence(Sequence sequence) {
+        return null;
+    }
+
+    /**
+     * inline_hint:
+     * *   | '>>' [return_type]
+     */
+    default T visitInlineHint(InlineHint inlineHint) {
         return null;
     }
 

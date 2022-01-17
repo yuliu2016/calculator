@@ -174,13 +174,14 @@ public class MetaParser {
 
     /**
      * sequence:
-     * *   | primary+ [result_expr]
+     * *   | primary+ [inline_hint] [result_expr]
      */
     public static boolean sequence(ParseTree t) {
         var m = t.enter(SEQUENCE);
         if (m != null) return m;
         boolean r;
         r = primary_loop(t);
+        if (r) inline_hint(t);
         if (r) result_expr(t);
         t.exit(r);
         return r;
@@ -193,6 +194,20 @@ public class MetaParser {
             if (!primary(t)) break;
         }
         t.exitLoop();
+        return r;
+    }
+
+    /**
+     * inline_hint:
+     * *   | '>>' [return_type]
+     */
+    public static boolean inline_hint(ParseTree t) {
+        var m = t.enter(INLINE_HINT);
+        if (m != null) return m;
+        boolean r;
+        r = t.consume(">>");
+        if (r) return_type(t);
+        t.exit(r);
         return r;
     }
 

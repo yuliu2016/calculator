@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * sequence:
- * *   | primary+ [result_expr]
+ * *   | primary+ [inline_hint] [result_expr]
  */
 public final class Sequence extends NodeWrapper {
 
@@ -19,11 +19,19 @@ public final class Sequence extends NodeWrapper {
         return getList(0, Primary::new);
     }
 
+    public InlineHint inlineHint() {
+        return new InlineHint(get(1));
+    }
+
+    public boolean hasInlineHint() {
+        return has(1);
+    }
+
     public ResultExpr resultExpr() {
-        return new ResultExpr(get(1));
+        return new ResultExpr(get(2));
     }
 
     public boolean hasResultExpr() {
-        return has(1);
+        return has(2);
     }
 }
