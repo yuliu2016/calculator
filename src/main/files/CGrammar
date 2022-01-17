@@ -2,37 +2,33 @@
 
 single_input[ast_list_t]:
     | NEWLINE { ast_list_of(p, ast_nop(p)) }
-    | simple_stmt { ast_list_of(p, %a) }
-    | compound_stmt NEWLINE { ast_list_of(p, %a) }
+    | simple_statements { ast_list_of(p, %a) }
+    | compound_statement NEWLINE { ast_list_of(p, %a) }
 file_input[ast_list_t]:
-    | stmt_list { a }
+    | statement_list { a }
 eval_input[ast_list_t]:
     | exprlist [NEWLINE] { a }
 
 # Statements
-stmt_list[ast_list_t]:
-    | stmt+ { a }
-stmt[ast_list_t]:
-    | (simple_stmt | compound_stmt { ast_list_of(p, %a) }) NEWLINE { a }
-simple_stmt[ast_list_t]:
-    | ';'.small_stmt+ [';'] { a }
+statement_list[ast_list_t]:
+    | line_statement+ { a }
+line_statement[ast_list_t]:
+    | simple_statements { a }
+    | compound_statement NEWLINE { ast_list_of(p, %a) }
+
+simple_statements[ast_list_t]:
+    | ';'.simple_statement+ [';'] NEWLINE { a }
 
 # Small Statements
-small_stmt[ast_stmt_t]:
+simple_statement[ast_stmt_t]:
     | 'pass' { ast_nop(p) }
     | 'break' { ast_break(p) }
     | 'continue' { ast_continue(p) }
-    | return_stmt { a }
-    | raise_stmt { a }
-    | del_stmt { a }
+    | 'return' [exprlist_star] { ast_return(p, %a) }
+    | 'raise' expr ['from' expr] { ast_nop(p) }
+    | 'del' targetlist { ast_del(p, %a) }
     | assignment { a }
 
-del_stmt[ast_stmt_t]:
-    | 'del' targetlist { ast_del(p, %a) }
-return_stmt[ast_stmt_t]:
-    | 'return' [exprlist_star] { ast_return(p, %a) }
-raise_stmt[ast_stmt_t]:
-    | 'raise' expr ['from' expr]
 
 # Expression groups
 star_expr[ast_expr_t]:
@@ -71,7 +67,7 @@ slice_expr:
 
 list_item:
     | star_expr
-    | named_expr
+    | named_expression
 list_items[ast_list_t]:
     | ','.list_item+ [','] { a }
 
@@ -79,16 +75,10 @@ list_items[ast_list_t]:
 # Assignments
 
 assignment:
-    | annassign
-    | augassign
-    | simple_assign
-annassign:
-    | target ':' expr ['=' exprlist]
-augassign:
-    | target augassign_op exprlist
-simple_assign:
-    | (targetlist '=')* exprlist_star
-augassign_op[int]:
+    | target ':' expr ['=' exprlist { a }]
+    | target augmented_assign exprlist
+    | (targetlist '=' { a })* exprlist_star
+augmented_assign[int]:
     | '+='  { ast_integer(p, BINOP_PLS) }
     | '-='  { ast_integer(p, BINOP_MIN) }
     | '*='  { ast_integer(p, BINOP_MUL) }
@@ -106,7 +96,7 @@ augassign_op[int]:
 
 # Compound statements
 
-compound_stmt:
+compound_statement:
     | if_stmt
     | while_stmt
     | for_stmt
@@ -114,11 +104,11 @@ compound_stmt:
     | with_stmt
 
 if_stmt:
-    | 'if' named_expr suite elif_stmt* [else_suite]
+    | 'if' named_expression suite elif_stmt* [else_suite]
 elif_stmt:
-    | 'elif' named_expr suite
+    | 'elif' named_expression suite
 while_stmt:
-    | 'while' named_expr suite [else_suite]
+    | 'while' named_expression suite [else_suite]
 for_stmt:
     | 'for' targetlist 'in' exprlist suite [else_suite]
 try_stmt:
@@ -131,10 +121,10 @@ expr_as_name:
 # Suites
 
 block_suite:
-    | '{' NEWLINE stmt_list '}'
-    | '{' [simple_stmt] '}' { a }
+    | '{' NEWLINE statement_list '}'
+    | '{' [simple_statements] '}' { a }
 suite:
-    | ':' simple_stmt { a }
+    | ':' simple_statements { a }
     | block_suite { a }
 else_suite:
     | 'else' suite { a }
@@ -183,7 +173,7 @@ builder_args:
 
 # Expressions
 
-named_expr[ast_named_t]:
+named_expression[ast_named_t]:
     | NAME ':=' expr { ast_named(p, %a, %b) }
     | expr { ast_unnamed(p, %a) }
 conditional[ast_expr_t]:
@@ -202,10 +192,10 @@ inversion[ast_expr_t]:
     | 'not' inversion { ast_unary(p, %a, LOGIC_NOT) }
     | comparison { a }
 comparison[ast_expr_t]:
-    | bitwise_or (comp_op bitwise_or { ast_comp_term(p, %a, %b) })+
+    | bitwise_or (comparator bitwise_or { ast_comp_term(p, %a, %b) })+
         { ast_comparison(p, %a, %b) }
     | bitwise_or { a }
-comp_op[int]:
+comparator[int]:
     | '<' { ast_integer(p, CMP_LT) }
     | '>' { ast_integer(p, CMP_GT) }
     | '==' { ast_integer(p, CMP_EQ) }
@@ -223,25 +213,25 @@ bitwise_xor[ast_expr_t] (left_recursive):
     | bitwise_xor '^' bitwise_and { ast_binary(p, %a, %b, BINOP_XOR) }
     | bitwise_and { a }
 bitwise_and[ast_expr_t] (left_recursive):
-    | bitwise_and '&' shift_expr { ast_binary(p, %a, %b, BINOP_AND) }
-    | shift_expr { a }
-shift_expr[ast_expr_t] (left_recursive):
-    | shift_expr '<<' sum { ast_binary(p, %a, %b, BINOP_SHL) }
-    | shift_expr '>>' sum { ast_binary(p, %a, %b, BINOP_SHR) }
+    | bitwise_and '&' bitwise_shift { ast_binary(p, %a, %b, BINOP_AND) }
+    | bitwise_shift { a }
+bitwise_shift[ast_expr_t] (left_recursive):
+    | bitwise_shift '<<' sum { ast_binary(p, %a, %b, BINOP_SHL) }
+    | bitwise_shift '>>' sum { ast_binary(p, %a, %b, BINOP_SHR) }
     | sum { a }
 sum[ast_expr_t] (left_recursive):
     | sum '+' term { ast_binary(p, %a, %b, BINOP_PLS) }
     | sum '-' term { ast_binary(p, %a, %b, BINOP_MIN) }
     | term { a }
 term[ast_expr_t] (left_recursive):
-    | term '*' pipe_expr { ast_binary(p, %a, %b, BINOP_MUL) }
-    | term '/' pipe_expr { ast_binary(p, %a, %b, BINOP_DIV) }
-    | term '%' pipe_expr { ast_binary(p, %a, %b, BINOP_MOD) }
-    | term '//' pipe_expr { ast_binary(p, %a, %b, BINOP_FDV) }
-    | term '@' pipe_expr { ast_binary(p, %a, %b, BINOP_MML) }
-    | pipe_expr { a }
-pipe_expr[ast_expr_t] (left_recursive):
-    | pipe_expr '->' factor { ast_binary(p, %a, %b, BINOP_PIP) }
+    | term '*' pipeline { ast_binary(p, %a, %b, BINOP_MUL) }
+    | term '/' pipeline { ast_binary(p, %a, %b, BINOP_DIV) }
+    | term '%' pipeline { ast_binary(p, %a, %b, BINOP_MOD) }
+    | term '//' pipeline { ast_binary(p, %a, %b, BINOP_FDV) }
+    | term '@' pipeline { ast_binary(p, %a, %b, BINOP_MML) }
+    | pipeline { a }
+pipeline[ast_expr_t] (left_recursive):
+    | pipeline '->' factor { ast_binary(p, %a, %b, BINOP_PIP) }
     | factor { a }
 factor[ast_expr_t]:
     | '+' factor { ast_unary(p, %a, UNARY_PLS) }
@@ -257,17 +247,17 @@ primary[ast_primary_t] (left_recursive):
     | primary invocation
     | primary subscript
     | atom
-tuple_atom[ast_primary_t]:
+paren_expression[ast_primary_t]:
     | '(' [list_items] ')'
-list_atom[ast_primary_t]:
+list_expression[ast_primary_t]:
     | '[' [list_items] ']'
-builder[ast_primary_t]:
+builder_expression[ast_primary_t]:
     | NAME simple_args ':' expr
     | NAME [builder_hint] [builder_args] block_suite
 atom[ast_primary_t]:
-    | tuple_atom
-    | list_atom
-    | builder
+    | paren_expression
+    | list_expression
+    | builder_expression
     | NAME { ast_name_atom(p, %a) }
     | NUMBER { ast_number_atom(p, %a) }
     | STRING { ast_string_atom(p, %a) }

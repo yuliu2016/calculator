@@ -190,7 +190,8 @@ public class RuleSetBuilder {
 
             var tokenEntry = tokenMap.get(primaryName);
             if (tokenEntry == null) {
-                throw new RuntimeException("'" + primaryName + "' is neither a rule or a token");
+                throw new RuntimeException("'" + primaryName + "' referenced in '" +
+                        unit.ruleName() + "' is neither a rule or a token");
             }
             var ruleName = unit.ruleName();
 
