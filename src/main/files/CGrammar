@@ -1,64 +1,64 @@
 # Grammar for Fuga
 
-single_input[ast_list_t]:
+single_input[ast_list_t *]:
     | NEWLINE { ast_list_of(p, ast_nop(p)) }
     | simple_statements { ast_list_of(p, %a) }
     | compound_statement NEWLINE { ast_list_of(p, %a) }
-file_input[ast_list_t]:
+file_input[ast_list_t *]:
     | statement_list { a }
-eval_input[ast_list_t]:
+eval_input[ast_list_t *]:
     | exprlist [NEWLINE] { a }
 
 # Statements
-statement_list[ast_list_t]:
+statement_list[ast_list_t *]:
     | line_statement+ { a }
-line_statement[ast_list_t]:
+line_statement[ast_list_t *]:
     | simple_statements NEWLINE { a }
     | compound_statement NEWLINE { ast_list_of(p, %a) }
 
-simple_statements[ast_list_t]:
+simple_statements[ast_list_t *]:
     | ';'.simple_statement+ [';'] { a }
 
 
 # Small Statements
-simple_statement[ast_stmt_t]:
+simple_statement[ast_stmt_t *]:
     | 'pass' { ast_nop(p) }
     | 'break' { ast_break(p) }
     | 'continue' { ast_continue(p) }
     | 'return' [exprlist_star] >> { ast_return(p, %a) }
-    | 'raise' expr ['from' expr >> [ast_expr_t] { a }] >> { ast_nop(p) }
+    | 'raise' expr ['from' expr >> [ast_expr_t *] { a }] >> { ast_nop(p) }
     | 'del' targetlist >> { ast_del(p, %a) }
     | assignment { a }
 
 
 # Expression groups
-star_expr[ast_expr_t]:
+star_expr[ast_expr_t *]:
     | '*' bitwise_or { a }
-exprlist[ast_list_t]:
+exprlist[ast_list_t *]:
     | ','.expr+ [','] { a }
 target (memo):
     | t_primary '.' NAME !t_lookahead
     | t_primary subscript !t_lookahead
     | NAME
     | '(' targetlist ')'
-t_primary[ast_primary_t] (left_recursive):
+t_primary[ast_primary_t *] (left_recursive):
     | t_primary '.' NAME &t_lookahead
     | t_primary invocation &t_lookahead
     | t_primary subscript &t_lookahead
     | atom &t_lookahead
-t_lookahead[void]:
+t_lookahead[void *]:
     | '.'
     | '('
     | '['
-targetlist[ast_list_t]:
+targetlist[ast_list_t *]:
     | ','.target+ [','] { a }
 expr_or_star:
     | star_expr
     | expr
-exprlist_star[ast_list_t]:
+exprlist_star[ast_list_t *]:
     | ','.expr_or_star+ [','] { a }
 
-subscript[ast_list_t]:
+subscript[ast_list_t *]:
     | '[' ','.slice+ [','] ']' { a }
 slice:
     | [expr] slice_expr [slice_expr]
@@ -69,7 +69,7 @@ slice_expr:
 list_item:
     | star_expr
     | named_expression
-list_items[ast_list_t]:
+list_items[ast_list_t *]:
     | ','.list_item+ [','] { a }
 
 
@@ -79,7 +79,7 @@ assignment:
     | target ':' expr ['=' exprlist >> { a }]
     | target augmented_assign exprlist
     | (targetlist '=' >> { a })* exprlist_star
-augmented_assign[int]:
+augmented_assign[int *]:
     | '+='  { ast_integer(p, BINOP_PLS) }
     | '-='  { ast_integer(p, BINOP_MIN) }
     | '*='  { ast_integer(p, BINOP_MUL) }
@@ -174,30 +174,30 @@ builder_args:
 
 # Expressions
 
-named_expression[ast_named_t]:
+named_expression[ast_named_t *]:
     | NAME ':=' expr { ast_named(p, %a, %b) }
     | expr { ast_unnamed(p, %a) }
-conditional[ast_expr_t]:
+conditional[ast_expr_t *]:
     | 'if' disjunction '?' disjunction ':' expr
         { ast_conditional(p, %a, %b, %c) }
-expr[ast_expr_t]:
+expr[ast_expr_t *]:
     | conditional { a }
     | disjunction { a }
-disjunction[ast_expr_t] (left_recursive):
+disjunction[ast_expr_t *] (left_recursive):
     | disjunction 'or' conjunction >> { ast_binary(p, %a, %b, LOGIC_OR) }
     | conjunction { a }
-conjunction[ast_expr_t] (left_recursive):
+conjunction[ast_expr_t *] (left_recursive):
     | conjunction 'and' inversion >> { ast_binary(p, %a, %b, LOGIC_AND) }
     | inversion { a }
-inversion[ast_expr_t]:
+inversion[ast_expr_t *]:
     | 'not' inversion >> { ast_unary(p, %a, LOGIC_NOT) }
     | comparison { a }
-comparison[ast_expr_t]:
+comparison[ast_expr_t *]:
     | bitwise_or (comparator bitwise_or >> [ast_expr_t]
             { ast_comp_term(p, %a, %b) })+
         { ast_comparison(p, %a, %b) }
     | bitwise_or { a }
-comparator[int]:
+comparator[int *]:
     | '<' { ast_integer(p, CMP_LT) }
     | '>' { ast_integer(p, CMP_GT) }
     | '==' { ast_integer(p, CMP_EQ) }
@@ -208,56 +208,56 @@ comparator[int]:
     | 'not' 'in' >> { ast_integer(p, CMP_NI) }
     | 'is' { ast_integer(p, CMP_IS) }
     | 'is' 'not' >> { ast_integer(p, CMP_NS) }
-bitwise_or[ast_expr_t] (left_recursive):
+bitwise_or[ast_expr_t *] (left_recursive):
     | bitwise_or '|' bitwise_xor >> { ast_binary(p, %a, %b, BINOP_IOR) }
     | bitwise_xor { a }
-bitwise_xor[ast_expr_t] (left_recursive):
+bitwise_xor[ast_expr_t *] (left_recursive):
     | bitwise_xor '^' bitwise_and >> { ast_binary(p, %a, %b, BINOP_XOR) }
     | bitwise_and { a }
-bitwise_and[ast_expr_t] (left_recursive):
+bitwise_and[ast_expr_t *] (left_recursive):
     | bitwise_and '&' bitwise_shift >> { ast_binary(p, %a, %b, BINOP_AND) }
     | bitwise_shift { a }
-bitwise_shift[ast_expr_t] (left_recursive):
+bitwise_shift[ast_expr_t *] (left_recursive):
     | bitwise_shift '<<' sum >> { ast_binary(p, %a, %b, BINOP_SHL) }
     | bitwise_shift '>>' sum >> { ast_binary(p, %a, %b, BINOP_SHR) }
     | sum { a }
-sum[ast_expr_t] (left_recursive):
+sum[ast_expr_t *] (left_recursive):
     | sum '+' term >> { ast_binary(p, %a, %b, BINOP_PLS) }
     | sum '-' term >> { ast_binary(p, %a, %b, BINOP_MIN) }
     | term { a }
-term[ast_expr_t] (left_recursive):
+term[ast_expr_t *] (left_recursive):
     | term '*' pipeline >> { ast_binary(p, %a, %b, BINOP_MUL) }
     | term '/' pipeline >> { ast_binary(p, %a, %b, BINOP_DIV) }
     | term '%' pipeline >> { ast_binary(p, %a, %b, BINOP_MOD) }
     | term '//' pipeline >> { ast_binary(p, %a, %b, BINOP_FDV) }
     | term '@' pipeline >> { ast_binary(p, %a, %b, BINOP_MML) }
     | pipeline { a }
-pipeline[ast_expr_t] (left_recursive):
+pipeline[ast_expr_t *] (left_recursive):
     | pipeline '->' factor >> { ast_binary(p, %a, %b, BINOP_PIP) }
     | factor { a }
-factor[ast_expr_t] (memo):
+factor[ast_expr_t *] (memo):
     | '+' factor >> { ast_unary(p, %a, UNARY_PLS) }
     | '-' factor >> { ast_unary(p, %a, UNARY_MIN) }
     | '~' factor >> { ast_unary(p, %a, UNARY_INV) }
     | power { a }
-power[ast_expr_t] (memo):
+power[ast_expr_t *] (memo):
     | primary '**' factor >>
         { ast_binary(p, ast_primary_expr(p, %a), %b, BINOP_POW) }
     | primary { ast_primary_expr(p, %a) }
 
-primary[ast_primary_t] (left_recursive):
+primary[ast_primary_t *] (left_recursive):
     | primary '.' NAME
     | primary invocation
     | primary subscript
     | atom
-paren_expression[ast_primary_t] (inline):
+paren_expression[ast_primary_t *] (inline):
     | '(' [list_items] ')'
-list_expression[ast_primary_t] (inline):
+list_expression[ast_primary_t *] (inline):
     | '[' [list_items] ']'
-builder_expression[ast_primary_t] (inline):
+builder_expression[ast_primary_t *] (inline):
     | NAME simple_args ':' expr
     | NAME [builder_hint] [builder_args] block_suite
-atom[ast_primary_t] (memo):
+atom[ast_primary_t *] (memo):
     | paren_expression
     | list_expression
     | builder_expression

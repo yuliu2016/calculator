@@ -1,26 +1,26 @@
 # Calculator Grammar
 
-sum[double] (left_recursive):
+sum[double *] (left_recursive):
     | sum '+' term >> { binop_add(p, %a, %b) }
     | sum '-' term >> { binop_sub(p, %a, %b) }
     | term { a }
-term[double] (left_recursive):
+term[double *] (left_recursive):
     | term '*' factor >> { binop_mul(p, %a, %b) }
     | term '/' factor >> { binop_div(p, %a, %b) }
     | term '%' factor >> { binop_mod(p, %a, %b) }
     | factor { a }
-factor[double] (memo):
+factor[double *] (memo):
     | '+' factor >> { a }
     | '-' factor >> { unary_minus(p, %a) }
     | '~' factor >> { unary_not(p, %a) }
     | power { a }
-power[double] (memo):
+power[double *] (memo):
     | atom '**' factor >> { binop_pow(p, %a, %b) }
     | atom { a }
-atom[double] (memo):
+atom[double *] (memo):
     | '(' sum ')' >> { a }
     | NAME '(' [parameters] ')' >> { call_func(p, %a, %b) }
     | NAME { load_const(p, %a) }
     | NUMBER { to_double(p, %a) }
-parameters[ast_list_t]:
+parameters[ast_list_t *]:
     | ','.sum+ [','] { a }

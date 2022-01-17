@@ -50,7 +50,7 @@ public class MetaParser {
 
     /**
      * return_type:
-     * *   | '[' NAME ']'
+     * *   | '[' NAME ['*'] ']'
      */
     public static boolean return_type(ParseTree t) {
         var m = t.enter(RETURN_TYPE);
@@ -58,6 +58,7 @@ public class MetaParser {
         boolean r;
         r = t.consume("[");
         r = r && t.consume(TokenType.NAME);
+        if (r) t.consume("*");
         r = r && t.consume("]");
         t.exit(r);
         return r;

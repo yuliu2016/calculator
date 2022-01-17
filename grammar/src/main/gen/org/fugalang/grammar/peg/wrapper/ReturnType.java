@@ -6,7 +6,7 @@ import org.fugalang.core.token.TokenType;
 
 /**
  * return_type:
- * *   | '[' NAME ']'
+ * *   | '[' NAME ['*'] ']'
  */
 public final class ReturnType extends NodeWrapper {
 
@@ -16,5 +16,9 @@ public final class ReturnType extends NodeWrapper {
 
     public String name() {
         return get(1, TokenType.NAME);
+    }
+
+    public boolean isTimes() {
+        return is(2);
     }
 }

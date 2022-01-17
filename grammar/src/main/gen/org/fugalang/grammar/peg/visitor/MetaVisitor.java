@@ -23,7 +23,7 @@ public interface MetaVisitor<T> {
 
     /**
      * return_type:
-     * *   | '[' NAME ']'
+     * *   | '[' NAME ['*'] ']'
      */
     default T visitReturnType(ReturnType returnType) {
         return null;

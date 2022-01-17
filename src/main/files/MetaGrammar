@@ -5,7 +5,7 @@ grammar:
 rule:
     | NAME [return_type] [rule_args] rule_suite
 return_type:
-    | '[' NAME ']'
+    | '[' NAME ['*'] ']'
 rule_args:
     | '(' ','.rule_arg+ ')'
 rule_arg:
