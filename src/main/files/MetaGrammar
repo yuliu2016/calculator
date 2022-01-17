@@ -37,6 +37,15 @@ expression:
     | NAME
     | STRING
 
+group:
+    | '(' alt_list ')'
+optional:
+    | '[' alt_list ']'
+delimited:
+    | STRING '.' item '+'
+custom_match:
+    | '@' expression
+
 primary:
     | delimited
     | '&' item
@@ -47,11 +56,6 @@ primary:
 item:
     | group
     | optional
+    | custom_match
     | NAME
     | STRING
-group:
-    | '(' alt_list ')'
-optional:
-    | '[' alt_list ']'
-delimited:
-    | STRING '.' item '+'

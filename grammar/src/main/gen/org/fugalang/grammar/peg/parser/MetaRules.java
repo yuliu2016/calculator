@@ -23,13 +23,14 @@ public class MetaRules {
     public static final ParserRule EXPR_ARG_1 = and_rule("expr_arg:1");
     public static final ParserRule EXPR_CALL = and_rule("expr_call");
     public static final ParserRule EXPRESSION = or_rule("expression");
+    public static final ParserRule GROUP = and_rule("group");
+    public static final ParserRule OPTIONAL = and_rule("optional");
+    public static final ParserRule DELIMITED = and_rule("delimited");
+    public static final ParserRule CUSTOM_MATCH = and_rule("custom_match");
     public static final ParserRule PRIMARY = or_rule("primary");
     public static final ParserRule PRIMARY_2 = and_rule("primary:2");
     public static final ParserRule PRIMARY_3 = and_rule("primary:3");
     public static final ParserRule PRIMARY_4 = and_rule("primary:4");
     public static final ParserRule PRIMARY_5 = and_rule("primary:5");
     public static final ParserRule ITEM = or_rule("item");
-    public static final ParserRule GROUP = and_rule("group");
-    public static final ParserRule OPTIONAL = and_rule("optional");
-    public static final ParserRule DELIMITED = and_rule("delimited");
 }

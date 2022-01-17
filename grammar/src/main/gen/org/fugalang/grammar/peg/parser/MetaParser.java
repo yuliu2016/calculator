@@ -332,6 +332,66 @@ public class MetaParser {
     }
 
     /**
+     * group:
+     * *   | '(' alt_list ')'
+     */
+    public static boolean group(ParseTree t) {
+        var m = t.enter(GROUP);
+        if (m != null) return m;
+        boolean r;
+        r = t.consume("(");
+        r = r && alt_list(t);
+        r = r && t.consume(")");
+        t.exit(r);
+        return r;
+    }
+
+    /**
+     * optional:
+     * *   | '[' alt_list ']'
+     */
+    public static boolean optional(ParseTree t) {
+        var m = t.enter(OPTIONAL);
+        if (m != null) return m;
+        boolean r;
+        r = t.consume("[");
+        r = r && alt_list(t);
+        r = r && t.consume("]");
+        t.exit(r);
+        return r;
+    }
+
+    /**
+     * delimited:
+     * *   | STRING '.' item '+'
+     */
+    public static boolean delimited(ParseTree t) {
+        var m = t.enter(DELIMITED);
+        if (m != null) return m;
+        boolean r;
+        r = t.consume(TokenType.STRING);
+        r = r && t.consume(".");
+        r = r && item(t);
+        r = r && t.consume("+");
+        t.exit(r);
+        return r;
+    }
+
+    /**
+     * custom_match:
+     * *   | '@' expression
+     */
+    public static boolean custom_match(ParseTree t) {
+        var m = t.enter(CUSTOM_MATCH);
+        if (m != null) return m;
+        boolean r;
+        r = t.consume("@");
+        r = r && expression(t);
+        t.exit(r);
+        return r;
+    }
+
+    /**
      * primary:
      * *   | delimited
      * *   | '&' item
@@ -410,6 +470,7 @@ public class MetaParser {
      * item:
      * *   | group
      * *   | optional
+     * *   | custom_match
      * *   | NAME
      * *   | STRING
      */
@@ -419,54 +480,9 @@ public class MetaParser {
         boolean r;
         r = group(t);
         r = r || optional(t);
+        r = r || custom_match(t);
         r = r || t.consume(TokenType.NAME);
         r = r || t.consume(TokenType.STRING);
-        t.exit(r);
-        return r;
-    }
-
-    /**
-     * group:
-     * *   | '(' alt_list ')'
-     */
-    public static boolean group(ParseTree t) {
-        var m = t.enter(GROUP);
-        if (m != null) return m;
-        boolean r;
-        r = t.consume("(");
-        r = r && alt_list(t);
-        r = r && t.consume(")");
-        t.exit(r);
-        return r;
-    }
-
-    /**
-     * optional:
-     * *   | '[' alt_list ']'
-     */
-    public static boolean optional(ParseTree t) {
-        var m = t.enter(OPTIONAL);
-        if (m != null) return m;
-        boolean r;
-        r = t.consume("[");
-        r = r && alt_list(t);
-        r = r && t.consume("]");
-        t.exit(r);
-        return r;
-    }
-
-    /**
-     * delimited:
-     * *   | STRING '.' item '+'
-     */
-    public static boolean delimited(ParseTree t) {
-        var m = t.enter(DELIMITED);
-        if (m != null) return m;
-        boolean r;
-        r = t.consume(TokenType.STRING);
-        r = r && t.consume(".");
-        r = r && item(t);
-        r = r && t.consume("+");
         t.exit(r);
         return r;
     }

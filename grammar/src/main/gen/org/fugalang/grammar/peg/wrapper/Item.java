@@ -8,6 +8,7 @@ import org.fugalang.core.token.TokenType;
  * item:
  * *   | group
  * *   | optional
+ * *   | custom_match
  * *   | NAME
  * *   | STRING
  */
@@ -33,19 +34,27 @@ public final class Item extends NodeWrapper {
         return has(1);
     }
 
-    public String name() {
-        return get(2, TokenType.NAME);
+    public CustomMatch customMatch() {
+        return new CustomMatch(get(2));
     }
 
-    public boolean hasName() {
+    public boolean hasCustomMatch() {
         return has(2);
     }
 
+    public String name() {
+        return get(3, TokenType.NAME);
+    }
+
+    public boolean hasName() {
+        return has(3);
+    }
+
     public String string() {
-        return get(3, TokenType.STRING);
+        return get(4, TokenType.STRING);
     }
 
     public boolean hasString() {
-        return has(3);
+        return has(4);
     }
 }

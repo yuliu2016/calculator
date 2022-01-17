@@ -13,20 +13,21 @@ eval_input[ast_list_t]:
 statement_list[ast_list_t]:
     | line_statement+ { a }
 line_statement[ast_list_t]:
-    | simple_statements { a }
+    | simple_statements NEWLINE { a }
     | compound_statement NEWLINE { ast_list_of(p, %a) }
 
 simple_statements[ast_list_t]:
-    | ';'.simple_statement+ [';'] NEWLINE { a }
+    | ';'.simple_statement+ [';'] { a }
+
 
 # Small Statements
 simple_statement[ast_stmt_t]:
     | 'pass' { ast_nop(p) }
     | 'break' { ast_break(p) }
     | 'continue' { ast_continue(p) }
-    | 'return' [exprlist_star] { ast_return(p, %a) }
-    | 'raise' expr ['from' expr >> [ast_expr_t] { a }] { ast_nop(p) }
-    | 'del' targetlist { ast_del(p, %a) }
+    | 'return' [exprlist_star] >> { ast_return(p, %a) }
+    | 'raise' expr ['from' expr >> [ast_expr_t] { a }] >> { ast_nop(p) }
+    | 'del' targetlist >> { ast_del(p, %a) }
     | assignment { a }
 
 

@@ -131,30 +131,6 @@ public interface MetaVisitor<T> {
     }
 
     /**
-     * primary:
-     * *   | delimited
-     * *   | '&' item
-     * *   | '!' item
-     * *   | item '*'
-     * *   | item '+'
-     * *   | item
-     */
-    default T visitPrimary(Primary primary) {
-        return null;
-    }
-
-    /**
-     * item:
-     * *   | group
-     * *   | optional
-     * *   | NAME
-     * *   | STRING
-     */
-    default T visitItem(Item item) {
-        return null;
-    }
-
-    /**
      * group:
      * *   | '(' alt_list ')'
      */
@@ -175,6 +151,39 @@ public interface MetaVisitor<T> {
      * *   | STRING '.' item '+'
      */
     default T visitDelimited(Delimited delimited) {
+        return null;
+    }
+
+    /**
+     * custom_match:
+     * *   | '@' expression
+     */
+    default T visitCustomMatch(CustomMatch customMatch) {
+        return null;
+    }
+
+    /**
+     * primary:
+     * *   | delimited
+     * *   | '&' item
+     * *   | '!' item
+     * *   | item '*'
+     * *   | item '+'
+     * *   | item
+     */
+    default T visitPrimary(Primary primary) {
+        return null;
+    }
+
+    /**
+     * item:
+     * *   | group
+     * *   | optional
+     * *   | custom_match
+     * *   | NAME
+     * *   | STRING
+     */
+    default T visitItem(Item item) {
         return null;
     }
 }
