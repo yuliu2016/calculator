@@ -143,11 +143,21 @@ public class LexingVisitor implements LexingContext {
         return line_to_index.size();
     }
 
+    private static boolean isNewline(char ch) {
+        return ch == '\n' || ch == '\r';
+    }
+
+    private int newlineFromIndex() {
+        int i = index + 1;
+        while (i < length && !isNewline(charAt(i))) ++i;
+        return i;
+    }
+
     @Override
     public String getLine(int line) {
         var a = line_to_index.get(line);
         var b = line == line_to_index.size() - 1 ?
-                length : line_to_index.get(line + 1);
+                newlineFromIndex() : line_to_index.get(line + 1);
         return code.substring(a, b);
     }
 }

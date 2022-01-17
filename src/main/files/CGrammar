@@ -36,7 +36,7 @@ star_expr[ast_expr_t]:
     | '*' bitwise_or { a }
 exprlist[ast_list_t]:
     | ','.expr+ [','] { a }
-target:
+target (memo):
     | t_primary '.' NAME !t_lookahead
     | t_primary subscript !t_lookahead
     | NAME
@@ -235,12 +235,12 @@ term[ast_expr_t] (left_recursive):
 pipeline[ast_expr_t] (left_recursive):
     | pipeline '->' factor >> { ast_binary(p, %a, %b, BINOP_PIP) }
     | factor { a }
-factor[ast_expr_t]:
+factor[ast_expr_t] (memo):
     | '+' factor >> { ast_unary(p, %a, UNARY_PLS) }
     | '-' factor >> { ast_unary(p, %a, UNARY_MIN) }
     | '~' factor >> { ast_unary(p, %a, UNARY_INV) }
     | power { a }
-power[ast_expr_t]:
+power[ast_expr_t] (memo):
     | primary '**' factor >>
         { ast_binary(p, ast_primary_expr(p, %a), %b, BINOP_POW) }
     | primary { ast_primary_expr(p, %a) }
@@ -257,7 +257,7 @@ list_expression[ast_primary_t] (inline):
 builder_expression[ast_primary_t] (inline):
     | NAME simple_args ':' expr
     | NAME [builder_hint] [builder_args] block_suite
-atom[ast_primary_t]:
+atom[ast_primary_t] (memo):
     | paren_expression
     | list_expression
     | builder_expression

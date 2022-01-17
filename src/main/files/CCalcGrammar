@@ -9,15 +9,15 @@ term[double] (left_recursive):
     | term '/' factor >> { binop_div(p, %a, %b) }
     | term '%' factor >> { binop_mod(p, %a, %b) }
     | factor { a }
-factor[double]:
+factor[double] (memo):
     | '+' factor >> { a }
     | '-' factor >> { unary_minus(p, %a) }
     | '~' factor >> { unary_not(p, %a) }
     | power { a }
-power[double]:
+power[double] (memo):
     | atom '**' factor >> { binop_pow(p, %a, %b) }
     | atom { a }
-atom[double]:
+atom[double] (memo):
     | '(' sum ')' >> { a }
     | NAME '(' [parameters] ')' >> { call_func(p, %a, %b) }
     | NAME { load_const(p, %a) }
