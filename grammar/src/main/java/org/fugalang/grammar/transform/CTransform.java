@@ -58,27 +58,37 @@ public class CTransform {
         sb.append(StringUtil.inlinedoc(unit.grammarString()));
 
         var rn = unit.ruleName();
-        sb.append("\nstatic ").append(rn.returnTypeOr("void")).append(" *")
+        var returnType = rn.returnTypeOr("void");
+        sb.append("\nstatic ").append(returnType).append(" *")
                 .append(rn.symbolicName());
-
-        int rawHash = rn.symbolicName().hashCode();
-        int hash = Math.floorMod(rawHash, 1000);
-        while (hashes.contains(hash)) {
-            hash++;
-        }
-        String hashStr = Integer.toString(hash);
-        hashes.add(hash);
-
         sb.append("(parser_t *p) {\n");
-        sb.append("    const frame_t f = {")
-                .append(hashStr)
-                .append(", p->pos, FUNC};\n");
 
-        var rtype = rn.returnTypeOr("void");
-        var resultName = "res_" + hashStr;
-        var rdec = "    " + rtype + " *" + resultName;
-        sb.append(rdec);
-        sb.append(unit.leftRecursive() ? " = 0;\n" : ";\n");
+        String resultName;
+        String hashStr;
+        if (unit.isInline()) {
+            // not needed
+            resultName = "ERROR";
+            hashStr = "ERROR";
+
+            sb.append("    size_t pos = p->pos;\n");
+        } else {
+            int rawHash = rn.symbolicName().hashCode();
+            int hash = Math.floorMod(rawHash, 1000);
+            while (hashes.contains(hash)) {
+                hash++;
+            }
+            hashStr = Integer.toString(hash);
+            hashes.add(hash);
+
+            sb.append("    const frame_t f = {")
+                    .append(hashStr)
+                    .append(", p->pos, FUNC};\n");
+            resultName = "res_" + hashStr;
+
+            var resultDeclare = "    " + returnType + " *" + resultName;
+            sb.append(resultDeclare);
+            sb.append(unit.leftRecursive() ? " = 0;\n" : ";\n");
+        }
 
         boolean memoize = args.containsKey("memo") || unit.leftRecursive();
         if (memoize) {
@@ -103,9 +113,10 @@ public class CTransform {
             sb.append("    insert_memo(p, &f, ").append(resultName).append(");\n");
         }
 
-        var exitFunc = unit.isInline() ? "exit_inline" : "exit_frame";
+        if (!unit.isInline()) {
+            sb.append("    return exit_frame(p, &f, ").append(resultName).append(");\n");
+        }
 
-        sb.append("    return ").append(exitFunc).append("(p, &f, ").append(resultName).append(");\n");
         sb.append("}\n");
 
         for (UnitField field : unit.fields()) {
@@ -183,7 +194,7 @@ public class CTransform {
 
         var resultName = "res_" + hashStr;
         if (unit.isInline()) {
-            sb.append("    ").append(resultName).append(" = (\n");
+            sb.append("    return (\n");
         } else {
             sb.append("    ").append(resultName).append(" = enter_frame(p, &f) && (\n");
         }
@@ -210,7 +221,12 @@ public class CTransform {
                 }
                 j++;
             }
-            sb.append(getParserFieldExpr(field));
+
+            var fieldExpr = getParserFieldExpr(field);
+
+            // Fix when frame structs are not available
+            if (unit.isInline()) sb.append(fieldExpr.replace("f.f_pos", "pos"));
+            else sb.append(fieldExpr);
 
             if (i == fields.size() - 1) {
                 sb.append(")");
@@ -231,7 +247,11 @@ public class CTransform {
             }
             sb.append(resultClause);
         }
-        sb.append(" : 0;\n");
+        if (unit.isInline()) {
+            sb.append(" :\n        (p->pos = pos, (void *) 0);\n");
+        } else {
+            sb.append(" : 0;\n");
+        }
     }
 
 
@@ -267,11 +287,16 @@ public class CTransform {
 
         var resultType = unit.ruleName().returnTypeOr("void");
         var resultName = "res_" + hashStr;
-        var altName = "alt_" + hashStr;
+        String altName;
+        if (unit.isInline()) {
+            altName = "alt";
+        } else {
+            altName = "alt_" + hashStr;
+        }
 
         sb.append("    ").append(resultType).append(" *").append(altName).append(";\n");
         if (unit.isInline()) {
-            sb.append("    ").append(resultName).append(" = (");
+            sb.append("    return (");
         } else {
             sb.append("    ").append(resultName).append(" = enter_frame(p, &f) && (");
         }
@@ -319,7 +344,13 @@ public class CTransform {
             }
         }
 
-        sb.append("\n    ) ? ").append(altName).append(" : 0;\n");
+        sb.append("\n    ) ? ").append(altName);
+
+        if (unit.isInline()) {
+            sb.append(" : (p->pos = pos, (void *) 0);\n");
+        } else {
+            sb.append(" : 0;\n");
+        }
     }
 
     private static String getParserFieldExpr(UnitField field) {
@@ -411,7 +442,7 @@ public class CTransform {
 
 
     private static String getTestExpr(UnitField field) {
-        return "test_and_reset(p, &f, " + getResultExpr(field) + ")";
+        return "test_and_reset(p, f.f_pos, " + getResultExpr(field) + ")";
     }
 
     private static String getResultExpr(UnitField field) {
