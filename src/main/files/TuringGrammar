@@ -36,6 +36,27 @@ statement:
     | 'unchecked'
     | 'checked'
 
+assignment_statement:
+    | variable_reference (':='
+        | '+=' | '-=' | '*=' | 'shl=' | 'shr=') expn
+
+open_statement:
+    | 'open' ':' file_number_var ',' [file_name
+        | arg_num] ','.io_capability+
+
+io_capability:
+    | 'get' | 'put' | 'read' | 'write' | 'seek' | 'mod'
+
+close_statement:
+    | 'close' ':' file_number_var
+
+put_statement:
+    | 'put' [':' file_number] ','.put_item+
+
+put_item:
+    | expn [':' width_expn [':' fraction_width [':' exponent_width]]]
+    | 'skip'
+
 declaration:
     | variable_declaration
     | constant_declaration

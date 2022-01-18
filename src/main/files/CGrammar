@@ -130,9 +130,9 @@ block_suite:
 suite:
     | ':' simple_statements { a }
     | block_suite { a }
-else_suite:
+else_suite (inline):
     | 'else' suite { a }
-finally_suite:
+finally_suite (inline):
     | 'finally' suite { a }
 except_clause:
     | 'except' [expr_as_name] suite
@@ -142,38 +142,13 @@ except_suite:
 # Function calls
 
 invocation:
-    | '(' [','.call_arg+  [','] { a } ] ')' { a }
-call_arg:
-    | NAME ':=' expr
-    | NAME '=' expr
-    | '**' expr
-    | '*' expr
-    | expr
-
-# Builder definitions
-
-typed_arg_list:
-    | kwargs
-    | args_kwargs
-    | full_arg_list
-full_arg_list:
-    | ','.default_arg+ [','  [kwargs | args_kwargs]]
-args_kwargs:
-    | '*' [typed_arg] (','  default_arg { a })* [','  [kwargs]]
-kwargs:
-    | '**' typed_arg [','] { a }
-default_arg:
-    | typed_arg ['=' expr { a }]
-typed_arg:
-    | NAME [':' expr { a }]
-simple_arg:
-    | NAME ['=' expr { a }]
-simple_args[ast_list_t]:
-    | ','.simple_arg+ { a }
-builder_hint[ast_list_t]:
-    | '<' ','.NAME+ '>' { a }
-builder_args:
-    | '(' [typed_arg_list] ')'
+    | '(' [','.call_argument+  [','] { a } ] ')' { a }
+call_argument:
+    | NAME ':=' expr >> { ast_named(p, %a, %b) }
+    | NAME '=' expr >> { ast_named(p, %a, %b) }
+    | '**' expr >> { a }
+    | '*' expr >> { a }
+    | expr { a }
 
 # Expressions
 
@@ -282,9 +257,21 @@ paren_expression[ast_primary_t *] (inline):
 list_expression[ast_primary_t *] (inline):
     | '[' [list_items] ']'
 
+# Builder definitions
+typed_argument:
+    | NAME [':' expr >> { a }]
+builder_argument:
+    | typed_argument ['=' expr >> { a }]
+    | '*' typed_argument >> { a }
+    | '**' typed_argument >> { a }
+simple_argument:
+    | NAME ['=' expr >> { a }]
 builder_expression[ast_primary_t *] (inline):
-    | NAME simple_args ':' expr
-    | NAME [builder_hint] [builder_args] block_suite
+    | NAME ['[' exprlist ']' >>
+        { a }] ['(' [','.builder_argument+ [','] >>
+        { a }] ')' >>
+        { a }] block_suite
+    | NAME ','.simple_argument+ ':' expr
 
 atom[ast_primary_t *] (memo):
     | paren_expression
