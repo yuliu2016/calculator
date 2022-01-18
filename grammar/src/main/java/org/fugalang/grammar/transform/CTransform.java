@@ -82,6 +82,8 @@ public class CTransform {
 
         boolean memoize = args.containsKey("memo") || unit.leftRecursive();
         if (memoize) {
+            if (unit.isInline())
+                throw new IllegalStateException("Inline rules cannot be memoized");
             sb.append("    if (is_memoized(p, &f, (void **) &")
                     .append(resultName).append(")) {\n");
             sb.append("        return ").append(resultName).append(";\n");
@@ -120,7 +122,8 @@ public class CTransform {
         sb.append("    size_t maxpos;\n");
         sb.append("    ").append(rtype).append(" *max;\n");
 
-        if (unit.isInline()) throw new IllegalStateException();
+        if (unit.isInline())
+            throw new IllegalStateException("LR rules cannot be inline");
 
         sb.append("    if (enter_frame(p, &f)) {\n");
         sb.append("        do {\n");
@@ -179,8 +182,11 @@ public class CTransform {
         }
 
         var resultName = "res_" + hashStr;
-        var enterFunc = unit.isInline() ? "enter_inline" : "enter_frame";
-        sb.append("    ").append(resultName).append(" = ").append(enterFunc).append("(p, &f) && (\n");
+        if (unit.isInline()) {
+            sb.append("    ").append(resultName).append(" = (\n");
+        } else {
+            sb.append("    ").append(resultName).append(" = enter_frame(p, &f) && (\n");
+        }
 
         var fields = unit.fields();
         j = 0;
@@ -262,10 +268,13 @@ public class CTransform {
         var resultType = unit.ruleName().returnTypeOr("void");
         var resultName = "res_" + hashStr;
         var altName = "alt_" + hashStr;
-        var enterFunc = unit.isInline() ? "enter_inline" : "enter_frame";
 
         sb.append("    ").append(resultType).append(" *").append(altName).append(";\n");
-        sb.append("    ").append(resultName).append(" = ").append(enterFunc).append("(p, &f) && (");
+        if (unit.isInline()) {
+            sb.append("    ").append(resultName).append(" = (");
+        } else {
+            sb.append("    ").append(resultName).append(" = enter_frame(p, &f) && (");
+        }
 
         var fields = unit.fields();
         for (int i = 0; i < fields.size(); i++) {

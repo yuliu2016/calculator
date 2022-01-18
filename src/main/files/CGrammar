@@ -48,7 +48,7 @@ t_primary[ast_primary_t *] (left_recursive):
     | t_primary invocation &t_lookahead >> { node(p) }
     | t_primary subscript &t_lookahead >> { node(p) }
     | atom &t_lookahead { a }
-t_lookahead[void *]:
+t_lookahead[void *] (inline):
     | '.'
     | '('
     | '['
@@ -80,8 +80,8 @@ list_items[ast_list_t *]:
 
 assignment:
     | target ':' expr ['=' exprlist >> { a }] >> { node(p) }
-    | target augmented_assign exprlist >> { node(p) }
     | (targetlist '=' >> { a })+ exprlist_star >> { node(p) }
+    | target augmented_assign exprlist >> { node(p) }
 augmented_assign[int *]:
     | '+='  { ast_integer(p, BINOP_PLS) }
     | '-='  { ast_integer(p, BINOP_MIN) }
