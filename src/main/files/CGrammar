@@ -34,7 +34,7 @@ simple_statement[ast_stmt_t *]:
 
 
 # Expression groups
-star_expr[ast_expr_t *]:
+star_expr[ast_expr_t *] (inline):
     | '*' bitwise_or { a }
 exprlist[ast_list_t *]:
     | ','.expr+ [','] { a }
@@ -107,7 +107,7 @@ compound_statement:
     | try_statement
     | with_statement
 
-if_statement (inline):
+if_statement:
     | 'if' named_expression suite elif_statement* [else_suite]
 elif_statement:
     | 'elif' named_expression suite
@@ -125,7 +125,7 @@ expr_as_name:
 # Suites
 
 block_suite:
-    | '{' NEWLINE statement_list '}'
+    | '{' NEWLINE statement_list '}' { b }
     | '{' [simple_statements] '}' { a }
 suite:
     | ':' simple_statements { a }

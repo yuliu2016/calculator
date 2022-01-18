@@ -165,6 +165,9 @@ public class CTransform {
         for (UnitField field : unit.fields()) {
             if (!isImportantField(field)) continue;
 
+            var name = field.fieldName().snakeCaseUnconflicted();
+            fieldNames.add(name);
+
             if (unit.resultClause() != null) {
                 var template = unit.resultClause().template();
                 var varName = "%" + ((char) ('a' + j));
@@ -174,10 +177,7 @@ public class CTransform {
                 }
             }
             j++;
-
             var type = getParserFieldType(field);
-            var name = field.fieldName().snakeCaseUnconflicted();
-            fieldNames.add(name);
             sb.append("    ").append(type).append(" *").append(name).append(";\n");
         }
 
