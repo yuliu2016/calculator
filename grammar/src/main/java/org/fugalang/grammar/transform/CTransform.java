@@ -3,6 +3,7 @@ package org.fugalang.grammar.transform;
 import org.fugalang.grammar.common.*;
 import org.fugalang.grammar.util.StringUtil;
 
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class CTransform {
@@ -53,6 +54,22 @@ public class CTransform {
         return sb.toString();
     }
 
+    private static String ruleNameHash(RuleName ruleName) {
+        String sym = ruleName.symbolicName();
+
+        int h = 0;
+        for (byte v : sym.getBytes(StandardCharsets.UTF_8)) {
+            h = 31 * h + (v & 0xff);
+        }
+
+        int hash = Math.floorMod(h, 1000);
+        while (hashes.contains(hash)) {
+            hash++;
+        }
+        hashes.add(hash);
+        return String.valueOf(hash);
+    }
+
     private static void addUnitRuleBody(UnitRule unit, StringBuilder sb, Map<String, String> args) {
         sb.append("\n");
         sb.append(StringUtil.inlinedoc(unit.grammarString()));
@@ -72,14 +89,7 @@ public class CTransform {
 
             sb.append("    size_t pos = p->pos;\n");
         } else {
-            int rawHash = rn.symbolicName().hashCode();
-            int hash = Math.floorMod(rawHash, 1000);
-            while (hashes.contains(hash)) {
-                hash++;
-            }
-            hashStr = Integer.toString(hash);
-            hashes.add(hash);
-
+            hashStr = ruleNameHash(rn);
             sb.append("    const frame_t f = {")
                     .append(hashStr)
                     .append(", p->pos, FUNC};\n");
@@ -236,8 +246,9 @@ public class CTransform {
         }
 
         sb.append("\n    ) ? ");
+        String templatedResult;
         if (unit.resultClause() == null) {
-            sb.append("node(p)");
+            templatedResult = "node(p)";
         } else {
             var resultClause = unit.resultClause().template();
             for (int i = 0; i < fieldNames.size(); i++) {
@@ -245,10 +256,14 @@ public class CTransform {
                 var templateName = "%" + ((char) ('a' + i));
                 resultClause = resultClause.replace(templateName, name);
             }
-            sb.append(resultClause);
+            templatedResult = resultClause;
         }
+        sb.append(templatedResult);
         if (unit.isInline()) {
-            sb.append(" :\n        (p->pos = pos, (void *) 0);\n");
+            if (templatedResult.length() > 20) {
+                sb.append(" :\n        ");
+            } else sb.append(" : ");
+            sb.append("(p->pos = pos, NULL);\n");
         } else {
             sb.append(" : 0;\n");
         }
@@ -347,7 +362,7 @@ public class CTransform {
         sb.append("\n    ) ? ").append(altName);
 
         if (unit.isInline()) {
-            sb.append(" : (p->pos = pos, (void *) 0);\n");
+            sb.append(" : (p->pos = pos, NULL);\n");
         } else {
             sb.append(" : 0;\n");
         }
