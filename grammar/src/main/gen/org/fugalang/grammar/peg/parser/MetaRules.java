@@ -25,6 +25,8 @@ public class MetaRules {
     public static final ParserRule EXPRESSION = or_rule("expression");
     public static final ParserRule GROUP = and_rule("group");
     public static final ParserRule OPTIONAL = and_rule("optional");
+    public static final ParserRule SMALL_OPTIONAL = and_rule("small_optional");
+    public static final ParserRule SMALL_OPTIONAL_1 = or_rule("small_optional:1");
     public static final ParserRule DELIMITED = and_rule("delimited");
     public static final ParserRule CUSTOM_MATCH = and_rule("custom_match");
     public static final ParserRule PRIMARY = or_rule("primary");

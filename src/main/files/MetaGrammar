@@ -41,6 +41,8 @@ group:
     | '(' alt_list ')'
 optional:
     | '[' alt_list ']'
+small_optional:
+    | (NAME | STRING) '?'
 delimited:
     | STRING '.' item '+'
 custom_match:
@@ -57,5 +59,6 @@ item:
     | group
     | optional
     | custom_match
+    | small_optional
     | NAME
     | STRING

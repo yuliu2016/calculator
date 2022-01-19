@@ -147,6 +147,14 @@ public interface MetaVisitor<T> {
     }
 
     /**
+     * small_optional:
+     * *   | (NAME | STRING) '?'
+     */
+    default T visitSmallOptional(SmallOptional smallOptional) {
+        return null;
+    }
+
+    /**
      * delimited:
      * *   | STRING '.' item '+'
      */
@@ -180,6 +188,7 @@ public interface MetaVisitor<T> {
      * *   | group
      * *   | optional
      * *   | custom_match
+     * *   | small_optional
      * *   | NAME
      * *   | STRING
      */

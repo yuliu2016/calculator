@@ -363,6 +363,33 @@ public class MetaParser {
     }
 
     /**
+     * small_optional:
+     * *   | (NAME | STRING) '?'
+     */
+    public static boolean small_optional(ParseTree t) {
+        var m = t.enter(SMALL_OPTIONAL);
+        if (m != null) return m;
+        boolean r;
+        r = small_optional_1(t);
+        r = r && t.consume("?");
+        t.exit(r);
+        return r;
+    }
+
+    /**
+     * NAME | STRING
+     */
+    private static boolean small_optional_1(ParseTree t) {
+        var m = t.enter(SMALL_OPTIONAL_1);
+        if (m != null) return m;
+        boolean r;
+        r = t.consume(TokenType.NAME);
+        r = r || t.consume(TokenType.STRING);
+        t.exit(r);
+        return r;
+    }
+
+    /**
      * delimited:
      * *   | STRING '.' item '+'
      */
@@ -472,6 +499,7 @@ public class MetaParser {
      * *   | group
      * *   | optional
      * *   | custom_match
+     * *   | small_optional
      * *   | NAME
      * *   | STRING
      */
@@ -482,6 +510,7 @@ public class MetaParser {
         r = group(t);
         r = r || optional(t);
         r = r || custom_match(t);
+        r = r || small_optional(t);
         r = r || t.consume(TokenType.NAME);
         r = r || t.consume(TokenType.STRING);
         t.exit(r);
