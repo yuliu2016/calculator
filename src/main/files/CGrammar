@@ -7,7 +7,7 @@ single_input[ast_list_t *]:
 file_input[ast_list_t *]:
     | statement_list { a }
 eval_input[ast_list_t *]:
-    | exprlist [NEWLINE] { a }
+    | expressions [NEWLINE] { a }
 
 # Statements
 statement_list[ast_list_t *]:
@@ -23,21 +23,17 @@ simple_statements[ast_list_t *]:
 # Small Statements
 simple_statement[ast_stmt_t *]:
     | assignment { a }
-    | exprlist_star { node(p) }
+    | starred_expressions { node(p) }
     | 'pass' { ast_nop(p) }
     | 'break' { ast_break(p) }
     | 'continue' { ast_continue(p) }
-    | 'return' [exprlist_star] >> { ast_return(p, %a) }
-    | 'raise' expr ['from' expr >> [ast_expr_t *]
+    | 'return' [starred_expressions] >> { ast_return(p, %a) }
+    | 'raise' expression ['from' expression >> [ast_expr_t *]
         { a }] >> { ast_nop(p) }
-    | 'del' targetlist >> { ast_del(p, %a) }
+    | 'del' targets >> { ast_del(p, %a) }
 
 
-# Expression groups
-star_expr[ast_expr_t *] (inline):
-    | '*' bitwise_or { a }
-exprlist[ast_list_t *]:
-    | ','.expr+ [','] { a }
+# Targets
 
 target (memo):
     | t_primary '.' NAME !t_lookahead >> { node(p) }
@@ -47,41 +43,23 @@ t_primary[ast_primary_t *] (left_recursive):
     | t_primary '.' NAME &t_lookahead >> { node(p) }
     | t_primary invocation &t_lookahead >> { node(p) }
     | t_primary subscript &t_lookahead >> { node(p) }
-    | atom &t_lookahead { a }
+    | atom &t_lookahead >> { a }
 t_lookahead[void *] (inline):
     | '.'
     | '('
     | '['
 
-targetlist[ast_list_t *]:
+targets[ast_list_t *]:
     | ','.target+ [','] { a }
-expr_or_star:
-    | star_expr
-    | expr
-exprlist_star[ast_list_t *]:
-    | ','.expr_or_star+ [','] { a }
-
-subscript[ast_list_t *]:
-    | '[' ','.slice+ [','] ']' { a }
-slice:
-    | [expr] slice_expr [slice_expr]
-    | expr
-slice_expr:
-    | ':' [expr] { a }
-
-list_item:
-    | star_expr
-    | named_expression
-list_items[ast_list_t *]:
-    | ','.list_item+ [','] { a }
 
 
 # Assignments
 
 assignment:
-    | target ':' expr ['=' exprlist >> { a }] >> { node(p) }
-    | (targetlist '=' >> { a })+ exprlist_star >> { node(p) }
-    | target augmented_assign exprlist >> { node(p) }
+    | target ':' expression ['=' expressions >> { a }] >> { node(p) }
+    | (targets '=' >> { a })+ starred_expressions >> { node(p) }
+    | target augmented_assign expressions >> { node(p) }
+
 augmented_assign[int *]:
     | '+='  { ast_integer(p, BINOP_PLS) }
     | '-='  { ast_integer(p, BINOP_MIN) }
@@ -114,13 +92,13 @@ elif_statement:
 while_statement:
     | 'while' named_expression suite [else_suite]
 for_statement:
-    | 'for' targetlist 'in' exprlist suite [else_suite]
+    | 'for' targets 'in' expressions suite [else_suite]
 try_statement:
     | 'try' suite (except_suite | finally_suite)
 with_statement:
-    | 'with' ','.expr_as_name+ suite
-expr_as_name:
-    | expr ['as' NAME >> [token_t]{ a }]
+    | 'with' ','.expression_as_name+ suite
+expression_as_name:
+    | expression ['as' NAME >> [token_t]{ a }]
 
 # Suites
 
@@ -135,30 +113,51 @@ else_suite (inline):
 finally_suite (inline):
     | 'finally' suite { a }
 except_clause:
-    | 'except' [expr_as_name] suite
+    | 'except' [expression_as_name] suite
 except_suite:
     | except_clause+ [else_suite] [finally_suite]
 
-# Function calls
+# Invocation and Subscripts
 
 invocation:
     | '(' [','.call_argument+  [','] { a } ] ')' { a }
 call_argument:
-    | NAME ':=' expr >> { ast_named(p, %a, %b) }
-    | NAME '=' expr >> { ast_named(p, %a, %b) }
-    | '**' expr >> { a }
-    | '*' expr >> { a }
-    | expr { a }
+    | NAME ':=' expression >> { ast_named(p, %a, %b) }
+    | NAME '=' expression >> { ast_named(p, %a, %b) }
+    | '**' expression >> { a }
+    | '*' expression >> { a }
+    | expression { a }
+
+subscript[ast_list_t *]:
+    | '[' ','.slice+ [','] ']' { a }
+slice:
+    | [expression] slice_expression [slice_expression]
+    | expression
+slice_expression:
+    | ':' [expression] { a }
+
 
 # Expressions
 
+expressions[ast_list_t *]:
+    | ','.expression+ [','] { a }
+starred_expression[ast_expr_t *] (inline):
+    | '*' bitwise_or { a }
+maybe_starred[ast_expr_t *]:
+    | starred_expression
+    | expression
+starred_expressions[ast_list_t *]:
+    | ','.maybe_starred+ [','] { a }
+
 named_expression[ast_named_t *]:
-    | NAME ':=' expr >> { ast_named(p, %a, %b) }
-    | expr { ast_unnamed(p, %a) }
+    | NAME ':=' expression >> { ast_named(p, %a, %b) }
+    | expression { ast_unnamed(p, %a) }
+
 conditional[ast_expr_t *] (inline):
-    | 'if' disjunction '?' disjunction ':' expr
+    | 'if' disjunction '?' disjunction ':' expression
         { ast_conditional(p, %a, %b, %c) }
-expr[ast_expr_t *]:
+
+expression[ast_expr_t *]:
     | conditional { a }
     | disjunction { a }
 
@@ -252,26 +251,35 @@ primary[ast_primary_t *] (left_recursive):
     | primary subscript >> { node(p) }
     | atom
 
+# Parenthesized and list expressions
+
+list_item:
+    | starred_expression
+    | named_expression
+list_items[ast_list_t *]:
+    | ','.list_item+ [','] { a }
 paren_expression[ast_primary_t *] (inline):
     | '(' [list_items] ')'
 list_expression[ast_primary_t *] (inline):
     | '[' [list_items] ']'
 
 # Builder definitions
-typed_argument:
-    | NAME [':' expr >> { a }]
-builder_argument:
-    | typed_argument ['=' expr >> { a }]
-    | '*' typed_argument >> { a }
-    | '**' typed_argument >> { a }
-simple_argument:
-    | NAME ['=' expr >> { a }]
+typed_parameter:
+    | NAME [':' expression >> { a }]
+builder_parameter:
+    | typed_parameter ['=' expression >> { a }]
+    | '*' typed_parameter >> { a }
+    | '**' typed_parameter >> { a }
+simple_parameter:
+    | NAME ['=' expression >> { a }]
+builder_parameters (inline):
+    | '(' [','.builder_parameter+ [','] >> { a }] ')' { a }
+builder_generics (inline):
+    | '[' expressions ']' { a }
+
 builder_expression[ast_primary_t *] (inline):
-    | NAME ['[' exprlist ']' >>
-        { a }] ['(' [','.builder_argument+ [','] >>
-        { a }] ')' >>
-        { a }] block_suite
-    | NAME ','.simple_argument+ ':' expr
+    | NAME [builder_generics] [builder_parameters] block_suite
+    | NAME ','.simple_parameter+ ':' expression
 
 atom[ast_primary_t *] (memo):
     | paren_expression
