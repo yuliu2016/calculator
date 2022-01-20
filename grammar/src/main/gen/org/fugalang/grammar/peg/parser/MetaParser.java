@@ -10,25 +10,84 @@ public class MetaParser {
 
     /**
      * grammar:
-     * *   | [NEWLINE] rule+
+     * *   | [NEWLINE] element+
      */
     public static boolean grammar(ParseTree t) {
         var m = t.enter(GRAMMAR);
         if (m != null) return m;
         boolean r;
         t.consume(TokenType.NEWLINE);
-        r = rule_loop(t);
+        r = element_loop(t);
         t.exit(r);
         return r;
     }
 
-    private static boolean rule_loop(ParseTree t) {
+    private static boolean element_loop(ParseTree t) {
         t.enterLoop();
-        var r = rule(t);
+        var r = element(t);
         if (r) while (true) {
-            if (!rule(t)) break;
+            if (!element(t)) break;
         }
         t.exitLoop();
+        return r;
+    }
+
+    /**
+     * element:
+     * *   | directive
+     * *   | rule
+     */
+    public static boolean element(ParseTree t) {
+        var m = t.enter(ELEMENT);
+        if (m != null) return m;
+        boolean r;
+        r = directive(t);
+        r = r || rule(t);
+        t.exit(r);
+        return r;
+    }
+
+    /**
+     * directive:
+     * *   | '.' NAME '(' [','.argument+] ')' NEWLINE
+     */
+    public static boolean directive(ParseTree t) {
+        var m = t.enter(DIRECTIVE);
+        if (m != null) return m;
+        boolean r;
+        r = t.consume(".");
+        r = r && t.consume(TokenType.NAME);
+        r = r && t.consume("(");
+        r = r && argument_loop(t);
+        r = r && t.consume(")");
+        r = r && t.consume(TokenType.NEWLINE);
+        t.exit(r);
+        return r;
+    }
+
+    private static boolean argument_loop(ParseTree t) {
+        t.enterLoop();
+        var r = argument(t);
+        if (r) while (true) {
+            var p = t.position();
+            if (t.skip(",") && argument(t)) continue;
+            t.reset(p);
+            break;
+        }
+        t.exitLoop();
+        return r;
+    }
+
+    /**
+     * argument:
+     * *   | STRING
+     */
+    public static boolean argument(ParseTree t) {
+        var m = t.enter(ARGUMENT);
+        if (m != null) return m;
+        boolean r;
+        r = t.consume(TokenType.STRING);
+        t.exit(r);
         return r;
     }
 

@@ -1,7 +1,17 @@
 # Meta Grammar
 
 grammar:
-    | [NEWLINE] rule+
+    | [NEWLINE] element+
+
+element:
+    | directive
+    | rule
+
+directive:
+    | '.' NAME '(' [",".argument+] ')' NEWLINE
+argument:
+    | STRING
+
 rule:
     | NAME [return_type] [rule_args] rule_suite
 return_type:

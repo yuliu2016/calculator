@@ -4,15 +4,12 @@ import org.fugalang.core.token.Keyword;
 import org.fugalang.core.token.Operator;
 import org.fugalang.grammar.common.RuleSet;
 import org.fugalang.grammar.common.RuleSetBuilder;
-import org.fugalang.grammar.common.TokenEntry;
 import org.fugalang.grammar.transform.CTransform;
-import org.fugalang.grammar.util.StringUtil;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Collectors;
 
 public class CFugaGenerator {
@@ -143,7 +140,7 @@ public class CFugaGenerator {
 
     public static void main(String[] args) throws Exception {
         RuleSet ruleSet = RuleSetBuilder.generateRuleSet(
-                GeneratorUtil.readGrammar(USER_DIR, GRAMMAR_PATH),
+                GeneratorUtil.readPreprocessed(USER_DIR, GRAMMAR_PATH),
                 GeneratorUtil.tokenMap
         );
 

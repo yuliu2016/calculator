@@ -7,9 +7,34 @@ public interface MetaVisitor<T> {
 
     /**
      * grammar:
-     * *   | [NEWLINE] rule+
+     * *   | [NEWLINE] element+
      */
     default T visitGrammar(Grammar grammar) {
+        return null;
+    }
+
+    /**
+     * element:
+     * *   | directive
+     * *   | rule
+     */
+    default T visitElement(Element element) {
+        return null;
+    }
+
+    /**
+     * directive:
+     * *   | '.' NAME '(' [','.argument+] ')' NEWLINE
+     */
+    default T visitDirective(Directive directive) {
+        return null;
+    }
+
+    /**
+     * argument:
+     * *   | STRING
+     */
+    default T visitArgument(Argument argument) {
         return null;
     }
 

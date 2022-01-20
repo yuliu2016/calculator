@@ -26,7 +26,12 @@ public class RuleSetBuilder {
     public RuleSetBuilder(
             Grammar grammar,
             Map<String, TokenEntry> tokenMap) {
-        this.rules = grammar.rules();
+        this.rules = grammar
+                .elements()
+                .stream()
+                .filter(Element::hasRule)
+                .map(Element::rule)
+                .toList();
         this.tokenMap = tokenMap;
         this.ruleSet = new RuleSet(new ArrayList<>(), tokenMap);
     }

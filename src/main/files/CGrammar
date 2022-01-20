@@ -1,5 +1,21 @@
 # Grammar for Fuga
 
+```c
+// Parser Entry Point
+void *parse_grammar(parser_t *p, int entry_point) {
+    switch (entry_point) {
+    case 0:
+        return single_input(p);
+    case 1:
+        return file_input(p);
+    case 2:
+        return eval_input(p);
+    default:
+        return 0;
+    }
+}
+```
+
 single_input[ast_list_t *]:
     | NEWLINE { ast_list_of(p, ast_nop(p)) }
     | simple_statements { ast_list_of(p, %a) }

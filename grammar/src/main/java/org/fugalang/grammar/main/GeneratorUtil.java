@@ -11,25 +11,49 @@ import org.fugalang.core.token.TokenType;
 import org.fugalang.grammar.common.TokenEntry;
 import org.fugalang.grammar.peg.parser.MetaParser;
 import org.fugalang.grammar.peg.wrapper.Grammar;
+import org.fugalang.grammar.util.StringUtil;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class GeneratorUtil {
 
     public static Grammar readGrammar(String base, String grammarPath) throws IOException {
-        String data;
-        data = Files.readString(Paths.get(base, grammarPath));
+        return readGrammar(Files.readString(Paths.get(base, grammarPath)));
+    }
+
+    public static Grammar readPreprocessed(
+            String base, String grammarPath) throws IOException {
+        return readGrammar(preprocessGrammar(Files
+                .readString(Paths.get(base, grammarPath))));
+    }
+
+    private static Grammar readGrammar(String data) {
         var visitor = LexingVisitor.of(data);
         var lexer = SimpleLexer.of(visitor);
         var context = LazyParserContext.of(lexer, visitor);
         var node = SimpleParseTree.parse(context, MetaParser::grammar);
         return new Grammar(node);
+    }
+
+    public static String preprocessGrammar(String s) {
+        var fixedSep = s.replace(System.lineSeparator(), "\n");
+        var lines = StringUtil.splitLines(fixedSep);
+        List<String> newLines = new ArrayList<>();
+        boolean inlineCode = false;
+        for (var line : lines) {
+            if (line.startsWith("```")) {
+                inlineCode = !inlineCode;
+                newLines.add("");
+            } else {
+                if (inlineCode) {
+                    newLines.add(".code ('" + line + "')");
+                } else newLines.add(line);
+            }
+        }
+        return String.join("\n", newLines);
     }
 
     public static final Map<String, TokenEntry> tokenMap = tokenMap("");

@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * grammar:
- * *   | [NEWLINE] rule+
+ * *   | [NEWLINE] element+
  */
 public final class Grammar extends NodeWrapper {
 
@@ -24,7 +24,7 @@ public final class Grammar extends NodeWrapper {
         return has(0);
     }
 
-    public List<Rule> rules() {
-        return getList(1, Rule::new);
+    public List<Element> elements() {
+        return getList(1, Element::new);
     }
 }
