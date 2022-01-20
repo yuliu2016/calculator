@@ -22,7 +22,13 @@ public class CTransform {
     private static void addUnitRuleDeclaration(UnitRule unit, StringBuilder sb) {
         var rn = unit.ruleName();
 
-        sb.append("static ").append(rn.returnTypeOr("void")).append(" *")
+        if (rn.returnType() != null &&
+                !rn.returnType().endsWith("*") && !unit.isInline()) {
+            throw new IllegalStateException(
+                    "Only pointer types allowed for non-inline rule: " + rn );
+        }
+
+        sb.append("static ").append(rn.returnTypeOr("void *"))
                 .append(rn.symbolicName());
         sb.append("(parser_t *);\n");
         for (UnitField field : unit.fields()) {
@@ -75,8 +81,8 @@ public class CTransform {
         sb.append(StringUtil.inlinedoc(unit.grammarString()));
 
         var rn = unit.ruleName();
-        var returnType = rn.returnTypeOr("void");
-        sb.append("\nstatic ").append(returnType).append(" *")
+        var returnType = rn.returnTypeOr("void *");
+        sb.append("\nstatic ").append(returnType)
                 .append(rn.symbolicName());
         sb.append("(parser_t *p) {\n");
 
@@ -95,7 +101,7 @@ public class CTransform {
                     .append(", p->pos, FUNC};\n");
             resultName = "res_" + hashStr;
 
-            var resultDeclare = "    " + returnType + " *" + resultName;
+            var resultDeclare = "    " + returnType + resultName;
             sb.append(resultDeclare);
             sb.append(unit.leftRecursive() ? " = 0;\n" : ";\n");
         }
@@ -135,13 +141,13 @@ public class CTransform {
     }
 
     private static void addLeftRecursiveUnitRuleBody(UnitRule unit,  String hashStr, StringBuilder sb) {
-        var rtype = unit.ruleName().returnTypeOr("void");
+        var rtype = unit.ruleName().returnTypeOr("void *");
         var resultName = "res_" + hashStr;
         var altName = "alt_" + hashStr;
 
-        sb.append("    ").append(rtype).append(" *").append(altName).append(";\n");
+        sb.append("    ").append(rtype).append(altName).append(";\n");
         sb.append("    size_t maxpos;\n");
-        sb.append("    ").append(rtype).append(" *max;\n");
+        sb.append("    ").append(rtype).append("max;\n");
 
         if (unit.isInline())
             throw new IllegalStateException("LR rules cannot be inline");
@@ -199,7 +205,7 @@ public class CTransform {
             }
             j++;
             var type = getParserFieldType(field);
-            sb.append("    ").append(type).append(" *").append(name).append(";\n");
+            sb.append("    ").append(type).append(name).append(";\n");
         }
 
         var resultName = "res_" + hashStr;
@@ -263,7 +269,11 @@ public class CTransform {
             if (templatedResult.length() > 20) {
                 sb.append(" :\n        ");
             } else sb.append(" : ");
-            sb.append("(p->pos = pos, NULL);\n");
+            if (unit.ruleName().returnTypeOr("void *").endsWith("*")) {
+                sb.append("(p->pos = pos, NULL);\n");
+            } else {
+                sb.append("(p->pos = pos, 0);\n");
+            }
         } else {
             sb.append(" : 0;\n");
         }
@@ -273,8 +283,8 @@ public class CTransform {
     private static String getRawParserFieldType(UnitField field) {
         var kind = field.resultSource().kind();
         return switch (kind) {
-            case TokenLiteral, TokenType -> "token_t";
-            case UnitRule -> field.resultSource().asRuleName().returnTypeOr("void");
+            case TokenLiteral, TokenType -> "token_t *";
+            case UnitRule -> field.resultSource().asRuleName().returnTypeOr("void *");
         };
     }
 
@@ -282,7 +292,7 @@ public class CTransform {
         String type;
         if (field.isSingular() || field.isPredicate()) {
             type = getRawParserFieldType(field);
-        } else type = "ast_list_t";
+        } else type = "ast_list_t *";
         return type;
     }
 
@@ -297,10 +307,10 @@ public class CTransform {
 
             var type = getParserFieldType(field);
             var name = field.fieldName().snakeCaseUnconflicted();
-            sb.append("    ").append(type).append(" *").append(name).append(";\n");
+            sb.append("    ").append(type).append(name).append(";\n");
         }
 
-        var resultType = unit.ruleName().returnTypeOr("void");
+        var resultType = unit.ruleName().returnTypeOr("void *");
         var resultName = "res_" + hashStr;
         String altName;
         if (unit.isInline()) {
@@ -309,7 +319,7 @@ public class CTransform {
             altName = "alt_" + hashStr;
         }
 
-        sb.append("    ").append(resultType).append(" *").append(altName).append(";\n");
+        sb.append("    ").append(resultType).append(altName).append(";\n");
         if (unit.isInline()) {
             sb.append("    return (");
         } else {
@@ -362,7 +372,11 @@ public class CTransform {
         sb.append("\n    ) ? ").append(altName);
 
         if (unit.isInline()) {
-            sb.append(" : (p->pos = pos, NULL);\n");
+            if (resultType.endsWith("*")) {
+                sb.append(" : (p->pos = pos, NULL);\n");
+            } else {
+                sb.append(" : (p->pos = pos, 0);\n");
+            }
         } else {
             sb.append(" : 0;\n");
         }
@@ -398,7 +412,7 @@ public class CTransform {
         TokenEntry delimiter = field.delimiter();
         if (delimiter == null) {
             return "\nstatic ast_list_t *" + ruleName + "_loop(parser_t *p) {\n" +
-                    "    " + rawType + " *" + fname + " = " + resultExpr + ";\n" +
+                    "    " + rawType + fname + " = " + resultExpr + ";\n" +
                     "    if (!" + fname + ") {\n" +
                     "        return 0;\n" +
                     "    }\n" +
@@ -411,7 +425,7 @@ public class CTransform {
         } else {
             var delimExpr = "consume(p, " + delimiter.index() + ", \"" + delimiter.literalValue() + "\")";
             return "\nstatic ast_list_t *" + ruleName + "_delimited(parser_t *p) {\n" +
-                    "    " + rawType + " *" + fname + " = " + resultExpr + ";\n" +
+                    "    " + rawType + fname + " = " + resultExpr + ";\n" +
                     "    if (!" + fname + ") {\n" +
                     "        return 0;\n" +
                     "    }\n" +
@@ -438,7 +452,7 @@ public class CTransform {
 
         return "\nstatic ast_list_t *" + rule_name + "_loop(parser_t *p) {\n" +
                 "    ast_list_t *" + listName + " = ast_list_new(p);\n" +
-                "    " + rawType + " *" + fname + ";\n" +
+                "    " + rawType + fname + ";\n" +
                 "    while ((" + fname + " = " + resultExpr + ")) {\n" +
                 "        ast_list_append(p, " + listName + ", " + fname + ");\n" +
                 "    }\n" +

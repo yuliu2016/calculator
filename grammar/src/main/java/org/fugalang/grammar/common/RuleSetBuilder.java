@@ -96,8 +96,8 @@ public class RuleSetBuilder {
                     var newRuleName = ruleName.withSuffix(sequenceCount);
                     boolean isInline = sequence.hasInlineHint();
                     if (isInline && sequence.inlineHint().hasReturnType()) {
-                        newRuleName = newRuleName.withReturn(
-                                sequence.inlineHint().returnType().name());
+                        var returnType = PEGUtil.getReturnType(sequence.inlineHint().returnType());
+                        newRuleName = newRuleName.withReturn(returnType);
                     }
 
                     // Need to make a new unit rule to hold the sequence
@@ -186,8 +186,8 @@ public class RuleSetBuilder {
                 var sequence = altList.sequence();
                 isInline = sequence.hasInlineHint();
                 if (isInline && sequence.inlineHint().hasReturnType()) {
-                    newRuleName = ruleName.withReturn(
-                            sequence.inlineHint().returnType().name());
+                    var returnType = PEGUtil.getReturnType(sequence.inlineHint().returnType());
+                    newRuleName = ruleName.withReturn(returnType);
                 } else newRuleName = ruleName;
             } else {
                 isInline = false;

@@ -60,20 +60,20 @@ assignment:
     | (targets '=' >> { a })+ starred_expressions >> { node(p) }
     | target augmented_assign expressions >> { node(p) }
 
-augmented_assign[int *]:
-    | '+='  { ast_integer(p, BINOP_PLS) }
-    | '-='  { ast_integer(p, BINOP_MIN) }
-    | '*='  { ast_integer(p, BINOP_MUL) }
-    | '/='  { ast_integer(p, BINOP_DIV) }
-    | '%='  { ast_integer(p, BINOP_MOD) }
-    | '@='  { ast_integer(p, BINOP_MML) }
-    | '|='  { ast_integer(p, BINOP_IOR) }
-    | '&='  { ast_integer(p, BINOP_AND) }
-    | '^='  { ast_integer(p, BINOP_XOR) }
-    | '//=' { ast_integer(p, BINOP_FDV) }
-    | '**=' { ast_integer(p, BINOP_POW) }
-    | '<<=' { ast_integer(p, BINOP_SHL) }
-    | '>>=' { ast_integer(p, BINOP_SHR) }
+augmented_assign[int] (inline):
+    | '+='  { BINOP_PLS }
+    | '-='  { BINOP_MIN }
+    | '*='  { BINOP_MUL }
+    | '/='  { BINOP_DIV }
+    | '%='  { BINOP_MOD }
+    | '@='  { BINOP_MML }
+    | '|='  { BINOP_IOR }
+    | '&='  { BINOP_AND }
+    | '^='  { BINOP_XOR }
+    | '//=' { BINOP_FDV }
+    | '**=' { BINOP_POW }
+    | '<<=' { BINOP_SHL }
+    | '>>=' { BINOP_SHR }
 
 
 # Compound statements
@@ -98,7 +98,7 @@ try_statement:
 with_statement:
     | 'with' ','.expression_as_name+ suite
 expression_as_name:
-    | expression ['as' NAME >> [token_t]{ a }]
+    | expression ['as' NAME >> [token_t *]{ a }]
 
 # Suites
 
@@ -175,21 +175,21 @@ inversion[ast_expr_t *]:
     | comparison { a }
 
 comparison[ast_expr_t *]:
-    | bitwise_or (comparator bitwise_or >> [ast_expr_t]
+    | bitwise_or (comparator bitwise_or >> [ast_expr_t *]
             { ast_comp_term(p, %a, %b) })+ >>
         { ast_comparison(p, %a, %b) }
     | bitwise_or { a }
-comparator[int *]:
-    | '<' { ast_integer(p, CMP_LT) }
-    | '>' { ast_integer(p, CMP_GT) }
-    | '==' { ast_integer(p, CMP_EQ) }
-    | '>=' { ast_integer(p, CMP_GE) }
-    | '<=' { ast_integer(p, CMP_LE) }
-    | '!=' { ast_integer(p, CMP_NE) }
-    | 'in' { ast_integer(p, CMP_IN) }
-    | 'not' 'in' >> { ast_integer(p, CMP_NI) }
-    | 'is' { ast_integer(p, CMP_IS) }
-    | 'is' 'not' >> { ast_integer(p, CMP_NS) }
+comparator[int] (inline):
+    | '<' { CMP_LT }
+    | '>' { CMP_GT }
+    | '==' { CMP_EQ }
+    | '>=' { CMP_GE }
+    | '<=' { CMP_LE }
+    | '!=' { CMP_NE }
+    | 'in' { CMP_IN }
+    | 'not' 'in' >> [int] { CMP_NI }
+    | 'is' { CMP_IS }
+    | 'is' 'not' >> [int] { CMP_NS }
 
 bitwise_or[ast_expr_t *] (left_recursive):
     | bitwise_or '|' bitwise_xor >>

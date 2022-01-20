@@ -166,7 +166,13 @@ public class PEGUtil {
         if (expr.hasExprCall()) {
             template = exprCallToString(expr.exprCall());
         } else if (expr.hasName()) {
-            template = "%" + expr.name();
+            var name = expr.name();
+            if (name.length() == 1) {
+                template = "%" + name;
+            } else {
+                // Allow single-word constants
+                template = name;
+            }
         } else if (expr.hasString()) {
             template = expr.string();
         } else throw new IllegalStateException();
@@ -181,9 +187,17 @@ public class PEGUtil {
         return new ResultClause(elseTemplate);
     }
 
+    public static String getReturnType(ReturnType returnType) {
+        return returnType.name() +
+                (returnType.isTimes() ? " *" : " ");
+    }
+
     public static RuleName getRuleName(Rule rule) {
         var ruleName = rule.name();
-        var returnType = rule.hasReturnType() ? rule.returnType().name() : null;
+        String returnType;
+        if (rule.hasReturnType()) {
+            returnType = getReturnType(rule.returnType());
+        } else returnType = null;
         return RuleName.of(ruleName, returnType);
     }
 }
