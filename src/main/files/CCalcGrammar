@@ -1,9 +1,9 @@
 # Calculator Grammar
 
 .include ('include/ast2.h')
-.space ("2")
+.space ('2')
 .fdecl ()
-.space ("3")
+.space ('2')
 
 ```c
 // Parser Entry Point

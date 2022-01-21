@@ -47,11 +47,18 @@ public class GeneratorUtil {
         boolean inlineCode = false;
         for (var line : lines) {
             if (line.startsWith("```")) {
-                inlineCode = !inlineCode;
-                newLines.add("");
+                if (inlineCode) {
+                    inlineCode = false;
+                    newLines.add("");
+                } else {
+                    inlineCode = true;
+                    newLines.add(".space ('1')");
+                }
             } else {
                 if (inlineCode) {
-                    newLines.add(".code ('" + line + "')");
+                    if (line.isEmpty()) {
+                        newLines.add(".space ('1')");
+                    } else newLines.add(".code ('" + line + "')");
                 } else newLines.add(line);
             }
         }

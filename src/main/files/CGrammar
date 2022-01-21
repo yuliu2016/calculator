@@ -1,9 +1,9 @@
 # Grammar for Fuga
 
 .include ('include/ast.h')
-.space ("2")
+.space ('2')
 .fdecl ()
-.space ("3")
+.space ('2')
 
 ```c
 // Parser Entry Point
@@ -18,6 +18,10 @@ void *parse_grammar(parser_t *p, int entry_point) {
     default:
         return 0;
     }
+}
+
+static ast_stmt_t *ast_nop(parser_t *p) {
+    return node(p);
 }
 ```
 
@@ -40,6 +44,27 @@ line_statement[ast_list_t *]:
 simple_statements[ast_list_t *]:
     | ';'.simple_statement+ [';'] { a }
 
+```c
+static ast_stmt_t *ast_break(parser_t *p) {
+    return node(p);
+}
+
+static ast_stmt_t *ast_continue(parser_t *p) {
+    return node(p);
+}
+
+static ast_stmt_t *ast_del(parser_t *p, ast_list_t *li) {
+    return node(p);
+}
+
+static ast_stmt_t *ast_return(parser_t *p, ast_list_t *li) {
+    return node(p);
+}
+
+static ast_named_t *ast_named(parser_t *p, token_t *name, ast_expr_t *expr) {
+    return node(p);
+}
+```
 
 # Small Statements
 simple_statement[ast_stmt_t *]:
@@ -170,6 +195,27 @@ maybe_starred[ast_expr_t *]:
 starred_expressions[ast_list_t *]:
     | ','.maybe_starred+ [','] { a }
 
+```c
+static ast_expr_t *ast_conditional(parser_t *p,
+        ast_expr_t *cond, ast_expr_t *a, ast_expr_t *b) {
+    return node(p);
+}
+
+static ast_named_t *ast_unnamed(parser_t *p, ast_expr_t *expr) {
+    return ast_named(p, NULL, expr);
+}
+
+static ast_expr_t *ast_comp_term(parser_t *p,
+        int comp_op, ast_expr_t *operand) {
+    return node(p);
+}
+
+static ast_expr_t *ast_comparison(parser_t *p,
+        ast_expr_t *first, ast_list_t *terms) {
+    return node(p);
+}
+```
+
 named_expression[ast_named_t *]:
     | NAME ':=' expression >> { ast_named(p, %a, %b) }
     | expression { ast_unnamed(p, %a) }
@@ -181,6 +227,24 @@ conditional[ast_expr_t *] (inline):
 expression[ast_expr_t *]:
     | conditional { a }
     | disjunction { a }
+
+```c
+// Construct a binary operation
+static ast_expr_t *ast_binary(parser_t *p, ast_expr_t *left,
+        ast_expr_t *right, enum expr_opcode binop_code) {
+    ast_expr_t *r = parser_alloc(p, sizeof(ast_expr_t));
+    r->opcode = binop_code;
+    r->left = left;
+    r->right.expr = right;
+    return r;
+}
+
+// Construct a unary operation
+static ast_expr_t *ast_unary(parser_t *p, ast_expr_t *expr,
+        enum expr_opcode unary_opcode) {
+    return ast_binary(p, expr, NULL, unary_opcode);
+}
+```
 
 disjunction[ast_expr_t *] (left_recursive):
     | disjunction 'or' conjunction >>
@@ -261,6 +325,17 @@ factor[ast_expr_t *] (memo):
     | '~' factor >> { ast_unary(p, %a, UNARY_INV) }
     | power { a }
 
+```c
+// Convert a primary to an expression
+static ast_expr_t *ast_primary_expr(parser_t *p, void *primary) {
+    ast_expr_t *r = parser_alloc(p, sizeof(ast_expr_t));
+    r->opcode = BINOP_PRIMARY;
+    r->left = NULL;
+    r->right.primary = primary;
+    return r;
+}
+```
+
 power[ast_expr_t *] (memo):
     | primary '**' factor >>
         { ast_binary(p, ast_primary_expr(p, %a), %b, BINOP_POW) }
@@ -301,6 +376,32 @@ builder_generics (inline):
 builder_expression[ast_primary_t *] (inline):
     | NAME [builder_generics] [builder_parameters] block_suite
     | NAME ','.simple_parameter+ ':' expression
+
+```c
+static ast_primary_t *ast_name_atom(parser_t *p, token_t *name) {
+    return node(p);
+}
+
+static ast_primary_t *ast_number_atom(parser_t *p, token_t *name) {
+    return node(p);
+}
+
+static ast_primary_t *ast_string_atom(parser_t *p, token_t *name) {
+    return node(p);
+}
+
+static ast_primary_t *ast_none(parser_t *p) {
+    return node(p);
+}
+
+static ast_primary_t *ast_true(parser_t *p) {
+    return node(p);
+}
+
+static ast_primary_t *ast_false(parser_t *p) {
+    return node(p);
+}
+```
 
 atom[ast_primary_t *] (memo):
     | paren_expression
