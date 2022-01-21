@@ -16,16 +16,6 @@ public class CCalcGenerator {
             System.getProperty("user.home"), "vscode/cpeg").toString();
     private static final Path C_PATH = Paths.get(BASE_DIR, "parser2.c");
 
-    private static final String ENTRY_POINT = """
-            
-            
-            
-            // Parser Entry Point
-            double *parse_calc(parser_t *p) {
-                return sum(p);
-            }
-            """;
-
     public static void main(String[] args) throws Exception {
         GrammarSpec spec = RuleSetBuilder.generate(
                 GeneratorUtil.readPreprocessed(USER_DIR, GRAMMAR_PATH),
@@ -33,10 +23,7 @@ public class CCalcGenerator {
         );
         GeneratorUtil.printStats(spec);
 
-        String c = "#include \"include/ast2.h\"\n\n\n" +
-                CTransform.getFuncDeclarations(spec) +
-                ENTRY_POINT +
-                CTransform.getFunctionBodies(spec);
-        Files.writeString(C_PATH, c.replace("\n", System.lineSeparator()));
+        String parser = CTransform.generateParser(spec);
+        Files.writeString(C_PATH, parser.replace("\n", System.lineSeparator()));
     }
 }

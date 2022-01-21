@@ -12,18 +12,71 @@ public class CTransform {
         throw new GrammarException(message);
     }
 
-    public static String getFuncDeclarations(GrammarSpec spec) {
-        StringBuilder sb = new StringBuilder();
-        for (NamedRule namedRule : spec.namedRules()) {
-            addUnitRuleDeclaration(namedRule.root(), sb);
-            for (UnitRule component : namedRule.components()) {
-                addUnitRuleDeclaration(component, sb);
-            }
+    public static String generateParser(GrammarSpec spec) {
+        return new CTransform(spec).generate();
+    }
+    
+    private final GrammarSpec spec;
+    private StringBuilder sb2;
+    private List<Integer> previousHashes;
+
+    public CTransform(GrammarSpec spec) {
+        this.spec = spec;
+    }
+    
+    private String generate() {
+        sb2 = new StringBuilder();
+        previousHashes = new ArrayList<>();
+        for (NamedDirective directive : spec.directives()) {
+            execute(directive.name(), directive.argument());
         }
-        return sb.toString();
+        return sb2.toString();
+    }
+    
+    private CTransform emit(Object ob) {
+        sb2.append(ob);
+        return this;
+    }
+    
+    private void execute(String name, Object arg) {
+        switch (name) {
+            case "include" -> addInclude(arg);
+            case "code" -> addCode(arg);
+            case "fdecl" -> addForwardDeclarations();
+            case "exp" -> addNamedExpansion(arg);
+            case "space" -> addSpace(arg);
+            default -> error("Unknown directive: " + name);
+        }
     }
 
-    private static void addUnitRuleDeclaration(UnitRule unit, StringBuilder sb) {
+    @SuppressWarnings("unchecked")
+    private static String firstStrArg(Object arg) {
+        return ((List<String>) arg).get(0);
+    }
+    
+    private void addInclude(Object arg) {
+        emit("#include \"%s\"\n".formatted(firstStrArg(arg)));
+    }
+
+    private void addCode(Object arg) {
+        emit("%s\n".formatted(firstStrArg(arg)));
+    }
+
+    private void addSpace(Object arg) {
+        var lines = Integer.parseInt(firstStrArg(arg));
+        emit("\n".repeat(lines));
+    }
+
+    private void addForwardDeclarations() {
+        for (NamedRule namedRule : spec.namedRules()) {
+            addUnitRuleDeclaration(namedRule.root());
+            for (UnitRule component : namedRule.components()) {
+                addUnitRuleDeclaration(component);
+            }
+        }
+    }
+
+    private void addUnitRuleDeclaration(UnitRule unit) {
         var rn = unit.ruleName();
 
         if (rn.returnType() != null &&
@@ -31,39 +84,33 @@ public class CTransform {
             error("Only pointer types allowed for non-inline rule: " + rn );
         }
 
-        sb.append("static ").append(rn.returnTypeOr("void *"))
-                .append(rn.symbolicName());
-        sb.append("(parser_t *);\n");
+        emit("static ").emit(rn.returnTypeOr("void *"))
+                .emit(rn.symbolicName());
+        emit("(parser_t *);\n");
         for (UnitField field : unit.fields()) {
             if (field.isSingular() || field.isPredicate()) {
                 continue;
             }
-            sb.append("static ast_list_t *");
-            sb.append(field.ruleName().symbolicName());
+            emit("static ast_list_t *");
+            emit(field.ruleName().symbolicName());
             if (field.delimiter() == null) {
-                sb.append("_loop");
+                emit("_loop");
             } else {
-                sb.append("_delimited");
+                emit("_delimited");
             }
-            sb.append("(parser_t *);\n");
+            emit("(parser_t *);\n");
+        }
+    }
+    
+    private void addNamedExpansion(Object arg) {
+        var namedRule = (NamedRule) arg;
+        addUnitRuleBody(namedRule.root(), namedRule.args());
+        for (UnitRule component : namedRule.components()) {
+            addUnitRuleBody(component, Collections.emptyMap());
         }
     }
 
-    private static final List<Integer> hashes = new ArrayList<>();
-
-    public static String getFunctionBodies(GrammarSpec spec) {
-        StringBuilder sb = new StringBuilder();
-        hashes.clear();
-        for (NamedRule namedRule : spec.namedRules()) {
-            addUnitRuleBody(namedRule.root(), sb, namedRule.args());
-            for (UnitRule component : namedRule.components()) {
-                addUnitRuleBody(component, sb, Collections.emptyMap());
-            }
-        }
-        return sb.toString();
-    }
-
-    private static String ruleNameHash(RuleName ruleName) {
+    private String ruleNameHash(RuleName ruleName) {
         String sym = ruleName.symbolicName();
 
         int h = 0;
@@ -72,22 +119,23 @@ public class CTransform {
         }
 
         int hash = Math.floorMod(h, 1000);
-        while (hashes.contains(hash)) {
+        while (previousHashes.contains(hash)) {
             hash++;
         }
-        hashes.add(hash);
+        previousHashes.add(hash);
         return String.valueOf(hash);
     }
 
-    private static void addUnitRuleBody(UnitRule unit, StringBuilder sb, Map<String, String> args) {
-        sb.append("\n");
-        sb.append(StringUtil.inlinedoc(unit.grammarString()));
+    
+    private void addUnitRuleBody(UnitRule unit, Map<String, String> args) {
+        emit("\n");
+        emit(StringUtil.inlinedoc(unit.grammarString()));
 
         var rn = unit.ruleName();
         var returnType = rn.returnTypeOr("void *");
-        sb.append("\nstatic ").append(returnType)
-                .append(rn.symbolicName());
-        sb.append("(parser_t *p) {\n");
+        emit("\nstatic ").emit(returnType)
+                .emit(rn.symbolicName());
+        emit("(parser_t *p) {\n");
 
         String resultName;
         String hashStr;
@@ -96,85 +144,85 @@ public class CTransform {
             resultName = "ERROR";
             hashStr = "ERROR";
 
-            sb.append("    size_t pos = p->pos;\n");
+            emit("    size_t pos = p->pos;\n");
         } else {
             hashStr = ruleNameHash(rn);
-            sb.append("    const frame_t f = {")
-                    .append(hashStr)
-                    .append(", p->pos, FUNC};\n");
+            emit("    const frame_t f = {")
+                    .emit(hashStr)
+                    .emit(", p->pos, FUNC};\n");
             resultName = "res_" + hashStr;
 
             var resultDeclare = "    " + returnType + resultName;
-            sb.append(resultDeclare);
-            sb.append(unit.leftRecursive() ? " = 0;\n" : ";\n");
+            emit(resultDeclare);
+            emit(unit.leftRecursive() ? " = 0;\n" : ";\n");
         }
 
         boolean memoize = args.containsKey("memo") || unit.leftRecursive();
         if (memoize) {
             if (unit.isInline())
                 error("Inline rules cannot be memoized");
-            sb.append("    if (is_memoized(p, &f, (void **) &")
-                    .append(resultName).append(")) {\n");
-            sb.append("        return ").append(resultName).append(";\n");
-            sb.append("    }\n");
+            emit("    if (is_memoized(p, &f, (void **) &")
+                    .emit(resultName).emit(")) {\n");
+            emit("        return ").emit(resultName).emit(";\n");
+            emit("    }\n");
         }
 
         if (unit.leftRecursive()) {
-            addLeftRecursiveUnitRuleBody(unit, hashStr, sb);
+            addLeftRecursiveUnitRuleBody(unit, hashStr);
         } else {
             switch (unit.ruleType()) {
-                case Disjunction -> addDisjunctionBody(unit, hashStr, sb);
-                case Conjunction -> addConjunctionBody(unit, hashStr, sb);
+                case Disjunction -> addDisjunctionBody(unit, hashStr);
+                case Conjunction -> addConjunctionBody(unit, hashStr);
             }
         }
 
         if (memoize) {
-            sb.append("    insert_memo(p, &f, ").append(resultName).append(");\n");
+            emit("    insert_memo(p, &f, ").emit(resultName).emit(");\n");
         }
 
         if (!unit.isInline()) {
-            sb.append("    return exit_frame(p, &f, ").append(resultName).append(");\n");
+            emit("    return exit_frame(p, &f, ").emit(resultName).emit(");\n");
         }
 
-        sb.append("}\n");
+        emit("}\n");
 
         for (UnitField field : unit.fields()) {
-            getLoopParser(field, sb);
+            getLoopParser(field);
         }
     }
 
-    private static void addLeftRecursiveUnitRuleBody(UnitRule unit,  String hashStr, StringBuilder sb) {
+    private void addLeftRecursiveUnitRuleBody(UnitRule unit,  String hashStr) {
         var rtype = unit.ruleName().returnTypeOr("void *");
         var resultName = "res_" + hashStr;
         var altName = "alt_" + hashStr;
 
-        sb.append("    ").append(rtype).append(altName).append(";\n");
-        sb.append("    size_t maxpos;\n");
-        sb.append("    ").append(rtype).append("max;\n");
+        emit("    ").emit(rtype).emit(altName).emit(";\n");
+        emit("    size_t maxpos;\n");
+        emit("    ").emit(rtype).emit("max;\n");
 
         if (unit.isInline()) error("LR rules cannot be inline");
 
-        sb.append("    if (enter_frame(p, &f)) {\n");
-        sb.append("        do {\n");
-        sb.append("            maxpos = p->pos;\n");
-        sb.append("            max = ").append(resultName).append(";\n");
-        sb.append("            insert_memo(p, &f, max);\n");
-        sb.append("            p->pos = f.f_pos;\n");
-        sb.append("            ").append(resultName).append(" = (\n");
+        emit("    if (enter_frame(p, &f)) {\n");
+        emit("        do {\n");
+        emit("            maxpos = p->pos;\n");
+        emit("            max = ").emit(resultName).emit(";\n");
+        emit("            insert_memo(p, &f, max);\n");
+        emit("            p->pos = f.f_pos;\n");
+        emit("            ").emit(resultName).emit(" = (\n");
 
         var fields = unit.fields();
         for (int i = 0; i < fields.size(); i++) {
-            sb.append("                (").append(altName).append(" = ");
-            sb.append(getParserFieldExpr(fields.get(i)));
+            emit("                (").emit(altName).emit(" = ");
+            emit(getParserFieldExpr(fields.get(i)));
 
             if (i == fields.size() - 1) {
-                sb.append(")");
+                emit(")");
             } else {
-                sb.append(") ||\n");
+                emit(") ||\n");
             }
         }
-        sb.append("\n            ) ? ").append(altName).append(" : 0;\n");
-        sb.append("""
+        emit("\n            ) ? ").emit(altName).emit(" : 0;\n");
+        emit("""
                         } while (p->pos > maxpos);
                         p->pos = maxpos;
                         r = max;
@@ -187,7 +235,7 @@ public class CTransform {
                 (field.resultSource().isTokenLiteral() && field.isRequired()));
     }
 
-    private static void addConjunctionBody(UnitRule unit, String hashStr, StringBuilder sb) {
+    private void addConjunctionBody(UnitRule unit, String hashStr) {
         List<String> fieldNames = new ArrayList<>();
 
         int j = 0;
@@ -207,21 +255,21 @@ public class CTransform {
             }
             j++;
             var type = getParserFieldType(field);
-            sb.append("    ").append(type).append(name).append(";\n");
+            emit("    ").emit(type).emit(name).emit(";\n");
         }
 
         var resultName = "res_" + hashStr;
         if (unit.isInline()) {
-            sb.append("    return (\n");
+            emit("    return (\n");
         } else {
-            sb.append("    ").append(resultName).append(" = enter_frame(p, &f) && (\n");
+            emit("    ").emit(resultName).emit(" = enter_frame(p, &f) && (\n");
         }
 
         var fields = unit.fields();
         j = 0;
         for (int i = 0; i < fields.size(); i++) {
-            sb.append("        ");
-            sb.append("(");
+            emit("        ");
+            emit("(");
             var field = fields.get(i);
             if (isImportantField(field)) {
                 var fieldName = field.fieldName().snakeCaseUnconflicted();
@@ -230,12 +278,12 @@ public class CTransform {
                     var template = unit.resultClause().template();
                     var varName = "%" + ((char) ('a' + j));
                     if (template.contains(varName)) {
-                        sb.append(fieldName);
-                        sb.append(" = ");
+                        emit(fieldName);
+                        emit(" = ");
                     }
                 } else {
-                    sb.append(fieldName);
-                    sb.append(" = ");
+                    emit(fieldName);
+                    emit(" = ");
                 }
                 j++;
             }
@@ -243,17 +291,17 @@ public class CTransform {
             var fieldExpr = getParserFieldExpr(field);
 
             // Fix when frame structs are not available
-            if (unit.isInline()) sb.append(fieldExpr.replace("f.f_pos", "pos"));
-            else sb.append(fieldExpr);
+            if (unit.isInline()) emit(fieldExpr.replace("f.f_pos", "pos"));
+            else emit(fieldExpr);
 
             if (i == fields.size() - 1) {
-                sb.append(")");
+                emit(")");
             } else {
-                sb.append(") &&\n");
+                emit(") &&\n");
             }
         }
 
-        sb.append("\n    ) ? ");
+        emit("\n    ) ? ");
         String templatedResult;
         if (unit.resultClause() == null) {
             templatedResult = "node(p)";
@@ -266,18 +314,18 @@ public class CTransform {
             }
             templatedResult = resultClause;
         }
-        sb.append(templatedResult);
+        emit(templatedResult);
         if (unit.isInline()) {
             if (templatedResult.length() > 20) {
-                sb.append(" :\n        ");
-            } else sb.append(" : ");
+                emit(" :\n        ");
+            } else emit(" : ");
             if (unit.ruleName().returnTypeOr("void *").endsWith("*")) {
-                sb.append("(p->pos = pos, NULL);\n");
+                emit("(p->pos = pos, NULL);\n");
             } else {
-                sb.append("(p->pos = pos, 0);\n");
+                emit("(p->pos = pos, 0);\n");
             }
         } else {
-            sb.append(" : 0;\n");
+            emit(" : 0;\n");
         }
     }
 
@@ -298,7 +346,7 @@ public class CTransform {
         return type;
     }
 
-    private static void addDisjunctionBody(UnitRule unit, String hashStr, StringBuilder sb) {
+    private void addDisjunctionBody(UnitRule unit, String hashStr) {
 
         for (UnitField field : unit.fields()) {
             var template = field.resultClause().template().strip();
@@ -309,7 +357,7 @@ public class CTransform {
 
             var type = getParserFieldType(field);
             var name = field.fieldName().snakeCaseUnconflicted();
-            sb.append("    ").append(type).append(name).append(";\n");
+            emit("    ").emit(type).emit(name).emit(";\n");
         }
 
         var resultType = unit.ruleName().returnTypeOr("void *");
@@ -321,11 +369,11 @@ public class CTransform {
             altName = "alt_" + hashStr;
         }
 
-        sb.append("    ").append(resultType).append(altName).append(";\n");
+        emit("    ").emit(resultType).emit(altName).emit(";\n");
         if (unit.isInline()) {
-            sb.append("    return (");
+            emit("    return (");
         } else {
-            sb.append("    ").append(resultName).append(" = enter_frame(p, &f) && (");
+            emit("    ").emit(resultName).emit(" = enter_frame(p, &f) && (");
         }
 
         var fields = unit.fields();
@@ -340,47 +388,47 @@ public class CTransform {
 
             if (template.equals("%a")) {
                 // Fall-through; no extra variables needed
-                sb.append("\n        (").append(altName).append(" = ")
-                        .append(getParserFieldExpr(field));
+                emit("\n        (").emit(altName).emit(" = ")
+                        .emit(getParserFieldExpr(field));
             } else {
-                if (i != 0) sb.append(" ");
-                sb.append("(\n            (");
+                if (i != 0) emit(" ");
+                emit("(\n            (");
 
                 if (template.contains("%a")) {
                     // Only assign to variable if it's actually used
-                    sb.append(fieldName).append(" = ");
+                    emit(fieldName).emit(" = ");
                 }
 
-                sb.append(getParserFieldExpr(field)).append(") &&\n");
+                emit(getParserFieldExpr(field)).emit(") &&\n");
 
-                sb.append("            ");
-                sb.append("(").append(altName).append(" = ");
+                emit("            ");
+                emit("(").emit(altName).emit(" = ");
 
-                sb.append(field.resultClause().template().replace("%a", fieldName));
+                emit(field.resultClause().template().replace("%a", fieldName));
                 if (i == fields.size() - 1) {
-                    sb.append(")");
+                    emit(")");
                 } else {
-                    sb.append(")\n        ");
+                    emit(")\n        ");
                 }
             }
 
             if (i == fields.size() - 1) {
-                sb.append(")");
+                emit(")");
             } else {
-                sb.append(") ||");
+                emit(") ||");
             }
         }
 
-        sb.append("\n    ) ? ").append(altName);
+        emit("\n    ) ? ").emit(altName);
 
         if (unit.isInline()) {
             if (resultType.endsWith("*")) {
-                sb.append(" : (p->pos = pos, NULL);\n");
+                emit(" : (p->pos = pos, NULL);\n");
             } else {
-                sb.append(" : (p->pos = pos, 0);\n");
+                emit(" : (p->pos = pos, 0);\n");
             }
         } else {
-            sb.append(" : 0;\n");
+            emit(" : 0;\n");
         }
     }
 
@@ -394,13 +442,13 @@ public class CTransform {
         };
     }
 
-    private static void getLoopParser(UnitField field, StringBuilder sb) {
+    private void getLoopParser(UnitField field) {
         if (field.isSingular() || field.isPredicate()) {
             return;
         }
         String s = field.fieldType() == FieldType.RequiredList ?
                 getRequiredLoopParser(field) : getOptionalLoopParser(field);
-        sb.append(s);
+        emit(s);
     }
 
     private static String getRequiredLoopParser(UnitField field) {

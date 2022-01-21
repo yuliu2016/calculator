@@ -21,25 +21,6 @@ public class CFugaGenerator {
     private static final Path C_PATH = Paths.get(BASE_DIR, "parser.c");
     private static final Path TM_PATH = Paths.get(BASE_DIR, "include/internal/tokenmap.h");
 
-    private static final String ENTRY_POINT = """
-            
-            
-            
-            // Parser Entry Point
-            void *parse_grammar(parser_t *p, int entry_point) {
-                switch (entry_point) {
-                case 0:
-                    return single_input(p);
-                case 1:
-                    return file_input(p);
-                case 2:
-                    return eval_input(p);
-                default:
-                    return 0;
-                }
-            }
-            """;
-
     private static final String TKL_TYPE = """
             
             struct token_literal {
@@ -145,11 +126,8 @@ public class CFugaGenerator {
         );
         GeneratorUtil.printStats(spec);
 
-        String c = "#include \"include/ast.h\"\n\n\n" +
-                CTransform.getFuncDeclarations(spec) +
-                ENTRY_POINT +
-                CTransform.getFunctionBodies(spec);
-        Files.writeString(C_PATH, c.replace("\n", System.lineSeparator()));
+        String parser = CTransform.generateParser(spec);
+        Files.writeString(C_PATH, parser.replace("\n", System.lineSeparator()));
 
         String tokenHeader = getTokenMap() + formatIndices() +
                 TKL_TYPE + formatLiterals();

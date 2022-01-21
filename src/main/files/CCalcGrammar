@@ -1,5 +1,17 @@
 # Calculator Grammar
 
+.include ('include/ast2.h')
+.space ("2")
+.fdecl ()
+.space ("3")
+
+```c
+// Parser Entry Point
+double *parse_calc(parser_t *p) {
+    return sum(p);
+}
+```
+
 sum[double *] (left_recursive):
     | sum '+' term >> { binop_add(p, %a, %b) }
     | sum '-' term >> { binop_sub(p, %a, %b) }

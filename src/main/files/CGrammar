@@ -1,7 +1,9 @@
 # Grammar for Fuga
 
-.include ('include/ast2.h')
-.fdecl ( )
+.include ('include/ast.h')
+.space ("2")
+.fdecl ()
+.space ("3")
 
 ```c
 // Parser Entry Point

@@ -15,7 +15,7 @@ public class RuleSetBuilder {
 
     private static final GrammarRepr REPR = GrammarRepr.INSTANCE;
 
-    private final List<Rule> rules;
+    private final Grammar grammar;
     private final Map<String, TokenEntry> tokenMap;
     private final Map<String, RuleName> ruleNameMap = new LinkedHashMap<>();
     private final GrammarSpec spec;
@@ -26,12 +26,7 @@ public class RuleSetBuilder {
     public RuleSetBuilder(
             Grammar grammar,
             Map<String, TokenEntry> tokenMap) {
-        this.rules = grammar
-                .elements()
-                .stream()
-                .filter(Element::hasRule)
-                .map(Element::rule)
-                .toList();
+        this.grammar = grammar;
         this.tokenMap = tokenMap;
         this.spec = new GrammarSpec(new ArrayList<>(), new ArrayList<>(), tokenMap);
     }
@@ -39,6 +34,7 @@ public class RuleSetBuilder {
     public static GrammarSpec generate(Grammar grammar, Map<String, TokenEntry> tokenMap) {
         var builder = new RuleSetBuilder(grammar, tokenMap);
         builder.generateRuleSet();
+        builder.generateDirectives();
         return builder.spec;
     }
 
@@ -46,7 +42,34 @@ public class RuleSetBuilder {
         throw new GrammarException(message);
     }
 
+    private void generateDirectives() {
+        var rulesCopy = new ArrayList<>(spec.namedRules());
+        var directives = spec.directives();
+        for (var elem : grammar.elements()) {
+            if (elem.hasRule()) {
+                NamedRule rule = rulesCopy.remove(0);
+                directives.add(new NamedDirective("exp", rule));
+            } else if (elem.hasDirective()) {
+                Directive directive = elem.directive();
+                List<String> args = new ArrayList<>();
+                if (directive.hasArguments()) {
+                    for (var arg : directive.arguments().arguments()) {
+                        args.add(arg.string());
+                    }
+                }
+                directives.add(new NamedDirective(directive.name(), args));
+            }
+        }
+    }
+
     private void generateRuleSet() {
+        List<Rule> rules = grammar
+                .elements()
+                .stream()
+                .filter(Element::hasRule)
+                .map(Element::rule)
+                .toList();
+
         // Each rule needs to be able to find the names of all rules
         for (Rule rule : rules) {
             ruleNameMap.put(rule.name(), PEGUtil.getRuleName(rule));
