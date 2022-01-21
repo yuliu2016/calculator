@@ -147,7 +147,7 @@ public interface MetaVisitor<T> {
 
     /**
      * expr_call:
-     * *   | expr_name '(' ','.expr_arg+ ')'
+     * *   | expr_name '(' [','.expr_arg+ [',']] ')'
      */
     default T visitExprCall(ExprCall exprCall) {
         return null;

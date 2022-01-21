@@ -26,6 +26,7 @@ public class MetaRules {
     public static final ParserRule EXPR_ARG = or_rule("expr_arg");
     public static final ParserRule EXPR_ARG_1 = and_rule("expr_arg:1");
     public static final ParserRule EXPR_CALL = and_rule("expr_call");
+    public static final ParserRule EXPR_CALL_3 = and_rule("expr_call:3");
     public static final ParserRule EXPRESSION = or_rule("expression");
     public static final ParserRule GROUP = and_rule("group");
     public static final ParserRule OPTIONAL = and_rule("optional");

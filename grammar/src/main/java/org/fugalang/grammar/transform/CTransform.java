@@ -88,7 +88,7 @@ public class CTransform {
 
         emit("static ").emit(rn.returnTypeOr("void *"))
                 .emit(rn.symbolicName());
-        emit("(parser_t *);\n");
+        emit("();\n");
         for (UnitField field : unit.fields()) {
             if (field.isSingular() || field.isPredicate()) {
                 continue;
@@ -100,7 +100,7 @@ public class CTransform {
             } else {
                 emit("_delimited");
             }
-            emit("(parser_t *);\n");
+            emit("();\n");
         }
     }
     
@@ -137,7 +137,7 @@ public class CTransform {
         var returnType = rn.returnTypeOr("void *");
         emit("\nstatic ").emit(returnType)
                 .emit(rn.symbolicName());
-        emit("(parser_t *p) {\n");
+        emit("() {\n");
 
         String resultName;
         String hashStr;
@@ -146,12 +146,12 @@ public class CTransform {
             resultName = "ERROR";
             hashStr = "ERROR";
 
-            emit("    size_t pos = p->pos;\n");
+            emit("    size_t pos = _pos();\n");
         } else {
             hashStr = ruleNameHash(rn);
-            emit("    const frame_t f = {")
+            emit("    frame_t f = {")
                     .emit(hashStr)
-                    .emit(", p->pos, FUNC};\n");
+                    .emit(", _pos(), FUNC};\n");
             resultName = "res_" + hashStr;
 
             var resultDeclare = "    " + returnType + resultName;
@@ -163,7 +163,7 @@ public class CTransform {
         if (memoize) {
             if (unit.isInline())
                 error("Inline rules cannot be memoized");
-            emit("    if (is_memoized(p, &f, (void **) &")
+            emit("    if (_is_memoized(&f, (void **) &")
                     .emit(resultName).emit(")) {\n");
             emit("        return ").emit(resultName).emit(";\n");
             emit("    }\n");
@@ -179,11 +179,11 @@ public class CTransform {
         }
 
         if (memoize) {
-            emit("    insert_memo(p, &f, ").emit(resultName).emit(");\n");
+            emit("    _insert_memo(&f, ").emit(resultName).emit(");\n");
         }
 
         if (!unit.isInline()) {
-            emit("    return exit_frame(p, &f, ").emit(resultName).emit(");\n");
+            emit("    return _exit_frame(&f, ").emit(resultName).emit(");\n");
         }
 
         emit("}\n");
@@ -204,12 +204,12 @@ public class CTransform {
 
         if (unit.isInline()) error("LR rules cannot be inline");
 
-        emit("    if (enter_frame(p, &f)) {\n");
+        emit("    if (_enter_frame(&f)) {\n");
         emit("        do {\n");
-        emit("            maxpos = p->pos;\n");
+        emit("            maxpos = _pos();\n");
         emit("            max = ").emit(resultName).emit(";\n");
-        emit("            insert_memo(p, &f, max);\n");
-        emit("            p->pos = f.f_pos;\n");
+        emit("            _insert_memo(&f, max);\n");
+        emit("            _set_pos(f.f_pos);\n");
         emit("            ").emit(resultName).emit(" = (\n");
 
         var fields = unit.fields();
@@ -225,8 +225,8 @@ public class CTransform {
         }
         emit("\n            ) ? ").emit(altName).emit(" : 0;\n");
         emit("""
-                        } while (p->pos > maxpos);
-                        p->pos = maxpos;
+                        } while (_pos() > maxpos);
+                        _set_pos(maxpos);
                         r = max;
                     }
                 """.replace("r", resultName));
@@ -264,7 +264,7 @@ public class CTransform {
         if (unit.isInline()) {
             emit("    return (\n");
         } else {
-            emit("    ").emit(resultName).emit(" = enter_frame(p, &f) && (\n");
+            emit("    ").emit(resultName).emit(" = _enter_frame(&f) && (\n");
         }
 
         var fields = unit.fields();
@@ -306,7 +306,7 @@ public class CTransform {
         emit("\n    ) ? ");
         String templatedResult;
         if (unit.resultClause() == null) {
-            templatedResult = "node(p)";
+            templatedResult = "node()";
         } else {
             var resultClause = unit.resultClause().template();
             for (int i = 0; i < fieldNames.size(); i++) {
@@ -322,9 +322,9 @@ public class CTransform {
                 emit(" :\n        ");
             } else emit(" : ");
             if (unit.ruleName().returnTypeOr("void *").endsWith("*")) {
-                emit("(p->pos = pos, NULL);\n");
+                emit("(_set_pos(pos), NULL);\n");
             } else {
-                emit("(p->pos = pos, 0);\n");
+                emit("(_set_pos(pos), 0);\n");
             }
         } else {
             emit(" : 0;\n");
@@ -375,7 +375,7 @@ public class CTransform {
         if (unit.isInline()) {
             emit("    return (");
         } else {
-            emit("    ").emit(resultName).emit(" = enter_frame(p, &f) && (");
+            emit("    ").emit(resultName).emit(" = _enter_frame(&f) && (");
         }
 
         var fields = unit.fields();
@@ -425,9 +425,9 @@ public class CTransform {
 
         if (unit.isInline()) {
             if (resultType.endsWith("*")) {
-                emit(" : (p->pos = pos, NULL);\n");
+                emit(" : (_set_pos(pos), NULL);\n");
             } else {
-                emit(" : (p->pos = pos, 0);\n");
+                emit(" : (_set_pos(pos), 0);\n");
             }
         } else {
             emit(" : 0;\n");
@@ -463,32 +463,32 @@ public class CTransform {
 
         TokenEntry delimiter = field.delimiter();
         if (delimiter == null) {
-            return "\nstatic ast_list_t *" + ruleName + "_loop(parser_t *p) {\n" +
+            return "\nstatic ast_list_t *" + ruleName + "_loop() {\n" +
                     "    " + rawType + fname + " = " + resultExpr + ";\n" +
                     "    if (!" + fname + ") {\n" +
                     "        return 0;\n" +
                     "    }\n" +
-                    "    ast_list_t *" + listName + " = ast_list_new(p);\n" +
+                    "    ast_list_t *" + listName + " = _ast_list_new();\n" +
                     "    do {\n" +
-                    "        ast_list_append(p, " + listName + ", " + fname + ");\n" +
+                    "        _ast_list_append(" + listName + ", " + fname + ");\n" +
                     "    } while ((" + fname + " = " + resultExpr + "));\n" +
                     "    return " + listName + ";\n" +
                     "}\n";
         } else {
-            var delimExpr = "consume(p, " + delimiter.index() + ", \"" + delimiter.literalValue() + "\")";
-            return "\nstatic ast_list_t *" + ruleName + "_delimited(parser_t *p) {\n" +
+            var delimExpr = "_consume(" + delimiter.index() + ", \"" + delimiter.literalValue() + "\")";
+            return "\nstatic ast_list_t *" + ruleName + "_delimited() {\n" +
                     "    " + rawType + fname + " = " + resultExpr + ";\n" +
                     "    if (!" + fname + ") {\n" +
                     "        return 0;\n" +
                     "    }\n" +
-                    "    ast_list_t *" + listName + " = ast_list_new(p);\n" +
+                    "    ast_list_t *" + listName + " = _ast_list_new();\n" +
                     "    size_t pos;\n" +
                     "    do {\n" +
-                    "        ast_list_append(p, " + listName + ", " + fname + ");\n" +
-                    "        pos = p->pos;\n" +
+                    "        _ast_list_append(" + listName + ", " + fname + ");\n" +
+                    "        pos = _pos();\n" +
                     "    } while (" + delimExpr + " &&\n" +
                     "            (" + fname + " = " + resultExpr + "));\n" +
-                    "    p->pos = pos;\n" +
+                    "    _set_pos(pos);\n" +
                     "    return " + listName + ";\n" +
                     "}\n";
         }
@@ -502,11 +502,11 @@ public class CTransform {
         var fname = "_" + field.fieldName().snakeCase();
         var rawType = getRawParserFieldType(field);
 
-        return "\nstatic ast_list_t *" + rule_name + "_loop(parser_t *p) {\n" +
-                "    ast_list_t *" + listName + " = ast_list_new(p);\n" +
+        return "\nstatic ast_list_t *" + rule_name + "_loop() {\n" +
+                "    ast_list_t *" + listName + " = _ast_list_new();\n" +
                 "    " + rawType + fname + ";\n" +
                 "    while ((" + fname + " = " + resultExpr + ")) {\n" +
-                "        ast_list_append(p, " + listName + ", " + fname + ");\n" +
+                "        _ast_list_append(" + listName + ", " + fname + ");\n" +
                 "    }\n" +
                 "    return " + listName + ";\n" +
                 "}\n";
@@ -515,25 +515,25 @@ public class CTransform {
     private static String getNewLoopExpr(UnitField field) {
         var name = field.ruleName().symbolicName();
         if (field.delimiter() == null) {
-            return name + "_loop(p)";
+            return name + "_loop()";
         } else {
-            return name + "_delimited(p)";
+            return name + "_delimited()";
         }
     }
 
 
     private static String getTestExpr(UnitField field) {
-        return "test_and_reset(p, f.f_pos, " + getResultExpr(field) + ")";
+        return "_test_and_reset(f.f_pos, " + getResultExpr(field) + ")";
     }
 
     private static String getResultExpr(UnitField field) {
         var rs = field.resultSource();
         String innerName;
         if (rs.isUnitRule()) {
-            innerName = rs.asRuleName().symbolicName() + "(p)";
+            innerName = rs.asRuleName().symbolicName() + "()";
         } else if (rs.isTokenType() || rs.isTokenLiteral()) {
             var te = rs.asTokenEntry();
-            innerName = "consume(p, " + te.index() + ", \"" + te.literalValue() + "\")";
+            innerName = "_consume(" + te.index() + ", \"" + te.literalValue() + "\")";
         } else throw new IllegalArgumentException();
         return innerName;
     }

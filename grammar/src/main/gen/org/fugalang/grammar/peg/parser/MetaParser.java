@@ -361,7 +361,7 @@ public class MetaParser {
 
     /**
      * expr_call:
-     * *   | expr_name '(' ','.expr_arg+ ')'
+     * *   | expr_name '(' [','.expr_arg+ [',']] ')'
      */
     public static boolean expr_call(ParseTree t) {
         var m = t.enter(EXPR_CALL);
@@ -369,8 +369,21 @@ public class MetaParser {
         boolean r;
         r = expr_name(t);
         r = r && t.consume("(");
-        r = r && expr_arg_loop(t);
+        if (r) expr_call_3(t);
         r = r && t.consume(")");
+        t.exit(r);
+        return r;
+    }
+
+    /**
+     * ','.expr_arg+ [',']
+     */
+    private static boolean expr_call_3(ParseTree t) {
+        var m = t.enter(EXPR_CALL_3);
+        if (m != null) return m;
+        boolean r;
+        r = expr_arg_loop(t);
+        if (r) t.consume(",");
         t.exit(r);
         return r;
     }

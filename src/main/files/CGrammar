@@ -6,20 +6,20 @@
 
 ```c
 // Placeholder node
-static inline void *node(parser_t *p) {
-    return parser_alloc(p, sizeof(char));
+static inline void *node() {
+    return palloc(sizeof(char));
 }
 
 // Do nothing operation
-static ast_stmt_t *ast_nop(parser_t *p) {
-    return node(p);
+static ast_stmt_t *ast_nop() {
+    return node();
 }
 ```
 
 single_input[ast_list_t *]:
-    | NEWLINE { ast_list_of(p, ast_nop(p)) }
-    | simple_statements { ast_list_of(p, %a) }
-    | compound_statement NEWLINE { ast_list_of(p, %a) }
+    | NEWLINE { _ast_list_of(ast_nop()) }
+    | simple_statements { _ast_list_of(%a) }
+    | compound_statement NEWLINE { _ast_list_of(%a) }
 file_input[ast_list_t *]:
     | statement_list { a }
 eval_input[ast_list_t *]:
@@ -30,56 +30,56 @@ statement_list[ast_list_t *]:
     | line_statement+ { a }
 line_statement[ast_list_t *]:
     | simple_statements NEWLINE { a }
-    | compound_statement NEWLINE { ast_list_of(p, %a) }
+    | compound_statement NEWLINE { _ast_list_of(%a) }
 
 simple_statements[ast_list_t *]:
     | ';'.simple_statement+ [';'] { a }
 
 ```c
-static ast_stmt_t *ast_break(parser_t *p) {
-    return node(p);
+static ast_stmt_t *ast_break() {
+    return node();
 }
 
-static ast_stmt_t *ast_continue(parser_t *p) {
-    return node(p);
+static ast_stmt_t *ast_continue() {
+    return node();
 }
 
-static ast_stmt_t *ast_del(parser_t *p, ast_list_t *li) {
-    return node(p);
+static ast_stmt_t *ast_del(ast_list_t *li) {
+    return node();
 }
 
-static ast_stmt_t *ast_return(parser_t *p, ast_list_t *li) {
-    return node(p);
+static ast_stmt_t *ast_return(ast_list_t *li) {
+    return node();
 }
 
-static ast_named_t *ast_named(parser_t *p, token_t *name, ast_expr_t *expr) {
-    return node(p);
+static ast_named_t *ast_named(token_t *name, ast_expr_t *expr) {
+    return node();
 }
 ```
 
 # Small Statements
 simple_statement[ast_stmt_t *]:
     | assignment { a }
-    | starred_expressions { node(p) }
-    | 'pass' { ast_nop(p) }
-    | 'break' { ast_break(p) }
-    | 'continue' { ast_continue(p) }
-    | 'return' [starred_expressions] >> { ast_return(p, %a) }
+    | starred_expressions { node() }
+    | 'pass' { ast_nop() }
+    | 'break' { ast_break() }
+    | 'continue' { ast_continue() }
+    | 'return' [starred_expressions] >> { ast_return(%a) }
     | 'raise' expression ['from' expression >> [ast_expr_t *]
-        { a }] >> { ast_nop(p) }
-    | 'del' targets >> { ast_del(p, %a) }
+        { a }] >> { ast_nop() }
+    | 'del' targets >> { ast_del(%a) }
 
 
 # Targets
 
 target (memo):
-    | t_primary '.' NAME !t_lookahead >> { node(p) }
-    | t_primary subscript !t_lookahead >> { node(p) }
+    | t_primary '.' NAME !t_lookahead >> { node() }
+    | t_primary subscript !t_lookahead >> { node() }
     | NAME
 t_primary[ast_primary_t *] (left_recursive):
-    | t_primary '.' NAME &t_lookahead >> { node(p) }
-    | t_primary invocation &t_lookahead >> { node(p) }
-    | t_primary subscript &t_lookahead >> { node(p) }
+    | t_primary '.' NAME &t_lookahead >> { node() }
+    | t_primary invocation &t_lookahead >> { node() }
+    | t_primary subscript &t_lookahead >> { node() }
     | atom &t_lookahead >> { a }
 t_lookahead[void *] (inline):
     | '.'
@@ -93,9 +93,9 @@ targets[ast_list_t *]:
 # Assignments
 
 assignment:
-    | target ':' expression ['=' expressions >> { a }] >> { node(p) }
-    | (targets '=' >> { a })+ starred_expressions >> { node(p) }
-    | target augmented_assign expressions >> { node(p) }
+    | target ':' expression ['=' expressions >> { a }] >> { node() }
+    | (targets '=' >> { a })+ starred_expressions >> { node() }
+    | target augmented_assign expressions >> { node() }
 
 augmented_assign[int] (inline):
     | '+='  { BINOP_PLS }
@@ -159,8 +159,8 @@ except_suite:
 invocation:
     | '(' [','.call_argument+  [','] { a } ] ')' { a }
 call_argument:
-    | NAME ':=' expression >> { ast_named(p, %a, %b) }
-    | NAME '=' expression >> { ast_named(p, %a, %b) }
+    | NAME ':=' expression >> { ast_named(%a, %b) }
+    | NAME '=' expression >> { ast_named(%a, %b) }
     | '**' expression >> { a }
     | '*' expression >> { a }
     | expression { a }
@@ -187,33 +187,33 @@ starred_expressions[ast_list_t *]:
     | ','.maybe_starred+ [','] { a }
 
 ```c
-static ast_expr_t *ast_conditional(parser_t *p,
+static ast_expr_t *ast_conditional(
         ast_expr_t *cond, ast_expr_t *a, ast_expr_t *b) {
-    return node(p);
+    return node();
 }
 
-static ast_named_t *ast_unnamed(parser_t *p, ast_expr_t *expr) {
-    return ast_named(p, NULL, expr);
+static ast_named_t *ast_unnamed(ast_expr_t *expr) {
+    return ast_named(NULL, expr);
 }
 
-static ast_expr_t *ast_comp_term(parser_t *p,
+static ast_expr_t *ast_comp_term(
         int comp_op, ast_expr_t *operand) {
-    return node(p);
+    return node();
 }
 
-static ast_expr_t *ast_comparison(parser_t *p,
+static ast_expr_t *ast_comparison(
         ast_expr_t *first, ast_list_t *terms) {
-    return node(p);
+    return node();
 }
 ```
 
 named_expression[ast_named_t *]:
-    | NAME ':=' expression >> { ast_named(p, %a, %b) }
-    | expression { ast_unnamed(p, %a) }
+    | NAME ':=' expression >> { ast_named(%a, %b) }
+    | expression { ast_unnamed(%a) }
 
 conditional[ast_expr_t *] (inline):
     | 'if' disjunction '?' disjunction ':' expression
-        { ast_conditional(p, %a, %b, %c) }
+        { ast_conditional(%a, %b, %c) }
 
 expression[ast_expr_t *]:
     | conditional { a }
@@ -221,9 +221,9 @@ expression[ast_expr_t *]:
 
 ```c
 // Construct a binary operation
-static ast_expr_t *ast_binary(parser_t *p, ast_expr_t *left,
+static ast_expr_t *ast_binary(ast_expr_t *left,
         ast_expr_t *right, enum expr_opcode binop_code) {
-    ast_expr_t *r = parser_alloc(p, sizeof(ast_expr_t));
+    ast_expr_t *r = palloc(sizeof(ast_expr_t));
     r->opcode = binop_code;
     r->left = left;
     r->right.expr = right;
@@ -231,29 +231,29 @@ static ast_expr_t *ast_binary(parser_t *p, ast_expr_t *left,
 }
 
 // Construct a unary operation
-static ast_expr_t *ast_unary(parser_t *p, ast_expr_t *expr,
+static ast_expr_t *ast_unary(ast_expr_t *expr,
         enum expr_opcode unary_opcode) {
-    return ast_binary(p, expr, NULL, unary_opcode);
+    return ast_binary(expr, NULL, unary_opcode);
 }
 ```
 
 disjunction[ast_expr_t *] (left_recursive):
     | disjunction 'or' conjunction >>
-        { ast_binary(p, %a, %b, LOGIC_OR) }
+        { ast_binary(%a, %b, LOGIC_OR) }
     | conjunction { a }
 conjunction[ast_expr_t *] (left_recursive):
     | conjunction 'and' inversion >>
-        { ast_binary(p, %a, %b, LOGIC_AND) }
+        { ast_binary(%a, %b, LOGIC_AND) }
     | inversion { a }
 inversion[ast_expr_t *]:
     | 'not' inversion >>
-        { ast_unary(p, %a, LOGIC_NOT) }
+        { ast_unary(%a, LOGIC_NOT) }
     | comparison { a }
 
 comparison[ast_expr_t *]:
     | bitwise_or (comparator bitwise_or >> [ast_expr_t *]
-            { ast_comp_term(p, %a, %b) })+ >>
-        { ast_comparison(p, %a, %b) }
+            { ast_comp_term(%a, %b) })+ >>
+        { ast_comparison(%a, %b) }
     | bitwise_or { a }
 comparator[int] (inline):
     | '<' { CMP_LT }
@@ -269,57 +269,57 @@ comparator[int] (inline):
 
 bitwise_or[ast_expr_t *] (left_recursive):
     | bitwise_or '|' bitwise_xor >>
-        { ast_binary(p, %a, %b, BINOP_IOR) }
+        { ast_binary(%a, %b, BINOP_IOR) }
     | bitwise_xor { a }
 bitwise_xor[ast_expr_t *] (left_recursive):
     | bitwise_xor '^' bitwise_and >>
-        { ast_binary(p, %a, %b, BINOP_XOR) }
+        { ast_binary(%a, %b, BINOP_XOR) }
     | bitwise_and { a }
 bitwise_and[ast_expr_t *] (left_recursive):
     | bitwise_and '&' bitwise_shift >>
-        { ast_binary(p, %a, %b, BINOP_AND) }
+        { ast_binary(%a, %b, BINOP_AND) }
     | bitwise_shift { a }
 bitwise_shift[ast_expr_t *] (left_recursive):
     | bitwise_shift '<<' sum >>
-        { ast_binary(p, %a, %b, BINOP_SHL) }
+        { ast_binary(%a, %b, BINOP_SHL) }
     | bitwise_shift '>>' sum >>
-        { ast_binary(p, %a, %b, BINOP_SHR) }
+        { ast_binary(%a, %b, BINOP_SHR) }
     | sum { a }
 
 sum[ast_expr_t *] (left_recursive):
     | sum '+' term >>
-        { ast_binary(p, %a, %b, BINOP_PLS) }
+        { ast_binary(%a, %b, BINOP_PLS) }
     | sum '-' term >>
-        { ast_binary(p, %a, %b, BINOP_MIN) }
+        { ast_binary(%a, %b, BINOP_MIN) }
     | term { a }
 term[ast_expr_t *] (left_recursive):
     | term '*' pipeline >>
-        { ast_binary(p, %a, %b, BINOP_MUL) }
+        { ast_binary(%a, %b, BINOP_MUL) }
     | term '/' pipeline >>
-        { ast_binary(p, %a, %b, BINOP_DIV) }
+        { ast_binary(%a, %b, BINOP_DIV) }
     | term '%' pipeline >>
-        { ast_binary(p, %a, %b, BINOP_MOD) }
+        { ast_binary(%a, %b, BINOP_MOD) }
     | term '//' pipeline >>
-        { ast_binary(p, %a, %b, BINOP_FDV) }
+        { ast_binary(%a, %b, BINOP_FDV) }
     | term '@' pipeline >>
-        { ast_binary(p, %a, %b, BINOP_MML) }
+        { ast_binary(%a, %b, BINOP_MML) }
     | pipeline { a }
 
 pipeline[ast_expr_t *] (left_recursive):
     | pipeline '->' factor >>
-        { ast_binary(p, %a, %b, BINOP_PIP) }
+        { ast_binary(%a, %b, BINOP_PIP) }
     | factor { a }
 
 factor[ast_expr_t *] (memo):
-    | '+' factor >> { ast_unary(p, %a, UNARY_PLS) }
-    | '-' factor >> { ast_unary(p, %a, UNARY_MIN) }
-    | '~' factor >> { ast_unary(p, %a, UNARY_INV) }
+    | '+' factor >> { ast_unary(%a, UNARY_PLS) }
+    | '-' factor >> { ast_unary(%a, UNARY_MIN) }
+    | '~' factor >> { ast_unary(%a, UNARY_INV) }
     | power { a }
 
 ```c
 // Convert a primary to an expression
-static ast_expr_t *ast_primary_expr(parser_t *p, void *primary) {
-    ast_expr_t *r = parser_alloc(p, sizeof(ast_expr_t));
+static ast_expr_t *ast_primary_expr(void *primary) {
+    ast_expr_t *r = palloc(sizeof(ast_expr_t));
     r->opcode = BINOP_PRIMARY;
     r->left = NULL;
     r->right.primary = primary;
@@ -329,13 +329,13 @@ static ast_expr_t *ast_primary_expr(parser_t *p, void *primary) {
 
 power[ast_expr_t *] (memo):
     | primary '**' factor >>
-        { ast_binary(p, ast_primary_expr(p, %a), %b, BINOP_POW) }
-    | primary { ast_primary_expr(p, %a) }
+        { ast_binary(ast_primary_expr(%a), %b, BINOP_POW) }
+    | primary { ast_primary_expr(%a) }
 
 primary[ast_primary_t *] (left_recursive):
-    | primary '.' NAME >> { node(p) }
-    | primary invocation >> { node(p) }
-    | primary subscript >> { node(p) }
+    | primary '.' NAME >> { node() }
+    | primary invocation >> { node() }
+    | primary subscript >> { node() }
     | atom
 
 # Parenthesized and list expressions
@@ -369,28 +369,28 @@ builder_expression[ast_primary_t *] (inline):
     | NAME ','.simple_parameter+ ':' expression
 
 ```c
-static ast_primary_t *ast_name_atom(parser_t *p, token_t *name) {
-    return node(p);
+static ast_primary_t *ast_name_atom( token_t *name) {
+    return node();
 }
 
-static ast_primary_t *ast_number_atom(parser_t *p, token_t *name) {
-    return node(p);
+static ast_primary_t *ast_number_atom(token_t *number) {
+    return node();
 }
 
-static ast_primary_t *ast_string_atom(parser_t *p, token_t *name) {
-    return node(p);
+static ast_primary_t *ast_string_atom(token_t *string) {
+    return node();
 }
 
-static ast_primary_t *ast_none(parser_t *p) {
-    return node(p);
+static ast_primary_t *ast_none() {
+    return node();
 }
 
-static ast_primary_t *ast_true(parser_t *p) {
-    return node(p);
+static ast_primary_t *ast_true() {
+    return node();
 }
 
-static ast_primary_t *ast_false(parser_t *p) {
-    return node(p);
+static ast_primary_t *ast_false() {
+    return node();
 }
 ```
 
@@ -398,29 +398,29 @@ atom[ast_primary_t *] (memo):
     | paren_expression
     | list_expression
     | builder_expression
-    | NAME { ast_name_atom(p, %a) }
-    | NUMBER { ast_number_atom(p, %a) }
-    | STRING { ast_string_atom(p, %a) }
-    | 'None' { ast_none(p) }
-    | 'True' { ast_true(p) }
-    | 'False' { ast_false(p) }
+    | NAME { ast_name_atom(%a) }
+    | NUMBER { ast_number_atom(%a) }
+    | STRING { ast_string_atom(%a) }
+    | 'None' { ast_none() }
+    | 'True' { ast_true() }
+    | 'False' { ast_false() }
 
 ```c
 
 // Provide the static parser struct
 parser_t *get_static_parser() {
-    return &_static_parser;
+    return &__parser;
 }
 
 // Parser Entry Point
-void *parse_grammar(parser_t *p, int entry_point) {
+void *parse_grammar(int entry_point) {
     switch (entry_point) {
     case 0:
-        return single_input(p);
+        return single_input();
     case 1:
-        return file_input(p);
+        return file_input();
     case 2:
-        return eval_input(p);
+        return eval_input();
     default:
         return 0;
     }

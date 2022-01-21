@@ -1,7 +1,12 @@
 # Calculator Grammar
 
 .include ('include/ast2.h')
+.include ('include/internal/static_parser.h')
 .fdecl ()
+
+```c
+#define p &__parser
+```
 
 sum[double *] (left_recursive):
     | sum '+' term >> { binop_add(p, %a, %b) }
@@ -29,8 +34,14 @@ atom[double *] (memo):
     | NUMBER { to_double(p, %a) }
 
 ```c
+
+// Provide the static parser struct
+parser_t *get_calc_parser() {
+    return p;
+}
+
 // Parser Entry Point
-double *parse_calc(parser_t *p) {
-    return sum(p);
+double *parse_calc() {
+    return sum();
 }
 ```

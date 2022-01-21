@@ -154,9 +154,13 @@ public class PEGUtil {
 
     private static String exprCallToString(ExprCall call) {
         return exprNameJoin(call.exprName()) + "(" +
-                call.exprArgs().stream()
+                (call.hasExprCall3() ? call
+                        .exprCall3()
+                        .exprArgs()
+                        .stream()
                         .map(PEGUtil::exprArgToString)
-                        .collect(Collectors.joining(", ")) + ")";
+                        .collect(Collectors.joining(", "))
+                        : "") + ")";
     }
 
     public static ResultClause getResultClause(Sequence sequence) {

@@ -43,7 +43,7 @@ expr_arg:
     | expr_call
     | expr_name
 expr_call:
-    | expr_name '(' ','.expr_arg+ ')'
+    | expr_name '(' [','.expr_arg+ [',']] ')'
 expression:
     | expr_call
     | NAME
