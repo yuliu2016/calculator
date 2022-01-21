@@ -4,11 +4,9 @@ import org.fugalang.core.parser.NodeWrapper;
 import org.fugalang.core.parser.ParseTreeNode;
 import org.fugalang.core.token.TokenType;
 
-import java.util.List;
-
 /**
  * directive:
- * *   | '.' NAME '(' [','.argument+] ')' NEWLINE
+ * *   | '.' NAME '(' [arguments] ')' NEWLINE
  */
 public final class Directive extends NodeWrapper {
 
@@ -20,8 +18,12 @@ public final class Directive extends NodeWrapper {
         return get(1, TokenType.NAME);
     }
 
-    public List<Argument> arguments() {
-        return getList(3, Argument::new);
+    public Arguments arguments() {
+        return new Arguments(get(3));
+    }
+
+    public boolean hasArguments() {
+        return has(3);
     }
 
     public String newline() {

@@ -12,6 +12,11 @@ import java.util.TreeSet;
 import static org.fugalang.grammar.common.FieldType.*;
 
 public class JTransform {
+
+    private static void error(String message) {
+        throw new GrammarException(message);
+    }
+
     public static void generateParser(StringBuilder sb, NamedRule rule) {
         generateParsingFunc(sb, rule.root(), true);
         for (var subRule : rule.components()) {
@@ -42,8 +47,7 @@ public class JTransform {
 
         if (rule.leftRecursive()) {
             if (!isNamedRule) {
-                throw new IllegalStateException(
-                        "Cannot be left-recursive and not a named rule");
+               error("Cannot be left-recursive and not a named rule");
             }
             generateLeftRecursiveBody(sb, rule);
         } else {
@@ -74,8 +78,7 @@ public class JTransform {
         }
 
         if (first) {
-            throw new IllegalStateException("The rule " + rule.ruleName() +
-                    " may match an empty string");
+            error("The rule " + rule.ruleName() + " may match an empty string");
         }
 
         sb.append("""
@@ -105,8 +108,7 @@ public class JTransform {
         }
 
         if (first) {
-            throw new IllegalStateException("The rule " + rule.ruleName() +
-                    " may match an empty string");
+            error("The rule " + rule.ruleName() + " may match an empty string");
         }
 
         sb.append("""
@@ -356,7 +358,7 @@ public class JTransform {
             // add the parent classes
             sb.append(" extends NodeWrapper");
         } else {
-            throw new IllegalStateException("No Rule Type");
+            error("No Rule Type");
         }
 
         sb.append(" {\n\n");

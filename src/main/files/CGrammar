@@ -1,5 +1,8 @@
 # Grammar for Fuga
 
+.include ('include/ast2.h')
+.fdecl ( )
+
 ```c
 // Parser Entry Point
 void *parse_grammar(parser_t *p, int entry_point) {

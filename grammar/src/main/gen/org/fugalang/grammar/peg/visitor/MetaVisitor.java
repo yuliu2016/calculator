@@ -24,9 +24,17 @@ public interface MetaVisitor<T> {
 
     /**
      * directive:
-     * *   | '.' NAME '(' [','.argument+] ')' NEWLINE
+     * *   | '.' NAME '(' [arguments] ')' NEWLINE
      */
     default T visitDirective(Directive directive) {
+        return null;
+    }
+
+    /**
+     * arguments:
+     * *   | ','.argument+ [',']
+     */
+    default T visitArguments(Arguments arguments) {
         return null;
     }
 

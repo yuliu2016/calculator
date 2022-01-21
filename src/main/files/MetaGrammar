@@ -8,7 +8,9 @@ element:
     | rule
 
 directive:
-    | '.' NAME '(' [",".argument+] ')' NEWLINE
+    | '.' NAME '(' [arguments] ')' NEWLINE
+arguments:
+    | ','.argument+ [',']
 argument:
     | STRING
 

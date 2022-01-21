@@ -49,7 +49,7 @@ public class MetaParser {
 
     /**
      * directive:
-     * *   | '.' NAME '(' [','.argument+] ')' NEWLINE
+     * *   | '.' NAME '(' [arguments] ')' NEWLINE
      */
     public static boolean directive(ParseTree t) {
         var m = t.enter(DIRECTIVE);
@@ -58,9 +58,23 @@ public class MetaParser {
         r = t.consume(".");
         r = r && t.consume(TokenType.NAME);
         r = r && t.consume("(");
-        r = r && argument_loop(t);
+        if (r) arguments(t);
         r = r && t.consume(")");
         r = r && t.consume(TokenType.NEWLINE);
+        t.exit(r);
+        return r;
+    }
+
+    /**
+     * arguments:
+     * *   | ','.argument+ [',']
+     */
+    public static boolean arguments(ParseTree t) {
+        var m = t.enter(ARGUMENTS);
+        if (m != null) return m;
+        boolean r;
+        r = argument_loop(t);
+        if (r) t.consume(",");
         t.exit(r);
         return r;
     }

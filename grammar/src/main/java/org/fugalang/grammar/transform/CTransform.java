@@ -8,6 +8,10 @@ import java.util.*;
 
 public class CTransform {
 
+    private static void error(String message) {
+        throw new GrammarException(message);
+    }
+
     public static String getFuncDeclarations(GrammarSpec spec) {
         StringBuilder sb = new StringBuilder();
         for (NamedRule namedRule : spec.namedRules()) {
@@ -24,8 +28,7 @@ public class CTransform {
 
         if (rn.returnType() != null &&
                 !rn.returnType().endsWith("*") && !unit.isInline()) {
-            throw new IllegalStateException(
-                    "Only pointer types allowed for non-inline rule: " + rn );
+            error("Only pointer types allowed for non-inline rule: " + rn );
         }
 
         sb.append("static ").append(rn.returnTypeOr("void *"))
@@ -109,7 +112,7 @@ public class CTransform {
         boolean memoize = args.containsKey("memo") || unit.leftRecursive();
         if (memoize) {
             if (unit.isInline())
-                throw new IllegalStateException("Inline rules cannot be memoized");
+                error("Inline rules cannot be memoized");
             sb.append("    if (is_memoized(p, &f, (void **) &")
                     .append(resultName).append(")) {\n");
             sb.append("        return ").append(resultName).append(";\n");
@@ -149,8 +152,7 @@ public class CTransform {
         sb.append("    size_t maxpos;\n");
         sb.append("    ").append(rtype).append("max;\n");
 
-        if (unit.isInline())
-            throw new IllegalStateException("LR rules cannot be inline");
+        if (unit.isInline()) error("LR rules cannot be inline");
 
         sb.append("    if (enter_frame(p, &f)) {\n");
         sb.append("        do {\n");
@@ -332,7 +334,7 @@ public class CTransform {
             var fieldName = field.fieldName().snakeCaseUnconflicted();
 
             if (field.resultClause() == null)
-                throw new IllegalStateException();
+                error("Result clause required for field " + fieldName);
 
             var template = field.resultClause().template().strip();
 

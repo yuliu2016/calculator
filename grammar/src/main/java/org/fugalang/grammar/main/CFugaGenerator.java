@@ -143,6 +143,7 @@ public class CFugaGenerator {
                 GeneratorUtil.readPreprocessed(USER_DIR, GRAMMAR_PATH),
                 GeneratorUtil.tokenMap
         );
+        GeneratorUtil.printStats(spec);
 
         String c = "#include \"include/ast.h\"\n\n\n" +
                 CTransform.getFuncDeclarations(spec) +

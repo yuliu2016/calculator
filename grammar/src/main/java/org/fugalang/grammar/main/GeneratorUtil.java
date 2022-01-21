@@ -8,6 +8,8 @@ import org.fugalang.core.token.Keyword;
 import org.fugalang.core.token.Operator;
 import org.fugalang.core.token.SimpleLexer;
 import org.fugalang.core.token.TokenType;
+import org.fugalang.grammar.common.GrammarSpec;
+import org.fugalang.grammar.common.NamedRule;
 import org.fugalang.grammar.common.TokenEntry;
 import org.fugalang.grammar.peg.parser.MetaParser;
 import org.fugalang.grammar.peg.wrapper.Grammar;
@@ -54,6 +56,23 @@ public class GeneratorUtil {
             }
         }
         return String.join("\n", newLines);
+    }
+
+    public static void printStats(GrammarSpec spec) {
+        System.out.printf("""
+                        Grammar Stats:
+                            # of directives: %d
+                            # of named rules: %d (%d total rules)
+                            # of tokens: %d
+                        """,
+                spec.directives().size(),
+                spec.namedRules().size(),
+                spec.namedRules().size() + spec.namedRules()
+                        .stream()
+                        .map(NamedRule::components)
+                        .mapToInt(List::size)
+                        .sum(),
+                spec.tokenMap().size());
     }
 
     public static final Map<String, TokenEntry> tokenMap = tokenMap("");

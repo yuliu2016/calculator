@@ -16,6 +16,7 @@ public class MetaGenerator {
                 GeneratorUtil.readGrammar(USER_DIR, GRAMMAR_PATH),
                 GeneratorUtil.classicTokenMap
         );
+        GeneratorUtil.printStats(spec);
         JGenerator.generateFiles(spec, PACKAGE_OUTPUT);
     }
 }
