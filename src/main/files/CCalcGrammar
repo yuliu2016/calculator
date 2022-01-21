@@ -1,16 +1,7 @@
 # Calculator Grammar
 
 .include ('include/ast2.h')
-.space ('2')
 .fdecl ()
-.space ('2')
-
-```c
-// Parser Entry Point
-double *parse_calc(parser_t *p) {
-    return sum(p);
-}
-```
 
 sum[double *] (left_recursive):
     | sum '+' term >> { binop_add(p, %a, %b) }
@@ -29,10 +20,17 @@ factor[double *] (memo):
 power[double *] (memo):
     | atom '**' factor >> { binop_pow(p, %a, %b) }
     | atom { a }
+parameters[ast_list_t *]:
+    | ','.sum+ [','] { a }
 atom[double *] (memo):
     | '(' sum ')' >> { a }
     | NAME '(' [parameters] ')' >> { call_func(p, %a, %b) }
     | NAME { load_const(p, %a) }
     | NUMBER { to_double(p, %a) }
-parameters[ast_list_t *]:
-    | ','.sum+ [','] { a }
+
+```c
+// Parser Entry Point
+double *parse_calc(parser_t *p) {
+    return sum(p);
+}
+```

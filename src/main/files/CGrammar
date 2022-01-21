@@ -1,25 +1,16 @@
 # Grammar for Fuga
 
 .include ('include/ast.h')
-.space ('2')
+.include ('include/internal/static_parser.h')
 .fdecl ()
-.space ('2')
 
 ```c
-// Parser Entry Point
-void *parse_grammar(parser_t *p, int entry_point) {
-    switch (entry_point) {
-    case 0:
-        return single_input(p);
-    case 1:
-        return file_input(p);
-    case 2:
-        return eval_input(p);
-    default:
-        return 0;
-    }
+// Placeholder node
+static inline void *node(parser_t *p) {
+    return parser_alloc(p, sizeof(char));
 }
 
+// Do nothing operation
 static ast_stmt_t *ast_nop(parser_t *p) {
     return node(p);
 }
@@ -413,3 +404,25 @@ atom[ast_primary_t *] (memo):
     | 'None' { ast_none(p) }
     | 'True' { ast_true(p) }
     | 'False' { ast_false(p) }
+
+```c
+
+// Provide the static parser struct
+parser_t *get_static_parser() {
+    return &_static_parser;
+}
+
+// Parser Entry Point
+void *parse_grammar(parser_t *p, int entry_point) {
+    switch (entry_point) {
+    case 0:
+        return single_input(p);
+    case 1:
+        return file_input(p);
+    case 2:
+        return eval_input(p);
+    default:
+        return 0;
+    }
+}
+```

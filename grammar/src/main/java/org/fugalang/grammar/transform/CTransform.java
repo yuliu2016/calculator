@@ -68,12 +68,14 @@ public class CTransform {
     }
 
     private void addForwardDeclarations() {
+        emit("\n\n");
         for (NamedRule namedRule : spec.namedRules()) {
             addUnitRuleDeclaration(namedRule.root());
             for (UnitRule component : namedRule.components()) {
                 addUnitRuleDeclaration(component);
             }
         }
+        emit("\n");
     }
 
     private void addUnitRuleDeclaration(UnitRule unit) {
