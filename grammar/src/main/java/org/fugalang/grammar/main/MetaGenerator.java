@@ -1,6 +1,6 @@
 package org.fugalang.grammar.main;
 
-import org.fugalang.grammar.common.RuleSet;
+import org.fugalang.grammar.common.GrammarSpec;
 import org.fugalang.grammar.common.RuleSetBuilder;
 import org.fugalang.grammar.transform.JPackageOutput;
 import org.fugalang.grammar.transform.JGenerator;
@@ -12,10 +12,10 @@ public class MetaGenerator {
             "grammar/src/main/gen", "org.fugalang.grammar.peg", "Meta");
 
     public static void main(String[] args) throws Exception {
-        RuleSet ruleSet = RuleSetBuilder.generateRuleSet(
+        GrammarSpec spec = RuleSetBuilder.generate(
                 GeneratorUtil.readGrammar(USER_DIR, GRAMMAR_PATH),
                 GeneratorUtil.classicTokenMap
         );
-        JGenerator.generateFiles(ruleSet, PACKAGE_OUTPUT);
+        JGenerator.generateFiles(spec, PACKAGE_OUTPUT);
     }
 }

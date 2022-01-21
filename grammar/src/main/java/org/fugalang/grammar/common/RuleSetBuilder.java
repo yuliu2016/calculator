@@ -18,7 +18,7 @@ public class RuleSetBuilder {
     private final List<Rule> rules;
     private final Map<String, TokenEntry> tokenMap;
     private final Map<String, RuleName> ruleNameMap = new LinkedHashMap<>();
-    private final RuleSet ruleSet;
+    private final GrammarSpec spec;
 
     private NamedRule currentNamedRule;
     private int ruleCounter = 0;
@@ -33,13 +33,17 @@ public class RuleSetBuilder {
                 .map(Element::rule)
                 .toList();
         this.tokenMap = tokenMap;
-        this.ruleSet = new RuleSet(new ArrayList<>(), tokenMap);
+        this.spec = new GrammarSpec(new ArrayList<>(), new ArrayList<>(), tokenMap);
     }
 
-    public static RuleSet generateRuleSet(Grammar grammar, Map<String, TokenEntry> tokenMap) {
+    public static GrammarSpec generate(Grammar grammar, Map<String, TokenEntry> tokenMap) {
         var builder = new RuleSetBuilder(grammar, tokenMap);
         builder.generateRuleSet();
-        return builder.ruleSet;
+        return builder.spec;
+    }
+
+    private static void error(String message) {
+        throw new GrammarException(message);
     }
 
     private void generateRuleSet() {
@@ -56,8 +60,7 @@ public class RuleSetBuilder {
             var altList = rule.ruleSuite().altList();
             if (altList.alternatives().isEmpty() &&
                     altList.sequence().hasInlineHint()) {
-                throw new IllegalStateException(ruleName +
-                        ": No direct inline hint allowed for named rules");
+                error(ruleName + ": No direct inline hint allowed for named rules");
             }
 
             addAltList(ruleName, unit, altList);
@@ -65,8 +68,7 @@ public class RuleSetBuilder {
             // Protect against not initializing result
             // (works only in the direct case against typos)
             if (unit.fields().stream().noneMatch(UnitField::isRequired)) {
-                throw new IllegalStateException("The named rule " + ruleName +
-                        " may match an empty string");
+                error("The named rule " + ruleName + " may match an empty string");
             }
             // Make sure that we don't accidentally add sub-rules
             currentNamedRule = null;
@@ -93,7 +95,7 @@ public class RuleSetBuilder {
                     var resultClause = PEGUtil.resultClauseOrElse(sequence, "%a");
 
                     if (sequence.hasInlineHint())
-                        throw new IllegalStateException("A one-item sequence can't be marked inline");
+                        error("A one-item sequence can't be marked inline");
 
                     addPrimary(ruleName, unit, sequence.primaries().get(0),
                             REQUIRED, resultClause);
@@ -236,7 +238,7 @@ public class RuleSetBuilder {
 
             var tokenEntry = tokenMap.get(primaryName);
             if (tokenEntry == null) {
-                throw new RuntimeException("'" + primaryName + "' referenced in '" +
+                error("'" + primaryName + "' referenced in '" +
                         unit.ruleName() + "' is neither a rule or a token");
             }
             var ruleName = unit.ruleName();
@@ -284,8 +286,8 @@ public class RuleSetBuilder {
     }
 
     public UnitRule createNamedRule(RuleName ruleName, Rule rule) {
-        if (ruleSet.namedRules().stream().anyMatch(nr -> nr.root().ruleName().equals(ruleName))) {
-            throw new IllegalStateException("Duplicate named rule: " + ruleName);
+        if (spec.namedRules().stream().anyMatch(nr -> nr.root().ruleName().equals(ruleName))) {
+            error("Duplicate named rule: " + ruleName);
         }
         var args = PEGUtil.extractRuleArgs(rule);
         var leftRecursive = PEGUtil.checkLeftRecursive(rule, args);
@@ -296,17 +298,17 @@ public class RuleSetBuilder {
         var unit = new UnitRule(ruleCounter, ruleName, leftRecursive, isInline, grammarString);
 
         currentNamedRule = new NamedRule(unit, new ArrayList<>(), args);
-        ruleSet.namedRules().add(currentNamedRule);
+        spec.namedRules().add(currentNamedRule);
         return unit;
     }
 
     public UnitRule createUnnamedRule(RuleName ruleName, String grammarString, boolean isInline) {
         if (currentNamedRule == null) {
-            throw new IllegalStateException("No named rule to add to");
+            error("No named rule to add to");
         }
         var current = currentNamedRule;
         if (current.components().stream().anyMatch(c -> c.ruleName().equals(ruleName))) {
-            throw new IllegalStateException("Duplicate inner rule: " + ruleName);
+            error("Duplicate inner rule: " + ruleName);
         }
         ruleCounter++;
         var unit = new UnitRule(ruleCounter, ruleName, false, isInline, grammarString);

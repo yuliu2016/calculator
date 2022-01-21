@@ -6,6 +6,7 @@ import org.fugalang.grammar.util.StringUtil;
 
 public class CTransformOld {
 
+    @SuppressWarnings("unused")
     @Deprecated
     private static String getLoopExpr(UnitField field) {
         var rs = field.resultSource();
@@ -44,17 +45,17 @@ public class CTransformOld {
     }
 
     @Deprecated
-    public static String getDummyCompiler(RuleSet ruleSet) {
+    public static String getDummyCompiler(GrammarSpec spec) {
         StringBuilder sb = new StringBuilder();
 
-        for (NamedRule namedRule : ruleSet.namedRules()) {
+        for (NamedRule namedRule : spec.namedRules()) {
             addDummyDeclaration(sb, namedRule.root());
             for (UnitRule component : namedRule.components()) {
                 addDummyDeclaration(sb, component);
             }
         }
 
-        for (NamedRule namedRule : ruleSet.namedRules()) {
+        for (NamedRule namedRule : spec.namedRules()) {
             sb.append("\n");
             sb.append(StringUtil.inlinedoc(namedRule.root().grammarString()));
             addDummyFunction(sb, namedRule.root());
@@ -125,13 +126,13 @@ public class CTransformOld {
     }
 
     @Deprecated
-    public static String getASTGen(RuleSet ruleSet) {
+    public static String getASTGen(GrammarSpec spec) {
         StringBuilder sb = new StringBuilder();
 
         sb.append("#define FVAR(name, node, i) FAstNode *name = (node)->ast_v.fields[i]\n");
         sb.append("#define TVAR(name, node, i) FToken *name = (node)->ast_v.fields[i]->ast_v.token\n");
 
-        for (NamedRule namedRule : ruleSet.namedRules()) {
+        for (NamedRule namedRule : spec.namedRules()) {
             addStructFields(namedRule.root(), sb);
             for (UnitRule component : namedRule.components()) {
                 addStructFields(component, sb);

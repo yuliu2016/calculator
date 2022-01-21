@@ -8,9 +8,9 @@ import java.util.*;
 
 public class CTransform {
 
-    public static String getFuncDeclarations(RuleSet ruleSet) {
+    public static String getFuncDeclarations(GrammarSpec spec) {
         StringBuilder sb = new StringBuilder();
-        for (NamedRule namedRule : ruleSet.namedRules()) {
+        for (NamedRule namedRule : spec.namedRules()) {
             addUnitRuleDeclaration(namedRule.root(), sb);
             for (UnitRule component : namedRule.components()) {
                 addUnitRuleDeclaration(component, sb);
@@ -48,10 +48,10 @@ public class CTransform {
 
     private static final List<Integer> hashes = new ArrayList<>();
 
-    public static String getFunctionBodies(RuleSet ruleSet) {
+    public static String getFunctionBodies(GrammarSpec spec) {
         StringBuilder sb = new StringBuilder();
         hashes.clear();
-        for (NamedRule namedRule : ruleSet.namedRules()) {
+        for (NamedRule namedRule : spec.namedRules()) {
             addUnitRuleBody(namedRule.root(), sb, namedRule.args());
             for (UnitRule component : namedRule.components()) {
                 addUnitRuleBody(component, sb, Collections.emptyMap());

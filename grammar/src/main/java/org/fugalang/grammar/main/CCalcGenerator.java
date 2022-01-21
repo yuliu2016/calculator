@@ -1,6 +1,6 @@
 package org.fugalang.grammar.main;
 
-import org.fugalang.grammar.common.RuleSet;
+import org.fugalang.grammar.common.GrammarSpec;
 import org.fugalang.grammar.common.RuleSetBuilder;
 import org.fugalang.grammar.transform.CTransform;
 
@@ -27,15 +27,15 @@ public class CCalcGenerator {
             """;
 
     public static void main(String[] args) throws Exception {
-        RuleSet ruleSet = RuleSetBuilder.generateRuleSet(
+        GrammarSpec spec = RuleSetBuilder.generate(
                 GeneratorUtil.readPreprocessed(USER_DIR, GRAMMAR_PATH),
                 GeneratorUtil.tokenMap
         );
 
         String c = "#include \"include/ast2.h\"\n\n\n" +
-                CTransform.getFuncDeclarations(ruleSet) +
+                CTransform.getFuncDeclarations(spec) +
                 ENTRY_POINT +
-                CTransform.getFunctionBodies(ruleSet);
+                CTransform.getFunctionBodies(spec);
         Files.writeString(C_PATH, c.replace("\n", System.lineSeparator()));
     }
 }
