@@ -138,6 +138,7 @@ public class CTransform {
         emit("\nstatic ").emit(returnType)
                 .emit(rn.symbolicName());
         emit("() {\n");
+        emit("    size_t _pos = pos();\n");
 
         String resultName;
         String hashStr;
@@ -145,13 +146,8 @@ public class CTransform {
             // not needed
             resultName = "ERROR";
             hashStr = "ERROR";
-
-            emit("    size_t _pos = pos();\n");
         } else {
             hashStr = ruleNameHash(rn);
-            emit("    frame_t f = {")
-                    .emit(hashStr)
-                    .emit(", pos(), FUNC};\n");
             resultName = "res_" + hashStr;
 
             var resultDeclare = "    " + returnType + resultName;
@@ -163,8 +159,8 @@ public class CTransform {
         if (memoize) {
             if (unit.isInline())
                 error("Inline rules cannot be memoized");
-            emit("    if (is_memoized(&f, (void **) &")
-                    .emit(resultName).emit(")) {\n");
+            emit("    if (is_memoized(" + hashStr + ", (void **) &")
+                    .emit(resultName).emit(", FUNC)) {\n");
             emit("        return ").emit(resultName).emit(";\n");
             emit("    }\n");
         }
@@ -178,12 +174,12 @@ public class CTransform {
             }
         }
 
-        if (memoize) {
-            emit("    insert_memo(&f, ").emit(resultName).emit(");\n");
+        if (memoize && !unit.leftRecursive()) {
+            emit("    insert_memo(_pos, " + hashStr + ", ").emit(resultName).emit(");\n");
         }
 
         if (!unit.isInline()) {
-            emit("    return exit_frame(&f, ").emit(resultName).emit(");\n");
+            emit("    return exit_frame(_pos, ").emit(resultName).emit(", FUNC);\n");
         }
 
         emit("}\n");
@@ -204,12 +200,12 @@ public class CTransform {
 
         if (unit.isInline()) error("LR rules cannot be inline");
 
-        emit("    if (enter_frame(&f)) {\n");
+        emit("    if (enter_frame(FUNC)) {\n");
         emit("        do {\n");
         emit("            maxpos = pos();\n");
         emit("            max = ").emit(resultName).emit(";\n");
-        emit("            insert_memo(&f, max);\n");
-        emit("            setpos(f.f_pos);\n");
+        emit("            insert_memo(_pos, ").emit(hashStr).emit(", max);\n");
+        emit("            restore(_pos);\n");
         emit("            ").emit(resultName).emit(" = (\n");
 
         var fields = unit.fields();
@@ -226,10 +222,11 @@ public class CTransform {
         emit("\n            ) ? ").emit(altName).emit(" : 0;\n");
         emit("""
                         } while (pos() > maxpos);
-                        setpos(maxpos);
-                        r = max;
+                        restore(maxpos);
+                        %s = max;
+                        insert_memo(_pos, %s, %s);
                     }
-                """.replace("r", resultName));
+                """.formatted(resultName, hashStr, resultName));
     }
 
     private static boolean isImportantField(UnitField field) {
@@ -264,7 +261,7 @@ public class CTransform {
         if (unit.isInline()) {
             emit("    return (\n");
         } else {
-            emit("    ").emit(resultName).emit(" = enter_frame(&f) && (\n");
+            emit("    ").emit(resultName).emit(" = enter_frame(FUNC) && (\n");
         }
 
         var fields = unit.fields();
@@ -290,11 +287,7 @@ public class CTransform {
                 j++;
             }
 
-            var fieldExpr = getParserFieldExpr(field);
-
-            // Fix when frame structs are not available
-            if (unit.isInline()) emit(fieldExpr.replace("f.f_pos", "_pos"));
-            else emit(fieldExpr);
+            emit(getParserFieldExpr(field));
 
             if (i == fields.size() - 1) {
                 emit(")");
@@ -322,9 +315,9 @@ public class CTransform {
                 emit(" :\n        ");
             } else emit(" : ");
             if (unit.ruleName().returnTypeOr("void *").endsWith("*")) {
-                emit("(setpos(_pos), NULL);\n");
+                emit("(restore(_pos), NULL);\n");
             } else {
-                emit("(setpos(_pos), 0);\n");
+                emit("(restore(_pos), 0);\n");
             }
         } else {
             emit(" : 0;\n");
@@ -375,7 +368,7 @@ public class CTransform {
         if (unit.isInline()) {
             emit("    return (");
         } else {
-            emit("    ").emit(resultName).emit(" = enter_frame(&f) && (");
+            emit("    ").emit(resultName).emit(" = enter_frame(FUNC) && (");
         }
 
         var fields = unit.fields();
@@ -425,9 +418,9 @@ public class CTransform {
 
         if (unit.isInline()) {
             if (resultType.endsWith("*")) {
-                emit(" : (setpos(_pos), NULL);\n");
+                emit(" : (restore(_pos), NULL);\n");
             } else {
-                emit(" : (setpos(_pos), 0);\n");
+                emit(" : (restore(_pos), 0);\n");
             }
         } else {
             emit(" : 0;\n");
@@ -488,7 +481,7 @@ public class CTransform {
                     "        _pos = pos();\n" +
                     "    } while (" + delimExpr + " &&\n" +
                     "            (" + fname + " = " + resultExpr + "));\n" +
-                    "    setpos(_pos);\n" +
+                    "    restore(_pos);\n" +
                     "    return " + listName + ";\n" +
                     "}\n";
         }
@@ -523,7 +516,7 @@ public class CTransform {
 
 
     private static String getTestExpr(UnitField field) {
-        return "test_and_reset(f.f_pos, " + getResultExpr(field) + ")";
+        return "test_and_reset(_pos, " + getResultExpr(field) + ")";
     }
 
     private static String getResultExpr(UnitField field) {
