@@ -159,9 +159,9 @@ public class CTransform {
         if (memoize) {
             if (unit.isInline())
                 error("Inline rules cannot be memoized");
-            emit("    if (is_memoized(" + hashStr + ", (void **) &")
-                    .emit(resultName).emit(", FUNC)) {\n");
-            emit("        return ").emit(resultName).emit(";\n");
+            emit("    memo_t *memo = fetch_memo(").emit(hashStr).emit(", FUNC);\n");
+            emit("    if (memo) {\n");
+            emit("        return memo->node;\n");
             emit("    }\n");
         }
 
@@ -200,17 +200,19 @@ public class CTransform {
 
         if (unit.isInline()) error("LR rules cannot be inline");
 
-        emit("    if (enter_frame(FUNC)) {\n");
-        emit("        do {\n");
-        emit("            maxpos = pos();\n");
-        emit("            max = ").emit(resultName).emit(";\n");
-        emit("            insert_memo(_pos, ").emit(hashStr).emit(", max);\n");
-        emit("            restore(_pos);\n");
-        emit("            ").emit(resultName).emit(" = (\n");
+        emit("    if (errorcode()) return NULL;\n");
+        emit("    enter_frame(FUNC);\n");
+
+        emit("    do {\n");
+        emit("        maxpos = pos();\n");
+        emit("        max = ").emit(resultName).emit(";\n");
+        emit("        insert_memo(_pos, ").emit(hashStr).emit(", max);\n");
+        emit("        restore(_pos);\n");
+        emit("        ").emit(resultName).emit(" = (\n");
 
         var fields = unit.fields();
         for (int i = 0; i < fields.size(); i++) {
-            emit("                (").emit(altName).emit(" = ");
+            emit("            (").emit(altName).emit(" = ");
             emit(getParserFieldExpr(fields.get(i)));
 
             if (i == fields.size() - 1) {
@@ -219,13 +221,12 @@ public class CTransform {
                 emit(") ||\n");
             }
         }
-        emit("\n            ) ? ").emit(altName).emit(" : 0;\n");
+        emit("\n        ) ? ").emit(altName).emit(" : 0;\n");
         emit("""
-                        } while (pos() > maxpos);
-                        restore(maxpos);
-                        %s = max;
-                        insert_memo(_pos, %s, %s);
-                    }
+                    } while (pos() > maxpos);
+                    restore(maxpos);
+                    %s = max;
+                    insert_memo(_pos, %s, %s);
                 """.formatted(resultName, hashStr, resultName));
     }
 
@@ -259,7 +260,7 @@ public class CTransform {
 
         var resultName = "res_" + hashStr;
         if (unit.isInline()) {
-            emit("    return (\n");
+            emit("\n    if (\n");
         } else {
             emit("    ").emit(resultName).emit(" = enter_frame(FUNC) && (\n");
         }
@@ -296,7 +297,6 @@ public class CTransform {
             }
         }
 
-        emit("\n    ) ? ");
         String templatedResult;
         if (unit.resultClause() == null) {
             templatedResult = "node()";
@@ -309,17 +309,22 @@ public class CTransform {
             }
             templatedResult = resultClause;
         }
-        emit(templatedResult);
+
         if (unit.isInline()) {
-            if (templatedResult.length() > 20) {
-                emit(" :\n        ");
-            } else emit(" : ");
+            emit("\n    ) {\n");
+            emit("        return ");
+            emit(templatedResult);
+            emit(";\n    } else {\n");
+            emit("        restore(_pos);\n");
             if (unit.ruleName().returnTypeOr("void *").endsWith("*")) {
-                emit("(restore(_pos), NULL);\n");
+                emit("        return NULL;");
             } else {
-                emit("(restore(_pos), 0);\n");
+                emit("        return 0;");
             }
+            emit("\n    }\n");
         } else {
+            emit("\n    ) ? ");
+            emit(templatedResult);
             emit(" : 0;\n");
         }
     }
@@ -366,7 +371,7 @@ public class CTransform {
 
         emit("    ").emit(resultType).emit(altName).emit(";\n");
         if (unit.isInline()) {
-            emit("    return (");
+            emit("\n    if (");
         } else {
             emit("    ").emit(resultName).emit(" = enter_frame(FUNC) && (");
         }
@@ -414,15 +419,22 @@ public class CTransform {
             }
         }
 
-        emit("\n    ) ? ").emit(altName);
 
         if (unit.isInline()) {
+            emit("\n    ) {\n");
+            emit("        return ");
+            emit(altName);
+            emit(";\n    } else {\n");
+            emit("        restore(_pos);\n");
             if (resultType.endsWith("*")) {
-                emit(" : (restore(_pos), NULL);\n");
+                emit("        return NULL;");
             } else {
-                emit(" : (restore(_pos), 0);\n");
+                emit("        return 0;");
             }
+            emit("\n    }\n");
         } else {
+            emit("\n    ) ? ");
+            emit(altName);
             emit(" : 0;\n");
         }
     }
