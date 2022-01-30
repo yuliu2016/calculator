@@ -18,8 +18,8 @@ static ast_stmt_t *ast_nop() {
 
 single_input[ast_list_t *]:
     | NEWLINE { ast_list_of(ast_nop()) }
-    | simple_statements { ast_list_of(%a) }
-    | compound_statement NEWLINE { ast_list_of(%a) }
+    | simple_statements { a }
+    | compound_line { a }
 file_input[ast_list_t *]:
     | statement_list { a }
 eval_input[ast_list_t *]:
@@ -29,7 +29,11 @@ eval_input[ast_list_t *]:
 statement_list[ast_list_t *]:
     | line_statement+ { a }
 line_statement[ast_list_t *]:
+    | simple_line { a }
+    | compound_line { a }
+simple_line[ast_list_t *] (inline):
     | simple_statements NEWLINE { a }
+compound_line[ast_list_t *] (inline):
     | compound_statement NEWLINE { ast_list_of(%a) }
 
 simple_statements[ast_list_t *]:
@@ -251,10 +255,14 @@ inversion[ast_expr_t *]:
     | comparison { a }
 
 comparison[ast_expr_t *]:
-    | bitwise_or (comparator bitwise_or >> [ast_expr_t *]
-            { ast_comp_term(%a, %b) })+ >>
+    | bitwise_or comparison_pair+ >>
         { ast_comparison(%a, %b) }
     | bitwise_or { a }
+
+comparison_pair[ast_expr_t *] (inline):
+    | comparator bitwise_or
+        { ast_comp_term(%a, %b) }
+
 comparator[int] (inline):
     | '<' { CMP_LT }
     | '>' { CMP_GT }

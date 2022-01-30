@@ -472,27 +472,30 @@ public class CTransform {
                     "    " + rawType + fname + " = " + resultExpr + ";\n" +
                     "    if (!" + fname + ") {\n" +
                     "        return 0;\n" +
-                    "    }\n" +
+                    "    }\n\n" +
                     "    ast_list_t *" + listName + " = ast_list_new();\n" +
                     "    do {\n" +
                     "        ast_list_append(" + listName + ", " + fname + ");\n" +
-                    "    } while ((" + fname + " = " + resultExpr + "));\n" +
+                    "    } while ((" + fname + " = " + resultExpr + "));\n\n" +
                     "    return " + listName + ";\n" +
                     "}\n";
         } else {
             var delimExpr = "consume(" + delimiter.index() + ", \"" + delimiter.literalValue() + "\")";
+
             return "\nstatic ast_list_t *" + ruleName + "_delimited() {\n" +
                     "    " + rawType + fname + " = " + resultExpr + ";\n" +
                     "    if (!" + fname + ") {\n" +
-                    "        return 0;\n" +
-                    "    }\n" +
+                    "        return NULL;\n" +
+                    "    }\n\n" +
                     "    ast_list_t *" + listName + " = ast_list_new();\n" +
-                    "    size_t _pos;\n" +
+                    "    size_t _pos;\n\n" +
                     "    do {\n" +
                     "        ast_list_append(" + listName + ", " + fname + ");\n" +
                     "        _pos = pos();\n" +
-                    "    } while (" + delimExpr + " &&\n" +
-                    "            (" + fname + " = " + resultExpr + "));\n" +
+                    "    } while (\n" +
+                    "        " + delimExpr + " &&\n" +
+                    "        (" + fname + " = " + resultExpr + ")\n" +
+                    "    );\n\n" +
                     "    restore(_pos);\n" +
                     "    return " + listName + ";\n" +
                     "}\n";
@@ -509,10 +512,10 @@ public class CTransform {
 
         return "\nstatic ast_list_t *" + rule_name + "_loop() {\n" +
                 "    ast_list_t *" + listName + " = ast_list_new();\n" +
-                "    " + rawType + fname + ";\n" +
+                "    " + rawType + fname + ";\n\n" +
                 "    while ((" + fname + " = " + resultExpr + ")) {\n" +
                 "        ast_list_append(" + listName + ", " + fname + ");\n" +
-                "    }\n" +
+                "    }\n\n" +
                 "    return " + listName + ";\n" +
                 "}\n";
     }
