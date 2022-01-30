@@ -185,7 +185,8 @@ public class CTransform {
         }
 
         if (!unit.isInline()) {
-            emit("    return exit_frame(_pos, ").emit(resultName).emit(", FUNC);\n");
+            emit("    exit_frame(_pos, ").emit(resultName).emit(", FUNC);\n");
+            emit("    return ").emit(resultName).emit(";\n");
         }
 
         emit("}\n");
@@ -267,11 +268,11 @@ public class CTransform {
         }
 
         var resultName = "res_" + hashStr;
-        if (unit.isInline()) {
-            emit("\n    if (\n");
-        } else {
-            emit("\n    ").emit(resultName).emit(" = enter_frame(FUNC) && (\n");
+
+        if (!unit.isInline()) {
+            emit("\n    enter_frame(FUNC);\n");
         }
+        emit("\n    if (\n");
 
         var fields = unit.fields();
         j = 0;
@@ -331,9 +332,13 @@ public class CTransform {
             }
             emit("\n    }\n");
         } else {
-            emit("\n    ) ? ");
+            emit("\n    ) {\n");
+            emit("        " + resultName + " = ");
             emit(templatedResult);
-            emit(" : 0;\n\n");
+            emit(";\n    } else {\n");
+            emit("        restore(_pos);\n");
+            emit("        " + resultName + " = NULL;\n");
+            emit("    }\n\n");
         }
     }
 
@@ -377,12 +382,11 @@ public class CTransform {
             altName = "alt_" + hashStr;
         }
 
-        emit("    ").emit(resultType).emit(altName).emit(";\n");
-        if (unit.isInline()) {
-            emit("\n    if (");
-        } else {
-            emit("\n    ").emit(resultName).emit(" = enter_frame(FUNC) && (");
+        emit("    ").emit(resultType).emit(altName).emit(";\n\n");
+        if (!unit.isInline()) {
+            emit("    enter_frame(FUNC);\n\n");
         }
+        emit("    if (");
 
         var fields = unit.fields();
         for (int i = 0; i < fields.size(); i++) {
@@ -398,6 +402,11 @@ public class CTransform {
                 // Fall-through; no extra variables needed
                 emit("\n        (").emit(altName).emit(" = ")
                         .emit(getParserFieldExpr(field));
+                if (i == fields.size() - 1) {
+                    emit(")");
+                } else {
+                    emit(") ||");
+                }
             } else {
                 if (i != 0) emit(" ");
                 emit("(\n            (");
@@ -414,17 +423,12 @@ public class CTransform {
 
                 emit(field.resultClause().template().replace("%a", fieldName));
                 if (i == fields.size() - 1) {
-                    emit(")");
+                    emit("))");
                 } else {
-                    emit(")\n        ");
+                    emit(")\n        ) ||");
                 }
             }
 
-            if (i == fields.size() - 1) {
-                emit(")");
-            } else {
-                emit(") ||");
-            }
         }
 
 
@@ -441,9 +445,13 @@ public class CTransform {
             }
             emit("\n    }\n");
         } else {
-            emit("\n    ) ? ");
+            emit("\n    ) {\n");
+            emit("        " + resultName + " = ");
             emit(altName);
-            emit(" : 0;\n\n");
+            emit(";\n    } else {\n");
+            emit("        restore(_pos);\n");
+            emit("        " + resultName + " = NULL;\n");
+            emit("    }\n\n");
         }
     }
 
