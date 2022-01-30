@@ -138,7 +138,6 @@ public class CTransform {
         emit("\nstatic ").emit(returnType)
                 .emit(rn.symbolicName());
         emit("() {\n");
-        emit("    size_t _pos = pos();\n");
 
         String resultName;
         String hashStr;
@@ -149,10 +148,10 @@ public class CTransform {
         } else {
             hashStr = ruleNameHash(rn);
             resultName = "res_" + hashStr;
+        }
 
-            var resultDeclare = "    " + returnType + resultName;
-            emit(resultDeclare);
-            emit(unit.leftRecursive() ? " = 0;\n" : ";\n");
+        if (!unit.isInline()) {
+            emit("    if (errorcode()) return 0;\n\n");
         }
 
         boolean memoize = args.containsKey("memo") || unit.leftRecursive();
@@ -162,7 +161,14 @@ public class CTransform {
             emit("    memo_t *memo = fetch_memo(").emit(hashStr).emit(", FUNC);\n");
             emit("    if (memo) {\n");
             emit("        return memo->node;\n");
-            emit("    }\n");
+            emit("    }\n\n");
+        }
+
+        emit("    size_t _pos = pos();\n");
+        if (!unit.isInline()) {
+            var resultDeclare = "    " + returnType + resultName;
+            emit(resultDeclare);
+            emit(unit.leftRecursive() ? " = 0;\n" : ";\n");
         }
 
         if (unit.leftRecursive()) {
@@ -200,8 +206,8 @@ public class CTransform {
 
         if (unit.isInline()) error("LR rules cannot be inline");
 
-        emit("    if (errorcode()) return NULL;\n");
-        emit("    enter_frame(FUNC);\n");
+        emit("\n");
+        emit("    enter_frame(FUNC);\n\n");
 
         emit("    do {\n");
         emit("        maxpos = pos();\n");
@@ -224,9 +230,11 @@ public class CTransform {
         emit("\n        ) ? ").emit(altName).emit(" : 0;\n");
         emit("""
                     } while (pos() > maxpos);
+                    
                     restore(maxpos);
                     %s = max;
                     insert_memo(_pos, %s, %s);
+                    
                 """.formatted(resultName, hashStr, resultName));
     }
 
@@ -262,7 +270,7 @@ public class CTransform {
         if (unit.isInline()) {
             emit("\n    if (\n");
         } else {
-            emit("    ").emit(resultName).emit(" = enter_frame(FUNC) && (\n");
+            emit("\n    ").emit(resultName).emit(" = enter_frame(FUNC) && (\n");
         }
 
         var fields = unit.fields();
@@ -325,7 +333,7 @@ public class CTransform {
         } else {
             emit("\n    ) ? ");
             emit(templatedResult);
-            emit(" : 0;\n");
+            emit(" : 0;\n\n");
         }
     }
 
@@ -373,7 +381,7 @@ public class CTransform {
         if (unit.isInline()) {
             emit("\n    if (");
         } else {
-            emit("    ").emit(resultName).emit(" = enter_frame(FUNC) && (");
+            emit("\n    ").emit(resultName).emit(" = enter_frame(FUNC) && (");
         }
 
         var fields = unit.fields();
@@ -435,7 +443,7 @@ public class CTransform {
         } else {
             emit("\n    ) ? ");
             emit(altName);
-            emit(" : 0;\n");
+            emit(" : 0;\n\n");
         }
     }
 
