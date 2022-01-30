@@ -8,6 +8,18 @@
 #define p &__parser
 ```
 
+.operators (
+    comma = ',',
+    lpar = '(',
+    rpar = ')',
+    plus = '+',
+    minus = '-',
+    times = '*',
+    div = '/',
+    modulus = '%',
+    power = '**'
+)
+
 sum[double *] (left_recursive):
     | sum '+' term >> { binop_add(p, %a, %b) }
     | sum '-' term >> { binop_sub(p, %a, %b) }

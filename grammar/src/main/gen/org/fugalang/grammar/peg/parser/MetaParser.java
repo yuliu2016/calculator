@@ -67,7 +67,7 @@ public class MetaParser {
 
     /**
      * arguments:
-     * *   | ','.argument+ [',']
+     * *   | ','.argument+ [','] [NEWLINE]
      */
     public static boolean arguments(ParseTree t) {
         var m = t.enter(ARGUMENTS);
@@ -75,6 +75,7 @@ public class MetaParser {
         boolean r;
         r = argument_loop(t);
         if (r) t.consume(",");
+        if (r) t.consume(TokenType.NEWLINE);
         t.exit(r);
         return r;
     }
@@ -95,12 +96,29 @@ public class MetaParser {
     /**
      * argument:
      * *   | STRING
+     * *   | [NEWLINE] NAME '=' STRING
      */
     public static boolean argument(ParseTree t) {
         var m = t.enter(ARGUMENT);
         if (m != null) return m;
         boolean r;
         r = t.consume(TokenType.STRING);
+        r = r || argument_2(t);
+        t.exit(r);
+        return r;
+    }
+
+    /**
+     * [NEWLINE] NAME '=' STRING
+     */
+    private static boolean argument_2(ParseTree t) {
+        var m = t.enter(ARGUMENT_2);
+        if (m != null) return m;
+        boolean r;
+        t.consume(TokenType.NEWLINE);
+        r = t.consume(TokenType.NAME);
+        r = r && t.consume("=");
+        r = r && t.consume(TokenType.STRING);
         t.exit(r);
         return r;
     }

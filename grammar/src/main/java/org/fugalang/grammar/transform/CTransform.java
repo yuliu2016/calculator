@@ -45,6 +45,7 @@ public class CTransform {
             case "fdecl" -> addForwardDeclarations();
             case "exp" -> addNamedExpansion(arg);
             case "space" -> addSpace(arg);
+            case "operators" -> {}
             default -> error("Unknown directive: " + name);
         }
     }
@@ -214,8 +215,8 @@ public class CTransform {
         emit("        maxpos = pos();\n");
         emit("        max = ").emit(resultName).emit(";\n");
         emit("        insert_memo(_pos, ").emit(hashStr).emit(", max);\n");
-        emit("        restore(_pos);\n");
-        emit("        ").emit(resultName).emit(" = (\n");
+        emit("        restore(_pos);\n\n");
+        emit("        if (\n");
 
         var fields = unit.fields();
         for (int i = 0; i < fields.size(); i++) {
@@ -228,7 +229,7 @@ public class CTransform {
                 emit(") ||\n");
             }
         }
-        emit("\n        ) ? ").emit(altName).emit(" : 0;\n");
+        emit("\n        ) ").emit(resultName).emit(" = ").emit(altName).emit(";\n\n");
         emit("""
                     } while (pos() > maxpos);
                     

@@ -4,6 +4,69 @@
 .include ('include/internal/static_parser.h')
 .fdecl ()
 
+.operators (
+    dot = '.',
+    comma = ',',
+    assign = '=',
+    colon = ':',
+    ternary = '?',
+    exclaim = '!',
+    semicolon = ';',
+
+    lpar = '(',
+    rpar = ')',
+    lbrace = '{',
+    rbrace = '}',
+    lsqb = '[',
+    rsqb = ']',
+
+    less = '<',
+    greater = '>',
+
+    plus = '+',
+    minus = '-',
+    times = '*',
+    div = '/',
+    modulus = '%',
+    matrix_times = '@',
+
+    bit_or = '|',
+    bit_and = '&',
+    bit_not = '~',
+    bit_xor = '^',
+
+    equal = '==',
+    nequal = '!=',
+    less_equal = '<=',
+    more_equal = '>=',
+
+    pipe = '->',
+    asgn_expr = ':=',
+
+    floor_div = '//',
+    power = '**',
+
+    plus_assign = '+=',
+    minus_assign = '-=',
+    times_assign = '*=',
+    div_assign = '/=',
+    modulus_assign = '%=',
+    matrix_times_assign = '@=',
+
+    bit_or_assign = '|=',
+    bit_and_assign = '&=',
+    bit_xor_assign = '^=',
+
+    lshift = '<<',
+    rshift = '>>',
+
+    floor_div_assign = '//=',
+    power_assign = '**=',
+    lshift_assign = '<<=',
+    rshift_assign = '>>=',
+)
+
+
 ```c
 // Placeholder node
 static inline void *node() {

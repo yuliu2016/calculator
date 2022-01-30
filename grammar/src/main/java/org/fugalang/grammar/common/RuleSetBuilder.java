@@ -54,7 +54,11 @@ public class RuleSetBuilder {
                 List<String> args = new ArrayList<>();
                 if (directive.hasArguments()) {
                     for (var arg : directive.arguments().arguments()) {
-                        args.add(arg.string());
+                        if (arg.hasString()) {
+                            args.add(arg.string());
+                        } else if (arg.hasArgument2()) {
+                            args.add(arg.argument2().toString());
+                        }
                     }
                 }
                 directives.add(new NamedDirective(directive.name(), args));

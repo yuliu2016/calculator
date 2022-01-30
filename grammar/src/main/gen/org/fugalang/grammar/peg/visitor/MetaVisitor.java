@@ -32,7 +32,7 @@ public interface MetaVisitor<T> {
 
     /**
      * arguments:
-     * *   | ','.argument+ [',']
+     * *   | ','.argument+ [','] [NEWLINE]
      */
     default T visitArguments(Arguments arguments) {
         return null;
@@ -41,6 +41,7 @@ public interface MetaVisitor<T> {
     /**
      * argument:
      * *   | STRING
+     * *   | [NEWLINE] NAME '=' STRING
      */
     default T visitArgument(Argument argument) {
         return null;

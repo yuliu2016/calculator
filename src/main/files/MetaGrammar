@@ -10,9 +10,10 @@ element:
 directive:
     | '.' NAME '(' [arguments] ')' NEWLINE
 arguments:
-    | ','.argument+ [',']
+    | ','.argument+ [','] [NEWLINE]
 argument:
     | STRING
+    | [NEWLINE] NAME '=' STRING
 
 rule:
     | NAME [return_type] [rule_args] rule_suite
